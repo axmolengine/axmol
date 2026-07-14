@@ -1073,7 +1073,7 @@ void CubismShader_Axmol::ReleaseShaderProgram()
 
 // SetupMask
 static const csmChar* VertShaderSrcSetupMask = "custom/live2d_setup_mask_vs";
-static const csmChar* FragShaderSrcSetupMask = "custom/live2d_setup_mask_ps";
+static const csmChar* FragShaderSrcSetupMask = "custom/live2d_setup_mask_fs";
 
 //----- バーテックスシェーダプログラム -----
 // Normal & Add & Mult 共通
@@ -1086,32 +1086,32 @@ static const csmChar* VertShaderSrcMaskedBlend = "custom/live2d_masked_blend_vs"
 
 //----- フラグメントシェーダプログラム -----
 // Normal & Add & Mult 共通
-static const csmChar* FragShaderSrc = "custom/live2d_ps";
+static const csmChar* FragShaderSrc = "custom/live2d_fs";
 
 // Normal & Add & Mult 共通 （PremultipliedAlpha）
-static const csmChar* FragShaderSrcPremultipliedAlpha = "custom/live2d_pma_ps";
+static const csmChar* FragShaderSrcPremultipliedAlpha = "custom/live2d_pma_fs";
 
 // Normal & Add & Mult 共通（クリッピングされたものの描画用）
-static const csmChar* FragShaderSrcMask = "custom/live2d_mask_ps";
+static const csmChar* FragShaderSrcMask = "custom/live2d_mask_fs";
 
 // Normal & Add & Mult 共通（クリッピングされて反転使用の描画用）
-static const csmChar* FragShaderSrcMaskInverted = "custom/live2d_mask_inv_ps";
+static const csmChar* FragShaderSrcMaskInverted = "custom/live2d_mask_inv_fs";
 
 // Normal & Add & Mult 共通（クリッピングされたものの描画用、PremultipliedAlphaの場合）
-static const csmChar* FragShaderSrcMaskPremultipliedAlpha = "custom/live2d_mask_pma_ps";
+static const csmChar* FragShaderSrcMaskPremultipliedAlpha = "custom/live2d_mask_pma_fs";
 
 // Normal & Add & Mult 共通（クリッピングされて反転使用の描画用、PremultipliedAlphaの場合）
 static const csmChar* FragShaderSrcMaskInvertedPremultipliedAlpha =
-    "custom/live2d_mask_inv_pma_ps";
+    "custom/live2d_mask_inv_pma_fs";
 
-static const csmChar* FragShaderSrcCopy = "custom/live2d_copy_ps";
-static const csmChar* FragShaderSrcBlend = "custom/live2d_blend_ps";
-static const csmChar* FragShaderSrcPremultipliedAlphaBlend = "custom/live2d_pma_blend_ps";
-static const csmChar* FragShaderSrcMaskBlend = "custom/live2d_mask_blend_ps";
-static const csmChar* FragShaderSrcMaskInvertedBlend = "custom/live2d_mask_inv_blend_ps";
-static const csmChar* FragShaderSrcMaskPremultipliedAlphaBlend = "custom/live2d_mask_pma_blend_ps";
+static const csmChar* FragShaderSrcCopy = "custom/live2d_copy_fs";
+static const csmChar* FragShaderSrcBlend = "custom/live2d_blend_fs";
+static const csmChar* FragShaderSrcPremultipliedAlphaBlend = "custom/live2d_pma_blend_fs";
+static const csmChar* FragShaderSrcMaskBlend = "custom/live2d_mask_blend_fs";
+static const csmChar* FragShaderSrcMaskInvertedBlend = "custom/live2d_mask_inv_blend_fs";
+static const csmChar* FragShaderSrcMaskPremultipliedAlphaBlend = "custom/live2d_mask_pma_blend_fs";
 static const csmChar* FragShaderSrcMaskInvertedPremultipliedAlphaBlend =
-    "custom/live2d_mask_inv_pma_blend_ps";
+    "custom/live2d_mask_inv_pma_blend_fs";
 
 CubismShader_Axmol::CubismShader_Axmol()
 { }

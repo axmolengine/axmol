@@ -200,7 +200,7 @@ bool ShaderMonjori::init()
 {
     if (ShaderTestDemo::init())
     {
-        auto sn = ShaderNode::shaderNodeWithVertex("", "custom/example_Monjori_ps");
+        auto sn = ShaderNode::shaderNodeWithVertex("", "custom/example_Monjori_fs");
 
         auto s = Director::getInstance()->getCanvasSize();
         sn->setPosition(Vec2(s.width / 2, s.height / 2));
@@ -230,7 +230,7 @@ bool ShaderMandelbrot::init()
 {
     if (ShaderTestDemo::init())
     {
-        auto sn = ShaderNode::shaderNodeWithVertex("", "custom/example_Mandelbrot_ps");
+        auto sn = ShaderNode::shaderNodeWithVertex("", "custom/example_Mandelbrot_fs");
 
         auto s = Director::getInstance()->getCanvasSize();
         sn->setPosition(Vec2(s.width / 2, s.height / 2));
@@ -259,7 +259,7 @@ bool ShaderJulia::init()
 {
     if (ShaderTestDemo::init())
     {
-        auto sn = ShaderNode::shaderNodeWithVertex("", "custom/example_Julia_ps");
+        auto sn = ShaderNode::shaderNodeWithVertex("", "custom/example_Julia_fs");
 
         auto s = Director::getInstance()->getCanvasSize();
         sn->setPosition(Vec2(s.width / 2, s.height / 2));
@@ -288,7 +288,7 @@ bool ShaderHeart::init()
 {
     if (ShaderTestDemo::init())
     {
-        auto sn = ShaderNode::shaderNodeWithVertex("", "custom/example_Heart_ps");
+        auto sn = ShaderNode::shaderNodeWithVertex("", "custom/example_Heart_fs");
 
         auto s = Director::getInstance()->getCanvasSize();
         sn->setPosition(Vec2(s.width / 2, s.height / 2));
@@ -318,7 +318,7 @@ bool ShaderFlower::init()
 {
     if (ShaderTestDemo::init())
     {
-        auto sn = ShaderNode::shaderNodeWithVertex("", "custom/example_Flower_ps");
+        auto sn = ShaderNode::shaderNodeWithVertex("", "custom/example_Flower_fs");
 
         auto s = Director::getInstance()->getCanvasSize();
         sn->setPosition(Vec2(s.width / 2, s.height / 2));
@@ -348,7 +348,7 @@ bool ShaderPlasma::init()
 {
     if (ShaderTestDemo::init())
     {
-        auto sn = ShaderNode::shaderNodeWithVertex("", "custom/example_Plasma_ps");
+        auto sn = ShaderNode::shaderNodeWithVertex("", "custom/example_Plasma_fs");
 
         auto s = Director::getInstance()->getCanvasSize();
         sn->setPosition(Vec2(s.width / 2, s.height / 2));
@@ -432,7 +432,7 @@ bool SpriteBlur::initWithTexture(Texture2D* texture, const Rect& rect)
 
 void SpriteBlur::initProgram()
 {
-    auto program      = ProgramManager::getInstance()->loadProgram(positionTextureColor_vert, "custom/example_Blur_ps",
+    auto program      = ProgramManager::getInstance()->loadProgram(positionTextureColor_vert, "custom/example_Blur_fs",
                                                                    VertexLayoutKind::Sprite);
     auto programState = new rhi::ProgramState(program);
     setProgramState(programState);
@@ -566,11 +566,11 @@ bool ShaderRetroEffect::init()
     {
 
         auto fragStr = FileUtils::getInstance()->getStringFromFile(
-            FileUtils::getInstance()->fullPathForFilename("custom/example_HorizontalColor_ps"));
+            FileUtils::getInstance()->fullPathForFilename("custom/example_HorizontalColor_fs"));
         char* fragSource = (char*)fragStr.c_str();
 
         auto program = ProgramManager::getInstance()->loadProgram(
-            positionTextureColor_vert, "custom/example_HorizontalColor_ps", VertexLayoutKind::Sprite);
+            positionTextureColor_vert, "custom/example_HorizontalColor_fs", VertexLayoutKind::Sprite);
         auto p                         = new rhi::ProgramState(program);
         auto director                  = Director::getInstance();
         const auto& screenSizeLocation = p->getUniformLocation("u_screenSize");
@@ -643,7 +643,7 @@ bool ShaderLensFlare::init()
 {
     if (ShaderTestDemo::init())
     {
-        auto sn = ShaderNode::shaderNodeWithVertex("", "custom/shadertoy_LensFlare_ps");
+        auto sn = ShaderNode::shaderNodeWithVertex("", "custom/shadertoy_LensFlare_fs");
 
         auto s = Director::getInstance()->getCanvasSize();
         sn->setPosition(Vec2(s.width / 2, s.height / 2));
@@ -675,7 +675,7 @@ bool ShaderGlow::init()
 {
     if (ShaderTestDemo::init())
     {
-        auto sn = ShaderNode::shaderNodeWithVertex("", "custom/shadertoy_Glow_ps");
+        auto sn = ShaderNode::shaderNodeWithVertex("", "custom/shadertoy_Glow_fs");
 
         auto s = Director::getInstance()->getCanvasSize();
         sn->setPosition(Vec2(s.width / 2, s.height / 2));
@@ -750,7 +750,7 @@ bool ShaderMultiTexture::init()
         _sprite->setPosition(Vec2(s.width / 2, s.height / 2));
 
         auto program = ProgramManager::getInstance()->loadProgram(
-            "custom/example_MultiTexture_vs", "custom/example_MultiTexture_ps", VertexLayoutKind::Sprite);
+            "custom/example_MultiTexture_vs", "custom/example_MultiTexture_fs", VertexLayoutKind::Sprite);
         auto programState = new rhi::ProgramState(program);
         _sprite->setProgramState(programState);
 

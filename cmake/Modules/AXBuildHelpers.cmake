@@ -599,7 +599,7 @@ function(ax_setup_app_config app_name)
 
   # auto looking app shaders source dir and add to axslcc compile-list
   get_target_property(_APP_SOURCE_DIR ${app_name} SOURCE_DIR)
-  set(app_shaders_dir "${_APP_SOURCE_DIR}/Source/shaders")
+  set(app_shaders_dir "${_APP_SOURCE_DIR}/Source/Shaders")
 
   ax_find_shaders(${app_shaders_dir} app_shaders RECURSE)
 
@@ -609,7 +609,7 @@ function(ax_setup_app_config app_name)
 
     # add non-builtin shader build target, will output to: ${CMAKE_BINARY_DIR}/runtime/axslc/custom/
     ax_add_shader_target_for(${app_name} FILES ${app_shaders})
-    source_group("Source Files/Source/shaders" FILES ${app_shaders})
+    source_group("Source Files/Source/Shaders" FILES ${app_shaders})
   endif()
 
   if(IS_DIRECTORY ${AXSLCC_OUT_DIR})

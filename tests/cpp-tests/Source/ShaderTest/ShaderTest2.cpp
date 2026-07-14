@@ -232,7 +232,7 @@ void EffectBlur::setTarget(EffectSprite* sprite)
 
 bool EffectBlur::init(float blurRadius, float sampleNum)
 {
-    initProgramState("custom/example_Blur_ps");
+    initProgramState("custom/example_Blur_fs");
     _blurRadius    = blurRadius;
     _blurSampleNum = sampleNum;
 
@@ -257,7 +257,7 @@ public:
 
     bool init()
     {
-        initProgramState("custom/example_Outline_ps");
+        initProgramState("custom/example_Outline_fs");
 
         Vec3 color(1.0f, 0.2f, 0.3f);
         float radius    = 0.01f;
@@ -279,7 +279,7 @@ public:
 protected:
     bool init()
     {
-        initProgramState("custom/example_Noisy_ps");
+        initProgramState("custom/example_Noisy_fs");
         return true;
     }
 
@@ -299,7 +299,7 @@ public:
 protected:
     bool init()
     {
-        initProgramState("custom/example_EdgeDetection_ps");
+        initProgramState("custom/example_EdgeDetection_fs");
         return true;
     }
 
@@ -319,7 +319,7 @@ public:
 protected:
     bool init()
     {
-        initProgramState("custom/example_GreyScale_ps");
+        initProgramState("custom/example_GreyScale_fs");
         return true;
     }
 };
@@ -333,7 +333,7 @@ public:
 protected:
     bool init()
     {
-        initProgramState("custom/example_Sepia_ps");
+        initProgramState("custom/example_Sepia_fs");
         return true;
     }
 };
@@ -347,7 +347,7 @@ public:
 protected:
     bool init()
     {
-        initProgramState("custom/example_Bloom_ps");
+        initProgramState("custom/example_Bloom_fs");
         return true;
     }
 
@@ -367,7 +367,7 @@ public:
 protected:
     bool init()
     {
-        initProgramState("custom/example_CelShading_ps");
+        initProgramState("custom/example_CelShading_fs");
         return true;
     }
 
@@ -387,7 +387,7 @@ public:
 protected:
     bool init()
     {
-        initProgramState("custom/example_LensFlare_ps");
+        initProgramState("custom/example_LensFlare_fs");
         return true;
     }
 
@@ -433,7 +433,7 @@ protected:
 
 bool EffectNormalMapped::init()
 {
-    initProgramState("custom/Normal_ps");
+    initProgramState("custom/Normal_fs");
     _kBump = 2;
     return true;
 }

@@ -72,9 +72,9 @@ private:
 NewRendererTests::NewRendererTests()
 {
     auto programManager = ProgramManager::getInstance();
-    s_blur_program_id   = programManager->registerCustomProgram(positionTextureColor_vert, "custom/example_Blur_ps"sv,
+    s_blur_program_id   = programManager->registerCustomProgram(positionTextureColor_vert, "custom/example_Blur_fs"sv,
                                                                 VertexLayoutKind::Sprite);
-    s_sepia_program_id  = programManager->registerCustomProgram(positionTextureColor_vert, "custom/example_Sepia_ps"sv,
+    s_sepia_program_id  = programManager->registerCustomProgram(positionTextureColor_vert, "custom/example_Sepia_fs"sv,
                                                                 VertexLayoutKind::Sprite);
 
     ADD_TEST_CASE(CaptureNodeTest);

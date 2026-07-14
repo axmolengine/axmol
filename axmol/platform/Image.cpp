@@ -1378,7 +1378,7 @@ bool Image::initWithPngData(uint8_t* data, ssize_t dataLen)
             else
             {
                 // if PNG_PREMULTIPLIED_ALPHA_ENABLED == false && AX_ENABLE_PREMULTIPLIED_ALPHA != 0,
-                // you must do PMA at shader, such as modify positionTextureColor_ps.hlsl
+                // you must do PMA at shader, such as modify positionTextureColor_fs.hlsl
                 _hasPremultipliedAlpha = !!AX_ENABLE_PREMULTIPLIED_ALPHA;
             }
         }

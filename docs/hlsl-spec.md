@@ -10,7 +10,7 @@
 | Fragment/Pixel Shader | `_ps` | `.hlsl` | Fragment shader |
 | Compute Shader | `_cs` | `.hlsl` | Compute shader |
 
-Examples: `positionTexture_vs.hlsl`, `positionTextureColor_ps.hlsl`, `computeParticles_cs.hlsl`
+Examples: `positionTexture_vs.hlsl`, `positionTextureColor_fs.hlsl`, `computeParticles_cs.hlsl`
 
 Input language is detected from the file extension:
 - `.hlsl`, `.fx` → HLSL (default for axmol shaders)
@@ -250,7 +250,7 @@ VS_OUT main(VS_IN input) {
     return output;
 }
 
-// ===== positionTexture_ps.hlsl =====
+// ===== positionTexture_fs.hlsl =====
 #include "base.hlsli"
 
 struct PS_IN {

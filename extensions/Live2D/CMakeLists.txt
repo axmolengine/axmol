@@ -31,7 +31,7 @@ else()
   target_link_libraries(${LIB_NAME} ${live2d_core_tgt})
 endif()
 
-ax_find_shaders("${CMAKE_CURRENT_LIST_DIR}/Framework/src/Rendering/Axmol/shaders" live2d_shader_sources)
+ax_find_shaders("${CMAKE_CURRENT_LIST_DIR}/Framework/src/Rendering/Axmol/Shaders" live2d_shader_sources)
 
 ax_add_shader_target_for(${LIB_NAME} FILES ${live2d_shader_sources})
 

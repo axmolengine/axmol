@@ -413,21 +413,21 @@ configure_file(
   "${CMAKE_CURRENT_LIST_DIR}/renderer/RenderConsts.h.in"
   "${CMAKE_CURRENT_LIST_DIR}/renderer/RenderConsts.h" @ONLY)
 
-# SKINPOSITION_NORMAL_TEXTURE_3D:       skinPositionNormalTexture_vs.hlsl,     colorNormalTexture_ps.hlsl, LightDefs
-# POSITION_NORMAL_TEXTURE_3D:           skinPositionNormalTexture_vs.hlsl,     colorNormalTexture_ps.hlsl, LightDefs
-# POSITION_NORMAL_3D:                   positionNormalTexture_vs.hlsl,         colorNormal_ps.hlsl,        LightDefs
-# POSITION_BUMPEDNORMAL_TEXTURE_3D:     positionNormalTexture_vs.hlsl,         colorNormalTexture_ps.hlsl, lightNormMapDef
-# SKINPOSITION_BUMPEDNORMAL_TEXTURE_3D: skinPositionNormalTexture_vs.hlsl,     colorNormalTexture_ps.hlsl, lightNormMapDef
+# SKINPOSITION_NORMAL_TEXTURE_3D:       skinPositionNormalTexture_vs.hlsl,     colorNormalTexture_fs.hlsl, LightDefs
+# POSITION_NORMAL_TEXTURE_3D:           skinPositionNormalTexture_vs.hlsl,     colorNormalTexture_fs.hlsl, LightDefs
+# POSITION_NORMAL_3D:                   positionNormalTexture_vs.hlsl,         colorNormal_fs.hlsl,        LightDefs
+# POSITION_BUMPEDNORMAL_TEXTURE_3D:     positionNormalTexture_vs.hlsl,         colorNormalTexture_fs.hlsl, lightNormMapDef
+# SKINPOSITION_BUMPEDNORMAL_TEXTURE_3D: skinPositionNormalTexture_vs.hlsl,     colorNormalTexture_fs.hlsl, lightNormMapDef
 set_source_files_properties(
-  ${_AX_ROOT}/axmol/renderer/shaders/colorNormal_ps.hlsl
-  ${_AX_ROOT}/axmol/renderer/shaders/colorNormalTexture_ps.hlsl
+  ${_AX_ROOT}/axmol/renderer/shaders/colorNormal_fs.hlsl
+  ${_AX_ROOT}/axmol/renderer/shaders/colorNormalTexture_fs.hlsl
   ${_AX_ROOT}/axmol/renderer/shaders/positionNormalTexture_vs.hlsl
   ${_AX_ROOT}/axmol/renderer/shaders/skinPositionNormalTexture_vs.hlsl
   PROPERTIES AXSLCC_DEFINES
   "MAX_DIRECTIONAL_LIGHT_NUM=${AX_MAX_DIRECTIONAL_LIGHT},MAX_POINT_LIGHT_NUM=${AX_MAX_POINT_LIGHT},MAX_SPOT_LIGHT_NUM=${AX_MAX_SPOT_LIGHT}"
 )
 set_source_files_properties(
-  ${_AX_ROOT}/axmol/renderer/shaders/colorNormalTexture_ps.hlsl
+  ${_AX_ROOT}/axmol/renderer/shaders/colorNormalTexture_fs.hlsl
   ${_AX_ROOT}/axmol/renderer/shaders/positionNormalTexture_vs.hlsl
   ${_AX_ROOT}/axmol/renderer/shaders/skinPositionNormalTexture_vs.hlsl
   PROPERTIES AXSLCC_VARIANT_DEFINES "USE_NORMAL_MAPPING=1"

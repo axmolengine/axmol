@@ -306,7 +306,7 @@ bool SampleDrawNode::initWithWorld(b2WorldId worldId)
         auto& cmd = _customCommandCircle;
 
         // vertex attributes
-        auto program    = axpm->loadProgram("custom/circle_vs", "custom/circle_ps");
+        auto program    = axpm->loadProgram("custom/circle_vs", "custom/circle_fs");
         auto pipelinePS = new rhi::ProgramState(program);
         auto vfmt       = axvlm->allocateVertexLayoutDesc();
         vfmt.startLayout(3);
@@ -338,7 +338,7 @@ bool SampleDrawNode::initWithWorld(b2WorldId worldId)
         auto& cmd = _customCommandSolidCircle;
 
         // vertex attributes
-        auto program    = axpm->loadProgram("custom/solid_circle_vs", "custom/solid_circle_ps");
+        auto program    = axpm->loadProgram("custom/solid_circle_vs", "custom/solid_circle_fs");
         auto pipelinePS = new rhi::ProgramState(program);
         auto vfmt       = axvlm->allocateVertexLayoutDesc();
         vfmt.startLayout(4);
@@ -372,7 +372,7 @@ bool SampleDrawNode::initWithWorld(b2WorldId worldId)
         auto& cmd = _customCommandCapsule;
 
         // vertex attributes
-        auto program    = axpm->loadProgram("custom/solid_capsule_vs", "custom/solid_capsule_ps");
+        auto program    = axpm->loadProgram("custom/solid_capsule_vs", "custom/solid_capsule_fs");
         auto pipelinePS = new rhi::ProgramState(program);
         auto vfmt       = axvlm->allocateVertexLayoutDesc();
         vfmt.startLayout(4);

@@ -1257,7 +1257,7 @@ void FogTestDemo::onEnter()
     AX_SAFE_RELEASE_NULL(_programState1);
     AX_SAFE_RELEASE_NULL(_programState2);
 
-    auto program   = ProgramManager::getInstance()->loadProgram("custom/fog_vs", "custom/fog_ps");
+    auto program   = ProgramManager::getInstance()->loadProgram("custom/fog_vs", "custom/fog_fs");
     _programState1 = new rhi::ProgramState(program);
     _programState2 = new rhi::ProgramState(program);
 
@@ -1304,7 +1304,7 @@ void FogTestDemo::onEnter()
         AX_SAFE_RELEASE_NULL(_programState1);
         AX_SAFE_RELEASE_NULL(_programState2);
 
-        auto program   = ProgramManager::getInstance()->loadProgram("custom/fog_vs", "custom/fog_ps");
+        auto program   = ProgramManager::getInstance()->loadProgram("custom/fog_vs", "custom/fog_fs");
         _programState1 = new rhi::ProgramState(program);
         _programState2 = new rhi::ProgramState(program);
 
