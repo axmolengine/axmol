@@ -150,6 +150,10 @@ function(ax_add_shader_target target_name)
       list(APPEND SC_FLAGS "-t" "${TARG}")
     endforeach()
 
+    if(IOS AND AX_ENABLE_MTL)
+      list(APPEND SC_FLAGS "--msl-ios")
+    endif()
+
     # defines
     get_source_file_property(SOURCE_SC_DEFINES ${SC_FILE} AXSLCC_DEFINES)
     axslcc_parse_defines("${SOURCE_SC_DEFINES}" PARSED_DEFINES)

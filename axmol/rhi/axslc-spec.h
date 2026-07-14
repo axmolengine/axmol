@@ -11,27 +11,6 @@ namespace axslc
 #define sc_makefourcc(_a, _b, _c, _d) \
     (((uint32_t)(_a) | ((uint32_t)(_b) << 8) | ((uint32_t)(_c) << 16) | ((uint32_t)(_d) << 24)))
 
-inline constexpr int kVertexSemanticCount = 16;
-
-inline constexpr const char* kVertexSemanticNames[kVertexSemanticCount] = {
-    "POSITION",      // 0
-    "NORMAL",        // 1
-    "TEXCOORD0",     // 2
-    "TEXCOORD1",     // 3
-    "TEXCOORD2",     // 4
-    "TEXCOORD3",     // 5
-    "TEXCOORD4",     // 6
-    "TEXCOORD5",     // 7
-    "TEXCOORD6",     // 8
-    "TEXCOORD7",     // 9
-    "COLOR0",        // 10
-    "COLOR1",        // 11
-    "TANGENT",       // 12
-    "BINORMAL",      // 13
-    "BLENDINDICES",  // 14
-    "BLENDWEIGHT",   // 15
-};
-
 #pragma pack(push, 1)
 
 #define SC_CHUNK          sc_makefourcc('A', 'X', 'S', 'C')

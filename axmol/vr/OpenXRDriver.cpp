@@ -71,7 +71,9 @@
 #    include "axmol/platform/GL.h"
 #endif
 
-#include "axmol/vr/OpenXRVulkanInterop.h"
+#if AX_ENABLE_VK
+#   include "axmol/vr/OpenXRVulkanInterop.h"
+#endif
 
 // Define graphics API usage for OpenXR platform types.
 // These must be set before including openxr_platform.h so that it provides
@@ -358,9 +360,11 @@ bool OpenXRDriver::registerVulkanInterop()
     if (!initXrInstance() || !initXrSystem())
         return false;
 
+#if AX_ENABLE_VK
     _vulkanInterop = std::make_unique<rhi::OpenXRVulkanInterop>();
     _vulkanInterop->setXrHandles(_xrInstance, _xrSystem);
     GraphicsCore::setVulkanInterop(_vulkanInterop.get());
+#endif
     return true;
 }
 
