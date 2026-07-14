@@ -70,6 +70,8 @@ public:
 
     void bindUniformBuffers(const uint8_t* buffer, size_t bufferSize);
 
+    bool isValid() const override;
+
 private:
     void compileProgram();
 

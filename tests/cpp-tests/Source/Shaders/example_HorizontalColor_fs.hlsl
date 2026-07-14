@@ -1,7 +1,7 @@
 #include "base.hlsli"
 
 struct PS_IN {
-    float4 v_color : COLOR0;
+    float4 v_color : COLOR0; // required for fixing d3d validation error
     float2 v_texCoord : TEXCOORD0;
     float4 pixelCoord : SV_Position;
 };

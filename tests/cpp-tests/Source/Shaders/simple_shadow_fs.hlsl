@@ -2,7 +2,7 @@
 
 struct PS_IN {
     float2 v_texCoord : TEXCOORD0;
-    float4 v_position : NORMAL;
+    float4 v_position : POSITION;
 };
 
 cbuffer fs_ub : register(b1, space0) {

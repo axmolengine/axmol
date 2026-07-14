@@ -50,6 +50,7 @@ AX_DLL const std::string_view positionColorLengthTexture_vs      = "positionColo
 AX_DLL const std::string_view positionColorLengthTexture_fs      = "positionColorLengthTexture_fs"sv;
 AX_DLL const std::string_view positionColorTextureAsPointsize_vs = "positionColorTextureAsPointsize_vs"sv;
 AX_DLL const std::string_view position_vs                        = "position_vs"sv;
+AX_DLL const std::string_view layer_radialGradient_vs            = "layer_radialGradient_vs"sv;
 AX_DLL const std::string_view layer_radialGradient_fs            = "layer_radialGradient_fs"sv;
 AX_DLL const std::string_view grayScale_fs                       = "grayScale_fs"sv;
 AX_DLL const std::string_view positionUColor_vs                  = "positionUColor_vs"sv;

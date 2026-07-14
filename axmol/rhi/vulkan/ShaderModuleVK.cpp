@@ -62,11 +62,14 @@ void ShaderModuleImpl::compileShader(VkDevice device)
     smci.codeSize = _codeSpan.size();
     smci.pCode    = reinterpret_cast<const uint32_t*>(_codeSpan.data());
 
-    VkResult vr = vkCreateShaderModule(device, &smci, nullptr, &_shader);
-    if (vr != VK_SUCCESS || _shader == VK_NULL_HANDLE)
+    _precompiled  = true;
+
+    VkResult ret = vkCreateShaderModule(device, &smci, nullptr, &_shader);
+
+    _compiled = ret == VK_SUCCESS && _shader != VK_NULL_HANDLE;
+    if (!_compiled)
     {
-        AXLOGE("axmol: Failed to create VkShaderModule (VkResult={}).", (int)vr);
-        assert(false);
+        AXLOGE("axmol: Failed to create VkShaderModule (VkResult={}).", (int)ret);
     }
 }
 

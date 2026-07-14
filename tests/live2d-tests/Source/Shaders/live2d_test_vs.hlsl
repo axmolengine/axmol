@@ -12,7 +12,11 @@ struct VS_OUT {
 
 VS_OUT main(VS_IN input) {
     VS_OUT output;
-    output.position = input.a_position;
+#ifdef AXSLC_TARGET_GLSL
+    output.position = float4(input.a_position.xyz, 1.0);
+#else
+    output.position = float4(input.a_position.x, -input.a_position.y, input.a_position.z, 1.0);
+#endif
     output.v_texCoord = input.a_texCoord;
     return output;
 }

@@ -123,7 +123,7 @@ void ProgramManager::init()
     registerProgram(ProgramType::POSITION_COLOR_TEXTURE_AS_POINTSIZE, positionColorTextureAsPointsize_vs,
                     positionColor_fs, VertexLayoutKind::DrawNode);
     registerProgram(ProgramType::POSITION_COLOR, positionColor_vs, positionColor_fs, VertexLayoutKind::posColor);
-    registerProgram(ProgramType::LAYER_RADIA_GRADIENT, position_vs, layer_radialGradient_fs, VertexLayoutKind::Pos);
+    registerProgram(ProgramType::LAYER_RADIA_GRADIENT, layer_radialGradient_vs, layer_radialGradient_fs, VertexLayoutKind::Pos);
     registerProgram(ProgramType::POSITION_TEXTURE, positionTexture_vs, positionTexture_fs, VertexLayoutKind::Texture);
     registerProgram(ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST, positionTextureColor_vs,
                     positionTextureColorAlphaTest_fs, VertexLayoutKind::Sprite);
@@ -232,7 +232,7 @@ Program* ProgramManager::loadProgram(std::string_view vsName,
     auto fragSource = fileUtils->getDataFromFile(fragFile);
     auto program    = axdrv->createProgram(std::move(vertSource), std::move(fragSource));
 
-    if (program)
+    if (program && program->isValid())
     {
         AXLOGD("Load program: {} {}, {} ok", progId, vsName, fsName);
 
@@ -246,7 +246,8 @@ Program* ProgramManager::loadProgram(std::string_view vsName,
     }
     else
     {
-        AXLOGD("Load program: {} {}, {} fail", progId, vsName, fsName);
+        AXLOGE("Load program: {} {}, {} fail", progId, vsName, fsName);
+        AXASSERT(false, "Load program fail");
     }
     return program;
 }

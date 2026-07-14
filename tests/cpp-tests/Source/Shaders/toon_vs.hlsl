@@ -1,7 +1,7 @@
 #include "base.hlsli"
 
 struct VS_IN {
-    float3 a_position : POSITION;
+    float4 a_position : POSITION;
     float2 a_texCoord : TEXCOORD0;
     float3 a_normal : NORMAL;
 };
@@ -19,7 +19,7 @@ cbuffer vs_ub : register(b0, space0) {
 
 VS_OUT main(VS_IN input) {
     VS_OUT output;
-    output.position = mul(u_MVPMatrix, float4(input.a_position, 1.0));
+    output.position = mul(u_MVPMatrix, input.a_position);
     output.v_texCoord = input.a_texCoord;
     output.v_normal = mul(u_NormalMatrix, input.a_normal);
     return output;

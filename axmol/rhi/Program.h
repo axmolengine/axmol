@@ -198,6 +198,8 @@ public:
 
     ShaderModule* getVSModule() const { return _vsModule; }
     ShaderModule* getFSModule() const { return _fsModule; }
+    
+    virtual bool isValid() const;
 
 protected:
     static uint64_t makeUniformNameKey(std::string_view name);

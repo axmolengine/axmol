@@ -31,7 +31,7 @@
 #include "axmol/base/Data.h"
 
 #include <span>
-#include <string>
+#include <string_view>
 
 namespace ax::rhi
 {
@@ -59,9 +59,9 @@ public:
 
     uint32_t getStageOffset() const { return _stageOffset; }
 
-    std::span<uint8_t> getCodeSpan() const { return _codeSpan; }
+    std::string_view getCode() const { return std::string_view{reinterpret_cast<const char*>(_codeSpan.data()), _codeSpan.size()}; }
 
-    bool isPrecompiled() const { return _precompiled; }
+    bool isCompiled() const { return _compiled; }
 
 protected:
     ShaderModule(ShaderStage stage, Data& data);
@@ -78,7 +78,8 @@ protected:
 
     Data _chunkData;               // owns the axslcc chunk
     std::span<uint8_t> _codeSpan;  // view into parsed shader source
-    bool _precompiled = false;     // true if bytecode (DXBC/DXIL), false if source text
+    bool _compiled    = false;   
+    bool _precompiled = false;  // true if bytecode (DXBC/DXIL) or SPIRV, false if source text
 
     uint32_t _stageOffset{0};
 };

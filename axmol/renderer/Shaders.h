@@ -58,6 +58,7 @@ extern AX_DLL const std::string_view positionColorLengthTexture_vs;
 extern AX_DLL const std::string_view positionColorLengthTexture_fs;
 extern AX_DLL const std::string_view positionColorTextureAsPointsize_vs;
 extern AX_DLL const std::string_view position_vs;
+extern AX_DLL const std::string_view layer_radialGradient_vs;
 extern AX_DLL const std::string_view layer_radialGradient_fs;
 extern AX_DLL const std::string_view grayScale_fs;
 extern AX_DLL const std::string_view positionUColor_vs;

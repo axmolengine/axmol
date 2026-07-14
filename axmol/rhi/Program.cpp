@@ -27,6 +27,7 @@
 #include "axmol/rhi/VertexLayout.h"
 #include "axmol/rhi/axslc-spec.h"
 #include "axmol/rhi/GraphicsCore.h"
+#include "axmol/rhi/ShaderModule.h"
 #include "axmol/tlx/hash.hpp"
 #include "axmol/tlx/utility.hpp"
 #include "yasio/ibstream.hpp"
@@ -82,6 +83,11 @@ Program::~Program()
     AX_SAFE_RELEASE(_vsModule);
     AX_SAFE_RELEASE(_fsModule);
     AX_SAFE_RELEASE(_vertexLayout);
+}
+
+bool Program::isValid() const
+{
+    return _vsModule && _fsModule && _vsModule->isCompiled() && _fsModule->isCompiled();
 }
 
 void Program::setProgramIds(uint32_t progType, uint64_t progId)

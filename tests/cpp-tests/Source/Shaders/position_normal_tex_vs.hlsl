@@ -44,6 +44,7 @@ VS_OUT main(VS_IN input)
 
     output.v_normal = mul(u_NormalMatrix, input.a_normal);
     output.v_texCoord = input.a_texCoord;
+    // check: does it required, original GLSL has the unconditional flip logic
     output.v_texCoord.y = 1.0 - output.v_texCoord.y;
     output.position = mul(u_PMatrix, ePosition);
     return output;

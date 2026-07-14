@@ -38,7 +38,8 @@
 
 namespace ax::rhi::gl
 {
-ProgramImpl::ProgramImpl(Data& vsData, Data& fsData) : Program(vsData, fsData)
+ProgramImpl::ProgramImpl(Data& vsData, Data& fsData)
+    : Program(vsData, fsData)
 {
     compileProgram();
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
@@ -65,6 +66,11 @@ void ProgramImpl::reloadProgram()
     compileProgram();
 }
 #endif
+
+bool ProgramImpl::isValid() const
+{
+    return _program != 0;
+}
 
 void ProgramImpl::compileProgram()
 {
@@ -94,17 +100,20 @@ void ProgramImpl::compileProgram()
     {
         GLint errorInfoLen = 0;
         glGetProgramiv(_program, GL_INFO_LOG_LENGTH, &errorInfoLen);
+
+        std::string_view vsSource = _vsModule->getCode();
+        std::string_view fsSource = _fsModule->getCode();
         if (errorInfoLen > 1)
         {
             auto errorInfo = tlx::make_unique_for_overwrite<char[]>(static_cast<size_t>(errorInfoLen));
             glGetProgramInfoLog(_program, errorInfoLen, NULL, errorInfo.get());
-            AXLOGE("axmol:ERROR: {}: failed to link program: {} ", __FUNCTION__, errorInfo.get());
+            AXLOGE("axmol:ERROR: {}: failed to link program: {} \n--- vsSource ---\n{}\n --- fsSource ---\n{}", __FUNCTION__, errorInfo.get(), vsSource, fsSource);
         }
         else
-            AXLOGE("axmol:ERROR: {}: failed to link program ", __FUNCTION__);
+            AXLOGE("axmol:ERROR: {}: failed to link program", __FUNCTION__);
         glDeleteProgram(_program);
         _program = 0;
-        AXASSERT(false, "Failed to link program");
+        return;
     }
 
     /// building runtime reflections and ubos

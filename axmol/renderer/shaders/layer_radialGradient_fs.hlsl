@@ -1,5 +1,5 @@
 struct PS_IN {
-    float4 v_position : SV_Position;
+    float4 v_position : POSITION;
 };
 
 cbuffer fs_ub : register(b1, space0) {

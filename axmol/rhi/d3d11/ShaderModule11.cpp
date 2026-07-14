@@ -33,17 +33,22 @@ namespace ax::rhi::d3d11
 {
 ShaderModuleImpl::ShaderModuleImpl(DriverImpl* driver, ShaderStage stage, Data& data) : ShaderModule(stage, data)
 {
-    if (isPrecompiled())
+    if (_precompiled)
     {
-        _blob   = _codeSpan;
-        _shader = driver->createShaderFromBytecode(_codeSpan, stage);
+        _blob     = _codeSpan;
+        _shader   = driver->createShaderFromBytecode(_codeSpan, stage);
+        _compiled = true;
     }
     else
     {
-        ID3DBlob* compiled = nullptr;
-        _shader            = driver->compileShader(_codeSpan, stage, compiled);
-        _blob              = {static_cast<uint8_t*>(compiled->GetBufferPointer()), compiled->GetBufferSize()};
-        _nativeBlob        = compiled;
+        ID3DBlob* shaderBlob{nullptr};
+        _shader   = driver->compileShader(_codeSpan, stage, shaderBlob);
+        _compiled = shaderBlob != nullptr;
+        if (_compiled)
+        {
+            _blob       = {static_cast<uint8_t*>(shaderBlob->GetBufferPointer()), shaderBlob->GetBufferSize()};
+            _nativeBlob = shaderBlob;
+        }
     }
 }
 
