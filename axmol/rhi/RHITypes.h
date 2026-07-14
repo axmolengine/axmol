@@ -626,12 +626,29 @@ struct UniformLocationHash
     size_t operator()(UniformLocation const& u) const noexcept { return size_t(u.location); }
 };
 
+/**
+ * Describes a vertex attribute semantic used to match shader inputs with
+ * vertex layout elements.
+ *
+ * A semantic consists of a base name and an independent numeric index, such
+ * as `POSITION0`, `TEXCOORD1`, or a user-defined semantic like `CUSTOM2`.
+ *
+ * The predefined static members provide commonly used Axmol semantics, but
+ * custom semantic names are also supported through the public constructor.
+ *
+ * Semantic values represent the logical purpose of vertex attributes and are
+ * independent of backend-specific attribute locations. The shader compiler
+ * reflection data maps each semantic to the actual location used by Vulkan,
+ * Metal, and OpenGL, while Direct3D uses the semantic name and index directly.
+ */
 struct VertexSemantic
 {
     char name[SC_NAME_LEN] = {};
     uint16_t index{0};
     uint16_t nameLen{0};
 
+    /// Builtin semantics for Axmol vertex attributes.
+    /// These are the most commonly used semantics in Axmol shaders.
     static const VertexSemantic POSITION;
     static const VertexSemantic NORMAL;
     static const VertexSemantic TEXCOORD0;

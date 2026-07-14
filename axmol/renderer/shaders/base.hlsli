@@ -87,7 +87,25 @@ SamplerState PointNoMipClamp : register(s21, space1);
 // Example:
 //   AX_INSTANCE_INPUT(TEXCOORD1)
 #define AX_INSTANCE_INPUT(semantic) \
-    float4x4 __ax_instance : semantic
+    AX_INSTANCE_INPUT_IMPL(semantic)
+
+#define AX_INSTANCE_INPUT_IMPL(semantic) \
+    AX_INSTANCE_INPUT_##semantic
+
+#define AX_INSTANCE_INPUT_TEXCOORD0 \
+    float4x4 __ax_instance : TEXCOORD0
+
+#define AX_INSTANCE_INPUT_TEXCOORD1 \
+    float4x4 __ax_instance : TEXCOORD1
+
+#define AX_INSTANCE_INPUT_TEXCOORD2 \
+    float4x4 __ax_instance : TEXCOORD2
+
+#define AX_INSTANCE_INPUT_TEXCOORD3 \
+    float4x4 __ax_instance : TEXCOORD3
+
+#define AX_INSTANCE_INPUT_TEXCOORD4 \
+    float4x4 __ax_instance : TEXCOORD4
 
 // Transforms an object-space position to clip space using the current
 // per-instance transform.

@@ -14,22 +14,22 @@ namespace axslc
 inline constexpr int kVertexSemanticCount = 16;
 
 inline constexpr const char* kVertexSemanticNames[kVertexSemanticCount] = {
-    "POSITION",     // 0
-    "NORMAL",       // 1
-    "TEXCOORD0",    // 2
-    "TEXCOORD1",    // 3
-    "TEXCOORD2",    // 4
-    "TEXCOORD3",    // 5
-    "TEXCOORD4",    // 6
-    "TEXCOORD5",    // 7
-    "TEXCOORD6",    // 8
-    "TEXCOORD7",    // 9
-    "COLOR",        // 10
-    "COLOR1",       // 11
-    "TANGENT",      // 12
-    "BINORMAL",     // 13
-    "BLENDINDICES", // 14
-    "BLENDWEIGHT",  // 15
+    "POSITION",      // 0
+    "NORMAL",        // 1
+    "TEXCOORD0",     // 2
+    "TEXCOORD1",     // 3
+    "TEXCOORD2",     // 4
+    "TEXCOORD3",     // 5
+    "TEXCOORD4",     // 6
+    "TEXCOORD5",     // 7
+    "TEXCOORD6",     // 8
+    "TEXCOORD7",     // 9
+    "COLOR0",        // 10
+    "COLOR1",        // 11
+    "TANGENT",       // 12
+    "BINORMAL",      // 13
+    "BLENDINDICES",  // 14
+    "BLENDWEIGHT",   // 15
 };
 
 #pragma pack(push, 1)
@@ -39,7 +39,7 @@ inline constexpr const char* kVertexSemanticNames[kVertexSemanticCount] = {
 #define SC_CHUNK_REFL     sc_makefourcc('R', 'E', 'F', 'L')
 #define SC_CHUNK_CODE     sc_makefourcc('C', 'O', 'D', 'E')
 
-#define SC_BYTECODE_FLAG  0x80000000U   // bit 31 of profile_ver: code is bytecode (DXBC/DXIL)
+#define SC_BYTECODE_FLAG  0x80000000U  // bit 31 of profile_ver: code is bytecode (DXBC/DXIL)
 
 #define SC_LANG_GLES      sc_makefourcc('G', 'L', 'E', 'S')
 #define SC_LANG_HLSL      sc_makefourcc('H', 'L', 'S', 'L')
@@ -119,7 +119,7 @@ struct sc_chunk
 
 struct sc_target_entry
 {
-    uint32_t lang;  // SC_LANG_GLES / HLSL / MSL / SPIRV ...
+    uint32_t lang;  // SHADER_LANG_ESSL / HLSL / MSL / SPIRV ...
     uint32_t profile_ver;
     uint32_t offset;
 };
@@ -167,7 +167,7 @@ struct sc_refl_texture
     uint8_t arrayed : 1;      // whether samplerXXArray
     uint8_t reserved : 6;     // reserved field
     uint16_t count;
-    uint8_t sampler_source;   // SamplerSource
+    uint8_t sampler_source;  // SamplerSource
     uint8_t reserved2;
 };
 
@@ -177,7 +177,7 @@ struct sc_refl_sampler
     int32_t binding;
     uint16_t descriptor_set;
     uint16_t count;
-    int16_t preset_index;
+    int16_t preset_index;  // -1 when not a base.hlsli preset
     uint8_t comparison;
     uint8_t reserved;
 };
