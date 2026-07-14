@@ -27,7 +27,6 @@
 
 #include <stdint.h>
 #include <assert.h>
-#include <cctype>
 #include <functional>
 #include <string>
 #include <string_view>
