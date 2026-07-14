@@ -229,6 +229,7 @@ protected:
 private:
     void prepareDrawing() const;
     void setTextures() const;
+    void setSamplers() const;
     void setUniformBuffer() const;
     void afterDraw();
     void flush();

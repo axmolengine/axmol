@@ -32,6 +32,7 @@
 #include "axmol/rhi/metal/BufferManager.h"
 #include "axmol/rhi/metal/DepthStencilStateMTL.h"
 #include "axmol/rhi/metal/RenderTargetMTL.h"
+#include "axmol/rhi/SamplerCache.h"
 #include "axmol/platform/Application.h"
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_MAC
@@ -509,6 +510,7 @@ void RenderContextImpl::prepareDrawing() const
 {
     setUniformBuffer();
     setTextures();
+    setSamplers();
 
     auto mtlDepthStencilState = _depthStencilState->getMTLDepthStencilState();
     if (mtlDepthStencilState)
@@ -530,7 +532,48 @@ void RenderContextImpl::setTextures() const
             const auto slot  = bindingIndex + k;
             auto textureImpl = static_cast<TextureImpl*>(texs[k]);
             [_mtlRenderEncoder setFragmentTexture:textureImpl->internalHandle() atIndex:slot];
+            // Legacy combined-sampler binding and fallback for samplers that
+            // are not resolved to a shader preset.
             [_mtlRenderEncoder setFragmentSamplerState:textureImpl->internalSampler() atIndex:slot];
+        }
+    }
+}
+
+void RenderContextImpl::setSamplers() const
+{
+    const auto& samplerInfos = _programState->getProgram()->getActiveSamplerInfos();
+    auto samplerCache        = SamplerCache::getInstance();
+
+    for (const auto& samplerInfo : samplerInfos)
+    {
+        if (samplerInfo.binding < 0 || samplerInfo.count == 0)
+            continue;
+
+        // Not a base.hlsli preset. Keep the texture-owned/custom fallback
+        // currently bound by setTextures().
+        if (samplerInfo.presetIndex < 0)
+            continue;
+
+        if (samplerInfo.presetIndex >= SamplerIndex::Count)
+        {
+            AXASSERT(false, "invalid Metal sampler preset index");
+            continue;
+        }
+
+        const auto samplerIndex = static_cast<SamplerIndex::enum_type>(samplerInfo.presetIndex);
+        const auto sampler      = samplerCache->getSampler(samplerIndex);
+        const auto samplerState = static_cast<id<MTLSamplerState>>(sampler);
+
+        if (samplerState == nil)
+        {
+            AXASSERT(false, "failed to resolve Metal sampler preset");
+            continue;
+        }
+
+        for (uint16_t index = 0; index < samplerInfo.count; ++index)
+        {
+            [_mtlRenderEncoder setFragmentSamplerState:samplerState
+                                               atIndex:samplerInfo.binding + index];
         }
     }
 }
