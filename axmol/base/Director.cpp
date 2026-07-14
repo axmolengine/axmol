@@ -55,6 +55,7 @@ THE SOFTWARE.
 #include "axmol/base/FPSImages.h"
 #include "axmol/base/Scheduler.h"
 #include "axmol/base/Macros.h"
+#include "axmol/base/Profiling.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/CustomEvent.h"
 #include "axmol/base/Logging.h"
@@ -1443,6 +1444,8 @@ void Director::renderFrame()
     if (!_active) [[unlikely]]
         return;
 
+    AX_PROFILER_ZONE_SCOPED;
+
     const auto canRender = _renderer->beginFrame();
 
     // calculate "global" dt
@@ -1534,6 +1537,8 @@ void Director::renderFrame()
     }
 
     _poolManager->getCurrentPool()->clear();
+
+    AX_PROFILER_FRAME_MARK;
 }
 
 void Director::renderFrame(float dt)
