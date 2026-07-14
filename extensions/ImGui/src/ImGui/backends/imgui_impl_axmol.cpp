@@ -550,7 +550,7 @@ IMGUI_IMPL_API bool ImGui_ImplAxmol_CreateDeviceObjects()
 
     auto pm = ProgramManager::getInstance();
 
-    bd->ProgramInfo.program = pm->loadProgram("custom/imgui_sprite_vs"sv, ax::positionTextureColor_frag);
+    bd->ProgramInfo.program = pm->loadProgram("custom/imgui_sprite_vs"sv, ax::positionTextureColor_fs);
 
     IM_ASSERT(bd->ProgramInfo.program);
 

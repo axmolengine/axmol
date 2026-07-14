@@ -184,7 +184,7 @@ protected:
 
 bool Effect::initProgramState(std::string_view fragmentFilename)
 {
-    auto program      = ProgramManager::getInstance()->loadProgram(positionTextureColor_vert, fragmentFilename,
+    auto program      = ProgramManager::getInstance()->loadProgram(positionTextureColor_vs, fragmentFilename,
                                                                    VertexLayoutKind::Sprite);
     auto programState = new rhi::ProgramState(program);
     AX_SAFE_RELEASE(_programState);
