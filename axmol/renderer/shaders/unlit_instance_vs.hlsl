@@ -3,7 +3,7 @@
 struct VS_IN {
     float4 a_position : POSITION;
     float2 a_texCoord : TEXCOORD0;
-    float4x4 a_instance : TEXCOORD1;
+    AX_INSTANCE_INPUT(TEXCOORD1);
 };
 
 struct VS_OUT {
@@ -18,7 +18,7 @@ cbuffer vs_ub : register(b0, space0) {
 VS_OUT main(VS_IN input)
 {
     VS_OUT output;
-    output.position = mul(mul(u_MVPMatrix, input.a_instance), input.a_position);
+    output.position = AX_INSTANCE_TRANSFORM(input, input.a_position, u_MVPMatrix);
     output.v_texCoord = input.a_texCoord;
     output.v_texCoord.y = 1.0 - output.v_texCoord.y;
     return output;

@@ -1,16 +1,16 @@
 #include "base.hlsli"
 
 struct VS_IN {
-    float2 a_localPosition : LOCAL_POSITION;
-    float4 a_instanceColor : INSTANCE_COLOR0;
-    float4 a_instancePosAndRadius : INSTANCE_POS_AND_RADIUS0;
+    float2 a_localPosition : POSITION;
+    float4 a_instanceColor : TEXCOORD0;
+    float4 a_instancePosAndRadius : TEXCOORD1;
 };
 
 struct VS_OUT {
-    float4 position : SV_Position;
     float2 f_position : TEXCOORD0;
     float4 f_color : TEXCOORD1;
     float f_thickness : TEXCOORD2;
+    float4 position : SV_Position;
 };
 
 cbuffer vs_ub : register(b0, space0) {

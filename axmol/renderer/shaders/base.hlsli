@@ -1,3 +1,7 @@
+//------------------------------------------------------------------------------
+// Basic definitions for HLSL shaders
+//------------------------------------------------------------------------------
+
 // Vertex input semantic alias
 #ifndef DIRLIGHT
 #define DIRLIGHT TEXCOORD1
@@ -36,7 +40,9 @@
 //   GLSL/ESSL       → no flip: ((v).y)
 #define AX_Y_UP(v) (AXSLC_UV_TOP ? (1.0 - (v).y) : ((v).y))
 
-// ==== Builtin Samplers ====
+//------------------------------------------------------------------------------
+// Builtin Samplers
+//------------------------------------------------------------------------------
 
 // --- Linear sampling ---
 SamplerState LinearClamp : register(s0, space1);
@@ -71,3 +77,24 @@ SamplerComparisonState ShadowCmpBorder : register(s19, space1);
 // --- Special cases ---
 SamplerState LinearNoMipClamp : register(s20, space1);
 SamplerState PointNoMipClamp : register(s21, space1);
+
+//------------------------------------------------------------------------------
+// GPU Instancing
+//------------------------------------------------------------------------------
+
+// Declares the per-instance transform input.
+//
+// Example:
+//   AX_INSTANCE_INPUT(TEXCOORD1)
+#define AX_INSTANCE_INPUT(semantic) \
+    float4x4 __ax_instance : semantic
+
+// Transforms an object-space position to clip space using the current
+// per-instance transform.
+//
+// NOTE:
+// Axmol stores instance transforms as four column vectors. HLSL assembles
+// vertex input matrices from semantic rows, so the matrix is transposed
+// to recover the logical object-to-world transform.
+#define AX_INSTANCE_TRANSFORM(input, position, mvp) \
+    mul(mul((mvp), transpose((input).__ax_instance)), (position))

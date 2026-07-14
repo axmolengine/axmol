@@ -1,15 +1,15 @@
 #include "base.hlsli"
 
 struct VS_IN {
-    float2 a_localPosition : LOCAL_POSITION;
-    float4 a_instanceTransform : INSTANCE_TRANSFORM0;
-    float4 a_instancePoints12 : INSTANCE_POINTS12_0;
-    float4 a_instancePoints34 : INSTANCE_POINTS34_0;
-    float4 a_instancePoints56 : INSTANCE_POINTS56_0;
-    float4 a_instancePoints78 : INSTANCE_POINTS78_0;
-    int a_instanceCount : INSTANCE_COUNT0;
-    float a_instanceRadius : INSTANCE_RADIUS0;
-    float4 a_instanceColor : INSTANCE_COLOR0;
+    float2 a_localPosition : POSITION;
+    float4 a_instanceTransform : TEXCOORD0;
+    float4 a_instancePoints12 : TEXCOORD1;
+    float4 a_instancePoints34 : TEXCOORD2;
+    float4 a_instancePoints56 : TEXCOORD3;
+    float4 a_instancePoints78 : TEXCOORD4;
+    int a_instanceCount : TEXCOORD5;
+    float a_instanceRadius : TEXCOORD6;
+    float4 a_instanceColor : TEXCOORD7;
 };
 
 struct VS_OUT {

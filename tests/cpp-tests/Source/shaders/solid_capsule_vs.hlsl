@@ -1,10 +1,10 @@
 #include "base.hlsli"
 
 struct VS_IN {
-    float2 a_localPosition : LOCAL_POSITION;
-    float4 a_instanceTransform : INSTANCE_TRANSFORM0;
-    float4 a_instanceColor : INSTANCE_COLOR0;
-    float4 a_instanceRadiusAndLength : INSTANCE_RADIUS_AND_LENGTH0;
+    float2 a_localPosition : POSITION;
+    float4 a_instanceColor : TEXCOORD0;
+    float4 a_instanceRadiusAndLength : TEXCOORD1;
+    float4 a_instanceTransform : TEXCOORD2;
 };
 
 struct VS_OUT {
