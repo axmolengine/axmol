@@ -33,6 +33,7 @@
 #include <bit>
 #include "axmol/tlx/bitmask.hpp"
 #include "axmol/rhi/axslc-spec.h"
+#include "axmol/platform/PlatformDefine.h"
 
 #define AX_ARRAYSIZE(A) (sizeof(A) / sizeof((A)[0]))
 
@@ -598,7 +599,7 @@ struct UniformLocationHash
  * reflection data maps each semantic to the actual location used by Vulkan,
  * Metal, and OpenGL, while Direct3D uses the semantic name and index directly.
  */
-struct VertexSemantic
+struct AX_API VertexSemantic
 {
     char name[SC_NAME_LEN] = {};
     uint16_t index{0};
