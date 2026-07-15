@@ -171,7 +171,7 @@ Axmol 引擎在 Cocos2d-x v4.0 的基础上进行迭代和改进。现在速度�
 #### Corporate Diamond
 <p align="left">
   <a href="https://scorewarrior.com/?ad=axmol" target=_blank><img
-    src="https://cdn.prod.website-files.com/633da33305ac754156026dd8/63566f1edf5f0712f94f7f1b_sw-triangle-821890.svg" height="120"
+    src="https://cdn.prod.website-files.com/633da33305ac754156026dd8/63566f1edf5f0712f94f7f1b_sw-triangle-821890.svg" height="160"
   /></a>
 </p>
 
@@ -194,7 +194,7 @@ Please visit: [https://axmol.dev/donate](https://axmol.dev/donate)
 ## 参考链接
 
 - [1kiss](https://github.com/simdsoft/1kiss): 一个由 PowerShell 编写的能够自动配置各平台编译工具链的跨平台构建工具。
-- [axslcc](https://github.com/axmolengine/axslcc): Axmol 引擎专用跨平台 Shader 编译器（fork 自 `glslcc`)。
+- [axslcc](https://github.com/axmolengine/axslcc): Axmol v3 的 HLSL-first 跨平台 shader 编译工具，为 Axmol RHI 提供统一 shader 工作流。
 - [Cocos2d-x](https://github.com/cocos2d/cocos2d-x)：原 Cocos2d-x 官方引擎仓库。
 
 ## Axmol 活跃状态

@@ -172,7 +172,7 @@ If you find **Axmol Engine** helpful, please consider donating in [https://axmol
 
 <p align="left">
   <a href="https://scorewarrior.com/?ad=axmol" target=_blank><img
-    src="https://cdn.prod.website-files.com/633da33305ac754156026dd8/63566f1edf5f0712f94f7f1b_sw-triangle-821890.svg" height="120"
+    src="https://cdn.prod.website-files.com/633da33305ac754156026dd8/63566f1edf5f0712f94f7f1b_sw-triangle-821890.svg" height="160"
   /></a>
 </p>
 
@@ -194,7 +194,7 @@ In order to see some of our community works, please check our Axmol Showcase: [M
 ## Reference links
 
 - [1kiss](https://github.com/simdsoft/1kiss): A cross-platform one step build powershell script, with auto setup general dependent tools.
-- [axslcc](https://github.com/axmolengine/axslcc): The axmol new shader workflow tool, forked from `glslcc`.
+- [axslcc](https://github.com/axmolengine/axslcc): The Axmol v3 HLSL-first shader compiler and cross-platform shader workflow tool.
 - [Official Cocos2d-x](https://github.com/cocos2d/cocos2d-x)
 
 ## Axmol Stats
