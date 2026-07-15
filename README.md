@@ -168,7 +168,7 @@ If you find **Axmol Engine** helpful, please consider donating in [https://axmol
 
 ## Sponsors
 
-#### Platinum Sponsors
+#### Corporate Diamond
 
 <p align="left">
   <a href="https://scorewarrior.com/?ad=axmol" target=_blank><img
