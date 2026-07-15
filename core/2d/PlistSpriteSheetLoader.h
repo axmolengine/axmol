@@ -46,6 +46,12 @@ public:
     void reload(std::string_view filePath, SpriteFrameCache& cache) override;
 
 protected:
+    SpriteFrame* parseFrame(const ValueMap& frameDict,
+                            std::vector<std::string>& frameAliases,
+                            int format,
+                            Texture2D* texture,
+                            const ax::Vec2& textureSize);
+
     /*Adds multiple Sprite Frames with a dictionary. The texture will be associated with the created sprite frames.
      */
     void addSpriteFramesWithDictionary(ValueMap& dictionary,
