@@ -710,48 +710,52 @@ int lua_ax_rhi_Program_getUniformBufferSize(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_rhi_Program_getVertexInputDesc(lua_State* tolua_S)
+int lua_ax_rhi_Program_getTextureOwnedSamplerInfo(lua_State* tolua_S)
 {
     int argc = 0;
     ax::rhi::Program* obj = nullptr;
     bool ok  = true;
+
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
+
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axr.Program",0,&tolua_err)) goto tolua_lerror;
 #endif
+
     obj = (ax::rhi::Program*)tolua_tousertype(tolua_S,1,0);
+
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Program_getVertexInputDesc'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Program_getTextureOwnedSamplerInfo'", nullptr);
         return 0;
     }
 #endif
-    argc = lua_gettop(tolua_S)-1;
-    do {
-        if (argc == 2) {
-            std::string_view semanticName;
-            int semanticIndex = 0;
-            ok &= luaval_to_std_string_view(tolua_S, 2, &semanticName, "axr.Program:getVertexInputDesc");
-            ok &= luaval_to_int(tolua_S, 3, &semanticIndex, "axr.Program:getVertexInputDesc");
 
-            if (!ok) { break; }
-            const ax::rhi::VertexInputDesc* ret =
-                obj->getVertexInputDesc(ax::rhi::VertexSemantic{semanticName, static_cast<uint16_t>(semanticIndex)});
-            #pragma warning NO CONVERSION FROM NATIVE FOR VertexInputDesc*;
-            return 1;
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        int arg0;
+
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axr.Program:getTextureOwnedSamplerInfo");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Program_getTextureOwnedSamplerInfo'", nullptr);
+            return 0;
         }
-    }while(0);
-    ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "axr.Program:getVertexInputDesc",argc, 2);
+        auto&& ret = obj->getTextureOwnedSamplerInfo(arg0);
+        #pragma warning NO CONVERSION FROM NATIVE FOR SamplerBindingInfo*;
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axr.Program:getTextureOwnedSamplerInfo",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_Program_getVertexInputDesc'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_Program_getTextureOwnedSamplerInfo'.",&tolua_err);
 #endif
 
     return 0;
@@ -991,6 +995,53 @@ int lua_ax_rhi_Program_getFSModule(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_rhi_Program_isValid(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::rhi::Program* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axr.Program",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::rhi::Program*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Program_isValid'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Program_isValid'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->isValid();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axr.Program:isValid",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_Program_isValid'.",&tolua_err);
+#endif
+
+    return 0;
+}
 static int lua_ax_rhi_Program_finalize(lua_State* tolua_S)
 {
     AXLOGV("luabindings: finalizing LUA object (Program)");
@@ -1005,12 +1056,13 @@ int lua_register_ax_rhi_Program(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"Program");
         tolua_function(tolua_S,"getUniformLocation",lua_ax_rhi_Program_getUniformLocation);
         tolua_function(tolua_S,"getUniformBufferSize",lua_ax_rhi_Program_getUniformBufferSize);
-        tolua_function(tolua_S,"getVertexInputDesc",lua_ax_rhi_Program_getVertexInputDesc);
+        tolua_function(tolua_S,"getTextureOwnedSamplerInfo",lua_ax_rhi_Program_getTextureOwnedSamplerInfo);
         tolua_function(tolua_S,"getProgramType",lua_ax_rhi_Program_getProgramType);
         tolua_function(tolua_S,"getProgramId",lua_ax_rhi_Program_getProgramId);
         tolua_function(tolua_S,"getVertexLayout",lua_ax_rhi_Program_getVertexLayout);
         tolua_function(tolua_S,"getVSModule",lua_ax_rhi_Program_getVSModule);
         tolua_function(tolua_S,"getFSModule",lua_ax_rhi_Program_getFSModule);
+        tolua_function(tolua_S,"isValid",lua_ax_rhi_Program_isValid);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::rhi::Program).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axr.Program";
@@ -1117,14 +1169,18 @@ int lua_ax_rhi_ProgramState_getVertexInputDesc(lua_State* tolua_S)
     int argc = 0;
     ax::rhi::ProgramState* obj = nullptr;
     bool ok  = true;
+
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
+
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axr.ProgramState",0,&tolua_err)) goto tolua_lerror;
 #endif
+
     obj = (ax::rhi::ProgramState*)tolua_tousertype(tolua_S,1,0);
+
 #if _AX_DEBUG >= 1
     if (!obj)
     {
@@ -1132,23 +1188,24 @@ int lua_ax_rhi_ProgramState_getVertexInputDesc(lua_State* tolua_S)
         return 0;
     }
 #endif
-    argc = lua_gettop(tolua_S)-1;
-    do {
-        if (argc == 2) {
-            std::string_view semanticName;
-            int semanticIndex = 0;
-            ok &= luaval_to_std_string_view(tolua_S, 2, &semanticName, "axr.ProgramState:getVertexInputDesc");
-            ok &= luaval_to_int(tolua_S, 3, &semanticIndex, "axr.ProgramState:getVertexInputDesc");
 
-            if (!ok) { break; }
-            const ax::rhi::VertexInputDesc* ret =
-                obj->getVertexInputDesc(ax::rhi::VertexSemantic{semanticName, static_cast<uint16_t>(semanticIndex)});
-            #pragma warning NO CONVERSION FROM NATIVE FOR VertexInputDesc*;
-            return 1;
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        ax::rhi::VertexSemantic arg0;
+
+        #pragma warning NO CONVERSION TO NATIVE FOR VertexSemantic
+        ok = false;
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_ProgramState_getVertexInputDesc'", nullptr);
+            return 0;
         }
-    }while(0);
-    ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "axr.ProgramState:getVertexInputDesc",argc, 2);
+        auto&& ret = obj->getVertexInputDesc(arg0);
+        #pragma warning NO CONVERSION FROM NATIVE FOR VertexInputDesc*;
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axr.ProgramState:getVertexInputDesc",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -3959,6 +4016,76 @@ int lua_ax_rhi_GraphicsCore_currentShaderProfile(lua_State* tolua_S)
 #endif
     return 0;
 }
+int lua_ax_rhi_GraphicsCore_currentShaderILProfile(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"axr.GraphicsCore",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_GraphicsCore_currentShaderILProfile'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::rhi::GraphicsCore::currentShaderILProfile();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.GraphicsCore:currentShaderILProfile",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_GraphicsCore_currentShaderILProfile'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_rhi_GraphicsCore_setCurrentShaderILProfile(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"axr.GraphicsCore",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 1)
+    {
+        int arg0;
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axr.GraphicsCore:setCurrentShaderILProfile");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_GraphicsCore_setCurrentShaderILProfile'", nullptr);
+            return 0;
+        }
+        ax::rhi::GraphicsCore::setCurrentShaderILProfile(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.GraphicsCore:setCurrentShaderILProfile",argc, 1);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_GraphicsCore_setCurrentShaderILProfile'.",&tolua_err);
+#endif
+    return 0;
+}
 static int lua_ax_rhi_GraphicsCore_finalize(lua_State* tolua_S)
 {
     AXLOGV("luabindings: finalizing LUA object (GraphicsCore)");
@@ -3988,6 +4115,8 @@ int lua_register_ax_rhi_GraphicsCore(lua_State* tolua_S)
         tolua_function(tolua_S,"isVulkan", lua_ax_rhi_GraphicsCore_isVulkan);
         tolua_function(tolua_S,"currentShaderLang", lua_ax_rhi_GraphicsCore_currentShaderLang);
         tolua_function(tolua_S,"currentShaderProfile", lua_ax_rhi_GraphicsCore_currentShaderProfile);
+        tolua_function(tolua_S,"currentShaderILProfile", lua_ax_rhi_GraphicsCore_currentShaderILProfile);
+        tolua_function(tolua_S,"setCurrentShaderILProfile", lua_ax_rhi_GraphicsCore_setCurrentShaderILProfile);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::rhi::GraphicsCore).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axr.GraphicsCore";
@@ -4027,3 +4156,4 @@ TOLUA_API int register_all_ax_rhi(lua_State* tolua_S)
     tolua_endmodule(tolua_S);
     return 1;
 }
+

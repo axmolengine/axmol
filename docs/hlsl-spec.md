@@ -97,7 +97,7 @@ Common Axmol mesh semantics:
 | --- | --- |
 | `POSITION` | position, semantic index 0 |
 | `COLOR0`, `COLOR1` | vertex colors, including Spine two-color tint |
-| `TEXCOORD0` - `TEXCOORD3` | mesh UV channels |
+| `TEXCOORD0` - `TEXCOORD7` | mesh UV channels |
 | `NORMAL` | normal |
 | `TANGENT` | tangent |
 | `BINORMAL` | binormal |
