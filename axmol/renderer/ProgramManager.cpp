@@ -123,7 +123,8 @@ void ProgramManager::init()
     registerProgram(ProgramType::POSITION_COLOR_TEXTURE_AS_POINTSIZE, positionColorTextureAsPointsize_vs,
                     positionColor_fs, VertexLayoutKind::DrawNode);
     registerProgram(ProgramType::POSITION_COLOR, positionColor_vs, positionColor_fs, VertexLayoutKind::posColor);
-    registerProgram(ProgramType::LAYER_RADIA_GRADIENT, layer_radialGradient_vs, layer_radialGradient_fs, VertexLayoutKind::Pos);
+    registerProgram(ProgramType::LAYER_RADIA_GRADIENT, layer_radialGradient_vs, layer_radialGradient_fs,
+                    VertexLayoutKind::Pos);
     registerProgram(ProgramType::POSITION_TEXTURE, positionTexture_vs, positionTexture_fs, VertexLayoutKind::Texture);
     registerProgram(ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST, positionTextureColor_vs,
                     positionTextureColorAlphaTest_fs, VertexLayoutKind::Sprite);

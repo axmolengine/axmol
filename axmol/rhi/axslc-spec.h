@@ -75,7 +75,7 @@ struct SamplerPreset
         Count
     };
 };
-inline constexpr uint32_t kTextureSamplerBindingBase = 32;
+inline constexpr uint32_t kTextureSamplerBindingBase  = 32;
 inline constexpr uint32_t kPresetSamplerDescriptorSet = 1;
 static_assert(static_cast<uint32_t>(SamplerPreset::Count) <= kTextureSamplerBindingBase);
 

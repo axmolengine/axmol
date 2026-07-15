@@ -62,7 +62,7 @@ void ShaderModuleImpl::compileShader(VkDevice device)
     smci.codeSize = _codeSpan.size();
     smci.pCode    = reinterpret_cast<const uint32_t*>(_codeSpan.data());
 
-    _precompiled  = true;
+    _precompiled = true;
 
     VkResult ret = vkCreateShaderModule(device, &smci, nullptr, &_shader);
 

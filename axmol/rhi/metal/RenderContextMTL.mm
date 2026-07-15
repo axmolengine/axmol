@@ -547,7 +547,7 @@ void RenderContextImpl::setTexturesAndSamplers() const
 
             auto textureImpl = static_cast<TextureImpl*>(texs[index]);
             [_mtlRenderEncoder setFragmentSamplerState:textureImpl->internalSampler()
-                                                atIndex:textureOwnedSampler->binding + index];
+                                               atIndex:textureOwnedSampler->binding + index];
         }
     }
 
@@ -576,8 +576,7 @@ void RenderContextImpl::setTexturesAndSamplers() const
 
         for (uint16_t index = 0; index < samplerInfo.count; ++index)
         {
-            [_mtlRenderEncoder setFragmentSamplerState:samplerState
-                                                atIndex:samplerInfo.binding + index];
+            [_mtlRenderEncoder setFragmentSamplerState:samplerState atIndex:samplerInfo.binding + index];
         }
     }
 }

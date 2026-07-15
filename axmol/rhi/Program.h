@@ -198,7 +198,7 @@ public:
 
     ShaderModule* getVSModule() const { return _vsModule; }
     ShaderModule* getFSModule() const { return _fsModule; }
-    
+
     virtual bool isValid() const;
 
 protected:
