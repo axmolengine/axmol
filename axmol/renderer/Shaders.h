@@ -3,6 +3,7 @@ Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2012 		cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmol.dev/
 
@@ -88,7 +89,6 @@ extern AX_DLL const std::string_view color_fs;
 extern AX_DLL const std::string_view colorNormal_fs;
 extern AX_DLL const std::string_view colorNormalTexture_fs;
 extern AX_DLL const std::string_view colorTexture_fs;
-extern AX_DLL const std::string_view colorTextureInstance_fs;
 extern AX_DLL const std::string_view particleTexture_fs;
 extern AX_DLL const std::string_view particleColor_fs;
 extern AX_DLL const std::string_view particle_vs;

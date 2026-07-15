@@ -78,6 +78,11 @@ SamplerComparisonState ShadowCmpBorder : register(s19, space1);
 SamplerState LinearNoMipClamp : register(s20, space1);
 SamplerState PointNoMipClamp : register(s21, space1);
 
+// s0-s21: predefined shader samplers
+// s22-s31: reserved
+// s32+: texture-owned samplers
+#define AX_TEXTURE_SAMPLER_BASE 32
+
 //------------------------------------------------------------------------------
 // GPU Instancing
 //------------------------------------------------------------------------------

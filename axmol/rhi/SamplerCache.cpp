@@ -71,7 +71,7 @@ void SamplerCache::removeAllSamplers()
     _nextSamplerIndex = 0;
 }
 
-SamplerIndex::enum_type SamplerCache::registerSampler(const SamplerDesc& desc)
+SamplerPreset::enum_type SamplerCache::registerSampler(const SamplerDesc& desc)
 {
     if (_nextSamplerIndex >= MAX_SAMPLER_COUNT)
     {
@@ -81,15 +81,15 @@ SamplerIndex::enum_type SamplerCache::registerSampler(const SamplerDesc& desc)
     auto key = std::bit_cast<uint32_t>(desc);
     auto it  = _samplersRegistry.find(key);
     if (it != _samplersRegistry.end())
-        return static_cast<SamplerIndex::enum_type>(it->second);
+        return static_cast<SamplerPreset::enum_type>(it->second);
 
     auto samplerIndex  = _nextSamplerIndex++;
     auto samplerHandle = _driver->createSampler(desc);
-    _customSamplers.emplace(static_cast<SamplerIndex::enum_type>(samplerIndex), samplerHandle);
+    _customSamplers.emplace(static_cast<SamplerPreset::enum_type>(samplerIndex), samplerHandle);
 
     _samplersRegistry.emplace(key, samplerIndex);
 
-    return static_cast<SamplerIndex::enum_type>(samplerIndex);
+    return static_cast<SamplerPreset::enum_type>(samplerIndex);
 }
 
 SamplerHandle SamplerCache::getSampler(const SamplerDesc& desc)
@@ -98,7 +98,7 @@ SamplerHandle SamplerCache::getSampler(const SamplerDesc& desc)
     return getSampler(samplerIndex);
 }
 
-SamplerHandle SamplerCache::getSampler(SamplerIndex::enum_type samplerIndex)
+SamplerHandle SamplerCache::getSampler(SamplerPreset::enum_type samplerIndex)
 {
     if (samplerIndex < _builtinSamplers.size())
         return _builtinSamplers[samplerIndex];
@@ -114,7 +114,7 @@ SamplerHandle SamplerCache::getSampler(SamplerIndex::enum_type samplerIndex)
 
 void SamplerCache::createBuiltinSamplers()
 {
-    _builtinSamplers.resize(SamplerIndex::Count);
+    _builtinSamplers.resize(SamplerPreset::Count);
 
     // --- Linear sampling ---
     {
@@ -125,19 +125,19 @@ void SamplerCache::createBuiltinSamplers()
 
         d.sAddressMode = SamplerAddressMode::CLAMP;
         d.tAddressMode = SamplerAddressMode::CLAMP;
-        createBuiltinSampler(SamplerIndex::LinearClamp, d);
+        createBuiltinSampler(SamplerPreset::LinearClamp, d);
 
         d.sAddressMode = SamplerAddressMode::REPEAT;
         d.tAddressMode = SamplerAddressMode::REPEAT;
-        createBuiltinSampler(SamplerIndex::LinearWrap, d);
+        createBuiltinSampler(SamplerPreset::LinearWrap, d);
 
         d.sAddressMode = SamplerAddressMode::MIRROR;
         d.tAddressMode = SamplerAddressMode::MIRROR;
-        createBuiltinSampler(SamplerIndex::LinearMirror, d);
+        createBuiltinSampler(SamplerPreset::LinearMirror, d);
 
         d.sAddressMode = SamplerAddressMode::BORDER;
         d.tAddressMode = SamplerAddressMode::BORDER;
-        createBuiltinSampler(SamplerIndex::LinearBorder, d);
+        createBuiltinSampler(SamplerPreset::LinearBorder, d);
     }
 
     // --- Point sampling ---
@@ -149,19 +149,19 @@ void SamplerCache::createBuiltinSamplers()
 
         d.sAddressMode = SamplerAddressMode::CLAMP;
         d.tAddressMode = SamplerAddressMode::CLAMP;
-        createBuiltinSampler(SamplerIndex::PointClamp, d);
+        createBuiltinSampler(SamplerPreset::PointClamp, d);
 
         d.sAddressMode = SamplerAddressMode::REPEAT;
         d.tAddressMode = SamplerAddressMode::REPEAT;
-        createBuiltinSampler(SamplerIndex::PointWrap, d);
+        createBuiltinSampler(SamplerPreset::PointWrap, d);
 
         d.sAddressMode = SamplerAddressMode::MIRROR;
         d.tAddressMode = SamplerAddressMode::MIRROR;
-        createBuiltinSampler(SamplerIndex::PointMirror, d);
+        createBuiltinSampler(SamplerPreset::PointMirror, d);
 
         d.sAddressMode = SamplerAddressMode::BORDER;
         d.tAddressMode = SamplerAddressMode::BORDER;
-        createBuiltinSampler(SamplerIndex::PointBorder, d);
+        createBuiltinSampler(SamplerPreset::PointBorder, d);
     }
 
     // --- Linear + Mipmap ---
@@ -173,19 +173,19 @@ void SamplerCache::createBuiltinSamplers()
 
         d.sAddressMode = SamplerAddressMode::CLAMP;
         d.tAddressMode = SamplerAddressMode::CLAMP;
-        createBuiltinSampler(SamplerIndex::LinearMipClamp, d);
+        createBuiltinSampler(SamplerPreset::LinearMipClamp, d);
 
         d.sAddressMode = SamplerAddressMode::REPEAT;
         d.tAddressMode = SamplerAddressMode::REPEAT;
-        createBuiltinSampler(SamplerIndex::LinearMipWrap, d);
+        createBuiltinSampler(SamplerPreset::LinearMipWrap, d);
 
         d.sAddressMode = SamplerAddressMode::MIRROR;
         d.tAddressMode = SamplerAddressMode::MIRROR;
-        createBuiltinSampler(SamplerIndex::LinearMipMirror, d);
+        createBuiltinSampler(SamplerPreset::LinearMipMirror, d);
 
         d.sAddressMode = SamplerAddressMode::BORDER;
         d.tAddressMode = SamplerAddressMode::BORDER;
-        createBuiltinSampler(SamplerIndex::LinearMipBorder, d);
+        createBuiltinSampler(SamplerPreset::LinearMipBorder, d);
     }
 
     // --- Anisotropic filtering ---
@@ -197,16 +197,16 @@ void SamplerCache::createBuiltinSamplers()
         d.anisotropy = 0xF;
 
         d.sAddressMode = SamplerAddressMode::CLAMP;
-        createBuiltinSampler(SamplerIndex::AnisoClamp, d);
+        createBuiltinSampler(SamplerPreset::AnisoClamp, d);
 
         d.sAddressMode = SamplerAddressMode::REPEAT;
-        createBuiltinSampler(SamplerIndex::AnisoWrap, d);
+        createBuiltinSampler(SamplerPreset::AnisoWrap, d);
 
         d.sAddressMode = SamplerAddressMode::MIRROR;
-        createBuiltinSampler(SamplerIndex::AnisoMirror, d);
+        createBuiltinSampler(SamplerPreset::AnisoMirror, d);
 
         d.sAddressMode = SamplerAddressMode::BORDER;
-        createBuiltinSampler(SamplerIndex::AnisoBorder, d);
+        createBuiltinSampler(SamplerPreset::AnisoBorder, d);
     }
 
     // --- Depth comparison samplers ---
@@ -218,16 +218,16 @@ void SamplerCache::createBuiltinSamplers()
         d.compareFunc = CompareFunc::LESS;
 
         d.sAddressMode = SamplerAddressMode::CLAMP;
-        createBuiltinSampler(SamplerIndex::ShadowCmpClamp, d);
+        createBuiltinSampler(SamplerPreset::ShadowCmpClamp, d);
 
         d.sAddressMode = SamplerAddressMode::REPEAT;
-        createBuiltinSampler(SamplerIndex::ShadowCmpWrap, d);
+        createBuiltinSampler(SamplerPreset::ShadowCmpWrap, d);
 
         d.sAddressMode = SamplerAddressMode::MIRROR;
-        createBuiltinSampler(SamplerIndex::ShadowCmpMirror, d);
+        createBuiltinSampler(SamplerPreset::ShadowCmpMirror, d);
 
         d.sAddressMode = SamplerAddressMode::BORDER;
-        createBuiltinSampler(SamplerIndex::ShadowCmpBorder, d);
+        createBuiltinSampler(SamplerPreset::ShadowCmpBorder, d);
     }
 
     // --- Special cases ---
@@ -237,11 +237,11 @@ void SamplerCache::createBuiltinSamplers()
         d.magFilter    = SamplerFilter::MAG_LINEAR;
         d.mipFilter    = SamplerFilter::MIP_NEAREST;  // no mip
         d.sAddressMode = SamplerAddressMode::CLAMP;
-        createBuiltinSampler(SamplerIndex::LinearNoMipClamp, d);
+        createBuiltinSampler(SamplerPreset::LinearNoMipClamp, d);
 
         d.minFilter = SamplerFilter::MIN_NEAREST;
         d.magFilter = SamplerFilter::MAG_NEAREST;
-        createBuiltinSampler(SamplerIndex::PointNoMipClamp, d);
+        createBuiltinSampler(SamplerPreset::PointNoMipClamp, d);
     }
 
     _nextSamplerIndex = static_cast<uint32_t>(_builtinSamplers.size());

@@ -75,18 +75,11 @@ struct UniformBlockInfo
 struct SamplerBindingInfo
 {
     int binding{-1};
+    int textureBinding{-1};
     uint16_t count{1};
     int16_t presetIndex{-1};
     bool comparison{false};
     std::string_view name;
-};
-
-struct SamplingPairInfo
-{
-    int textureBinding{-1};
-    int samplerBinding{-1};
-    int16_t presetIndex{-1};
-    uint8_t source{0};
 };
 
 struct SLCReflectContext;
@@ -172,7 +165,14 @@ public:
 
     const std::vector<TextureUniformEntry>& getActiveTextureInfos() const { return _activeTextureInfos; };
     const std::vector<SamplerBindingInfo>& getActiveSamplerInfos() const { return _activeSamplerInfos; }
-    const std::vector<SamplingPairInfo>& getSamplingPairs() const { return _samplingPairs; }
+    const SamplerBindingInfo* getTextureOwnedSamplerInfo(int textureBinding) const
+    {
+        if (textureBinding < 0 || static_cast<size_t>(textureBinding) >= _textureOwnedSamplerIndices.size())
+            return nullptr;
+
+        const auto samplerIndex = _textureOwnedSamplerIndices[textureBinding];
+        return samplerIndex >= 0 ? &_activeSamplerInfos[samplerIndex] : nullptr;
+    }
 
     /**
      * Get engine built-in program type.
@@ -240,7 +240,7 @@ protected:
     // unstable textures reflection, we need copy and update runtimeLocation after link program every time
     std::vector<TextureUniformEntry> _activeTextureInfos;
     std::vector<SamplerBindingInfo> _activeSamplerInfos;
-    std::vector<SamplingPairInfo> _samplingPairs;
+    std::vector<int16_t> _textureOwnedSamplerIndices;
 
     // Populated once from ShaderModule reflection at program creation.
     // Contains stable, backend‑independent metadata for all active uniform blocks.

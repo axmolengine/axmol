@@ -370,6 +370,7 @@ using PixelFormat  = rhi::PixelFormat;
 using TargetBufferFlags = rhi::TargetBufferFlags;
 using DepthStencilFlags = rhi::DepthStencilFlags;
 using ClearFlag         = rhi::ClearFlag;
+using VertexSemantic    = rhi::VertexSemantic;
 
 template <typename _Ty>
 using LinearStack = std::stack<_Ty, std::vector<_Ty>>;

@@ -18,5 +18,6 @@ VS_OUT main(VS_IN input) {
     VS_OUT output;
     output.position = mul(u_MVPMatrix, input.a_position);
     output.v_texCoord = input.a_texCoord;
+    output.v_texCoord.y = 1.0 - output.v_texCoord.y;
     return output;
 }

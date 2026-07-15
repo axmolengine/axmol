@@ -32,6 +32,8 @@
 #include "axmol/tlx/utility.hpp"
 #include "yasio/ibstream.hpp"
 
+#include <limits>
+
 namespace ax::rhi
 {
 
@@ -396,27 +398,39 @@ void Program::reflectSamplers(SLCReflectContext* context)
     for (uint32_t i = 0; i < context->refl->num_samplers; ++i)
     {
         SamplerBindingInfo sampler;
-        sampler.name    = _sc_read_name(ibs);
-        sampler.binding = ibs->read<int32_t>();
+        sampler.name           = _sc_read_name(ibs);
+        sampler.binding        = ibs->read<int32_t>();
+        sampler.textureBinding = ibs->read<int32_t>();
         ibs->advance(static_cast<ptrdiff_t>(sizeof(uint16_t)));  // descriptor set
         sampler.count       = ibs->read<uint16_t>();
         sampler.presetIndex = ibs->read<int16_t>();
         sampler.comparison  = ibs->read<uint8_t>() != 0;
         ibs->advance(static_cast<ptrdiff_t>(sizeof(uint8_t)));  // reserved
-        _activeSamplerInfos.emplace_back(sampler);
-    }
 
-    _samplingPairs.reserve(context->refl->num_sampling_pairs);
-    for (uint32_t i = 0; i < context->refl->num_sampling_pairs; ++i)
-    {
-        SamplingPairInfo pair;
-        pair.textureBinding = ibs->read<int32_t>();
-        pair.samplerBinding = ibs->read<int32_t>();
-        ibs->advance(static_cast<ptrdiff_t>(sizeof(uint16_t) * 2));  // descriptor sets
-        pair.presetIndex = ibs->read<int16_t>();
-        pair.source      = ibs->read<uint8_t>();
-        ibs->advance(static_cast<ptrdiff_t>(sizeof(uint8_t)));  // reserved
-        _samplingPairs.emplace_back(pair);
+        const auto samplerIndex = _activeSamplerInfos.size();
+        _activeSamplerInfos.emplace_back(sampler);
+
+        if (sampler.presetIndex < 0 && sampler.textureBinding >= 0)
+        {
+            if (samplerIndex > static_cast<size_t>((std::numeric_limits<int16_t>::max)()))
+            {
+                AXLOGE("Too many active samplers in shader reflection");
+                continue;
+            }
+
+            const auto textureBinding = static_cast<size_t>(sampler.textureBinding);
+            if (_textureOwnedSamplerIndices.size() <= textureBinding)
+                _textureOwnedSamplerIndices.resize(textureBinding + 1, -1);
+
+            auto& textureOwnedSamplerIndex = _textureOwnedSamplerIndices[textureBinding];
+            if (textureOwnedSamplerIndex >= 0)
+            {
+                AXLOGE("Duplicate texture-owned sampler for texture binding {}", sampler.textureBinding);
+                continue;
+            }
+
+            textureOwnedSamplerIndex = static_cast<int16_t>(samplerIndex);
+        }
     }
 }
 

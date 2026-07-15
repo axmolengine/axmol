@@ -1146,23 +1146,50 @@ void RenderContextImpl::prepareDrawing()
     {
         for (const auto& samplerInfo : _programState->getProgram()->getActiveSamplerInfos())
         {
-            AXASSERT(samplerInfo.presetIndex >= 0 && samplerInfo.presetIndex < SamplerIndex::Count,
-                     "separate Vulkan sampler must resolve to a base.hlsli preset");
             const size_t offset = imageInfos.size();
-            auto sampler        = static_cast<VkSampler>(
-                SamplerCache::getInstance()->getSampler(static_cast<SamplerIndex::enum_type>(samplerInfo.presetIndex)));
-            for (uint16_t i = 0; i < samplerInfo.count; ++i)
+            if (samplerInfo.presetIndex >= 0)
             {
-                auto& imageInfo   = imageInfos.emplace_back();
-                imageInfo.sampler = sampler;
+                AXASSERT(samplerInfo.presetIndex < SamplerPreset::Count, "invalid Vulkan sampler preset index");
+                auto sampler = static_cast<VkSampler>(SamplerCache::getInstance()->getSampler(
+                    static_cast<SamplerPreset::enum_type>(samplerInfo.presetIndex)));
+                for (uint16_t i = 0; i < samplerInfo.count; ++i)
+                {
+                    auto& imageInfo   = imageInfos.emplace_back();
+                    imageInfo.sampler = sampler;
+                }
             }
+            else
+            {
+                const auto& textureBindingSets = _programState->getTextureBindingSets();
+                auto textureBindingIt          = textureBindingSets.find(samplerInfo.textureBinding);
+                if (textureBindingIt == textureBindingSets.end() || textureBindingIt->second.texs.empty())
+                {
+                    AXLOGW("Vulkan texture-owned sampler binding {} has no associated texture binding {}",
+                           samplerInfo.binding, samplerInfo.textureBinding);
+                    continue;
+                }
+
+                const auto& texs = textureBindingIt->second.texs;
+                for (uint16_t i = 0; i < samplerInfo.count; ++i)
+                {
+                    if (i >= texs.size())
+                        break;
+
+                    auto textureImpl  = static_cast<TextureImpl*>(texs[i]);
+                    auto& imageInfo   = imageInfos.emplace_back();
+                    imageInfo.sampler = textureImpl->getSampler();
+                }
+            }
+
+            if (imageInfos.size() == offset)
+                continue;
 
             VkWriteDescriptorSet& write = writes.emplace_back();
             write.sType                 = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
             write.dstSet                = descriptorSets[SET_INDEX_SAMPLER];
             write.dstBinding            = samplerInfo.binding;
             write.descriptorType        = VK_DESCRIPTOR_TYPE_SAMPLER;
-            write.descriptorCount       = samplerInfo.count;
+            write.descriptorCount       = static_cast<uint32_t>(imageInfos.size() - offset);
             write.pImageInfo            = imageInfos.data() + offset;
         }
     }

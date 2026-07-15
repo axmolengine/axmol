@@ -1,5 +1,5 @@
 // The Axmol Shader Compiler spec, define macros and structs
-// match with axslcc-3.99.0+
+// match with axslcc-3.99.2+
 
 #pragma once
 
@@ -31,6 +31,53 @@ namespace axslc
 #define SC_STAGE_COMPUTE  sc_makefourcc('C', 'O', 'M', 'P')
 
 #define SC_NAME_LEN       32
+
+// The axslcc sampler presets
+struct SamplerPreset
+{
+    enum enum_type : uint32_t
+    {
+        // --- Linear sampling ---
+        LinearClamp,   // Linear, clamp to edge
+        LinearWrap,    // Linear, repeat
+        LinearMirror,  // Linear, mirror repeat
+        LinearBorder,  // Linear, border color
+
+        // --- Point sampling ---
+        PointClamp,   // Nearest, clamp to edge
+        PointWrap,    // Nearest, repeat
+        PointMirror,  // Nearest, mirror repeat
+        PointBorder,  // Nearest, border color
+
+        // --- Linear + Mipmap ---
+        LinearMipClamp,   // Linear min/mag, mip linear, clamp
+        LinearMipWrap,    // Linear min/mag, mip linear, wrap
+        LinearMipMirror,  // Linear min/mag, mip linear, mirror
+        LinearMipBorder,  // Linear min/mag, mip linear, border
+
+        // --- Anisotropic filtering ---
+        AnisoClamp,   // Anisotropic, clamp to edge
+        AnisoWrap,    // Anisotropic, repeat
+        AnisoMirror,  // Anisotropic, mirror repeat
+        AnisoBorder,  // Anisotropic, border color
+
+        // --- Depth comparison samplers (shadow maps) ---
+        ShadowCmpClamp,   // Compare sampler, clamp to edge
+        ShadowCmpWrap,    // Compare sampler, repeat
+        ShadowCmpMirror,  // Compare sampler, mirror repeat
+        ShadowCmpBorder,  // Compare sampler, border color
+
+        // --- Special cases ---
+        LinearNoMipClamp,  // Linear min/mag, no mip, clamp (UI, 2D sprites)
+        PointNoMipClamp,   // Point min/mag, no mip, clamp (pixel art)
+
+        //
+        Count
+    };
+};
+inline constexpr uint32_t kTextureSamplerBindingBase = 32;
+inline constexpr uint32_t kPresetSamplerDescriptorSet = 1;
+static_assert(static_cast<uint32_t>(SamplerPreset::Count) <= kTextureSamplerBindingBase);
 
 enum Dim : uint16_t
 {
@@ -110,7 +157,6 @@ struct sc_chunk_refl
     uint32_t num_inputs;
     uint32_t num_textures;
     uint32_t num_samplers;
-    uint32_t num_sampling_pairs;
     uint32_t num_uniform_buffers;
     uint32_t num_storage_images;
     uint32_t num_storage_buffers;
@@ -121,7 +167,6 @@ struct sc_chunk_refl
     // uniform-buffers: sc_refl_uniformbuffer[num_uniform_buffers]
     // textures: sc_refl_texture[num_textures]
     // samplers: sc_refl_sampler[num_samplers]
-    // sampling-pairs: sc_refl_sampling_pair[num_sampling_pairs]
     // storage_images: sc_refl_texture[num_storage_images]
     // storage_buffers: sc_refl_buffer[num_storage_buffers]
 };
@@ -154,21 +199,11 @@ struct sc_refl_sampler
 {
     char name[SC_NAME_LEN];
     int32_t binding;
+    int32_t texture_binding;  // owner texture binding for TextureOwned samplers, -1 for ShaderPreset
     uint16_t descriptor_set;
     uint16_t count;
     int16_t preset_index;  // -1 when not a base.hlsli preset
     uint8_t comparison;
-    uint8_t reserved;
-};
-
-struct sc_refl_sampling_pair
-{
-    int32_t texture_binding;
-    int32_t sampler_binding;
-    uint16_t texture_set;
-    uint16_t sampler_set;
-    int16_t preset_index;
-    uint8_t sampler_source;
     uint8_t reserved;
 };
 

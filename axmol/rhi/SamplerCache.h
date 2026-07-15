@@ -50,10 +50,10 @@ public:
 
     void rebuild();
 
-    SamplerHandle getSampler(SamplerIndex::enum_type samplerIndex);
+    SamplerHandle getSampler(SamplerPreset::enum_type samplerIndex);
     SamplerHandle getSampler(const SamplerDesc& desc);
 
-    SamplerIndex::enum_type registerSampler(const SamplerDesc& desc);
+    SamplerPreset::enum_type registerSampler(const SamplerDesc& desc);
 
 private:
     void removeAllSamplers();
@@ -61,7 +61,7 @@ private:
     void createBuiltinSampler(uint32_t samplerIndex, const SamplerDesc& desc);
 
     tlx::pod_vector<SamplerHandle> _builtinSamplers;
-    tlx::hash_map<SamplerIndex::enum_type, SamplerHandle> _customSamplers;
+    tlx::hash_map<SamplerPreset::enum_type, SamplerHandle> _customSamplers;
 
     tlx::hash_map<uint32_t, uint32_t> _samplersRegistry;  // sampler desc => sampler index registry
 

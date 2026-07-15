@@ -509,8 +509,7 @@ void RenderContextImpl::afterDraw()
 void RenderContextImpl::prepareDrawing() const
 {
     setUniformBuffer();
-    setTextures();
-    setSamplers();
+    setTexturesAndSamplers();
 
     auto mtlDepthStencilState = _depthStencilState->getMTLDepthStencilState();
     if (mtlDepthStencilState)
@@ -521,8 +520,11 @@ void RenderContextImpl::prepareDrawing() const
     }
 }
 
-void RenderContextImpl::setTextures() const
+void RenderContextImpl::setTexturesAndSamplers() const
 {
+    const auto program = _programState->getProgram();
+
+    // Phase 1: bind textures and their reflected TextureOwned samplers.
     for (const auto& [bindingIndex, bindingSet] : _programState->getTextureBindingSets())
     {
         auto& texs     = bindingSet.texs;
@@ -532,35 +534,37 @@ void RenderContextImpl::setTextures() const
             const auto slot  = bindingIndex + k;
             auto textureImpl = static_cast<TextureImpl*>(texs[k]);
             [_mtlRenderEncoder setFragmentTexture:textureImpl->internalHandle() atIndex:slot];
-            // Legacy combined-sampler binding and fallback for samplers that
-            // are not resolved to a shader preset.
-            [_mtlRenderEncoder setFragmentSamplerState:textureImpl->internalSampler() atIndex:slot];
+        }
+
+        const auto* textureOwnedSampler = program->getTextureOwnedSamplerInfo(bindingIndex);
+        if (!textureOwnedSampler || textureOwnedSampler->binding < 0 || textureOwnedSampler->count == 0)
+            continue;
+
+        for (uint16_t index = 0; index < textureOwnedSampler->count; ++index)
+        {
+            if (index >= texs.size())
+                break;
+
+            auto textureImpl = static_cast<TextureImpl*>(texs[index]);
+            [_mtlRenderEncoder setFragmentSamplerState:textureImpl->internalSampler()
+                                                atIndex:textureOwnedSampler->binding + index];
         }
     }
-}
 
-void RenderContextImpl::setSamplers() const
-{
-    const auto& samplerInfos = _programState->getProgram()->getActiveSamplerInfos();
-    auto samplerCache        = SamplerCache::getInstance();
-
-    for (const auto& samplerInfo : samplerInfos)
+    // Phase 2: bind ShaderPreset samplers. They are independent of texture bindings.
+    auto samplerCache = SamplerCache::getInstance();
+    for (const auto& samplerInfo : program->getActiveSamplerInfos())
     {
-        if (samplerInfo.binding < 0 || samplerInfo.count == 0)
+        if (samplerInfo.presetIndex < 0 || samplerInfo.binding < 0 || samplerInfo.count == 0)
             continue;
 
-        // Not a base.hlsli preset. Keep the texture-owned/custom fallback
-        // currently bound by setTextures().
-        if (samplerInfo.presetIndex < 0)
-            continue;
-
-        if (samplerInfo.presetIndex >= SamplerIndex::Count)
+        if (samplerInfo.presetIndex >= SamplerPreset::Count)
         {
             AXASSERT(false, "invalid Metal sampler preset index");
             continue;
         }
 
-        const auto samplerIndex = static_cast<SamplerIndex::enum_type>(samplerInfo.presetIndex);
+        const auto samplerIndex = static_cast<SamplerPreset::enum_type>(samplerInfo.presetIndex);
         const auto sampler      = samplerCache->getSampler(samplerIndex);
         const auto samplerState = static_cast<id<MTLSamplerState>>(sampler);
 
@@ -573,7 +577,7 @@ void RenderContextImpl::setSamplers() const
         for (uint16_t index = 0; index < samplerInfo.count; ++index)
         {
             [_mtlRenderEncoder setFragmentSamplerState:samplerState
-                                               atIndex:samplerInfo.binding + index];
+                                                atIndex:samplerInfo.binding + index];
         }
     }
 }

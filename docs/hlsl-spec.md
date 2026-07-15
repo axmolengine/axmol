@@ -1,455 +1,456 @@
-# Axmol HLSL 5.1 Shader Specification
+# Axmol HLSL Shader Specification
 
-> **axmol PR #3223** — HLSL shader authoring conventions for the axmol engine
+This document describes the HLSL authoring rules used by Axmol v3 shaders.
+It is written for engine users and extension authors who want one HLSL source
+to work across D3D11, D3D12, Vulkan, Metal, OpenGL 3.3, and OpenGL ES 3.x.
 
-## 1. File Naming
+For common migration questions and backend caveats, see
+[hlsl-faq.md](hlsl-faq.md).
 
-| Stage | Suffix | Extension | Description |
-|-------|--------|-----------|-------------|
-| Vertex Shader | `_vs` | `.hlsl` | Vertex shader |
-| Fragment/Pixel Shader | `_ps` | `.hlsl` | Fragment shader |
-| Compute Shader | `_cs` | `.hlsl` | Compute shader |
+## Goals
 
-Examples: `positionTexture_vs.hlsl`, `positionTextureColor_fs.hlsl`, `computeParticles_cs.hlsl`
+Axmol uses HLSL as the primary shader source language. The shader compiler
+generates the backend shader code and runtime reflection used by the RHI.
 
-Input language is detected from the file extension:
-- `.hlsl`, `.fx` → HLSL (default for axmol shaders)
-- `.vert`, `.frag`, `.comp`, `.glsl` → GLSL
+The public shader contract is:
 
-Use `-x hlsl` to override auto-detection and force HLSL interpretation.
+- vertex inputs are matched by semantic name and semantic index;
+- textures, samplers, and uniform buffers use explicit registers;
+- runtime reflection contains final backend resource bindings only;
+- sampler pairs are compiler-internal lowering data and are not part of the
+  runtime reflection ABI.
 
-## 2. Entry Point
+## File Names
+
+Use these suffixes for Axmol shader stages:
+
+| Stage | Suffix | Example |
+| --- | --- | --- |
+| Vertex | `_vs.hlsl` | `positionTexture_vs.hlsl` |
+| Pixel / Fragment | `_fs.hlsl` or `_ps.hlsl` | `positionTexture_fs.hlsl` |
+| Compute | `_cs.hlsl` | `particles_cs.hlsl` |
+
+`.hlsl` and `.fx` files are treated as HLSL. GLSL source files are still
+recognized by their GLSL extensions, but new Axmol shaders should use HLSL.
+
+## Entry Points
+
+Use `main` as the entry point.
 
 ```hlsl
-// Vertex shader
-VS_OUT main(VS_IN input) { ... }
+VS_OUT main(VS_IN input)
+{
+    ...
+}
 
-// Fragment shader
-float4 main(PS_IN input) : SV_Target0 { ... }
+float4 main(PS_IN input) : SV_Target0
+{
+    ...
+}
 ```
 
-Compute shaders use `[numthreads(X, Y, Z)]` decorator.
+Compute shaders use the normal HLSL thread-count attribute:
 
-## 3. Vertex Input Structure
+```hlsl
+[numthreads(8, 8, 1)]
+void main(uint3 id : SV_DispatchThreadID)
+{
+    ...
+}
+```
+
+## Include `base.hlsli`
+
+Most Axmol shaders should include `base.hlsli`:
 
 ```hlsl
 #include "base.hlsli"
+```
 
-struct VS_IN {
-    float3 a_position : POSITION;       // required
-    float2 a_texCoord : TEXCOORD0;      // optional
-    float4 a_color : COLOR0;            // optional
-    float3 a_normal : NORMAL;           // optional
-    float3 a_tangent : TANGENT;         // optional
-    float3 a_binormal : BINORMAL;       // optional
-    float4 a_blendIndices : BLENDINDICES; // optional
-    float4 a_blendWeights : BLENDWEIGHT;  // optional
+It provides:
+
+- built-in sampler declarations such as `LinearClamp` and `PointClamp`;
+- target macros such as `AXSLC_TARGET_HLSL`, `AXSLC_TARGET_SPIRV`,
+  `AXSLC_TARGET_GLSL`, and `AXSLC_TARGET_MSL`;
+- compatibility helpers used by existing engine shaders.
+
+## Vertex Inputs
+
+Vertex input variable names are not the binding contract. Axmol matches vertex
+data to shader inputs by semantic base name and semantic index.
+
+```hlsl
+struct VS_IN
+{
+    float3 position : POSITION;
+    float2 uv       : TEXCOORD0;
+    float4 color    : COLOR0;
 };
 ```
 
-### Semantics
+`POSITION` is treated as `POSITION0`. `TEXCOORD1`, `COLOR1`, and similar names
+use the numeric suffix as the semantic index.
 
-| Semantic | Location | Type | Index Convention |
-|----------|----------|------|-----------------|
-| `POSITION` | 0 | `float3`/`float4` | No index suffix |
-| `NORMAL` | varies | `float3` | No index suffix |
-| `TEXCOORD0`–`TEXCOORD7` | varies | `float2`/`float3`/`float4` | Index suffix required |
-| `COLOR0`–`COLOR3` | varies | `float4`/`ubyte4` | Index suffix required |
-| `TANGENT` | varies | `float3` | No index suffix |
-| `BINORMAL` | varies | `float3` | No index suffix |
-| `BLENDINDICES` | varies | `float4`/`int4` | No index suffix |
-| `BLENDWEIGHT` | varies | `float4` | No index suffix |
+Common Axmol mesh semantics:
 
-### VS_IN Declaration Order
+| Semantic | Typical Use |
+| --- | --- |
+| `POSITION` | position, semantic index 0 |
+| `COLOR0`, `COLOR1` | vertex colors, including Spine two-color tint |
+| `TEXCOORD0` - `TEXCOORD3` | mesh UV channels |
+| `NORMAL` | normal |
+| `TANGENT` | tangent |
+| `BINORMAL` | binormal |
+| `BLENDWEIGHT` | skin weights |
+| `BLENDINDICES` | skin joint indices |
 
-The declaration order of members in `VS_IN` **must match** the order defined in the
-corresponding `VertexLayoutKind` layout (see `VertexLayoutManager.cpp`). The axslcc
-pipeline assigns D3D input registers based on VS_IN declaration order. While D3D11
-matches IA elements to VS inputs by semantic name+index, certain D3D11 debug layers
-and GPU drivers validate that the register indices are consistent between IA output
-slots and VS input registers. If the orders differ, the following error may appear:
-
-```
-D3D11 ERROR: ID3D11DeviceContext::Draw: Input Assembler - Vertex Shader linkage
-error: Signatures between stages are incompatible.
-Semantic 'COLOR' is defined for mismatched hardware registers between the output
-stage and input stage.
-Semantic 'TEXCOORD' is defined for mismatched hardware registers between the output
-stage and input stage.
-```
-
-**Example — incorrect** (order mismatches `VertexLayoutKind::DrawNode` layout):
+Custom semantics are allowed for custom render paths:
 
 ```hlsl
-// VertexLayoutKind::DrawNode order:  POSITION → TEXCOORD → COLOR
-struct VS_IN {
-    float4 a_position : POSITION;
-    float4 a_color : COLOR0;        // COLOR before TEXCOORD — wrong!
-    float2 a_texCoord : TEXCOORD0;
+struct VS_IN
+{
+    float2 localPosition : LOCAL_POSITION0;
+    float4 instanceColor : INSTANCE_COLOR0;
 };
 ```
 
-**Fix**: match the layout order:
+The C++ side must query the same semantic base and index. Do not rely on HLSL
+member names such as `a_position`; those names may be changed freely.
+
+## Varyings
+
+Use matching semantics between vertex output and pixel input.
 
 ```hlsl
-struct VS_IN {
-    float4 a_position : POSITION;
-    float2 a_texCoord : TEXCOORD0;  // TEXCOORD before COLOR
-    float4 a_color : COLOR0;
+struct VS_OUT
+{
+    float4 position : SV_Position;
+    float2 uv       : TEXCOORD0;
+    float4 color    : COLOR0;
+};
+
+struct PS_IN
+{
+    float2 uv    : TEXCOORD0;
+    float4 color : COLOR0;
 };
 ```
 
-## 4. Vertex Output / Fragment Input (Varyings)
+Rules:
+
+- `SV_Position` is the clip-space position output from the vertex shader.
+- Non-built-in varyings should use ordinary HLSL semantics such as `TEXCOORD0`,
+  `COLOR0`, and `NORMAL`.
+- Match semantic names and indices between stages.
+- Variable names do not need to match.
+
+For point-size output on Vulkan, annotate the `PSIZE` output:
 
 ```hlsl
-struct VS_OUT {
-    float2 v_texCoord : TEXCOORD0;
-    float4 v_color : COLOR0;
-    float3 v_normal : NORMAL;
-    float4 position : SV_Position;      // required
-};
-```
-
-### PointSize (Dynamic Point Size)
-
-For vertex shaders that need dynamic point size, declare a `PSIZE` output with the
-`[[vk::builtin("PointSize")]]` annotation:
-
-```hlsl
-struct VS_OUT {
-    float4 v_color : COLOR0;
+struct VS_OUT
+{
     float4 position : SV_Position;
     [[vk::builtin("PointSize")]] float pointSize : PSIZE;
 };
 ```
 
-The `[[vk::builtin("PointSize")]]` annotation is **required** — glslang recognizes
-this Vulkan-specific attribute and emits the `BuiltIn PointSize` decoration in
-SPIR-V. Without it, the SPIR-V output lacks the PointSize built-in decoration.
+## Uniform Buffers
 
-This annotation is consumed during glslang's HLSL→SPIR-V compilation and does
-**not** appear in cross-compiled output (SPIRV-Cross ignores it). All `--dxbc`
-binary targets (d3d11/d3d12) now route through SPIRV-Cross first, so DXC/FXC
-only see the clean HLSL output without `[[vk::builtin(...)]]`.
-
-struct PS_IN {
-    float2 v_texCoord : TEXCOORD0;      // must match VS_OUT
-    float4 v_color : COLOR0;            // must match VS_OUT
-    float3 v_normal : NORMAL;           // must match VS_OUT
-};
-```
-
-### Rules
-- VS_OUT and PS_IN varying names and semantics **must match**. The compiler validates this.
-- `SV_Position` is the only varying that can change type (VS outputs `float4`, PS receives it as pixel coordinate).
-- Only declare PS_IN members that are actually used by the pixel shader.
-- **The declaration order of non-builtin members in VS_OUT and PS_IN must be identical.**
-  glslang assigns SPIR-V `Location` decorations in struct declaration order (not by semantic name).
-  SPIRV-Cross then generates D3D semantics (`TEXCOORDn`) from `Location` values during cross-compilation.
-  If order differs, D3D12 will see mismatched register component masks and reject the PSO:
-  ```
-  D3D12 ERROR: ID3D12Device::CreateGraphicsPipelineState: Vertex Shader - Pixel Shader
-  linkage error: Signatures between stages are incompatible.
-  Semantic 'TEXCOORD' ... has a hardware register component mask that
-  is not a subset of the output of the previous stage.
-  ```
-  This is independent of the semantic names — the names can be `COLOR0`/`TEXCOORD0` in source,
-  but SPIRV-Cross will reassign them to sequential `TEXCOORDn` in cross-compiled output
-  based on the SPIR-V location assignment. Only the *declaration order* matters.
-
-## 5. Constant Buffers (Uniform Blocks)
+Use explicit constant buffer registers.
 
 ```hlsl
-// VS UBO: set=0, binding=0 → register(b0, space0)
-cbuffer vs_ub : register(b0, space0) {
+cbuffer vs_ub : register(b0, space0)
+{
     float4x4 u_MVPMatrix;
-    float4x4 u_MVMatrix;
-    float3x3 u_NormalMatrix;
-    // ... other VS uniforms
 };
 
-// PS UBO: set=0, binding=1 → register(b1, space0)
-cbuffer fs_ub : register(b1, space0) {
+cbuffer fs_ub : register(b1, space0)
+{
     float4 u_color;
-    float2 resolution;
-    // ... other PS uniforms
 };
 ```
 
-### Layout Rules
-- Use `space0` for all uniform buffers
-- `b0` = VS UBO, `b1` = PS UBO
-- For legacy packed UBOs, use `vfloat_def`/`vvec3_def` macros from `base.hlsli`
+Conventions:
 
-## 6. Textures and Samplers
+| Register | Use |
+| --- | --- |
+| `b0, space0` | vertex-stage uniforms |
+| `b1, space0` | pixel-stage uniforms |
+
+Existing engine shaders may use packing helpers from `base.hlsli`, such as
+`vfloat_def` and `vvec3_def`. New shaders should prefer ordinary HLSL types
+unless they need to match an existing packed uniform layout.
+
+## Textures
+
+Declare textures in `space1` using `t#` registers.
 
 ```hlsl
-// Textures: set=1 → space1
 Texture2D u_tex0 : register(t0, space1);
 Texture2D u_tex1 : register(t1, space1);
-TextureCube u_cubeTex : register(t0, space1);
-
-// Builtin samplers are declared in base.hlsli (s0–s21, space1)
-// — include "base.hlsli" and use them directly:
-float4 c = u_tex0.Sample(LinearClamp, uv);
-float4 c = u_tex0.Sample(PointClamp, uv);
-float3 c = u_cubeTex.Sample(LinearClamp, reflectDir);
+TextureCube u_Env : register(t0, space1);
 ```
 
-### Builtin Samplers (from `base.hlsli`)
-
-| Name | Register | Type |
-|------|----------|------|
-| `LinearClamp` | s0 | `SamplerState` |
-| `LinearWrap` | s1 | `SamplerState` |
-| `LinearMirror` | s2 | `SamplerState` |
-| `LinearBorder` | s3 | `SamplerState` |
-| `PointClamp` | s4 | `SamplerState` |
-| `PointWrap` | s5 | `SamplerState` |
-| `PointMirror` | s6 | `SamplerState` |
-| `PointBorder` | s7 | `SamplerState` |
-| `LinearMipClamp` | s8 | `SamplerState` |
-| `LinearMipWrap` | s9 | `SamplerState` |
-| `LinearMipMirror` | s10 | `SamplerState` |
-| `LinearMipBorder` | s11 | `SamplerState` |
-| `AnisoClamp` | s12 | `SamplerState` |
-| `AnisoWrap` | s13 | `SamplerState` |
-| `AnisoMirror` | s14 | `SamplerState` |
-| `AnisoBorder` | s15 | `SamplerState` |
-| `ShadowCmpClamp` | s16 | `SamplerComparisonState` |
-| `ShadowCmpWrap` | s17 | `SamplerComparisonState` |
-| `ShadowCmpMirror` | s18 | `SamplerComparisonState` |
-| `ShadowCmpBorder` | s19 | `SamplerComparisonState` |
-| `LinearNoMipClamp` | s20 | `SamplerState` |
-| `PointNoMipClamp` | s21 | `SamplerState` |
-
-## 7. Shader Entry Point Pattern
+Texture arrays are supported when the C++ side binds an array to the same
+texture binding:
 
 ```hlsl
-// ===== positionTexture_vs.hlsl =====
+Texture2D u_details[4] : register(t0, space1);
+```
+
+## Sampler Model
+
+Axmol has two sampler sources.
+
+| Source | Meaning | Shader Authoring |
+| --- | --- | --- |
+| TextureOwned | sampler state comes from exactly one associated texture/resource | declare one non-preset sampler for that texture |
+| Shader preset | sampler state comes from one of Axmol's built-in presets | sample with `LinearClamp`, `PointClamp`, etc. |
+
+There is no runtime API for arbitrary custom sampler objects in the current RHI.
+Do not treat a non-preset sampler declaration as a user-bindable custom sampler.
+
+### Shader Preset Samplers
+
+Most Axmol HLSL should use the built-in sampler presets from `base.hlsli`:
+
+```hlsl
 #include "base.hlsli"
 
-struct VS_IN {
-    float3 a_position : POSITION;
-    float2 a_texCoord : TEXCOORD0;
+Texture2D u_tex0 : register(t0, space1);
+
+float4 main(PS_IN input) : SV_Target0
+{
+    return u_tex0.Sample(LinearClamp, input.uv);
+}
+```
+
+Built-in presets:
+
+| Name | Register | Type |
+| --- | --- | --- |
+| `LinearClamp` | `s0, space1` | `SamplerState` |
+| `LinearWrap` | `s1, space1` | `SamplerState` |
+| `LinearMirror` | `s2, space1` | `SamplerState` |
+| `LinearBorder` | `s3, space1` | `SamplerState` |
+| `PointClamp` | `s4, space1` | `SamplerState` |
+| `PointWrap` | `s5, space1` | `SamplerState` |
+| `PointMirror` | `s6, space1` | `SamplerState` |
+| `PointBorder` | `s7, space1` | `SamplerState` |
+| `LinearMipClamp` | `s8, space1` | `SamplerState` |
+| `LinearMipWrap` | `s9, space1` | `SamplerState` |
+| `LinearMipMirror` | `s10, space1` | `SamplerState` |
+| `LinearMipBorder` | `s11, space1` | `SamplerState` |
+| `AnisoClamp` | `s12, space1` | `SamplerState` |
+| `AnisoWrap` | `s13, space1` | `SamplerState` |
+| `AnisoMirror` | `s14, space1` | `SamplerState` |
+| `AnisoBorder` | `s15, space1` | `SamplerState` |
+| `ShadowCmpClamp` | `s16, space1` | `SamplerComparisonState` |
+| `ShadowCmpWrap` | `s17, space1` | `SamplerComparisonState` |
+| `ShadowCmpMirror` | `s18, space1` | `SamplerComparisonState` |
+| `ShadowCmpBorder` | `s19, space1` | `SamplerComparisonState` |
+| `LinearNoMipClamp` | `s20, space1` | `SamplerState` |
+| `PointNoMipClamp` | `s21, space1` | `SamplerState` |
+
+Shader preset samplers are independent of texture registers. For example, this
+is valid:
+
+```hlsl
+Texture2D albedo : register(t3, space1);
+
+float4 c = albedo.Sample(LinearClamp, uv); // texture t3, sampler s0
+```
+
+### TextureOwned Samplers
+
+TextureOwned sampling means the sampler state is taken from one associated
+texture. A TextureOwned sampler may internally reuse an existing built-in
+sampler state owned by that texture; the shader register still follows Axmol's
+sampler ABI.
+
+The texture register and sampler register do not need to have the same number,
+but TextureOwned sampler registers must use `s22` or higher because `s0` - `s21`
+are reserved binding slots for Axmol ShaderPreset samplers declared in
+`base.hlsli`:
+
+```hlsl
+Texture2D u_albedo : register(t3, space1);
+SamplerState u_albedoSampler : register(s22, space1);
+
+float4 c = u_albedo.Sample(u_albedoSampler, uv);
+```
+
+Reflection records this as `u_albedoSampler.binding = 22` and
+`u_albedoSampler.textureBinding = 3`.
+
+A TextureOwned sampler must have exactly one owner texture. Do not share one
+non-preset sampler across multiple textures:
+
+```hlsl
+// Not supported for TextureOwned samplers:
+a.Sample(sharedSampler, uv);
+b.Sample(sharedSampler, uv);
+```
+
+If several textures should use the same sampler state, use a ShaderPreset such
+as `LinearClamp` instead.
+
+### GL/GLES Combined Samplers
+
+OpenGL 3.3 and OpenGL ES 3.x use combined sampler uniforms in GLSL/ESSL.
+axslcc lowers HLSL texture + sampler usage into the final combined GLSL resource
+at compile time. Runtime reflection for GL/GLES describes the final combined
+uniforms, not the original HLSL separate image/sampler resources.
+
+For cross-backend shaders, do not sample the same texture with multiple sampler
+states in one shader:
+
+```hlsl
+// Not supported for Axmol GL/GLES lowering:
+float4 a = u_tex0.Sample(LinearClamp, uv);
+float4 b = u_tex0.Sample(PointClamp, uv);
+```
+
+Use separate texture bindings or a single sampler state per texture.
+
+## Register Spaces
+
+| Resource | Space | Registers |
+| --- | --- | --- |
+| Uniform buffers | `space0` | `b0`, `b1`, ... |
+| Textures | `space1` | `t0`, `t1`, ... |
+| ShaderPreset sampler slots | `space1` | `s0` - `s21`, reserved by `base.hlsli` |
+| TextureOwned sampler slots | `space1` | `s22` and above |
+
+Axmol currently flattens runtime bindings for its RHI backends. Use the spaces
+above consistently.
+
+## Complete Example
+
+```hlsl
+#include "base.hlsli"
+
+struct VS_IN
+{
+    float3 position : POSITION;
+    float2 uv       : TEXCOORD0;
+    float4 color    : COLOR0;
 };
 
-struct VS_OUT {
-    float2 v_texCoord : TEXCOORD0;
+struct VS_OUT
+{
     float4 position : SV_Position;
+    float2 uv       : TEXCOORD0;
+    float4 color    : COLOR0;
 };
 
-cbuffer vs_ub : register(b0, space0) {
+cbuffer vs_ub : register(b0, space0)
+{
     float4x4 u_MVPMatrix;
 };
 
-VS_OUT main(VS_IN input) {
+VS_OUT main(VS_IN input)
+{
     VS_OUT output;
-    output.position = mul(u_MVPMatrix, float4(input.a_position, 1.0));
-    output.v_texCoord = input.a_texCoord;
+    output.position = mul(u_MVPMatrix, float4(input.position, 1.0));
+    output.uv = input.uv;
+    output.color = input.color;
     return output;
 }
+```
 
-// ===== positionTexture_fs.hlsl =====
+```hlsl
 #include "base.hlsli"
 
-struct PS_IN {
-    float2 v_texCoord : TEXCOORD0;
+struct PS_IN
+{
+    float2 uv    : TEXCOORD0;
+    float4 color : COLOR0;
 };
 
 Texture2D u_tex0 : register(t0, space1);
 
-float4 main(PS_IN input) : SV_Target0 {
-    return u_tex0.Sample(LinearClamp, input.v_texCoord);
+float4 main(PS_IN input) : SV_Target0
+{
+    return input.color * u_tex0.Sample(LinearClamp, input.uv);
 }
 ```
 
-## 8. Fullscreen / Shadertoy Fragment Shaders
+## Target Macros
 
-```hlsl
-#include "base.hlsli"
+axslcc defines target macros while compiling each backend variant.
 
-struct PS_IN {
-    float4 gl_FragCoord : SV_Position;  // pixel position
-};
+| Target | Defines |
+| --- | --- |
+| D3D/HLSL | `AXSLC_TARGET_HLSL=1` |
+| Vulkan/SPIR-V | `AXSLC_TARGET_SPIRV=1` |
+| Metal/MSL | `AXSLC_TARGET_MSL=1` |
+| OpenGL/GLSL | `AXSLC_TARGET_GLSL=1` |
+| OpenGL ES/ESSL | `AXSLC_TARGET_ESSL=1`, `AXSLC_TARGET_GLSL=1` |
 
-cbuffer fs_ub : register(b1, space0) {
-    float2 center;
-    float2 resolution;
-    float4 u_Time;
-};
+Use these only when a backend really needs different source behavior.
 
-float4 main(PS_IN input) : SV_Target0 {
-    float2 fragCoord = input.gl_FragCoord.xy;
-    // ... shadertoy body ...
-}
-```
+## Coordinate Notes
 
-## 9. Constants and Preprocessor
+Do not treat UV Y flipping as a backend rule. Whether a shader should flip
+`uv.y` depends on the meaning of the coordinate being passed through the shader.
 
-### Const Members in cbuffer
+There are three common cases:
 
-```hlsl
-// cbuffer members that are compile-time constant
-static const float intensity = 0.05;  // use 'static' for global constants
+| Input meaning | Recommended code | Why |
+| --- | --- | --- |
+| Mesh/asset UVs are already in the sampling convention expected by the texture | pass the UV through unchanged | most new shaders should start here |
+| The asset or old GLSL shader intentionally stored UVs in the opposite convention | explicitly convert the data, for example `uv.y = 1.0 - uv.y` | this preserves the asset/shader contract across all backends |
+| The shader is converting a backend-dependent screen or render-target coordinate to a bottom-left/Y-up convention | use `AX_Y_UP(coord)` from `base.hlsli` | this documents that the conversion depends on target coordinate origin |
 
-// Local constants (no 'static' needed)
-float4 main(PS_IN input) : SV_Target0 {
-    const float blurSize = 1.0 / 512.0;
-    // ...
-}
-```
+In other words, `1.0 - uv.y` is a data-space conversion, while `AX_Y_UP()` is a
+target-space conversion helper. Do not replace one with the other mechanically.
 
-### Macros
+When migrating old GLSL, compare the original shader behavior instead of
+assuming all GLSL-era flips were backend workarounds. Some were part of the
+shader's intended asset UV semantics.
 
-```hlsl
-#define FILTER_SIZE 3
-#define COLOR_LEVELS 7.0
-```
+## Compile Variants
 
-## 10. Y-Flip (no longer needed)
-
-In the old GLSL path, `v_texCoord.y = 1.0 - v_texCoord.y` was used for OpenGL/D3D coordinate system differences. With HLSL 5.1 and SPIRV-Cross handling backend differences:
-
-- **D3D11/D3D12**: No Y-flip. Texture origin is top-left.
-- **GLES**: No Y-flip. SPIRV-Cross handles the flip in ESSL output.
-- **Vulkan**: No Y-flip.
-- **Metal**: Handled by `AXSLC_TARGET_MSL` macro (axslcc internal).
-
-```hlsl
-// In HLSL/D3D, texture origin is top-left (no Y flip needed).
-// spirv-cross handles GL-specific Y flip when producing GLSL output.
-#define TEXCOORD_Y(v) ((v).y)
-```
-
-## 11. Packed UBO Layout (Legacy)
-
-For existing UBO layouts that need compact float packing (used by older engine code):
-
-```hlsl
-// From base.hlsli
-#define vfloat_def(x, y) float4 x[(y + 3) / 4]
-#define vfloat_at(x, y) x[y / 4][y % 4]
-#define vvec3_def(x, y) float4 x[(y * 3 + 3) / 4]
-
-// Usage
-cbuffer fs_ub : register(b1, space0) {
-    vvec3_def(u_DirLightSourceColor, MAX_DIRECTIONAL_LIGHT_NUM);
-    vfloat_def(u_PointLightSourceRangeInverse, MAX_POINT_LIGHT_NUM);
-};
-```
-
-## 12. Include Path
-
-```hlsl
-// include "base.hlsli" for builtin samplers and common macros
-// include other .hlsli files as needed
-#include "base.hlsli"
-#include "colorUtils.hlsli"
-```
-
-## 13. Register Space Mapping
-
-| Descriptor Type | Space | Registers |
-|----------------|-------|-----------|
-| Uniform Buffer (UBO) | `space0` | `b0` (VS), `b1` (PS) |
-| Texture SRV | `space1` | `t0`, `t1`, `t2`, ... |
-| Sampler | `space1` | `s0`–`s21` (builtin) |
-
-## 14. Compilation Pipeline
-
-axslcc performs per-target compilation to inject `AXSLC_TARGET_*` preprocessor defines
-at source level:
-
-```
-for each target (HLSL, GLSL, ESSL, MSL, SPIRV):
-  .hlsl source + target defines (-DAXSLC_TARGET_<LANG>=1)
-    → glslang → SPIR-V
-      → SPIRV-Cross + attribute remap → target output
-    → packed into .sc file (axslcc -a)
-```
-
-### 14.1 Shader Compile Variants
-
-A single `.hlsl` source can produce multiple compiled `.sc` outputs with different
-preprocessor defines using the `AXSLCC_VARIANT_DEFINES` source property:
+CMake can build shader variants with extra defines.
 
 ```cmake
-# Single extra variant
 set_source_files_properties(
     positionNormalTexture_vs.hlsl
     PROPERTIES AXSLCC_VARIANT_DEFINES "USE_NORMAL_MAPPING=1"
 )
-# → outputs: positionNormalTexture_vs (base), positionNormalTexture_vs_1 (-DUSE_NORMAL_MAPPING=1)
-
-# Multiple variants
-PROPERTIES AXSLCC_VARIANT_DEFINES "A=1,B=2;C=3"
-# → outputs: file, file_1 (-DA=1 -DB=2), file_2 (-DC=3)
 ```
 
 Rules:
-- **`;`** (semicolon) separates variants
-- **`,`** (comma) separates defines within one variant
-- Variant defines are **only** applied to `_1`, `_2`, ... outputs — never the base output
-- `AXSLCC_DEFINES` (comma-separated) applies to **all** outputs including the base
 
-## 15. Target Identification Macros
+- `;` separates variants;
+- `,` separates defines in one variant;
+- `AXSLCC_DEFINES` applies to all variants;
+- `AXSLCC_VARIANT_DEFINES` applies only to generated variant outputs.
 
-axslcc automatically defines `AXSLC_TARGET_*` macros as preprocessor defines during
-source compilation (per-target via glslang `-D` flags). These are available in source
-and all `#include`d headers:
+## Runtime Reflection
 
-| Target | Defines |
-|--------|---------|
-| ESSL (GLES) | `AXSLC_TARGET_ESSL=1` + `AXSLC_TARGET_GLSL=1` |
-| HLSL (D3D)  | `AXSLC_TARGET_HLSL=1` |
-| MSL (Metal)  | `AXSLC_TARGET_MSL=1` |
-| GLSL         | `AXSLC_TARGET_GLSL=1` |
-| SPIR-V (Vulkan) | `AXSLC_TARGET_SPIRV=1` |
+Runtime reflection contains the resources the backend needs to bind:
 
-### Helper: `AX_Y_UP(v)` + `AXSLC_UV_TOP` (`base.hlsli`)
+- vertex input semantic, semantic index, and backend location;
+- textures;
+- samplers;
+- uniform buffers;
+- storage resources where applicable.
 
-```hlsl
-// AXSLC_UV_TOP: 0 = bottom-left origin (GLSL/ESSL), 1 = top-left origin (HLSL/SPIRV/MSL)
-#if defined(AXSLC_TARGET_GLSL)
-    #define AXSLC_UV_TOP 0
-#else
-    #define AXSLC_UV_TOP 1
-#endif
+It does not contain texture/sampler sampling pairs. Texture/sampler pair
+analysis is a compiler-internal step used for GL/GLES lowering and Vulkan
+combined-mode preparation.
 
-// AX_Y_UP(v): Convert from platform origin to bottom-left (Y-up) coordinate
-#define AX_Y_UP(v) (AXSLC_UV_TOP ? (1.0 - (v).y) : ((v).y))
-```
+## Checklist
 
-Use for vertex shader texcoords that need Y-up convention:
-
-```hlsl
-output.v_texCoord = float2(input.a_texCoord.x, AX_Y_UP(input.a_texCoord));
-```
-
-### Fullscreen Fragment Shaders
-
-For fullscreen PS shaders using `SV_Position` with Shadertoy-style coordinate math,
-use `AXSLC_UV_TOP` to conditionally flip `gl_FragCoord.y`:
-
-```hlsl
-float4 main(PS_IN input) : SV_Target0 {
-#if AXSLC_UV_TOP
-    float2 fragCoord = float2(input.gl_FragCoord.x, u_screenSize.y - input.gl_FragCoord.y);
-#else
-    float2 fragCoord = input.gl_FragCoord.xy;
-#endif
-    // ... rest using fragCoord
-}
-```
-
-## 16. Testing Checklist
-
-- [ ] Vertex inputs declared with correct D3D semantics
-- [ ] PS_IN varyings match VS_OUT varyings
-- [ ] cbuffer bindings: `b0` for VS, `b1` for PS
-- [ ] Texture bindings: `register(tN, space1)`
-- [ ] No Y-flip in HLSL source (SPIRV-Cross handles it)
-- [ ] `#include "base.hlsli"` when using any sampler
-- [ ] No `vfloat_def`/`vvec3_def` in new shaders (use native `float4` arrays)
-- [ ] `float4x4` multiply uses `mul(matrix, vector)` order
+- Include `base.hlsli` when using preset samplers.
+- Use `b0, space0` for vertex uniforms and `b1, space0` for pixel uniforms.
+- Use `tN, space1` for textures.
+- Use built-in sampler presets for explicit shader sampler state.
+- Use one TextureOwned sampler per owner texture, or use a ShaderPreset for
+  sampler state shared by multiple textures.
+- Do not sample one texture with multiple sampler states if GL/GLES is a target.
+- Match varyings by semantic name and index, not variable name.
+- Recompile all shaders after changing the reflection layout or axslcc runtime
+  ABI.
