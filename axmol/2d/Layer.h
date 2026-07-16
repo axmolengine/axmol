@@ -242,8 +242,8 @@ public:
 protected:
     void updateColor() override;
 
-    Color32 _startColor           = Color32::BLACK;
-    Color32 _endColor             = Color32::BLACK;
+    Color32 _startColor           = Color32::black;
+    Color32 _endColor             = Color32::black;
     Vec2 _alongVector             = {0.0f, -1.0f};
     bool _compressedInterpolation = true;
 };
@@ -310,11 +310,11 @@ public:
                        float expand);
 
 private:
-    Color32 _startColor   = Color32::BLACK;
-    Color _startColorRend = Color::BLACK;  // start color used in shader
+    Color32 _startColor   = Color32::black;
+    Color _startColorRend = Color::black;  // start color used in shader
 
-    Color32 _endColor   = Color32::BLACK;
-    Color _endColorRend = Color::BLACK;  // end color used in shader
+    Color32 _endColor   = Color32::black;
+    Color _endColorRend = Color::black;  // end color used in shader
 
     Vec3 _vertices[4];
     Vec2 _center;

@@ -102,7 +102,7 @@ Animation3D::Curve::~Curve()
     AX_SAFE_RELEASE_NULL(scaleCurve);
 }
 
-// constexpr bool kkk = std::is_trivially_copyable<Quaternion>::value;
+// constexpr bool kkk = std::is_trivially_copyable<Quat>::value;
 
 bool Animation3D::init(const Animation3DData& data)
 {
@@ -136,7 +136,7 @@ bool Animation3D::init(const Animation3DData& data)
 
     {
         tlx::pod_vector<float> keys;
-        tlx::pod_vector<Quaternion> values;
+        tlx::pod_vector<Quat> values;
         for (const auto& iter : data._rotationKeys)
         {
             Curve* curve = _boneCurves[iter.first];

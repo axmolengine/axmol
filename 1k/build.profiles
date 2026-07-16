@@ -6,11 +6,11 @@
 # --- region platfom:common
 
 # The axmol shader compiler, legacy name is 'glslcc' before axmol-2.3.0
-axslcc=3.6.0+
+axslcc=3.6.0
 
 # The cmake, @gradle @axmol-cmdline
 # as latest as possible
-cmake=4.2.0~4.3.2+
+cmake=4.2.0~4.3.3+
 
 # The ninja
 ninja=1.10.0~1.13.2+
@@ -58,7 +58,7 @@ min_sdk=23
 
 # The gradle version, @setup.ps1
 # as latest as possible
-gradle=9.5.0
+gradle=9.6.1
 
 # The android gradle plugin, @setup.ps1
 # as stable as possible, match with build-tools,android-studio
@@ -88,14 +88,16 @@ guava=33.6.0
 # - since emsdk-4.0.0+ can't be debugging via chrome properly on windows (macos and linux no this issue), since emsdk 5.0.0, issue resolved
 # - axmol can build with emsdk-3.1.73+
 # - please use emsdk-3.1.73/5.0.0+ if you want debug axmol wasm app properly
-emsdk=3.1.73~5.0.7+
+emsdk=3.1.73~6.0.1+
 
 # --- endregion
 
 # --- region dependencies @fetch.cmake
-1kdist=v120
+1kdist=v121
 oboe=1.10.0
-kcp=v1.7-f4f3a89
+kcp=2.1.1
 lz4=v1.10.0
-sample-assets=master
+sample-assets=v3.0.0-alpha22
+live2d-core=5.5
+openxr=release-1.1.61
 # --- endregion

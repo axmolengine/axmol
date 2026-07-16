@@ -24,7 +24,7 @@
 
 #include "sceneio/WidgetReader/TextFieldReader/TextFieldExReader.h"
 
-#include "axmol/ui/UITextFieldEx.h"
+#include "axmol/ui/InputField.h"
 #include "axmol/platform/FileUtils.h"
 #include "sceneext/CocoLoader.h"
 #include "sceneio/CSParseBinary_generated.h"
@@ -91,7 +91,7 @@ Offset<Table> TextFieldExReader::createOptionsWithFlatBuffers(pugi::xml_node obj
     int fontSize = 20;
     std::string text;
     bool isLocalized              = false;
-    std::string placeHolder       = "Text Field Extend";
+    std::string placeHolder       = "Input Field";
     bool passwordEnabled          = false;
     std::string passwordStyleText = "*";
     bool maxLengthEnabled         = false;
@@ -290,8 +290,8 @@ Offset<Table> TextFieldExReader::createOptionsWithFlatBuffers(pugi::xml_node obj
 
 void TextFieldExReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* textFieldOptions)
 {
-    TextFieldEx** pTextField = (TextFieldEx**)(node);
-    auto options             = (TextFieldExOptions*)textFieldOptions;
+    InputField** pTextField = (InputField**)(node);
+    auto options            = (TextFieldExOptions*)textFieldOptions;
 
     std::string placeholder = options->placeholderText()->c_str();
 
@@ -334,7 +334,7 @@ void TextFieldExReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffer
 
     // bool maxLengthEnabled = options->maxLengthEnabled() != 0;
     // textField->setMaxLengthEnabled(maxLengthEnabled);
-    auto textField = TextFieldEx::create(placeholder, fontName, fontSize);
+    auto textField = InputField::create(placeholder, fontName, fontSize);
 
     *pTextField = textField;
 
@@ -344,11 +344,11 @@ void TextFieldExReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffer
 
     textField->setPasswordEnabled(passwordEnabled);
 
-    /*if (passwordEnabled)
+    if (passwordEnabled)
     {
         std::string passwordStyleText = options->passwordStyleText()->c_str();
-        textField->setPasswordStyleText(passwordStyleText.c_str());
-    }*/
+        textField->setPasswordChar(passwordStyleText);
+    }
     textField->setString(text);
 
     textField->setTextColor(Color32FromFb(options->textColor()));
@@ -367,18 +367,18 @@ void TextFieldExReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffer
     textField->setContentSize(contentSize);
 
     textField->setEnabled(options->enabled());
-    textField->setEditable(options->editable());
+    textField->setReadOnly(!options->editable());
 
-    textField->enableIME(nullptr);
-    /*if (!textField->isIgnoreContentAdaptWithSize())
+    // InputField will enable IME when user interacts with it
+    if (!textField->isAutoSize())
     {
-        ((Label*)(textField->getVirtualRenderer()))->setLineBreakWithoutSpace(true);
-    }*/
+        ((Label*)(textField->getRenderNode()))->setLineBreakWithoutSpace(true);
+    }
 }
 
 Node* TextFieldExReader::createNodeWithFlatBuffers(const flatbuffers::Table* textFieldOptions)
 {
-    TextFieldEx* textField = nullptr;  // TextFieldEx::create("dummy", "Courier New", 18);
+    InputField* textField = nullptr;
 
     setPropsWithFlatBuffers((Node*)&textField, (Table*)textFieldOptions);
 

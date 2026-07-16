@@ -111,7 +111,7 @@ protected:
     std::mutex _sleepMutex;
 
     std::mutex _play2dMutex;
-    std::function<void(AUDIO_ID, std::string_view)> _finishCallbak;
+    std::function<void(AudioId, std::string_view)> _finishCallbak;
 
     friend class AudioEngineImpl;
 };

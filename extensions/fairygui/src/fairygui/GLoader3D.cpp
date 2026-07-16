@@ -6,7 +6,7 @@
 #include "utils/ByteBuffer.h"
 #include "utils/ToolSet.h"
 
-#include "spine/spine-cocos2dx.h"
+#include "spine/spine-axmol.h"
 
 NS_FGUI_BEGIN
 using namespace ax;
@@ -24,7 +24,7 @@ GLoader3D::GLoader3D()
     _playing(true),
     _frame(0),
     _loop(false),
-    _color(Color32::WHITE)
+    _color(Color32::white)
 {
 }
 
@@ -43,7 +43,7 @@ void GLoader3D::handleInit()
 
     _container = FUIContainer::create();
     _container->retain();
-    _container->setAnchorPoint(Vec2::ZERO);
+    _container->setAnchorPoint(Vec2::zero);
     _displayObject->addChild(_container);
 }
 
@@ -198,11 +198,7 @@ void GLoader3D::loadFromPackage()
             std::string atlasFile = _contentItem->file.substr(0, pos + 1).append("atlas");
             if (!ToolSet::isFileExist(atlasFile))
                 atlasFile = _contentItem->file.substr(0, pos + 1).append("atlas.txt");
-            spine::SkeletonAnimation* skeletonAni;
-            if (FileUtils::getPathExtension(_contentItem->file) == ".skel")
-                skeletonAni = spine::SkeletonAnimation::createWithBinaryFile(_contentItem->file, atlasFile);
-            else
-                skeletonAni = spine::SkeletonAnimation::createWithJsonFile(_contentItem->file, atlasFile);
+            spine::SkeletonAnimation* skeletonAni = spine::SkeletonAnimation::create(_contentItem->file, atlasFile);
             skeletonAni->setPosition(_contentItem->skeletonAnchor->x, _contentItem->skeletonAnchor->y);
             skeletonAni->retain();
 
@@ -236,28 +232,24 @@ void GLoader3D::onChangeSpine()
         return;
 
 #if !defined(AX_SPINE_VERSION) || AX_SPINE_VERSION >= 0x030700
-    spine::AnimationState* state = skeletonAni->getState();
-
-    spine::Animation* aniToUse = !_animationName.empty() ? skeletonAni->findAnimation(_animationName) : nullptr;
-    if (aniToUse != nullptr)
+    if (!_animationName.empty() && skeletonAni->hasAnimation(_animationName))
     {
-        spine::TrackEntry* entry = state->getCurrent(0);
-        if (entry == nullptr || strcmp(entry->getAnimation()->getName().buffer(), _animationName.c_str()) != 0
-            || entry->isComplete() && !entry->getLoop())
-            entry = state->setAnimation(0, aniToUse, _loop);
+        if (skeletonAni->getAnimationName(0) != _animationName ||
+            (skeletonAni->isAnimationComplete(0) && !skeletonAni->isAnimationLooping(0)))
+            skeletonAni->setAnimation(0, _animationName, _loop);
         else
-            entry->setLoop(_loop);
+            skeletonAni->setAnimationLoop(0, _loop);
 
         if (_playing)
-            entry->setTimeScale(1);
+            skeletonAni->setAnimationTimeScale(0, 1);
         else
         {
-            entry->setTimeScale(0);
-            entry->setTrackTime(MathUtil::lerp(0, entry->getAnimationEnd() - entry->getAnimationStart(), _frame / 100.0f));
+            skeletonAni->setAnimationTimeScale(0, 0);
+            skeletonAni->setAnimationNormalizedTime(0, _frame / 100.0f);
         }
     }
     else
-        state->clearTrack(0);
+        skeletonAni->clearTrack(0);
 
     skeletonAni->setSkin(_skinName);
 #else
@@ -334,7 +326,7 @@ void GLoader3D::updateLayout()
         if (_size.equals(contentSize))
         {
             _container->setScale(1, 1);
-            _container->setAnchorPoint(Vec2::ZERO);
+            _container->setAnchorPoint(Vec2::zero);
             _container->setPosition(0, 0);
             return;
         }
@@ -380,7 +372,7 @@ void GLoader3D::updateLayout()
     }
 
     _container->setScale(sx, sy);
-    _container->setAnchorPoint(Vec2::ZERO);
+    _container->setAnchorPoint(Vec2::zero);
 
     float nx;
     float ny;
@@ -494,7 +486,7 @@ GObject* GLoader3D::hitTest(const Vec2& worldPoint, const Camera* camera)
 
     Rect rect;
     rect.size = _size;
-    //if (isScreenPointInRect(worldPoint, camera, _displayObject->getWorldToNodeTransform(), rect, nullptr))
+    //if (camera->isWorldPointInRect(worldPoint, _displayObject->getWorldToNodeTransform(), rect))
     if (rect.containsPoint(_displayObject->convertToNodeSpace(worldPoint)))
         return this;
     else

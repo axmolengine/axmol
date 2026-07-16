@@ -31,7 +31,7 @@
      AX_TARGET_PLATFORM == AX_PLATFORM_WASM)
 
 #    include "axmol/base/EventDispatcher.h"
-#    include "axmol/base/EventController.h"
+#    include "axmol/base/ControllerEvent.h"
 #    include "axmol/base/Director.h"
 
 namespace ax
@@ -75,9 +75,9 @@ void Controller::init()
     }
 
     _eventDispatcher = Director::getInstance()->getEventDispatcher();
-    _connectEvent    = new EventController(EventController::ControllerEventType::CONNECTION, this, false);
-    _keyEvent        = new EventController(EventController::ControllerEventType::BUTTON_STATUS_CHANGED, this, 0);
-    _axisEvent       = new EventController(EventController::ControllerEventType::AXIS_STATUS_CHANGED, this, 0);
+    _connectEvent    = new ControllerEvent(ControllerEvent::ControllerEventType::CONNECTION, this, false);
+    _keyEvent        = new ControllerEvent(ControllerEvent::ControllerEventType::BUTTON_STATUS_CHANGED, this, 0);
+    _axisEvent       = new ControllerEvent(ControllerEvent::ControllerEventType::AXIS_STATUS_CHANGED, this, 0);
 }
 
 const Controller::KeyStatus& Controller::getKeyStatus(int keyCode)

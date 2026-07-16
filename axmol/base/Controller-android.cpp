@@ -32,7 +32,7 @@
 #    include "axmol/base/Macros.h"
 #    include "axmol/base/Director.h"
 #    include "axmol/platform/android/jni/JniHelper.h"
-#    include "axmol/base/EventController.h"
+#    include "axmol/base/ControllerEvent.h"
 
 namespace ax
 {

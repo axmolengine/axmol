@@ -21,12 +21,13 @@ struct Mat3
         _M22 = 10
     };
 
-    Mat3() = default;
-    Mat3(float m00, float m01, float m02, float m10, float m11, float m12, float m20, float m21, float m22)
+    constexpr Mat3() = default;
+    constexpr Mat3(float m00, float m01, float m02, float m10, float m11, float m12, float m20, float m21, float m22)
     {
         this->set(m00, m01, m02, m10, m11, m12, m20, m21, m22);
     }
-    void set(float m00, float m01, float m02, float m10, float m11, float m12, float m20, float m21, float m22)
+    constexpr void
+    set(float m00, float m01, float m02, float m10, float m11, float m12, float m20, float m21, float m22)
     {
         m[_M00] = m00;
         m[_M01] = m01;
@@ -41,7 +42,7 @@ struct Mat3
         m[_M22] = m22;
         // 2 3   = 2 * 4 + 3 = 11
     }
-    float* operator[](size_t rowIndex)
+    constexpr float* operator[](size_t rowIndex)
     {
         assert(rowIndex < 3);
         return &m[rowIndex * 4];

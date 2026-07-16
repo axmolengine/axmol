@@ -32,6 +32,8 @@ namespace ax
 {
 
 class GridBase;
+class Camera;
+class TransitionFadeTR;
 /**
  *  @addtogroup _2d
  *  @{
@@ -92,15 +94,26 @@ public:
     virtual ~NodeGrid();
 
 protected:
+    friend class TransitionFadeTR;
+
+    /** Internal transition hook for VR: align grid blit geometry with the
+     *  visiting capture camera instead of leaving tile edges head-locked.
+     */
+    void setProjectGridBlitToVisitingCamera(bool enabled) { _projectGridBlitToVisitingCamera = enabled; }
+
     void onGridBeginDraw();
     void onGridEndDraw();
+    Camera* getGridCamera();
 
     Node* _gridTarget   = nullptr;
     GridBase* _nodeGrid = nullptr;
+    Camera* _gridCamera = nullptr;
     CustomCommand _gridBeginCommand;
     CustomCommand _gridEndCommand;
 
-    Rect _gridRect = Rect::ZERO;
+    Rect _gridRect = Rect::zero;
+
+    bool _projectGridBlitToVisitingCamera = false;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(NodeGrid);

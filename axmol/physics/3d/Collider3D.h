@@ -27,7 +27,7 @@
 #include "axmol/math/Math.h"
 #include "axmol/physics/PhysicsActor.h"
 
-#include <cstdint>
+#include <stdint.h>
 #include <functional>
 #include <vector>
 #include <span>
@@ -131,7 +131,7 @@ public:
      * @param translateInPhysics Translation offset in local physics space.
      * @param rotInPhysics Rotation offset in local physics space.
      */
-    void setTransformInPhysics(const Vec3& translateInPhysics, const Quaternion& rotInPhysics);
+    void setTransformInPhysics(const Vec3& translateInPhysics, const Quat& rotInPhysics);
 
     /** @brief Synchronizes the owner node transform to the native physics body. */
     void syncNodeToPhysics() override;

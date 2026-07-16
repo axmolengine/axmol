@@ -1,4 +1,4 @@
-﻿
+
 
 #include "Effekseer.InstanceChunk.h"
 #include "Effekseer.InstanceGlobal.h"

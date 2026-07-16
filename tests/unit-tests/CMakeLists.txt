@@ -33,13 +33,13 @@ set(GAME_SOURCE
     Source/TestUtils.cpp
 
     Source/axmol/2d/NodeTests.cpp
+    Source/axmol/3d/TerrainTests.cpp
 
     Source/axmol/base/MapTests.cpp
     Source/axmol/base/UTF8Tests.cpp
     Source/axmol/base/UtilsTests.cpp
     Source/axmol/base/ValueTests.cpp
     Source/axmol/base/VectorTests.cpp
-    Source/axmol/base/WeakPtrTests.cpp
 
     Source/axmol/math/FastRNGTests.cpp
     Source/axmol/math/MathUtilTests.cpp

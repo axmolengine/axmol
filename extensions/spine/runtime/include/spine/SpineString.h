@@ -36,6 +36,8 @@
 #include <string.h>
 #include <stdio.h>
 
+#include <string_view> // Axmol-spec
+
 namespace spine {
 	class SP_API String : public SpineObject {
 	public:
@@ -55,6 +57,21 @@ namespace spine {
 				} else {
 					_buffer = (char *) chars;
 				}
+			}
+		}
+
+		/// Axmol-spec: Unsafe constructor for String.
+		/// This overload avoids unnecessary strlen calls and memory copies by directly
+		/// referencing the provided std::string_view buffer. The caller must ensure
+		/// the lifetime of the input string_view outlives this String instance.
+        [[unsafe]] explicit String(std::string_view sv) {
+			_tempowner = false;
+			if (sv.empty()) {
+				_length = 0;
+				_buffer = NULL;
+			} else {
+				_length = sv.length();
+                _buffer = const_cast<char*>(sv.data());
 			}
 		}
 
@@ -179,41 +196,50 @@ namespace spine {
 			return *this;
 		}
 
+		String &append(char c) {
+			size_t thisLen = _length;
+			_length = _length + 1;
+			_buffer = SpineExtension::realloc(_buffer, _length + 1, __FILE__, __LINE__);
+			_buffer[thisLen] = c;
+			_buffer[_length] = '\0';
+			return *this;
+		}
+
 		bool startsWith(const String &needle) const {
 			if (needle.length() > length()) return false;
-			for (int i = 0; i < (int)needle.length(); i++) {
+			for (int i = 0; i < (int) needle.length(); i++) {
 				if (buffer()[i] != needle.buffer()[i]) return false;
 			}
 			return true;
 		}
 
-        int lastIndexOf(const char c) const {
-            for (int i = (int)length() - 1; i >= 0; i--) {
-                if (buffer()[i] == c) return i;
-            }
-            return -1;
-        }
+		int lastIndexOf(const char c) const {
+			for (int i = (int) length() - 1; i >= 0; i--) {
+				if (buffer()[i] == c) return i;
+			}
+			return -1;
+		}
 
-        String substring(int startIndex, int length) const {
-            if (startIndex < 0 || startIndex >= (int)_length || length < 0 || startIndex + length > (int)_length) {
-                return String();
-            }
-            char* subStr = SpineExtension::calloc<char>(length + 1, __FILE__, __LINE__);
-            memcpy(subStr, _buffer + startIndex, length);
-            subStr[length] = '\0';
-            return String(subStr, true, true);
-        }
+		String substring(int startIndex, int length) const {
+			if (startIndex < 0 || startIndex >= (int) _length || length < 0 || startIndex + length > (int) _length) {
+				return String();
+			}
+			char *subStr = SpineExtension::calloc<char>(length + 1, __FILE__, __LINE__);
+			memcpy(subStr, _buffer + startIndex, length);
+			subStr[length] = '\0';
+			return String(subStr, true, true);
+		}
 
-        String substring(int startIndex) const {
-            if (startIndex < 0 || startIndex >= (int)_length) {
-                return String();
-            }
-            int length = (int)_length - startIndex;
-            char* subStr = SpineExtension::calloc<char>(length + 1, __FILE__, __LINE__);
-            memcpy(subStr, _buffer + startIndex, length);
-            subStr[length] = '\0';
-            return String(subStr, true, true);
-        }
+		String substring(int startIndex) const {
+			if (startIndex < 0 || startIndex >= (int) _length) {
+				return String();
+			}
+			int length = (int) _length - startIndex;
+			char *subStr = SpineExtension::calloc<char>(length + 1, __FILE__, __LINE__);
+			memcpy(subStr, _buffer + startIndex, length);
+			subStr[length] = '\0';
+			return String(subStr, true, true);
+		}
 
 		friend bool operator==(const String &a, const String &b) {
 			if (a._buffer == b._buffer) return true;
@@ -243,4 +269,4 @@ namespace spine {
 }
 
 
-#endif //SPINE_STRING_H
+#endif//SPINE_STRING_H

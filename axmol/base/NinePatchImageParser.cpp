@@ -31,9 +31,9 @@ namespace ax
 
 NinePatchImageParser::~NinePatchImageParser() {}
 
-NinePatchImageParser::NinePatchImageParser() : _image(nullptr), _imageFrame(Rect::ZERO), _isRotated(false) {}
+NinePatchImageParser::NinePatchImageParser() : _image(nullptr), _imageFrame(Rect::zero), _isRotated(false) {}
 
-NinePatchImageParser::NinePatchImageParser(Image* image) : _image(image), _imageFrame(Rect::ZERO), _isRotated(false)
+NinePatchImageParser::NinePatchImageParser(Image* image) : _image(image), _imageFrame(Rect::zero), _isRotated(false)
 {
     this->_imageFrame = Rect(0, 0, image->getWidth(), image->getHeight());
     AXASSERT(image->getPixelFormat() == rhi::PixelFormat::RGBA8,

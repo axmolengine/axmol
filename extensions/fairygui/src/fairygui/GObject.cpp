@@ -124,7 +124,7 @@ void GObject::setPosition(float xv, float yv)
         }
 
         if (_draggingObject == this && !sUpdateInDragging)
-            sGlobalRect = localToGlobal(Rect(Vec2::ZERO, _size));
+            sGlobalRect = localToGlobal(Rect(Vec2::zero, _size));
     }
 }
 
@@ -714,7 +714,7 @@ GObject* GObject::hitTest(const Vec2& worldPoint, const Camera* camera)
 
     Rect rect;
     rect.size = _size;
-    //if (isScreenPointInRect(worldPoint, camera, _displayObject->getWorldToNodeTransform(), rect, nullptr))
+    //if (camera->isWorldPointInRect(worldPoint, _displayObject->getWorldToNodeTransform(), rect))
     if (rect.containsPoint(_displayObject->convertToNodeSpace(worldPoint)))
         return this;
     else
@@ -936,7 +936,7 @@ void GObject::dragBegin(int touchId)
     }
 
     sGlobalDragStart = UIRoot->getTouchPosition(touchId);
-    sGlobalRect = localToGlobal(Rect(Vec2::ZERO, _size));
+    sGlobalRect = localToGlobal(Rect(Vec2::zero, _size));
 
     _draggingObject = this;
     _dragTesting = true;

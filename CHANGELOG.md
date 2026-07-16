@@ -1092,7 +1092,7 @@ across different devices and orientations.
 - Add ability to create console apps by @smilediver in https://github.com/axmolengine/axmol/pull/1859
 - Add support for ensuring sprite content size does not change on new texture by @rh101 in https://github.com/axmolengine/axmol/pull/1897
 - Remove obsolete `box2d-optimized` support by @aismann in https://github.com/axmolengine/axmol/pull/1913
-- Add macOS, Linux support for `tools/ci/genbindings.ps1`
+- Add macOS, Linux support for `tools/cmdline/genbindings.ps1`
 - Fix `axmol` cmdline not raise error when cmake build fail
 - Migrate wasm ci from appveyor to github actions
 - Set AX_USE_METAL and AX_USE_GL to 1 if defined by @smilediver in https://github.com/axmolengine/axmol/pull/1916

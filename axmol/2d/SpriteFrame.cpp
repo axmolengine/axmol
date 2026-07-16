@@ -93,13 +93,13 @@ SpriteFrame::SpriteFrame() : _rotated(false), _texture(nullptr) {}
 bool SpriteFrame::initWithTexture(Texture2D* texture, const Rect& rect)
 {
     Rect rectInPixels = AX_RECT_POINTS_TO_PIXELS(rect);
-    return initWithTexture(texture, rectInPixels, false, Vec2::ZERO, rectInPixels.size);
+    return initWithTexture(texture, rectInPixels, false, Vec2::zero, rectInPixels.size);
 }
 
 bool SpriteFrame::initWithTextureFilename(std::string_view filename, const Rect& rect)
 {
     Rect rectInPixels = AX_RECT_POINTS_TO_PIXELS(rect);
-    return initWithTextureFilename(filename, rectInPixels, false, Vec2::ZERO, rectInPixels.size);
+    return initWithTextureFilename(filename, rectInPixels, false, Vec2::zero, rectInPixels.size);
 }
 
 bool SpriteFrame::initWithTexture(Texture2D* texture,

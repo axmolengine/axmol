@@ -267,7 +267,7 @@ bool UIButtonTest_Scale9_State_Change::init()
         // Create the button
         Button* button = Button::create("cocosui/button.png");
         // open scale9 render
-        button->ignoreContentAdaptWithSize(false);
+        button->setAutoSize(false);
         button->setScale9Enabled(true);
         button->setPosition(Vec2(widgetSize.width / 2.0f - 100, widgetSize.height / 2.0f));
         button->setContentSize(Size(180.0f, 60.0f));
@@ -278,7 +278,7 @@ bool UIButtonTest_Scale9_State_Change::init()
 
         Button* button2 = Button::create("cocosui/button.png", "cocosui/buttonHighlighted.png");
         // open scale9 render
-        button2->ignoreContentAdaptWithSize(false);
+        button2->setAutoSize(false);
         button2->setScale9Enabled(true);
         button2->setTitleText("Hello scale9");
         button2->setPosition(Vec2(widgetSize.width / 2.0f + 100, widgetSize.height / 2.0f));
@@ -355,7 +355,7 @@ bool UIButtonTest_PressedAction::init()
         Button* button = Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
         button->setPressedActionEnabled(true);
         button->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
-        button->setColor(Color32::GREEN);
+        button->setColor(Color32::green);
         button->setOpacity(30);
         button->addTouchEventListener(AX_CALLBACK_2(UIButtonTest_PressedAction::touchEvent, this));
         button->setName("button");
@@ -432,8 +432,8 @@ bool UIButtonTest_Title::init()
         Button* button = Button::create("cocosui/backtotoppressed.png", "cocosui/backtotopnormal.png");
         button->setTitleText("Title Button!");
         button->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
-        button->setTitleColor(Color32::YELLOW);
-        AXASSERT(button->getTitleColor() == Color32::YELLOW, "Button setTitleColor & getTitleColor not match!");
+        button->setTitleColor(Color32::yellow);
+        AXASSERT(button->getTitleColor() == Color32::yellow, "Button setTitleColor & getTitleColor not match!");
         button->addTouchEventListener(AX_CALLBACK_2(UIButtonTest_Title::touchEvent, this));
         _uiLayer->addChild(button);
         button->setFlippedX(true);
@@ -444,7 +444,7 @@ bool UIButtonTest_Title::init()
 
         TextBMFont* text = TextBMFont::create("BMFont", "cocosui/bitmapFontTest2.fnt");
         text->setPosition(button->getPosition() + Vec2(button->getContentSize().width / 2 + 50, 0.0f));
-        text->setColor(Color32::YELLOW);
+        text->setColor(Color32::yellow);
         text->setOpacity(50);
         text->setName("text");
 
@@ -529,11 +529,11 @@ bool UIButtonTestRemoveSelf::init()
 
         Layout* layout = Layout::create();
         layout->setContentSize(widgetSize * 0.6f);
-        layout->setBackGroundColor(Color32::GREEN);
+        layout->setBackGroundColor(Color32::green);
         layout->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
         layout->setBackGroundColorOpacity(100);
         layout->setPosition(Size(widgetSize.width / 2, widgetSize.height / 2));
-        layout->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+        layout->setAnchorPoint(Anchors::center);
         layout->setTag(12);
         _uiLayer->addChild(layout);
 
@@ -600,7 +600,7 @@ bool UIButtonTestSwitchScale9::init()
         button->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
         button->addTouchEventListener(AX_CALLBACK_2(UIButtonTestSwitchScale9::touchEvent, this));
         button->setTitleText("Button Title");
-        button->ignoreContentAdaptWithSize(false);
+        button->setAutoSize(false);
 
         _uiLayer->addChild(button);
 
@@ -680,9 +680,9 @@ bool UIButtonTestZoomScale::init()
     return false;
 }
 
-void UIButtonTestZoomScale::sliderEvent(Object* pSender, Slider::EventType type)
+void UIButtonTestZoomScale::sliderEvent(Object* pSender, Slider::EventType ev)
 {
-    if (type == Slider::EventType::ON_PERCENTAGE_CHANGED)
+    if (ev == Slider::EventType::ON_PERCENTAGE_CHANGED)
     {
         Slider* slider  = dynamic_cast<Slider*>(pSender);
         int percent     = slider->getPercent();
@@ -746,7 +746,7 @@ bool UIButtonIgnoreContentSizeTest::init()
 
         // Create the button
         auto button = Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
-        button->ignoreContentAdaptWithSize(false);
+        button->setAutoSize(false);
         button->setContentSize(Size(200.0f, 100.0f));
         button->setPositionNormalized(Vec2(0.3f, 0.5f));
         button->setTitleText("PLAY GAME");
@@ -760,7 +760,7 @@ bool UIButtonIgnoreContentSizeTest::init()
 
         // Create the button
         auto button2 = Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
-        button2->ignoreContentAdaptWithSize(false);
+        button2->setAutoSize(false);
         button2->setContentSize(Size(200.0f, 100.0f));
         button2->setPositionNormalized(Vec2(0.8f, 0.5f));
         button2->setTitleText("PLAY GAME");
@@ -803,8 +803,8 @@ bool UIButtonTitleEffectTest::init()
         button->setScale(2.0f);
         button->setPressedActionEnabled(true);
         Label* title = button->getTitleRenderer();
-        button->setTitleColor(Color32::RED);
-        title->enableShadow(Color32::BLACK, Size(2, -2));
+        button->setTitleColor(Color32::red);
+        title->enableShadow(Color32::black, Size(2, -2));
 
         _uiLayer->addChild(button);
 
@@ -813,7 +813,7 @@ bool UIButtonTitleEffectTest::init()
         button2->setPositionNormalized(Vec2(0.8f, 0.5f));
         button2->setTitleText("PLAY GAME");
         auto title2 = button2->getTitleRenderer();
-        title2->enableOutline(Color32::GREEN, 3);
+        title2->enableOutline(Color32::green, 3);
         _uiLayer->addChild(button2);
 
         return true;

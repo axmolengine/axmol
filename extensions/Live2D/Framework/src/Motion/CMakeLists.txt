@@ -4,6 +4,8 @@ target_sources(${LIB_NAME}
     ${CMAKE_CURRENT_SOURCE_DIR}/ACubismMotion.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/CubismExpressionMotion.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/CubismExpressionMotion.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismExpressionMotionManager.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismExpressionMotionManager.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/CubismMotion.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/CubismMotion.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/CubismMotionInternal.hpp
@@ -15,4 +17,24 @@ target_sources(${LIB_NAME}
     ${CMAKE_CURRENT_SOURCE_DIR}/CubismMotionQueueEntry.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/CubismMotionQueueManager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/CubismMotionQueueManager.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismUpdateScheduler.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismUpdateScheduler.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismBreathUpdater.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismBreathUpdater.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismExpressionUpdater.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismExpressionUpdater.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismEyeBlinkUpdater.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismEyeBlinkUpdater.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismLipSyncUpdater.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismLipSyncUpdater.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismLookUpdater.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismLookUpdater.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismPhysicsUpdater.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismPhysicsUpdater.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismPoseUpdater.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismPoseUpdater.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ICubismUpdater.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ICubismUpdater.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/IParameterProvider.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/IParameterProvider.hpp
 )

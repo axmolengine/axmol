@@ -36,7 +36,7 @@ namespace ax
 {
 
 class SpriteFrame;
-class EventCustom;
+class CustomEvent;
 
 /**
  * @addtogroup _2d
@@ -106,7 +106,7 @@ public:
      *
      * @param event the event that renderer was recreated on Android/WP8.
      */
-    void listenRendererRecreated(EventCustom* event);
+    void listenRendererRecreated(CustomEvent* event);
 
     /**
      * @lua NA

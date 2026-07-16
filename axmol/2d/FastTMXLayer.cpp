@@ -46,7 +46,7 @@ THE SOFTWARE.
 #include "axmol/renderer/TextureCache.h"
 #include "axmol/renderer/Renderer.h"
 #include "axmol/renderer/Shaders.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include "axmol/rhi/Buffer.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/text_utils.h"
@@ -189,7 +189,7 @@ void FastTMXLayer::setTileSet(TMXTilesetInfo* info)
 
 void FastTMXLayer::recomputeMaxTileSize()
 {
-    _maxTileSize = Vec2::ZERO;
+    _maxTileSize = Vec2::zero;
     for (auto& batch : _batches)
     {
         _maxTileSize.x = std::max(_maxTileSize.x, batch.tilesetInfo->_tileSize.x);
@@ -240,7 +240,7 @@ void FastTMXLayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flag
         _dirty = false;
     }
 
-    const auto& projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    const auto& projectionMat = Camera::getVisitingViewProjectionMatrix();
     Mat4 finalMat             = projectionMat * _modelViewTransform;
     // Submit batches lowest-firstGid first so base/terrain tiles (low GIDs) draw behind
     // overlay/object tiles (high GIDs) that share the same vertexZ.
@@ -408,7 +408,7 @@ void FastTMXLayer::setupTiles()
     {
         if (batch.texture)
         {
-            batch.tilesetInfo->_imageSize = batch.texture->getContentSizeInPixels();
+            batch.tilesetInfo->_imageSize = batch.texture->getPixelSize();
             batch.texture->setAliasTexParameters();
         }
         maxTileHeight = std::max(maxTileHeight, batch.tilesetInfo->_tileSize.height);
@@ -531,7 +531,7 @@ Mat4 FastTMXLayer::tileToNodeTransform()
     }
     default:
     {
-        _tileToNodeTransform = Mat4::IDENTITY;
+        _tileToNodeTransform = Mat4::identity;
         return _tileToNodeTransform;
     }
     }
@@ -638,7 +638,7 @@ void FastTMXLayer::updateTotalQuads()
     {
         auto* ts          = _batches[i].tilesetInfo;
         const bool premul = _batches[i].texture && _batches[i].texture->hasPremultipliedAlpha();
-        Color32 c         = Color32::WHITE;
+        Color32 c         = Color32::white;
         c.a               = opa;
         if (premul)
         {
@@ -1031,7 +1031,7 @@ void FastTMXLayer::setTileGID(int gid, const Vec2& tileCoordinate, TMXTileFlags 
         {
             Sprite* sprite = it->second.first;
             int bi         = batchIndexForGID(gid);
-            Rect rect      = (bi >= 0) ? _batches[bi].tilesetInfo->getRectForGID(gid) : Rect::ZERO;
+            Rect rect      = (bi >= 0) ? _batches[bi].tilesetInfo->getRectForGID(gid) : Rect::zero;
             rect           = AX_RECT_PIXELS_TO_POINTS(rect);
             if (bi >= 0 && _batches[bi].texture)
                 sprite->setTexture(_batches[bi].texture);
@@ -1063,7 +1063,7 @@ void FastTMXLayer::setupTileSprite(Sprite* sprite, const Vec2& pos, uint32_t gid
     // fix issue #1283 too;  put the anchor in the middle for ease of rotation.
     sprite->setAnchorPoint(Vec2(0.5f, 0.5f));
     int bi                        = batchIndexForGID(gid);
-    const Vec2 tileOff            = (bi >= 0) ? _batches[bi].tilesetInfo->_tileOffset : Vec2::ZERO;
+    const Vec2 tileOff            = (bi >= 0) ? _batches[bi].tilesetInfo->_tileOffset : Vec2::zero;
     const float spriteTileOffsetX = tileOff.x / AX_CONTENT_SCALE_FACTOR();
     const float spriteTileOffsetY = -tileOff.y / AX_CONTENT_SCALE_FACTOR();
     sprite->setPosition(tempPosAt.x + std::roundf(tempSpriteContentSize.height / 2) + spriteTileOffsetX,

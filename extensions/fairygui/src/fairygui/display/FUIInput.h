@@ -3,7 +3,7 @@
 
 #include "axmol/cocos2d.h"
 #include "FairyGUIMacros.h"
-#include "axmol/ui/UIEditBox/UIEditBox.h"
+#include "axmol/ui/EditBox/EditBox.h"
 #include "TextFormat.h"
 
 NS_FGUI_BEGIN

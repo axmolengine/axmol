@@ -2,6 +2,8 @@ if nil == ccui then
     return
 end
 
+ccui.TextField = axui.InputField
+
 --tip
 local function deprecatedTip(old_name,new_name)
     print("\n********** \n"..old_name.." was deprecated please use ".. new_name .. " instead.\n**********")

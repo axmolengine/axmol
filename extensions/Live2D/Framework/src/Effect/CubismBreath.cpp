@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright(c) Live2D Inc. All rights reserved.
  *
  * Use of this source code is governed by the Live2D Open Software license
@@ -7,6 +7,7 @@
 
 #include "CubismBreath.hpp"
 #include <math.h>
+#include "Math/CubismMath.hpp"
 
 namespace Live2D { namespace Cubism { namespace Framework {
 
@@ -41,7 +42,7 @@ void CubismBreath::UpdateParameters(CubismModel* model, csmFloat32 deltaTimeSeco
 {
     _currentTime += deltaTimeSeconds;
 
-    const csmFloat32 t = _currentTime * 2.0f * 3.14159f;
+    const csmFloat32 t = _currentTime * 2.0f * CubismMath::Pi;
 
     for (csmUint32 i = 0; i < _breathParameters.GetSize(); ++i)
     {

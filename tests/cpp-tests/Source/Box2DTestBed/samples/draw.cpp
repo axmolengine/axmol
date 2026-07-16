@@ -310,7 +310,7 @@ bool SampleDrawNode::initWithWorld(b2WorldId worldId)
         auto pipelinePS = new rhi::ProgramState(program);
         auto vfmt       = axvlm->allocateVertexLayoutDesc();
         vfmt.startLayout(3);
-        vfmt.addAttrib("a_localPosition", program->getVertexInputDesc("a_localPosition"), rhi::VertexFormat::FLOAT2, 0,
+        vfmt.addAttrib("a_localPosition", program->getVertexInputDesc("a_localPosition"), rhi::VertexElementType::FLOAT2, 0,
                        false);
         cmd.createVertexBuffer(sizeof(Vec2), 6, CustomCommand::BufferUsage::STATIC);
         float a           = 1.1f;
@@ -319,10 +319,10 @@ bool SampleDrawNode::initWithWorld(b2WorldId worldId)
         cmd.setVertexDrawInfo(0, 6);
 
         // instanced attributes
-        vfmt.addAttrib("a_instanceColor", program->getVertexInputDesc("a_instanceColor"), rhi::VertexFormat::FLOAT4,
+        vfmt.addAttrib("a_instanceColor", program->getVertexInputDesc("a_instanceColor"), rhi::VertexElementType::FLOAT4,
                        offsetof(CircleData, rgba), false, 1);
         vfmt.addAttrib("a_instancePosAndRadius", program->getVertexInputDesc("a_instancePosAndRadius"),
-                       rhi::VertexFormat::FLOAT4, offsetof(CircleData, position), false, 1);
+                       rhi::VertexElementType::FLOAT4, offsetof(CircleData, position), false, 1);
         vfmt.endLayout();
 
         auto pipelineVL = axvlm->getVertexLayout(std::move(vfmt));
@@ -342,7 +342,7 @@ bool SampleDrawNode::initWithWorld(b2WorldId worldId)
         auto pipelinePS = new rhi::ProgramState(program);
         auto vfmt       = axvlm->allocateVertexLayoutDesc();
         vfmt.startLayout(4);
-        vfmt.addAttrib("a_localPosition", program->getVertexInputDesc("a_localPosition"), rhi::VertexFormat::FLOAT2, 0,
+        vfmt.addAttrib("a_localPosition", program->getVertexInputDesc("a_localPosition"), rhi::VertexElementType::FLOAT2, 0,
                        false);
 
         cmd.createVertexBuffer(sizeof(Vec2), 6, CustomCommand::BufferUsage::STATIC);
@@ -353,10 +353,10 @@ bool SampleDrawNode::initWithWorld(b2WorldId worldId)
 
         // instanced attributes
         vfmt.addAttrib("a_instanceTransform", program->getVertexInputDesc("a_instanceTransform"),
-                       rhi::VertexFormat::FLOAT4, offsetof(SolidCircleData, transform), false, 1);
-        vfmt.addAttrib("a_instanceColor", program->getVertexInputDesc("a_instanceColor"), rhi::VertexFormat::FLOAT4,
+                       rhi::VertexElementType::FLOAT4, offsetof(SolidCircleData, transform), false, 1);
+        vfmt.addAttrib("a_instanceColor", program->getVertexInputDesc("a_instanceColor"), rhi::VertexElementType::FLOAT4,
                        offsetof(SolidCircleData, rgba), false, 1);
-        vfmt.addAttrib("a_instanceRadius", program->getVertexInputDesc("a_instanceRadius"), rhi::VertexFormat::FLOAT4,
+        vfmt.addAttrib("a_instanceRadius", program->getVertexInputDesc("a_instanceRadius"), rhi::VertexElementType::FLOAT4,
                        offsetof(SolidCircleData, radius), false, 1);
         vfmt.endLayout();
 
@@ -376,7 +376,7 @@ bool SampleDrawNode::initWithWorld(b2WorldId worldId)
         auto pipelinePS = new rhi::ProgramState(program);
         auto vfmt       = axvlm->allocateVertexLayoutDesc();
         vfmt.startLayout(4);
-        vfmt.addAttrib("a_localPosition", program->getVertexInputDesc("a_localPosition"), rhi::VertexFormat::FLOAT2, 0,
+        vfmt.addAttrib("a_localPosition", program->getVertexInputDesc("a_localPosition"), rhi::VertexElementType::FLOAT2, 0,
                        false);
 
         cmd.createVertexBuffer(sizeof(Vec2), 6, CustomCommand::BufferUsage::STATIC);
@@ -387,11 +387,11 @@ bool SampleDrawNode::initWithWorld(b2WorldId worldId)
 
         // instanced attributes
         vfmt.addAttrib("a_instanceTransform", program->getVertexInputDesc("a_instanceTransform"),
-                       rhi::VertexFormat::FLOAT4, offsetof(CapsuleData, transform), false, 1);
-        vfmt.addAttrib("a_instanceColor", program->getVertexInputDesc("a_instanceColor"), rhi::VertexFormat::FLOAT4,
+                       rhi::VertexElementType::FLOAT4, offsetof(CapsuleData, transform), false, 1);
+        vfmt.addAttrib("a_instanceColor", program->getVertexInputDesc("a_instanceColor"), rhi::VertexElementType::FLOAT4,
                        offsetof(CapsuleData, rgba), false, 1);
         vfmt.addAttrib("a_instanceRadiusAndLength", program->getVertexInputDesc("a_instanceRadiusAndLength"),
-                       rhi::VertexFormat::FLOAT4, offsetof(CapsuleData, radius), false, 1);
+                       rhi::VertexElementType::FLOAT4, offsetof(CapsuleData, radius), false, 1);
         vfmt.endLayout();
 
         auto pipelineVL = axvlm->getVertexLayout(std::move(vfmt));
@@ -504,7 +504,7 @@ void SampleDrawNode::submitDrawCommand(Renderer* renderer, CustomCommand& cmd, c
     blendDescriptor.destinationAlphaBlendFactor = rhi::BlendFactor::ONE_MINUS_SRC_ALPHA;
 
     auto pipelinePS     = cmd.unsafePS();
-    const auto& matrixP = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    const auto& matrixP = Camera::getVisitingViewProjectionMatrix();
     Mat4 matrixMVP      = matrixP * transform;
     auto mvpLocation    = pipelinePS->getUniformLocation("u_MVPMatrix");
     pipelinePS->setUniform(mvpLocation, matrixMVP.m, sizeof(matrixMVP.m));

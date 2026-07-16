@@ -3,8 +3,8 @@
 # 3.27.0: https://gitlab.kitware.com/cmake/cmake/-/merge_requests/8319
 # 3.28.0: https://gitlab.kitware.com/cmake/cmake/-/merge_requests/8632
 #         https://gitlab.kitware.com/cmake/cmake/-/merge_requests/9008
-# 3.28.0: https://gitlab.kitware.com/cmake/cmake/-/merge_requests/9014
 # 3.30.0: https://gitlab.kitware.com/cmake/cmake/-/merge_requests/9478
+# 4.4.0: https://gitlab.kitware.com/cmake/cmake/-/merge_requests/12102
 #
 
 # load cross platform build.profiles

@@ -27,7 +27,7 @@
 #include "RendererTest.h"
 #include <chrono>
 #include <sstream>
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 
 namespace
 {
@@ -77,6 +77,8 @@ NewRendererTests::NewRendererTests()
     s_sepia_program_id  = programManager->registerCustomProgram(positionTextureColor_vert, "custom/example_Sepia_fs"sv,
                                                                 VertexLayoutKind::Sprite);
 
+    ADD_TEST_CASE(CaptureNodeTest);
+
     ADD_TEST_CASE(NewSpriteTest);
     ADD_TEST_CASE(GroupCommandTest);
     //    ADD_TEST_CASE(NewClippingNodeTest); // When depth and stencil are used together, ...
@@ -105,8 +107,8 @@ std::string MultiSceneTest::subtitle() const
 
 NewSpriteTest::NewSpriteTest()
 {
-    auto touchListener            = EventListenerTouchAllAtOnce::create();
-    touchListener->onTouchesEnded = AX_CALLBACK_2(NewSpriteTest::onTouchesEnded, this);
+    auto touchListener         = PointerEventListener::create();
+    touchListener->onPointerUp = AX_CALLBACK_1(NewSpriteTest::onPointerUp, this);
 
     createSpriteTest();
     createNewSpriteTest();
@@ -176,7 +178,7 @@ void NewSpriteTest::createNewSpriteTest()
     addChild(parent);
 }
 
-void NewSpriteTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event) {}
+void NewSpriteTest::onPointerUp(PointerEvent* event) {}
 
 std::string NewSpriteTest::title() const
 {
@@ -274,10 +276,10 @@ NewClippingNodeTest::NewClippingNodeTest()
 
     _scrolling = false;
 
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesBegan = AX_CALLBACK_2(NewClippingNodeTest::onTouchesBegan, this);
-    listener->onTouchesMoved = AX_CALLBACK_2(NewClippingNodeTest::onTouchesMoved, this);
-    listener->onTouchesEnded = AX_CALLBACK_2(NewClippingNodeTest::onTouchesEnded, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = AX_CALLBACK_1(NewClippingNodeTest::onPointerDown, this);
+    listener->onPointerMove = AX_CALLBACK_1(NewClippingNodeTest::onPointerMove, this);
+    listener->onPointerUp   = AX_CALLBACK_1(NewClippingNodeTest::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 
@@ -293,30 +295,30 @@ std::string NewClippingNodeTest::subtitle() const
     return "ClipNode";
 }
 
-void NewClippingNodeTest::onTouchesBegan(const std::vector<Touch*>& touches, Event* event)
+bool NewClippingNodeTest::onPointerDown(PointerEvent* event)
 {
-    Touch* touch = touches[0];
     auto clipper = this->getChildByTag(kTagClipperNode);
-    Vec2 point   = clipper->convertToNodeSpace(Director::getInstance()->screenToWorld(touch->getLocationInView()));
+    Vec2 point   = clipper->convertToNodeSpace(event->getWorldPoint());
     auto rect    = Rect(0, 0, clipper->getContentSize().width, clipper->getContentSize().height);
     _scrolling   = rect.containsPoint(point);
     _lastPoint   = point;
+
+    return _scrolling;
 }
 
-void NewClippingNodeTest::onTouchesMoved(const std::vector<Touch*>& touches, Event* event)
+void NewClippingNodeTest::onPointerMove(PointerEvent* event)
 {
     if (!_scrolling)
         return;
-    Touch* touch = touches[0];
     auto clipper = this->getChildByTag(kTagClipperNode);
-    auto point   = clipper->convertToNodeSpace(Director::getInstance()->screenToWorld(touch->getLocationInView()));
+    auto point   = clipper->convertToNodeSpace(event->getWorldPoint());
     Vec2 diff    = point - _lastPoint;
     auto content = clipper->getChildByTag(kTagContentNode);
     content->setPosition(content->getPosition() + diff);
     _lastPoint = point;
 }
 
-void NewClippingNodeTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+void NewClippingNodeTest::onPointerUp(PointerEvent* event)
 {
     if (!_scrolling)
         return;
@@ -373,25 +375,24 @@ NewCullingTest::NewCullingTest()
     sprite2->setScale(2);
     addChild(sprite2);
 
-    auto listener = EventListenerTouchOneByOne::create();
-    listener->setSwallowTouches(true);
+    auto listener = PointerEventListener::create();
 
-    listener->onTouchBegan = AX_CALLBACK_2(NewCullingTest::onTouchBegan, this);
-    listener->onTouchMoved = AX_CALLBACK_2(NewCullingTest::onTouchMoved, this);
+    listener->onPointerDown = AX_CALLBACK_1(NewCullingTest::onPointerDown, this);
+    listener->onPointerMove = AX_CALLBACK_1(NewCullingTest::onPointerMove, this);
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 
-bool NewCullingTest::onTouchBegan(Touch* touch, Event* event)
+bool NewCullingTest::onPointerDown(PointerEvent* event)
 {
-    auto pos = touch->getLocation();
+    auto pos = event->getWorldPoint();
     _lastPos = pos;
     return true;
 }
 
-void NewCullingTest::onTouchMoved(Touch* touch, Event* event)
+void NewCullingTest::onPointerMove(PointerEvent* event)
 {
-    auto pos = touch->getLocation();
+    auto pos = event->getWorldPoint();
 
     auto offset = pos - _lastPos;
 
@@ -400,6 +401,8 @@ void NewCullingTest::onTouchMoved(Touch* touch, Event* event)
 
     setPosition(newPos);
     _lastPos = pos;
+
+    return;
 }
 
 NewCullingTest::~NewCullingTest() {}
@@ -740,7 +743,7 @@ void CaptureNodeTest::onCaptured(Object*)
     };
 
     auto callbackFunction = std::bind(callback, std::placeholders::_1);
-    utils::captureNode(this, callbackFunction, 0.5);
+    utils::captureNode(this, callbackFunction, 0.5f);
 }
 
 BugAutoCulling::BugAutoCulling()
@@ -788,14 +791,14 @@ RendererBatchQuadTri::RendererBatchQuadTri()
         int y = AXRANDOM_0_1() * s.height;
 
         auto label = LabelAtlas::create("This is a label", "fonts/tuffy_bold_italic-charmap.plist");
-        label->setColor(Color32::RED);
+        label->setColor(Color32::red);
         label->setPosition(Vec2(x, y));
         addChild(label);
 
         auto sprite = Sprite::create("fonts/tuffy_bold_italic-charmap.png");
         sprite->setTextureRect(Rect(0.0f, 0.0f, 100.0f, 100.0f));
         sprite->setPosition(Vec2(x, y));
-        sprite->setColor(Color32::BLUE);
+        sprite->setColor(Color32::blue);
         addChild(sprite);
     }
 }
@@ -963,8 +966,8 @@ NonBatchSprites::NonBatchSprites()
     addChild(_spritesAnchor);
 
     _totalSprites = Label::createWithTTF(TTFConfig("fonts/arial.ttf"), "sprites");
-    _totalSprites->setColor(Color32::YELLOW);
-    _totalSprites->enableOutline(Color32::RED, 2);
+    _totalSprites->setColor(Color32::yellow);
+    _totalSprites->enableOutline(Color32::red, 2);
     _totalSprites->setPosition(s.width / 2, s.height / 2);
 
     addChild(_totalSprites);

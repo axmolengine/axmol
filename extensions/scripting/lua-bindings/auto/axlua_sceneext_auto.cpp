@@ -14622,6 +14622,394 @@ int lua_register_ax_sceneext_ComAudio(lua_State* tolua_S)
     return 1;
 }
 
+int lua_ax_sceneext_ComController_isPointerEnabled(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ext::ComController* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axext.ComController",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ext::ComController*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_sceneext_ComController_isPointerEnabled'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_sceneext_ComController_isPointerEnabled'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->isPointerEnabled();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ComController:isPointerEnabled",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_sceneext_ComController_isPointerEnabled'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_sceneext_ComController_setPointerEnabled(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ext::ComController* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axext.ComController",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ext::ComController*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_sceneext_ComController_setPointerEnabled'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axext.ComController:setPointerEnabled");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_sceneext_ComController_setPointerEnabled'", nullptr);
+            return 0;
+        }
+        obj->setPointerEnabled(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ComController:setPointerEnabled",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_sceneext_ComController_setPointerEnabled'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_sceneext_ComController_isAccelerometerEnabled(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ext::ComController* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axext.ComController",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ext::ComController*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_sceneext_ComController_isAccelerometerEnabled'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_sceneext_ComController_isAccelerometerEnabled'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->isAccelerometerEnabled();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ComController:isAccelerometerEnabled",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_sceneext_ComController_isAccelerometerEnabled'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_sceneext_ComController_setAccelerometerEnabled(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ext::ComController* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axext.ComController",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ext::ComController*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_sceneext_ComController_setAccelerometerEnabled'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axext.ComController:setAccelerometerEnabled");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_sceneext_ComController_setAccelerometerEnabled'", nullptr);
+            return 0;
+        }
+        obj->setAccelerometerEnabled(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ComController:setAccelerometerEnabled",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_sceneext_ComController_setAccelerometerEnabled'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_sceneext_ComController_isKeypadEnabled(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ext::ComController* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axext.ComController",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ext::ComController*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_sceneext_ComController_isKeypadEnabled'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_sceneext_ComController_isKeypadEnabled'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->isKeypadEnabled();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ComController:isKeypadEnabled",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_sceneext_ComController_isKeypadEnabled'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_sceneext_ComController_setKeypadEnabled(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ext::ComController* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axext.ComController",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ext::ComController*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_sceneext_ComController_setKeypadEnabled'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2, &arg0, "axext.ComController:setKeypadEnabled");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_sceneext_ComController_setKeypadEnabled'", nullptr);
+            return 0;
+        }
+        obj->setKeypadEnabled(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ComController:setKeypadEnabled",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_sceneext_ComController_setKeypadEnabled'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_sceneext_ComController_setPointerPriority(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ext::ComController* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axext.ComController",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ext::ComController*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_sceneext_ComController_setPointerPriority'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        int arg0;
+
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axext.ComController:setPointerPriority");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_sceneext_ComController_setPointerPriority'", nullptr);
+            return 0;
+        }
+        obj->setPointerPriority(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ComController:setPointerPriority",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_sceneext_ComController_setPointerPriority'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_sceneext_ComController_getPointerPriority(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ext::ComController* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axext.ComController",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ext::ComController*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_sceneext_ComController_getPointerPriority'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_sceneext_ComController_getPointerPriority'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getPointerPriority();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axext.ComController:getPointerPriority",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_sceneext_ComController_getPointerPriority'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_sceneext_ComController_createInstance(lua_State* tolua_S)
 {
     int argc = 0;
@@ -14740,6 +15128,14 @@ int lua_register_ax_sceneext_ComController(lua_State* tolua_S)
 
     tolua_beginmodule(tolua_S,"ComController");
         tolua_function(tolua_S,"new",lua_ax_sceneext_ComController_constructor);
+        tolua_function(tolua_S,"isPointerEnabled",lua_ax_sceneext_ComController_isPointerEnabled);
+        tolua_function(tolua_S,"setPointerEnabled",lua_ax_sceneext_ComController_setPointerEnabled);
+        tolua_function(tolua_S,"isAccelerometerEnabled",lua_ax_sceneext_ComController_isAccelerometerEnabled);
+        tolua_function(tolua_S,"setAccelerometerEnabled",lua_ax_sceneext_ComController_setAccelerometerEnabled);
+        tolua_function(tolua_S,"isKeypadEnabled",lua_ax_sceneext_ComController_isKeypadEnabled);
+        tolua_function(tolua_S,"setKeypadEnabled",lua_ax_sceneext_ComController_setKeypadEnabled);
+        tolua_function(tolua_S,"setPointerPriority",lua_ax_sceneext_ComController_setPointerPriority);
+        tolua_function(tolua_S,"getPointerPriority",lua_ax_sceneext_ComController_getPointerPriority);
         tolua_function(tolua_S,"createInstance", lua_ax_sceneext_ComController_createInstance);
         tolua_function(tolua_S,"create", lua_ax_sceneext_ComController_create);
     tolua_endmodule(tolua_S);

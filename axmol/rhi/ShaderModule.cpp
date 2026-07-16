@@ -23,6 +23,8 @@
  ****************************************************************************/
 
 #include "axmol/rhi/ShaderModule.h"
+#include "axmol/rhi/GraphicsCore.h"
+#include "axmol/base/Logging.h"
 #include "axmol/rhi/axslc-spec.h"
 #include "yasio/ibstream.hpp"
 
@@ -74,9 +76,9 @@ void ShaderModule::parseShaderCode(void)
     }
 
     // find target entry
-    const auto driverType        = DriverContext::currentDriverType();
-    const auto currentShaderLang = DriverContext::currentShaderLang();
-    const auto currentProfileVer = DriverContext::currentShaderProfile();
+    const auto driverType        = GraphicsCore::currentDriverType();
+    const auto currentShaderLang = GraphicsCore::currentShaderLang();
+    const auto currentProfileVer = GraphicsCore::currentShaderProfile();
 
     for (int i = 0; i < chunk.num_targets; ++i)
     {

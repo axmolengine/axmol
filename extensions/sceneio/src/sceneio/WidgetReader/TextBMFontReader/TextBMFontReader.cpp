@@ -25,7 +25,7 @@
 #include "sceneio/WidgetReader/TextBMFontReader/TextBMFontReader.h"
 
 #include "axmol/2d/FontAtlasCache.h"
-#include "axmol/ui/UITextBMFont.h"
+#include "axmol/ui/TextBMFont.h"
 #include "axmol/platform/FileUtils.h"
 #include "sceneext/CocoLoader.h"
 #include "sceneio/CSParseBinary_generated.h"
@@ -263,7 +263,7 @@ void TextBMFontReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers
     auto widgetReader = WidgetReader::getInstance();
     widgetReader->setPropsWithFlatBuffers(node, (Table*)options->widgetOptions());
 
-    labelBMFont->ignoreContentAdaptWithSize(true);
+    labelBMFont->setAutoSize(false);
 }
 
 Node* TextBMFontReader::createNodeWithFlatBuffers(const flatbuffers::Table* textBMFontOptions)

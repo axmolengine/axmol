@@ -12,15 +12,15 @@ local function createTileDemoLayer(title, subtitle)
     Helper.titleLabel:setString(titleStr)
     Helper.subtitleLabel:setString(subTitleStr)
 
-    local function onTouchesMoved(touches, event )
-        local diff = touches[1]:getDelta()
+    local function onPointerMove(event)
+        local diff = event:getDelta()
         local node = layer:getChildByTag(kTagTileMap)
         local currentPosX, currentPosY= node:getPosition()
         node:setPosition(ax.p(currentPosX + diff.x, currentPosY + diff.y))
     end
 
-    local listener = ax.EventListenerTouchAllAtOnce:create()
-    listener:registerScriptHandler(onTouchesMoved,ax.Handler.EVENT_TOUCHES_MOVED )
+    local listener = ax.PointerEventListener:create()
+    listener:registerScriptHandler(onPointerMove,ax.Handler.EVENT_POINTER_MOVE )
     local eventDispatcher = layer:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, layer)
 

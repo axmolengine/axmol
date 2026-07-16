@@ -24,7 +24,7 @@
 
 #include "sceneio/WidgetReader/CheckBoxReader/CheckBoxReader.h"
 
-#include "axmol/ui/UICheckBox.h"
+#include "axmol/ui/CheckBox.h"
 #include "axmol/platform/FileUtils.h"
 #include "axmol/2d/SpriteFrameCache.h"
 #include "sceneext/CocoLoader.h"

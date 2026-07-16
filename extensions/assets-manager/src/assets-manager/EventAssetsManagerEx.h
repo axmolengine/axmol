@@ -26,7 +26,7 @@
 #pragma once
 
 #include "axmol/base/Event.h"
-#include "axmol/base/EventCustom.h"
+#include "axmol/base/CustomEvent.h"
 #include "extensions/ExtensionMacros.h"
 #include "extensions/ExtensionExport.h"
 
@@ -34,7 +34,7 @@ NS_AX_EXT_BEGIN
 
 class AssetsManagerEx;
 
-class AX_EXT_API EventAssetsManagerEx : public ax::EventCustom
+class AX_EXT_API EventAssetsManagerEx : public ax::CustomEvent
 {
 public:
     friend class AssetsManagerEx;

@@ -427,7 +427,7 @@ MeshRenderer* MeshRenderer::createMeshRendererNode(NodeData* nodedata,
 
     // set locale transform
     Vec3 pos;
-    Quaternion qua;
+    Quat qua;
     Vec3 scale;
     nodedata->transform.decompose(&scale, &qua, &pos);
     meshRenderer->setPosition3D(pos);
@@ -600,7 +600,7 @@ void MeshRenderer::createNode(NodeData* nodedata, Node* root, const MaterialData
                     }
 
                     Vec3 pos;
-                    Quaternion qua;
+                    Quat qua;
                     Vec3 scale;
                     nodedata->transform.decompose(&scale, &qua, &pos);
                     setPosition3D(pos);
@@ -635,7 +635,7 @@ void MeshRenderer::createNode(NodeData* nodedata, Node* root, const MaterialData
 
             // set locale transform
             Vec3 pos;
-            Quaternion qua;
+            Quat qua;
             Vec3 scale;
             nodedata->transform.decompose(&scale, &qua, &pos);
             node->setPosition3D(pos);
@@ -823,10 +823,6 @@ void MeshRenderer::visit(ax::Renderer* renderer, const ax::Mat4& parentTransform
     uint32_t flags = processParentFlags(parentTransform, parentFlags);
     flags |= FLAGS_RENDER_AS_3D;
 
-    //
-    _director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
-
     bool visibleByCamera = isVisitableByVisitingCamera();
 
     int i = 0;
@@ -855,8 +851,6 @@ void MeshRenderer::visit(ax::Renderer* renderer, const ax::Mat4& parentTransform
     {
         this->draw(renderer, _modelViewTransform, flags);
     }
-
-    _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 }
 
 void MeshRenderer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)

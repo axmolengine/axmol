@@ -78,8 +78,8 @@ void ClippingRectangleNode::onBeforeVisitScissor()
             parent = parent->getParent();
         }
 
-        const Point pos        = convertToWorldSpace(Point(_clippingRegion.origin.x, _clippingRegion.origin.y));
-        RenderView* renderView = _director->getRenderView();
+        const Point pos = convertToWorldSpace(Point(_clippingRegion.origin.x, _clippingRegion.origin.y));
+        auto renderView = _director->getRenderView();
         renderView->setScissorInPoints(pos.x, pos.y, _clippingRegion.size.width * scaleX,
                                        _clippingRegion.size.height * scaleY);
     }

@@ -19,11 +19,6 @@
 #include "PhysicsDebugNode.h"
 #include "axmol//physics/2d/PhysicsUtility2D.h"
 
-#if defined(_WIN32)
-#    pragma push_macro("TRANSPARENT")
-#    undef TRANSPARENT
-#endif
-
 NS_AX_EXT_BEGIN
 
 /// Draw a closed polygon provided in CCW order.
@@ -35,7 +30,7 @@ static void b2DrawPolygon(const b2Vec2* verts, int vertexCount, b2HexColor color
     {
         vec[i] = Vec2(verts[i].x * dn->getPTMRatio(), verts[i].y * dn->getPTMRatio()) + dn->getWorldOffset();
     }
-    dn->drawPolygon(vec, vertexCount, ax::Color::BLACK, 0.4f, b2util::cast(color));
+    dn->drawPolygon(vec, vertexCount, ax::Color::black, 0.4f, b2util::cast(color));
 }
 
 /// Draw a solid closed polygon provided in CCW order.
@@ -187,7 +182,3 @@ void PhysicsDebugNode::setBuiltinDrawFuncs()
 }
 
 NS_AX_EXT_END
-
-#if defined(_WIN32)
-#    pragma pop_macro("TRANSPARENT")
-#endif

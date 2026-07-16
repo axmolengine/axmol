@@ -323,7 +323,7 @@ bool ParticleSun::initWithTotalParticles(int numberOfParticles)
         // emitter position
         Vec2 canvasSize = _director->getCanvasSize();
         this->setPosition(canvasSize.width / 2, canvasSize.height / 2);
-        setPosVar(Vec2::ZERO);
+        setPosVar(Vec2::zero);
 
         // life of particles
         _life    = 1;
@@ -430,7 +430,7 @@ bool ParticleGalaxy::initWithTotalParticles(int numberOfParticles)
         // emitter position
         Vec2 canvasSize = _director->getCanvasSize();
         this->setPosition(canvasSize.width / 2, canvasSize.height / 2);
-        setPosVar(Vec2::ZERO);
+        setPosVar(Vec2::zero);
 
         // life of particles
         _life    = 4;
@@ -539,7 +539,7 @@ bool ParticleFlower::initWithTotalParticles(int numberOfParticles)
         // emitter position
         Vec2 canvasSize = _director->getCanvasSize();
         this->setPosition(canvasSize.width / 2, canvasSize.height / 2);
-        setPosVar(Vec2::ZERO);
+        setPosVar(Vec2::zero);
 
         // life of particles
         _life    = 4;
@@ -647,7 +647,7 @@ bool ParticleMeteor::initWithTotalParticles(int numberOfParticles)
         // emitter position
         Vec2 canvasSize = _director->getCanvasSize();
         this->setPosition(canvasSize.width / 2, canvasSize.height / 2);
-        setPosVar(Vec2::ZERO);
+        setPosVar(Vec2::zero);
 
         // life of particles
         _life    = 2;
@@ -756,7 +756,7 @@ bool ParticleSpiral::initWithTotalParticles(int numberOfParticles)
         // emitter position
         Vec2 canvasSize = _director->getCanvasSize();
         this->setPosition(canvasSize.width / 2, canvasSize.height / 2);
-        setPosVar(Vec2::ZERO);
+        setPosVar(Vec2::zero);
 
         // life of particles
         _life    = 12;
@@ -864,7 +864,7 @@ bool ParticleExplosion::initWithTotalParticles(int numberOfParticles)
         // emitter position
         Vec2 canvasSize = _director->getCanvasSize();
         this->setPosition(canvasSize.width / 2, canvasSize.height / 2);
-        setPosVar(Vec2::ZERO);
+        setPosVar(Vec2::zero);
 
         // life of particles
         _life    = 5.0f;

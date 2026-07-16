@@ -150,8 +150,8 @@ void LabelAtlas::updateAtlasValues()
     const unsigned char* s = (unsigned char*)_string.c_str();
 
     Texture2D* texture       = _textureAtlas->getTexture();
-    float textureWide        = (float)texture->getPixelsWide();
-    float textureHigh        = (float)texture->getPixelsHigh();
+    float textureWide        = (float)texture->getWidth();
+    float textureHigh        = (float)texture->getHeight();
     float itemWidthInPixels  = _itemWidth * AX_CONTENT_SCALE_FACTOR();
     float itemHeightInPixels = _itemHeight * AX_CONTENT_SCALE_FACTOR();
     if (_ignoreContentScaleFactor)
@@ -273,8 +273,8 @@ void LabelAtlas::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 
     _debugDrawNode->clear();
     auto size        = getContentSize();
-    Vec2 vertices[4] = {Vec2::ZERO, Vec2(size.width, 0), Vec2(size.width, size.height), Vec2(0.0f, size.height)};
-    _debugDrawNode->drawPoly(vertices, 4, true, Color32::WHITE);
+    Vec2 vertices[4] = {Vec2::zero, Vec2(size.width, 0), Vec2(size.width, size.height), Vec2(0.0f, size.height)};
+    _debugDrawNode->drawPoly(vertices, 4, true, Color32::white);
 }
 #endif
 

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // ----------------------------------------------------------------------------
-// Copyright 2011-2025 Arm Limited
+// Copyright 2011-2026 Arm Limited
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy
@@ -130,6 +130,10 @@ static void compute_angular_offsets(
 		}
 
 		vfloat angle = atan2(anglesum_y, anglesum_x);
+
+		// Suppress NaNs generated if anglesums are both zero
+		angle = select(vfloat::zero(), angle, angle == angle);
+
 		vfloat ofs = angle * mult;
 		storea(ofs, offsets + i);
 	}

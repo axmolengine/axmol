@@ -381,7 +381,7 @@ bool luaval_to_vec4(lua_State* L, int lo, ax::Vec4* outValue, const char* funcNa
     return ok;
 }
 
-bool luaval_to_quat(lua_State* L, int lo, ax::Quaternion* outValue, const char* funcName)
+bool luaval_to_quat(lua_State* L, int lo, ax::Quat* outValue, const char* funcName)
 {
     if (nullptr == L || nullptr == outValue)
         return false;
@@ -937,6 +937,48 @@ bool luaval_to_rect(lua_State* L, int lo, Rect* outValue, const char* funcName)
     return ok;
 }
 
+bool luaval_to_recti(lua_State* L, int lo, rhi::RectI* outValue, const char* funcName)
+{
+    if (NULL == L || NULL == outValue)
+        return false;
+
+    bool ok = true;
+
+    tolua_Error tolua_err;
+    if (!tolua_istable(L, lo, 0, &tolua_err))
+    {
+#if _AX_DEBUG >= 1
+        luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
+#endif
+        ok = false;
+    }
+
+    if (ok)
+    {
+        lua_pushstring(L, "x");
+        lua_gettable(L, lo);
+        outValue->x = lua_isnil(L, -1) ? 0 : static_cast<int>(lua_tointeger(L, -1));
+        lua_pop(L, 1);
+
+        lua_pushstring(L, "y");
+        lua_gettable(L, lo);
+        outValue->y = lua_isnil(L, -1) ? 0 : static_cast<int>(lua_tointeger(L, -1));
+        lua_pop(L, 1);
+
+        lua_pushstring(L, "width");
+        lua_gettable(L, lo);
+        outValue->width = lua_isnil(L, -1) ? 0 : static_cast<int>(lua_tointeger(L, -1));
+        lua_pop(L, 1);
+
+        lua_pushstring(L, "height");
+        lua_gettable(L, lo);
+        outValue->height = lua_isnil(L, -1) ? 0 : static_cast<int>(lua_tointeger(L, -1));
+        lua_pop(L, 1);
+    }
+
+    return ok;
+}
+
 bool luaval_to_color32(lua_State* L, int lo, Color32* outValue, const char* funcName)
 {
     if (NULL == L || NULL == outValue)
@@ -1129,7 +1171,7 @@ bool luaval_to_fontdefinition(lua_State* L, int lo, FontDefinition* outValue, co
         outValue->_stroke._strokeEnabled = false;
 
         // white text by default
-        outValue->_fontFillColor = Color32::WHITE;
+        outValue->_fontFillColor = Color32::white;
 
         lua_pushstring(L, "fontName");
         lua_gettable(L, lo);
@@ -1176,7 +1218,7 @@ bool luaval_to_fontdefinition(lua_State* L, int lo, FontDefinition* outValue, co
             {
                 // default stroke values
                 outValue->_stroke._strokeSize  = 1;
-                outValue->_stroke._strokeColor = Color32::BLUE;
+                outValue->_stroke._strokeColor = Color32::blue;
 
                 lua_pushstring(L, "strokeColor");
                 lua_gettable(L, lo);
@@ -1876,7 +1918,7 @@ bool luaval_to_mesh_vertex_attrib(lua_State* L, int lo, ax::MeshVertexAttrib* re
 
         lua_pushstring(L, "type"); /* L: paramStack key */
         lua_gettable(L, lo);       /* L: paramStack paramStack[lo][key] */
-        ret->type = (rhi::VertexFormat)(int)lua_tonumber(L, -1);
+        ret->type = (rhi::VertexElementType)(int)lua_tonumber(L, -1);
         lua_pop(L, 1);
 
         lua_pushstring(L, "vertexAttrib"); /* L: paramStack key */
@@ -1966,7 +2008,7 @@ bool luaval_to_std_vector_ushort(lua_State* L, int lo, std::vector<unsigned shor
     return ok;
 }
 
-bool luaval_to_quaternion(lua_State* L, int lo, ax::Quaternion* outValue, const char* funcName)
+bool luaval_to_quaternion(lua_State* L, int lo, ax::Quat* outValue, const char* funcName)
 {
     if (nullptr == L || nullptr == outValue)
         return false;
@@ -2446,7 +2488,7 @@ int vec4_to_luaval(lua_State* L, const ax::Vec4& vec4)
     return 1;
 }
 
-int quat_to_luaval(lua_State* L, const ax::Quaternion& quat)
+int quat_to_luaval(lua_State* L, const ax::Quat& quat)
 {
     lua_createtable(L, 4, 0);              /* L: table */
     lua_pushnumber(L, (lua_Number)quat.x); /* L: table key value*/
@@ -2706,6 +2748,69 @@ void rect_to_luaval(lua_State* L, const Rect& rt)
     lua_pushstring(L, "height");                   /* L: table key */
     lua_pushnumber(L, (lua_Number)rt.size.height); /* L: table key value*/
     lua_rawset(L, -3);                             /* table[key] = value, L: table */
+}
+
+void recti_to_luaval(lua_State* L, const rhi::RectI& rt)
+{
+    if (NULL == L)
+        return;
+    lua_newtable(L);               /* L: table */
+    lua_pushstring(L, "x");        /* L: table key */
+    lua_pushinteger(L, rt.x);      /* L: table key value*/
+    lua_rawset(L, -3);             /* table[key] = value, L: table */
+    lua_pushstring(L, "y");        /* L: table key */
+    lua_pushinteger(L, rt.y);      /* L: table key value*/
+    lua_rawset(L, -3);             /* table[key] = value, L: table */
+    lua_pushstring(L, "width");    /* L: table key */
+    lua_pushinteger(L, rt.width);  /* L: table key value*/
+    lua_rawset(L, -3);             /* table[key] = value, L: table */
+    lua_pushstring(L, "height");   /* L: table key */
+    lua_pushinteger(L, rt.height); /* L: table key value*/
+    lua_rawset(L, -3);             /* table[key] = value, L: table */
+}
+
+void ray_to_luaval(lua_State* L, const Ray& ray)
+{
+    if (NULL == L)
+        return;
+    lua_newtable(L);                                /* L: table */
+    lua_pushstring(L, "ox");                        /* L: table key */
+    lua_pushnumber(L, (lua_Number)ray.origin.x);    /* L: table key value*/
+    lua_rawset(L, -3);                              /* table[key] = value, L: table */
+    lua_pushstring(L, "oy");                        /* L: table key */
+    lua_pushnumber(L, (lua_Number)ray.origin.y);    /* L: table key value*/
+    lua_rawset(L, -3);                              /* table[key] = value, L: table */
+    lua_pushstring(L, "oz");                        /* L: table key */
+    lua_pushnumber(L, (lua_Number)ray.origin.z);    /* L: table key value*/
+    lua_rawset(L, -3);                              /* table[key] = value, L: table */
+    lua_pushstring(L, "dx");                        /* L: table key */
+    lua_pushnumber(L, (lua_Number)ray.direction.x); /* L: table key value*/
+    lua_rawset(L, -3);                              /* table[key] = value, L: table */
+    lua_pushstring(L, "dy");                        /* L: table key */
+    lua_pushnumber(L, (lua_Number)ray.direction.y); /* L: table key value*/
+    lua_rawset(L, -3);                              /* table[key] = value, L: table */
+    lua_pushstring(L, "dz");                        /* L: table key */
+    lua_pushnumber(L, (lua_Number)ray.direction.y); /* L: table key value*/
+    lua_rawset(L, -3);                              /* table[key] = value, L: table */
+}
+
+void accel_to_luaval(lua_State* L, const Acceleration& accel)
+{
+    if (NULL == L)
+        return;
+    lua_newtable(L);                                /* L: table */
+    lua_pushstring(L, "x");                         /* L: table key */
+    lua_pushnumber(L, (lua_Number)accel.x);         /* L: table key value*/
+    lua_rawset(L, -3);                              /* table[key] = value, L: table */
+    lua_pushstring(L, "y");                         /* L: table key */
+    lua_pushnumber(L, (lua_Number)accel.y);         /* L: table key value*/
+    lua_rawset(L, -3);                              /* table[key] = value, L: table */
+    lua_pushstring(L, "z");                         /* L: table key */
+    lua_pushnumber(L, (lua_Number)accel.z);         /* L: table key value*/
+    lua_rawset(L, -3);                              /* table[key] = value, L: table */
+    lua_pushstring(L, "timestamp");                 /* L: table key */
+    lua_pushnumber(L, (lua_Number)accel.timestamp); /* L: table key value*/
+    lua_rawset(L, -3);                              /* table[key] = value, L: table */
 }
 
 void color32_to_luaval(lua_State* L, const Color32& color)
@@ -3216,7 +3321,7 @@ void ushortspan_to_luaval(lua_State* L, std::span<unsigned short> inValue)
     }
 }
 
-void quaternion_to_luaval(lua_State* L, const ax::Quaternion& inValue)
+void quaternion_to_luaval(lua_State* L, const ax::Quat& inValue)
 {
     if (NULL == L)
         return;

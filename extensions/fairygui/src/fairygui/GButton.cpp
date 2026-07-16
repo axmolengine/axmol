@@ -74,7 +74,7 @@ ax::Color32 GButton::getTitleColor() const
     if (tf)
         return tf->getColor();
     else
-        return Color32::BLACK;
+        return Color32::black;
 }
 
 void GButton::setTitleColor(const ax::Color32& value)
@@ -374,7 +374,7 @@ void GButton::onRollOut(EventContext* context)
 
 void GButton::onTouchBegin(EventContext* context)
 {
-    if (context->getInput()->getButton() != EventMouse::MouseButton::BUTTON_LEFT)
+    if (context->getInput()->getButton() != ax::InputButton::Left)
         return;
 
     _down = true;
@@ -391,7 +391,7 @@ void GButton::onTouchBegin(EventContext* context)
 
 void GButton::onTouchEnd(EventContext* context)
 {
-    if (context->getInput()->getButton() != EventMouse::MouseButton::BUTTON_LEFT)
+    if (context->getInput()->getButton() != ax::InputButton::Left)
         return;
 
     if (_down)

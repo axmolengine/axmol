@@ -215,7 +215,7 @@ void SDFGen::open(ax::Scene* scene)
 
     _atlasViewer = Sprite::create();
     _atlasViewer->setTexture(Director::getInstance()->getTextureCache()->getWhiteTexture("/black-texture", 0));
-    _atlasViewer->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    _atlasViewer->setAnchorPoint(Anchors::bottomLeft);
     _atlasViewer->retain();
 
     auto defaultFontFile = FileUtils::getInstance()->fullPathForFilename(R"(fonts/arial.ttf)");
@@ -322,7 +322,7 @@ void SDFGen::onImGuiDraw()
             auto textureAtlasPage0 = _fontAtlas->getTexture(0);
             _atlasViewer->setTexture(textureAtlasPage0);
 
-            Rect rect = Rect::ZERO;
+            Rect rect = Rect::zero;
             rect.size = textureAtlasPage0->getContentSize();
             _atlasViewer->setTextureRect(rect);
         }
@@ -347,7 +347,7 @@ void SDFGen::onImGuiDraw()
         }
 
         auto viewerSize = _atlasViewer->getContentSize();
-        if (viewerSize.fuzzyEquals(Vec2::ZERO, 1e-3))
+        if (viewerSize.fuzzyEquals(Vec2::zero, 1e-3))
         {
             viewerSize.width  = 512;
             viewerSize.height = 512;

@@ -24,7 +24,7 @@
 
 #include "sceneio/WidgetReader/LoadingBarReader/LoadingBarReader.h"
 
-#include "axmol/ui/UILoadingBar.h"
+#include "axmol/ui/LoadingBar.h"
 #include "axmol/2d/SpriteFrameCache.h"
 #include "axmol/platform/FileUtils.h"
 

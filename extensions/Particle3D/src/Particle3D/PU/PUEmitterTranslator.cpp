@@ -138,7 +138,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode* 
                 // Property: orientation
                 if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_ORIENTATION], VAL_QUATERNION))
                 {
-                    Quaternion val;
+                    Quat val;
                     if (getQuaternion(prop->values.begin(), prop->values.end(), &val))
                     {
                         _emitter->setParticleOrientation(val);
@@ -150,7 +150,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode* 
                 // Property: start_orientation_range
                 if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_START_ORIENTATION_RANGE], VAL_QUATERNION))
                 {
-                    Quaternion val;
+                    Quat val;
                     if (getQuaternion(prop->values.begin(), prop->values.end(), &val))
                     {
                         _emitter->setParticleOrientationRangeStart(val);
@@ -162,7 +162,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode* 
                 // Property: range_start_orientation (deprecated and replaced by start_orientation_range)
                 if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_ORIENTATION_RANGE_START], VAL_QUATERNION))
                 {
-                    Quaternion val;
+                    Quat val;
                     if (getQuaternion(prop->values.begin(), prop->values.end(), &val))
                     {
                         _emitter->setParticleOrientationRangeStart(val);
@@ -174,7 +174,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode* 
                 // Property: end_orientation_range
                 if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_END_ORIENTATION_RANGE], VAL_QUATERNION))
                 {
-                    Quaternion val;
+                    Quat val;
                     if (getQuaternion(prop->values.begin(), prop->values.end(), &val))
                     {
                         _emitter->setParticleOrientationRangeEnd(val);
@@ -186,7 +186,7 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode* 
                 // Property: range_end_orientation (deprecated and replaced by end_orientation_range)
                 if (passValidateProperty(compiler, prop, token[TOKEN_EMITTER_ORIENTATION_RANGE_END], VAL_QUATERNION))
                 {
-                    Quaternion val;
+                    Quat val;
                     if (getQuaternion(prop->values.begin(), prop->values.end(), &val))
                     {
                         _emitter->setParticleOrientationRangeEnd(val);

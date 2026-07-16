@@ -28,7 +28,7 @@
 
 #include "axmol/base/Types.h"
 #include "axmol/base/Object.h"
-#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/CustomEventListener.h"
 #include "axmol/renderer/QuadCommand.h"
 #include "axmol/renderer/CustomCommand.h"
 #include "axmol/renderer/GroupCommand.h"
@@ -170,7 +170,7 @@ private:
 
 protected:
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-    EventListenerCustom* _backToForegroundListener;
+    CustomEventListener* _backToForegroundListener;
 #endif
     void initBuffer();
 
@@ -230,7 +230,7 @@ protected:
 };
 
 class TextureCube;
-class EventListenerCustom;
+class CustomEventListener;
 
 /**
  * Skybox brush clear buffer with a skybox
@@ -299,7 +299,7 @@ protected:
     TextureCube* _texture;
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-    EventListenerCustom* _backToForegroundListener;
+    CustomEventListener* _backToForegroundListener;
 #endif
 
 private:

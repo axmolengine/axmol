@@ -25,9 +25,9 @@ THE SOFTWARE.
 
 #include "sceneext/ActionNode.h"
 #include "sceneext/ActionFrameEasing.h"
-#include "axmol/ui/UIWidget.h"
+#include "axmol/ui/Widget.h"
 #include "axmol/ui/UIHelper.h"
-#include "axmol/ui/UILayout.h"
+#include "axmol/ui/LayoutGroup.h"
 #include "sceneext/CocoLoader.h"
 #include "axmol/base/Utils.h"
 #include "sceneext/ActionManagerEx.h"
@@ -85,7 +85,7 @@ void ActionNode::initWithDictionary(const rapidjson::Value& dic, Object* root)
 
     setActionTag(DICTOOL->getIntValue_json(dic, "ActionTag"));
     Widget* node        = Helper::seekActionWidgetByActionTag(rw, getActionTag());
-    bool positionOffset = node && (nullptr == (dynamic_cast<Layout*>(node)));
+    bool positionOffset = node && (nullptr == (dynamic_cast<LayoutGroup*>(node)));
 
     int actionFrameCount = DICTOOL->getArrayCount_json(dic, "actionframelist");
     for (int i = 0; i < actionFrameCount; i++)

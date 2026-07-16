@@ -26,6 +26,7 @@
 
 #include "axmol/physics/3d/PhysicsDebugDraw3D.h"
 #include "axmol/physics/3d/PhysicsUtility3D.h"
+#include "axmol/scene/Camera.h"
 
 #if defined(AX_ENABLE_PHYSICS_3D)
 
@@ -219,7 +220,7 @@ void PhysicsDebugDraw3D::DrawText3D(JPH::RVec3Arg inPosition,
 
 void PhysicsDebugDraw3D::draw(ax::Renderer* renderer)
 {
-    auto& transform = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    const auto& transform = Camera::getVisitingViewProjectionMatrix();
 
     auto& blend                  = _lineCommand.blendDesc();
     blend.blendEnabled           = true;
@@ -230,7 +231,7 @@ void PhysicsDebugDraw3D::draw(ax::Renderer* renderer)
     if (_dirtyLines && !_lineBuffer.empty())
     {
         _lineCommand.unsafePS()->setUniform(_locMVP, transform.m, sizeof(transform.m));
-        _lineCommand.init(0, Mat4::IDENTITY, 0);
+        _lineCommand.init(0, Mat4::identity, 0);
 
         _lineCommand.setPrimitiveType(CustomCommand::PrimitiveType::LINE);
         _lineCommand.createVertexBuffer(sizeof(_lineBuffer[0]), _lineBuffer.size(),
@@ -245,7 +246,7 @@ void PhysicsDebugDraw3D::draw(ax::Renderer* renderer)
     if (_dirtyTris && !_triBuffer.empty())
     {
         _triCommand.unsafePS()->setUniform(_locMVP, transform.m, sizeof(transform.m));
-        _triCommand.init(0, Mat4::IDENTITY, 0);
+        _triCommand.init(0, Mat4::identity, 0);
 
         _triCommand.setPrimitiveType(CustomCommand::PrimitiveType::TRIANGLE);
         _triCommand.createVertexBuffer(sizeof(_triBuffer[0]), _triBuffer.size(), CustomCommand::BufferUsage::DYNAMIC);

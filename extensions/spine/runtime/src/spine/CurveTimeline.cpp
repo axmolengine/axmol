@@ -35,8 +35,7 @@ using namespace spine;
 
 RTTI_IMPL(CurveTimeline, Timeline)
 
-CurveTimeline::CurveTimeline(size_t frameCount, size_t frameEntries, size_t bezierCount) : Timeline(frameCount,
-																									frameEntries) {
+CurveTimeline::CurveTimeline(size_t frameCount, size_t frameEntries, size_t bezierCount) : Timeline(frameCount, frameEntries) {
 	_curves.setSize(frameCount + bezierCount * BEZIER_SIZE, 0);
 	_curves[frameCount - 1] = STEPPED;
 }
@@ -52,8 +51,8 @@ void CurveTimeline::setStepped(size_t frame) {
 	_curves[frame] = STEPPED;
 }
 
-void CurveTimeline::setBezier(size_t bezier, size_t frame, float value, float time1, float value1, float cx1, float cy1,
-							  float cx2, float cy2, float time2, float value2) {
+void CurveTimeline::setBezier(size_t bezier, size_t frame, float value, float time1, float value1, float cx1, float cy1, float cx2, float cy2,
+							  float time2, float value2) {
 	size_t i = getFrameCount() + bezier * BEZIER_SIZE;
 	if (value == 0) _curves[frame] = BEZIER + i;
 	float tmpx = (time1 - cx1 * 2 + cx2) * 0.03, tmpy = (value1 - cy1 * 2 + cy2) * 0.03;
@@ -90,15 +89,13 @@ float CurveTimeline::getBezierValue(float time, size_t frameIndex, size_t valueO
 	return y + (time - x) / (_frames[frameIndex] - x) * (_frames[frameIndex + valueOffset] - y);
 }
 
-Vector<float> &CurveTimeline::getCurves() {
+Array<float> &CurveTimeline::getCurves() {
 	return _curves;
 }
 
 RTTI_IMPL(CurveTimeline1, CurveTimeline)
 
-CurveTimeline1::CurveTimeline1(size_t frameCount, size_t bezierCount) : CurveTimeline(frameCount,
-																					  CurveTimeline1::ENTRIES,
-																					  bezierCount) {
+CurveTimeline1::CurveTimeline1(size_t frameCount, size_t bezierCount) : CurveTimeline(frameCount, CurveTimeline1::ENTRIES, bezierCount) {
 }
 
 CurveTimeline1::~CurveTimeline1() {
@@ -123,8 +120,9 @@ float CurveTimeline1::getCurveValue(float time) {
 	switch (curveType) {
 		case CurveTimeline::LINEAR: {
 			float before = _frames[i], value = _frames[i + CurveTimeline1::VALUE];
-			return value + (time - before) / (_frames[i + CurveTimeline1::ENTRIES] - before) *
-								   (_frames[i + CurveTimeline1::ENTRIES + CurveTimeline1::VALUE] - value);
+			return value +
+				(time - before) / (_frames[i + CurveTimeline1::ENTRIES] - before) *
+				(_frames[i + CurveTimeline1::ENTRIES + CurveTimeline1::VALUE] - value);
 		}
 		case CurveTimeline::STEPPED:
 			return _frames[i + CurveTimeline1::VALUE];
@@ -132,121 +130,42 @@ float CurveTimeline1::getCurveValue(float time) {
 	return getBezierValue(time, i, CurveTimeline1::VALUE, curveType - CurveTimeline1::BEZIER);
 }
 
-float CurveTimeline1::getRelativeValue(float time, float alpha, MixBlend blend, float current, float setup) {
-	if (time < _frames[0]) {
-		switch (blend) {
-			case MixBlend_Setup:
-				return setup;
-			case MixBlend_First:
-				return current + (setup - current) * alpha;
-			default:
-				return current;
-		}
-	}
+float CurveTimeline1::getRelativeValue(float time, float alpha, MixFrom from, bool add, float current, float setup) {
+	if (time < _frames[0]) return beforeFirstKey(from, alpha, current, setup);
 	float value = getCurveValue(time);
-	switch (blend) {
-		case MixBlend_Setup:
-			return setup + value * alpha;
-		case MixBlend_First:
-		case MixBlend_Replace:
-			value += setup - current;
-			break;
-		case MixBlend_Add:
-			break;
-	}
-	return current + value * alpha;
+	return from == MixFrom_Setup ? setup + value * alpha : current + (add ? value : value + setup - current) * alpha;
 }
 
-float CurveTimeline1::getAbsoluteValue(float time, float alpha, MixBlend blend, float current, float setup) {
-	if (time < _frames[0]) {
-		switch (blend) {
-			case MixBlend_Setup:
-				return setup;
-			case MixBlend_First:
-				return current + (setup - current) * alpha;
-			default:
-				return current;
-		}
-	}
+float CurveTimeline1::getAbsoluteValue(float time, float alpha, MixFrom from, bool add, float current, float setup) {
+	if (time < _frames[0]) return beforeFirstKey(from, alpha, current, setup);
 	float value = getCurveValue(time);
-	if (blend == MixBlend_Setup) return setup + (value - setup) * alpha;
-	return current + (value - current) * alpha;
+	return from == MixFrom_Setup ? setup + (add ? value : value - setup) * alpha : current + (add ? value : value - current) * alpha;
 }
 
-float CurveTimeline1::getAbsoluteValue(float time, float alpha, MixBlend blend, float current, float setup, float value) {
-	if (time < _frames[0]) {
-		switch (blend) {
-			case MixBlend_Setup:
-				return setup;
-			case MixBlend_First:
-				return current + (setup - current) * alpha;
-			default:
-				return current;
-		}
-	}
-	if (blend == MixBlend_Setup) return setup + (value - setup) * alpha;
-	return current + (value - current) * alpha;
+float CurveTimeline1::getAbsoluteValue(float time, float alpha, MixFrom from, bool add, float current, float setup, float value) {
+	if (time < _frames[0]) return beforeFirstKey(from, alpha, current, setup);
+	return from == MixFrom_Setup ? setup + (add ? value : value - setup) * alpha : current + (add ? value : value - current) * alpha;
 }
 
-float CurveTimeline1::getScaleValue(float time, float alpha, MixBlend blend, MixDirection direction, float current,
-									float setup) {
-	if (time < _frames[0]) {
-		switch (blend) {
-			case MixBlend_Setup:
-				return setup;
-			case MixBlend_First:
-				return current + (setup - current) * alpha;
-			default:
-				return current;
-		}
-	}
+float CurveTimeline1::getScaleValue(float time, float alpha, MixFrom from, bool add, bool out, float current, float setup) {
+	if (time < _frames[0]) return beforeFirstKey(from, alpha, current, setup);
 	float value = getCurveValue(time) * setup;
-	if (alpha == 1) {
-		if (blend == MixBlend_Add) return current + value - setup;
-		return value;
+	if (alpha == 1 && !add) return value;
+	float base = from == MixFrom_Setup ? setup : current;
+	if (add) return base + (value - setup) * alpha;
+	if (out) return base + (MathUtil::abs(value) * MathUtil::sign(base) - base) * alpha;
+	base = MathUtil::abs(base) * MathUtil::sign(value);
+	return base + (value - base) * alpha;
+}
+
+float CurveTimeline1::beforeFirstKey(MixFrom from, float alpha, float current, float setup) {
+	switch (from) {
+		case MixFrom_Setup:
+			return setup;
+		case MixFrom_First:
+			return current + (setup - current) * alpha;
+		case MixFrom_Current:
+			return current;
 	}
-	// Mixing out uses sign of setup or current pose, else use sign of key.
-	if (direction == MixDirection_Out) {
-		switch (blend) {
-			case MixBlend_Setup:
-				return setup + (MathUtil::abs(value) * MathUtil::sign(setup) - setup) * alpha;
-			case MixBlend_First:
-			case MixBlend_Replace:
-				return current + (MathUtil::abs(value) * MathUtil::sign(current) - current) * alpha;
-			default:
-				break;
-		}
-	} else {
-		float s;
-		switch (blend) {
-			case MixBlend_Setup:
-				s = MathUtil::abs(setup) * MathUtil::sign(value);
-				return s + (value - s) * alpha;
-			case MixBlend_First:
-			case MixBlend_Replace:
-				s = MathUtil::abs(current) * MathUtil::sign(value);
-				return s + (value - s) * alpha;
-			default:
-				break;
-		}
-	}
-	return current + (value - setup) * alpha;
-}
-
-
-RTTI_IMPL(CurveTimeline2, CurveTimeline)
-
-CurveTimeline2::CurveTimeline2(size_t frameCount, size_t bezierCount) : CurveTimeline(frameCount,
-																					  CurveTimeline2::ENTRIES,
-																					  bezierCount) {
-}
-
-CurveTimeline2::~CurveTimeline2() {
-}
-
-void CurveTimeline2::setFrame(size_t frame, float time, float value1, float value2) {
-	frame *= CurveTimeline2::ENTRIES;
-	_frames[frame] = time;
-	_frames[frame + CurveTimeline2::VALUE1] = value1;
-	_frames[frame + CurveTimeline2::VALUE2] = value2;
+	return current;
 }

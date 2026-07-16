@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright(c) Live2D Inc. All rights reserved.
  *
  * Use of this source code is governed by the Live2D Open Software license
@@ -103,7 +103,7 @@ public:
      * @brief   画面を更新するときの処理
      *          モデルの更新処理および描画処理を行う
      */
-    void OnUpdate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* commandBuffer) const;
+    void OnUpdate(Csm::Rendering::CubismCommandBuffer_Axmol* commandBuffer) const;
 
     /**
      * @brief   次のシーンに切り替える<br>
@@ -148,7 +148,7 @@ private:
     // レンダリング先を別ターゲットにする方式の場合に使用
     SelectTarget _renderTarget;                 ///< レンダリング先の選択肢
     LAppSprite* _sprite;                        ///< テクスチャの単純描画クラス
-    Csm::Rendering::CubismOffscreenFrame_Cocos2dx* _renderBuffer;   ///< モードによってはCubismモデル結果をこっちにレンダリング
+    Csm::Rendering::CubismOffscreenFrame_Axmol* _renderBuffer;   ///< モードによってはCubismモデル結果をこっちにレンダリング
     float _clearColor[4];                       ///< レンダリングターゲットのクリアカラー
     ax::rhi::Program* _program;
 

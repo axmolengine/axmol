@@ -42,10 +42,9 @@ enum
 };
 
 ControlButton::ControlButton()
-    : _isPushed(false)
-    , _parentInited(false)
+    : _parentInited(false)
     , _doesAdjustBackgroundImage(false)
-    , _currentTitleColor(Color32::WHITE)
+    , _currentTitleColor(Color32::white)
     , _titleLabel(nullptr)
     , _backgroundSprite(nullptr)
     , _zoomOnTouchDown(false)
@@ -80,10 +79,10 @@ bool ControlButton::initWithLabelAndBackgroundSprite(Node* node,
 
         _parentInited = true;
 
-        _isPushed = false;
+        _isPressed = false;
 
         // Adjust the background image by adjustBackGroundSize
-        setPreferredSize(Size::ZERO);
+        setPreferredSize(Size::zero);
         setAdjustBackgroundImage(adjustBackGroundSize);
         // Zooming button by default
         _zoomOnTouchDown = true;
@@ -91,14 +90,14 @@ bool ControlButton::initWithLabelAndBackgroundSprite(Node* node,
 
         // Set the default anchor point
         setIgnoreAnchorPointForPosition(false);
-        setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+        setAnchorPoint(Anchors::center);
 
         // Set the nodes
         setTitleLabel(node);
         setBackgroundSprite(backgroundSprite);
 
         // Set the default color and opacity
-        setColor(Color32::WHITE);
+        setColor(Color32::white);
         setOpacity(255.0f);
         setOpacityModifyRGB(true);
 
@@ -109,7 +108,7 @@ bool ControlButton::initWithLabelAndBackgroundSprite(Node* node,
         setTitleLabelForState(node, Control::State::NORMAL);
         setBackgroundSpriteForState(backgroundSprite, Control::State::NORMAL);
 
-        setLabelAnchorPoint(Vec2::ANCHOR_MIDDLE);
+        setLabelAnchorPoint(Anchors::center);
 
         // Layout update
         needsLayout();
@@ -238,7 +237,7 @@ void ControlButton::setPreferredSize(const Size& size)
 
         for (auto iter = _backgroundSpriteDispatchTable.begin(); iter != _backgroundSpriteDispatchTable.end(); ++iter)
         {
-            iter->second->setPreferredSize(size);
+            iter->second->setContentSize(size);
         }
     }
 
@@ -307,7 +306,7 @@ void ControlButton::setTitleForState(std::string_view title, State state)
 
 Color32 ControlButton::getTitleColorForState(State state) const
 {
-    Color32 returnColor = Color32::WHITE;
+    Color32 returnColor = Color32::white;
 
     auto iter = _titleColorDispatchTable.find((int)state);
     if (iter != _titleColorDispatchTable.end())
@@ -464,10 +463,10 @@ void ControlButton::setBackgroundSpriteForState(ui::Scale9Sprite* sprite, State 
         if (oldPreferredSize.equals(_preferredSize))
         {
             // Force update of preferred size
-            sprite->setPreferredSize(Size(oldPreferredSize.width + 1, oldPreferredSize.height + 1));
+            sprite->setContentSize(Size(oldPreferredSize.width + 1, oldPreferredSize.height + 1));
         }
 
-        sprite->setPreferredSize(this->_preferredSize);
+        sprite->setContentSize(this->_preferredSize);
     }
 
     // If the current state if equal to the given state we update the layout
@@ -552,7 +551,7 @@ void ControlButton::needsLayout()
         // TODO: should this also have margins if one of the preferred sizes is relaxed?
         if (_backgroundSprite != nullptr)
         {
-            Size preferredSize = _backgroundSprite->getPreferredSize();
+            Size preferredSize = _backgroundSprite->getContentSize();
             if (preferredSize.width <= 0)
             {
                 preferredSize.width = titleLabelSize.width;
@@ -595,9 +594,13 @@ void ControlButton::needsLayout()
     }
 }
 
-bool ControlButton::onTouchBegan(Touch* pTouch, Event* /*pEvent*/)
+bool ControlButton::onPointerDown(PointerEvent* event)
 {
-    if (!isTouchInside(pTouch) || !isEnabled() || !isVisible() || !hasVisibleParents())
+    bool ret = Control::onPointerDown(event);
+    if (!ret)
+        return false;
+
+    if (!isTouchInside(event) || !isEnabled() || !isVisible() || !hasVisibleParents())
     {
         return false;
     }
@@ -610,13 +613,13 @@ bool ControlButton::onTouchBegan(Touch* pTouch, Event* /*pEvent*/)
         }
     }
 
-    _isPushed = true;
+    _isPressed = true;
     this->setHighlighted(true);
     sendActionsForControlEvents(Control::EventType::TOUCH_DOWN);
     return true;
 }
 
-void ControlButton::onTouchMoved(Touch* pTouch, Event* /*pEvent*/)
+void ControlButton::onPointerMove(PointerEvent* event)
 {
     if (!isEnabled() || !isPushed() || isSelected())
     {
@@ -627,7 +630,7 @@ void ControlButton::onTouchMoved(Touch* pTouch, Event* /*pEvent*/)
         return;
     }
 
-    bool isTouchMoveInside = isTouchInside(pTouch);
+    bool isTouchMoveInside = isTouchInside(event);
     if (isTouchMoveInside && !isHighlighted())
     {
         setHighlighted(true);
@@ -647,13 +650,15 @@ void ControlButton::onTouchMoved(Touch* pTouch, Event* /*pEvent*/)
     {
         sendActionsForControlEvents(Control::EventType::DRAG_OUTSIDE);
     }
+
+    AX_UNUSED_PARAM(isTouchMoveInside);
 }
-void ControlButton::onTouchEnded(Touch* pTouch, Event* /*pEvent*/)
+void ControlButton::onPointerUp(PointerEvent* event)
 {
-    _isPushed = false;
+    _isPressed = false;
     setHighlighted(false);
 
-    if (isTouchInside(pTouch))
+    if (isTouchInside(event))
     {
         sendActionsForControlEvents(Control::EventType::TOUCH_UP_INSIDE);
     }
@@ -723,9 +728,9 @@ void ControlButton::updateDisplayedColor(const Color32& parentColor)
     }
 }
 
-void ControlButton::onTouchCancelled(Touch* /*pTouch*/, Event* /*pEvent*/)
+void ControlButton::onPointerCancel(PointerEvent* /*event*/)
 {
-    _isPushed = false;
+    _isPressed = false;
     setHighlighted(false);
     sendActionsForControlEvents(Control::EventType::TOUCH_CANCEL);
 }

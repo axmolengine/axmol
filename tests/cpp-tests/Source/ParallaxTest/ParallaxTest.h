@@ -59,7 +59,7 @@ public:
     CREATE_FUNC(Parallax2);
     Parallax2();
 
-    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onPointerMove(ax::PointerEvent* event);
 
     virtual std::string title() const override;
 };

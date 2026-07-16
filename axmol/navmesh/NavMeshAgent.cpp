@@ -70,7 +70,7 @@ std::string_view NavMeshAgent::getNavMeshAgentComponentName()
 
 ax::NavMeshAgent::NavMeshAgent()
     : _syncFlag(NODE_AND_NODE)
-    , _rotRefAxes(Vec3::UNIT_Z)
+    , _rotRefAxes(Vec3::zAxis)
     , _state(DT_CROWDAGENT_STATE_WALKING)
     , _needAutoOrientation(true)
     , _agentID(-1)
@@ -189,7 +189,7 @@ Vec3 NavMeshAgent::getCurrentVelocity() const
             return Vec3(agent->vel[0], agent->vel[1], agent->vel[2]);
         }
     }
-    return Vec3::ZERO;
+    return Vec3::zero;
 }
 
 void NavMeshAgent::setMaxSpeed(float maxSpeed)
@@ -377,7 +377,7 @@ void NavMeshAgent::syncToNode()
                 float cosTheta = Vec3::dot(axes, dir);
                 Vec3 rotAxes;
                 Vec3::cross(axes, dir, &rotAxes);
-                Quaternion rot = Quaternion(rotAxes, acosf(cosTheta));
+                Quat rot = Quat(rotAxes, acosf(cosTheta));
                 _owner->setRotationQuat(rot);
             }
         }
@@ -421,7 +421,7 @@ Vec3 NavMeshAgent::getVelocity() const
     {
         return Vec3(agent->vel[0], agent->vel[1], agent->vel[2]);
     }
-    return Vec3::ZERO;
+    return Vec3::zero;
 }
 
 }  // namespace ax

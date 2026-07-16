@@ -98,9 +98,6 @@ Texture2DTests::Texture2DTests()
     ADD_TEST_CASE(TextureGlRepeat);
     ADD_TEST_CASE(TextureSizeTest);
     ADD_TEST_CASE(TextureCache1);
-    ADD_TEST_CASE(TextureDrawAtPoint);
-    ADD_TEST_CASE(TextureDrawInRect);
-
     ADD_TEST_CASE(TextureS3TCDxt1);
     ADD_TEST_CASE(TextureS3TCDxt3);
     ADD_TEST_CASE(TextureS3TCDxt5);
@@ -152,7 +149,7 @@ void TextureASTC::onEnter()
     auto& s     = getContentSize();
     _background = LayerColor::create(Color32(15, 19, 42, 255), s.width, s.height);
     _background->setIgnoreAnchorPointForPosition(false);
-    _background->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _background->setAnchorPoint(Anchors::center);
 
     _background->setPosition(Vec2(s.width / 2, s.height / 2));
     this->addChild(_background);
@@ -188,8 +185,8 @@ std::string TextureASTC::title() const
 
 TextureETC1Alpha::TextureETC1Alpha()
 {
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = AX_CALLBACK_2(TextureETC1Alpha::onTouchesEnded, this);
+    auto listener         = PointerEventListener::create();
+    listener->onPointerUp = AX_CALLBACK_1(TextureETC1Alpha::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 
@@ -201,7 +198,7 @@ bool TextureETC1Alpha::init()
     auto& canvasSize = getContentSize();
     _background      = LayerColor::create(Color32(15, 19, 42, 255), canvasSize.width, canvasSize.height);
     _background->setIgnoreAnchorPointForPosition(false);
-    _background->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _background->setAnchorPoint(Anchors::center);
 
     auto s = Director::getInstance()->getCanvasSize();
     _background->setPosition(Vec2(s.width / 2, s.height / 2));
@@ -216,7 +213,7 @@ void TextureETC1Alpha::addNewSpriteWithCoords(Vec2 p)
     auto sprite           = Sprite::create("Images/grossini_dance_08.png");
     Texture2D* etcTexture = _director->getTextureCache()->addImage("Images/etc1-alpha.pkm");
     sprite->setTexture(etcTexture);
-    sprite->setTextureRect(Rect(Vec2::ZERO, etcTexture->getContentSize()));
+    sprite->setTextureRect(Rect(Vec2::zero, etcTexture->getContentSize()));
 
     _background->addChild(sprite);
 
@@ -241,11 +238,10 @@ void TextureETC1Alpha::addNewSpriteWithCoords(Vec2 p)
     sprite->runAction(RepeatForever::create(seq));
 }
 
-void TextureETC1Alpha::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+void TextureETC1Alpha::onPointerUp(PointerEvent* event)
 {
-    for (auto&& touch : touches)
     {
-        auto location = touch->getLocation();
+        auto location = event->getWorldPoint();
 
         addNewSpriteWithCoords(location);
     }
@@ -269,8 +265,8 @@ std::string TextureETC1Alpha::subtitle() const
 
 TextureETC2::TextureETC2()
 {
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = AX_CALLBACK_2(TextureETC2::onTouchesEnded, this);
+    auto listener         = PointerEventListener::create();
+    listener->onPointerUp = AX_CALLBACK_1(TextureETC2::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 
@@ -282,7 +278,7 @@ bool TextureETC2::init()
     auto& canvasSize = getContentSize();
     _background      = LayerColor::create(Color32(15, 19, 42, 255), canvasSize.width, canvasSize.height);
     _background->setIgnoreAnchorPointForPosition(false);
-    _background->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _background->setAnchorPoint(Anchors::center);
 
     auto s = Director::getInstance()->getCanvasSize();
     _background->setPosition(Vec2(s.width / 2, s.height / 2));
@@ -304,11 +300,11 @@ void TextureETC2::addNewSpriteWithCoords()
     _background->addChild(spriteA4);
 }
 
-void TextureETC2::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+void TextureETC2::onPointerUp(PointerEvent* event)
 {
     // for (auto&& touch : touches)
     //{
-    //     auto location = touch->getLocation();
+    //     auto location = touch->getWorldPoint();
 
     //    addNewSpriteWithCoords();
     //}
@@ -332,8 +328,8 @@ std::string TextureETC2::subtitle() const
 
 TextureBMP::TextureBMP()
 {
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = AX_CALLBACK_2(TextureBMP::onTouchesEnded, this);
+    auto listener         = PointerEventListener::create();
+    listener->onPointerUp = AX_CALLBACK_1(TextureBMP::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto s = Director::getInstance()->getCanvasSize();
@@ -370,11 +366,10 @@ void TextureBMP::addNewSpriteWithCoords(Vec2 p)
     sprite->runAction(RepeatForever::create(seq));
 }
 
-void TextureBMP::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+void TextureBMP::onPointerUp(PointerEvent* event)
 {
-    for (auto&& touch : touches)
     {
-        auto location = touch->getLocation();
+        auto location = event->getWorldPoint();
 
         addNewSpriteWithCoords(location);
     }
@@ -1972,109 +1967,6 @@ std::string TextureCache1::title() const
 std::string TextureCache1::subtitle() const
 {
     return "4 images should appear: alias, antialias, alias, antialias";
-}
-
-// TextureDrawAtPoint
-void TextureDrawAtPoint::onEnter()
-{
-    TextureDemo::onEnter();
-
-    _tex1  = Director::getInstance()->getTextureCache()->addImage("Images/grossinis_sister1.png");
-    _Tex2F = Director::getInstance()->getTextureCache()->addImage("Images/grossinis_sister2.png");
-
-    _tex1->retain();
-    _Tex2F->retain();
-}
-
-TextureDrawAtPoint::~TextureDrawAtPoint()
-{
-    _tex1->release();
-    _Tex2F->release();
-}
-
-std::string TextureDrawAtPoint::title() const
-{
-    return "Texture2D: drawAtPoint";
-}
-
-std::string TextureDrawAtPoint::subtitle() const
-{
-    return "draws 2 textures using drawAtPoint";
-}
-
-void TextureDrawAtPoint::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
-{
-    TextureDemo::draw(renderer, transform, flags);
-
-    onDraw(transform, flags);
-}
-
-void TextureDrawAtPoint::onDraw(const Mat4& transform, uint32_t flags)
-{
-    Director* director = Director::getInstance();
-    AXASSERT(nullptr != director, "Director is null when setting matrix stack");
-    director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, transform);
-
-    auto s = Director::getInstance()->getCanvasSize();
-
-    _tex1->drawAtPoint(Vec2(s.width / 2 - 50, s.height / 2 - 50), _globalZOrder);
-    _Tex2F->drawAtPoint(Vec2(s.width / 2 + 50, s.height / 2 - 50), _globalZOrder);
-
-    director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-}
-
-// TextureDrawInRect
-
-void TextureDrawInRect::onEnter()
-{
-    TextureDemo::onEnter();
-    _tex1  = Director::getInstance()->getTextureCache()->addImage("Images/grossinis_sister1.png");
-    _Tex2F = Director::getInstance()->getTextureCache()->addImage("Images/grossinis_sister2.png");
-
-    _tex1->retain();
-    _Tex2F->retain();
-}
-
-TextureDrawInRect::~TextureDrawInRect()
-{
-    _tex1->release();
-    _Tex2F->release();
-}
-
-void TextureDrawInRect::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
-{
-    TextureDemo::draw(renderer, transform, flags);
-    onDraw(transform, flags);
-}
-
-void TextureDrawInRect::onDraw(const Mat4& transform, uint32_t flags)
-{
-    Director* director = Director::getInstance();
-    AXASSERT(nullptr != director, "Director is null when setting matrix stack");
-    director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, transform);
-
-    auto s = Director::getInstance()->getCanvasSize();
-
-    auto rect1 = Rect(s.width / 2 - 80, 20, _tex1->getContentSize().width * 0.5f, _tex1->getContentSize().height * 2);
-    auto rect2 =
-        Rect(s.width / 2 + 80, s.height / 2, _tex1->getContentSize().width * 2, _tex1->getContentSize().height * 0.5f);
-
-    _tex1->drawInRect(rect1, _globalZOrder);
-    _Tex2F->drawInRect(rect2, _globalZOrder);
-
-    director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-}
-
-std::string TextureDrawInRect::title() const
-{
-    return "Texture2D: drawInRect";
-}
-
-std::string TextureDrawInRect::subtitle() const
-{
-    return "draws 2 textures using drawInRect";
 }
 
 //------------------------------------------------------------------

@@ -25,13 +25,15 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #pragma once
-#include "spine/spine-cocos2dx.h"
+#include "spine/SkeletonAnimation.h"
 
 /// @cond
 class LuaSkeletonAnimation : public spine::SkeletonAnimation
 {
 public:
-    static LuaSkeletonAnimation* createWithFile(const char* skeletonDataFile, const char* atlasFile, float scale = 1);
+    static LuaSkeletonAnimation* createWithFile(std::string_view skeletonDataFile,
+                                                std::string_view atlasFile,
+                                                float scale = 1);
 
     LuaSkeletonAnimation();
 

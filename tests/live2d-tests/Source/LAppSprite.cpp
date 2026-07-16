@@ -20,11 +20,11 @@ LAppSprite::~LAppSprite()
 {
 }
 
-void LAppSprite::RenderImmidiate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* commandBuffer,
+void LAppSprite::RenderImmidiate(Csm::Rendering::CubismCommandBuffer_Axmol* commandBuffer,
                                  rhi::Texture* texture,
                                  float uvVertex[8]) const
 {
-    Csm::Rendering::CubismCommandBuffer_Cocos2dx::DrawCommandBuffer* drawCommandBuffer = CSM_NEW Csm::Rendering::CubismCommandBuffer_Cocos2dx::DrawCommandBuffer();
+    Csm::Rendering::CubismCommandBuffer_Axmol::DrawCommandBuffer* drawCommandBuffer = CSM_NEW Csm::Rendering::CubismCommandBuffer_Axmol::DrawCommandBuffer();
     auto cmd = drawCommandBuffer->GetCommandDraw()->GetCommand();
     rhi::BlendDesc* blendDescriptor = drawCommandBuffer->GetCommandDraw()->GetBlendDescriptor();
     rhi::ProgramState* programState = cmd->unsafePS();
@@ -66,8 +66,8 @@ void LAppSprite::RenderImmidiate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* c
     rhi::VertexLayoutDesc desc = axvlm->allocateVertexLayoutDesc();
     // attribute属性を登録
     desc.startLayout(2);
-    desc.addAttrib("a_position", _program->getVertexInputDesc("a_position"), rhi::VertexFormat::FLOAT2, 0, false);
-    desc.addAttrib("a_texCoord", _program->getVertexInputDesc("a_texCoord"), rhi::VertexFormat::FLOAT2,
+    desc.addAttrib("a_position", _program->getVertexInputDesc("a_position"), rhi::VertexElementType::FLOAT2, 0, false);
+    desc.addAttrib("a_texCoord", _program->getVertexInputDesc("a_texCoord"), rhi::VertexElementType::FLOAT2,
                             sizeof(float) * 2, false);
 
     // uniform属性の登録

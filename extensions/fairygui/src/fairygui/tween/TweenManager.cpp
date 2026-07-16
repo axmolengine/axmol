@@ -177,7 +177,7 @@ void TweenManager::init()
     ax::Director::getInstance()->getEventDispatcher()->addCustomEventListener(ax::Director::EVENT_RESET, &reset);
 }
 
-void TweenManager::reset(ax::EventCustom*)
+void TweenManager::reset(ax::CustomEvent*)
 {
     int cnt = _totalActiveTweens;
     for (int i = 0; i < cnt; i++)

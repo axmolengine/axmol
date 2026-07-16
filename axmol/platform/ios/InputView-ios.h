@@ -25,5 +25,11 @@ THE SOFTWARE.
 
 #import <UIKit/UIKit.h>
 
-@interface TextInputView : UIView <UITextInput>
+@interface InputHostView : UIView <UITextInput>
+
+// Show the system edit menu (Copy/Paste/Cut) at the given view point (UIKit points).
+// The view will NOT perform clipboard operations itself; it dispatches menu actions to InputSystem.
+- (void)showContextMenu:(CGPoint)point hasText:(BOOL)hasText hasSelection:(BOOL)hasSelection readOnly:(BOOL)readOnly;
+- (void)hideContextMenu;
+
 @end

@@ -38,8 +38,8 @@ namespace ax
 {
 
 class Texture2D;
-class EventCustom;
-class EventListenerCustom;
+class CustomEvent;
+class CustomEventListener;
 
 /**
  * @addtogroup _2d
@@ -239,7 +239,7 @@ protected:
     V3F_T2F_C4B_Quad* _quads = nullptr;
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-    EventListenerCustom* _rendererRecreatedListener = nullptr;
+    CustomEventListener* _rendererRecreatedListener = nullptr;
 #endif
 };
 

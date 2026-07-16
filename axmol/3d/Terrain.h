@@ -35,9 +35,9 @@ THE SOFTWARE.
 #include "axmol/renderer/GroupCommand.h"
 #include "axmol/renderer/RenderState.h"
 #include "axmol/rhi/ProgramState.h"
-#include "axmol/3d/AABB.h"
-#include "axmol/3d/Ray.h"
-#include "axmol/base/EventListenerCustom.h"
+#include "axmol/math/AABB.h"
+#include "axmol/math/Ray.h"
+#include "axmol/base/CustomEventListener.h"
 #include "axmol/base/EventDispatcher.h"
 
 namespace ax
@@ -415,6 +415,8 @@ public:
 
     // Overrides, internal use only
     void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
+    bool onPointerHitTest(PointerEvent* event, Vec3* outHitPoint) override;
+
     /**
      * Ray-Terrain intersection.
      * @return the intersection point
@@ -584,7 +586,7 @@ private:
 
     rhi::UniformLocation _mvpMatrixLocation;
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-    EventListenerCustom* _backToForegroundListener;
+    CustomEventListener* _backToForegroundListener;
 #endif
 };
 

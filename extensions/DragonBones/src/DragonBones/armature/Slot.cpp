@@ -1,4 +1,4 @@
-﻿#include "Slot.h"
+#include "Slot.h"
 #include "../model/DragonBonesData.h"
 #include "../model/UserData.h"
 #include "../model/SkinData.h"
@@ -291,7 +291,7 @@ void Slot::_updateDisplay()
     const auto prevChildArmature = _childArmature;
 
     // Update display and child armature.
-    if (_displayIndex >= 0 && (std::size_t)_displayIndex < _displayList.size())
+    if (_displayIndex >= 0 && (size_t)_displayIndex < _displayList.size())
     {
         const auto& displayPair = _displayList[_displayIndex];
         _display                = displayPair.first;
@@ -470,7 +470,7 @@ bool Slot::_setDisplayList(const std::vector<std::pair<void*, DisplayType>>& val
             _displayList.resize(value.size());
         }
 
-        for (std::size_t i = 0, l = value.size(); i < l; ++i)
+        for (size_t i = 0, l = value.size(); i < l; ++i)
         {
             const auto& eachPair = value[i];
             if (eachPair.first != nullptr && eachPair.first != _rawDisplay && eachPair.first != _meshDisplay &&
@@ -489,7 +489,7 @@ bool Slot::_setDisplayList(const std::vector<std::pair<void*, DisplayType>>& val
         _displayList.clear();
     }
 
-    if (_displayIndex >= 0 && (std::size_t)_displayIndex < _displayList.size())
+    if (_displayIndex >= 0 && (size_t)_displayIndex < _displayList.size())
     {
         _displayDirty = _display != _displayList[_displayIndex].first;
     }
@@ -856,7 +856,7 @@ void Slot::setRawDisplayDatas(const std::vector<DisplayData*>* value)
     {
         _displayDatas.resize(_rawDisplayDatas->size());
 
-        for (std::size_t i = 0, l = _displayDatas.size(); i < l; ++i)
+        for (size_t i = 0, l = _displayDatas.size(); i < l; ++i)
         {
             auto rawDisplayData = (*_rawDisplayDatas)[i];
 
@@ -894,7 +894,7 @@ void Slot::setDisplay(void* value, DisplayType displayType)
     else
     {
         auto relpaceDisplayList = _displayList;  // copy
-        if (displayListLength <= (std::size_t)_displayIndex)
+        if (displayListLength <= (size_t)_displayIndex)
         {
             relpaceDisplayList.resize(_displayIndex + 1);
         }

@@ -34,7 +34,7 @@ namespace ax
 {
 
 #if defined(AX_DLLEXPORT) || defined(AX_DLLIMPORT)
-const Rect Rect::ZERO = Rect(0, 0, 0, 0);
+const Rect Rect::zero{0, 0, 0, 0};
 #endif
 
 bool Rect::intersectsCircle(const Vec2& center, float radius) const

@@ -15,7 +15,7 @@ require "axmol.init"
 local director = ax.Director:getInstance()
 local renderView   = director:getRenderView()
 if nil == renderView then
-    renderView = ax.RenderViewImpl:createWithRect("Lua Tests", ax.rect(0,0,960,640), 1.0, true)
+    renderView = ax.RenderView:createWithRect("Lua Tests", ax.rect(0,0,960,640), 1.0, true)
     director:setRenderView(renderView)
 end
 

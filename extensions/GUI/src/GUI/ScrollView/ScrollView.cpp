@@ -34,6 +34,8 @@
 #include "axmol/renderer/Renderer.h"
 
 #include <algorithm>
+#include <cmath>
+#include <limits>
 
 NS_AX_EXT_BEGIN
 
@@ -49,6 +51,25 @@ static float convertDistanceFromPointToInch(float pointDis)
     auto renderView = Director::getInstance()->getRenderView();
     float factor    = (renderView->getScaleX() + renderView->getScaleY()) / 2;
     return pointDis * factor / Device::getDPI();
+}
+
+static bool rayToLocalPlane(const Ray& worldRay, Node* node, Vec2* outLocalPoint)
+{
+    if (!node || !outLocalPoint)
+        return false;
+
+    Ray localRay(worldRay);
+    localRay.transform(node->getWorldToNodeTransform());
+    if (std::abs(localRay.direction.z) <= std::numeric_limits<float>::epsilon())
+        return false;
+
+    const float t = -localRay.origin.z / localRay.direction.z;
+    if (t < 0.0f)
+        return false;
+
+    const Vec3 localHit = localRay.origin + t * localRay.direction;
+    outLocalPoint->set(localHit.x, localHit.y);
+    return true;
 }
 
 ScrollView::ScrollView()
@@ -118,7 +139,7 @@ bool ScrollView::initWithViewSize(Size size, Node* container /* = nullptr*/)
 
         setTouchEnabled(true);
 
-        _touches.reserve(EventTouch::MAX_TOUCHES);
+        _touches.reserve(4);
 
         _delegate         = nullptr;
         _bounceable       = true;
@@ -188,12 +209,12 @@ void ScrollView::setTouchEnabled(bool enabled)
 
     if (enabled)
     {
-        _touchListener = EventListenerTouchOneByOne::create();
-        _touchListener->setSwallowTouches(true);
-        _touchListener->onTouchBegan     = AX_CALLBACK_2(ScrollView::onTouchBegan, this);
-        _touchListener->onTouchMoved     = AX_CALLBACK_2(ScrollView::onTouchMoved, this);
-        _touchListener->onTouchEnded     = AX_CALLBACK_2(ScrollView::onTouchEnded, this);
-        _touchListener->onTouchCancelled = AX_CALLBACK_2(ScrollView::onTouchCancelled, this);
+        _touchListener                  = PointerEventListener::create();
+        _touchListener->onPointerDown   = AX_CALLBACK_1(ScrollView::onPointerDown, this);
+        _touchListener->onPointerMove   = AX_CALLBACK_1(ScrollView::onPointerMove, this);
+        _touchListener->onPointerUp     = AX_CALLBACK_1(ScrollView::onPointerUp, this);
+        _touchListener->onPointerCancel = AX_CALLBACK_1(ScrollView::onPointerCancel, this);
+        _touchListener->onPointerScroll = AX_CALLBACK_1(ScrollView::onPointerScroll, this);
 
         _eventDispatcher->addEventListenerWithSceneGraphPriority(_touchListener, this);
     }
@@ -202,14 +223,6 @@ void ScrollView::setTouchEnabled(bool enabled)
         _dragging   = false;
         _touchMoved = false;
         _touches.clear();
-    }
-}
-
-void ScrollView::setSwallowTouches(bool needSwallow)
-{
-    if (_touchListener != nullptr)
-    {
-        _touchListener->setSwallowTouches(needSwallow);
     }
 }
 
@@ -410,7 +423,7 @@ void ScrollView::relocateContainer(bool animated)
 
 Vec2 ScrollView::maxContainerOffset()
 {
-    Point anchorPoint = _container->isIgnoreAnchorPointForPosition() ? Point::ZERO : _container->getAnchorPoint();
+    Point anchorPoint = _container->isIgnoreAnchorPointForPosition() ? Point::zero : _container->getAnchorPoint();
     float contW       = _container->getContentSize().width * _container->getScaleX();
     float contH       = _container->getContentSize().height * _container->getScaleY();
 
@@ -419,7 +432,7 @@ Vec2 ScrollView::maxContainerOffset()
 
 Vec2 ScrollView::minContainerOffset()
 {
-    Point anchorPoint = _container->isIgnoreAnchorPointForPosition() ? Point::ZERO : _container->getAnchorPoint();
+    Point anchorPoint = _container->isIgnoreAnchorPointForPosition() ? Point::zero : _container->getAnchorPoint();
     float contW       = _container->getContentSize().width * _container->getScaleX();
     float contH       = _container->getContentSize().height * _container->getScaleY();
 
@@ -652,14 +665,6 @@ void ScrollView::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t
 
     uint32_t flags = processParentFlags(parentTransform, parentFlags);
 
-    // IMPORTANT:
-    // To ease the migration to v3.0, we still support the Mat4 stack,
-    // but it is deprecated and your code should not rely on it
-    Director* director = Director::getInstance();
-    AXASSERT(nullptr != director, "Director is null when setting matrix stack");
-    director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
-
     this->beforeDraw();
     bool visibleByCamera = isVisitableByVisitingCamera();
 
@@ -698,21 +703,89 @@ void ScrollView::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t
     }
 
     this->afterDraw();
-
-    director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 }
 
-bool ScrollView::onTouchBegan(Touch* touch, Event* /*event*/)
+bool ScrollView::getPointerLocalPoint(PointerEvent* event, Node* node, Vec2* outLocalPoint) const
 {
+    if (!event || !node || !outLocalPoint)
+        return false;
+
+    const Ray& ray = event->getRay();
+    if (ray.direction != Vec3())
+    {
+        return rayToLocalPlane(ray, node, outLocalPoint);
+    }
+
+    *outLocalPoint = node->convertPointerToNodeSpace(event);
+    return true;
+}
+
+bool ScrollView::isPointerInView(PointerEvent* event, Vec2* outLocalPoint)
+{
+    if (!event)
+        return false;
+
+    Vec2 localPoint;
+    if (!getPointerLocalPoint(event, this, &localPoint))
+        return false;
+
+    const Vec2 worldPoint = convertToWorldSpace(localPoint);
+    if (!getViewRect().containsPoint(worldPoint))
+        return false;
+
+    if (outLocalPoint)
+        *outLocalPoint = worldPoint;
+
+    return true;
+}
+
+bool ScrollView::onPointerHitTest(PointerEvent* event, Vec3* outHitPoint)
+{
+    if (!event)
+        return false;
+
+    auto phase = event->getPhase();
+    if (phase == InputPhase::PointerDown)
+    {
+        if (!event->isPrimaryPressed())
+            return false;
+    }
+
+    else if (phase != InputPhase::PointerScroll)
+    {
+        // Captured Move/Up/Cancel should not come through hit-test.
+        return false;
+    }
+
+    if (!this->isVisible() || !this->hasVisibleParents())
+        return false;
+
+    // ScrollView uses _viewSize/getViewRect as its input area, not container contentSize.
+    Vec2 worldPoint;
+
+    // Keep the same acceptance rules as onPointerDown.
+    // Dispatcher-level hit-test should reject touches outside visible bounds.
+    if (_touches.size() > 2 || _touchMoved || !isPointerInView(event, &worldPoint))
+        return false;
+
+    if (outHitPoint)
+        outHitPoint->set(worldPoint.x, worldPoint.y, 0.0f);
+
+    return true;
+}
+
+bool ScrollView::onPointerDown(PointerEvent* touch)
+{
+    if (!touch->isPrimaryPressed())
+        return false;
+
     if (!this->isVisible() || !this->hasVisibleParents())
     {
         return false;
     }
 
-    Rect frame = getViewRect();
-
     // dispatcher does not know about clipping. reject touches outside visible bounds.
-    if (_touches.size() > 2 || _touchMoved || !frame.containsPoint(touch->getLocation()))
+    if (_touches.size() > 2 || _touchMoved || !isPointerInView(touch))
     {
         return false;
     }
@@ -724,7 +797,8 @@ bool ScrollView::onTouchBegan(Touch* touch, Event* /*event*/)
 
     if (_touches.size() == 1)
     {  // scrolling
-        _touchPoint = this->convertTouchToNodeSpace(touch);
+        if (!getPointerLocalPoint(touch, this, &_touchPoint))
+            return false;
         _touchMoved = false;
         _dragging   = true;  // dragging started
         _scrollDistance.setZero();
@@ -732,18 +806,26 @@ bool ScrollView::onTouchBegan(Touch* touch, Event* /*event*/)
     }
     else if (_touches.size() == 2)
     {
-        _touchPoint =
-            (this->convertTouchToNodeSpace(_touches[0]).getMidpoint(this->convertTouchToNodeSpace(_touches[1])));
+        Vec2 firstPoint;
+        Vec2 secondPoint;
+        if (!getPointerLocalPoint(_touches[0], this, &firstPoint) ||
+            !getPointerLocalPoint(_touches[1], this, &secondPoint))
+            return false;
+        _touchPoint = firstPoint.getMidpoint(secondPoint);
 
-        _touchLength = _container->convertTouchToNodeSpace(_touches[0])
-                           .getDistance(_container->convertTouchToNodeSpace(_touches[1]));
+        Vec2 firstContainerPoint;
+        Vec2 secondContainerPoint;
+        if (!getPointerLocalPoint(_touches[0], _container, &firstContainerPoint) ||
+            !getPointerLocalPoint(_touches[1], _container, &secondContainerPoint))
+            return false;
+        _touchLength = firstContainerPoint.getDistance(secondContainerPoint);
 
         _dragging = false;
     }
     return true;
 }
 
-void ScrollView::onTouchMoved(Touch* touch, Event* /*event*/)
+void ScrollView::onPointerMove(PointerEvent* touch)
 {
     if (!this->isVisible())
     {
@@ -755,12 +837,10 @@ void ScrollView::onTouchMoved(Touch* touch, Event* /*event*/)
         if (_touches.size() == 1 && _dragging)
         {  // scrolling
             Vec2 moveDistance, newPoint;
-            Rect frame;
             float newX, newY;
 
-            frame = getViewRect();
-
-            newPoint     = this->convertTouchToNodeSpace(_touches[0]);
+            if (!getPointerLocalPoint(_touches[0], this, &newPoint))
+                return;
             moveDistance = newPoint - _touchPoint;
 
             float dis = 0.0f;
@@ -836,14 +916,19 @@ void ScrollView::onTouchMoved(Touch* touch, Event* /*event*/)
         }
         else if (_touches.size() == 2 && !_dragging)
         {
-            const float len = _container->convertTouchToNodeSpace(_touches[0])
-                                  .getDistance(_container->convertTouchToNodeSpace(_touches[1]));
+            Vec2 firstContainerPoint;
+            Vec2 secondContainerPoint;
+            if (!getPointerLocalPoint(_touches[0], _container, &firstContainerPoint) ||
+                !getPointerLocalPoint(_touches[1], _container, &secondContainerPoint))
+                return;
+            const float len = firstContainerPoint.getDistance(secondContainerPoint);
             this->setZoomScale(this->getZoomScale() * len / _touchLength);
         }
+        return;
     }
 }
 
-void ScrollView::onTouchEnded(Touch* touch, Event* /*event*/)
+void ScrollView::onPointerUp(PointerEvent* touch)
 {
     if (!this->isVisible())
     {
@@ -868,7 +953,7 @@ void ScrollView::onTouchEnded(Touch* touch, Event* /*event*/)
     }
 }
 
-void ScrollView::onTouchCancelled(Touch* touch, Event* /*event*/)
+void ScrollView::onPointerCancel(PointerEvent* touch)
 {
     if (!this->isVisible())
     {
@@ -889,9 +974,65 @@ void ScrollView::onTouchCancelled(Touch* touch, Event* /*event*/)
     }
 }
 
+bool ScrollView::onPointerScroll(PointerEvent* event)
+{
+    if (!event || !_container || !this->isVisible() || !this->hasVisibleParents())
+        return false;
+
+    if (_direction == Direction::NONE)
+        return false;
+
+    constexpr float mouseFactor = 20.0f;
+    Vec2 move;
+
+    const auto minOffset   = this->minContainerOffset();
+    const auto maxOffset   = this->maxContainerOffset();
+    const bool canScrollX  = minOffset.x < maxOffset.x;
+    const bool canScrollY  = minOffset.y < maxOffset.y;
+    const auto scrollDelta = event->getScrollDelta();
+
+    switch (_direction)
+    {
+    case Direction::HORIZONTAL:
+        if (!canScrollX)
+            return true;
+        move.x = (scrollDelta.x != 0.0f ? scrollDelta.x : scrollDelta.y) * mouseFactor;
+        break;
+
+    case Direction::VERTICAL:
+        if (!canScrollY)
+            return true;
+        move.y = scrollDelta.y * mouseFactor;
+        break;
+
+    case Direction::BOTH:
+        if (!canScrollX && !canScrollY)
+            return true;
+        move.x = canScrollX ? scrollDelta.x * mouseFactor : 0.0f;
+        move.y = canScrollY ? scrollDelta.y * mouseFactor : 0.0f;
+        break;
+
+    default:
+        return false;
+    }
+
+    if (move == Vec2::zero)
+        return false;
+
+    this->unschedule(AX_SCHEDULE_SELECTOR(ScrollView::deaccelerateScrolling));
+    _scrollDistance.setZero();
+
+    const bool bounceable = _bounceable;
+    _bounceable           = false;
+    this->setContentOffset(_container->getPosition() + move);
+    _bounceable = bounceable;
+
+    return true;
+}
+
 Rect ScrollView::getViewRect()
 {
-    Vec2 screenPos = this->convertToWorldSpace(Vec2::ZERO);
+    Vec2 screenPos = this->convertToWorldSpace(Vec2::zero);
 
     float scaleX = this->getScaleX();
     float scaleY = this->getScaleY();

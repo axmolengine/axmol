@@ -23,7 +23,7 @@
  ****************************************************************************/
 
 #include "axmol/rhi/opengl/BufferGL.h"
-#include <cassert>
+#include <assert.h>
 #include "axmol/base/Director.h"
 #include "axmol/base/EventType.h"
 #include "axmol/base/EventDispatcher.h"
@@ -49,8 +49,7 @@ GLenum toGLUsage(const BufferUsage& usage)
 }
 }  // namespace
 
-BufferImpl::BufferImpl(std::size_t size, BufferType type, BufferUsage usage, const void* initial)
-    : Buffer(size, type, usage)
+BufferImpl::BufferImpl(size_t size, BufferType type, BufferUsage usage, const void* initial) : Buffer(size, type, usage)
 {
     glGenBuffers(1, &_buffer);
 
@@ -59,7 +58,7 @@ BufferImpl::BufferImpl(std::size_t size, BufferType type, BufferUsage usage, con
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     _backToForegroundListener =
-        EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) { this->reloadBuffer(); });
+        CustomEventListener::create(EVENT_RENDERER_RECREATED, [this](CustomEvent*) { this->reloadBuffer(); });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
 #endif
 }
@@ -93,7 +92,7 @@ void BufferImpl::reloadBuffer()
     updateData(_data, _bufferAllocated);
 }
 
-void BufferImpl::fillBuffer(const void* data, std::size_t offset, std::size_t size)
+void BufferImpl::fillBuffer(const void* data, size_t offset, size_t size)
 {
     if (_bufferAlreadyFilled || !_needDefaultStoredData || BufferUsage::STATIC != _usage)
         return;
@@ -107,7 +106,7 @@ void BufferImpl::fillBuffer(const void* data, std::size_t offset, std::size_t si
 }
 #endif
 
-void BufferImpl::updateData(const void* data, std::size_t size)
+void BufferImpl::updateData(const void* data, size_t size)
 {
     assert(size && size <= _capacity);
 
@@ -124,7 +123,7 @@ void BufferImpl::updateData(const void* data, std::size_t size)
     }
 }
 
-void BufferImpl::updateSubData(const void* data, std::size_t offset, std::size_t size)
+void BufferImpl::updateSubData(const void* data, size_t offset, size_t size)
 {
 
     AXASSERT(_bufferAllocated != 0, "updateData should be invoke before updateSubData");

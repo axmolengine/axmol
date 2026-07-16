@@ -34,8 +34,8 @@
 #    include "lua-bindings/manual/LuaEngine.h"
 #    include "axmol/base/GameController.h"
 
-static void cloneEventListenerControllerHandler(const ax::EventListenerController* src,
-                                                ax::EventListenerController* dst,
+static void cloneControllerEventListenerHandler(const ax::ControllerEventListener* src,
+                                                ax::ControllerEventListener* dst,
                                                 ScriptHandlerMgr::HandlerType type)
 {
     if (nullptr == src || nullptr == dst)
@@ -51,40 +51,40 @@ static void cloneEventListenerControllerHandler(const ax::EventListenerControlle
         {
         case ScriptHandlerMgr::HandlerType::EVENT_CONTROLLER_CONNECTED:
         {
-            dst->onConnected = [=](ax::Controller* controller, Event* event) {
+            dst->onConnected = [=](ax::ControllerEvent* event) {
 
             };
         }
         break;
         case ScriptHandlerMgr::HandlerType::EVENT_CONTROLLER_DISCONNECTED:
         {
-            dst->onDisconnected = [=](ax::Controller* controller, Event* event) {
+            dst->onDisconnected = [=](ax::ControllerEvent* event) {
 
             };
         }
         break;
         case ScriptHandlerMgr::HandlerType::EVENT_CONTROLLER_KEYDOWN:
         {
-            dst->onKeyDown = [=](ax::Controller* controller, int keyCode, Event* event) {
+            dst->onKeyDown = [=](ax::ControllerEvent* event) {
 
             };
         }
         break;
         case ScriptHandlerMgr::HandlerType::EVENT_CONTROLLER_KEYUP:
         {
-            dst->onKeyUp = [=](ax::Controller* controller, int keyCode, Event* event) {
+            dst->onKeyUp = [=](ax::ControllerEvent* event) {
 
             };
         }
         break;
         case ScriptHandlerMgr::HandlerType::EVENT_CONTROLLER_KEYREPEAT:
         {
-            dst->onKeyRepeat = [=](ax::Controller* controller, int keyCode, Event* event) {};
+            dst->onKeyRepeat = [=](ax::ControllerEvent* event) {};
         }
         break;
         case ScriptHandlerMgr::HandlerType::EVENT_CONTROLLER_AXIS:
         {
-            dst->onAxisEvent = [=](ax::Controller* controller, int keyCode, Event* event) {};
+            dst->onAxisEvent = [=](ax::ControllerEvent* event) {};
         }
         break;
         default:
@@ -93,24 +93,24 @@ static void cloneEventListenerControllerHandler(const ax::EventListenerControlle
     }
 }
 
-static int toaxlua_EventListenerController_clone(lua_State* tolua_S)
+static int toaxlua_ControllerEventListener_clone(lua_State* tolua_S)
 {
     if (nullptr == tolua_S)
         return 0;
 
     int argc                          = 0;
-    ax::EventListenerController* self = nullptr;
+    ax::ControllerEventListener* self = nullptr;
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
-    if (!tolua_isusertype(tolua_S, 1, "ax.EventListenerController", 0, &tolua_err))
+    if (!tolua_isusertype(tolua_S, 1, "ax.ControllerEventListener", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
 
-    self = static_cast<ax::EventListenerController*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<ax::ControllerEventListener*>(tolua_tousertype(tolua_S, 1, 0));
 #    if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        tolua_error(tolua_S, "invalid 'self' in function 'toaxlua_EventListenerController_clone'\n", nullptr);
+        tolua_error(tolua_S, "invalid 'self' in function 'toaxlua_ControllerEventListener_clone'\n", nullptr);
         return 0;
     }
 #    endif
@@ -119,21 +119,21 @@ static int toaxlua_EventListenerController_clone(lua_State* tolua_S)
 
     if (argc == 0)
     {
-        ax::EventListenerController* tolua_ret = ax::EventListenerController::create();
+        ax::ControllerEventListener* tolua_ret = ax::ControllerEventListener::create();
         if (nullptr == tolua_ret)
             return 0;
 
-        cloneEventListenerControllerHandler(self, tolua_ret, ScriptHandlerMgr::HandlerType::EVENT_CONTROLLER_CONNECTED);
-        cloneEventListenerControllerHandler(self, tolua_ret,
+        cloneControllerEventListenerHandler(self, tolua_ret, ScriptHandlerMgr::HandlerType::EVENT_CONTROLLER_CONNECTED);
+        cloneControllerEventListenerHandler(self, tolua_ret,
                                             ScriptHandlerMgr::HandlerType::EVENT_CONTROLLER_DISCONNECTED);
-        cloneEventListenerControllerHandler(self, tolua_ret, ScriptHandlerMgr::HandlerType::EVENT_CONTROLLER_KEYDOWN);
-        cloneEventListenerControllerHandler(self, tolua_ret, ScriptHandlerMgr::HandlerType::EVENT_CONTROLLER_KEYUP);
-        cloneEventListenerControllerHandler(self, tolua_ret, ScriptHandlerMgr::HandlerType::EVENT_CONTROLLER_KEYREPEAT);
-        cloneEventListenerControllerHandler(self, tolua_ret, ScriptHandlerMgr::HandlerType::EVENT_CONTROLLER_AXIS);
+        cloneControllerEventListenerHandler(self, tolua_ret, ScriptHandlerMgr::HandlerType::EVENT_CONTROLLER_KEYDOWN);
+        cloneControllerEventListenerHandler(self, tolua_ret, ScriptHandlerMgr::HandlerType::EVENT_CONTROLLER_KEYUP);
+        cloneControllerEventListenerHandler(self, tolua_ret, ScriptHandlerMgr::HandlerType::EVENT_CONTROLLER_KEYREPEAT);
+        cloneControllerEventListenerHandler(self, tolua_ret, ScriptHandlerMgr::HandlerType::EVENT_CONTROLLER_AXIS);
 
         int ID     = (int)tolua_ret->_ID;
         int* luaID = &tolua_ret->_luaID;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)tolua_ret, "ax.EventListenerController");
+        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)tolua_ret, "ax.ControllerEventListener");
 
         return 1;
     }
@@ -148,24 +148,24 @@ tolua_lerror:
 #    endif
 }
 
-static int toaxlua_EventListenerController_registerScriptHandler(lua_State* tolua_S)
+static int toaxlua_ControllerEventListener_registerScriptHandler(lua_State* tolua_S)
 {
     if (nullptr == tolua_S)
         return 0;
 
     int argc                          = 0;
-    ax::EventListenerController* self = nullptr;
+    ax::ControllerEventListener* self = nullptr;
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
-    if (!tolua_isusertype(tolua_S, 1, "ax.EventListenerController", 0, &tolua_err))
+    if (!tolua_isusertype(tolua_S, 1, "ax.ControllerEventListener", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
 
-    self = static_cast<ax::EventListenerController*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<ax::ControllerEventListener*>(tolua_tousertype(tolua_S, 1, 0));
 #    if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        tolua_error(tolua_S, "invalid 'self' in function 'toaxlua_EventListenerController_registerScriptHandler'\n",
+        tolua_error(tolua_S, "invalid 'self' in function 'toaxlua_ControllerEventListener_registerScriptHandler'\n",
                     nullptr);
         return 0;
     }
@@ -194,8 +194,8 @@ static int toaxlua_EventListenerController_registerScriptHandler(lua_State* tolu
         {
             ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
 
-            self->onConnected = [=](ax::Controller* controller, Event* event) {
-                tolua_pushusertype(Ls, (void*)controller, "ax.Controller");
+            self->onConnected = [=](ax::ControllerEvent* event) {
+                tolua_pushusertype(Ls, (void*)event->getController(), "ax.Controller");
                 int ID     = (event) ? (int)event->_ID : -1;
                 int* luaID = (event) ? &event->_luaID : NULL;
                 toluafix_pushusertype_object(Ls, ID, luaID, (void*)event, "ax.event");
@@ -207,8 +207,8 @@ static int toaxlua_EventListenerController_registerScriptHandler(lua_State* tolu
         {
             ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
 
-            self->onDisconnected = [=](ax::Controller* controller, Event* event) {
-                tolua_pushusertype(Ls, (void*)controller, "ax.Controller");
+            self->onDisconnected = [=](ax::ControllerEvent* event) {
+                tolua_pushusertype(Ls, (void*)event->getController(), "ax.Controller");
                 int ID     = (event) ? (int)event->_ID : -1;
                 int* luaID = (event) ? &event->_luaID : NULL;
                 toluafix_pushusertype_object(Ls, ID, luaID, (void*)event, "ax.event");
@@ -221,9 +221,9 @@ static int toaxlua_EventListenerController_registerScriptHandler(lua_State* tolu
 
             ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
 
-            self->onKeyDown = [=](ax::Controller* controller, int keyCode, Event* event) {
-                tolua_pushusertype(Ls, (void*)controller, "ax.Controller");
-                tolua_pushnumber(Ls, (lua_Number)keyCode);
+            self->onKeyDown = [=](ax::ControllerEvent* event) {
+                tolua_pushusertype(Ls, (void*)event->getController(), "ax.Controller");
+                tolua_pushnumber(Ls, (lua_Number)event->getKeyCode());
                 int ID     = (event) ? (int)event->_ID : -1;
                 int* luaID = (event) ? &event->_luaID : NULL;
                 toluafix_pushusertype_object(Ls, ID, luaID, (void*)event, "ax.event");
@@ -235,9 +235,9 @@ static int toaxlua_EventListenerController_registerScriptHandler(lua_State* tolu
         {
             ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
 
-            self->onKeyUp = [=](ax::Controller* controller, int keyCode, Event* event) {
-                tolua_pushusertype(Ls, (void*)controller, "ax.Controller");
-                tolua_pushnumber(Ls, (lua_Number)keyCode);
+            self->onKeyUp = [=](ax::ControllerEvent* event) {
+                tolua_pushusertype(Ls, (void*)event->getController(), "ax.Controller");
+                tolua_pushnumber(Ls, (lua_Number)event->getKeyCode());
                 int ID     = (event) ? (int)event->_ID : -1;
                 int* luaID = (event) ? &event->_luaID : NULL;
                 toluafix_pushusertype_object(Ls, ID, luaID, (void*)event, "ax.event");
@@ -249,9 +249,9 @@ static int toaxlua_EventListenerController_registerScriptHandler(lua_State* tolu
         {
             ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
 
-            self->onKeyRepeat = [=](ax::Controller* controller, int keyCode, Event* event) {
-                tolua_pushusertype(Ls, (void*)controller, "ax.Controller");
-                tolua_pushnumber(Ls, (lua_Number)keyCode);
+            self->onKeyRepeat = [=](ax::ControllerEvent* event) {
+                tolua_pushusertype(Ls, (void*)event->getController(), "ax.Controller");
+                tolua_pushnumber(Ls, (lua_Number)event->getKeyCode());
                 int ID     = (event) ? (int)event->_ID : -1;
                 int* luaID = (event) ? &event->_luaID : NULL;
                 toluafix_pushusertype_object(Ls, ID, luaID, (void*)event, "ax.event");
@@ -263,9 +263,9 @@ static int toaxlua_EventListenerController_registerScriptHandler(lua_State* tolu
         {
             ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
 
-            self->onAxisEvent = [=](ax::Controller* controller, int keyCode, Event* event) {
-                tolua_pushusertype(Ls, (void*)controller, "ax.Controller");
-                tolua_pushnumber(Ls, (lua_Number)keyCode);
+            self->onAxisEvent = [=](ax::ControllerEvent* event) {
+                tolua_pushusertype(Ls, (void*)event->getController(), "ax.Controller");
+                tolua_pushnumber(Ls, (lua_Number)event->getKeyCode());
                 int ID     = (event) ? (int)event->_ID : -1;
                 int* luaID = (event) ? &event->_luaID : NULL;
                 toluafix_pushusertype_object(Ls, ID, luaID, (void*)event, "ax.event");
@@ -289,14 +289,14 @@ tolua_lerror:
 #    endif
 }
 
-static void extendEventListenerController(lua_State* L)
+static void extendControllerEventListener(lua_State* L)
 {
-    lua_pushstring(L, "ax.EventListenerController");
+    lua_pushstring(L, "ax.ControllerEventListener");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {
-        tolua_function(L, "clone", toaxlua_EventListenerController_clone);
-        tolua_function(L, "registerScriptHandler", toaxlua_EventListenerController_registerScriptHandler);
+        tolua_function(L, "clone", toaxlua_ControllerEventListener_clone);
+        tolua_function(L, "registerScriptHandler", toaxlua_ControllerEventListener_registerScriptHandler);
     }
     lua_pop(L, 1);
 }
@@ -374,7 +374,7 @@ int register_all_ax_controller_manual(lua_State* L)
     if (nullptr == L)
         return 0;
 
-    extendEventListenerController(L);
+    extendControllerEventListener(L);
     extendController(L);
 
     return 0;

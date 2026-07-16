@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright(c) Live2D Inc. All rights reserved.
  *
  * Use of this source code is governed by the Live2D Open Software license
@@ -46,6 +46,12 @@ void CubismModelUserData::Delete(CubismModelUserData* modelUserData)
 void CubismModelUserData::ParseUserData(const csmByte* buffer, const csmSizeInt size)
 {
     CubismModelUserDataJson* json = CSM_NEW CubismModelUserDataJson(buffer, size);
+
+    if (!json->IsValid())
+    {
+        CSM_DELETE(json);
+        return;
+    }
 
     const ModelUserDataType typeOfArtMesh = CubismFramework::GetIdManager()->GetId(ArtMesh);
 

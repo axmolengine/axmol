@@ -30,8 +30,7 @@ THE SOFTWARE.
 #include "axmol/renderer/TextureCache.h"
 
 #include <errno.h>
-#include <stack>
-#include <cctype>
+#include <ctype.h>
 #include <list>
 
 #include "axmol/renderer/Texture2D.h"
@@ -42,7 +41,7 @@ THE SOFTWARE.
 #include "axmol/platform/FileUtils.h"
 #include "axmol/base/Utils.h"
 #include "axmol/base/NinePatchImageParser.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 
 using namespace std;
 
@@ -818,12 +817,12 @@ std::string TextureCache::getCachedTextureInfo() const
         Texture2D* tex   = texture.second;
         unsigned int bpp = tex->getBitsPerPixelForFormat();
         // Each texture takes up width * height * bytesPerPixel bytes.
-        auto bytes = tex->getPixelsWide() * tex->getPixelsHigh() * bpp / 8;
+        auto bytes = tex->getWidth() * tex->getHeight() * bpp / 8;
         totalBytes += bytes;
         count++;
         auto msg = fmt::format_to_z(tmp, "\"{}\" rc={} id={} {} x {} @ {} bpp => {} KB\n", texture.first,
-                                    tex->getReferenceCount(), fmt::ptr(tex->getRHITexture()), tex->getPixelsWide(),
-                                    tex->getPixelsHigh(), bpp, bytes / 1024);
+                                    tex->getReferenceCount(), fmt::ptr(tex->getRHITexture()), tex->getWidth(),
+                                    tex->getHeight(), bpp, bytes / 1024);
 
         ret += msg;
     }

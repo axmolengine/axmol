@@ -6,8 +6,8 @@ local json = require 'cjson'
 
 require "axmol.cocostudio.StudioConstants"
 
-function axext.sendTriggerEvent(event)
-    local triggerObjArr = axext.TriggerMng.getInstance():get(event)
+function ax.sendTriggerEvent(event)
+    local triggerObjArr = ax.TriggerMng.getInstance():get(event)
 
     if nil == triggerObjArr then
         return
@@ -21,16 +21,16 @@ function axext.sendTriggerEvent(event)
     end
 end
 
-function axext.registerTriggerClass(className, createFunc)
-    axext.TInfo.new(className,createFunc)
+function ax.registerTriggerClass(className, createFunc)
+    ax.TInfo.new(className,createFunc)
 end
 
-axext.TInfo = class("TInfo")
-axext.TInfo._className = ""
-axext.TInfo._fun = nil
+ax.TInfo = class("TInfo")
+ax.TInfo._className = ""
+ax.TInfo._fun = nil
 
-function axext.TInfo:ctor(c,f)
-     -- @param {String|axext.TInfo}c
+function ax.TInfo:ctor(c,f)
+     -- @param {String|ax.TInfo}c
      -- @param {Function}f
     if nil ~= f then
         self._className = c
@@ -40,30 +40,30 @@ function axext.TInfo:ctor(c,f)
         self._fun       = c._fun
     end
 
-    axext.ObjectFactory.getInstance():registerType(self)
+    ax.ObjectFactory.getInstance():registerType(self)
 end
 
-axext.ObjectFactory = class("ObjectFactory")
-axext.ObjectFactory._typeMap = nil
-axext.ObjectFactory._instance = nil
+ax.ObjectFactory = class("ObjectFactory")
+ax.ObjectFactory._typeMap = nil
+ax.ObjectFactory._instance = nil
 
-function axext.ObjectFactory:ctor()
+function ax.ObjectFactory:ctor()
     self._typeMap = {}
 end
 
-function axext.ObjectFactory.getInstance()
-    if nil == axext.ObjectFactory._instance then
-        axext.ObjectFactory._instance = axext.ObjectFactory.new()
+function ax.ObjectFactory.getInstance()
+    if nil == ax.ObjectFactory._instance then
+        ax.ObjectFactory._instance = ax.ObjectFactory.new()
     end
 
-    return axext.ObjectFactory._instance
+    return ax.ObjectFactory._instance
 end
 
-function axext.ObjectFactory.destroyInstance()
-    axext.ObjectFactory._instance = nil
+function ax.ObjectFactory.destroyInstance()
+    ax.ObjectFactory._instance = nil
 end
 
-function axext.ObjectFactory:createObject(classname)
+function ax.ObjectFactory:createObject(classname)
     local obj = nil
     local t   = self._typeMap[classname]
     if nil ~= t then
@@ -73,32 +73,32 @@ function axext.ObjectFactory:createObject(classname)
     return obj
 end
 
-function axext.ObjectFactory:registerType(t)
+function ax.ObjectFactory:registerType(t)
     self._typeMap[t._className] = t
 end
 
-axext.TriggerObj = class("TriggerObj")
-axext.TriggerObj._cons = {}
-axext.TriggerObj._acts = {}
-axext.TriggerObj._enable = false
-axext.TriggerObj._id   = 0
-axext.TriggerObj._vInt = {}
+ax.TriggerObj = class("TriggerObj")
+ax.TriggerObj._cons = {}
+ax.TriggerObj._acts = {}
+ax.TriggerObj._enable = false
+ax.TriggerObj._id   = 0
+ax.TriggerObj._vInt = {}
 
-function axext.TriggerObj.extend(target)
+function ax.TriggerObj.extend(target)
     local t = tolua.getpeer(target)
     if not t then
         t = {}
         tolua.setpeer(target, t)
     end
-    setmetatable(t, axext.TriggerObj)
+    setmetatable(t, ax.TriggerObj)
     return target
 end
 
-function axext.TriggerObj:ctor()
+function ax.TriggerObj:ctor()
     self:init()
 end
 
-function axext.TriggerObj:init()
+function ax.TriggerObj:init()
     self._id = 0
     self._enable = true
     self._cons = {}
@@ -106,7 +106,7 @@ function axext.TriggerObj:init()
     self._vInt = {}
 end
 
-function axext.TriggerObj:detect()
+function ax.TriggerObj:detect()
     if (not self._enable) or (#self._cons == 0) then
         return true
     end
@@ -122,7 +122,7 @@ function axext.TriggerObj:detect()
     return ret
 end
 
-function axext.TriggerObj:done()
+function ax.TriggerObj:done()
     if (not self._enable) or (#self._acts == 0) then
         return
     end
@@ -136,7 +136,7 @@ function axext.TriggerObj:done()
     end
 end
 
-function axext.TriggerObj:removeAll()
+function ax.TriggerObj:removeAll()
     local obj = nil
     for i=1, #self._cons do
         obj = self._cons[i]
@@ -155,7 +155,7 @@ function axext.TriggerObj:removeAll()
     self._acts = {}
 end
 
-function axext.TriggerObj:serialize(jsonValue)
+function ax.TriggerObj:serialize(jsonValue)
     self._id = jsonValue["id"]
     local count = 0
 
@@ -167,7 +167,7 @@ function axext.TriggerObj:serialize(jsonValue)
             local subDict = cons[i]
             local className = subDict["classname"]
             if nil ~= className then
-                local obj = axext.ObjectFactory.getInstance():createObject(className)
+                local obj = ax.ObjectFactory.getInstance():createObject(className)
                 assert(nil ~= obj, string.format("class named %s can not implement!",className))
                 obj:serialize(subDict)
                 obj:init()
@@ -183,7 +183,7 @@ function axext.TriggerObj:serialize(jsonValue)
             local  subAction = actions[i]
             local  className = subAction["classname"]
             if nil ~= className then
-                local act = axext.ObjectFactory.getInstance():createObject(className)
+                local act = ax.ObjectFactory.getInstance():createObject(className)
                 assert(nil ~= act ,string.format("class named %s can not implement!",className))
                 act:serialize(subAction)
                 act:init()
@@ -205,50 +205,50 @@ function axext.TriggerObj:serialize(jsonValue)
     end
 end
 
-function axext.TriggerObj:getId()
+function ax.TriggerObj:getId()
     return self._id
 end
 
-function axext.TriggerObj:setEnable(enable)
+function ax.TriggerObj:setEnable(enable)
     self._enable = enable
 end
 
-function axext.TriggerObj:getEvents()
+function ax.TriggerObj:getEvents()
     return self._vInt
 end
 
-axext.TriggerMng = class("TriggerMng")
-axext.TriggerMng._eventTriggers = nil
-axext.TriggerMng._triggerObjs = nil
-axext.TriggerMng._movementDispatches =  nil
-axext.TriggerMng._instance  = nil
+ax.TriggerMng = class("TriggerMng")
+ax.TriggerMng._eventTriggers = nil
+ax.TriggerMng._triggerObjs = nil
+ax.TriggerMng._movementDispatches =  nil
+ax.TriggerMng._instance  = nil
 
-function axext.TriggerMng:ctor()
+function ax.TriggerMng:ctor()
     self._triggerObjs = {}
     self._movementDispatches = {}
     self._eventTriggers = {}
 end
 
-function axext.TriggerMng.getInstance()
-    if axext.TriggerMng._instance == nil then
-        axext.TriggerMng._instance = axext.TriggerMng.new()
+function ax.TriggerMng.getInstance()
+    if ax.TriggerMng._instance == nil then
+        ax.TriggerMng._instance = ax.TriggerMng.new()
     end
 
-    return axext.TriggerMng._instance
+    return ax.TriggerMng._instance
 end
 
-function axext.TriggerMng.destroyInstance()
-    if axext.TriggerMng._instance ~= nil then
-        axext.TriggerMng._instance:removeAll()
-        axext.TriggerMng._instance = nil
+function ax.TriggerMng.destroyInstance()
+    if ax.TriggerMng._instance ~= nil then
+        ax.TriggerMng._instance:removeAll()
+        ax.TriggerMng._instance = nil
     end
 end
 
-function axext.TriggerMng:triggerMngVersion()
+function ax.TriggerMng:triggerMngVersion()
     return "1.0.0.0"
 end
 
-function axext.TriggerMng:parse(jsonStr)
+function ax.TriggerMng:parse(jsonStr)
     local parseTable = json.decode(jsonStr,1)
     if nil == parseTable then
         return
@@ -257,7 +257,7 @@ function axext.TriggerMng:parse(jsonStr)
     local count = #parseTable
     for i = 1, count do
         local subDict = parseTable[i]
-        local triggerObj = axext.TriggerObj.new()
+        local triggerObj = ax.TriggerObj.new()
         triggerObj:serialize(subDict)
         local events = triggerObj:getEvents()
         for j = 1, #events do
@@ -269,15 +269,15 @@ function axext.TriggerMng:parse(jsonStr)
     end
 end
 
-function axext.TriggerMng:get(event)
+function ax.TriggerMng:get(event)
     return self._eventTriggers[event]
 end
 
-function axext.TriggerMng:getTriggerObj(id)
+function ax.TriggerMng:getTriggerObj(id)
     return self._triggerObjs[id]
 end
 
-function axext.TriggerMng:add(event,triggerObj)
+function ax.TriggerMng:add(event,triggerObj)
     local eventTriggers = self._eventTriggers[event]
     if nil == eventTriggers then
         eventTriggers = {}
@@ -297,7 +297,7 @@ function axext.TriggerMng:add(event,triggerObj)
     end
 end
 
-function axext.TriggerMng:removeAll( )
+function ax.TriggerMng:removeAll( )
     for k in pairs(self._eventTriggers) do
         local triObjArr = self._eventTriggers[k]
         for j = 1, #triObjArr do
@@ -308,7 +308,7 @@ function axext.TriggerMng:removeAll( )
     self._eventTriggers = {}
 end
 
-function axext.TriggerMng:remove(event, obj)
+function ax.TriggerMng:remove(event, obj)
 
     if nil ~= obj then
         return self:removeObjByEvent(event, obj)
@@ -335,7 +335,7 @@ function axext.TriggerMng:remove(event, obj)
     return true
 end
 
-function axext.TriggerMng:removeObjByEvent(event, obj)
+function ax.TriggerMng:removeObjByEvent(event, obj)
     assert(event >= 0,"event must be larger than 0")
     if nil == self._eventTriggers then
         return false
@@ -356,7 +356,7 @@ function axext.TriggerMng:removeObjByEvent(event, obj)
     end
 end
 
-function axext.TriggerMng:removeTriggerObj(id)
+function ax.TriggerMng:removeTriggerObj(id)
     local obj = self.getTriggerObj(id)
 
     if nil == obj then
@@ -371,17 +371,17 @@ function axext.TriggerMng:removeTriggerObj(id)
     return true
 end
 
-function axext.TriggerMng:isEmpty()
+function ax.TriggerMng:isEmpty()
     return (self._eventTriggers ~= nil) or #self._eventTriggers <= 0
 end
 
 function __onParseConfig(configType,jasonStr)
     if configType == ax.ConfigType.COCOSTUDIO then
-        axext.TriggerMng.getInstance():parse(jasonStr)
+        ax.TriggerMng.getInstance():parse(jasonStr)
     end
 end
 
-function axext.AnimationInfo(_name, _startIndex, _endIndex)
-    assert(nil ~= _name and type(_name) == "string" and _startIndex ~= nil and type(_startIndex) == "number" and _endIndex ~= nil and  type(_endIndex) == "number", "axext.AnimationInfo() - invalid input parameters")
+function ax.AnimationInfo(_name, _startIndex, _endIndex)
+    assert(nil ~= _name and type(_name) == "string" and _startIndex ~= nil and type(_startIndex) == "number" and _endIndex ~= nil and  type(_endIndex) == "number", "ax.AnimationInfo() - invalid input parameters")
     return { name = _name, startIndex = _startIndex,  endIndex = _endIndex}
 end

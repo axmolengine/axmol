@@ -78,7 +78,7 @@ static Mat4 getRotationMatrix(const Vec3& gravity, const Vec3& geomagnetic)
     if (normsqA < freeFallGravitySquared)
     {
         // gravity less than 10% of normal value
-        return Mat4::IDENTITY;
+        return Mat4::identity;
     }
 
     const float Ex    = geomagnetic.x;
@@ -93,7 +93,7 @@ static Mat4 getRotationMatrix(const Vec3& gravity, const Vec3& geomagnetic)
     {
         // device is close to free fall (or in space?), or close to
         // magnetic north pole. Typical values are  > 100.
-        return Mat4::IDENTITY;
+        return Mat4::identity;
     }
     const float invH = 1.0f / normH;
     Hx *= invH;
@@ -158,7 +158,7 @@ static Mat4 getRotateEulerMatrix(float x, float y, float z)
 
 #endif
 
-VRGenericHeadTracker::VRGenericHeadTracker() : _localPosition(Vec3::ZERO)
+VRGenericHeadTracker::VRGenericHeadTracker() : _localPosition(Vec3::zero)
 {
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS) && !defined(AX_TARGET_OS_TVOS)
     _motionMgr = [[CMMotionManager alloc] init];
@@ -240,7 +240,7 @@ Mat4 VRGenericHeadTracker::getLocalRotation()
         return _deviceToDisplay * worldToDevice;
     }
     // bug!
-    return Mat4::IDENTITY;
+    return Mat4::identity;
 
 #elif (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
     static Vec3 prevAccel   = Vec3(0, 0, 0);
@@ -261,7 +261,7 @@ Mat4 VRGenericHeadTracker::getLocalRotation()
     Mat4 worldToDevice = rotMatrix * _worldToInertialReferenceFrame;
     return _deviceToDisplay * worldToDevice;
 #else
-    return Mat4::IDENTITY;
+    return Mat4::identity;
 #endif
 }
 }  // namespace experimental

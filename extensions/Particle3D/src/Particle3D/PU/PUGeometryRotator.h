@@ -90,7 +90,7 @@ protected:
     float _scaledRotationSpeed;
     bool _useOwnRotationSpeed;
     PUDynamicAttribute* _dynRotationSpeed;
-    Quaternion _q;
+    Quat _q;
     Vec3 _rotationAxis;
     bool _rotationAxisSet;
 

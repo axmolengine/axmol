@@ -33,6 +33,7 @@ THE SOFTWARE.
 
 #include "axmol/platform/PlatformMacros.h"
 #include "axmol/2d/ActionCoroutine.h"
+#include "axmol/base/PointerEvent.h"
 
 class TestList;
 class TestSuite;
@@ -41,9 +42,8 @@ class TestCase;
 namespace ax
 {
 class Director;
-class Touch;
 class Event;
-class EventListenerTouchOneByOne;
+class PointerEventListener;
 }  // namespace ax
 
 class TestController
@@ -62,7 +62,7 @@ public:
     void onEnterBackground();
     void onEnterForeground();
 
-    bool blockTouchBegan(ax::Touch* touch, ax::Event* event);
+    bool blockTouchBegan(ax::PointerEvent* event);
 
     void setCurrTestSuite(TestSuite* testSuite) { _testSuite = testSuite; }
     TestSuite* getCurrTestSuite() { return _testSuite; }
@@ -85,7 +85,7 @@ private:
     std::string _autoTestCaptureDirectory;
 
     ax::Director* _director;
-    ax::EventListenerTouchOneByOne* _touchListener;
+    ax::PointerEventListener* _pointerListener;
 
     std::string _logIndentation;
 };

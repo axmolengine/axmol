@@ -1,4 +1,4 @@
-﻿
+
 
 #include "EffekseerRenderer.CommonUtils.h"
 

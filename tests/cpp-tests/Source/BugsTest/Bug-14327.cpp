@@ -23,15 +23,6 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-//
-//  Bug-14327.cpp
-//  cocos2d_tests
-//
-//  Issue: https://github.com/cocos2d/cocos2d-x/pull/14327
-//  Please test in Windows
-//
-//
-
 #include "Bug-14327.h"
 
 #include "axmol/tlx/format.hpp"
@@ -64,7 +55,7 @@ bool Bug14327Layer::init()
         std::string pNormalSprite = "extensions/green_edit.png";
         _edit = ui::EditBox::create(editBoxSize + Size(0, 20), ui::Scale9Sprite::create(pNormalSprite));
         _edit->setPosition(Vec2(visibleOrigin.x + visibleSize.width / 2, visibleOrigin.y + visibleSize.height / 2));
-        _edit->setFontColor(Color32::RED);
+        _edit->setFontColor(Color32::red);
         _edit->setReturnType(ui::EditBox::KeyboardReturnType::DONE);
         _edit->setDelegate(this);
         this->addChild(_edit);

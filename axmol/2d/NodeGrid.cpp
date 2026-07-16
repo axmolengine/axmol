@@ -25,6 +25,7 @@
 #include "axmol/2d/NodeGrid.h"
 #include "axmol/2d/Grid.h"
 #include "axmol/renderer/Renderer.h"
+#include "axmol/scene/Camera.h"
 
 namespace ax
 {
@@ -74,8 +75,27 @@ void NodeGrid::setTarget(Node* target)
 
 NodeGrid::~NodeGrid()
 {
+    AX_SAFE_RELEASE(_gridCamera);
     AX_SAFE_RELEASE(_nodeGrid);
     AX_SAFE_RELEASE(_gridTarget);
+}
+
+Camera* NodeGrid::getGridCamera()
+{
+    if (!_gridCamera)
+    {
+        _gridCamera = Camera::createOrthographicView(_director->getCanvasSize(), -1024, 1024);
+        AX_SAFE_RETAIN(_gridCamera);
+    }
+    else
+    {
+        _gridCamera->initOrthographicView(_director->getCanvasSize(), -1024, 1024);
+    }
+
+    auto visitingCamera = Camera::getVisitingCamera();
+    _gridCamera->setCameraFlag(visitingCamera ? visitingCamera->getCameraFlag() : CameraFlag::DEFAULT);
+
+    return _gridCamera;
 }
 
 void NodeGrid::onGridBeginDraw()
@@ -107,18 +127,11 @@ void NodeGrid::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t p
         _modelViewTransform = this->transform(parentTransform);
     _transformUpdated = false;
 
-    // IMPORTANT:
-    // To ease the migration to v3.0, we still support the Mat4 stack,
-    // but it is deprecated and your code should not rely on it
-    _director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
+    auto activeGrid     = _nodeGrid && _nodeGrid->isActive();
+    auto previousCamera = const_cast<Camera*>(Camera::getVisitingCamera());
 
-    Director::Projection beforeProjectionType = Director::Projection::DEFAULT;
-    if (_nodeGrid && _nodeGrid->isActive())
-    {
-        beforeProjectionType = _director->getProjection();
-        _nodeGrid->set2DProjection();
-    }
+    auto gridCam        = activeGrid ? getGridCamera() : nullptr;
+    auto switchedCamera = gridCam != nullptr;
 
     onGridBeginDraw();
 
@@ -161,15 +174,31 @@ void NodeGrid::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t p
     // Please refer to https://github.com/cocos2d/cocos2d-x/pull/6920
     // setOrderOfArrival(0);
 
-    if (_nodeGrid && _nodeGrid->isActive())
+    if (_nodeGrid)
     {
-        // restore projection
-        _director->setProjection(beforeProjectionType);
+        // Capture may use the scene/XR camera, while blit still uses gridCam's
+        // canvas ortho matrix. Projecting the uploaded grid vertices/UVs keeps
+        // tile edges in the same camera space as the captured texture.
+        const auto& screenProjection = previousCamera ? previousCamera->getViewProjectionMatrix() : Mat4::identity;
+        _nodeGrid->setScreenProjectionForBlit(
+            _projectGridBlitToVisitingCamera && previousCamera ? &screenProjection : nullptr,
+            _director->getCanvasSize());
     }
+
+    // Switch to grid camera before blit so that Grid3D::blit() /
+    // TiledGrid3D::blit() pick up the grid camera's ortho VP matrix
+    // via Camera::getVisitingViewProjectionMatrix(), instead of the
+    // scene camera's VR perspective VP which would warp the grid mesh.
+    if (gridCam)
+        Camera::setVisitingCamera(gridCam);
 
     onGridEndDraw();
 
-    _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    if (_nodeGrid)
+        _nodeGrid->setScreenProjectionForBlit(nullptr, Vec2::zero);
+
+    if (gridCam || switchedCamera)
+        Camera::setVisitingCamera(previousCamera);
 }
 
 void NodeGrid::setGrid(GridBase* grid)

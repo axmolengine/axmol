@@ -65,7 +65,7 @@ bool FastTMXTiledMap::initWithTMXFile(std::string_view tmxFile, bool allowInvisi
 {
     AXASSERT(!tmxFile.empty(), "FastTMXTiledMap: tmx file should not be empty");
 
-    setContentSize(Vec2::ZERO);
+    setContentSize(Vec2::zero);
 
     TMXMapInfo* mapInfo = TMXMapInfo::create(tmxFile);
 
@@ -83,7 +83,7 @@ bool FastTMXTiledMap::initWithTMXFile(std::string_view tmxFile, bool allowInvisi
 
 bool FastTMXTiledMap::initWithXML(std::string_view tmxString, std::string_view resourcePath, bool allowInvisibleLayers)
 {
-    setContentSize(Vec2::ZERO);
+    setContentSize(Vec2::zero);
 
     TMXMapInfo* mapInfo = TMXMapInfo::createWithXML(tmxString, resourcePath);
     if (!mapInfo)
@@ -95,7 +95,7 @@ bool FastTMXTiledMap::initWithXML(std::string_view tmxString, std::string_view r
     return true;
 }
 
-FastTMXTiledMap::FastTMXTiledMap() : _mapSize(Vec2::ZERO), _tileSize(Vec2::ZERO), _mapOrientation(0), _mapInfo(nullptr)
+FastTMXTiledMap::FastTMXTiledMap() : _mapSize(Vec2::zero), _tileSize(Vec2::zero), _mapOrientation(0), _mapInfo(nullptr)
 {}
 
 FastTMXTiledMap::~FastTMXTiledMap()

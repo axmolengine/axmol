@@ -22,7 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "axmol/rhi/SamplerCache.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include "axmol/tlx/singleton.hpp"
 
 namespace ax::rhi

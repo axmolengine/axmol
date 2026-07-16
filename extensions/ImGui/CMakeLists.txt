@@ -37,7 +37,7 @@ list(APPEND SOURCE
 list(APPEND SOURCE src/ImGui/backends/imgui_impl_axmol.cpp)
 list(APPEND HEADER src/ImGui/backends/imgui_impl_axmol.h)
 
-if(WINRT OR ANDROID OR IOS)
+if(WINRT OR ANDROID OR IOS OR WASM)
   list(APPEND SOURCE src/ImGui/backends/imgui_impl_axmol_sw.cpp)
   list(APPEND HEADER src/ImGui/backends/imgui_impl_axmol_sw.h)
 else()

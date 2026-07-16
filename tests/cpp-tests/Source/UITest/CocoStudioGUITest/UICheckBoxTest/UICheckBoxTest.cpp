@@ -81,9 +81,9 @@ bool UICheckBoxTest::init()
     return false;
 }
 
-void UICheckBoxTest::selectedEvent(Object* pSender, CheckBox::EventType type)
+void UICheckBoxTest::selectedEvent(Object* pSender, CheckBox::EventType event)
 {
-    switch (type)
+    switch (event)
     {
     case CheckBox::EventType::SELECTED:
         _displayValueLabel->setString("Selected");
@@ -148,7 +148,7 @@ bool UICheckBoxDefaultBehaviorTest::init()
         // Create the checkbox
         CheckBox* checkBox2 = CheckBox::create("cocosui/check_box_normal.png", "cocosui/check_box_active.png");
         checkBox2->setPosition(Vec2(widgetSize.width / 2.0f - 150, widgetSize.height / 2.0f));
-        checkBox2->ignoreContentAdaptWithSize(false);
+        checkBox2->setAutoSize(true);
         checkBox2->setZoomScale(0.5f);
         checkBox2->setContentSize(Size(80.0f, 80.0f));
         checkBox2->setName("bigCheckBox");

@@ -294,7 +294,7 @@ RenderContext* DriverImpl::createRenderContext(SurfaceHandle surface)
     return new RenderContextImpl(this, surface);
 }
 
-Buffer* DriverImpl::createBuffer(std::size_t size, BufferType type, BufferUsage usage, const void* initial)
+Buffer* DriverImpl::createBuffer(size_t size, BufferType type, BufferUsage usage, const void* initial)
 {
     return new BufferImpl(_device, _context, size, type, usage, initial);
 }
@@ -304,9 +304,20 @@ Buffer* DriverImpl::createBuffer(std::size_t size, BufferType type, BufferUsage 
  * @param descriptor Specifies texture description.
  * @return A Texture object.
  */
-Texture* DriverImpl::createTexture(const TextureDesc& descriptor)
+Texture* DriverImpl::createTexture(const TextureDesc& descriptor, std::optional<Color>)
 {
     return new TextureImpl(_device, descriptor);
+}
+
+Texture* DriverImpl::createTextureFromNativeHandle(const ExternalTextureDesc& descriptor)
+{
+    auto nativeTexture = static_cast<ID3D11Texture2D*>(descriptor.nativeTexture.ptr);
+    if (!nativeTexture)
+        return nullptr;
+
+    auto texture = new TextureImpl(_device, nativeTexture);
+    texture->updateTextureDesc(descriptor.desc);
+    return texture;
 }
 
 RenderTarget* DriverImpl::createRenderTarget(Texture* colorAttachment, Texture* depthAttachment)

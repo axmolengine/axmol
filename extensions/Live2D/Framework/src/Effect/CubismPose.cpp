@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright(c) Live2D Inc. All rights reserved.
  *
  * Use of this source code is governed by the Live2D Open Software license
@@ -70,8 +70,12 @@ CubismPose::~CubismPose()
 
 CubismPose* CubismPose::Create(const csmByte* pose3json, csmSizeInt size)
 {
-    CubismPose*         ret = CSM_NEW CubismPose();
     Utils::CubismJson*  json = Utils::CubismJson::Create(pose3json, size);
+    if (!json)
+    {
+        return NULL;
+    }
+    CubismPose* ret = CSM_NEW CubismPose();
     Utils::Value&       root = json->GetRoot();
 
     // フェード時間の指定
@@ -225,6 +229,12 @@ void CubismPose::DoFade(CubismModel* model, csmFloat32 deltaTimeSeconds, csmInt3
             }
 
             visiblePartIndex = i;
+            if (_fadeTimeSeconds == 0.0f)
+            {
+                newOpacity = 1.0f;
+                continue;
+            }
+
             newOpacity = model->GetPartOpacity(partIndex);
 
             // 新しい不透明度を計算

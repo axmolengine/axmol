@@ -27,7 +27,7 @@ if(ANDROID)
   set(_AX_PLATFORM_SPECIFIC_SRC
     platform/android/Application-android.cpp
     platform/android/Common-android.cpp
-    platform/android/RenderViewImpl-android.cpp
+    platform/android/RenderView-android.cpp
     platform/android/FileUtils-android.cpp
   )
 elseif(WINDOWS)
@@ -81,14 +81,14 @@ elseif(APPLE)
       platform/mac/Common-mac.mm
       platform/mac/Device-mac.mm
     )
-    set_source_files_properties(platform/desktop/RenderViewImpl.cpp PROPERTIES LANGUAGE OBJCXX)
+    set_source_files_properties(platform/pc/RenderView-pc.cpp PROPERTIES LANGUAGE OBJCXX)
   elseif(IOS)
     set(_AX_PLATFORM_SPECIFIC_HEADER
       ${_AX_PLATFORM_SPECIFIC_HEADER}
       platform/ios/Application-ios.h
       platform/ios/DirectorCaller-ios.h
       platform/ios/RenderHostView-ios.h
-      platform/ios/RenderViewImpl-ios.h
+      platform/ios/RenderView-ios.h
       platform/ios/StdC-ios.h
       platform/ios/InputView-ios.h
       platform/ios/AxmolAppController.h
@@ -101,7 +101,7 @@ elseif(APPLE)
       platform/ios/Device-ios.mm
       platform/ios/DirectorCaller-ios.mm
       platform/ios/RenderHostView-ios.mm
-      platform/ios/RenderViewImpl-ios.mm
+      platform/ios/RenderView-ios.mm
       platform/ios/Image-ios.mm
       platform/ios/InputView-ios.mm
       platform/ios/AxmolAppController.mm
@@ -161,22 +161,23 @@ elseif(EMSCRIPTEN)
   endif()
 endif()
 
-# Add desktop-specific sources for platforms where GLFW is available
+# Add PC-specific sources for platforms where GLFW is available
 if((WIN32 AND NOT WINRT) OR LINUX OR MACOSX OR WASM)
-  list(APPEND _AX_PLATFORM_SPECIFIC_HEADER "platform/desktop/RenderViewImpl.h")
-  list(APPEND _AX_PLATFORM_SPECIFIC_SRC "platform/desktop/RenderViewImpl.cpp")
-  list(APPEND _AX_PLATFORM_SPECIFIC_SRC "platform/desktop/Device-desktop.cpp")
+  list(APPEND _AX_PLATFORM_SPECIFIC_HEADER "platform/pc/RenderView-pc.h")
+  list(APPEND _AX_PLATFORM_SPECIFIC_SRC "platform/pc/RenderView-pc.cpp")
+  list(APPEND _AX_PLATFORM_SPECIFIC_SRC "platform/pc/Device-pc.cpp")
 endif()
 
 set(_AX_PLATFORM_HEADER
   ${_AX_PLATFORM_SPECIFIC_HEADER}
   platform/Application.h
-  platform/ApplicationBase.h
+  platform/ApplicationCore.h
   platform/Common.h
   platform/Device.h
   platform/FileUtils.h
   platform/GL.h
   platform/RenderView.h
+  platform/RenderViewCore.h
   platform/Image.h
   platform/PlatformConfig.h
   platform/PlatformDefine.h
@@ -191,10 +192,10 @@ set(_AX_PLATFORM_HEADER
 set(_AX_PLATFORM_SRC
   ${_AX_PLATFORM_SPECIFIC_SRC}
   platform/SAXParser.cpp
-  platform/RenderView.cpp
+  platform/RenderViewCore.cpp
   platform/FileUtils.cpp
   platform/Image.cpp
   platform/FileStream.cpp
-  platform/ApplicationBase.cpp
+  platform/ApplicationCore.cpp
   platform/CommandLineArgs.cpp
 )

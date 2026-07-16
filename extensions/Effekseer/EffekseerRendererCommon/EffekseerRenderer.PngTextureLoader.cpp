@@ -1,4 +1,4 @@
-﻿#ifndef __DISABLED_DEFAULT_TEXTURE_LOADER__
+#ifndef __DISABLED_DEFAULT_TEXTURE_LOADER__
 #include "EffekseerRenderer.PngTextureLoader.h"
 #include <chrono>
 

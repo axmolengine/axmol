@@ -26,7 +26,7 @@
 #include "../testResource.h"
 #include "axmol/axmol.h"
 #include "axmol/renderer/Shaders.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 
 using namespace ax;
 USING_NS_AX_EXT;
@@ -107,7 +107,7 @@ bool ShaderNode::initWithVertex(std::string_view vert, std::string_view frag)
     auto inputDesc = _programState->getVertexInputDesc("a_position");
 
     // auto vertexLayout = _programState->getMutableVertexLayout();
-    // vertexLayout->setAttrib("a_position", attrPosLoc, rhi::VertexFormat::FLOAT4, 0, false);
+    // vertexLayout->setAttrib("a_position", attrPosLoc, rhi::VertexElementType::FLOAT4, 0, false);
 
     float w = SIZE_X, h = SIZE_Y;
     Vec3 vertices[6] = {Vec3(0.0f, 0.0f, 1.0f), Vec3(w, 0.0f, 1.0f), Vec3(w, h, 1.0f),
@@ -158,7 +158,7 @@ void ShaderNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
     _programState->setUniform(_locResolution, &_resolution, sizeof(_resolution));
     _programState->setUniform(_locCenter, &_center, sizeof(_center));
 
-    auto projectionMatrix = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    auto projectionMatrix = Camera::getVisitingViewProjectionMatrix();
     auto finalMatrix      = projectionMatrix * transform;
 
     _programState->setUniform(_locMVP, finalMatrix.m, sizeof(finalMatrix.m));
@@ -384,6 +384,7 @@ public:
     void initProgram();
 
     static SpriteBlur* create(const char* pszFileName);
+    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
     void setBlurRadius(float radius);
     void setBlurSampleNum(float num);
 
@@ -419,7 +420,7 @@ bool SpriteBlur::initWithTexture(Texture2D* texture, const Rect& rect)
     {
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
         auto listener =
-            EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom* event) { initProgram(); });
+            CustomEventListener::create(EVENT_RENDERER_RECREATED, [this](CustomEvent* event) { initProgram(); });
 
         _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 #endif
@@ -440,13 +441,17 @@ void SpriteBlur::initProgram()
     setProgramState(programState);
     AX_SAFE_RELEASE(programState);
 
-    auto size = getTexture()->getContentSizeInPixels();
+    auto size = getTexture()->getPixelSize();
 
     SET_UNIFORM(_programState, "resolution", size);
     SET_UNIFORM(_programState, "blurRadius", _blurRadius);
     SET_UNIFORM(_programState, "sampleNum", 7.0f);
-    SET_UNIFORM(_programState, "u_PMatrix",
-                Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION));
+}
+
+void SpriteBlur::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+{
+    SET_UNIFORM(_programState, "u_PMatrix", Camera::getVisitingViewProjectionMatrix());
+    Sprite::draw(renderer, transform, flags);
 }
 
 void SpriteBlur::setBlurRadius(float radius)
@@ -580,7 +585,7 @@ bool ShaderRetroEffect::init()
         auto s = director->getCanvasSize();
 
         _label = Label::createWithBMFont("fonts/west_england-64.fnt", "RETRO EFFECT");
-        _label->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+        _label->setAnchorPoint(Anchors::center);
         _label->setProgramState(p);
         AX_SAFE_RELEASE(p);
 
@@ -598,7 +603,7 @@ bool ShaderRetroEffect::init()
 void ShaderRetroEffect::update(float dt)
 {
     _accum += dt;
-    int letterCount = _label->getStringLength();
+    int letterCount = _label->getCharCount();
     for (int i = 0; i < letterCount; ++i)
     {
         auto sprite = _label->getLetter(i);

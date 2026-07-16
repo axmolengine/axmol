@@ -28,8 +28,8 @@
 
 #include "../../testResource.h"
 
-#include "axmol/ui/UILoadingBar.h"
-#include "axmol/ui/UIButton.h"
+#include "axmol/ui/LoadingBar.h"
+#include "axmol/ui/Button.h"
 #include "axmol/network/Downloader.h"
 
 #include "axmol/tlx/format.hpp"
@@ -72,7 +72,7 @@ struct DownloaderTest : public TestCase
         TAG_SPRITE,
     };
 
-    Node* createDownloadView(const char* name, const ax::ui::Button::ccWidgetClickCallback& callback)
+    Node* createDownloadView(const char* name, const ax::ui::Button::ClickEventHandler& callback)
     {
         Size viewSize(220, 120);
         float margin = 5;
@@ -100,7 +100,7 @@ struct DownloaderTest : public TestCase
         // add a progress bar
         auto bar = ui::LoadingBar::create("ccs-res/cocosui/sliderProgress.png");
         bar->setTag(TAG_PROGRESS_BAR);
-        bar->ignoreContentAdaptWithSize(false);
+        bar->setAutoSize(true);
         bar->setAnchorPoint(Vec2(0.5f, 0.0f));
         bar->setContentSize(Size(viewSize.width - margin * 2, btn->getContentSize().height));
         bar->setPosition(btn->getPosition());

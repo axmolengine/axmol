@@ -2,6 +2,7 @@
 #include "axmol/rhi/RenderTarget.h"
 #include "axmol/platform/GL.h"
 #include "axmol/rhi/opengl/OpenGLState.h"
+#include "axmol/tlx/vector.hpp"
 
 namespace ax::rhi::gl
 {
@@ -28,7 +29,7 @@ public:
     GLuint _FBO = 0;
     tlx::pod_vector<GLenum> _GLbufs;
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-    EventListenerCustom* _rendererRecreatedListener{nullptr};
+    CustomEventListener* _rendererRecreatedListener{nullptr};
 #endif
 };
 

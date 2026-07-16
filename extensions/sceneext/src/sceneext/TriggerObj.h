@@ -27,7 +27,7 @@ THE SOFTWARE.
 
 #include "sceneext/sceneext.h"
 #include "axmol/base/Vector.h"
-#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/CustomEventListener.h"
 
 namespace ax::ext
 {
@@ -81,7 +81,7 @@ private:
     ax::Vector<BaseTriggerAction*> _acts;
     unsigned int _id;
     bool _enabled;
-    ax::Vector<ax::EventListenerCustom*> _listeners;
+    ax::Vector<ax::CustomEventListener*> _listeners;
 };
 
 }  // namespace ax::ext

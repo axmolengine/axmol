@@ -35,44 +35,49 @@
 #include <spine/Animation.h>
 #include <spine/PathConstraint.h>
 #include <spine/PathConstraintData.h>
+#include <spine/PathConstraintPose.h>
 #include <spine/Property.h>
 #include <spine/Slot.h>
 #include <spine/SlotData.h>
 
 using namespace spine;
 
-RTTI_IMPL(PathConstraintMixTimeline, CurveTimeline)
+RTTI_IMPL_MULTI(PathConstraintMixTimeline, CurveTimeline, ConstraintTimeline)
 
-PathConstraintMixTimeline::PathConstraintMixTimeline(size_t frameCount, size_t bezierCount, int pathConstraintIndex)
-	: CurveTimeline(frameCount, PathConstraintMixTimeline::ENTRIES, bezierCount),
-	  _constraintIndex(pathConstraintIndex) {
-	PropertyId ids[] = {((PropertyId) Property_PathConstraintMix << 32) | pathConstraintIndex};
+PathConstraintMixTimeline::PathConstraintMixTimeline(size_t frameCount, size_t bezierCount, int constraintIndex)
+	: CurveTimeline(frameCount, PathConstraintMixTimeline::ENTRIES, bezierCount), ConstraintTimeline(), _constraintIndex(constraintIndex) {
+	PropertyId ids[] = {((PropertyId) Property_PathConstraintMix << 32) | constraintIndex};
 	setPropertyIds(ids, 1);
 }
 
-void PathConstraintMixTimeline::apply(Skeleton &skeleton, float lastTime, float time, Vector<Event *> *pEvents, float alpha,
-									  MixBlend blend, MixDirection direction) {
-	SP_UNUSED(lastTime);
-	SP_UNUSED(pEvents);
-	SP_UNUSED(direction);
+PathConstraintMixTimeline::~PathConstraintMixTimeline() {
+}
 
-	PathConstraint *constraintP = skeleton._pathConstraints[_constraintIndex];
-	PathConstraint &constraint = *constraintP;
-	if (!constraint.isActive()) return;
+void PathConstraintMixTimeline::apply(Skeleton &skeleton, float lastTime, float time, Array<Event *> *events, float alpha, MixFrom from, bool add,
+									  bool out, bool appliedPose) {
+	SP_UNUSED(lastTime);
+	SP_UNUSED(events);
+	SP_UNUSED(out);
+
+	PathConstraint *constraint = (PathConstraint *) skeleton._constraints[_constraintIndex];
+	if (!constraint->isActive()) return;
+	PathConstraintPose &pose = appliedPose ? *constraint->_appliedPose : constraint->_pose;
 
 	if (time < _frames[0]) {
-		switch (blend) {
-			case MixBlend_Setup:
-				constraint._mixRotate = constraint._data._mixRotate;
-				constraint._mixX = constraint._data._mixX;
-				constraint._mixY = constraint._data._mixY;
-				return;
-			case MixBlend_First:
-				constraint._mixRotate += (constraint._data._mixRotate - constraint._mixRotate) * alpha;
-				constraint._mixX += (constraint._data._mixX - constraint._mixX) * alpha;
-				constraint._mixY += (constraint._data._mixY - constraint._mixY) * alpha;
-			default: {
-			}
+		PathConstraintPose &setup = constraint->_data._setupPose;
+		switch (from) {
+			case MixFrom_Setup:
+				pose._mixRotate = setup._mixRotate;
+				pose._mixX = setup._mixX;
+				pose._mixY = setup._mixY;
+				break;
+			case MixFrom_First:
+				pose._mixRotate += (setup._mixRotate - pose._mixRotate) * alpha;
+				pose._mixX += (setup._mixX - pose._mixX) * alpha;
+				pose._mixY += (setup._mixY - pose._mixY) * alpha;
+				break;
+			case MixFrom_Current:
+				break;
 		}
 		return;
 	}
@@ -105,15 +110,15 @@ void PathConstraintMixTimeline::apply(Skeleton &skeleton, float lastTime, float 
 		}
 	}
 
-	if (blend == MixBlend_Setup) {
-		PathConstraintData data = constraint._data;
-		constraint._mixRotate = data._mixRotate + (rotate - data._mixRotate) * alpha;
-		constraint._mixX = data._mixX + (x - data._mixX) * alpha;
-		constraint._mixY = data._mixY + (y - data._mixY) * alpha;
+	PathConstraintPose &base = from == MixFrom_Setup ? constraint->_data._setupPose : pose;
+	if (add) {
+		pose._mixRotate = base._mixRotate + rotate * alpha;
+		pose._mixX = base._mixX + x * alpha;
+		pose._mixY = base._mixY + y * alpha;
 	} else {
-		constraint._mixRotate += (rotate - constraint._mixRotate) * alpha;
-		constraint._mixX += (x - constraint._mixX) * alpha;
-		constraint._mixY += (y - constraint._mixY) * alpha;
+		pose._mixRotate = base._mixRotate + (rotate - base._mixRotate) * alpha;
+		pose._mixX = base._mixX + (x - base._mixX) * alpha;
+		pose._mixY = base._mixY + (y - base._mixY) * alpha;
 	}
 }
 

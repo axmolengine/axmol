@@ -39,6 +39,8 @@ namespace ax
 {
 
 class Scheduler;
+class Director;
+struct AudioEngineSettings;
 
 class AX_DLL AudioEngineImpl : public ax::Object
 {
@@ -46,37 +48,45 @@ public:
     AudioEngineImpl();
     ~AudioEngineImpl();
 
-    bool init();
-    AUDIO_ID play2d(std::string_view fileFullPath, bool loop, float volume, float time);
-    AUDIO_ID play3d(std::string_view fileFullPath,
-                    const Vec3& position,
-                    float distanceScale,
-                    bool loop,
-                    float volume,
-                    float time);
-    void setVolume(AUDIO_ID audioID, float volume);
-    void setPitch(AUDIO_ID audioID, float pitch);
-    void setLoop(AUDIO_ID audioID, bool loop);
-    bool pause(AUDIO_ID audioID);
-    bool resume(AUDIO_ID audioID);
-    void stop(AUDIO_ID audioID);
+    bool init(const AudioEngineSettings& settings);
+    AudioId play2d(std::string_view fileFullPath, bool loop, float volume, float time);
+    AudioId play3d(std::string_view fileFullPath,
+                   const Vec3& position,
+                   float distanceScale,
+                   bool loop,
+                   float volume,
+                   float time);
+    void setVolume(AudioId audioID, float volume);
+    void setPitch(AudioId audioID, float pitch);
+    void setLoop(AudioId audioID, bool loop);
+    bool pause(AudioId audioID);
+    bool resume(AudioId audioID);
+    void stop(AudioId audioID);
     void stopAll();
-    float getDuration(AUDIO_ID audioID);
-    float getCurrentTime(AUDIO_ID audioID);
-    bool setCurrentTime(AUDIO_ID audioID, float time);
-    void setFinishCallback(AUDIO_ID audioID, const std::function<void(AUDIO_ID, std::string_view)>& callback);
-    void setPan(AUDIO_ID audioId, float value, float distance);
-    float getPan(AUDIO_ID audioId);
-    ax::Vec3 getSourcePosition(AUDIO_ID audioId);
-    void setSourcePosition(AUDIO_ID audioId, const ax::Vec3& position);
+    float getDuration(AudioId audioID);
+    float getCurrentTime(AudioId audioID);
+    bool setCurrentTime(AudioId audioID, float time);
+    void setFinishCallback(AudioId audioID, const std::function<void(AudioId, std::string_view)>& callback);
+    void setPan(AudioId audioId, float value, float distance);
+    float getPan(AudioId audioId);
+    ax::Vec3 getSourcePosition(AudioId audioId);
+    void setSourcePosition(AudioId audioId, const ax::Vec3& position);
     void setListenerPosition(const ax::Vec3& position);
     ax::Vec3 getListenerPosition();
-    void setReverbProperties(AUDIO_ID audioId, const ReverbProperties* reverbProperties);
+    void setReverbProperties(AudioId audioId, const ReverbProperties* reverbProperties);
 
     void uncache(std::string_view filePath);
     void uncacheAll();
     AudioCache* preload(std::string_view filePath, std::function<void(bool)> callback);
     void update(float dt);
+
+    bool setHRTFEnabled(bool enabled);
+
+    void pauseDevice();
+    void resumeDevice();
+    void reopenDevice();
+
+    static AudioEngineImpl* current;
 
 private:
     bool isExtensionPresent(const char* extensionId);
@@ -84,13 +94,16 @@ private:
 
     // query players state per frame and dispatch finish callback if possible
     void _updatePlayers(bool forStop);
-    void _play2d(AudioCache* cache, AUDIO_ID audioID);
-    void _play3d(AudioCache* cache, AUDIO_ID audioID);
+    void _play2d(AudioCache* cache, AudioId audioID);
+    void _play3d(AudioCache* cache, AudioId audioID);
     void _unscheduleUpdate();
     ALuint findValidSource();
 #if defined(__APPLE__) && !AX_USE_ALSOFT
-    static ALvoid myAlSourceNotificationCallback(ALuint sid, ALuint notificationID, ALvoid* userData);
+    static ALvoid onAlSourceNotification(ALuint sourceID, ALuint notificationID, ALvoid* userData);
+    void weakupAudioPlayer(ALuint sourceID);
 #endif
+    Director* _director{nullptr};
+
     ALuint _alSources[MAX_AUDIOINSTANCES];
 
     // available sources
@@ -100,18 +113,20 @@ private:
     tlx::string_map<std::unique_ptr<AudioCache>> _audioCaches;
 
     // audioID,AudioInfo
-    std::unordered_map<AUDIO_ID, AudioPlayer*> _audioPlayers;
+    std::unordered_map<AudioId, AudioPlayer*> _audioPlayers;
     std::recursive_mutex _threadMutex;
 
     // finish callbacks
     std::vector<std::function<void()>> _finishCallbacks;
 
-    bool _scheduled;
+    bool _scheduled{false};
+    bool _stereoExtension{false};
 
-    AUDIO_ID _currentAudioID;
-    Scheduler* _scheduler;
+    AudioId _currentAudioID{0};
+    Scheduler* _scheduler{nullptr};
 
-    bool _stereoExtension{};
+    ALCdevice* _device{nullptr};
+    ALCcontext* _context{nullptr};
 };
 
 }  // namespace ax

@@ -165,8 +165,8 @@ void TileMapAtlas::updateAtlasValueAt(const Vec2& pos, const uint8_t* color24, i
     float row      = (float)(red % _itemsPerRow);
     float col      = (float)(red / _itemsPerRow);
 
-    float textureWide = (float)(_textureAtlas->getTexture()->getPixelsWide());
-    float textureHigh = (float)(_textureAtlas->getTexture()->getPixelsHigh());
+    float textureWide = (float)(_textureAtlas->getTexture()->getWidth());
+    float textureHigh = (float)(_textureAtlas->getTexture()->getHeight());
 
     float itemWidthInPixels  = _itemWidth * AX_CONTENT_SCALE_FACTOR();
     float itemHeightInPixels = _itemHeight * AX_CONTENT_SCALE_FACTOR();

@@ -32,6 +32,7 @@
 #include "axmol/rhi/Buffer.h"
 #include "axmol/tlx/hlookup.hpp"
 #include "axmol/tlx/inlined_vector.hpp"
+#include "axmol/tlx/vector.hpp"
 
 #include <functional>
 #include <vector>
@@ -153,7 +154,7 @@ public:
      * @param stage Specifies the shader stage. The symbolic constant can be either VERTEX or FRAGMENT.
      * @return The uniform buffer size in bytes.
      */
-    std::size_t getUniformBufferSize() const;
+    size_t getUniformBufferSize() const;
 
     /**
      * Get attribute location by attribute name.
@@ -252,10 +253,12 @@ protected:
     tlx::pod_vector<const VertexInputDesc*> _builtinVertexInputs;
 
     // The total uniform buffer size
-    std::size_t _uniformBufferSize{0};
+    size_t _uniformBufferSize{0};
 };
 
 // end of _rhi group
 /// @}
 }  // namespace rhi
+
+using Program = rhi::Program;
 }  // namespace ax

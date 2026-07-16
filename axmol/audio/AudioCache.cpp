@@ -392,8 +392,7 @@ void AudioCache::invokingLoadCallbacks()
     }
 
     auto isDestroyed = _isDestroyed;
-    auto scheduler   = Director::getInstance()->getScheduler();
-    scheduler->runOnAxmolThread([&, isDestroyed]() {
+    Director::getInstance()->postTask([&, isDestroyed]() {
         if (*isDestroyed)
         {
             AXLOGV("invokingLoadCallbacks perform in axmol thread, AudioCache ({}) was destroyed!", fmt::ptr(this));

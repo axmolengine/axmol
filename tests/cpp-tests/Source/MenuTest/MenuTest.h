@@ -44,17 +44,17 @@ class MenuLayerMainMenu : public ax::Layer
 {
 protected:
     ax::MenuItem* _disabledItem;
-    ax::EventListenerTouchOneByOne* _touchListener;
+    ax::PointerEventListener* _touchListener;
 
 public:
     MenuLayerMainMenu();
     ~MenuLayerMainMenu();
 
 public:
-    bool touchBegan(ax::Touch* touch, ax::Event* event);
-    void touchEnded(ax::Touch* touch, ax::Event* event);
-    void touchCancelled(ax::Touch* touch, ax::Event* event);
-    void touchMoved(ax::Touch* touch, ax::Event* event);
+    bool touchBegan(ax::PointerEvent* event);
+    void touchEnded(ax::PointerEvent* event);
+    void touchCancelled(ax::PointerEvent* event);
+    bool touchMoved(ax::PointerEvent* event);
 
     void allowTouches(float dt);
     void menuCallback(ax::Object* sender);
@@ -124,14 +124,14 @@ class RemoveMenuItemWhenMove : public ax::Layer
 public:
     RemoveMenuItemWhenMove();
     ~RemoveMenuItemWhenMove();
-    bool onTouchBegan(ax::Touch* touch, ax::Event* event);
-    void onTouchMoved(ax::Touch* touch, ax::Event* event);
+    bool onPointerDown(ax::PointerEvent* event);
+    void onPointerMove(ax::PointerEvent* event);
 
     void goBack(ax::Object* pSender);
 
 private:
     ax::MenuItemFont* item;
-    ax::EventListenerTouchOneByOne* _touchListener;
+    ax::PointerEventListener* _touchListener;
 };
 
 #endif

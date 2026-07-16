@@ -23,10 +23,13 @@ THE SOFTWARE.
 ****************************************************************************/
 #include "axmol/platform/CommandLineArgs.h"
 
-#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+#if defined(_WIN32)
 #    include <windows.h>
-#    include <shellapi.h>
 #    include "ntcvt/ntcvt.hpp"
+#endif
+
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+#    include <shellapi.h>
 #endif
 
 namespace ax
@@ -40,7 +43,7 @@ void CommandLineArgs::rebuildViews()
         _views.emplace_back(s);
 }
 
-void CommandLineArgs::buildFromArgv(int argc, char** argv)
+void CommandLineArgs::buildFromArgv(int argc, tchar_t** argv)
 {
     // Caller must ensure no concurrent access during construction
     _storage.clear();
@@ -53,32 +56,17 @@ void CommandLineArgs::buildFromArgv(int argc, char** argv)
     _storage.reserve(static_cast<size_t>(argc));
     for (int i = 0; i < argc; ++i)
     {
+#if defined(_WIN32) && defined(_UNICODE)
+        _storage.emplace_back(argv[i] ? ntcvt::from_chars(argv[i]) : std::string{});
+#else
         _storage.emplace_back(argv[i] ? argv[i] : "");
+#endif
     }
     rebuildViews();
     _ownsStorage = true;
 }
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
-void CommandLineArgs::buildFromWargv(int argc, wchar_t** wargv)
-{
-    // Caller must ensure no concurrent access during construction
-    _storage.clear();
-    _views.clear();
-    if (argc <= 0)
-    {
-        _ownsStorage = true;
-        return;
-    }
-    _storage.reserve(static_cast<size_t>(argc));
-    for (int i = 0; i < argc; ++i)
-    {
-        _storage.emplace_back(wargv[i] ? ntcvt::from_chars(wargv[i]) : std::string{});
-    }
-    rebuildViews();
-    _ownsStorage = true;
-}
-
 void CommandLineArgs::buildFromCommandLine()
 {
     // Caller must ensure no concurrent access during construction

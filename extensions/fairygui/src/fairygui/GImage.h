@@ -4,7 +4,7 @@
 #include "FairyGUIMacros.h"
 #include "GObject.h"
 #include "axmol/cocos2d.h"
-#include "axmol/ui/UIScale9Sprite.h"
+#include "axmol/ui/Scale9Sprite.h"
 
 NS_FGUI_BEGIN
 

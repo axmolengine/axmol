@@ -59,7 +59,7 @@ void CCArmatureDisplay::dbUpdate()
 
 void CCArmatureDisplay::addDBEventListener(std::string_view type, const std::function<void(EventObject*)>& callback)
 {
-    auto lambda = [callback](ax::EventCustom* event) -> void {
+    auto lambda = [callback](ax::CustomEvent* event) -> void {
         callback(static_cast<EventObject*>(event->getUserData()));
     };
     _dispatcher->addCustomEventListener(type, lambda);
@@ -150,7 +150,7 @@ bool DBCCSprite::_checkVisibility(const ax::Mat4& transform, const ax::Size& siz
     ax::Vec3 v3p(hSizeX, hSizeY, 0);
 
     transform.transformPoint(&v3p);
-    ax::Vec2 v2p = ax::Camera::getVisitingCamera()->projectGL(v3p);
+    ax::Vec2 v2p = ax::Camera::getVisitingCamera()->projectWorldToCanvas(v3p);
 
     // convert content size to world coordinates
     float wshw = std::max(fabsf(hSizeX * transform.m[0] + hSizeY * transform.m[4]),
@@ -202,15 +202,15 @@ void DBCCSprite::draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_
             // draw 3 lines
             auto from = verts[indices[i * 3]].position;
             auto to   = verts[indices[i * 3 + 1]].position;
-            _debugDrawNode->drawLine(ax::Vec2(from.x, from.y), ax::Vec2(to.x, to.y), ax::Color32::WHITE);
+            _debugDrawNode->drawLine(ax::Vec2(from.x, from.y), ax::Vec2(to.x, to.y), ax::Color32::white);
 
             from = verts[indices[i * 3 + 1]].position;
             to   = verts[indices[i * 3 + 2]].position;
-            _debugDrawNode->drawLine(ax::Vec2(from.x, from.y), ax::Vec2(to.x, to.y), ax::Color32::WHITE);
+            _debugDrawNode->drawLine(ax::Vec2(from.x, from.y), ax::Vec2(to.x, to.y), ax::Color32::white);
 
             from = verts[indices[i * 3 + 2]].position;
             to   = verts[indices[i * 3]].position;
-            _debugDrawNode->drawLine(ax::Vec2(from.x, from.y), ax::Vec2(to.x, to.y), ax::Color32::WHITE);
+            _debugDrawNode->drawLine(ax::Vec2(from.x, from.y), ax::Vec2(to.x, to.y), ax::Color32::white);
         }
 #endif  // AX_SPRITE_DEBUG_DRAW
     }

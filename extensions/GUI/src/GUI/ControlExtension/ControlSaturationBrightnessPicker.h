@@ -90,8 +90,8 @@ protected:
     void updateSliderPosition(Vec2 location);
     bool checkSliderPosition(Vec2 location);
 
-    bool onTouchBegan(Touch* touch, Event* pEvent) override;
-    void onTouchMoved(Touch* pTouch, Event* pEvent) override;
+    bool onPointerDown(PointerEvent* event) override;
+    void onPointerMove(PointerEvent* event) override;
 };
 
 // end of GUI group

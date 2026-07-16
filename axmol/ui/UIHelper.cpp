@@ -26,10 +26,12 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "axmol/ui/UIHelper.h"
-#include "axmol/ui/UIWidget.h"
-#include "axmol/ui/UILayoutComponent.h"
+#include "axmol/ui/Widget.h"
+#include "axmol/ui/LayoutComponent.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/text_utils.h"
+#include "axmol/base/InputSystem.h"
+#include "axmol/scene/Camera.h"
 
 namespace ax
 {
@@ -187,44 +189,9 @@ Rect Helper::restrictCapInsetRect(const ax::Rect& capInsets, const Vec2& texture
     return Rect(x, y, width, height);
 }
 
-Rect Helper::convertBoundingBoxToScreen(Node* node)
+Rect Helper::getNodeNativeWindowRect(Node* node)
 {
-    auto director   = Director::getInstance();
-    auto renderView = director->getRenderView();
-
-    float scaleX = renderView->getScaleX();
-    float scaleY = renderView->getScaleY();
-
-    const auto windowPlatform  = renderView->getWindowPlatform();
-    const auto renderScaleMode = Application::getContextAttrs().renderScaleMode;
-#if defined(AX_PLATFORM_PC)
-    Size winSize = renderView->getNativeWindowSize();
-    if (renderScaleMode == RenderScaleMode::Physical &&
-        (windowPlatform != WindowPlatform::Win32 && windowPlatform != WindowPlatform::X11))
-    {
-        auto renderScale = renderView->getRenderScale();
-        if (renderScale > 0.f)
-        {
-            scaleX /= renderScale;
-            scaleY /= renderScale;
-        }
-    }
-#else
-    Size winSize = renderView->getWindowSize();
-#endif
-
-    auto canvasSize = director->getCanvasSize();
-    auto leftBottom = node->convertToWorldSpace(Point::ZERO);
-
-    auto contentSize = node->getContentSize();
-    auto rightTop    = node->convertToWorldSpace(Point(contentSize.width, contentSize.height));
-
-    auto uiLeft   = winSize.width / 2 + (leftBottom.x - canvasSize.width / 2) * scaleX;
-    auto uiTop    = winSize.height / 2 - (rightTop.y - canvasSize.height / 2) * scaleY;
-    auto uiWidth  = (rightTop.x - leftBottom.x) * scaleX;
-    auto uiHeight = (rightTop.y - leftBottom.y) * scaleY;
-
-    return Rect(uiLeft, uiTop, uiWidth, uiHeight);
+    return InputSystem::getInstance()->getNodeNativeWindowRect(node);
 }
 
 #pragma region Layout helper
@@ -236,8 +203,8 @@ void Helper::setDesignSizeFixedEdge(const Vec2& designSize)
     Helper::s_designSize = designSize;
 
     // Set the design resolution
-    RenderView* pERenderView = Director::getInstance()->getRenderView();
-    const Vec2& windowSize   = pERenderView->getWindowSize();
+    auto pERenderView      = Director::getInstance()->getRenderView();
+    const Vec2& windowSize = pERenderView->getWindowSize();
 
     // Vec2 lsSize = lsaSize;
 
@@ -261,8 +228,8 @@ void Helper::setDesignSizeNoBorder(const Vec2& designSize)
     Helper::s_designSize = designSize;
 
     // Set the design resolution
-    RenderView* pERenderView = Director::getInstance()->getRenderView();
-    const Vec2& windowSize   = pERenderView->getWindowSize();
+    auto pERenderView      = Director::getInstance()->getRenderView();
+    const Vec2& windowSize = pERenderView->getWindowSize();
 
     // Vec2 lsSize = lsaSize;
 
@@ -302,7 +269,7 @@ Vec2 Helper::getNodeGroupSize(std::span<Node* const> nodes)
 {
     if (nodes.empty())
     {
-        return Vec2::ZERO;
+        return Vec2::zero;
     }
 
     // group nodes locators
@@ -376,7 +343,7 @@ Vec2 Helper::getNodeGroupScaledSize(std::span<Node* const> nodes)
 {
     if (nodes.empty())
     {
-        return Vec2::ZERO;
+        return Vec2::zero;
     }
 
     auto scale = getScale2D(nodes[0]);
@@ -1065,105 +1032,100 @@ void Helper::makeVerticalSpacingEqual(std::span<Node* const> nodes, float theSpa
 
 // ----------------- Helper::VisibleRect --------------------------
 
-ax::Rect Helper::VisibleRect::s_ScreenVisibleRect;
+ax::Rect Helper::VisibleRect::s_rect;
 
 /// x-studio: when design resolution changed, should call this func.
 void Helper::VisibleRect::refresh(void)
 {
-    auto director              = Director::getInstance();
-    s_ScreenVisibleRect.origin = Director::getInstance()->getVisibleOrigin();
-    s_ScreenVisibleRect.size   = Director::getInstance()->getVisibleSize();
+    auto director = Director::getInstance();
+    s_rect.origin = Director::getInstance()->getVisibleOrigin();
+    s_rect.size   = Director::getInstance()->getVisibleSize();
 }
 
 void Helper::VisibleRect::lazyInit()
 {
-    if (s_ScreenVisibleRect.size.width == 0.0f && s_ScreenVisibleRect.size.height == 0.0f)
+    if (s_rect.size.width == 0.0f && s_rect.size.height == 0.0f)
     {
         auto director   = Director::getInstance();
         auto renderView = director->getRenderView();
 
         if (renderView->getResolutionPolicy() == ResolutionPolicy::NO_BORDER)
         {
-            s_ScreenVisibleRect.origin = director->getVisibleOrigin();
-            s_ScreenVisibleRect.size   = director->getVisibleSize();
+            s_rect.origin = director->getVisibleOrigin();
+            s_rect.size   = director->getVisibleSize();
         }
         else
         {
-            s_ScreenVisibleRect.origin = Helper::getVisibleOrigin();
-            s_ScreenVisibleRect.size   = Helper::getVisibleSize();
+            s_rect.origin = Helper::getVisibleOrigin();
+            s_rect.size   = Helper::getVisibleSize();
         }
     }
 }
 
-ax::Rect Helper::VisibleRect::getScreenVisibleRect()
+ax::Rect Helper::VisibleRect::getRect()
 {
     lazyInit();
-    return ax::Rect(s_ScreenVisibleRect.origin.x, s_ScreenVisibleRect.origin.y, s_ScreenVisibleRect.size.width,
-                    s_ScreenVisibleRect.size.height);
+    return s_rect;
 }
 
 Vec2 Helper::VisibleRect::size()
 {
     lazyInit();
-    return s_ScreenVisibleRect.size;
+    return s_rect.size;
 }
 
 Point Helper::VisibleRect::left()
 {
     lazyInit();
-    return ax::Point(s_ScreenVisibleRect.origin.x, s_ScreenVisibleRect.origin.y + s_ScreenVisibleRect.size.height / 2);
+    return ax::Point(s_rect.origin.x, s_rect.origin.y + s_rect.size.height / 2);
 }
 
 Point Helper::VisibleRect::right()
 {
     lazyInit();
-    return ax::Point(s_ScreenVisibleRect.origin.x + s_ScreenVisibleRect.size.width,
-                     s_ScreenVisibleRect.origin.y + s_ScreenVisibleRect.size.height / 2);
+    return ax::Point(s_rect.origin.x + s_rect.size.width, s_rect.origin.y + s_rect.size.height / 2);
 }
 
 Point Helper::VisibleRect::top()
 {
     lazyInit();
-    return ax::Point(s_ScreenVisibleRect.origin.x + s_ScreenVisibleRect.size.width / 2,
-                     s_ScreenVisibleRect.origin.y + s_ScreenVisibleRect.size.height);
+    return ax::Point(s_rect.origin.x + s_rect.size.width / 2, s_rect.origin.y + s_rect.size.height);
 }
 
 Point Helper::VisibleRect::bottom()
 {
     lazyInit();
-    return ax::Point(s_ScreenVisibleRect.origin.x + s_ScreenVisibleRect.size.width / 2, s_ScreenVisibleRect.origin.y);
+    return ax::Point(s_rect.origin.x + s_rect.size.width / 2, s_rect.origin.y);
 }
 
 Point Helper::VisibleRect::center()
 {
     lazyInit();
-    return ax::Point(s_ScreenVisibleRect.origin.x + s_ScreenVisibleRect.size.width / 2,
-                     s_ScreenVisibleRect.origin.y + s_ScreenVisibleRect.size.height / 2);
+    return ax::Point(s_rect.origin.x + s_rect.size.width / 2, s_rect.origin.y + s_rect.size.height / 2);
 }
 
 Point Helper::VisibleRect::leftTop()
 {
     lazyInit();
-    return ax::Point(s_ScreenVisibleRect.origin.x, s_ScreenVisibleRect.origin.y + s_ScreenVisibleRect.size.height);
+    return ax::Point(s_rect.origin.x, s_rect.origin.y + s_rect.size.height);
 }
 
 Point Helper::VisibleRect::rightTop()
 {
     lazyInit();
-    return ax::Point(s_ScreenVisibleRect.origin.x + s_ScreenVisibleRect.size.width,
-                     s_ScreenVisibleRect.origin.y + s_ScreenVisibleRect.size.height);
+    return ax::Point(s_rect.origin.x + s_rect.size.width, s_rect.origin.y + s_rect.size.height);
 }
 
 Point Helper::VisibleRect::leftBottom()
 {
     lazyInit();
-    return s_ScreenVisibleRect.origin;
+    return s_rect.origin;
 }
 
 Point Helper::VisibleRect::rightBottom()
 {
     lazyInit();
-    return ax::Point(s_ScreenVisibleRect.origin.x + s_ScreenVisibleRect.size.width, s_ScreenVisibleRect.origin.y);
+    return ax::Point(s_rect.origin.x + s_rect.size.width, s_rect.origin.y);
 }
 
 /// visual screen
@@ -1185,14 +1147,14 @@ float Helper::VisibleRect::getNodeRight(Node* pNode)
     ax::Point ptLocal(Helper::getNodeLeft(pNode) + pNode->getContentSize().width /* * pNode->getScaleX()*/, 0);
     auto ptWorld = pNode->getParent()->convertToWorldSpace(ptLocal);
 
-    auto visibleRect = Helper::VisibleRect::getScreenVisibleRect();
+    auto visibleRect = Helper::VisibleRect::getRect();
     return visibleRect.size.width - ptWorld.x;
 }
 float Helper::VisibleRect::getNodeTop(Node* pNode)
 {
     ax::Point ptLocal(0, Helper::getNodeBottom(pNode) + pNode->getContentSize().height /* * pNode->getScaleY()*/);
     auto ptWorld     = pNode->getParent()->convertToWorldSpace(ptLocal);
-    auto visibleRect = Helper::VisibleRect::getScreenVisibleRect();
+    auto visibleRect = Helper::VisibleRect::getRect();
 
     return visibleRect.size.height - ptWorld.y;
 }
@@ -1203,7 +1165,7 @@ void Helper::VisibleRect::setNodeLeft(Node* pNode, float left)
     Vec2 scrSize         = Director::getInstance()->getRenderView()->getDesignResolutionSize();
     ax::Point delta      = ax::Vec2(0, scrSize.height) - Helper::VisibleRect::leftTop();
     Vec2 size            = pNode->getContentSize() * getScale2D(pNode);
-    ax::Point achorPoint = Vec2::ZERO;
+    ax::Point achorPoint = Vec2::zero;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
@@ -1218,7 +1180,7 @@ void Helper::VisibleRect::setNodeTop(Node* pNode, float top)
     Vec2 scrSize         = Director::getInstance()->getRenderView()->getDesignResolutionSize();
     ax::Point delta      = ax::Vec2(0, scrSize.height) - Helper::VisibleRect::leftTop();
     Vec2 size            = pNode->getContentSize() * getScale2D(pNode);
-    ax::Point achorPoint = Vec2::ZERO;
+    ax::Point achorPoint = Vec2::zero;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
@@ -1233,7 +1195,7 @@ void Helper::VisibleRect::setNodeRight(Node* pNode, float right)
     Vec2 scrSize         = Director::getInstance()->getRenderView()->getDesignResolutionSize();
     ax::Point delta      = ax::Vec2(scrSize.width, 0) - Helper::VisibleRect::rightBottom();
     Vec2 size            = pNode->getContentSize() * getScale2D(pNode);
-    ax::Point achorPoint = Vec2::ZERO;
+    ax::Point achorPoint = Vec2::zero;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
@@ -1248,7 +1210,7 @@ void Helper::VisibleRect::setNodeBottom(Node* pNode, float bottom)
     Vec2 scrSize         = Director::getInstance()->getRenderView()->getDesignResolutionSize();
     ax::Point delta      = ax::Vec2(scrSize.width, 0) - Helper::VisibleRect::rightBottom();
     Vec2 size            = pNode->getContentSize() * getScale2D(pNode);
-    ax::Point achorPoint = Vec2::ZERO;
+    ax::Point achorPoint = Vec2::zero;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
@@ -1264,7 +1226,7 @@ void Helper::VisibleRect::setNodeLT(Node* pNode, const ax::Point& p)
     Vec2 scrSize         = Director::getInstance()->getRenderView()->getDesignResolutionSize();
     ax::Point delta      = ax::Vec2(0, scrSize.height) - Helper::VisibleRect::leftTop();
     Vec2 size            = pNode->getContentSize() * getScale2D(pNode);
-    ax::Point achorPoint = Vec2::ZERO;
+    ax::Point achorPoint = Vec2::zero;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
@@ -1281,7 +1243,7 @@ void Helper::VisibleRect::setNodeRT(Node* pNode, const ax::Point& p)
     Vec2 scrSize         = Director::getInstance()->getRenderView()->getDesignResolutionSize();
     ax::Point delta      = ax::Vec2(scrSize.width, scrSize.height) - Helper::VisibleRect::rightTop();
     Vec2 size            = pNode->getContentSize() * getScale2D(pNode);
-    ax::Point achorPoint = Vec2::ZERO;
+    ax::Point achorPoint = Vec2::zero;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
@@ -1297,7 +1259,7 @@ void Helper::VisibleRect::setNodeLB(Node* pNode, const ax::Point& p)
     Vec2 scrSize         = Director::getInstance()->getRenderView()->getDesignResolutionSize();
     ax::Point delta      = ax::Vec2(0, 0) - Helper::VisibleRect::leftBottom();
     Vec2 size            = pNode->getContentSize() * getScale2D(pNode);
-    ax::Point achorPoint = Vec2::ZERO;
+    ax::Point achorPoint = Vec2::zero;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
@@ -1313,7 +1275,7 @@ void Helper::VisibleRect::setNodeRB(Node* pNode, const ax::Point& p)
     Vec2 scrSize         = Director::getInstance()->getRenderView()->getDesignResolutionSize();
     ax::Point delta      = ax::Vec2(scrSize.width, 0) - Helper::VisibleRect::rightBottom();
     Vec2 size            = pNode->getContentSize() * getScale2D(pNode);
-    ax::Point achorPoint = Vec2::ZERO;
+    ax::Point achorPoint = Vec2::zero;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
@@ -1337,7 +1299,7 @@ void Helper::VisibleRect::setNodeNormalizedLT(Node* pNode, const ax::Point& rati
     ax::Point p   = ax::Vec2(vscrSize.width * ratio.x, vscrSize.height * ratio.y);
 
     Vec2 size            = pNode->getContentSize() * getScale2D(pNode);
-    ax::Point achorPoint = Vec2::ZERO;
+    ax::Point achorPoint = Vec2::zero;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
@@ -1358,7 +1320,7 @@ void Helper::VisibleRect::setNodeNormalizedRT(Node* pNode, const ax::Point& rati
     ax::Point p   = ax::Vec2(vscrSize.width * ratio.x, vscrSize.height * ratio.y);
 
     Vec2 size            = pNode->getContentSize() * getScale2D(pNode);
-    ax::Point achorPoint = Vec2::ZERO;
+    ax::Point achorPoint = Vec2::zero;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
@@ -1379,7 +1341,7 @@ void Helper::VisibleRect::setNodeNormalizedLB(Node* pNode, const ax::Point& rati
     ax::Point p   = ax::Vec2(vscrSize.width * ratio.x, vscrSize.height * ratio.y);
 
     Vec2 size            = pNode->getContentSize() * getScale2D(pNode);
-    ax::Point achorPoint = Vec2::ZERO;
+    ax::Point achorPoint = Vec2::zero;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
@@ -1400,7 +1362,7 @@ void Helper::VisibleRect::setNodeNormalizedRB(Node* pNode, const ax::Point& rati
     ax::Point p   = ax::Vec2(vscrSize.width * ratio.x, vscrSize.height * ratio.y);
 
     Vec2 size            = pNode->getContentSize() * getScale2D(pNode);
-    ax::Point achorPoint = Vec2::ZERO;
+    ax::Point achorPoint = Vec2::zero;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
@@ -1422,7 +1384,7 @@ void Helper::VisibleRect::setNodeNormalizedTop(Node* pNode, const float ratioTop
     float top     = vscrSize.width * ratioTop;
 
     Vec2 size            = pNode->getContentSize() * getScale2D(pNode);
-    ax::Point achorPoint = Vec2::ZERO;
+    ax::Point achorPoint = Vec2::zero;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
@@ -1435,7 +1397,7 @@ void Helper::VisibleRect::setNodeNormalizedTop(Node* pNode, const float ratioTop
 void Helper::VisibleRect::setNodeNormalizedPositionX(ax::Node* pNode, float ratio)
 {
     AX_ASSERT(pNode);
-    ax::Rect visibleRect = Helper::Helper::VisibleRect::getScreenVisibleRect();
+    ax::Rect visibleRect = Helper::Helper::VisibleRect::getRect();
     ax::Point ptWorld(visibleRect.size.width * ratio + visibleRect.origin.x, 0);
     auto ptLocal = pNode->getParent()->convertToNodeSpace(ptWorld);
     pNode->setPositionX(ptLocal.x);
@@ -1444,7 +1406,7 @@ void Helper::VisibleRect::setNodeNormalizedPositionX(ax::Node* pNode, float rati
 void Helper::VisibleRect::setNodeNormalizedPositionY(ax::Node* pNode, float ratio)
 {
     AX_ASSERT(pNode);
-    ax::Rect visibleRect = Helper::Helper::VisibleRect::getScreenVisibleRect();
+    ax::Rect visibleRect = Helper::Helper::VisibleRect::getRect();
 
     ax::Point ptWorld(0, visibleRect.size.height * ratio + visibleRect.origin.y);
     auto ptLocal = pNode->getParent()->convertToNodeSpace(ptWorld);
@@ -1455,7 +1417,7 @@ void Helper::VisibleRect::setNodeNormalizedPosition(Node* pNode, const ax::Point
     AX_ASSERT(pNode);
     pNode->setIgnoreAnchorPointForPosition(false);
     pNode->setAnchorPoint(ax::Vec2(.5f, .5f));
-    ax::Rect visibleRect = Helper::Helper::VisibleRect::getScreenVisibleRect();
+    ax::Rect visibleRect = Helper::Helper::VisibleRect::getRect();
     ax::Point ptWorld(visibleRect.size.width * ratio.x + visibleRect.origin.x,
                       visibleRect.size.height * ratio.y + visibleRect.origin.y);
     auto ptLocal = pNode->getParent()->convertToNodeSpace(ptWorld);

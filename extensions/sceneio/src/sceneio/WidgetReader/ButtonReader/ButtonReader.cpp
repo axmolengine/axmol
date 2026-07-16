@@ -24,7 +24,7 @@
 
 #include "sceneio/WidgetReader/ButtonReader/ButtonReader.h"
 
-#include "axmol/ui/UIButton.h"
+#include "axmol/ui/Button.h"
 #include "axmol/2d/SpriteFrameCache.h"
 #include "axmol/2d/Label.h"
 #include "axmol/platform/FileUtils.h"
@@ -314,15 +314,15 @@ Offset<Table> ButtonReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
     int fontResourceResourceType = 0;
 
     bool outlineEnabled  = false;
-    Color32 outlineColor = Color32::BLACK;
+    Color32 outlineColor = Color32::black;
     int outlineSize      = 1;
     bool shadowEnabled   = false;
-    Color32 shadowColor  = Color32::BLACK;
+    Color32 shadowColor  = Color32::black;
     Size shadowOffset    = Size(2, -2);
     int shadowBlurRadius = 0;
 
     bool glowEnabled  = false;
-    Color32 glowColor = Color32::BLACK;
+    Color32 glowColor = Color32::black;
 
     bool boldEnabled = false, underlineEnabled = false, italicsEnabled = false, strikethroughEnabled = false;
 
@@ -985,8 +985,7 @@ void ButtonReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Ta
 
     if (scale9Enabled)
     {
-        button->setUnifySizeEnabled(false);
-        button->ignoreContentAdaptWithSize(false);
+        button->setAutoSize(false);
 
         auto f_capInsets = options->capInsets();
         Rect capInsets(f_capInsets->x(), f_capInsets->y(), f_capInsets->width(), f_capInsets->height());

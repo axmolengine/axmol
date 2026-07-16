@@ -24,6 +24,12 @@ THE SOFTWARE.
 
 #include "sceneext/ComController.h"
 #include "axmol/scene/Node.h"
+#include "axmol/base/Director.h"
+#include "axmol/platform/Device.h"
+#include "axmol/base/PointerEventListener.h"
+#include "axmol/base/AccelerationEventListener.h"
+#include "axmol/base/KeyboardEventListener.h"
+#include "axmol/base/EventDispatcher.h"
 
 namespace ax::ext
 {
@@ -37,7 +43,14 @@ ComController::ComController()
     _name = COMPONENT_NAME;
 }
 
-ComController::~ComController() {}
+ComController::~ComController()
+{
+    auto dispatcher = Director::getInstance()->getEventDispatcher();
+    dispatcher->removeEventListener(_pointerListener);
+    dispatcher->removeEventListener(_keyboardListener);
+    dispatcher->removeEventListener(_accelerometerListener);
+    Device::setAccelerometerEnabled(false);
+}
 
 bool ComController::init()
 {
@@ -78,6 +91,129 @@ ComController* ComController::create()
         AX_SAFE_DELETE(pRet);
     }
     return pRet;
+}
+
+//////////////////////////////////////////////////////////////////////////
+// Events
+//////////////////////////////////////////////////////////////////////////
+
+void ComController::onAcceleration(ax::AccelerationEvent* /*event*/) {}
+
+void ComController::onKeyPressed(ax::KeyboardEvent* /*event*/) {}
+
+void ComController::onKeyReleased(ax::KeyboardEvent* /*event*/) {}
+
+bool ComController::onPointerDown(PointerEvent*)
+{
+    return true;
+}
+
+void ComController::onPointerMove(PointerEvent* /*event*/) {}
+
+void ComController::onPointerUp(PointerEvent* /*event*/) {}
+
+void ComController::onPointerCancel(PointerEvent* /*event*/) {}
+
+bool ComController::isPointerEnabled() const
+{
+    return _pointerEnabled;
+}
+
+void ComController::setPointerEnabled(bool enabled)
+{
+    if (_pointerEnabled != enabled)
+    {
+        auto dispatcher = Director::getInstance()->getEventDispatcher();
+        _pointerEnabled = enabled;
+        if (enabled)
+        {
+            // Register Touch Event
+            auto listener = PointerEventListener::create();
+
+            listener->onPointerDown   = AX_CALLBACK_1(ComController::onPointerDown, this);
+            listener->onPointerMove   = AX_CALLBACK_1(ComController::onPointerMove, this);
+            listener->onPointerUp     = AX_CALLBACK_1(ComController::onPointerUp, this);
+            listener->onPointerCancel = AX_CALLBACK_1(ComController::onPointerCancel, this);
+
+            dispatcher->addEventListenerWithFixedPriority(listener, _pointerPriority);
+            _pointerListener = listener;
+        }
+        else
+        {
+            dispatcher->removeEventListener(_pointerListener);
+        }
+    }
+}
+
+void ComController::setPointerPriority(int priority)
+{
+    if (_pointerPriority != priority)
+    {
+        _pointerPriority = priority;
+
+        if (_pointerEnabled)
+        {
+            setPointerEnabled(false);
+            setPointerEnabled(true);
+        }
+    }
+}
+
+int ComController::getPointerPriority() const
+{
+    return _pointerPriority;
+}
+
+bool ComController::isAccelerometerEnabled() const
+{
+    return _accelerometerEnabled;
+}
+
+void ComController::setAccelerometerEnabled(bool enabled)
+{
+    if (enabled != _accelerometerEnabled)
+    {
+        _accelerometerEnabled = enabled;
+
+        auto dispatcher = Director::getInstance()->getEventDispatcher();
+        dispatcher->removeEventListener(_accelerometerListener);
+        _accelerometerListener = nullptr;
+
+        Device::setAccelerometerEnabled(enabled);
+
+        if (enabled)
+        {
+            auto listener = AccelerationEventListener::create(AX_CALLBACK_1(ComController::onAcceleration, this));
+            dispatcher->addEventListenerWithFixedPriority(listener, -1);
+            _accelerometerListener = listener;
+        }
+    }
+}
+
+bool ComController::isKeypadEnabled() const
+{
+    return _keypadEnabled;
+}
+
+void ComController::setKeypadEnabled(bool enabled)
+{
+    if (enabled != _keypadEnabled)
+    {
+        _keypadEnabled = enabled;
+
+        auto dispatcher = Director::getInstance()->getEventDispatcher();
+        dispatcher->removeEventListener(_keyboardListener);
+
+        if (enabled)
+        {
+            auto listener           = KeyboardEventListener::create();
+            listener->onKeyPressed  = AX_CALLBACK_1(ComController::onKeyPressed, this);
+            listener->onKeyReleased = AX_CALLBACK_1(ComController::onKeyReleased, this);
+
+            dispatcher->addEventListenerWithFixedPriority(listener, -1);
+            _keyboardListener = listener;
+        }
+    }
 }
 
 }  // namespace ax::ext

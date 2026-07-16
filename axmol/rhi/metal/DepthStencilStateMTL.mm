@@ -25,7 +25,7 @@
 
 #include "axmol/rhi/metal/DepthStencilStateMTL.h"
 #include "axmol/rhi/RenderTarget.h"
-#include "xxhash.h"
+#include "xxhash/xxhash.h"
 
 namespace ax::rhi::mtl
 {

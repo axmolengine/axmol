@@ -235,7 +235,7 @@ void GSlider::onTouchBegin(EventContext* context)
         return;
 
     InputEvent* evt = context->getInput();
-    if (evt->getButton() != EventMouse::MouseButton::BUTTON_LEFT)
+    if (evt->getButton() != ax::InputButton::Left)
         return;
 
     Vec2 pt = _gripObject->globalToLocal(evt->getPosition());
@@ -254,7 +254,7 @@ void GSlider::onTouchBegin(EventContext* context)
 
 void GSlider::onGripTouchBegin(EventContext* context)
 {
-    if (context->getInput()->getButton() != EventMouse::MouseButton::BUTTON_LEFT)
+    if (context->getInput()->getButton() != ax::InputButton::Left)
         return;
 
     canDrag = true;

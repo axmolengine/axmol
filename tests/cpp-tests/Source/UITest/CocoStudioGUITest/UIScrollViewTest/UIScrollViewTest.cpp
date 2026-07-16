@@ -82,7 +82,7 @@ bool UIScrollViewTest_Vertical::init()
                                          (backgroundSize.height - scrollView->getContentSize().height) / 2.0f));
         scrollView->setScrollBarWidth(4);
         scrollView->setScrollBarPositionFromCorner(Vec2(2, 2));
-        scrollView->setScrollBarColor(Color32::WHITE);
+        scrollView->setScrollBarColor(Color32::white);
         scrollView->setGlobalZOrder(200);
         _uiLayer->addChild(scrollView);
 
@@ -106,7 +106,7 @@ bool UIScrollViewTest_Vertical::init()
 
         Button* button_scale9 = Button::create("cocosui/button.png", "cocosui/buttonHighlighted.png");
         button_scale9->setScale9Enabled(true);
-        button_scale9->setContentSize(Size(100.0f, button_scale9->getVirtualRendererSize().height));
+        button_scale9->setContentSize(Size(100.0f, button_scale9->getPreferredSize().height));
         button_scale9->setPosition(
             Vec2(innerWidth / 2.0f, titleButton->getBottomBoundary() - titleButton->getContentSize().height));
         scrollView->addChild(button_scale9);
@@ -156,7 +156,7 @@ bool UIScrollViewTest_Horizontal::init()
         scrollView->setContentSize(Size(280.0f, 150.0f));
         scrollView->setInnerContainerSize(scrollView->getContentSize());
         scrollView->setScrollBarPositionFromCorner(Vec2(4, 4));
-        scrollView->setScrollBarColor(Color32::YELLOW);
+        scrollView->setScrollBarColor(Color32::yellow);
         Size backgroundSize = background->getContentSize();
         scrollView->setPosition((widgetSize - scrollView->getContentSize()) / 2.0f);
         _uiLayer->addChild(scrollView);
@@ -181,7 +181,7 @@ bool UIScrollViewTest_Horizontal::init()
 
         Button* button_scale9 = Button::create("cocosui/button.png", "cocosui/buttonHighlighted.png");
         button_scale9->setScale9Enabled(true);
-        button_scale9->setContentSize(Size(100.0f, button_scale9->getVirtualRendererSize().height));
+        button_scale9->setContentSize(Size(100.0f, button_scale9->getPreferredSize().height));
         button_scale9->setPosition(
             Vec2(titleButton->getRightBoundary() + titleButton->getContentSize().width / 2.0f,
                  titleButton->getBottomBoundary() - titleButton->getContentSize().height / 2.0f));
@@ -296,7 +296,7 @@ bool UIScrollViewTest_ScrollToPercentBothDirection::init()
         Layout* background = static_cast<Layout*>(root->getChildByName("background_Panel"));
 
         ui::ScrollView* sc = ui::ScrollView::create();
-        sc->setBackGroundColor(Color32::GREEN);
+        sc->setBackGroundColor(Color32::green);
         sc->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
         sc->setDirection(ui::ScrollView::Direction::BOTH);
         sc->setInnerContainerSize(Size(480.0f, 320.0f));
@@ -350,7 +350,7 @@ bool UIScrollViewTest_ScrollToPercentBothDirection_Bounce::init()
         Layout* background = dynamic_cast<Layout*>(root->getChildByName("background_Panel"));
 
         ui::ScrollView* sc = ui::ScrollView::create();
-        sc->setBackGroundColor(Color32::GREEN);
+        sc->setBackGroundColor(Color32::green);
         sc->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
         sc->setBounceEnabled(true);
         sc->setDirection(ui::ScrollView::Direction::BOTH);
@@ -416,7 +416,7 @@ bool UIScrollViewNestTest::init()
                                      (widgetSize.height - backgroundSize.height) / 2.0f +
                                          (backgroundSize.height - scrollView->getContentSize().height) / 2.0f));
         scrollView->setScrollBarPositionFromCornerForVertical(Vec2(scrollView->getContentSize().width - 4, 4.0f));
-        scrollView->setScrollBarColor(Color32::BLUE);
+        scrollView->setScrollBarColor(Color32::blue);
         _uiLayer->addChild(scrollView);
 
         ImageView* imageView = ImageView::create("cocosui/ccicon.png");
@@ -439,7 +439,7 @@ bool UIScrollViewNestTest::init()
 
         Button* button_scale9 = Button::create("cocosui/button.png", "cocosui/buttonHighlighted.png");
         button_scale9->setScale9Enabled(true);
-        button_scale9->setContentSize(Size(100.0f, button_scale9->getVirtualRendererSize().height));
+        button_scale9->setContentSize(Size(100.0f, button_scale9->getPreferredSize().height));
         button_scale9->setPosition(
             Vec2(innerWidth / 2.0f, titleButton->getBottomBoundary() - titleButton->getContentSize().height));
         scrollView->addChild(button_scale9);
@@ -449,13 +449,13 @@ bool UIScrollViewNestTest::init()
 
         // Create the scrollview by both
         ui::ScrollView* sc = ui::ScrollView::create();
-        sc->setBackGroundColor(Color32::GREEN);
+        sc->setBackGroundColor(Color32::green);
         sc->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
         sc->setBounceEnabled(true);
         sc->setDirection(ui::ScrollView::Direction::BOTH);
         sc->setInnerContainerSize(Size(480.0f, 320.0f));
         sc->setContentSize(Size(100.0f, 100.0f));
-        sc->setPropagateTouchEvents(false);
+        sc->setPropagatePointerEvents(false);
         sc->setPosition(Vec2(180.0f, 100.0f));
         sc->scrollToPercentBothDirection(Vec2(50.0f, 50.0f), 1, true);
         sc->setScrollBarPositionFromCorner(Vec2(4.0f, 4.0f));
@@ -512,7 +512,7 @@ bool UIScrollViewRotated::init()
                                          (backgroundSize.height - scrollView->getContentSize().height) / 2.0f + 100));
         scrollView->setRotation(45);
         scrollView->setScrollBarPositionFromCorner(Vec2(4, 4));
-        scrollView->setScrollBarColor(Color32::WHITE);
+        scrollView->setScrollBarColor(Color32::white);
         _uiLayer->addChild(scrollView);
 
         ImageView* imageView = ImageView::create("cocosui/ccicon.png");
@@ -535,7 +535,7 @@ bool UIScrollViewRotated::init()
 
         Button* button_scale9 = Button::create("cocosui/button.png", "cocosui/buttonHighlighted.png");
         button_scale9->setScale9Enabled(true);
-        button_scale9->setContentSize(Size(100.0f, button_scale9->getVirtualRendererSize().height));
+        button_scale9->setContentSize(Size(100.0f, button_scale9->getPreferredSize().height));
         button_scale9->setPosition(
             Vec2(innerWidth / 2.0f, titleButton->getBottomBoundary() - titleButton->getContentSize().height));
         scrollView->addChild(button_scale9);
@@ -590,7 +590,7 @@ bool UIScrollViewDisableTest::init()
         scrollView->setScrollBarWidth(4);
         scrollView->setTouchEnabled(false);
         scrollView->setScrollBarPositionFromCorner(Vec2(2, 2));
-        scrollView->setScrollBarColor(Color32::WHITE);
+        scrollView->setScrollBarColor(Color32::white);
         _uiLayer->addChild(scrollView);
 
         ImageView* imageView = ImageView::create("cocosui/ccicon.png");
@@ -613,7 +613,7 @@ bool UIScrollViewDisableTest::init()
 
         Button* button_scale9 = Button::create("cocosui/button.png", "cocosui/buttonHighlighted.png");
         button_scale9->setScale9Enabled(true);
-        button_scale9->setContentSize(Size(100.0f, button_scale9->getVirtualRendererSize().height));
+        button_scale9->setContentSize(Size(100.0f, button_scale9->getPreferredSize().height));
         button_scale9->setPosition(
             Vec2(innerWidth / 2.0f, titleButton->getBottomBoundary() - titleButton->getContentSize().height));
         scrollView->addChild(button_scale9);
@@ -669,7 +669,7 @@ bool UIScrollViewInnerSize::init()
         scrollView->setScrollBarWidth(4);
         scrollView->setTouchEnabled(false);
         scrollView->setScrollBarPositionFromCorner(Vec2(2, 2));
-        scrollView->setScrollBarColor(Color32::WHITE);
+        scrollView->setScrollBarColor(Color32::white);
         scrollView->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
         scrollView->setBackGroundColor(Color32(150, 150, 100));
         scrollView->getInnerContainer()->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
@@ -841,7 +841,7 @@ bool UIScrollViewStopScrollingTest::init()
         Button* button_scale9 = Button::create("cocosui/button.png", "cocosui/buttonHighlighted.png");
         button_scale9->setTitleText("Stop scrolling in 3 sec.");
         button_scale9->setScale9Enabled(true);
-        button_scale9->setContentSize(Size(120.0f, button_scale9->getVirtualRendererSize().height));
+        button_scale9->setContentSize(Size(120.0f, button_scale9->getPreferredSize().height));
         button_scale9->setPosition(Vec2(innerSize.width / 2.0f, innerSize.height / 2.0f));
         button_scale9->addClickEventListener([this](Object*) { this->_remainingTime = 3.0f; });
         _scrollView->addChild(button_scale9);
@@ -926,7 +926,7 @@ bool UIScrollViewTest_Overlap::init()
             scrollView->setPosition(scrollView->getPosition() + Vec2(0, 50));
             scrollView->setScrollBarWidth(4);
             scrollView->setScrollBarPositionFromCorner(Vec2(2, 2));
-            scrollView->setScrollBarColor(Color32::WHITE);
+            scrollView->setScrollBarColor(Color32::white);
             scrollView->setGlobalZOrder(200);
             _uiLayer->addChild(scrollView);
 
@@ -950,7 +950,7 @@ bool UIScrollViewTest_Overlap::init()
 
             Button* button_scale9 = Button::create("cocosui/button.png", "cocosui/buttonHighlighted.png");
             button_scale9->setScale9Enabled(true);
-            button_scale9->setContentSize(Size(100.0f, button_scale9->getVirtualRendererSize().height));
+            button_scale9->setContentSize(Size(100.0f, button_scale9->getPreferredSize().height));
             button_scale9->setPosition(
                 Vec2(innerWidth / 2.0f, titleButton->getBottomBoundary() - titleButton->getContentSize().height));
             scrollView->addChild(button_scale9);
@@ -968,7 +968,7 @@ bool UIScrollViewTest_Overlap::init()
             scrollView->setContentSize(Size(280.0f, 150.0f) / 2);
             scrollView->setInnerContainerSize(scrollView->getContentSize());
             scrollView->setScrollBarPositionFromCorner(Vec2(4, 4));
-            scrollView->setScrollBarColor(Color32::YELLOW);
+            scrollView->setScrollBarColor(Color32::yellow);
             Size backgroundSize = background->getContentSize();
             scrollView->setPosition((widgetSize - scrollView->getContentSize()) / 2.0f);
             scrollView->setPosition(scrollView->getPosition() - Vec2(0, 50));
@@ -995,7 +995,7 @@ bool UIScrollViewTest_Overlap::init()
 
             Button* button_scale9 = Button::create("cocosui/button.png", "cocosui/buttonHighlighted.png");
             button_scale9->setScale9Enabled(true);
-            button_scale9->setContentSize(Size(100.0f, button_scale9->getVirtualRendererSize().height));
+            button_scale9->setContentSize(Size(100.0f, button_scale9->getPreferredSize().height));
             button_scale9->setPosition(
                 Vec2(titleButton->getRightBoundary() + titleButton->getContentSize().width / 2.0f,
                      titleButton->getBottomBoundary() - titleButton->getContentSize().height / 2.0f));

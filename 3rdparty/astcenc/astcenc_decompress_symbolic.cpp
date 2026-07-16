@@ -170,15 +170,15 @@ static float error_color_nan()
 void decompress_symbolic_block(
 	astcenc_profile decode_mode,
 	const block_size_descriptor& bsd,
-	int xpos,
-	int ypos,
-	int zpos,
+	size_t pos_x,
+	size_t pos_y,
+	size_t pos_z,
 	const symbolic_compressed_block& scb,
 	image_block& blk
 ) {
-	blk.xpos = xpos;
-	blk.ypos = ypos;
-	blk.zpos = zpos;
+	blk.pos_x = pos_x;
+	blk.pos_y = pos_y;
+	blk.pos_z = pos_z;
 
 	blk.data_min = vfloat4::zero();
 	blk.data_mean = vfloat4::zero();
@@ -216,7 +216,7 @@ void decompress_symbolic_block(
 			vmask4 u8_mask = get_u8_component_mask(decode_mode, blk);
 
 			// The real decoder would just use the top 8 bits, but we rescale
-			// in to a 16-bit value that rounds correctly.
+			// into a 16-bit value that rounds correctly.
 			vint4 colori_u8 = asr<8>(colori) * 257;
 			colori = select(colori, colori_u8, u8_mask);
 

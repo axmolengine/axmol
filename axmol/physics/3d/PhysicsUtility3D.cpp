@@ -47,7 +47,7 @@ ax::Mat4 cast(const JPH::Mat44& mat4)
     const JPH::Vec4 c2 = mat4.GetColumn4(2);
     const JPH::Vec4 c3 = mat4.GetColumn4(3);
 
-    ax::Mat4 mat = ax::Mat4::IDENTITY;
+    ax::Mat4 mat = ax::Mat4::identity;
     mat.m[0]     = c0.GetX();
     mat.m[1]     = c0.GetY();
     mat.m[2]     = c0.GetZ();

@@ -43,7 +43,7 @@ void SpineExtension::setInstance(SpineExtension *inValue) {
 }
 
 SpineExtension *SpineExtension::getInstance() {
-	if (!_instance) _instance = spine::getDefaultExtension();
+	if (!_instance) _instance = getDefaultExtension();
 	assert(_instance);
 
 	return _instance;
@@ -62,8 +62,7 @@ void *DefaultSpineExtension::_alloc(size_t size, const char *file, int line) {
 	SP_UNUSED(file);
 	SP_UNUSED(line);
 
-	if (size == 0)
-		return 0;
+	if (size == 0) return 0;
 	void *ptr = ::malloc(size);
 	return ptr;
 }
@@ -72,8 +71,7 @@ void *DefaultSpineExtension::_calloc(size_t size, const char *file, int line) {
 	SP_UNUSED(file);
 	SP_UNUSED(line);
 
-	if (size == 0)
-		return 0;
+	if (size == 0) return 0;
 
 	void *ptr = ::malloc(size);
 	if (ptr) {
@@ -87,8 +85,7 @@ void *DefaultSpineExtension::_realloc(void *ptr, size_t size, const char *file, 
 	SP_UNUSED(line);
 
 	void *mem = NULL;
-	if (size == 0)
-		return 0;
+	if (size == 0) return 0;
 	if (ptr == NULL)
 		mem = ::malloc(size);
 	else
@@ -104,7 +101,7 @@ void DefaultSpineExtension::_free(void *mem, const char *file, int line) {
 }
 
 char *DefaultSpineExtension::_readFile(const String &path, int *length) {
-#ifndef __EMSCRIPTEN__
+#if !defined(__EMSCRIPTEN__) && !defined(SPINE_NO_FILE_IO)
 	char *data;
 	FILE *file = fopen(path.buffer(), "rb");
 	if (!file) return 0;

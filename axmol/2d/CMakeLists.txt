@@ -17,7 +17,7 @@ set(_AX_2D_HEADER
   2d/FontAtlas.h
   2d/AtlasNode.h
   2d/ClippingNode.h
-  2d/RenderTexture.h
+
   2d/ActionInterval.h
   2d/TMXXMLParser.h
   2d/ActionInstant.h
@@ -29,7 +29,6 @@ set(_AX_2D_HEADER
   2d/ClippingRectangleNode.h
   2d/ActionEase.h
   2d/ProtectedNode.h
-  2d/TextFieldTTF.h
   2d/AnimationCache.h
   2d/FastTMXLayer.h
   2d/FontAtlasCache.h
@@ -109,14 +108,12 @@ set(_AX_2D_SRC
   2d/ParticleSystemQuad.cpp
   2d/ProgressTimer.cpp
   2d/ProtectedNode.cpp
-  2d/RenderTexture.cpp
   2d/SpriteBatchNode.cpp
   2d/Sprite.cpp
   2d/AnchoredSprite.cpp
   2d/SpriteFrameCache.cpp
   2d/SpriteFrame.cpp
   2d/AutoPolygon.cpp
-  2d/TextFieldTTF.cpp
   2d/TileMapAtlas.cpp
 
   # 2d/TMXLayer.cpp

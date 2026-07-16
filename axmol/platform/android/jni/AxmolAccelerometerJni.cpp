@@ -26,7 +26,7 @@
 #include <jni.h>
 #include "axmol/base/Director.h"
 #include "axmol/base/EventDispatcher.h"
-#include "axmol/base/EventAcceleration.h"
+#include "axmol/base/AccelerationEvent.h"
 
 #define TG3_GRAVITY_EARTH (9.80665f)
 
@@ -42,7 +42,7 @@ Java_dev_axmol_lib_AxmolAccelerometer_onSensorChanged(JNIEnv*, jclass, jfloat x,
     a.z         = -((double)z / TG3_GRAVITY_EARTH);
     a.timestamp = (double)timeStamp / 1e9;
 
-    EventAcceleration event(a);
+    AccelerationEvent event(a);
     Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
 }
 }

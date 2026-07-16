@@ -1,4 +1,4 @@
-﻿
+
 #ifndef __EFFEKSEER_VECTOR3D_H__
 #define __EFFEKSEER_VECTOR3D_H__
 

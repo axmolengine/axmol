@@ -1,7 +1,7 @@
 // axmol spec box2d draw implemention
 #pragma once
 
-#include "axmol/platform/RenderViewImpl.h"
+#include "axmol/platform/RenderView.h"
 #include "physics-nodes/PhysicsDebugNode.h"
 
 using namespace ax;

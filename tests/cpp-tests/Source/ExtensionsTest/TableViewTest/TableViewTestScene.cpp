@@ -91,13 +91,13 @@ TableViewCell* TableViewTest::tableCellAtIndex(TableView* table, ssize_t idx)
         cell = new CustomTableViewCell();
         cell->autorelease();
         auto sprite = Sprite::create("Images/Icon.png");
-        sprite->setAnchorPoint(Vec2::ZERO);
+        sprite->setAnchorPoint(Vec2::zero);
         sprite->setPosition(Vec2(0, 0));
         cell->addChild(sprite);
 
         auto label = Label::createWithSystemFont(string, "Helvetica", 20.0);
-        label->setPosition(Vec2::ZERO);
-        label->setAnchorPoint(Vec2::ZERO);
+        label->setPosition(Vec2::zero);
+        label->setAnchorPoint(Vec2::zero);
         label->setTag(123);
         cell->addChild(label);
     }

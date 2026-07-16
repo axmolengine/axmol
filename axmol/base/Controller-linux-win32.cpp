@@ -33,7 +33,7 @@ THE SOFTWARE.
 #    include "axmol/base/Macros.h"
 #    include "axmol/base/Director.h"
 #    include "axmol/base/Scheduler.h"
-#    include "axmol/base/EventController.h"
+#    include "axmol/base/ControllerEvent.h"
 #    include "glfw3.h"
 
 namespace ax

@@ -163,12 +163,12 @@ bool DrawNode3D::init()
     desc.startLayout(2);
     if (iter != inputs.end())
     {
-        desc.addAttrib(iter->first, &iter->second, rhi::VertexFormat::FLOAT3, 0, false);
+        desc.addAttrib(iter->first, &iter->second, rhi::VertexElementType::FLOAT3, 0, false);
     }
     iter = inputs.find("a_color");
     if (iter != inputs.end())
     {
-        desc.addAttrib(iter->first, &iter->second, rhi::VertexFormat::UBYTE4, sizeof(Vec3), true);
+        desc.addAttrib(iter->first, &iter->second, rhi::VertexElementType::UBYTE4, sizeof(Vec3), true);
     }
     desc.endLayout();
 
@@ -185,7 +185,7 @@ bool DrawNode3D::init()
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     // Need to listen the event only when not use batchnode, because it will use VBO
-    auto listener = EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, [this](EventCustom* event) {
+    auto listener = CustomEventListener::create(EVENT_COME_TO_FOREGROUND, [this](CustomEvent* event) {
         /** listen the event that coming to foreground on Android */
         this->init();
     });
@@ -200,8 +200,8 @@ void DrawNode3D::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
     _customCommand.init(_globalZOrder);
     // update mvp matrix
-    auto& matrixP = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    auto mvp      = matrixP * transform;
+    const auto& matrixP = Camera::getVisitingViewProjectionMatrix();
+    auto mvp            = matrixP * transform;
     _programState->setUniform(_locMVPMatrix, mvp.m, sizeof(mvp.m));
 
     if (_customCommand.getVertexCapacity() < _buffer.size())

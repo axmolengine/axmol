@@ -118,21 +118,34 @@ if ($cm_target_index -ne -1) {
     $cmake_target = $options.xb[$cm_target_index + 1]
 }
 
+# if cmake target not specified by cmake options, parse axmol cmdline option: -t
+if (!$cmake_target -and $options.t) {
+    if($options.t -isnot [array]) {
+        $options.t = "$($options.t)".Split(',')
+    }
+
+    $cmake_target = $options.t[0]
+}
+
 if ($is_axmol_engine -and $is_android) {
     if (!$cmake_target) {
         $source_proj_dir = Join-Path $AX_ROOT 'tests/cpp-tests'
     }
     else {
-        $builtin_targets = @{
+        $builtin_projects = @{
             'cpp-tests'      = 'tests/cpp-tests'
             'fairygui-tests' = 'tests/fairygui-tests'
             'live2d-tests'   = 'tests/live2d-tests'
             'unit-tests'     = 'tests/unit-tests'
         }
-        if (!$builtin_targets.Contains($cmake_target)) {
-            throw "specified target '$cmake_target' not present in engine"
+        if (!$builtin_projects.Contains($cmake_target)) {
+            throw "Unknown builtin project '$cmake_target' for Android."
         }
-        $source_proj_dir = Join-Path $AX_ROOT $builtin_targets[$cmake_target]
+
+        $target_dir = $builtin_projects[$cmake_target]
+        if ($target_dir) {
+            $source_proj_dir = Join-Path $AX_ROOT $builtin_projects[$cmake_target]
+        }
     }
 }
 
@@ -152,27 +165,29 @@ $proj_dir = search_proj_file 'CMakeLists.txt' 'Leaf'
 if (!$proj_dir) { throw "The directory $source_proj_dir doesn't contains CMakeLists.txt!" }
 $proj_name = (Get-Item $proj_dir).BaseName
 
+# Auto-detect cmake target if not specified:
+# - Non-Axmol engine project: use project name as target
+# - Axmol engine project: use 'axmol-sdk' (engine + enabled extensions)
+# Store the inferred target in options.t for use by the main script (1kiss.ps1)
+if (!$cmake_target) {
+    if (!$is_axmol_engine) {
+        $cmake_target = $proj_name
+    }
+    else {
+        $cmake_target = 'axmol-sdk'
+        if (!$configOnly) {
+            Write-Warning "Default build target updated: 'cpp-tests' -> 'axmol-sdk'. To build tests, use '-t cpp-tests' explicitly."
+        }
+    }
+    $options.t = @($cmake_target)
+}
+
 $use_gradle = $is_android -and (Test-Path $(Join-Path $proj_dir 'proj.android/gradlew') -PathType Leaf)
 if ($use_gradle) {
     $1k_args += '-xt', 'proj.android/gradlew'
 }
 
 if (!$use_gradle) {
-    if (!$cmake_target) {
-        # non android, specific cmake target
-        if($options.t) {
-            if($options.t -isnot [array]) {
-                $options.t = "$($options.t)".Split(',')
-            }
-        }
-
-        if(!$options.t) {
-            $options.t = @(@($proj_name, 'cpp-tests')[$is_axmol_engine])
-        }
-
-        $cmake_target = $options.t[-1]
-    }
-
     if ($is_android -and !"$($options.xc)".Contains('-DANDROID_STL')) {
         $options.xc += '-DANDROID_STL=c++_shared'
     }
@@ -181,7 +196,7 @@ else {
     # android gradle
     # engine ci
     if ($is_axmol_engine) {
-        $options.xc += "-PKEY_STORE_FILE=$AX_ROOT/tools/ci/axmol-ci.jks", '-PKEY_STORE_PASSWORD=axmol-ci', '-PKEY_ALIAS=axmol-ci', '-PKEY_PASSWORD=axmol-ci'
+        $options.xc += "-PKEY_STORE_FILE=$AX_ROOT/tools/cmdline/axmol-ci.jks", '-PKEY_STORE_PASSWORD=axmol-ci', '-PKEY_ALIAS=axmol-ci', '-PKEY_PASSWORD=axmol-ci'
     }
 }
 

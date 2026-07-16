@@ -24,7 +24,7 @@
 
 #include "sceneio/WidgetReader/SliderReader/SliderReader.h"
 
-#include "axmol/ui/UISlider.h"
+#include "axmol/ui/Slider.h"
 #include "axmol/2d/SpriteFrameCache.h"
 #include "axmol/platform/FileUtils.h"
 

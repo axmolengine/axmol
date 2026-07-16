@@ -39,7 +39,7 @@ EventAssetsManagerEx::EventAssetsManagerEx(std::string_view eventName,
                                            std::string_view message /* = "" */,
                                            int curle_code /* = CURLE_OK*/,
                                            int curlm_code /* = CURLM_OK*/)
-    : EventCustom(eventName)
+    : CustomEvent(eventName)
     , _code(code)
     , _manager(manager)
     , _message(message)

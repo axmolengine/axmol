@@ -27,12 +27,12 @@ THE SOFTWARE.
 #pragma once
 
 #include "axmol/platform/Common.h"
-#include "axmol/platform/ApplicationBase.h"
+#include "axmol/platform/ApplicationCore.h"
 
 namespace ax
 {
 
-class AX_DLL Application : public ApplicationBase
+class AX_DLL Application : public ApplicationCore
 {
 public:
     /**
@@ -49,16 +49,7 @@ public:
     */
     void setAnimationInterval(float interval) override;
 
-    /**
-    @brief    Run the message loop.
-    */
-    int run();
-
-    /**
-    @brief    Get current application instance.
-    @return Current application instance pointer.
-    */
-    static Application* getInstance();
+    int run() override;
 
     /**
     @brief Get current language config
@@ -90,7 +81,7 @@ public:
     bool openURL(std::string_view url) override;
 
 protected:
-    static Application* sm_pSharedApplication;
+    void postBoundaryTaskSignal() override;
 };
 
 }  // namespace ax

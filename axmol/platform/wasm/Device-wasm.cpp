@@ -33,9 +33,69 @@ THE SOFTWARE.
 
 #    include <emscripten/emscripten.h>
 #    include <emscripten/html5.h>
+#    include "GLFW/glfw3.h"
+
+#    include <map>
+#    include <atomic>
 
 namespace ax
 {
+
+// clang-format off
+
+// Global pointer just to bridge the active callback
+static std::map<uint64_t, std::function<void(std::string_view)>> g_clipboard_callbacks;
+static std::atomic<uint64_t> g_next_clipboard_id{1};
+
+extern "C" EMSCRIPTEN_KEEPALIVE void paste_bridge(uint64_t id, const char* text) {
+    auto it = g_clipboard_callbacks.find(id);
+    if (it != g_clipboard_callbacks.end()) {
+        it->second(text ? text : "");
+        g_clipboard_callbacks.erase(it);
+    }
+}
+
+void Device::getClipboardText(std::function<void(std::string_view)> callback)
+{
+    if (!callback)
+        return;
+
+    // Save the callback pointer globally for the duration of the async event
+    uint64_t id = g_next_clipboard_id++;
+    g_clipboard_callbacks[id] = std::move(callback);
+
+    EM_ASM({
+        var handlerId = $0;
+        navigator.clipboard.readText()
+            .then(function(text) {
+                // Pass directly to WASM using the runtime helper
+                ccall('paste_bridge', null, ['uint64', 'string'], [handlerId, text]);
+            })
+            .catch(function(err) {
+                ccall('paste_bridge', null, ['uint64', 'string'], [handlerId, ""]);
+            });
+    }, id);
+}
+
+void Device::setClipboardText(std::string_view text)
+{
+    EM_ASM_({
+        const str = UTF8ToString($0, $1);
+        navigator.clipboard.writeText(str).catch(err => {
+            console.error("Clipboard write failed:", err);
+        });
+    }, text.data(), text.size());
+}
+
+void Device::clearClipboard()
+{
+    EM_ASM({
+        navigator.clipboard.writeText("").catch(err => {
+            console.error("Clipboard clear failed:", err);
+        });
+    });
+}
+// clang-format on
 
 int Device::getDPI()
 {
@@ -90,8 +150,8 @@ Data Device::getTextureDataForText(std::string_view text,
         var strokeColor = UTF8ToString($9);
         var overflow = $10;
 
-        // use shared canvas
-        var canvas = Module.axmolSharedCanvas = Module.axmolSharedCanvas || document.createElement("canvas");
+        // use axmol offscreen canvas to render text
+        var canvas = Module.axmol_offscreen_canvas = Module.axmol_offscreen_canvas || document.createElement("canvas");
         var context = canvas.getContext('2d', { willReadFrequently: true });
         // use alphabetic baseline for text rendering
         context.textBaseline = "alphabetic";
@@ -229,10 +289,10 @@ Data Device::getTextureDataForText(std::string_view text,
        textDefinition._overflow);
 
     width = EM_ASM_INT({
-        return Module.axmolSharedCanvas.width;
+        return Module.axmol_offscreen_canvas.width;
     });
     height = EM_ASM_INT({
-        return Module.axmolSharedCanvas.height;
+        return Module.axmol_offscreen_canvas.height;
     });
     // clang-format on
 

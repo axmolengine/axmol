@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright(c) Live2D Inc. All rights reserved.
  *
  * Use of this source code is governed by the Live2D Open Software license
@@ -282,7 +282,7 @@ csmString& csmString::operator+=(const csmChar* c)
     {
         newptr = static_cast<csmChar*>(CSM_MALLOC(sizeof(csmChar) * (len1 + len2 + 1)));
 
-        memcpy(newptr, this->_ptr, len1); //nullを含めない
+        memcpy(newptr, GetRawString(), len1); //nullを含めない
         memcpy(&newptr[len1], c, len2 + 1); //nullを含めて+1
 
         Clear(); //現在のポインタを開放してから処理する

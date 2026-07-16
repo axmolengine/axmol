@@ -1,4 +1,4 @@
-﻿
+
 #ifndef __EFFEKSEER_PARAMETERS_H__
 #define __EFFEKSEER_PARAMETERS_H__
 

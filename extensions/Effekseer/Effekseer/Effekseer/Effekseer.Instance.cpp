@@ -1,4 +1,4 @@
-﻿#include "Effekseer.Instance.h"
+#include "Effekseer.Instance.h"
 #include "Effekseer.Curve.h"
 #include "Effekseer.Effect.h"
 #include "Effekseer.EffectImplemented.h"

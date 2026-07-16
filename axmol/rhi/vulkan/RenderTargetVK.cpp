@@ -104,6 +104,17 @@ void RenderTargetImpl::rebuildSwapchainAttachments(const tlx::pod_vector<VkImage
     auto device = _driver->getDevice();
     for (auto i = 0; i < images.size(); ++i)
     {
+#if !defined(NDEBUG) && defined(_WIN32)
+        if (Application::getContextAttrs().debugLayerEnabled)
+        {
+            VkDebugUtilsObjectNameInfoEXT debugName{.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT};
+            debugName.objectHandle = std::bit_cast<uintptr_t>(images[i]);
+            debugName.pObjectName  = "axmol3-swapchain-image";
+            debugName.objectType   = VK_OBJECT_TYPE_IMAGE;
+            vkSetDebugUtilsObjectNameEXT(_driver->getDevice(), &debugName);
+        }
+#endif
+
         VkImageView imageView{VK_NULL_HANDLE};
 
         VkImageViewCreateInfo viewInfo{};
@@ -124,9 +135,9 @@ void RenderTargetImpl::rebuildSwapchainAttachments(const tlx::pod_vector<VkImage
 
         _swapchainImageViews[i] = imageView;
 
-        // Wrap the swapchain VkImage as TextureImpl (color attachment)
-        // Important: TextureImpl(VkImage) does not own the image memory; it should create a VkImageView for sampling.
-        auto colorTex = new TextureImpl(_driver, images[i], imageView);
+        // Wrap the swapchain VkImage as a presentable color attachment.
+        // It must not be treated as a sampled texture
+        auto colorTex = new TextureImpl(_driver, images[i], imageView, SWAPCHAIN_IMAGE_USAGE_FLAGS);
         // Update descriptor (sampler, mip info, etc.). The TextureImpl should create view if missing.
         colorTex->updateTextureDesc(colorDesc);
         _color[i].texture = colorTex;
@@ -143,9 +154,7 @@ void RenderTargetImpl::rebuildSwapchainAttachments(const tlx::pod_vector<VkImage
     depthDesc.pixelFormat  = PixelFormat::D24S8;
     depthDesc.textureUsage = TextureUsage::RENDER_TARGET;
 
-    auto tex = new TextureImpl(_driver, depthDesc);
-    // init image, imageView
-    tex->updateData(nullptr, extent.width, extent.height, 0);
+    auto tex              = new TextureImpl(_driver, depthDesc);
     _depthStencil.texture = tex;
 }
 
@@ -208,7 +217,7 @@ void RenderTargetImpl::beginRenderPass(VkCommandBuffer cmd,
                     continue;
                 if (_color[i].texture)
                 {
-                    auto* texImpl       = static_cast<TextureImpl*>(_color[i].texture);
+                    auto texImpl        = static_cast<TextureImpl*>(_color[i].texture);
                     _attachmentViews[i] = texImpl->internalHandle().view;
                 }
                 else
@@ -221,7 +230,7 @@ void RenderTargetImpl::beginRenderPass(VkCommandBuffer cmd,
             {
                 if (_depthStencil.texture)
                 {
-                    auto* texImpl           = static_cast<TextureImpl*>(_depthStencil.texture);
+                    auto texImpl            = static_cast<TextureImpl*>(_depthStencil.texture);
                     _attachmentViews.back() = texImpl->internalHandle().view;
                 }
                 else
@@ -322,12 +331,15 @@ void RenderTargetImpl::endRenderPass(VkCommandBuffer cmd)
         {
             if (!rb)
                 break;
-            // transitionLayout to SHADER_READ_ONLY_OPTIMAL for sampling explicitly to fix vkCmdDrawIndexed():
-            // READ_AFTER_WRITE hazard detected. Shader stage VK_SHADER_STAGE_FRAGMENT_BIT reads
-            // VkImageView which was previously written during an image layout transition initiated by
-            // vkCmdEndRenderPass
-            auto texImpl = static_cast<TextureImpl*>(rb.texture);
-            texImpl->transitionLayout(cmd, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+            auto texImpl           = static_cast<TextureImpl*>(rb.texture);
+            const auto finalLayout = texImpl->getRenderTargetFinalLayout();
+            if (finalLayout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
+            {
+                AXASSERT(texImpl->canUseShaderReadOnlyLayout(),
+                         "VkImage must have VK_IMAGE_USAGE_SAMPLED_BIT or VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT before "
+                         "using VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL");
+            }
+            texImpl->transitionLayout(cmd, finalLayout);
         }
         if (_depthStencil)
         {
@@ -432,12 +444,12 @@ void RenderTargetImpl::updateRenderPass(const RenderPassDesc& desc, uint32_t ima
                 discardEnd ? VK_ATTACHMENT_STORE_OP_DONT_CARE : VK_ATTACHMENT_STORE_OP_STORE;
 
             VkAttachmentDescription& ad = attachments.emplace_back();
-            ad.format                   = UtilsVK::toVKFormat(attDesc.pixelFormat);
-            ad.samples                  = VK_SAMPLE_COUNT_1_BIT;
-            ad.loadOp                   = loadOp;
-            ad.storeOp                  = storeOp;
-            ad.stencilLoadOp            = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-            ad.stencilStoreOp           = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+            ad.format         = UtilsVK::toVkFormat(attDesc.pixelFormat, attDesc.colorSpace == ColorSpace::Srgb);
+            ad.samples        = VK_SAMPLE_COUNT_1_BIT;
+            ad.loadOp         = loadOp;
+            ad.storeOp        = storeOp;
+            ad.stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+            ad.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
 
             // Use UNDEFINED when not loading to minimize mismatch risk
             ad.initialLayout =
@@ -497,7 +509,7 @@ void RenderTargetImpl::updateRenderPass(const RenderPassDesc& desc, uint32_t ima
                 discardS1 ? VK_ATTACHMENT_STORE_OP_DONT_CARE : VK_ATTACHMENT_STORE_OP_STORE;
 
             VkAttachmentDescription& ad = attachments.emplace_back();
-            ad.format                   = UtilsVK::toVKFormat(dsDesc.pixelFormat);
+            ad.format                   = UtilsVK::toVkFormat(dsDesc.pixelFormat);
             ad.samples                  = VK_SAMPLE_COUNT_1_BIT;
             ad.loadOp                   = depthLoad;
             ad.storeOp                  = depthStore;

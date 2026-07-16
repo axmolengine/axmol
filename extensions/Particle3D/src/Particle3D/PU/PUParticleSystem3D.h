@@ -113,12 +113,12 @@ struct AX_EXT_API PUParticle3D : public Particle3D
         in 2D. */
     float zRotationSpeed;  // radian
 
-    // Quaternion orientationInWorld;
+    // Quat orientationInWorld;
     /*@remarks
         The orientation of the particle is only visible if the Particle Renderer - such as the Box renderer -
         supports orientation.
     */
-    Quaternion originalOrientation;
+    Quat originalOrientation;
 
     /** The rotation is used in combination with orientation. Because the rotation speed is part
         of the particle itself, it can be changed independently. */
@@ -282,7 +282,7 @@ public:
     void setDefaultDepth(const float depth);
 
     Vec3 getDerivedPosition();
-    Quaternion getDerivedOrientation();
+    Quat getDerivedOrientation();
     Vec3 getDerivedScale();
 
     /**
@@ -394,7 +394,7 @@ protected:
     float _particleSystemScaleVelocity;
     float _timeElapsedSinceStart;
 
-    Quaternion _rotationOffset;  // Rotation offset between 2 updates.
+    Quat _rotationOffset;  // Rotation offset between 2 updates.
 
     Vec3 _rotationCentre;  // The rotation centre.
 
@@ -414,7 +414,7 @@ protected:
     Vec3 _latestPositionDiff;
     Vec3 _latestPosition;  // Keep latest position
 
-    Quaternion _latestOrientation;
+    Quat _latestOrientation;
 
     PUParticleSystem3D* _parentParticleSystem;
 };

@@ -293,11 +293,11 @@ static bool generate_one_partition_info_entry(
 	// Assign texels to partitions
 	int texel_idx = 0;
 	int counts[BLOCK_MAX_PARTITIONS] { 0 };
-	for (unsigned int z = 0; z < bsd.zdim; z++)
+	for (unsigned int z = 0; z < bsd.dim_z; z++)
 	{
-		for (unsigned int y = 0; y <  bsd.ydim; y++)
+		for (unsigned int y = 0; y <  bsd.dim_y; y++)
 		{
-			for (unsigned int x = 0; x <  bsd.xdim; x++)
+			for (unsigned int x = 0; x <  bsd.dim_x; x++)
 			{
 				uint8_t part = select_partition(partition_index, x, y, z, partition_count, small_block);
 				pi.texels_of_partition[part][counts[part]++] = static_cast<uint8_t>(texel_idx++);
@@ -397,6 +397,15 @@ static void build_partition_table_for_one_partition_count(
 	unsigned int next_index = 0;
 	bsd.partitioning_count_selected[partition_count - 1] = 0;
 	bsd.partitioning_count_all[partition_count - 1] = 0;
+
+	// Mark all partitionings as unused; the loops below overwrite the entries
+	// that are actually kept. Partitionings dropped in self-decompress mode
+	// must retain this known-bad value so that decoding an unknown raw
+	// partition index does not result in a bad packed index.
+	for (unsigned int i = 0; i < BLOCK_MAX_PARTITIONINGS; i++)
+	{
+		bsd.partitioning_packed_index[partition_count - 2][i] = BLOCK_BAD_PARTITIONING;
+	}
 
 	// Skip tables larger than config max partition count if we can omit modes
 	if (can_omit_partitionings && (partition_count > partition_count_cutoff))

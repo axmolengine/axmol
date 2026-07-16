@@ -34,6 +34,49 @@ THE SOFTWARE.
 namespace ax
 {
 
+void Device::getClipboardText(std::function<void(std::string_view)> callback)
+{
+    if (!callback)
+        return;
+    @autoreleasepool
+    {
+        NSPasteboard* pb = [NSPasteboard generalPasteboard];
+        NSString* s      = [pb stringForType:NSPasteboardTypeString];
+        if (!s)
+        {
+            callback(std::string_view{});
+            return;
+        }
+        const char* utf8 = [s UTF8String];
+        NSUInteger len   = [s lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+        callback(utf8 ? std::string_view(utf8, static_cast<size_t>(len)) : std::string_view{});
+    }
+}
+
+void Device::setClipboardText(std::string_view text)
+{
+    @autoreleasepool
+    {
+        NSPasteboard* pb = [NSPasteboard generalPasteboard];
+        [pb clearContents];
+
+        NSString* s = [[NSString alloc] initWithBytes:text.data()
+                                               length:(NSUInteger)text.size()
+                                             encoding:NSUTF8StringEncoding];
+        if (s)
+            [pb setString:s forType:NSPasteboardTypeString];
+    }
+}
+
+void Device::clearClipboard()
+{
+    @autoreleasepool
+    {
+        NSPasteboard* pb = [NSPasteboard generalPasteboard];
+        [pb clearContents];
+    }
+}
+
 static NSAttributedString* __attributedStringWithFontSize(NSMutableAttributedString* attributedString, CGFloat fontSize)
 {
     {

@@ -39,7 +39,7 @@ public:
     virtual std::string subtitle() const override;
     virtual void onExit() override;
 
-    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onPointerMove(ax::PointerEvent* event);
 };
 
 class TileMapTestNew : public TileDemoNew
@@ -348,7 +348,7 @@ public:
 
     ax::FastTMXTiledMap* map;
     bool _animStarted = true;
-    void onTouchBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    bool onPointerDown(ax::PointerEvent* event);
 };
 
 class TileAnimTestNew2 : public TileDemoNew
@@ -360,7 +360,7 @@ public:
 
     ax::FastTMXTiledMap* map;
     bool _animStarted = true;
-    void onTouchBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    bool onPointerDown(ax::PointerEvent* event);
 };
 
 // Multi-tileset support tests

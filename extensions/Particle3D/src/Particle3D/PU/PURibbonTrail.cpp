@@ -34,11 +34,6 @@
 #include "axmol/scene/Camera.h"
 #include "axmol/3d/MeshRenderer.h"
 
-#if defined(_WIN32)
-#    pragma push_macro("TRANSPARENT")
-#    undef TRANSPARENT
-#endif
-
 namespace ax
 {
 
@@ -142,8 +137,8 @@ void PURibbonTrail::setNumberOfChains(size_t numChains)
 
     PUBillboardChain::setNumberOfChains(numChains);
 
-    _initialColor.resize(numChains, Color::WHITE);
-    _deltaColor.resize(numChains, Color::TRANSPARENT);
+    _initialColor.resize(numChains, Color::white);
+    _deltaColor.resize(numChains, Color::clear);
     _initialWidth.resize(numChains, 10);
     _deltaWidth.resize(numChains, 0);
 
@@ -252,7 +247,7 @@ void PURibbonTrail::manageController()
     _needTimeUpdate = false;
     for (size_t i = 0; i < _chainCount; ++i)
     {
-        if (_deltaWidth[i] != 0 || !_deltaColor[i].equals(Color::TRANSPARENT))
+        if (_deltaWidth[i] != 0 || !_deltaColor[i].equals(Color::clear))
         {
             _needTimeUpdate = true;
             break;
@@ -426,7 +421,3 @@ void PURibbonTrail::update(float deltaTime)
 }
 
 }  // namespace ax
-
-#if defined(_WIN32)
-#    pragma pop_macro("TRANSPARENT")
-#endif

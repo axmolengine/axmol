@@ -49,13 +49,17 @@ namespace ax
  0   1    0
  0   0    1
  */
-struct AX_DLL AffineTransform
+struct AffineTransform
 {
     float a, b, c, d;
     float tx, ty;
 
-    static const AffineTransform IDENTITY;
+    static const AffineTransform identity;
 };
+
+// POD type with no non‑trivial member functions or static initialization logic; safe to define as an inline constexpr
+// in the header C++17 or later.
+inline constexpr AffineTransform AffineTransform::identity{1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f};
 
 /**@}*/
 

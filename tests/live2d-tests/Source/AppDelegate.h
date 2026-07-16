@@ -26,7 +26,7 @@ public:
     AppDelegate();
     ~AppDelegate() override;
 
-    void initContextAttrs() override;
+    void applicationWillLaunch() override;
 
     /**
     @brief    Implement Director and Scene init code here.
@@ -48,7 +48,7 @@ public:
     void applicationWillEnterForeground() override;
 
 private:
-    ax::EventListenerCustom* _recreatedEventlistener;
+    ax::CustomEventListener* _recreatedEventlistener;
 
     LAppAllocator _cubismAllocator;
     Csm::CubismFramework::Option _cubismOption;

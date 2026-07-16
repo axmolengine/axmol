@@ -29,9 +29,8 @@ THE SOFTWARE.
 #pragma once
 
 #include "axmol/scene/Node.h"
-#if defined(AX_ENABLE_3D)
-#    include "axmol/3d/Frustum.h"
-#endif
+#include "axmol/math/Frustum.h"
+#include "axmol/math/Ray.h"
 #include "axmol/renderer/QuadCommand.h"
 #include "axmol/renderer/CustomCommand.h"
 #include "axmol/base/Director.h"
@@ -40,6 +39,8 @@ namespace ax
 {
 
 class Scene;
+class RenderView;
+class RenderTexture;
 class CameraBackgroundBrush;
 
 /**
@@ -64,6 +65,7 @@ enum class CameraFlag
     USER7   = 1 << 7,
     USER8   = 1 << 8,
 };
+
 /**
  * Defines a camera .
  */
@@ -72,6 +74,7 @@ class AX_DLL Camera : public Node
     friend class Scene;
     friend class Director;
     friend class EventDispatcher;
+    friend class NodeGrid;
 
 public:
     /**
@@ -95,17 +98,63 @@ public:
      */
     static Camera* createOrthographic(float zoomX, float zoomY, float nearPlane, float farPlane);
 
-    /** create default camera, the camera type depends on Director::getProjection, the depth of the default camera is 0
+    /**
+     * @brief Creates a 2D orthographic camera for a view of the given size.
+     *
+     * The camera uses an orthographic projection whose visible area matches
+     * `size.width` by `size.height`, and is positioned at the center of that
+     * area: `(size.width / 2, size.height / 2, 0)`.
+     *
+     * This is useful for rendering 2D content in a local canvas coordinate space,
+     * such as offscreen rendering, RenderTexture capture, UI texture generation,
+     * or any pass where the render target has its own logical size.
+     *
+     * Unlike createOrthographic(), this helper also initializes the camera transform
+     * so that local coordinates from `(0, 0)` to `(size.width, size.height)` map
+     * naturally into the camera view.
+     *
+     * @param size       The logical size of the orthographic view.
+     * @param nearPlane  The near clipping plane.
+     * @param farPlane   The far clipping plane.
+     *
+     * @return An autoreleased Camera instance.
+     *
+     * @see initOrthographicView
+     * @see createOrthographic
      */
-    static Camera* create();
+    static Camera* createOrthographicView(const Vec2& size, float nearPlane, float farPlane);
+
+    /** create default camera (Classic calibrated perspective mode), the depth of the default camera is 0
+     */
+    static Camera* create(CameraMode mode = CameraMode::Classic);
 
     /**
      * Get the visiting camera , the visiting camera shall be set on Scene::render
      */
-    static const Camera* getVisitingCamera();
+    static const Camera* getVisitingCamera() { return _visitingCamera; }
+
+    /**
+     * Set the visiting camera for draw context. Used by engine internals
+     * for offscreen capture (Transition, Utils, etc.)
+     */
+    static void setVisitingCamera(Camera* camera) { _visitingCamera = camera; }
+
+    /**
+     * Get the view-projection matrix of the current draw context.
+     */
+    static const Mat4& getVisitingViewProjectionMatrix();
 
     static const Viewport& getDefaultViewport();
     static void setDefaultViewport(const Viewport& vp);
+
+    /**
+     * @brief Updates the view-projection update state from the camera transform state.
+     *
+     * This is used by renderers that manage render targets and viewports themselves
+     * and therefore cannot call Camera::apply(), but still need the camera
+     * view-projection update flag to match the current transform state.
+     */
+    void updateViewProjectionState() { _viewProjectionUpdated = _transformUpdated; }
 
     /**
      * Get the default camera of the current running scene.
@@ -117,12 +166,28 @@ public:
     void setCameraFlag(CameraFlag flag) { _cameraFlag = flag; }
 
     /**
+     * Set a render texture as the camera's offscreen render target.
+     * When set, Scene::render() will automatically bind this render target
+     * before visiting the scene with this camera, and restore the previous
+     * render target afterwards.
+     *
+     * @param target The render texture to render into, or nullptr to restore default behavior.
+     */
+    void setTargetTexture(RenderTexture* target);
+
+    /**
+     * Get the render texture currently bound as this camera's offscreen target.
+     * @return The bound render texture, or nullptr if rendering to screen.
+     */
+    RenderTexture* getTargetTexture() const { return _targetTexture; }
+
+    /**
      * Make Camera looks at target
      *
      * @param target The target camera is point at
      * @param up The up vector, usually it's Y axis
      */
-    virtual void lookAt(const Vec3& target, const Vec3& up = Vec3::UNIT_Y);
+    virtual void lookAt(const Vec3& target, const Vec3& up = Vec3::yAxis);
 
     /**
      * Gets the camera's projection matrix.
@@ -130,6 +195,12 @@ public:
      * @return The camera projection matrix.
      */
     const Mat4& getProjectionMatrix() const;
+    /**
+     * Sets the camera's projection matrix.
+     *
+     * @param mat The new projection matrix.
+     */
+    void setProjectionMatrix(const Mat4& mat);
     /**
      * Gets the camera's view matrix.
      *
@@ -140,66 +211,71 @@ public:
     /**get view projection matrix*/
     const Mat4& getViewProjectionMatrix() const;
 
-    /* convert the specified point in 3D world-space coordinates into the screen-space coordinates.
-     *
-     * Origin point at left top corner in screen-space.
-     * @param src The world-space position.
-     * @return The screen-space position.
-     */
-    Vec2 project(const Vec3& src) const;
+    /** Get the scene that currently owns this camera for rendering. */
+    Scene* getOwnerScene() const { return _scene; }
 
-    /* convert the specified point in 3D world-space coordinates into the GL-screen-space coordinates.
+    /**
+     * @brief Converts a 2D screen point into a 3D ray in world space.
      *
-     * Origin point at left bottom corner in GL-screen-space.
+     * This function serves as the core gateway for 3D raycast picking. It unprojects
+     * a 2D screen coordinate to the near plane (Z=0) and far plane (Z=1) in world space
+     * using the current camera's viewport, view matrix, and projection matrix to construct a 3D ray.
+     *
+     * @param screenPoint The 2D screen coordinate. Must comply with the new input system
+     * specification: origin at top-left, with the Y-axis increasing downwards.
+     *
+     * @return A Ray structure representing the constructed 3D ray.
+     * - Ray.origin: The starting point of the ray, located on the near clipping plane in world space.
+     * - Ray.direction: The normalized direction vector of the ray.
+     *
+     * @note The function automatically handles the Y-axis viewport coordinate conversion from
+     * the new system's top-left origin (Y-down) to the underlying graphics API's (OpenGL/Vulkan)
+     * bottom-left origin (Y-up). Callers do not need to manually flip the Y-axis.
+     *
+     * @see Director::screenToCanvas
+     */
+    Ray screenToRay(const Vec2& screenPoint) const;
+
+    /**
+     * Convert the specified point in 3D world-space coordinates into the screen-space coordinates.
+     *
+     * The screen-space coordinate system has its origin point at the left top corner.
+     * This corresponds to the native platform/window input coordinates.
+     *
      * @param src The 3D world-space position.
-     * @return The GL-screen-space position.
+     * @return The screen-space position (left-top origin).
      */
-    Vec2 projectGL(const Vec3& src) const;
+    Vec2 projectWorldToScreen(const Vec3& src) const;
 
     /**
      * Convert the specified point of screen-space coordinate into the 3D world-space coordinate.
      *
-     * Origin point at left top corner in screen-space.
-     * @param src The screen-space position.
+     * The screen-space coordinate system has its origin point at the left top corner.
+     *
+     * @param src The screen-space position (left-top origin).
      * @return The 3D world-space position.
      */
-    Vec3 unproject(const Vec3& src) const;
+    Vec3 deprojectScreenToWorld(const Vec3& src) const;
 
     /**
-     * Convert the specified point of GL-screen-space coordinate into the 3D world-space coordinate.
+     * @brief Converts a 3D world-space coordinate into the 2D legacy Canvas coordinate space.
      *
-     * Origin point at left bottom corner in GL-screen-space.
-     * @param src The GL-screen-space position.
-     * @return The 3D world-space position.
-     */
-    Vec3 unprojectGL(const Vec3& src) const;
-
-    /**
-     * Convert the specified point of screen-space coordinate into the 3D world-space coordinate.
+     * This function maps a 3D position into the logical design resolution space used by the
+     * 2D UI hierarchy (e.g., Node, Widget, Sprite). The returned coordinate system has its
+     * origin (0, 0) at the **bottom-left corner** of the design resolution canvas.
      *
-     * Origin point at left top corner in screen-space.
-     * @param size The window size to use.
-     * @param src  The screen-space position.
-     * @param dst  The 3D world-space position.
-     */
-    void unproject(const Vec2& size, const Vec3* src, Vec3* dst) const;
-
-    /**
-     * Convert the specified point of GL-screen-space coordinate into the 3D world-space coordinate.
+     * @note This replaces the legacy 'projectWorldToViewport' which was a misnomer, as it
+     * scales against Director::getCanvasSize() rather than the actual RHI physical viewport.
      *
-     * Origin point at left bottom corner in GL-screen-space.
-     * @param size The window size to use.
-     * @param src  The GL-screen-space position.
-     * @param dst  The 3D world-space position.
+     * @param src The 3D world-space position to be projected.
+     * @return The 2D logical canvas-space position (bottom-left origin).
      */
-    void unprojectGL(const Vec2& size, const Vec3* src, Vec3* dst) const;
+    Vec2 projectWorldToCanvas(const Vec3& src) const;
 
-#if defined(AX_ENABLE_3D)
     /**
      * Is this aabb visible in frustum
      */
     bool isVisibleInFrustum(const AABB* aabb) const;
-#endif
 
     /**
      * Get object depth towards camera
@@ -333,9 +409,9 @@ public:
      * WP8*/
     void setAdditionalProjection(const Mat4& mat);
 
-    /** Init default camera with director current projection,
+    /** Init camera with Classic calibrated perspective mode
     !!!Note: Must invoke this function again when director projection or winsize changed */
-    void initDefault();
+    void initClassic();
 
     /** Update camera transformations */
     void updateTransform() override;
@@ -344,9 +420,32 @@ public:
     bool initOrthographic(float zoomX, float zoomY, float nearPlane, float farPlane);
     void applyViewport();
 
+    /**
+     * Checks whether a 2D world/canvas point hits a local content rectangle.
+     *
+     * The input point is interpreted as a point in world/canvas XY space, not
+     * native screen space. The function builds a line from (pt.x, pt.y, -1) to
+     * (pt.x, pt.y, 1), transforms it into node local space, intersects it with
+     * the local z = 0 plane, and checks whether the intersection lies inside rect.
+     *
+     * @param pt   Point in 2D world/canvas coordinates.
+     * @param w2l  World-to-local transform.
+     * @param rect Rectangle in local space.
+     * @param p    Optional local-space intersection point.
+     */
+    static bool isWorldPointInRect(const Vec2& pt, const Mat4& w2l, const Rect& rect, Vec3* p);
+    static bool isWorldPointInRect(const Vec2& pt, const Mat4& w2l, const Rect& rect)
+    {
+        return isWorldPointInRect(pt, w2l, rect, nullptr);
+    }
+
 protected:
     static Camera* _visitingCamera;
     static Viewport _defaultViewport;
+
+    bool initOrthographicView(const Vec2& size, float nearPlane, float farPlane);
+
+    RenderViewCore* _renderView{nullptr};
 
     //* Scene that owns this camera.
     Scene* _scene = nullptr;
@@ -363,12 +462,12 @@ protected:
     mutable bool _viewProjectionDirty = true;
     bool _viewProjectionUpdated = false;  // Whether or not the viewprojection matrix was updated since the last frame.
     CameraFlag _cameraFlag      = CameraFlag::DEFAULT;  // camera flag
-#if defined(AX_ENABLE_3D)
-    mutable Frustum _frustum;  // camera frustum
+    mutable Frustum _frustum;                           // camera frustum
     mutable bool _frustumDirty = true;
-#endif
     int8_t _depth = -1;  // camera depth, the depth of camera with CameraFlag::DEFAULT flag is 0 by default, a camera
                          // with larger depth is drawn on top of camera with smaller depth
+
+    CameraMode _cameraMode{CameraMode::Classic};  // set during creation
 
     float _eyeZdistance;  // Z eye projection distance for 2D in 3D projection.
     float _zoomFactor =
@@ -377,6 +476,7 @@ protected:
     float _zoomFactorNearPlane;
 
     CameraBackgroundBrush* _clearBrush = nullptr;  // brush used to clear the back ground
+    RenderTexture* _targetTexture      = nullptr;  // optional offscreen render target
 };
 
 }  // namespace ax

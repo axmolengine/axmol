@@ -672,7 +672,7 @@ void ActionAnimate::onEnter()
     auto action2 = Animate::create(animation2);
     _tamara->runAction(Sequence::create(action2, action2->reverse(), nullptr));
 
-    _frameDisplayedListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [](EventCustom* event) {
+    _frameDisplayedListener = CustomEventListener::create(AnimationFrameDisplayedNotification, [](CustomEvent* event) {
         auto userData = static_cast<AnimationFrame::DisplayedEventInfo*>(event->getUserData());
 
         AXLOGD("target {} with data {}", fmt::ptr(userData->target), Value(userData->userInfo).getDescription());
@@ -1192,7 +1192,6 @@ void ActionOrbit::onEnter()
 {
     ActionsDemo::onEnter();
 
-    Director::getInstance()->setProjection(Director::Projection::_2D);
     centerSprites(3);
 
     auto orbit1  = OrbitCamera::create(2, 1, 0, 0, 180, 0, 0);
@@ -1220,8 +1219,6 @@ void ActionOrbit::onEnter()
 void ActionOrbit::onExit()
 {
     ActionsDemo::onExit();
-
-    Director::getInstance()->setProjection(Director::Projection::DEFAULT);
 }
 
 std::string ActionOrbit::subtitle() const
@@ -1312,7 +1309,7 @@ void ActionTargeted::onEnter()
     ActionsDemo::onEnter();
     centerSprites(2);
 
-    auto jump1 = JumpBy::create(2, Vec2::ZERO, 100, 3);
+    auto jump1 = JumpBy::create(2, Vec2::zero, 100, 3);
     auto jump2 = jump1->clone();
     auto rot1  = RotateBy::create(1, 360);
     auto rot2  = rot1->clone();
@@ -1341,7 +1338,7 @@ void ActionTargetedReverse::onEnter()
     ActionsDemo::onEnter();
     centerSprites(2);
 
-    auto jump1 = JumpBy::create(2, Vec2::ZERO, 100, 3);
+    auto jump1 = JumpBy::create(2, Vec2::zero, 100, 3);
     auto jump2 = jump1->clone();
     auto rot1  = RotateBy::create(1, 360);
     auto rot2  = rot1->clone();
@@ -1373,8 +1370,8 @@ void ActionStacked::onEnter()
 
     this->centerSprites(0);
 
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = AX_CALLBACK_2(ActionStacked::onTouchesEnded, this);
+    auto listener         = PointerEventListener::create();
+    listener->onPointerUp = AX_CALLBACK_1(ActionStacked::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto s = Director::getInstance()->getCanvasSize();
@@ -1402,13 +1399,10 @@ void ActionStacked::runActionsInSprite(Sprite* sprite)
     // override me
 }
 
-void ActionStacked::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+void ActionStacked::onPointerUp(PointerEvent* event)
 {
-    for (auto&& touch : touches)
-    {
-        auto location = touch->getLocation();
-        addNewSpriteWithCoords(location);
-    }
+    auto location = event->getWorldPoint();
+    addNewSpriteWithCoords(location);
 }
 
 std::string ActionStacked::title() const

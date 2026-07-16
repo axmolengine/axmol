@@ -38,8 +38,8 @@ namespace ax
 {
 
 class ControllerImpl;
-class EventListenerController;
-class EventController;
+class ControllerEventListener;
+class ControllerEvent;
 class EventDispatcher;
 
 /**
@@ -219,9 +219,9 @@ private:
     ControllerImpl* _impl;
 
     EventDispatcher* _eventDispatcher;
-    EventController* _connectEvent;
-    EventController* _keyEvent;
-    EventController* _axisEvent;
+    ControllerEvent* _connectEvent;
+    ControllerEvent* _keyEvent;
+    ControllerEvent* _axisEvent;
 
 #    if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX || AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
     // FIXME: Once GLFW 3.3 is bundled with cocos2d-x, remove these unordered
@@ -242,7 +242,7 @@ private:
 #    endif
 
     friend class ControllerImpl;
-    friend class EventListenerController;
+    friend class ControllerEventListener;
 };
 
 // end group

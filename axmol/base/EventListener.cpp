@@ -38,12 +38,12 @@ EventListener::~EventListener()
 
 bool EventListener::init(Type t, std::string_view listenerID, const std::function<void(Event*)>& callback)
 {
-    _onEvent      = callback;
-    _type         = t;
-    _listenerID   = listenerID;
-    _isRegistered = false;
-    _paused       = false;
-    _isEnabled    = true;
+    _onEvent    = callback;
+    _type       = t;
+    _listenerID = listenerID;
+    _isAttached = false;
+    _paused     = false;
+    _isEnabled  = true;
 
     return true;
 }

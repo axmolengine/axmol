@@ -32,42 +32,42 @@
 #include <spine/Event.h>
 #include <spine/Skeleton.h>
 
-namespace spine {
-	RTTI_IMPL_NOPARENT(Timeline)
+using namespace spine;
 
-	Timeline::Timeline(size_t frameCount, size_t frameEntries)
-		: _propertyIds(), _frames(), _frameEntries(frameEntries) {
-		_frames.setSize(frameCount * frameEntries, 0);
-	}
+RTTI_IMPL_NOPARENT(Timeline)
 
-	Timeline::~Timeline() {
-	}
+Timeline::Timeline(size_t frameCount, size_t frameEntries)
+	: _propertyIds(), _frames(), _frameEntries(frameEntries), _additive(false), _instant(false) {
+	_frames.setSize(frameCount * frameEntries, 0);
+}
 
-	Vector<PropertyId> &Timeline::getPropertyIds() {
-		return _propertyIds;
-	}
+Timeline::~Timeline() {
+}
 
-	void Timeline::setPropertyIds(PropertyId propertyIds[], size_t propertyIdsCount) {
-		_propertyIds.clear();
-		_propertyIds.ensureCapacity(propertyIdsCount);
-		for (size_t i = 0; i < propertyIdsCount; i++) {
-			_propertyIds.add(propertyIds[i]);
-		}
-	}
+Array<PropertyId> &Timeline::getPropertyIds() {
+	return _propertyIds;
+}
 
-	size_t Timeline::getFrameCount() {
-		return _frames.size() / _frameEntries;
+void Timeline::setPropertyIds(PropertyId propertyIds[], size_t propertyIdsCount) {
+	_propertyIds.clear();
+	_propertyIds.ensureCapacity(propertyIdsCount);
+	for (size_t i = 0; i < propertyIdsCount; i++) {
+		_propertyIds.add(propertyIds[i]);
 	}
+}
 
-	Vector<float> &Timeline::getFrames() {
-		return _frames;
-	}
+size_t Timeline::getFrameCount() {
+	return _frames.size() / _frameEntries;
+}
 
-	size_t Timeline::getFrameEntries() {
-		return _frameEntries;
-	}
+Array<float> &Timeline::getFrames() {
+	return _frames;
+}
 
-	float Timeline::getDuration() {
-		return _frames[_frames.size() - getFrameEntries()];
-	}
-}// namespace spine
+size_t Timeline::getFrameEntries() {
+	return _frameEntries;
+}
+
+float Timeline::getDuration() {
+	return _frames[_frames.size() - getFrameEntries()];
+}

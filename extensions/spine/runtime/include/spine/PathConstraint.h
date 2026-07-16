@@ -30,103 +30,88 @@
 #ifndef Spine_PathConstraint_h
 #define Spine_PathConstraint_h
 
+#include <spine/Constraint.h>
 #include <spine/ConstraintData.h>
-
-#include <spine/Vector.h>
+#include <spine/PathConstraintData.h>
+#include <spine/PathConstraintPose.h>
+#include <spine/Array.h>
 
 namespace spine {
-	class PathConstraintData;
-
 	class Skeleton;
-
 	class PathAttachment;
-
-	class Bone;
-
+	class BonePose;
 	class Slot;
+	class Bone;
+	class Skin;
+	class Attachment;
 
-	class SP_API PathConstraint : public Updatable {
+	/// Adjusts the rotation, translation, and scale of the constrained bones so they follow a PathAttachment.
+	///
+	/// See https://esotericsoftware.com/spine-path-constraints Path constraints in the Spine User Guide.
+	// Non-exported base class that inherits from the template
+	class PathConstraintBase : public ConstraintGeneric<PathConstraint, PathConstraintData, PathConstraintPose> {
+	public:
+		PathConstraintBase(PathConstraintData &data) : ConstraintGeneric<PathConstraint, PathConstraintData, PathConstraintPose>(data) {
+		}
+	};
+
+	class SP_API PathConstraint : public PathConstraintBase {
 		friend class Skeleton;
-
 		friend class PathConstraintMixTimeline;
-
 		friend class PathConstraintPositionTimeline;
-
+		friend class PathConstraintPositionTimeline;
 		friend class PathConstraintSpacingTimeline;
 
-	RTTI_DECL
+		RTTI_DECL
 
 	public:
-		PathConstraint(PathConstraintData &data, Skeleton &skeleton);
-
-		virtual void update(Physics physics);
-
-		virtual int getOrder();
-
-        PathConstraintData &getData();
-
-        Vector<Bone *> &getBones();
-
-        Slot *getTarget();
-
-        void setTarget(Slot *inValue);
-
-		float getPosition();
-
-		void setPosition(float inValue);
-
-		float getSpacing();
-
-		void setSpacing(float inValue);
-
-		float getMixRotate();
-
-		void setMixRotate(float inValue);
-
-		float getMixX();
-
-		void setMixX(float inValue);
-
-		float getMixY();
-
-		void setMixY(float inValue);
-
-		bool isActive();
-
-		void setActive(bool inValue);
-
-        void setToSetupPose();
-
-	private:
-		static const float EPSILON;
+		static const float epsilon;
 		static const int NONE;
 		static const int BEFORE;
 		static const int AFTER;
 
-		PathConstraintData &_data;
-		Vector<Bone *> _bones;
-		Slot *_target;
-		float _position, _spacing;
-		float _mixRotate, _mixX, _mixY;
+		PathConstraint(PathConstraintData &data, Skeleton &skeleton);
 
-		Vector<float> _spaces;
-		Vector<float> _positions;
-		Vector<float> _world;
-		Vector<float> _curves;
-		Vector<float> _lengths;
-		Vector<float> _segments;
+		PathConstraint &copy(Skeleton &skeleton);
 
-		bool _active;
+		/// Applies the constraint to the constrained bones.
+		virtual void update(Skeleton &skeleton, Physics physics) override;
 
-		Vector<float> &computeWorldPositions(PathAttachment &path, int spacesCount, bool tangents);
+		virtual void sort(Skeleton &skeleton) override;
 
-		static void addBeforePosition(float p, Vector<float> &temp, int i, Vector<float> &output, int o);
+		virtual bool isSourceActive() override;
 
-		static void addAfterPosition(float p, Vector<float> &temp, int i, Vector<float> &output, int o);
+		/// The bones that will be modified by this path constraint.
+		Array<BonePose *> &getBones();
 
-		static void
-		addCurvePosition(float p, float x1, float y1, float cx1, float cy1, float cx2, float cy2, float x2, float y2,
-						 Vector<float> &output, int o, bool tangents);
+		/// The slot whose path attachment will be used to constrained the bones.
+		Slot &getSlot();
+
+		void setSlot(Slot &slot);
+
+	private:
+		Array<BonePose *> _bones;
+		Slot *_slot;
+
+		Array<float> _spaces;
+		Array<float> _positions;
+		Array<float> _world;
+		Array<float> _curves;
+		Array<float> _lengths;
+		Array<float> _segments;
+
+		Array<float> &computeWorldPositions(Skeleton &skeleton, PathAttachment &path, int spacesCount, bool tangents);
+
+		void addBeforePosition(float p, Array<float> &temp, int i, Array<float> &output, int o);
+
+		void addAfterPosition(float p, Array<float> &temp, int i, Array<float> &output, int o);
+
+		void addCurvePosition(float p, float x1, float y1, float cx1, float cy1, float cx2, float cy2, float x2, float y2, Array<float> &output,
+							  int o, bool tangents);
+
+		void sortPathSlot(Skeleton &skeleton, Skin &skin, int slotIndex, Bone &slotBone);
+
+		void sortPath(Skeleton &skeleton, Attachment *attachment, Bone &slotBone);
 	};
 }
 

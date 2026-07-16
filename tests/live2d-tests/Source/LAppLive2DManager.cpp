@@ -14,12 +14,12 @@
 #include "LAppSprite.hpp"
 #include <Rendering/CubismRenderer.hpp>
 #ifdef CSM_TARGET_ANDROID_ES2
-#include <Rendering/Cocos2d/CubismRenderer_Cocos2dx.hpp>
+#include <Rendering/Cocos2d/CubismRenderer_Axmol.hpp>
 #endif
 
 //cocos2d
 #include "axmol/base/Director.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 
 using namespace Csm;
 using namespace LAppDefine;
@@ -74,35 +74,21 @@ LAppLive2DManager::LAppLive2DManager()
 
     CreateShader();
 
-    int width = static_cast<int>(ax::Director::getInstance()->getRenderView()->getWindowSize().width);
-    int height = static_cast<int>(ax::Director::getInstance()->getRenderView()->getWindowSize().height);
-
     // 画面全体を覆うサイズ
     _sprite = new LAppSprite(_program);
 
     _viewMatrix = new CubismMatrix44();
 
     // 使用するターゲット
-    _renderBuffer = new Csm::Rendering::CubismOffscreenFrame_Cocos2dx;
+    _renderBuffer = new Csm::Rendering::CubismOffscreenFrame_Axmol;
     if (_renderBuffer)
     {// 描画ターゲット作成
-
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
-        // Retina対策でこっちからとる
-        RenderViewImpl *glimpl = (RenderViewImpl *)Director::getInstance()->getRenderView();
-        glfwGetFramebufferSize(glimpl->getWindow(), &width, &height);
-#endif
+        auto renderView = ax::Director::getInstance()->getRenderView();
+        auto&& renderSize = renderView->getRenderSize();
 
         // モデル描画キャンバス
-        _renderBuffer->CreateOffscreenFrame(static_cast<csmUint32>(width), static_cast<csmUint32>(height));
+        _renderBuffer->CreateOffscreenFrame(static_cast<csmUint32>(renderSize.width), static_cast<csmUint32>(renderSize.height));
     }
-
-#ifdef CSM_TARGET_ANDROID_ES2
-    char *exts = (char*)rhi::DriverBase::getInstance()->getExtension();
-    if(strstr(exts, "GL_NV_shader_framebuffer_fetch ")){
-        Rendering::CubismRenderer_Cocos2dx::SetExtShaderMode( true , true );
-    }
-#endif
 
     ChangeScene(_sceneIndex);
 }
@@ -193,12 +179,12 @@ void LAppLive2DManager::OnTap(csmFloat32 x, csmFloat32 y)
     }
 }
 
-void LAppLive2DManager::OnUpdate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* commandBuffer) const
+void LAppLive2DManager::OnUpdate(Csm::Rendering::CubismCommandBuffer_Axmol* commandBuffer) const
 {
     Director* director = Director::getInstance();
     Size window = director->getCanvasSize();
 
-    Csm::Rendering::CubismRenderer_Cocos2dx::StartFrame(commandBuffer);
+    Csm::Rendering::CubismRenderer_Axmol::StartFrame(commandBuffer);
 
     for (csmUint32 i = 0; i < _models.GetSize(); ++i)
     {
@@ -241,7 +227,7 @@ void LAppLive2DManager::OnUpdate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* c
             };
 
             // program退避
-            Csm::Rendering::CubismCommandBuffer_Cocos2dx* lastCommandBuffer = commandBuffer;
+            Csm::Rendering::CubismCommandBuffer_Axmol* lastCommandBuffer = commandBuffer;
 
             _sprite->SetColor(1.0f, 1.0f, 1.0f, 0.25f + (float)i * 0.5f);
             _sprite->RenderImmidiate(commandBuffer, _renderBuffer->GetColorBuffer()->getRHITexture(), uvVertex);

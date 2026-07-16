@@ -82,8 +82,8 @@ TileDemoNew::TileDemoNew()
     Director::getInstance()->getRenderer()->setDepthTest(true);
     Director::getInstance()->getRenderer()->setDepthWrite(true);
 
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesMoved = AX_CALLBACK_2(TileDemoNew::onTouchesMoved, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerMove = AX_CALLBACK_1(TileDemoNew::onPointerMove, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 
@@ -106,14 +106,17 @@ void TileDemoNew::onExit()
     Director::getInstance()->getRenderer()->setDepthWrite(false);
 }
 
-void TileDemoNew::onTouchesMoved(const std::vector<Touch*>& touches, Event* event)
+void TileDemoNew::onPointerMove(PointerEvent* event)
 {
-    auto touch = touches[0];
+    if (!event->isPrimaryPressed())
+        return;
 
-    auto diff       = touch->getDelta();
+    auto diff       = (event->getWorldPoint() - event->getPrevWorldPoint());
     auto node       = getChildByTag(kTagTileMap);
     auto currentPos = node->getPosition();
     node->setPosition(currentPos + diff);
+
+    return;
 }
 
 //------------------------------------------------------------------
@@ -249,13 +252,10 @@ TMXOrthoTestNew::TMXOrthoTestNew()
 void TMXOrthoTestNew::onEnter()
 {
     TileDemoNew::onEnter();
-
-    Director::getInstance()->setProjection(Director::Projection::_3D);
 }
 
 void TMXOrthoTestNew::onExit()
 {
-    Director::getInstance()->setProjection(Director::Projection::DEFAULT);
     TileDemoNew::onExit();
 }
 
@@ -952,16 +952,12 @@ void TMXIsoVertexZNew::onEnter()
 {
     TileDemoNew::onEnter();
 
-    // TIP: 2d projection should be used
-    Director::getInstance()->setProjection(Director::Projection::_2D);
     Director::getInstance()->getRenderer()->setDepthTest(true);
     Director::getInstance()->getRenderer()->setDepthWrite(true);
 }
 
 void TMXIsoVertexZNew::onExit()
 {
-    // At exit use any other projection.
-    Director::getInstance()->setProjection(Director::Projection::DEFAULT);
     Director::getInstance()->getRenderer()->setDepthTest(false);
     Director::getInstance()->getRenderer()->setDepthWrite(false);
     TileDemoNew::onExit();
@@ -1023,16 +1019,12 @@ void TMXOrthoVertexZNew::onEnter()
 {
     TileDemoNew::onEnter();
 
-    // TIP: 2d projection should be used
-    Director::getInstance()->setProjection(Director::Projection::_2D);
     Director::getInstance()->getRenderer()->setDepthTest(true);
     Director::getInstance()->getRenderer()->setDepthWrite(true);
 }
 
 void TMXOrthoVertexZNew::onExit()
 {
-    // At exit use any other projection.
-    Director::getInstance()->setProjection(Director::Projection::DEFAULT);
     Director::getInstance()->getRenderer()->setDepthTest(false);
     Director::getInstance()->getRenderer()->setDepthWrite(false);
     TileDemoNew::onExit();
@@ -1383,8 +1375,8 @@ TileAnimTestNew::TileAnimTestNew()
     map = FastTMXTiledMap::create("TileMaps/tile_animation_test.tmx");
     addChild(map, 0, kTagTileMap);
 
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesBegan = AX_CALLBACK_2(TileAnimTestNew::onTouchBegan, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = AX_CALLBACK_1(TileAnimTestNew::onPointerDown, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     Size AX_UNUSED s = map->getContentSize();
@@ -1398,10 +1390,12 @@ std::string TileAnimTestNew::title() const
     return "Tile animation test.\nClick to toggle the animation";
 }
 
-void TileAnimTestNew::onTouchBegan(const std::vector<ax::Touch*>& touches, ax::Event* event)
+bool TileAnimTestNew::onPointerDown(ax::PointerEvent* event)
 {
     _animStarted = !_animStarted;
     map->setTileAnimEnabled(_animStarted);
+
+    return true;
 }
 
 //------------------------------------------------------------------
@@ -1415,8 +1409,8 @@ TileAnimTestNew2::TileAnimTestNew2()
     map = FastTMXTiledMap::create("TileMaps/tile_animation_test_2.tmx");
     addChild(map, 0, kTagTileMap);
 
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesBegan = AX_CALLBACK_2(TileAnimTestNew2::onTouchBegan, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = AX_CALLBACK_1(TileAnimTestNew2::onPointerDown, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     Size AX_UNUSED s = map->getContentSize();
@@ -1430,10 +1424,11 @@ std::string TileAnimTestNew2::title() const
     return "Tile animation test with flipped/rotated.\nClick to toggle the animation";
 }
 
-void TileAnimTestNew2::onTouchBegan(const std::vector<ax::Touch*>& touches, ax::Event* event)
+bool TileAnimTestNew2::onPointerDown(ax::PointerEvent* event)
 {
     _animStarted = !_animStarted;
     map->setTileAnimEnabled(_animStarted);
+    return true;
 }
 
 //------------------------------------------------------------------

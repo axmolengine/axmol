@@ -90,7 +90,7 @@ bool ControlStepper::initWithMinusSpriteAndPlusSprite(Sprite* minusSprite, Sprit
 
         this->setMinusLabel(Label::createWithSystemFont("-", ControlStepperLabelFont, 40));
         _minusLabel->setColor(ControlStepperLabelColorDisabled);
-        _minusLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+        _minusLabel->setAnchorPoint(Anchors::center);
         _minusLabel->setPosition(_minusSprite->getContentSize().width / 2, _minusSprite->getContentSize().height / 2);
         _minusSprite->addChild(_minusLabel);
 
@@ -102,7 +102,7 @@ bool ControlStepper::initWithMinusSpriteAndPlusSprite(Sprite* minusSprite, Sprit
 
         this->setPlusLabel(Label::createWithSystemFont("+", ControlStepperLabelFont, 40));
         _plusLabel->setColor(ControlStepperLabelColorEnabled);
-        _plusLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+        _plusLabel->setAnchorPoint(Anchors::center);
         _plusLabel->setPosition(_plusSprite->getContentSize().width / 2, _plusSprite->getContentSize().height / 2);
         _plusSprite->addChild(_plusLabel);
 
@@ -259,31 +259,37 @@ void ControlStepper::updateLayoutUsingTouchLocation(Vec2 location)
     {
         _touchedPart = Part::MINUS;
 
-        _minusSprite->setColor(Color32::GRAY);
-        _plusSprite->setColor(Color32::WHITE);
+        _minusSprite->setColor(Color32::gray);
+        _plusSprite->setColor(Color32::white);
     }
     else if (location.x >= _minusSprite->getContentSize().width && _value < _maximumValue)
     {
         _touchedPart = Part::PLUS;
 
-        _minusSprite->setColor(Color32::WHITE);
-        _plusSprite->setColor(Color32::GRAY);
+        _minusSprite->setColor(Color32::white);
+        _plusSprite->setColor(Color32::gray);
     }
     else
     {
         _touchedPart = Part::NONE;
 
-        _minusSprite->setColor(Color32::WHITE);
-        _plusSprite->setColor(Color32::WHITE);
+        _minusSprite->setColor(Color32::white);
+        _plusSprite->setColor(Color32::white);
     }
 }
 
-bool ControlStepper::onTouchBegan(Touch* pTouch, Event* /*pEvent*/)
+bool ControlStepper::onPointerDown(PointerEvent* pTouch)
 {
+    bool ret = Control::onPointerDown(pTouch);
+    if (!ret)
+        return false;
+
     if (!isTouchInside(pTouch) || !isEnabled() || !isVisible())
     {
         return false;
     }
+
+    _isPressed = true;
 
     Vec2 location = this->getTouchLocation(pTouch);
     this->updateLayoutUsingTouchLocation(location);
@@ -298,8 +304,11 @@ bool ControlStepper::onTouchBegan(Touch* pTouch, Event* /*pEvent*/)
     return true;
 }
 
-void ControlStepper::onTouchMoved(Touch* pTouch, Event* /*pEvent*/)
+void ControlStepper::onPointerMove(PointerEvent* pTouch)
 {
+    if (!_isPressed)
+        return;
+
     if (this->isTouchInside(pTouch))
     {
         Vec2 location = this->getTouchLocation(pTouch);
@@ -314,6 +323,7 @@ void ControlStepper::onTouchMoved(Touch* pTouch, Event* /*pEvent*/)
                 this->startAutorepeat();
             }
         }
+        return;
     }
     else
     {
@@ -321,20 +331,22 @@ void ControlStepper::onTouchMoved(Touch* pTouch, Event* /*pEvent*/)
 
         _touchedPart = Part::NONE;
 
-        _minusSprite->setColor(Color32::WHITE);
-        _plusSprite->setColor(Color32::WHITE);
+        _minusSprite->setColor(Color32::white);
+        _plusSprite->setColor(Color32::white);
 
         if (_autorepeat)
         {
             this->stopAutorepeat();
         }
+
+        return;
     }
 }
 
-void ControlStepper::onTouchEnded(Touch* pTouch, Event* /*pEvent*/)
+void ControlStepper::onPointerUp(PointerEvent* pTouch)
 {
-    _minusSprite->setColor(Color32::WHITE);
-    _plusSprite->setColor(Color32::WHITE);
+    _minusSprite->setColor(Color32::white);
+    _plusSprite->setColor(Color32::white);
 
     if (_autorepeat)
     {
@@ -348,6 +360,8 @@ void ControlStepper::onTouchEnded(Touch* pTouch, Event* /*pEvent*/)
         this->setValue(_value +
                        ((location.x < _minusSprite->getContentSize().width) ? (0.0 - _stepValue) : _stepValue));
     }
+
+    _isPressed = false;
 }
 
 NS_AX_EXT_END

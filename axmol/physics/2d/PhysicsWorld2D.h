@@ -42,7 +42,7 @@ class Rigidbody2D;
 class Joint2D;
 class Collider2D;
 class ContactEvent2D;
-
+class ContactInfo2D;
 class Director;
 class Node;
 class Sprite;
@@ -371,7 +371,7 @@ public:
      * @param delta The time step (in seconds) to simulate.
      */
     void stepSimulation(float delta);
-    AX_DEPRECATED(3.0) inline void step(float dt) { stepSimulation(dt); }
+    AX_DEPRECATED("3.0") inline void step(float dt) { stepSimulation(dt); }
 
 protected:
     static bool handlePreSolve(b2ShapeId shapeIdA,

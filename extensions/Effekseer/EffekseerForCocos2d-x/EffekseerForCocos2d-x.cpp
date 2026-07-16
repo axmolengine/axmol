@@ -1,7 +1,7 @@
 
 #include "EffekseerForCocos2d-x.h"
 
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 
 namespace efk
 {
@@ -675,7 +675,7 @@ void EffectEmitter::draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& paren
         manager->getInternalManager()->GetTotalInstanceCount() < 1)
         return; // nothing to draw
 
-    if (ax::rhi::DriverContext::isMetal() && !manager->isDistorted)
+    if (ax::rhi::GraphicsCore::isMetal() && !manager->isDistorted)
     {
         // allow frame buffer texture to be copied for distortion
         ax::Director::getInstance()->getRenderer()->setFrameBufferOnly(false);
@@ -692,7 +692,7 @@ void EffectEmitter::draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& paren
 		renderer2d->SetCameraMatrix(mCamera);
 		renderer2d->SetProjectionMatrix(mProj);
 
-        const auto isMetal = ax::rhi::DriverContext::isMetal();
+        const auto isMetal = ax::rhi::GraphicsCore::isMetal();
         Effekseer::RefPtr<::EffekseerRenderer::CommandList> commandList;
         if (isMetal) {
             commandList = manager->getInternalCommandList();

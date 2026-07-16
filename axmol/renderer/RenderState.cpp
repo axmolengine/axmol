@@ -29,7 +29,7 @@
 #include "axmol/renderer/RenderState.h"
 
 #include <string>
-#include <cassert>
+#include <assert.h>
 
 #include "axmol/renderer/Texture2D.h"
 #include "axmol/renderer/Pass.h"

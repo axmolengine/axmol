@@ -27,10 +27,10 @@
 
 #include "axmol/rhi/RHITypes.h"
 #include "axmol/base/Object.h"
-#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/CustomEventListener.h"
 #include "axmol/platform/GL.h"
 #include "axmol/rhi/Program.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 
 #include <string>
 #include <vector>
@@ -85,7 +85,7 @@ private:
     UniformBufferVector _uniformBuffers;
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-    EventListenerCustom* _backToForegroundListener = nullptr;
+    CustomEventListener* _backToForegroundListener = nullptr;
 #endif
 };
 // end of _opengl group

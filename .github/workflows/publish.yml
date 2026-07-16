@@ -54,7 +54,7 @@ jobs:
         axmol -xc '-DAX_WITH_LZ4=ON,-DAX_WITH_CARES=ON,-DAX_WITH_YAML_CPP=ON,-DAX_WITH_KCP=ON' -c
         $input_commitish = "${{ github.event.inputs.commitish }}"
         if (!$input_commitish) { $input_commitish = $(git -C $AX_ROOT branch --show-current) }
-        ./tools/ci/publish.ps1 -version "${{ steps.check_ver.outputs.release_ver }}" -commitish $input_commitish
+        ./tools/cmdline/publish.ps1 -version "${{ steps.check_ver.outputs.release_ver }}" -commitish $input_commitish
         echo "commitish=$input_commitish" >> ${env:GITHUB_OUTPUT}
 
     - name: Publish to github release page

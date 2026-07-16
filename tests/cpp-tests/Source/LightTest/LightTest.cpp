@@ -62,14 +62,14 @@ LightTest::LightTest() : _directionalLight(nullptr), _pointLight(nullptr), _spot
     auto menuItem3 =
         MenuItemLabel::create(_spotLightLabel, AX_CALLBACK_1(LightTest::SwitchLight, this, LightType::SPOT));
     auto menu = Menu::create(menuItem0, menuItem1, menuItem2, menuItem3, nullptr);
-    menu->setPosition(Vec2::ZERO);
-    menuItem0->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+    menu->setPosition(Vec2::zero);
+    menuItem0->setAnchorPoint(Anchors::topLeft);
     menuItem0->setPosition(Vec2(VisibleRect::left().x, VisibleRect::top().y - 50));
-    menuItem1->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+    menuItem1->setAnchorPoint(Anchors::topLeft);
     menuItem1->setPosition(Vec2(VisibleRect::left().x, VisibleRect::top().y - 100));
-    menuItem2->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+    menuItem2->setAnchorPoint(Anchors::topLeft);
     menuItem2->setPosition(Vec2(VisibleRect::left().x, VisibleRect::top().y - 150));
-    menuItem3->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+    menuItem3->setAnchorPoint(Anchors::topLeft);
     menuItem3->setPosition(Vec2(VisibleRect::left().x, VisibleRect::top().y - 200));
     addChild(menu);
 }

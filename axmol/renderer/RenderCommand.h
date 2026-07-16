@@ -27,7 +27,7 @@
 
 #include "axmol/platform/PlatformMacros.h"
 #include "axmol/base/Types.h"
-#include "axmol/renderer/PipelineDesc.h"
+#include "axmol/rhi/PipelineDesc.h"
 
 /**
  * @addtogroup renderer
@@ -123,7 +123,7 @@ public:
 
 private:
     /// Can use the result to change the descriptor content.
-    inline const PipelineDesc& getPipelineDesc() const { return _pipelineDesc; }
+    inline const rhi::PipelineDesc& getPipelineDesc() const { return _pipelineDesc; }
 #pragma endregion
 protected:
     /**Constructor.*/
@@ -161,7 +161,7 @@ protected:
 
     Mat4 _mv;
 
-    PipelineDesc _pipelineDesc;
+    rhi::PipelineDesc _pipelineDesc;
 };
 
 }  // namespace ax

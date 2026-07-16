@@ -314,17 +314,17 @@ public:
      * Creates the action with a set boundary or with no boundary.
      *
      * @param followedNode  The node to be followed.
-     * @param rect  The boundary. If \p rect is equal to Rect::ZERO, it'll work
+     * @param rect  The boundary. If \p rect is equal to Rect::zero, it'll work
      *              with no boundary.
      */
 
-    static Follow* create(Node* followedNode, const Rect& rect = Rect::ZERO);
+    static Follow* create(Node* followedNode, const Rect& rect = Rect::zero);
 
     /**
      * Creates the action with a set boundary or with no boundary with offsets.
      *
      * @param followedNode  The node to be followed.
-     * @param rect  The boundary. If \p rect is equal to Rect::ZERO, it'll work
+     * @param rect  The boundary. If \p rect is equal to Rect::zero, it'll work
      *              with no boundary.
      * @param xOffset The horizontal offset from the center of the screen from which the
      *               node  is to be followed.It can be positive,negative or zero.If
@@ -336,7 +336,7 @@ public:
      * followed.
      */
 
-    static Follow* createWithOffset(Node* followedNode, float xOffset, float yOffset, const Rect& rect = Rect::ZERO);
+    static Follow* createWithOffset(Node* followedNode, float xOffset, float yOffset, const Rect& rect = Rect::zero);
 
     /** Return boundarySet.
      *
@@ -373,7 +373,7 @@ public:
         , _bottomBoundary(0.0)
         , _offsetX(0.0)
         , _offsetY(0.0)
-        , _worldRect(Rect::ZERO)
+        , _worldRect(Rect::zero)
     {}
     /**
      * @lua NA
@@ -384,16 +384,16 @@ public:
      * Initializes the action with a set boundary or with no boundary.
      *
      * @param followedNode  The node to be followed.
-     * @param rect  The boundary. If \p rect is equal to Rect::ZERO, it'll work
+     * @param rect  The boundary. If \p rect is equal to Rect::zero, it'll work
      *              with no boundary.
      */
-    bool initWithTarget(Node* followedNode, const Rect& rect = Rect::ZERO);
+    bool initWithTarget(Node* followedNode, const Rect& rect = Rect::zero);
 
     /**
      * Initializes the action with a set boundary or with no boundary with offsets.
      *
      * @param followedNode  The node to be followed.
-     * @param rect  The boundary. If \p rect is equal to Rect::ZERO, it'll work
+     * @param rect  The boundary. If \p rect is equal to Rect::zero, it'll work
      *              with no boundary.
      * @param xOffset The horizontal offset from the center of the screen from which the
      *                node  is to be followed.It can be positive,negative or zero.If
@@ -405,7 +405,7 @@ public:
      followed.
 
      */
-    bool initWithTargetAndOffset(Node* followedNode, float xOffset, float yOffset, const Rect& rect = Rect::ZERO);
+    bool initWithTargetAndOffset(Node* followedNode, float xOffset, float yOffset, const Rect& rect = Rect::zero);
 
 protected:
     /** Node to follow. */

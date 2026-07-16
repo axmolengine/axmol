@@ -126,7 +126,7 @@ inline void clear(_BITMASK& _Left, _BITMASK _Elements) noexcept
     _Left &= ~_Elements;
 }
 
-template<typename _Ty>
+template <typename _Ty>
 static inline constexpr _Ty low_bits(uint32_t n)
 {
     return (n >= sizeof(_Ty) * 8) ? ~(_Ty(0)) : (_Ty(1) << n) - _Ty(1);

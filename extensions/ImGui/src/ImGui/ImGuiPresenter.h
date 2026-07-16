@@ -36,7 +36,13 @@ THE SOFTWARE.
 
 NS_AX_EXT_BEGIN
 
-#if defined(AX_PLATFORM_GLFW)
+#if defined(AX_PLATFORM_GLFW) && AX_TARGET_PLATFORM != AX_PLATFORM_WASM
+#    define AX_IMGUI_USE_GLFW 1
+#else
+#    define AX_IMGUI_USE_GLFW 0
+#endif
+
+#if AX_IMGUI_USE_GLFW
 class ImGuiEventTracker;
 #endif
 
@@ -180,7 +186,7 @@ private:
 private:
     struct ImGuiLoop
     {
-#if defined(AX_PLATFORM_GLFW)
+#if AX_IMGUI_USE_GLFW
         ImGuiEventTracker* tracker{nullptr};
 #endif
         std::function<void()> func;

@@ -14,7 +14,7 @@ mkdir -p $cacheDir
 
 pwsh_ver=$1
 if [ "$pwsh_ver" = "" ] ; then
-    pwsh_ver='7.6.1'
+    pwsh_ver='7.6.2'
 fi
 
 pwsh_min_ver=$2
@@ -41,13 +41,16 @@ function check_pwsh {
     echo "pwshi: Installing PowerShell $preferred_ver ..."
 }
 
-HOST_ARCH=$(uname -m)
-if [ "$HOST_ARCH" = 'x86_64' ] ; then
+HOST_CPU=$(uname -m)
+if [[ "$HOST_CPU" = 'arm64' || "$HOST_CPU" == 'aarch64' ]] ; then
+    pwsh_arch=arm64
+    icu_arch=arm64
+elif [ "$HOST_CPU" = 'x86_64' ] ; then
     pwsh_arch=x64
     icu_arch=amd64
 else
-    pwsh_arch=$HOST_ARCH
-    icu_arch=$HOST_ARCH
+    echo "pwshi: Unsupported HOST CPU: $HOST_CPU"
+    exit 1
 fi
 
 icu_pkg_out=""
@@ -63,9 +66,12 @@ if [ $HOST_OS = 'Darwin' ] ; then
     sudo xattr -rd com.apple.quarantine "$pwsh_pkg_out"
     sudo installer -pkg "$pwsh_pkg_out" -target /
 elif [ $HOST_OS = 'Linux' ] ; then
-    distro=$(grep -oP '(?<=^ID=).+' /etc/os-release | tr -d '"')
+    distro=$(grep -oP '(?<=^ID_LIKE=).+' /etc/os-release | tr -d '"')
+    if [ "$distro" = "" ] ; then
+        distro=$(grep -oP '(?<=^ID=).+' /etc/os-release | tr -d '"')
+    fi
     sudo_cmd=$(command -v sudo)
-    if command -v dpkg > /dev/null; then  # Linux distro: deb (ubuntu)
+    if [ "$distro" = "debian" ] ; then  # Linux distro: deb (ubuntu)
         check_pwsh $pwsh_min_ver $pwsh_ver
 
         if ! command -v curl >/dev/null 2>&1; then

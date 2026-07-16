@@ -226,7 +226,7 @@ void RenderContextImpl::setInstanceBuffer(Buffer* buffer)
     _instanceBuffer = static_cast<BufferImpl*>(buffer);
 }
 
-void RenderContextImpl::drawArrays(std::size_t start, std::size_t count, bool wireframe)
+void RenderContextImpl::drawArrays(size_t start, size_t count, bool wireframe)
 {
     prepareDrawing();
 #if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
@@ -244,7 +244,7 @@ void RenderContextImpl::drawArrays(std::size_t start, std::size_t count, bool wi
     cleanResources();
 }
 
-void RenderContextImpl::drawArraysInstanced(std::size_t start, std::size_t count, int instanceCount, bool wireframe)
+void RenderContextImpl::drawArraysInstanced(size_t start, size_t count, int instanceCount, bool wireframe)
 {
     prepareDrawing();
 #if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
@@ -262,7 +262,7 @@ void RenderContextImpl::drawArraysInstanced(std::size_t start, std::size_t count
     cleanResources();
 }
 
-void RenderContextImpl::drawElements(IndexFormat indexType, std::size_t count, std::size_t offset, bool wireframe)
+void RenderContextImpl::drawElements(IndexFormat indexType, size_t count, size_t offset, bool wireframe)
 {
     prepareDrawing();
 #if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
@@ -283,8 +283,8 @@ void RenderContextImpl::drawElements(IndexFormat indexType, std::size_t count, s
 }
 
 void RenderContextImpl::drawElementsInstanced(IndexFormat indexType,
-                                              std::size_t count,
-                                              std::size_t offset,
+                                              size_t count,
+                                              size_t offset,
                                               int instanceCount,
                                               bool wireframe)
 {
@@ -314,6 +314,14 @@ void RenderContextImpl::endRenderPass()
 }
 
 void RenderContextImpl::endFrame() {}
+
+void RenderContextImpl::submitCurrentFrameCommands(bool waitForCompletion)
+{
+    if (waitForCompletion)
+        glFinish();
+    else
+        glFlush();
+}
 
 void RenderContextImpl::prepareDrawing() const
 {
@@ -408,15 +416,12 @@ void RenderContextImpl::setScissorRect(bool enabled, float x, float y, float wid
     }
 }
 
-void RenderContextImpl::readPixels(RenderTarget* rt,
-                                   bool preserveAxisHint,
-                                   std::function<void(const PixelBufferDesc&)> callback)
+void RenderContextImpl::readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback)
 {
     PixelBufferDesc pbd;
     if (rt->isDefaultRenderTarget())
     {  // read pixels from screen
-        readPixels(rt, _viewport.x, _viewport.y, _viewport.width, _viewport.height, _viewport.width * 4,
-                   preserveAxisHint, pbd);
+        readPixels(rt, _viewport.x, _viewport.y, _viewport.width, _viewport.height, _viewport.width * 4, pbd);
     }
     else
     {
@@ -425,7 +430,7 @@ void RenderContextImpl::readPixels(RenderTarget* rt,
         if (colorAttachment)
         {
             readPixels(rt, 0, 0, colorAttachment->getWidth(), colorAttachment->getHeight(),
-                       colorAttachment->getWidth() * 4, preserveAxisHint, pbd);
+                       colorAttachment->getWidth() * 4, pbd);
         }
     }
     callback(pbd);
@@ -437,7 +442,6 @@ void RenderContextImpl::readPixels(RenderTarget* rt,
                                    uint32_t width,
                                    uint32_t height,
                                    uint32_t bytesPerRow,
-                                   bool preserveAxisHint,
                                    PixelBufferDesc& pbd)
 {
     auto rtGL = static_cast<RenderTargetImpl*>(rt);
@@ -462,9 +466,9 @@ void RenderContextImpl::readPixels(RenderTarget* rt,
 
     if (buffer_ptr)
     {
-        if (!preserveAxisHint)
+        if (rt->isDefaultRenderTarget())
         {
-            // we need to flip the buffer vertically to match our API
+            // flip Y for default RT (OpenGL has inverted Y)
             uint8_t* wptr = pbd._data.resize(bufferSize);
             if (wptr)
             {

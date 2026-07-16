@@ -239,7 +239,7 @@ void UIEventDispatcher::doDispatch(int eventType, EventContext* context)
             if (context->_touchCapture != 0 && dynamic_cast<GObject*>(this))
             {
                 if (context->_touchCapture == 1 && eventType == UIEventType::TouchBegin)
-                    context->getInput()->getProcessor()->addTouchMonitor(context->getInput()->getTouchId(), dynamic_cast<GObject*>(this));
+                    context->getInput()->getProcessor()->addTouchMonitor(context->getInput()->getPointerId(), dynamic_cast<GObject*>(this));
                 else if (context->_touchCapture == 2)
                     context->getInput()->getProcessor()->removeTouchMonitor(dynamic_cast<GObject*>(this));
             }

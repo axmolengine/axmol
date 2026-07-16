@@ -39,9 +39,10 @@ THE SOFTWARE.
 #include "axmol/base/Director.h"
 #include "axmol/base/EventType.h"
 #include "axmol/base/Environment.h"
-#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/CustomEventListener.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/text_utils.h"
+#include "axmol/scene/Camera.h"
 #include "axmol/renderer/Shaders.h"
 #include "axmol/rhi/ProgramState.h"
 #include "axmol/2d/TweenFunction.h"
@@ -123,7 +124,7 @@ bool ParticleSystemQuad::initWithTotalParticles(int numberOfParticles)
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
         // Need to listen the event only when not use batchnode, because it will use VBO
-        auto listener = EventListenerCustom::create(EVENT_RENDERER_RECREATED,
+        auto listener = CustomEventListener::create(EVENT_RENDERER_RECREATED,
                                                     AX_CALLBACK_1(ParticleSystemQuad::listenRendererRecreated, this));
         _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 #endif
@@ -147,8 +148,8 @@ void ParticleSystemQuad::initTexCoordsWithRect(const Rect& pointRect)
 
     if (_texture)
     {
-        wide = (float)_texture->getPixelsWide();
-        high = (float)_texture->getPixelsHigh();
+        wide = (float)_texture->getWidth();
+        high = (float)_texture->getHeight();
     }
 
 #if AX_FIX_ARTIFACTS_BY_STRECHING_TEXEL
@@ -319,7 +320,7 @@ void ParticleSystemQuad::updateParticleQuads()
     Vec2 currentPosition;
     if (_positionType == PositionType::FREE)
     {
-        currentPosition = this->convertToWorldSpace(Vec2::ZERO);
+        currentPosition = this->convertToWorldSpace(Vec2::zero);
     }
     else if (_positionType == PositionType::RELATIVE)
     {
@@ -327,7 +328,7 @@ void ParticleSystemQuad::updateParticleQuads()
     }
 
     V3F_T2F_C4B_Quad* startQuad;
-    Vec2 pos = Vec2::ZERO;
+    Vec2 pos = Vec2::zero;
     if (_batchNode)
     {
         V3F_T2F_C4B_Quad* batchQuads = _batchNode->getTextureAtlas()->getQuads();
@@ -625,12 +626,12 @@ void ParticleSystemQuad::updateParticleQuads()
 
             auto iter = _animationIndices.find(*cellIndex);
             if (iter == _animationIndices.end())
-                index.rect = {0, 0, float(_texture->getPixelsWide()), float(_texture->getPixelsHigh())};
+                index.rect = {0, 0, float(_texture->getWidth()), float(_texture->getHeight())};
             else
                 index = iter->second;
 
-            auto texWidth  = _texture->getPixelsWide();
-            auto texHeight = _texture->getPixelsHigh();
+            auto texWidth  = _texture->getWidth();
+            auto texHeight = _texture->getHeight();
 
             left  = index.rect.origin.x / texWidth;
             right = (index.rect.origin.x + index.rect.size.x) / texWidth;
@@ -661,7 +662,7 @@ void ParticleSystemQuad::draw(Renderer* renderer, const Mat4& transform, uint32_
     {
         auto programState = _quadCommand.unsafePS();
 
-        ax::Mat4 projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+        ax::Mat4 projectionMat = Camera::getVisitingViewProjectionMatrix();
         programState->setUniform(_mvpMatrixLocaiton, projectionMat.m, sizeof(projectionMat.m));
 
         _quadCommand.init(_globalZOrder, _texture, _blendFunc, _quads, _particleCount, transform, flags);
@@ -772,7 +773,7 @@ void ParticleSystemQuad::setTotalParticles(int tp)
     resetSystem();
 }
 
-void ParticleSystemQuad::listenRendererRecreated(EventCustom* /*event*/)
+void ParticleSystemQuad::listenRendererRecreated(CustomEvent* /*event*/)
 {
     // when comes to foreground in android, _buffersVBO and _VAOname is a wild handle
     // before recreating, we need to reset them to 0

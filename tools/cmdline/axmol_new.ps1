@@ -2,6 +2,7 @@ param(
     $packageName,
     $directory,
     $lang,
+    [string]$mode,
     [switch]$isolated,
     [switch]$repair,
     [switch]$forceOverwrite
@@ -13,6 +14,14 @@ $is_portrait = $portrait_idx -ne -1
 if ($is_portrait) {
     $params.RemoveAt($portrait_idx)
 }
+
+# $mode_idx = $params.IndexOf('-m')
+# if ($mode_idx -ne -1) {
+#     $mode = $params[$mode_idx + 1]
+#     $params.RemoveAt($mode_idx + 1)
+#     $params.RemoveAt($mode_idx)
+# }
+
 $projectName = $params[0]
 
 if (!$packageName) {
@@ -65,6 +74,8 @@ else {
 println "==> packageName: $packageName"
 println "==> destinationPath: $destinationPath"
 println "==> lang: $lang"
+println "==> mode: $mode"
+println "==> forceOverwrite: $forceOverwrite"
 println "==> is_portrait: $is_portrait"
 
 # copy language spec files
@@ -185,6 +196,13 @@ foreach ($actionParam in $template_cfg.do_default) {
 
 if ($is_portrait) {
     foreach ($actionParam in $template_cfg.do_portrait) {
+        perform_action $actionParam
+    }
+}
+
+$modeActionKey = "do_mode_$mode"
+if ($template_cfg.$modeActionKey) {
+    foreach ($actionParam in $template_cfg.$modeActionKey) {
         perform_action $actionParam
     }
 }

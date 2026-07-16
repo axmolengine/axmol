@@ -30,7 +30,7 @@
 #ifndef Spine_Triangulator_h
 #define Spine_Triangulator_h
 
-#include <spine/Vector.h>
+#include <spine/Array.h>
 #include <spine/Pool.h>
 
 namespace spine {
@@ -38,28 +38,22 @@ namespace spine {
 	public:
 		~Triangulator();
 
-		Vector<int> &triangulate(Vector<float> &vertices);
+		Array<int> &triangulate(Array<float> &vertices);
 
-		Vector<Vector < float>* > &
-		decompose(Vector<float>
-		&vertices,
-		Vector<int> &triangles
-		);
+		Array<Array<float> *> &decompose(Array<float> &vertices, Array<int> &triangles);
 
 	private:
-		Vector<Vector < float>* >
-		_convexPolygons;
-		Vector<Vector < int>* >
-		_convexPolygonsIndices;
+		Array<Array<float> *> _convexPolygons;
+		Array<Array<int> *> _convexPolygonsIndices;
 
-		Vector<int> _indices;
-		Vector<bool> _isConcaveArray;
-		Vector<int> _triangles;
+		Array<int> _indices;
+		Array<bool> _isConcaveArray;
+		Array<int> _triangles;
 
-		Pool <Vector<float>> _polygonPool;
-		Pool <Vector<int>> _polygonIndicesPool;
+		Pool<Array<float>> _polygonPool;
+		Pool<Array<int>> _polygonIndicesPool;
 
-		static bool isConcave(int index, int vertexCount, Vector<float> &vertices, Vector<int> &indices);
+		static bool isConcave(int index, int vertexCount, const float *vertices, const int *indices);
 
 		static bool positiveArea(float p1x, float p1y, float p2x, float p2y, float p3x, float p3y);
 

@@ -66,7 +66,6 @@ public:
 
 private:
     bool isFileExistInternal(std::string_view filePath) const override;
-    bool removeDirectory(std::string_view dirPath) const override;
 
     struct IMPL;
     std::unique_ptr<IMPL> pimpl_;

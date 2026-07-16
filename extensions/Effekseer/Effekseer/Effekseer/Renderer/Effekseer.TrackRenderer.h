@@ -1,4 +1,4 @@
-﻿
+
 #ifndef __EFFEKSEER_TRACK_RENDERER_H__
 #define __EFFEKSEER_TRACK_RENDERER_H__
 

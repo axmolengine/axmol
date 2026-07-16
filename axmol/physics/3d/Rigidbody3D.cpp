@@ -189,7 +189,7 @@ bool Rigidbody3D::init(Collider3D* collider, float mass)
 
     _mass = mass;
 
-    setTransformInPhysics(Vec3::ZERO, Quaternion::identity());
+    setTransformInPhysics(Vec3::zero, Quat::identity);
     return true;
 }
 
@@ -247,7 +247,7 @@ bool Rigidbody3D::attachToWorld(PhysicsWorld3D* world)
     // Decompose transform into scale/rotation/translation
     Vec3 scale;
     Vec3 translation;
-    Quaternion rotation;
+    Quat rotation;
     worldTransform.decompose(&scale, &rotation, &translation);
     rotation.normalize();
 
@@ -365,7 +365,7 @@ void Rigidbody3D::invalidate()
     _world = nullptr;
 }
 
-void Rigidbody3D::setTransformInPhysics(const Vec3& translateInPhysics, const Quaternion& rotInPhysics)
+void Rigidbody3D::setTransformInPhysics(const Vec3& translateInPhysics, const Quat& rotInPhysics)
 {
     Mat4::createRotation(rotInPhysics, &_transformInPhysics);
     _transformInPhysics.m[12] = translateInPhysics.x;
@@ -389,7 +389,7 @@ void Rigidbody3D::syncPhysicsToNode()
 
     Vec3 scale;
     Vec3 translation;
-    Quaternion quat;
+    Quat quat;
     mat.decompose(&scale, &quat, &translation);
     quat.normalize();
     _owner->setPosition3D(translation);
@@ -406,7 +406,7 @@ void Rigidbody3D::syncNodeToPhysics()
     mat *= _invTransformInPhysics;
     Vec3 scale;
     Vec3 translation;
-    Quaternion quat;
+    Quat quat;
     mat.decompose(&scale, &quat, &translation);
     quat.normalize();
 
@@ -434,12 +434,12 @@ void Rigidbody3D::setPosition(const Vec3& point, bool teleport)
 Vec3 Rigidbody3D::getPosition() const
 {
     if (!isAttached())
-        return Vec3::ZERO;
+        return Vec3::zero;
 
     return jphutil::cast(_world->internalHandle().GetBodyInterface().GetPosition(_bodyID));
 }
 
-void Rigidbody3D::setRotation(const Quaternion& rot, bool teleport)
+void Rigidbody3D::setRotation(const Quat& rot, bool teleport)
 {
     if (!isAttached())
         return;
@@ -456,17 +456,17 @@ void Rigidbody3D::setRotation(const Quaternion& rot, bool teleport)
                                                                        activation);
 }
 
-Quaternion Rigidbody3D::getRotation() const
+Quat Rigidbody3D::getRotation() const
 {
     if (!isAttached())
-        return Quaternion::identity();
+        return Quat::identity;
 
     return jphutil::cast(_world->internalHandle().GetBodyInterface().GetRotation(_bodyID));
 }
 
 Mat4 Rigidbody3D::getCenterOfMassTransform() const
 {
-    Mat4 transform = Mat4::IDENTITY;
+    Mat4 transform = Mat4::identity;
     if (!isAttached())
         return transform;
     transform = jphutil::cast(_world->internalHandle().GetBodyInterface().GetCenterOfMassTransform(_bodyID));
@@ -475,7 +475,7 @@ Mat4 Rigidbody3D::getCenterOfMassTransform() const
 
 Mat4 Rigidbody3D::getWorldTransform() const
 {
-    Mat4 transform = Mat4::IDENTITY;
+    Mat4 transform = Mat4::identity;
     withBodyReadLock(this, [&](const JPH::Body& body) { transform = jphutil::cast(body.GetWorldTransform()); });
     return transform;
 }
@@ -524,7 +524,7 @@ void Rigidbody3D::setLinearVelocity(const Vec3& linearVelocity)
 Vec3 Rigidbody3D::getLinearVelocity() const
 {
     if (!isAttached())
-        return Vec3::ZERO;
+        return Vec3::zero;
     return jphutil::cast(_world->internalHandle().GetBodyInterface().GetLinearVelocity(_bodyID));
 }
 
@@ -607,7 +607,7 @@ Vec3 Rigidbody3D::world2Local(const Vec3& point)
         Vec4 result = bodyWorld * Vec4(point.x, point.y, point.z, 1.0f);
         return Vec3(result.x, result.y, result.z);
     }
-    return Vec3::ZERO;
+    return Vec3::zero;
 }
 
 Vec3 Rigidbody3D::local2World(const Vec3& point)
@@ -626,7 +626,7 @@ Vec3 Rigidbody3D::local2World(const Vec3& point)
         Vec4 result    = bodyWorld * Vec4(point.x, point.y, point.z, 1.0f);
         return Vec3(result.x, result.y, result.z);
     }
-    return Vec3::ZERO;
+    return Vec3::zero;
 }
 
 void Rigidbody3D::setInertia(const Vec3& inertia)
@@ -697,7 +697,7 @@ void Rigidbody3D::setMassData(float mass, const Vec3& inertia)
 
 Vec3 Rigidbody3D::getTotalForce() const
 {
-    Vec3 total = Vec3::ZERO;
+    Vec3 total = Vec3::zero;
     withBodyReadLock(this, [&](const JPH::Body& body) {
         if (!body.IsStatic())
             total = jphutil::cast(body.GetAccumulatedForce());
@@ -707,7 +707,7 @@ Vec3 Rigidbody3D::getTotalForce() const
 
 Vec3 Rigidbody3D::getTotalTorque() const
 {
-    Vec3 total = Vec3::ZERO;
+    Vec3 total = Vec3::zero;
     withBodyReadLock(this, [&](const JPH::Body& body) {
         if (!body.IsStatic())
             total = jphutil::cast(body.GetAccumulatedTorque());

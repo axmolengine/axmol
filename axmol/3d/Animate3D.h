@@ -39,7 +39,7 @@ namespace ax
 
 class Bone3D;
 class MeshRenderer;
-class EventCustom;
+class CustomEvent;
 
 enum class Animate3DQuality
 {
@@ -172,7 +172,7 @@ protected:
     std::unordered_map<Node*, Animation3D::Curve*> _nodeCurves;
 
     std::unordered_map<int, ValueMap> _keyFrameUserInfos;
-    std::unordered_map<int, EventCustom*> _keyFrameEvent;
+    std::unordered_map<int, CustomEvent*> _keyFrameEvent;
     std::unordered_map<int, Animate3DDisplayedEventInfo> _displayedEventInfo;
 
     // mesh animations

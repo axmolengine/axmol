@@ -63,4 +63,7 @@
         break;                                                                   \
     }
 
-#define AUDIO_ID int
+namespace ax
+{
+using AudioId = int;
+}

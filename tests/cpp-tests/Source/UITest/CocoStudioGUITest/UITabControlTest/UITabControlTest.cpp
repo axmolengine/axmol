@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "axmol/ui/UITabControl.h"
+#include "axmol/ui/TabView.h"
 #include "UITabControlTest.h"
 
 using namespace ax;
@@ -53,9 +53,8 @@ bool UITabControlTest::init()
         touchSinkLayer->setContentSize(_uiLayer->getContentSize());
         _uiLayer->addChild(touchSinkLayer);
 
-        auto listener = EventListenerTouchOneByOne::create();
-        listener->setSwallowTouches(true);
-        listener->onTouchBegan = [](Touch* t, Event* e) { return true; };
+        auto listener           = PointerEventListener::create();
+        listener->onPointerDown = [](PointerEvent* e) { return true; };
         _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, touchSinkLayer);
 
         auto tab = TabControl::create();
@@ -78,17 +77,17 @@ bool UITabControlTest::init()
         auto container1 = Layout::create();
         container1->setOpacity(255);
         container1->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
-        container1->setBackGroundColor(Color32::GRAY);
+        container1->setBackGroundColor(Color32::gray);
         container1->setBackGroundColorOpacity(255);
         auto container2 = Layout::create();
         container2->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
         container2->setOpacity(255);
-        container2->setBackGroundColor(Color32::BLUE);
+        container2->setBackGroundColor(Color32::blue);
         container2->setBackGroundColorOpacity(255);
         auto container3 = Layout::create();
         container3->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
         container3->setOpacity(255);
-        container3->setBackGroundColor(Color32::RED);
+        container3->setBackGroundColor(Color32::red);
         container3->setBackGroundColorOpacity(255);
 
         tab->insertTab(0, header1, container1);
@@ -100,9 +99,9 @@ bool UITabControlTest::init()
         touchSinkLayer->addChild(tab);
         tab->setPosition(Vec2(widgetSize.width * .5f, widgetSize.height * .5f));
 
-        tab->setTabChangedEventListener([displayText](int index, TabControl::EventType evtType) {
+        tab->setTabChangedEventListener([tab, displayText](int /*tabIndex*/, TabView::EventType /*eventType*/) {
             displayText->retain();
-            std::string text = fmt::format("tab {} selected", index);
+            std::string text = fmt::format("tab {} selected", tab->getSelectedTabIndex());
             displayText->setString(text);
             displayText->release();
         });

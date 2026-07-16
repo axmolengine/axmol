@@ -3,6 +3,9 @@
  * Last updated April 5, 2025. Replaces all prior versions.
  *
  * Copyright (c) 2013-2025, Esoteric Software LLC
+ * Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+ *
+ * https://axmol.dev/
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -27,19 +30,21 @@
  * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#ifndef SPINE_SKELETONBATCH_H_
-#define SPINE_SKELETONBATCH_H_
-
-#include "axmol/axmol.h"
+#pragma once
 
 #include "axmol/rhi/ProgramState.h"
+#include "axmol/renderer/TrianglesCommand.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/renderer/Texture2D.h"
+
 #include <spine/spine.h>
+
 #include <vector>
 
 namespace spine {
-	struct SkeletonCommand : public axmol::TrianglesCommand {
-		axmol::rhi::UniformLocation _locMVP;
-		axmol::rhi::UniformLocation _locTexture;
+	struct SkeletonCommand : public ax::TrianglesCommand {
+		ax::rhi::UniformLocation _locMVP;
+		ax::rhi::UniformLocation _locTexture;
 	};
 	class SP_API SkeletonBatch {
 	public:
@@ -49,13 +54,13 @@ namespace spine {
 
 		void update(float delta);
 
-		axmol::V3F_T2F_C4B *allocateVertices(uint32_t numVertices);
+		ax::V3F_T2F_C4B *allocateVertices(uint32_t numVertices);
 		void deallocateVertices(uint32_t numVertices);
 		unsigned short *allocateIndices(uint32_t numIndices);
 		void deallocateIndices(uint32_t numVertices);
-		axmol::TrianglesCommand *addCommand(axmol::Renderer *renderer, float globalOrder, axmol::Texture2D *texture, axmol::rhi::ProgramState *programState, axmol::BlendFunc blendType, const axmol::TrianglesCommand::Triangles &triangles, const axmol::Mat4 &mv, uint32_t flags);
+		ax::TrianglesCommand *addCommand(ax::Renderer *renderer, float globalOrder, ax::Texture2D *texture, ax::rhi::ProgramState *programState, ax::BlendFunc blendType, const ax::TrianglesCommand::Triangles &triangles, const ax::Mat4 &mv, uint32_t flags);
 
-		axmol::rhi::ProgramState* updateCommandPipelinePS(SkeletonCommand* command, axmol::rhi::ProgramState* programState);
+		ax::rhi::ProgramState* updateCommandPipelinePS(SkeletonCommand* command, ax::rhi::ProgramState* programState);
 
 	protected:
 		SkeletonBatch();
@@ -74,15 +79,13 @@ namespace spine {
 		uint32_t _nextFreeCommand;
 
 		// pool of vertices
-		std::vector<axmol::V3F_T2F_C4B> _vertices;
+		std::vector<ax::V3F_T2F_C4B> _vertices;
 		uint32_t _numVertices;
 
 		// pool of indices
-		Vector<unsigned short> _indices;
+		::spine::Array<unsigned short> _indices;
 
         ax::EventListener* _afterDrawListener{nullptr};
 	};
 
 }// namespace spine
-
-#endif// SPINE_SKELETONBATCH_H_

@@ -349,7 +349,7 @@ void ColliderDetector::setBody(b2BodyId pBody)
         shapeDef.enableSensorEvents = true;
         shapeDef.userData           = _bone;
 
-        AX_SAFE_DELETE(b2bv);
+        AX_SAFE_DELETE_ARRAY(b2bv);
         auto oldShape = colliderBody->getShape();
         if (b2Shape_IsValid(oldShape))
             b2DestroyShape(oldShape, true);

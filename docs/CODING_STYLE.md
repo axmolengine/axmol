@@ -275,6 +275,19 @@ Exception: sometimes, system-specific code needs conditional includes. Such code
 #endif  // LANG_CXX11
 ```
 
+### C++ Wrapper C Headers
+
+Do not use C++ wrapper C headers (`<c*>`), such as `<cstdlib>`, `<cstring>`, `<cstdint>`, etc. Use the corresponding C headers (`<stdlib.h>`, `<string.h>`, `<stdint.h>`, etc.) instead.
+
+This applies to the core engine (`axmol/`) and all community-maintained extensions. Third-party extensions (e.g. `spine/`, `Live2D/`, `Effekseer/`) are exempt.
+
+**Allowances:**
+
+- **`<cmath>`** — exempted. C++ provides overloaded math functions for `float`/`double`/`long double` (e.g. `std::sin(float)`), which C's `<math.h>` does not offer without the `*f`/`*l` suffix functions (`sinf`, `sinl`).
+- **`<cstddef>`** — not required explicitly. `size_t` and `ptrdiff_t` are available transitively through other C headers; `std::nullptr_t` is provided by standard C++ headers (`<memory>`, `<type_traits>`, etc.).
+
+**Rationale:** Axmol targets platforms where C standard library headers are always available. Using `<c*>` wrappers adds an unnecessary layer and can cause portability issues on certain toolchains. Consistency across the codebase is preferred.
+
 # Scoping
 
 ## Namespaces

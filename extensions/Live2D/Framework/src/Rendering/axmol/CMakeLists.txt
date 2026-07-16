@@ -1,9 +1,0 @@
-target_sources(${LIB_NAME}
-  PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/CubismOffscreenSurface_Cocos2dx.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/CubismOffscreenSurface_Cocos2dx.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/CubismRenderer_Cocos2dx.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/CubismRenderer_Cocos2dx.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/CubismCommandBuffer_Cocos2dx.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/CubismCommandBuffer_Cocos2dx.hpp
-)

@@ -1,4 +1,4 @@
-﻿#include "DragonBonesData.h"
+#include "DragonBonesData.h"
 #include "UserData.h"
 #include "ArmatureData.h"
 

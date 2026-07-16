@@ -70,7 +70,7 @@ WebSocketTest::WebSocketTest()
     const int SPACE  = 35;
 
     auto menuRequest = Menu::create();
-    menuRequest->setPosition(Vec2::ZERO);
+    menuRequest->setPosition(Vec2::zero);
     addChild(menuRequest);
 
     // Send Text
@@ -117,7 +117,7 @@ WebSocketTest::WebSocketTest()
     auto startTestItem  = MenuItemLabel::create(startTestLabel, AX_CALLBACK_1(WebSocketTest::startTestCallback, this));
     startTestItem->setPosition(Vec2(VisibleRect::center().x - 150, VisibleRect::bottom().y + 150));
     _startTestMenu = Menu::create(startTestItem, nullptr);
-    _startTestMenu->setPosition(Vec2::ZERO);
+    _startTestMenu->setPosition(Vec2::zero);
     this->addChild(_startTestMenu, 1);
 }
 
@@ -369,7 +369,7 @@ WebSocketCloseTest::WebSocketCloseTest() : _wsiTest(nullptr)
     closeItem->setPosition(VisibleRect::right().x / 2, VisibleRect::top().y * 2 / 3);
 
     auto menu = Menu::create(closeItem, nullptr);
-    menu->setPosition(Vec2::ZERO);
+    menu->setPosition(Vec2::zero);
     addChild(menu, 1);
 
     auto notifyLabel = Label::createWithTTF(
@@ -427,7 +427,7 @@ WebSocketDelayTest::WebSocketDelayTest()
     const int SPACE  = 35;
 
     auto menuRequest = Menu::create();
-    menuRequest->setPosition(Vec2::ZERO);
+    menuRequest->setPosition(Vec2::zero);
     addChild(menuRequest);
 
     // Send Text
@@ -458,7 +458,7 @@ WebSocketDelayTest::WebSocketDelayTest()
         MenuItemLabel::create(startTestLabel, AX_CALLBACK_1(WebSocketDelayTest::startTestCallback, this));
     startTestItem->setPosition(Vec2(VisibleRect::center().x - 150, VisibleRect::bottom().y + 150));
     _startTestMenu = Menu::create(startTestItem, nullptr);
-    _startTestMenu->setPosition(Vec2::ZERO);
+    _startTestMenu->setPosition(Vec2::zero);
     this->addChild(_startTestMenu, 1);
 }
 

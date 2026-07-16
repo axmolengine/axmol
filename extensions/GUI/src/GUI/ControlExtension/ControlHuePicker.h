@@ -62,8 +62,8 @@ public:
     void setEnabled(bool enabled) override;
 
     // overrides
-    bool onTouchBegan(Touch* touch, Event* pEvent) override;
-    void onTouchMoved(Touch* pTouch, Event* pEvent) override;
+    bool onPointerDown(PointerEvent* event) override;
+    void onPointerMove(PointerEvent* event) override;
 
 protected:
     void updateSliderPosition(Vec2 location);

@@ -36,10 +36,10 @@ public:
 
     virtual bool init() override;
 
-    void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
-    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
-    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
-    void onTouchesCancelled(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    bool onPointerDown(ax::PointerEvent* event);
+    void onPointerMove(ax::PointerEvent* event);
+    void onPointerUp(ax::PointerEvent* event);
+    void onPointerCancel(ax::PointerEvent* event);
 };
 
 #endif /* __MULTITOUCHTEST_H__ */

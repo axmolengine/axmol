@@ -22,7 +22,7 @@ public:
     InputProcessor(GComponent* owner);
     ~InputProcessor();
 
-    ax::Vec2 getTouchPosition(int touchId);
+    ax::Vec2 getTouchPosition(intptr_t touchId);
 
     void addTouchMonitor(int touchId, GObject* target);
     void removeTouchMonitor(GObject* target);
@@ -33,23 +33,20 @@ public:
     void setCaptureCallback(CaptureEventCallback value) { _captureCallback = value; }
     
     void disableDefaultTouchEvent();
-    bool touchDown(ax::Touch *touch, ax::Event *event);
-    void touchMove(ax::Touch *touch, ax::Event *event);
-    void touchUp(ax::Touch *touch, ax::Event *event);
+    bool pointerDown(ax::PointerEvent* event);
+    void pointerMove(ax::PointerEvent* event);
+    void pointerUp(ax::PointerEvent* event);
     
 private:
-    bool onTouchBegan(ax::Touch * touch, ax::Event *);
-    void onTouchMoved(ax::Touch * touch, ax::Event *);
-    void onTouchEnded(ax::Touch * touch, ax::Event *);
-    void onTouchCancelled(ax::Touch * touch, ax::Event *);
+    bool onPointerDown(ax::PointerEvent* event);
+    void onPointerMove(ax::PointerEvent* event);
+    void onPointerUp(ax::PointerEvent* event);
+    void onPointerCancel(ax::PointerEvent* event);
 
-    bool onMouseDown(ax::EventMouse* event);
-    bool onMouseUp(ax::EventMouse* event);
-    bool onMouseMove(ax::EventMouse* event);
-    bool onMouseScroll(ax::EventMouse* event);
+    bool onPointerScroll(ax::PointerEvent* event);
 
-    void onKeyDown(ax::EventKeyboard::KeyCode keyCode, ax::Event*);
-    void onKeyUp(ax::EventKeyboard::KeyCode keyCode, ax::Event*);
+    void onKeyDown(ax::KeyboardEvent*);
+    void onKeyUp(ax::KeyboardEvent*);
 
     TouchInfo* getTouch(int touchId, bool createIfNotExisits = true);
     void updateRecentInput(TouchInfo* touch, GObject* target);
@@ -58,9 +55,8 @@ private:
     void setEnd(TouchInfo* touch, GObject* target);
     GObject* clickTest(TouchInfo* touch, GObject* target);
 
-    ax::EventListenerTouchOneByOne* _touchListener;
-    ax::EventListenerMouse* _mouseListener;
-    ax::EventListenerKeyboard* _keyboardListener;
+    ax::PointerEventListener* _pointerListener;
+    ax::KeyboardEventListener* _keyboardListener;
     std::vector<TouchInfo*> _touches;
     GComponent* _owner;
     CaptureEventCallback _captureCallback;

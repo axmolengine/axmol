@@ -38,6 +38,7 @@ RenderTextureTests::RenderTextureTests()
     ADD_TEST_CASE(SpriteRenderTextureBug);
     ADD_TEST_CASE(RenderTexturePartTest);
     ADD_TEST_CASE(Issue16113Test);
+    ADD_TEST_CASE(CameraTargetTextureTest);
 };
 
 /**
@@ -45,20 +46,21 @@ RenderTextureTests::RenderTextureTests()
  */
 RenderTextureSave::RenderTextureSave()
 {
-    auto s = Director::getInstance()->getCanvasSize();
+    auto s = _director->getCanvasSize();
 
     // create a render texture, this is what we are going to draw into
-    _target = RenderTexture::create(s.width, s.height, rhi::PixelFormat::RGBA8);
+    _target = RenderTexture::create(_director->canvasToPixels(s), rhi::PixelFormat::RGBA8);
     _target->retain();
-    _target->setPosition(Vec2(s.width / 2, s.height / 2));
-    _target->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _rtxPass = RefPtr<RenderTexturePass>(RenderTexturePass::obtain(_target), tlx::adopt_object);
 
-    // note that the render texture is a Node, and contains a sprite of its texture for convenience,
-    // so we can just parent it to the scene like any other Node
-    this->addChild(_target, -1);
+    // create a sprite from the render texture to display it in the scene
+    auto targetSprite = Sprite::createWithTexture(_target);
+    targetSprite->setPosition(Vec2(s.width / 2, s.height / 2));
+    targetSprite->setAnchorPoint(Anchors::center);
+    this->addChild(targetSprite, -1);
 
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesMoved = AX_CALLBACK_2(RenderTextureSave::onTouchesMoved, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerMove = AX_CALLBACK_1(RenderTextureSave::onPointerMove, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     // Save Image menu
@@ -89,12 +91,21 @@ std::string RenderTextureSave::subtitle() const
 
 void RenderTextureSave::clearImage(ax::Object* sender)
 {
-    _target->clear(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1());
+    {
+        _rtxPass->begin();
+        _rtxPass->clear(ClearFlag::COLOR,
+                        {.color = Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1())});
+        _rtxPass->end();
+    }
 }
 
 void RenderTextureSave::clearImageTransparent(ax::Object* sender)
 {
-    _target->clear(0, 0, 0, 0);
+    {
+        _rtxPass->begin();
+        _rtxPass->clear(ClearFlag::COLOR, {.color = Color(0, 0, 0, 0)});
+        _rtxPass->end();
+    }
 }
 
 void RenderTextureSave::saveImageWithPremultipliedAlpha(ax::Object* sender)
@@ -152,17 +163,17 @@ void RenderTextureSave::addImage(ax::Object* sender)
 {
     auto s = Director::getInstance()->getCanvasSize();
 
-    // begin drawing to the render texture
-    _target->begin();
+    {
+        _rtxPass->begin(getDefaultCamera());
 
-    Sprite* sprite = Sprite::create("Images/test-rgba1.png");
-    sprite->setPosition(
-        sprite->getContentSize().width + AXRANDOM_0_1() * (s.width - sprite->getContentSize().width),
-        sprite->getContentSize().height + AXRANDOM_0_1() * (s.height - sprite->getContentSize().height));
-    sprite->visit();
+        Sprite* sprite = Sprite::create("Images/test-rgba1.png");
+        sprite->setPosition(
+            sprite->getContentSize().width + AXRANDOM_0_1() * (s.width - sprite->getContentSize().width),
+            sprite->getContentSize().height + AXRANDOM_0_1() * (s.height - sprite->getContentSize().height));
+        sprite->visit();
 
-    // finish drawing and return context back to the screen
-    _target->end();
+        _rtxPass->end();
+    }
 }
 
 RenderTextureSave::~RenderTextureSave()
@@ -171,48 +182,52 @@ RenderTextureSave::~RenderTextureSave()
     Director::getInstance()->getTextureCache()->removeUnusedTextures();
 }
 
-void RenderTextureSave::onTouchesMoved(const std::vector<Touch*>& touches, Event* event)
+void RenderTextureSave::onPointerMove(PointerEvent* event)
 {
-    auto touch = touches[0];
-    auto start = touch->getLocation();
-    auto end   = touch->getPreviousLocation();
+    if (!event->isPrimaryPressed())
+        return;
 
-    // begin drawing to the render texture
-    _target->begin();
+    auto start = event->getWorldPoint();
+    auto end   = event->getPrevWorldPoint();
 
-    // for extra points, we'll draw this smoothly from the last position and vary the sprite's
-    // scale/rotation/offset
-    float distance = start.getDistance(end);
-    if (distance > 1)
     {
-        int d = (int)distance;
-        _brushs.clear();
-        for (int i = 0; i < d; ++i)
+        _rtxPass->begin(getDefaultCamera());
+
+        // for extra points, we'll draw this smoothly from the last position and vary the sprite's
+        // scale/rotation/offset
+        float distance = start.getDistance(end);
+        if (distance > 1)
         {
-            Sprite* sprite = Sprite::create("Images/fire.png");
-            sprite->setColor(Color32(255, 0, 0, 20));
-            _brushs.pushBack(sprite);
+            int d = (int)distance;
+            _brushs.clear();
+            for (int i = 0; i < d; ++i)
+            {
+                Sprite* sprite = Sprite::create("Images/fire.png");
+                sprite->setColor(Color32(255, 0, 0, 20));
+                _brushs.pushBack(sprite);
+            }
+            for (int i = 0; i < d; i++)
+            {
+                float difx  = end.x - start.x;
+                float dify  = end.y - start.y;
+                float delta = (float)i / distance;
+                auto brush  = _brushs.at(i);
+                brush->setPosition(Vec2(start.x + (difx * delta), start.y + (dify * delta)));
+                brush->setRotation(rand() % 360);
+                float r = (float)(rand() % 50 / 50.f) + 0.25f;
+                brush->setScale(r);
+                /*_brush->setColor(Color32(AXRANDOM_0_1() * 127 + 128, 255, 255));*/
+                // Use AXRANDOM_0_1() will cause error when loading libtests.so on android, I don't know why.
+                brush->setColor(Color32(rand() % 127 + 128, 255, 255, brush->getOpacity()));
+                // Call visit to draw the brush, don't call draw..
+                brush->visit();
+            }
         }
-        for (int i = 0; i < d; i++)
-        {
-            float difx  = end.x - start.x;
-            float dify  = end.y - start.y;
-            float delta = (float)i / distance;
-            auto brush  = _brushs.at(i);
-            brush->setPosition(Vec2(start.x + (difx * delta), start.y + (dify * delta)));
-            brush->setRotation(rand() % 360);
-            float r = (float)(rand() % 50 / 50.f) + 0.25f;
-            brush->setScale(r);
-            /*_brush->setColor(Color32(AXRANDOM_0_1() * 127 + 128, 255, 255));*/
-            // Use AXRANDOM_0_1() will cause error when loading libtests.so on android, I don't know why.
-            brush->setColor(Color32(rand() % 127 + 128, 255, 255, brush->getOpacity()));
-            // Call visit to draw the brush, don't call draw..
-            brush->visit();
-        }
+
+        _rtxPass->end();
     }
 
-    // finish drawing and return context back to the screen
-    _target->end();
+    return;
 }
 
 /**
@@ -244,32 +259,34 @@ RenderTextureIssue937::RenderTextureIssue937()
     spr_nonpremulti->setPosition(Vec2(s.width / 2 - 16, s.height / 2 - 16));
 
     /* A2 & B2 setup */
-    auto rend = RenderTexture::create(32, 64, rhi::PixelFormat::RGBA8);
+    auto rend = RenderTexture::create(_director->canvasToPixels(Vec2(32, 64)), rhi::PixelFormat::RGBA8);
 
     if (nullptr == rend)
     {
         return;
     }
 
-    auto spr_size = spr_premulti->getContentSize();
-    rend->setKeepMatrix(true);
-    Size pixelSize = Director::getInstance()->getCanvasSizeInPixels();
-    rend->setVirtualViewport(Vec2(s.width / 2 - 32, s.height / 2 - 32), Rect(0, 0, s.width, s.height),
-                             Rect(0, 0, pixelSize.width, pixelSize.height));
-
     // It's possible to modify the RenderTexture blending function by
     //        [[rend sprite] setBlendFunc:(BlendFunc) {BlendFactor::ONE, BlendFactor::ONE_MINUS_SRC_ALPHA}];
-    rend->begin();
-    spr_premulti->visit();
-    spr_nonpremulti->visit();
-    rend->end();
+    {
+        auto scope           = RefPtr<RenderTexturePass>(RenderTexturePass::obtain(rend), tlx::adopt_object);
+        const auto pixelSize = Director::getInstance()->getCanvasSizeInPixels();
+        scope->setViewport(scope->makeVirtualViewport(Vec2(s.width / 2 - 32, s.height / 2 - 32),
+                                                      Rect(0, 0, s.width, s.height),
+                                                      Rect(0, 0, pixelSize.width, pixelSize.height)));
+        scope->begin(getDefaultCamera());
+        spr_premulti->visit();
+        spr_nonpremulti->visit();
+        scope->end();
+    }
 
-    rend->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-    rend->setPosition(Vec2(s.width / 2 + 16, s.height / 2));
+    auto rendSprite = Sprite::createWithTexture(rend);
+    rendSprite->setAnchorPoint(Anchors::center);
+    rendSprite->setPosition(Vec2(s.width / 2 + 16, s.height / 2));
 
     addChild(spr_nonpremulti);
     addChild(spr_premulti);
-    addChild(rend);
+    addChild(rendSprite);
 }
 
 std::string RenderTextureIssue937::title() const
@@ -288,10 +305,10 @@ std::string RenderTextureIssue937::subtitle() const
 
 RenderTextureZbuffer::RenderTextureZbuffer()
 {
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesBegan = AX_CALLBACK_2(RenderTextureZbuffer::onTouchesBegan, this);
-    listener->onTouchesMoved = AX_CALLBACK_2(RenderTextureZbuffer::onTouchesMoved, this);
-    listener->onTouchesEnded = AX_CALLBACK_2(RenderTextureZbuffer::onTouchesEnded, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = AX_CALLBACK_1(RenderTextureZbuffer::onPointerDown, this);
+    listener->onPointerMove = AX_CALLBACK_1(RenderTextureZbuffer::onPointerMove, this);
+    listener->onPointerUp   = AX_CALLBACK_1(RenderTextureZbuffer::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto size  = Director::getInstance()->getCanvasSize();
@@ -345,7 +362,7 @@ RenderTextureZbuffer::RenderTextureZbuffer()
     sp9->setPositionZ(-400);
 
     sp9->setScale(2);
-    sp9->setColor(Color32::YELLOW);
+    sp9->setColor(Color32::yellow);
 }
 
 std::string RenderTextureZbuffer::title() const
@@ -358,71 +375,71 @@ std::string RenderTextureZbuffer::subtitle() const
     return "Touch screen. It should be green";
 }
 
-void RenderTextureZbuffer::onTouchesBegan(const std::vector<Touch*>& touches, Event* event)
+bool RenderTextureZbuffer::onPointerDown(PointerEvent* event)
 {
+    auto location = event->getWorldPoint();
 
-    for (auto& item : touches)
-    {
-        auto touch    = static_cast<Touch*>(item);
-        auto location = touch->getLocation();
+    sp1->setPosition(location);
+    sp2->setPosition(location);
+    sp3->setPosition(location);
+    sp4->setPosition(location);
+    sp5->setPosition(location);
+    sp6->setPosition(location);
+    sp7->setPosition(location);
+    sp8->setPosition(location);
+    sp9->setPosition(location);
 
-        sp1->setPosition(location);
-        sp2->setPosition(location);
-        sp3->setPosition(location);
-        sp4->setPosition(location);
-        sp5->setPosition(location);
-        sp6->setPosition(location);
-        sp7->setPosition(location);
-        sp8->setPosition(location);
-        sp9->setPosition(location);
-    }
+    return true;
 }
 
-void RenderTextureZbuffer::onTouchesMoved(const std::vector<Touch*>& touches, Event* event)
+void RenderTextureZbuffer::onPointerMove(PointerEvent* event)
 {
-    for (auto& item : touches)
-    {
-        auto touch    = static_cast<Touch*>(item);
-        auto location = touch->getLocation();
+    if (!event->isCaptured())
+        return;
 
-        sp1->setPosition(location);
-        sp2->setPosition(location);
-        sp3->setPosition(location);
-        sp4->setPosition(location);
-        sp5->setPosition(location);
-        sp6->setPosition(location);
-        sp7->setPosition(location);
-        sp8->setPosition(location);
-        sp9->setPosition(location);
-    }
+    auto location = event->getWorldPoint();
+
+    sp1->setPosition(location);
+    sp2->setPosition(location);
+    sp3->setPosition(location);
+    sp4->setPosition(location);
+    sp5->setPosition(location);
+    sp6->setPosition(location);
+    sp7->setPosition(location);
+    sp8->setPosition(location);
+    sp9->setPosition(location);
 }
 
-void RenderTextureZbuffer::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+void RenderTextureZbuffer::onPointerUp(PointerEvent* event)
 {
     this->renderScreenShot();
 }
 
 void RenderTextureZbuffer::renderScreenShot()
 {
-    auto texture = RenderTexture::create(512, 512);
+    auto texture = RenderTexture::create(_director->canvasToPixels(Vec2(512, 512)));
     if (nullptr == texture)
     {
         return;
     }
 
-    texture->begin();
+    {
+        auto renderer = _director->getRenderer();
+        auto scope    = RefPtr<RenderTexturePass>(RenderTexturePass::obtain(texture), tlx::adopt_object);
+        scope->begin(getDefaultCamera());
+        this->visit(renderer, getNodeToParentTransform(), 0);
+        scope->end();
+    }
 
-    this->visit();
+    _director->getRenderer()->render();
 
-    texture->end();
-
-    auto sprite = Sprite::createWithTexture(texture->getSprite()->getTexture());
+    auto sprite = Sprite::createWithTexture(texture);
 
     sprite->setPosition(Vec2(256, 256));
     sprite->setOpacity(182);
     sprite->setFlippedY(1);
     this->addChild(sprite, 999999);
-    sprite->setColor(Color32::GREEN);
+    sprite->setColor(Color32::green);
 
     sprite->runAction(Sequence::create(FadeTo::create(2, 0), RemoveSelf::create(), nullptr));
 }
@@ -446,21 +463,25 @@ RenderTexturePartTest::RenderTexturePartTest()
     addChild(sprite2);
     addChild(sprite22);
 
-    _rend = RenderTexture::create(200, 200, rhi::PixelFormat::RGBA8);
+    _rend = RenderTexture::create(_director->canvasToPixels(Vec2(200, 200)), rhi::PixelFormat::RGBA8);
     _rend->retain();
-    _rend->setKeepMatrix(true);
-    Size pixelSize = Director::getInstance()->getCanvasSizeInPixels();
-    _rend->setVirtualViewport(Vec2(size.width / 2 - 150, size.height / 2 - 150), Rect(0, 0, size.width, size.height),
-                              Rect(0, 0, pixelSize.width, pixelSize.height));
 
-    _rend->beginWithClear(1, 0, 0, 1);
-    sprite1->visit();
-    sprite11->visit();
-    sprite2->visit();
-    sprite22->visit();
-    _rend->end();
+    {
+        auto scope           = RefPtr<RenderTexturePass>(RenderTexturePass::obtain(_rend), tlx::adopt_object);
+        const auto pixelSize = Director::getInstance()->getCanvasSizeInPixels();
+        scope->setViewport(scope->makeVirtualViewport(Vec2(size.width / 2 - 150, size.height / 2 - 150),
+                                                      Rect(0, 0, size.width, size.height),
+                                                      Rect(0, 0, pixelSize.width, pixelSize.height)));
+        scope->begin(getDefaultCamera());
+        scope->clear(ClearFlag::COLOR, {.color = Color(1, 0, 0, 1)});
+        sprite1->visit();
+        sprite11->visit();
+        sprite2->visit();
+        sprite22->visit();
+        scope->end();
+    }
 
-    _spriteDraw                  = Sprite::createWithTexture(_rend->getSprite()->getTexture());
+    _spriteDraw                  = Sprite::createWithTexture(_rend);
     FiniteTimeAction* baseAction = MoveBy::create(1, Vec2(size.width, 0.0f));
     _spriteDraw->setPosition(0, size.height / 2);
     _spriteDraw->setScaleY(-1);
@@ -508,12 +529,14 @@ RenderTextureTestDepthStencil::RenderTextureTestDepthStencil()
                              Vec2(_spriteDraw->getContentSize().width * _spriteDraw->getScale() * 0.5f,
                                   _spriteDraw->getContentSize().height * _spriteDraw->getScale() * 0.5f));
 
-    _rtx = RenderTexture::create(s.width, s.height, rhi::PixelFormat::RGBA4, PixelFormat::D24S8);
+    _rtx     = RenderTexture::create(_director->canvasToPixels(s), rhi::PixelFormat::RGBA4, PixelFormat::D24S8);
+    _rtxPass = RefPtr<RenderTexturePass>(RenderTexturePass::obtain(_rtx), tlx::adopt_object);
 
-    _rtx->setPosition(Vec2(s.width * 0.5f, s.height * 0.5f));
-    _rtx->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    auto rtxSprite = Sprite::createWithTexture(_rtx);
+    rtxSprite->setPosition(Vec2(s.width * 0.5f, s.height * 0.5f));
+    rtxSprite->setAnchorPoint(Anchors::center);
 
-    this->addChild(_rtx);
+    this->addChild(rtxSprite);
 }
 
 RenderTextureTestDepthStencil::~RenderTextureTestDepthStencil()
@@ -528,31 +551,36 @@ RenderTextureTestDepthStencil::~RenderTextureTestDepthStencil()
 
 void RenderTextureTestDepthStencil::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
-    _rtx->beginWithClear(0, 0, 0, 0, 0, 0);
+    {
+        _rtxPass->begin();
+        _rtxPass->clear(ClearFlag::COLOR | ClearFlag::DEPTH | ClearFlag::STENCIL,
+                        {.color = Color(0, 0, 0, 0), .depth = 0, .stencil = 0});
 
-    //    _renderCmds[0].init(_globalZOrder);
-    //    _renderCmds[0].func = AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeClear, this);
-    renderer->addCallbackCommand(AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeClear, this), _globalZOrder);
+        //    _renderCmds[0].init(_globalZOrder);
+        //    _renderCmds[0].func = AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeClear, this);
+        renderer->addCallbackCommand(AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeClear, this), _globalZOrder);
 
-    //    _renderCmds[1].init(_globalZOrder);
-    //    _renderCmds[1].func = AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeStencil, this);
-    renderer->addCallbackCommand(AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeStencil, this), _globalZOrder);
+        //    _renderCmds[1].init(_globalZOrder);
+        //    _renderCmds[1].func = AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeStencil, this);
+        renderer->addCallbackCommand(AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeStencil, this),
+                                     _globalZOrder);
 
-    _spriteDS->visit();
+        _spriteDS->visit();
 
-    //    _renderCmds[2].init(_globalZOrder);
-    //    _renderCmds[2].func = AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeDraw, this);
-    renderer->addCallbackCommand(AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeDraw, this), _globalZOrder);
+        //    _renderCmds[2].init(_globalZOrder);
+        //    _renderCmds[2].func = AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeDraw, this);
+        renderer->addCallbackCommand(AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeDraw, this), _globalZOrder);
 
-    _spriteDraw->visit();
+        _spriteDraw->visit();
 
-    //    _renderCmds[3].init(_globalZOrder);
-    //    _renderCmds[3].func = AX_CALLBACK_0(RenderTextureTestDepthStencil::onAfterDraw, this);
-    renderer->addCallbackCommand(AX_CALLBACK_0(RenderTextureTestDepthStencil::onAfterDraw, this), _globalZOrder);
+        //    _renderCmds[3].init(_globalZOrder);
+        //    _renderCmds[3].func = AX_CALLBACK_0(RenderTextureTestDepthStencil::onAfterDraw, this);
+        renderer->addCallbackCommand(AX_CALLBACK_0(RenderTextureTestDepthStencil::onAfterDraw, this), _globalZOrder);
 
-    /// !!!end will set current render target to default renderTarget
-    /// !!!all render target share one depthStencilDesc, TODO: optimize me?
-    _rtx->end();
+        /// !!!end will set current render target to default renderTarget
+        /// !!!all render target share one depthStencilDesc, TODO: optimize me?
+        _rtxPass->end();
+    }
 }
 
 void RenderTextureTestDepthStencil::onBeforeClear()
@@ -607,37 +635,35 @@ RenderTextureTargetNode::RenderTextureTargetNode()
     addChild(background);
 
     // sprite 1
-    sprite1 = Sprite::create("Images/fire.png");
+    _sprite1 = Sprite::create("Images/fire.png");
 
     // sprite 2
-    sprite2 = Sprite::create("Images/fire_rgba8888.pvr");
+    _sprite2 = Sprite::create("Images/fire_rgba8888.pvr");
 
     auto s = Director::getInstance()->getCanvasSize();
 
     /* Create the render texture */
-    renderTexture = RenderTexture::create(s.width, s.height, rhi::PixelFormat::RGBA4);
+    _renderTexture = RenderTexture::create(_director->canvasToPixels(s), rhi::PixelFormat::RGBA4);
+    _rtxPass       = RefPtr<RenderTexturePass>(RenderTexturePass::obtain(_renderTexture), tlx::adopt_object);
 
-    renderTexture->setPosition(Vec2(s.width / 2, s.height / 2));
-    renderTexture->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-    // renderTexture->setScale(2.0f);
+    /* store sprites in a container that we'll render into the RT each frame */
+    _container = Node::create();
+    _container->setContentSize(_renderTexture->getContentSize());
+    _spriteCenterPosition = _container->getContentSize() / 2;
 
-    /* add the sprites to the render texture */
-    _spriteCenterPosition = renderTexture->getContentSize() / 2;
+    _sprite1->setAnchorPoint(Anchors::center);
+    _sprite1->setPosition(_spriteCenterPosition);
+    _container->addChild(_sprite1);
 
-    sprite1->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-    sprite1->setPosition(_spriteCenterPosition);
-    renderTexture->addChild(sprite1);
+    _sprite2->setAnchorPoint(Anchors::center);
+    _sprite2->setPosition(_spriteCenterPosition);
+    _container->addChild(_sprite2);
 
-    sprite2->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-    sprite2->setPosition(_spriteCenterPosition);
-    renderTexture->addChild(sprite2);
-    renderTexture->setClearColor(Color(0, 0, 0, 0));
-    renderTexture->setClearFlags(ClearFlag::COLOR);
-
-    /* add the render texture to the scene */
-    addChild(renderTexture);
-
-    renderTexture->setAutoDraw(true);
+    /* create a sprite from the RT to display it */
+    auto rtSprite = Sprite::createWithTexture(_renderTexture);
+    rtSprite->setPosition(Vec2(s.width / 2, s.height / 2));
+    rtSprite->setAnchorPoint(Anchors::center);
+    addChild(rtSprite);
 
     scheduleUpdate();
 
@@ -651,26 +677,30 @@ RenderTextureTargetNode::RenderTextureTargetNode()
 
 void RenderTextureTargetNode::touched(Object* sender)
 {
-    // TODO: minggo
-    if (renderTexture->getClearFlags() == ClearFlag::NONE)
-    {
-        renderTexture->setClearFlags(ClearFlag::COLOR);
-    }
-    else
-    {
-        renderTexture->setClearFlags(ClearFlag::NONE);
-        renderTexture->setClearColor(Color(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
-    }
+    _shouldClear = !_shouldClear;
 }
 
 void RenderTextureTargetNode::update(float dt)
 {
     static float time = 0;
     float r           = 80;
-    sprite1->setPosition(_spriteCenterPosition + Vec2(cosf(time * 2) * r, sinf(time * 2) * r));
-    sprite2->setPosition(_spriteCenterPosition + Vec2(sinf(time * 2) * r, cosf(time * 2) * r));
+    _sprite1->setPosition(_spriteCenterPosition + Vec2(cosf(time * 2) * r, sinf(time * 2) * r));
+    _sprite2->setPosition(_spriteCenterPosition + Vec2(sinf(time * 2) * r, cosf(time * 2) * r));
 
     time += dt;
+}
+
+void RenderTextureTargetNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+{
+    {
+        _rtxPass->begin();
+        if (_shouldClear)
+            _rtxPass->clear(ClearFlag::COLOR, {.color = Color(0, 0, 0, 0)});
+        _container->visit();
+        _rtxPass->end();
+    }
+
+    RenderTextureTest::draw(renderer, transform, flags);
 }
 
 std::string RenderTextureTargetNode::title() const
@@ -711,20 +741,24 @@ void SpriteRenderTextureBug::SimpleSprite::draw(Renderer* renderer, const Mat4& 
 {
     if (_rt == nullptr)
     {
-        auto s = Director::getInstance()->getCanvasSize();
-        _rt    = RenderTexture::create(s.width, s.height, rhi::PixelFormat::RGBA8);
+        auto s = _director->getCanvasSizeInPixels();
+        _rt    = RenderTexture::create(s, rhi::PixelFormat::RGBA8);
         _rt->retain();
+        _rtxPass = RefPtr<RenderTexturePass>(RenderTexturePass::obtain(_rt), tlx::adopt_object);
     }
-    _rt->beginWithClear(0.0f, 0.0f, 0.0f, 1.0f);
-    _rt->end();
+    {
+        _rtxPass->begin();
+        _rtxPass->clear(ClearFlag::COLOR, {.color = Color(0, 0, 0, 1)});
+        _rtxPass->end();
+    }
 
     Sprite::draw(renderer, transform, flags);
 }
 
 SpriteRenderTextureBug::SpriteRenderTextureBug()
 {
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = AX_CALLBACK_2(SpriteRenderTextureBug::onTouchesEnded, this);
+    auto listener         = PointerEventListener::create();
+    listener->onPointerUp = AX_CALLBACK_1(SpriteRenderTextureBug::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto s = Director::getInstance()->getCanvasSize();
@@ -765,11 +799,10 @@ SpriteRenderTextureBug::SimpleSprite* SpriteRenderTextureBug::addNewSpriteWithCo
     return nullptr;
 }
 
-void SpriteRenderTextureBug::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+void SpriteRenderTextureBug::onPointerUp(PointerEvent* event)
 {
-    for (auto& touch : touches)
     {
-        auto location = touch->getLocation();
+        auto location = event->getWorldPoint();
         addNewSpriteWithCoords(location);
     }
 }
@@ -796,12 +829,16 @@ Issue16113Test::Issue16113Test()
     auto item1 = MenuItemFont::create("Save Image", [&](Object* ref) {
         auto canvasSize = Director::getInstance()->getVisibleSize();
         auto text       = Label::createWithTTF("hello world", "fonts/Marker Felt.ttf", 40);
-        text->setTextColor(Color32::RED);
-        auto target = RenderTexture::create(canvasSize.width, canvasSize.height, rhi::PixelFormat::RGBA8);
-        target->beginWithClear(0, 0, 0, 0);
-        text->setPosition(canvasSize.width / 2, canvasSize.height / 2);
-        text->Node::visit();
-        target->end();
+        text->setTextColor(Color32::red);
+        auto target = RenderTexture::create(_director->canvasToPixels(canvasSize), rhi::PixelFormat::RGBA8);
+        {
+            auto scope = RefPtr<RenderTexturePass>(RenderTexturePass::obtain(target), tlx::adopt_object);
+            scope->begin();
+            scope->clear(ClearFlag::COLOR, {.color = Color(0, 0, 0, 0)});
+            text->setPosition(canvasSize.width / 2, canvasSize.height / 2);
+            text->Node::visit();
+            scope->end();
+        }
         auto callback = [this](RenderTexture* rt, std::string_view path) { rt->release(); };
         target->retain();
         target->saveToFile("issue16113.png", Image::Format::PNG, true, callback);
@@ -819,4 +856,46 @@ std::string Issue16113Test::title() const
 std::string Issue16113Test::subtitle() const
 {
     return "aaa.png file without white border on iOS";
+}
+
+CameraTargetTextureTest::CameraTargetTextureTest()
+{
+    auto s = _director->getCanvasSize();
+
+    auto background = LayerColor::create(Color32(64, 64, 64, 255));
+    this->addChild(background, -1);
+
+    // Sprite visible only in RT (CameraFlag::USER1)
+    auto targetSprite = Sprite::create("Images/grossinis_sister1.png");
+    targetSprite->setPosition(Vec2(s.width / 2, s.height / 2));
+    targetSprite->setCameraMask((unsigned short)CameraFlag::USER1);
+    targetSprite->runAction(RepeatForever::create(RotateBy::create(2, 360)));
+    this->addChild(targetSprite);
+
+    // RenderTexture filled automatically by Scene::render() via camera targetTexture
+    _rt = RenderTexture::create(_director->canvasToPixels(s), rhi::PixelFormat::RGBA8);
+
+    // Camera with targetTexture: renders only USER1-flagged nodes to RT
+    _captureCamera = Camera::createOrthographic(s.width, s.height, -1024, 1024);
+    _captureCamera->setCameraFlag(CameraFlag::USER1);
+    _captureCamera->setPosition3D(Vec3(s.width / 2, s.height / 2, 0));
+    _captureCamera->setTargetTexture(_rt);
+    this->addChild(_captureCamera);
+
+    // Sprite displaying the RT content (DEFAULT flag, rendered by default camera)
+    auto rtSprite = Sprite::createWithTexture(_rt);
+    rtSprite->setPosition(Vec2(s.width * 0.15f, s.height * 0.15f));
+    rtSprite->setScale(0.3f);
+    rtSprite->setAnchorPoint(Anchors::center);
+    this->addChild(rtSprite);
+}
+
+std::string CameraTargetTextureTest::title() const
+{
+    return "Camera Target Texture";
+}
+
+std::string CameraTargetTextureTest::subtitle() const
+{
+    return "Camera::setTargetTexture driven by Scene::render() camera loop";
 }

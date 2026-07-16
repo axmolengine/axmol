@@ -40,11 +40,11 @@ void AnimationCurve<componentSize>::evaluate(float time, float* dst, EvaluateTyp
         case EvaluateType::INT_QUAT_SLERP:
         {
             // Evaluate.
-            Quaternion quat;
+            Quat quat;
             if (t >= 0)
-                Quaternion::slerp(Quaternion(fromValue), Quaternion(toValue), t, &quat);
+                Quat::slerp(Quat(fromValue), Quat(toValue), t, &quat);
             else
-                Quaternion::slerp(Quaternion(toValue), Quaternion(fromValue), t, &quat);
+                Quat::slerp(Quat(toValue), Quat(fromValue), t, &quat);
 
             dst[0] = quat.x;
             dst[1] = quat.y;

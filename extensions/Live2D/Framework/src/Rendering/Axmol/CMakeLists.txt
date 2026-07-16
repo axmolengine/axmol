@@ -1,0 +1,9 @@
+target_sources(${LIB_NAME}
+  PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismOffscreenSurface_Axmol.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismOffscreenSurface_Axmol.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismRenderer_Axmol.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismRenderer_Axmol.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismCommandBuffer_Axmol.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismCommandBuffer_Axmol.hpp
+)

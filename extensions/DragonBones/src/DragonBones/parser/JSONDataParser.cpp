@@ -1,4 +1,4 @@
-﻿#include "JSONDataParser.h"
+#include "JSONDataParser.h"
 
 DRAGONBONES_NAMESPACE_BEGIN
 
@@ -29,7 +29,7 @@ void JSONDataParser::_samplingEasingCurve(const rapidjson::Value& curve, std::ve
 {
     int curveCount = curve.Size();
     int stepIndex  = -2;
-    for (std::size_t i = 0, l = samples.size(); i < l; ++i)
+    for (size_t i = 0, l = samples.size(); i < l; ++i)
     {
         float t = (float)(i + 1) / (l + 1);                                              // float
         while ((stepIndex + 6 < curveCount ? curve[stepIndex + 6].GetDouble() : 1) < t)  // stepIndex + 3 * 2
@@ -136,7 +136,7 @@ void JSONDataParser::_mergeActionFrame(const rapidjson::Value& rawData,
         frame->frameStart = frameStart;
     }
 
-    for (std::size_t i = 0; i < actions.size(); ++i)  // Cache action offsets.
+    for (size_t i = 0; i < actions.size(); ++i)  // Cache action offsets.
     {
         frame->actions.push_back(actionOffset + i);
     }
@@ -150,7 +150,7 @@ unsigned JSONDataParser::_parseCacheActionFrame(ActionFrame& frame)
     _frameArray[frameOffset + (unsigned)BinaryOffset::FramePosition]     = frame.frameStart;
     _frameArray[frameOffset + (unsigned)BinaryOffset::FramePosition + 1] = actionCount;  // Action count.
 
-    for (std::size_t i = 0; i < actionCount; ++i)  // Action offsets.
+    for (size_t i = 0; i < actionCount; ++i)  // Action offsets.
     {
         _frameArray[frameOffset + (unsigned)BinaryOffset::FramePosition + 2 + i] = frame.actions[i];
     }
@@ -207,7 +207,7 @@ ArmatureData* JSONDataParser::_parseArmature(const rapidjson::Value& rawData, fl
     if (rawData.HasMember(BONE))
     {
         const auto& rawBones = rawData[BONE];
-        for (std::size_t i = 0, l = rawBones.Size(); i < l; ++i)
+        for (size_t i = 0, l = rawBones.Size(); i < l; ++i)
         {
             const auto& rawBone    = rawBones[i];
             const auto& parentName = _getString(rawBone, PARENT, "");
@@ -246,7 +246,7 @@ ArmatureData* JSONDataParser::_parseArmature(const rapidjson::Value& rawData, fl
     if (rawData.HasMember(IK))
     {
         const auto& rawIKS = rawData[IK];
-        for (std::size_t i = 0, l = rawIKS.Size(); i < l; ++i)
+        for (size_t i = 0, l = rawIKS.Size(); i < l; ++i)
         {
             const auto constraint = _parseIKConstraint(rawIKS[i]);
             if (constraint)
@@ -262,7 +262,7 @@ ArmatureData* JSONDataParser::_parseArmature(const rapidjson::Value& rawData, fl
     {
         int zOrder           = 0;
         const auto& rawSlots = rawData[SLOT];
-        for (std::size_t i = 0, l = rawSlots.Size(); i < l; ++i)
+        for (size_t i = 0, l = rawSlots.Size(); i < l; ++i)
         {
             armature->addSlot(_parseSlot(rawSlots[i], zOrder++));
         }
@@ -271,13 +271,13 @@ ArmatureData* JSONDataParser::_parseArmature(const rapidjson::Value& rawData, fl
     if (rawData.HasMember(SKIN))
     {
         const auto& rawSkins = rawData[SKIN];
-        for (std::size_t i = 0, l = rawSkins.Size(); i < l; ++i)
+        for (size_t i = 0, l = rawSkins.Size(); i < l; ++i)
         {
             armature->addSkin(_parseSkin(rawSkins[i]));
         }
     }
 
-    for (std::size_t i = 0, l = _cacheRawMeshes.size(); i < l; ++i)  // Link mesh.
+    for (size_t i = 0, l = _cacheRawMeshes.size(); i < l; ++i)  // Link mesh.
     {
         const auto rawMeshData = _cacheRawMeshes[i];
         const auto& shareName  = _getString(*rawMeshData, SHARE, "");
@@ -305,7 +305,7 @@ ArmatureData* JSONDataParser::_parseArmature(const rapidjson::Value& rawData, fl
     if (rawData.HasMember(ANIMATION))
     {
         const auto& rawAnimations = rawData[ANIMATION];
-        for (std::size_t i = 0, l = rawAnimations.Size(); i < l; ++i)
+        for (size_t i = 0, l = rawAnimations.Size(); i < l; ++i)
         {
             armature->addAnimation(_parseAnimation(rawAnimations[i]));
         }
@@ -457,7 +457,7 @@ SkinData* JSONDataParser::_parseSkin(const rapidjson::Value& rawData)
         const auto& rawSlots = rawData[SLOT];
         _skin                = skin;
 
-        for (std::size_t i = 0, l = rawSlots.Size(); i < l; ++i)
+        for (size_t i = 0, l = rawSlots.Size(); i < l; ++i)
         {
             const auto& rawSlot  = rawSlots[i];
             const auto& slotName = _getString(rawSlot, NAME, "");
@@ -469,7 +469,7 @@ SkinData* JSONDataParser::_parseSkin(const rapidjson::Value& rawData)
                 if (rawSlot.HasMember(DISPLAY))
                 {
                     const auto& rawDisplays = rawSlot[DISPLAY];
-                    for (std::size_t j = 0, lJ = rawDisplays.Size(); j < lJ; ++j)
+                    for (size_t j = 0, lJ = rawDisplays.Size(); j < lJ; ++j)
                     {
                         const auto& rawDisplay = rawDisplays[j];
                         if (!rawDisplay.IsNull())
@@ -541,7 +541,7 @@ DisplayData* JSONDataParser::_parseDisplay(const rapidjson::Value& rawData)
         else if (_slotChildActions.find(_slot->name) != _slotChildActions.cend())
         {
             const auto displays = _skin->getDisplays(_slot->name);
-            if (displays == nullptr ? _slot->displayIndex == 0 : (std::size_t)_slot->displayIndex == displays->size())
+            if (displays == nullptr ? _slot->displayIndex == 0 : (size_t)_slot->displayIndex == displays->size())
             {
                 for (const auto action : _slotChildActions[_slot->name])
                 {
@@ -634,13 +634,13 @@ void JSONDataParser::_parseMesh(const rapidjson::Value& rawData, MeshDisplayData
     _intArray[meshOffset + (unsigned)BinaryOffset::MeshVertexCount]   = vertexCount;
     _intArray[meshOffset + (unsigned)BinaryOffset::MeshTriangleCount] = triangleCount;
     _intArray[meshOffset + (unsigned)BinaryOffset::MeshFloatOffset]   = vertexOffset;
-    for (std::size_t i = 0, l = triangleCount * 3; i < l; ++i)
+    for (size_t i = 0, l = triangleCount * 3; i < l; ++i)
     {
         _intArray[meshOffset + (unsigned)BinaryOffset::MeshVertexIndices + i] = rawTriangles[i].GetUint();
     }
 
     _floatArray.resize(_floatArray.size() + vertexCount * 2 + vertexCount * 2);
-    for (std::size_t i = 0, l = vertexCount * 2; i < l; ++i)
+    for (size_t i = 0, l = vertexCount * 2; i < l; ++i)
     {
         _floatArray[vertexOffset + i] = rawVertices[i].GetDouble();
         _floatArray[uvOffset + i]     = rawUVs[i].GetDouble();
@@ -665,7 +665,7 @@ void JSONDataParser::_parseMesh(const rapidjson::Value& rawData, MeshDisplayData
         _intArray.resize(_intArray.size() + 1 + 1 + weightBoneCount + vertexCount + weightCount);
         _intArray[weightOffset + (unsigned)BinaryOffset::WeigthFloatOffset] = floatOffset;
 
-        for (std::size_t i = 0; i < weightBoneCount; ++i)
+        for (size_t i = 0; i < weightBoneCount; ++i)
         {
             const auto rawBoneIndex = rawBonePoses[i * 7].GetUint();
             const auto bone         = _rawBones[rawBoneIndex];
@@ -683,8 +683,8 @@ void JSONDataParser::_parseMesh(const rapidjson::Value& rawData, MeshDisplayData
         _helpMatrixA.tx = rawSlotPose[4].GetDouble();
         _helpMatrixA.ty = rawSlotPose[5].GetDouble();
 
-        for (std::size_t i = 0, iW = 0, iB = weightOffset + (unsigned)BinaryOffset::WeigthBoneIndices + weightBoneCount,
-                         iV = floatOffset;
+        for (size_t i = 0, iW = 0, iB = weightOffset + (unsigned)BinaryOffset::WeigthBoneIndices + weightBoneCount,
+                    iV = floatOffset;
              i < vertexCount; ++i)
         {
             const auto iD              = i * 2;
@@ -698,7 +698,7 @@ void JSONDataParser::_parseMesh(const rapidjson::Value& rawData, MeshDisplayData
             x = _helpPoint.x;
             y = _helpPoint.y;
 
-            for (std::size_t j = 0; j < vertexBoneCount; ++j)
+            for (size_t j = 0; j < vertexBoneCount; ++j)
             {
                 const auto rawBoneIndex = rawWeights[iW++].GetUint();
                 const auto boneIndex    = indexOf(weightBoneIndices, rawBoneIndex);
@@ -778,7 +778,7 @@ PolygonBoundingBoxData* JSONDataParser::_parsePolygonBoundingBox(const rapidjson
 
         polygonBoundingBox->vertices.resize(rawVertices.Size());
 
-        for (std::size_t i = 0, l = rawVertices.Size(); i < l; i += 2)
+        for (size_t i = 0, l = rawVertices.Size(); i < l; i += 2)
         {
             const auto x    = rawVertices[i].GetDouble();
             const auto y    = rawVertices[i + 1].GetDouble();
@@ -853,7 +853,7 @@ AnimationData* JSONDataParser::_parseAnimation(const rapidjson::Value& rawData)
         const auto keyFrameCount = rawFrames.Size();
         if (keyFrameCount > 0)
         {
-            for (std::size_t i = 0, frameStart = 0; i < keyFrameCount; ++i)
+            for (size_t i = 0, frameStart = 0; i < keyFrameCount; ++i)
             {
                 const auto& rawFrame = rawFrames[i];
                 _parseActionDataInFrame(rawFrame, frameStart, nullptr, nullptr);
@@ -873,7 +873,7 @@ AnimationData* JSONDataParser::_parseAnimation(const rapidjson::Value& rawData)
     if (rawData.HasMember(BONE))
     {
         const auto& rawTimelines = rawData[BONE];
-        for (std::size_t i = 0, l = rawTimelines.Size(); i < l; ++i)
+        for (size_t i = 0, l = rawTimelines.Size(); i < l; ++i)
         {
             _parseBoneTimeline(rawTimelines[i]);
         }
@@ -882,7 +882,7 @@ AnimationData* JSONDataParser::_parseAnimation(const rapidjson::Value& rawData)
     if (rawData.HasMember(SLOT))
     {
         const auto& rawTimelines = rawData[SLOT];
-        for (std::size_t i = 0, l = rawTimelines.Size(); i < l; ++i)
+        for (size_t i = 0, l = rawTimelines.Size(); i < l; ++i)
         {
             _parseSlotTimeline(rawTimelines[i]);
         }
@@ -891,7 +891,7 @@ AnimationData* JSONDataParser::_parseAnimation(const rapidjson::Value& rawData)
     if (rawData.HasMember(FFD))
     {
         const auto& rawTimelines = rawData[FFD];
-        for (std::size_t i = 0, l = rawTimelines.Size(); i < l; ++i)
+        for (size_t i = 0, l = rawTimelines.Size(); i < l; ++i)
         {
             const auto& rawTimeline = rawTimelines[i];
             auto skinName           = _getString(rawTimeline, SKIN, DEFAULT_NAME);
@@ -927,7 +927,7 @@ AnimationData* JSONDataParser::_parseAnimation(const rapidjson::Value& rawData)
     if (rawData.HasMember(IK))
     {
         const auto& rawTimelines = rawData[IK];
-        for (std::size_t i = 0, l = rawTimelines.Size(); i < l; ++i)
+        for (size_t i = 0, l = rawTimelines.Size(); i < l; ++i)
         {
             const auto& rawTimeline    = rawTimelines[i];
             const auto& constraintName = _getString(rawTimeline, NAME, "");
@@ -979,7 +979,7 @@ AnimationData* JSONDataParser::_parseAnimation(const rapidjson::Value& rawData)
             timeline->frameIndicesOffset = frameIndices.size();
             frameIndices.resize(frameIndices.size() + totalFrameCount);
 
-            for (std::size_t i = 0, iK = 0, frameStart = 0, frameCount = 0; i < totalFrameCount; ++i)
+            for (size_t i = 0, iK = 0, frameStart = 0, frameCount = 0; i < totalFrameCount; ++i)
             {
                 if (frameStart + frameCount <= i && iK < keyFrameCount)
                 {
@@ -1075,7 +1075,7 @@ TimelineData* JSONDataParser::_parseTimeline(
         frameIndices.resize(frameIndicesOffset + totalFrameCount);
         timeline->frameIndicesOffset = frameIndicesOffset;
 
-        for (std::size_t i = 0, iK = 0, frameStart = 0, frameCount = 0; i < totalFrameCount; ++i)
+        for (size_t i = 0, iK = 0, frameStart = 0, frameCount = 0; i < totalFrameCount; ++i)
         {
             if (frameStart + frameCount <= i && iK < keyFrameCount)
             {
@@ -1237,7 +1237,7 @@ unsigned JSONDataParser::_parseTweenFrame(const rapidjson::Value& rawData, unsig
             _frameArray.resize(_frameArray.size() + 1 + 1 + _helpArray.size());
             _frameArray[frameOffset + (unsigned)BinaryOffset::FrameTweenType] = (int)TweenType::Curve;
             _frameArray[frameOffset + (unsigned)BinaryOffset::FrameTweenEasingOrCurveSampleCount] = sampleCount;
-            for (std::size_t i = 0; i < sampleCount; ++i)
+            for (size_t i = 0; i < sampleCount; ++i)
             {
                 _frameArray[frameOffset + (unsigned)BinaryOffset::FrameCurveSamples + i] = _helpArray[i] * 10000.0f;
             }
@@ -1301,7 +1301,7 @@ unsigned JSONDataParser::_parseActionFrame(const ActionFrame& frame, unsigned fr
     _frameArray[frameOffset + (unsigned)BinaryOffset::FramePosition]     = frameStart;
     _frameArray[frameOffset + (unsigned)BinaryOffset::FramePosition + 1] = actionCount;  // Action count.
 
-    for (std::size_t i = 0; i < actionCount; ++i)  // Action offsets.
+    for (size_t i = 0; i < actionCount; ++i)  // Action offsets.
     {
         _frameArray[frameOffset + (unsigned)BinaryOffset::FramePosition + 2 + i] = frame.actions[i];
     }
@@ -1324,19 +1324,19 @@ unsigned JSONDataParser::_parseZOrderFrame(const rapidjson::Value& rawData, unsi
             unchanged.resize(slotCount - rawZOrder.Size() / 2);
             zOrders.resize(slotCount);
 
-            for (std::size_t i = 0; i < unchanged.size(); ++i)
+            for (size_t i = 0; i < unchanged.size(); ++i)
             {
                 unchanged[i] = 0;
             }
 
-            for (std::size_t i = 0; i < slotCount; ++i)
+            for (size_t i = 0; i < slotCount; ++i)
             {
                 zOrders[i] = -1;
             }
 
             unsigned originalIndex  = 0;
             unsigned unchangedIndex = 0;
-            for (std::size_t i = 0, l = rawZOrder.Size(); i < l; i += 2)
+            for (size_t i = 0, l = rawZOrder.Size(); i < l; i += 2)
             {
                 const auto slotIndex    = rawZOrder[i].GetInt();
                 const auto zOrderOffset = rawZOrder[i + 1].GetInt();
@@ -1592,7 +1592,7 @@ unsigned JSONDataParser::_parseSlotFFDFrame(const rapidjson::Value& rawData, uns
         _frameFloatArray.resize(_frameFloatArray.size() + vertexCount * 2);
     }
 
-    for (std::size_t i = 0; i < vertexCount * 2; i += 2)
+    for (size_t i = 0; i < vertexCount * 2; i += 2)
     {
         if (!rawData.HasMember(VERTICES))  // Fill 0.
         {
@@ -1629,7 +1629,7 @@ unsigned JSONDataParser::_parseSlotFFDFrame(const rapidjson::Value& rawData, uns
             x = _helpPoint.x;
             y = _helpPoint.y;
 
-            for (std::size_t j = 0; j < vertexBoneCount; ++j)
+            for (size_t j = 0; j < vertexBoneCount; ++j)
             {
                 const auto boneIndex    = _intArray[iB++];
                 const auto matrixOffset = boneIndex * 7 + 1;
@@ -1705,7 +1705,7 @@ const std::vector<ActionData*>& JSONDataParser::_parseActionData(const rapidjson
     }
     else if (rawData.IsArray())
     {
-        for (std::size_t iA = 0, lA = rawData.Size(); iA < lA; ++iA)
+        for (size_t iA = 0, lA = rawData.Size(); iA < lA; ++iA)
         {
             const auto& rawAction = rawData[iA];
             const auto action     = BaseObject::borrowObject<ActionData>();
@@ -1757,7 +1757,7 @@ const std::vector<ActionData*>& JSONDataParser::_parseActionData(const rapidjson
                 }
 
                 const auto& rawInts = rawAction[INTS];
-                for (std::size_t i = 0, l = rawInts.Size(); i < l; ++i)
+                for (size_t i = 0, l = rawInts.Size(); i < l; ++i)
                 {
                     action->data->addInt(rawInts[i].GetInt());
                 }
@@ -1771,7 +1771,7 @@ const std::vector<ActionData*>& JSONDataParser::_parseActionData(const rapidjson
                 }
 
                 const auto& rawFloats = rawAction[FLOATS];
-                for (std::size_t i = 0, l = rawFloats.Size(); i < l; ++i)
+                for (size_t i = 0, l = rawFloats.Size(); i < l; ++i)
                 {
                     action->data->addFloat(rawFloats[i].GetDouble());
                 }
@@ -1785,7 +1785,7 @@ const std::vector<ActionData*>& JSONDataParser::_parseActionData(const rapidjson
                 }
 
                 const auto& rawStrings = rawAction[STRINGS];
-                for (std::size_t i = 0, l = rawStrings.Size(); i < l; ++i)
+                for (size_t i = 0, l = rawStrings.Size(); i < l; ++i)
                 {
                     action->data->addString(rawStrings[i].GetString());
                 }
@@ -1864,7 +1864,7 @@ DragonBonesData* JSONDataParser::_parseDragonBonesData(const rapidjson::Value& r
             _parseArray(rawData);
 
             const auto& rawArmatures = rawData[ARMATURE];
-            for (std::size_t i = 0, l = rawArmatures.Size(); i < l; ++i)
+            for (size_t i = 0, l = rawArmatures.Size(); i < l; ++i)
             {
                 data->addArmature(_parseArmature(rawArmatures[i], scale));
             }
@@ -1907,32 +1907,32 @@ DragonBonesData* JSONDataParser::_parseDragonBonesData(const rapidjson::Value& r
                 auto frameArray      = (int16_t*)(binary + l1 + l2 + l3 + l4);
                 auto timelineArray   = (uint16_t*)(binary + l1 + l2 + l3 + l4 + l5);
 
-                for (std::size_t i = 0, l = _intArray.size(); i < l; ++i)
+                for (size_t i = 0, l = _intArray.size(); i < l; ++i)
                 {
                     intArray[i] = _intArray[i];
                 }
 
-                for (std::size_t i = 0, l = _floatArray.size(); i < l; ++i)
+                for (size_t i = 0, l = _floatArray.size(); i < l; ++i)
                 {
                     floatArray[i] = _floatArray[i];
                 }
 
-                for (std::size_t i = 0, l = _frameIntArray.size(); i < l; ++i)
+                for (size_t i = 0, l = _frameIntArray.size(); i < l; ++i)
                 {
                     frameIntArray[i] = _frameIntArray[i];
                 }
 
-                for (std::size_t i = 0, l = _frameFloatArray.size(); i < l; ++i)
+                for (size_t i = 0, l = _frameFloatArray.size(); i < l; ++i)
                 {
                     frameFloatArray[i] = _frameFloatArray[i];
                 }
 
-                for (std::size_t i = 0, l = _frameArray.size(); i < l; ++i)
+                for (size_t i = 0, l = _frameArray.size(); i < l; ++i)
                 {
                     frameArray[i] = _frameArray[i];
                 }
 
-                for (std::size_t i = 0, l = _timelineArray.size(); i < l; ++i)
+                for (size_t i = 0, l = _timelineArray.size(); i < l; ++i)
                 {
                     timelineArray[i] = _timelineArray[i];
                 }
@@ -1981,7 +1981,7 @@ void JSONDataParser::_parseTextureAtlasData(const rapidjson::Value& rawData,
     if (rawData.HasMember(SUB_TEXTURE))
     {
         const auto& rawTextures = rawData[SUB_TEXTURE];
-        for (std::size_t i = 0, l = rawTextures.Size(); i < l; ++i)
+        for (size_t i = 0, l = rawTextures.Size(); i < l; ++i)
         {
             const auto& rawTexture     = rawTextures[i];
             const auto textureData     = textureAtlasData.createTexture();

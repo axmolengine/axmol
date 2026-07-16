@@ -35,13 +35,14 @@ THE SOFTWARE.
 #include "axmol/renderer/Renderer.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/EventDispatcher.h"
-#include "axmol/base/EventListenerTouch.h"
-#include "axmol/base/EventTouch.h"
-#include "axmol/base/EventKeyboard.h"
-#include "axmol/base/EventListenerKeyboard.h"
-#include "axmol/base/EventAcceleration.h"
-#include "axmol/base/EventListenerAcceleration.h"
+#include "axmol/base/PointerEventListener.h"
+#include "axmol/base/PointerEvent.h"
+#include "axmol/base/KeyboardEvent.h"
+#include "axmol/base/KeyboardEventListener.h"
+#include "axmol/base/AccelerationEvent.h"
+#include "axmol/base/AccelerationEventListener.h"
 #include "axmol/base/text_utils.h"
+#include "axmol/scene/Camera.h"
 #include "axmol/rhi/Buffer.h"
 #include "axmol/renderer/Shaders.h"
 #include "axmol/rhi/ProgramState.h"
@@ -357,7 +358,7 @@ LayerRadialGradient* LayerRadialGradient::create(const Color32& startColor,
 LayerRadialGradient* LayerRadialGradient::create()
 {
     auto layerGradient = new LayerRadialGradient();
-    if (layerGradient && layerGradient->initWithColor(Color32::BLACK, Color32::BLACK, 0, Vec2(0, 0), 0))
+    if (layerGradient && layerGradient->initWithColor(Color32::black, Color32::black, 0, Vec2(0, 0), 0))
     {
         layerGradient->autorelease();
         return layerGradient;
@@ -425,7 +426,7 @@ void LayerRadialGradient::draw(Renderer* renderer, const Mat4& transform, uint32
     _customCommand.init(_globalZOrder, _blendFunc);
     renderer->addCommand(&_customCommand);
 
-    const auto& projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    const auto& projectionMat = Camera::getVisitingViewProjectionMatrix();
     auto ps                   = _customCommand.unsafePS();
     Mat4 finalMat             = projectionMat * transform;
     ps->setUniform(_mvpMatrixLocation, finalMat.m, sizeof(finalMat.m));

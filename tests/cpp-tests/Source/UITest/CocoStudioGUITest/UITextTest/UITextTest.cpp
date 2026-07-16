@@ -80,7 +80,7 @@ bool UITextTest_LineWrap::init()
 
         // Create the line wrap
         Text* text = Text::create("TextArea Widget can line wrap", "AmericanTypewriter", 32);
-        text->ignoreContentAdaptWithSize(false);
+        text->setAutoSize(true);
         text->setContentSize(Size(280.0f, 150.0f));
         text->setTextHorizontalAlignment(TextHAlignment::CENTER);
         text->setTouchScaleChangeEnabled(true);
@@ -139,7 +139,7 @@ bool UILabelTest_Effect::init()
         Text* glow_label = Text::create();
         glow_label->setFontName("fonts/Marker Felt.ttf");
         glow_label->setString("Glow");
-        glow_label->enableGlow(Color32::RED);
+        glow_label->enableGlow(Color32::red);
 
         glow_label->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - 20));
 
@@ -150,7 +150,7 @@ bool UILabelTest_Effect::init()
         outline_label->setString("Outline");
         AXLOGD("content size without outline: {} {}", outline_label->getContentSize().width,
                outline_label->getContentSize().height);
-        outline_label->enableOutline(Color32::GREEN, 4);
+        outline_label->enableOutline(Color32::green, 4);
         outline_label->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - shadow_label->getContentSize().height - 50));
 
@@ -225,7 +225,7 @@ bool UITextTest_IgnoreContentSize::init()
 
         Text* leftText = Text::create("ignore content", "fonts/Marker Felt.ttf", 10);
         leftText->setPosition(Vec2(widgetSize.width / 2.0f - 50, widgetSize.height / 2.0f));
-        leftText->ignoreContentAdaptWithSize(false);
+        leftText->setAutoSize(true);
         leftText->setTextAreaSize(Size(60.0f, 60.0f));
         leftText->setString("Text line with break\nText line with break\nText line with break\nText line with break\n");
         leftText->setTouchScaleChangeEnabled(true);
@@ -238,7 +238,7 @@ bool UITextTest_IgnoreContentSize::init()
             "Text line with break\nText line with break\nText line with break\nText line with break\n");
         // note:setTextAreaSize must be used with ignoreContentAdaptWithSize(false)
         rightText->setTextAreaSize(Size(100.0f, 30.0f));
-        rightText->ignoreContentAdaptWithSize(false);
+        rightText->setAutoSize(true);
         _uiLayer->addChild(rightText);
 
         auto halighButton = Button::create();
@@ -269,7 +269,7 @@ bool UITextTest_Clone::init()
         singleText->setTouchScaleChangeEnabled(true);
         singleText->setTouchEnabled(true);
         singleText->enableOutline(Color32(255, 0, 0, 100), 10);
-        singleText->enableShadow(Color32::YELLOW, Size(2, -2), 0);
+        singleText->enableShadow(Color32::yellow, Size(2, -2), 0);
         _uiLayer->addChild(singleText);
 
         auto cloneText = singleText->clone();

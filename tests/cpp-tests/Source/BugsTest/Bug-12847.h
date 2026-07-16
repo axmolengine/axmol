@@ -22,8 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __cocos2d_tests__Bug_12847__
-#define __cocos2d_tests__Bug_12847__
+#pragma once
 
 #include "BugsTest.h"
 
@@ -48,8 +47,4 @@ private:
     ax::Sprite* sprite2;
     ax::Sprite* sprite3;
     ax::Sprite* sprite4;
-
-    ax::Director::Projection _projection = ax::Director::Projection::_3D;
 };
-
-#endif /* defined(__cocos2d_tests__Bug_12847__) */

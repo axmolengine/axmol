@@ -25,7 +25,6 @@
 
 #include "main.h"
 #include "AppDelegate.h"
-#include "axmol/platform/Application.h"
 #include "axmol/platform/CommandLineArgs.h"
 
 #include <tchar.h>
@@ -35,15 +34,11 @@
 
 using namespace ax;
 
-#if !defined(_CONSOLE) && defined(_UNICODE)
-static int axmol_main(int argc, wchar_t** argv)
-#else
-static int axmol_main(int argc, char** argv)
-#endif
+static int axmol_main(int argc, TCHAR** argv)
 {
     // create the application instance
     AppDelegate app;
-    return app.launch(argc, argv);
+    return Application::getInstance()->launch(argc, argv);
 }
 
 #if !defined(_CONSOLE)
@@ -61,7 +56,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
     return axmol_main(__argc, __targv);
 }
 #else
-int main(int argc, char** argv)
+int _tmain(int argc, TCHAR** argv)
 {
     return axmol_main(argc, argv);
 }

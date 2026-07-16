@@ -6,7 +6,7 @@
 
 ## astcenc
 - [![Upstream](https://img.shields.io/github/v/release/ARM-software/astc-encoder?label=Upstream)](https://github.com/ARM-software/astc-encoder)
-- Version: 5.4.0
+- Version: 5.6.0
 - License: Apache-2.0
 
 ## Box2D
@@ -51,7 +51,7 @@
 
 ## fast_float
 - [![Upstream](https://img.shields.io/github/v/release/fastfloat/fast_float?label=Upstream)](https://github.com/fastfloat/fast_float)
-- Version: 8.2.5
+- Version: 8.2.10
 - License: MIT
 
 ## flatbuffers
@@ -61,7 +61,7 @@
 
 ## {fmt}
 - [![Upstream](https://img.shields.io/github/v/release/fmtlib/fmt?label=Upstream)](https://github.com/fmtlib/fmt)
-- Version: 12.1.0
+- Version: 12.2.0
 
 - License: MIT
 
@@ -81,7 +81,7 @@
 
 ## glfw
 - [![Upstream](https://img.shields.io/github/v/release/glfw/glfw?label=Upstream)](https://github.com/glfw/glfw)
-- Version: 3.5-2f3efb7 of https://github.com/axmolengine/glfw
+- Version: 3.5-12d2696 of https://github.com/axmolengine/glfw
 - License: zlib
 
 ## ghc (iOS < 13 ONLY)
@@ -106,12 +106,12 @@
 
 ## kcp
 - [![Upstream](https://img.shields.io/github/v/release/skywind3000/kcp?label=Upstream)](https://github.com/skywind3000/kcp)
-- Version: 1.7-f2aa30e
+- Version: 2.1.1
 - License: MIT
 
 ## llhttp
 - [![Upstream](https://img.shields.io/github/v/release/nodejs/llhttp?label=Upstream)](https://github.com/nodejs/llhttp)
-- Version: 9.4.1
+- Version: 9.4.2
 - License: MIT
 
 ## lua
@@ -127,7 +127,7 @@
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: 2.1-18b087c
+  - Version: 2.1-b925b3e
   - License: MIT
 
 - tolua
@@ -181,9 +181,14 @@
   - Version: 1.3.7-83a82dd (1569)
   - License: BSD-3-Clause
 
+## OpenXR-SDK
+- [![Upstream](https://img.shields.io/github/v/release/KhronosGroup/OpenXR-SDK?label=Upstream)](https://github.com/KhronosGroup/OpenXR-SDK)
+- Version: 1.1.60
+- License: Apache-2.0
+
 ## OpenAL Soft
 - [![Upstream](https://img.shields.io/github/v/release/kcat/openal-soft?label=Upstream)](https://github.com/kcat/openal-soft)
-- Version: 1.25.2
+- Version: 1.25.2-dd4e07d
 - Modifications: 
   - Remove `-Werror=undef`
   - Linking `fmt::fmt` instead `alsoft::fmt`
@@ -191,11 +196,12 @@
   - Fix `al::char_as_u8/al::u8_as_char` in `common/alstring.hpp` with compiler flag: `-fno-char8_t` or `/Zc:char8_t-`
   - Disable non‑standard [[clang::nonblocking]] attribute to avoid compiler compatibility issues
   - Restrict warning flags scope to target: `alsoft.common`
+  - Fix compile error with fmt 12.2.0
 - License: LGPL-2.1
 
 ## OpenSSL
 - [![Upstream](https://img.shields.io/github/v/release/openssl/openssl?label=Upstream)](https://github.com/openssl/openssl)
-- Version: 3.0.20
+- Version: 3.0.21
 - License: Apache-2.0
 
 ## png
@@ -235,7 +241,7 @@
 
 ## simdjson
 - [![Upstream](https://img.shields.io/github/v/tag/simdjson/simdjson?label=Upstream)](https://github.com/simdjson/simdjson)
-- Version: 4.6.3
+- Version: 4.6.4
 - License: Apache-2.0
 
 ## stb (stb_image)

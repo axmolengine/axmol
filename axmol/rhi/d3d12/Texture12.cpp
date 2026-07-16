@@ -26,8 +26,8 @@
 #include "axmol/rhi/SamplerCache.h"
 #include "axmol/rhi/RHIUtils.h"
 #include "axmol/base/Logging.h"
-#include <cassert>
-#include <cstring>
+#include <assert.h>
+#include <string.h>
 
 namespace ax::rhi::d3d12
 {
@@ -70,10 +70,12 @@ static inline UINT D3D12CalcSubresource(UINT MipSlice, UINT ArraySlice, UINT Pla
     return MipSlice + ArraySlice * MipLevels + PlaneSlice * MipLevels * ArraySize;
 }
 
-TextureImpl::TextureImpl(DriverImpl* driver, const TextureDesc& desc)
+TextureImpl::TextureImpl(DriverImpl* driver, const TextureDesc& desc, std::optional<Color> clearColorHint)
     : _driver(driver), _stateTracker(LEVEL_INITIAL_CAPS, LAYER_INITIAL_CAPS)
 {
     updateTextureDesc(desc);
+    if (clearColorHint || desc.textureUsage == TextureUsage::RENDER_TARGET)
+        ensureNativeTexture(false, clearColorHint);
 }
 
 TextureImpl::TextureImpl(DriverImpl* driver, ComPtr<ID3D12Resource> existingResource)
@@ -82,6 +84,22 @@ TextureImpl::TextureImpl(DriverImpl* driver, ComPtr<ID3D12Resource> existingReso
     D3D12_RESOURCE_DESC d3dDesc = existingResource->GetDesc();
     D3D12TexDescToTexDesc(_desc, d3dDesc);
     _nativeTexture.resource = existingResource;
+    Texture::updateTextureDesc(_desc);
+    updateSamplerDesc(_desc.samplerDesc);
+    setKnownState(D3D12_RESOURCE_STATE_COMMON);
+}
+
+TextureImpl::TextureImpl(DriverImpl* driver,
+                         ComPtr<ID3D12Resource> existingResource,
+                         const TextureDesc& desc,
+                         D3D12_RESOURCE_STATES initialState,
+                         D3D12_RESOURCE_STATES renderTargetFinalState)
+    : _driver(driver), _stateTracker(LEVEL_INITIAL_CAPS, LAYER_INITIAL_CAPS)
+{
+    updateTextureDesc(desc);
+    _nativeTexture.resource = existingResource;
+    _renderTargetFinalState = renderTargetFinalState;
+    setKnownState(initialState);
 }
 
 TextureImpl::~TextureImpl()
@@ -210,7 +228,7 @@ void TextureImpl::updateSubData(int xoffset,
 void TextureImpl::updateCompressedData(const void* data,
                                        int width,
                                        int height,
-                                       std::size_t dataSize,
+                                       size_t dataSize,
                                        int level,
                                        int layerIndex)
 {
@@ -222,7 +240,7 @@ void TextureImpl::updateCompressedSubData(int xoffset,
                                           int yoffset,
                                           int width,
                                           int height,
-                                          std::size_t dataSize,
+                                          size_t dataSize,
                                           int level,
                                           const void* data,
                                           int layerIndex)
@@ -386,7 +404,7 @@ void TextureImpl::updateTextureDesc(const TextureDesc& desc)
     updateSamplerDesc(desc.samplerDesc);
 }
 
-D3D12_RESOURCE_STATES TextureImpl::ensureNativeTexture(bool prepareForCopyDest)
+D3D12_RESOURCE_STATES TextureImpl::ensureNativeTexture(bool prepareForCopyDest, std::optional<Color> clearColorHint)
 {
     if (_nativeTexture)
         return D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
@@ -430,7 +448,6 @@ D3D12_RESOURCE_STATES TextureImpl::ensureNativeTexture(bool prepareForCopyDest)
     D3D12_RESOURCE_STATES initialResourceState{};
     if (_desc.textureUsage == TextureUsage::RENDER_TARGET) [[unlikely]]
     {
-        D3D12_CLEAR_VALUE clearValue{};
         if (_desc.pixelFormat == PixelFormat::D24S8)
         {  // depth-stencil attachment: screen/offscreen render target
             clearValue.Format               = fmtInfo->fmtDsv;
@@ -444,10 +461,11 @@ D3D12_RESOURCE_STATES TextureImpl::ensureNativeTexture(bool prepareForCopyDest)
         else
         {  // color attachment: offscreen render target
             clearValue.Format   = fmtInfo->fmtSrv;
-            clearValue.Color[0] = 0.0f;
-            clearValue.Color[1] = 0.0f;
-            clearValue.Color[2] = 0.0f;
-            clearValue.Color[3] = 0.0f;  // default alpha
+            const Color color   = clearColorHint.value_or(Color{});
+            clearValue.Color[0] = color.r;
+            clearValue.Color[1] = color.g;
+            clearValue.Color[2] = color.b;
+            clearValue.Color[3] = color.a;
 
             initialResourceState = D3D12_RESOURCE_STATE_RENDER_TARGET;
 

@@ -783,32 +783,21 @@ public:
     static Vec2 getIntersectPoint(const Vec2& A, const Vec2& B, const Vec2& C, const Vec2& D);
 
     /** equals to Vec2(0,0) */
-    static const Vec2 ZERO;
+    static const Vec2 zero;
     /** equals to Vec2(1,1) */
-    static const Vec2 ONE;
+    static const Vec2 one;
     /** equals to Vec2(1,0) */
-    static const Vec2 UNIT_X;
+    static const Vec2 xAxis;
     /** equals to Vec2(0,1) */
-    static const Vec2 UNIT_Y;
-    /** equals to Vec2(0.5, 0.5) */
-    static const Vec2 ANCHOR_MIDDLE;
-    /** equals to Vec2(0, 0) */
-    static const Vec2 ANCHOR_BOTTOM_LEFT;
-    /** equals to Vec2(0, 1) */
-    static const Vec2 ANCHOR_TOP_LEFT;
-    /** equals to Vec2(1, 0) */
-    static const Vec2 ANCHOR_BOTTOM_RIGHT;
-    /** equals to Vec2(1, 1) */
-    static const Vec2 ANCHOR_TOP_RIGHT;
-    /** equals to Vec2(1, 0.5) */
-    static const Vec2 ANCHOR_MIDDLE_RIGHT;
-    /** equals to Vec2(0, 0.5) */
-    static const Vec2 ANCHOR_MIDDLE_LEFT;
-    /** equals to Vec2(0.5, 1) */
-    static const Vec2 ANCHOR_MIDDLE_TOP;
-    /** equals to Vec2(0.5, 0) */
-    static const Vec2 ANCHOR_MIDDLE_BOTTOM;
+    static const Vec2 yAxis;
 };
+
+#if !(defined(AX_DLLEXPORT) || defined(AX_DLLIMPORT))
+inline constexpr Vec2 Vec2::zero{0.0f, 0.0f};
+inline constexpr Vec2 Vec2::one{1.0f, 1.0f};
+inline constexpr Vec2 Vec2::xAxis{1.0f, 0.0f};
+inline constexpr Vec2 Vec2::yAxis{0.0f, 1.0f};
+#endif
 
 /**
  * Calculates the scalar product of the given vector with the given value.
@@ -834,26 +823,26 @@ inline Vec2 operator/(const Vec2& left, const Vec2& right)
     return Vec2(left.x / right.x, left.y / right.y);
 }
 
-#if !(defined(AX_DLLEXPORT) || defined(AX_DLLIMPORT))
-inline constexpr Vec2 Vec2::ZERO(0.0f, 0.0f);
-inline constexpr Vec2 Vec2::ONE(1.0f, 1.0f);
-inline constexpr Vec2 Vec2::UNIT_X(1.0f, 0.0f);
-inline constexpr Vec2 Vec2::UNIT_Y(0.0f, 1.0f);
-inline constexpr Vec2 Vec2::ANCHOR_MIDDLE(0.5f, 0.5f);
-inline constexpr Vec2 Vec2::ANCHOR_BOTTOM_LEFT(0.0f, 0.0f);
-inline constexpr Vec2 Vec2::ANCHOR_TOP_LEFT(0.0f, 1.0f);
-inline constexpr Vec2 Vec2::ANCHOR_BOTTOM_RIGHT(1.0f, 0.0f);
-inline constexpr Vec2 Vec2::ANCHOR_TOP_RIGHT(1.0f, 1.0f);
-inline constexpr Vec2 Vec2::ANCHOR_MIDDLE_RIGHT(1.0f, 0.5f);
-inline constexpr Vec2 Vec2::ANCHOR_MIDDLE_LEFT(0.0f, 0.5f);
-inline constexpr Vec2 Vec2::ANCHOR_MIDDLE_TOP(0.5f, 1.0f);
-inline constexpr Vec2 Vec2::ANCHOR_MIDDLE_BOTTOM(0.5f, 0.0f);
-#endif
-
 using Point = Vec2;
 
 // [DEPRECATED] compatible only
-using Size = Vec2;  // typedef Vec2 Size;
+using Size = Vec2;
+
+// 2D anchor point constants (normalized Vec2 in [0,1])
+struct Anchors
+{
+    static constexpr Vec2 topLeft{0.0f, 1.0f};
+    static constexpr Vec2 bottomLeft{0.0f, 0.0f};
+    static constexpr Vec2 topRight{1.0f, 1.0f};
+    static constexpr Vec2 bottomRight{1.0f, 0.0f};
+
+    static constexpr Vec2 topCenter{0.5f, 1.0f};
+    static constexpr Vec2 bottomCenter{0.5f, 0.0f};
+    static constexpr Vec2 leftCenter{0.0f, 0.5f};
+    static constexpr Vec2 rightCenter{1.0f, 0.5f};
+
+    static constexpr Vec2 center{0.5f, 0.5f};
+};
 
 NS_AX_MATH_END
 

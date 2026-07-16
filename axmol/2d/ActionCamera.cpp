@@ -94,7 +94,7 @@ void ActionCamera::updateTransform()
 
     bool needsTranslation = !anchorPoint.isZero();
 
-    Mat4 mv = Mat4::IDENTITY;
+    Mat4 mv = Mat4::identity;
 
     if (needsTranslation)
     {

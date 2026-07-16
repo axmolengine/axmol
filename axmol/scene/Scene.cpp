@@ -28,12 +28,15 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "axmol/scene/Scene.h"
+
+#include <algorithm>
+
 #include "axmol/base/Director.h"
 #include "axmol/scene/Camera.h"
 #include "axmol/base/EventDispatcher.h"
-#include "axmol/base/EventListenerCustom.h"
 #include "axmol/base/text_utils.h"
 #include "axmol/renderer/Renderer.h"
+#include "axmol/scene/SceneCompositor.h"
 
 #if defined(AX_ENABLE_PHYSICS_2D)
 #    include "axmol/physics/2d/PhysicsWorld2D.h"
@@ -50,12 +53,16 @@ THE SOFTWARE.
 namespace ax
 {
 
+namespace
+{
+bool camera_cmp(const Camera* a, const Camera* b)
+{
+    return a->getRenderOrder() < b->getRenderOrder();
+}
+}  // namespace
+
 Scene::Scene()
 {
-    _event = (_director->getEventDispatcher()->addCustomEventListener(
-        Director::EVENT_PROJECTION_CHANGED, std::bind(&Scene::onProjectionChanged, this, std::placeholders::_1)));
-    _event->retain();
-
     _ignoreAnchorPointForPosition = true;
     setAnchorPoint(Vec2(0.5f, 0.5f));
 
@@ -76,8 +83,6 @@ Scene::~Scene()
 #if defined(AX_ENABLE_NAVMESH)
     AX_SAFE_RELEASE(_navMesh);
 #endif
-    _director->getEventDispatcher()->removeEventListener(_event);
-    AX_SAFE_RELEASE(_event);
 
 #if defined(AX_ENABLE_PHYSICS_2D)
     delete _physicsWorld2D;
@@ -121,9 +126,14 @@ void Scene::initDefaultCamera()
 {
     if (!_defaultCamera)
     {
-        _defaultCamera = Camera::create();
+        _defaultCamera = Camera::create(getDefaultCameraMode());
         addChild(_defaultCamera);
     }
+}
+
+void Scene::setCameraOrderDirty()
+{
+    _cameraOrderDirty = true;
 }
 
 Scene* Scene::create()
@@ -161,24 +171,34 @@ std::string Scene::getDescription() const
     return fmt::format("<Scene | tag = {}>", _tag);
 }
 
-void Scene::onProjectionChanged(EventCustom* /*event*/)
+void Scene::registerCamera(Camera* camera)
 {
-    if (_defaultCamera)
+    if (!camera)
+        return;
+
+    auto it = std::find(_cameras.begin(), _cameras.end(), camera);
+    if (it == _cameras.end())
     {
-        _defaultCamera->initDefault();
+        _cameras.emplace_back(camera);
+        setCameraOrderDirty();
     }
 }
 
-static bool camera_cmp(const Camera* a, const Camera* b)
+void Scene::unregisterCamera(Camera* camera)
 {
-    return a->getRenderOrder() < b->getRenderOrder();
+    if (!camera)
+        return;
+
+    auto it = std::find(_cameras.begin(), _cameras.end(), camera);
+    if (it != _cameras.end())
+        _cameras.erase(it);
 }
 
 const std::vector<Camera*>& Scene::getCameras()
 {
     if (_cameraOrderDirty)
     {
-        stable_sort(_cameras.begin(), _cameras.end(), camera_cmp);
+        std::stable_sort(_cameras.begin(), _cameras.end(), camera_cmp);
         _cameraOrderDirty = false;
     }
     return _cameras;
@@ -189,120 +209,9 @@ void Scene::setDebugCamera(Camera* camera)
     Object::assign(_debugCamera, camera);
 }
 
-void Scene::render(Renderer* renderer, const Mat4& eyeTransform, const Mat4* eyeProjection)
-{
-    Camera* defaultCamera = nullptr;
-    const auto& transform = getNodeToParentTransform();
-
-    for (const auto& camera : getCameras())
-    {
-        if (!camera->isVisible())
-            continue;
-
-        Camera::_visitingCamera = camera;
-        if (Camera::_visitingCamera->getCameraFlag() == CameraFlag::DEFAULT)
-        {
-            defaultCamera = Camera::_visitingCamera;
-        }
-
-        // There are two ways to modify the "default camera" with the eye Transform:
-        // a) modify the "nodeToParentTransform" matrix
-        // b) modify the "additional transform" matrix
-        // both alternatives are correct, if the user manually modifies the camera with a camera->setPosition()
-        // then the "nodeToParent transform" will be lost.
-        // And it is important that the change is "permanent", because the matrix might be used for calculate
-        // culling and other stuff.
-        if (eyeProjection)
-            camera->setAdditionalProjection(*eyeProjection * camera->getProjectionMatrix().getInversed());
-
-        camera->setAdditionalTransform(eyeTransform.getInversed());
-        _director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-        _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION,
-                              Camera::_visitingCamera->getViewProjectionMatrix());
-
-        camera->apply();
-        // clear background with max depth
-        camera->clearBackground();
-        // visit the scene
-        visit(renderer, transform, 0);
-#if defined(AX_ENABLE_NAVMESH)
-        if (_navMesh)
-            _navMesh->debugDraw(renderer);
-#endif
-
-        renderer->render();
-
-        _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-
-        // we shouldn't restore the transform matrix since it could be used
-        // from "update" or other parts of the game to calculate culling or something else.
-        //        camera->setNodeToParentTransform(eyeCopy);
-    }
-
-#if defined(AX_ENABLE_PHYSICS_3D) || defined(AX_ENABLE_NAVMESH)
-    if (_debugCamera) [[unlikely]]
-    {
-        // prepare draw
-        if (eyeProjection)
-            _debugCamera->setAdditionalProjection(*eyeProjection * _debugCamera->getProjectionMatrix().getInversed());
-        _debugCamera->setAdditionalTransform(eyeTransform.getInversed());
-        _director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-        _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, _debugCamera->getViewProjectionMatrix());
-
-        _debugCamera->apply();
-        _debugCamera->clearBackground();
-
-        // draw
-#    if defined(AX_ENABLE_NAVMESH)
-        if (_navMesh)
-            _navMesh->debugDraw(renderer);
-#    endif
-
-#    if defined(AX_ENABLE_PHYSICS_3D)
-        if (_physicsWorld3D)
-            _physicsWorld3D->debugDraw(renderer);
-#    endif
-
-        // post draw
-        renderer->render();
-        _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    }
-#endif
-
-    Camera::_visitingCamera = nullptr;
-}
-
 void Scene::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags)
 {
     Node::visit(renderer, parentTransform, parentFlags);
-}
-
-void Scene::visit()
-{
-    const auto eyeTransform = Mat4::IDENTITY;
-
-    for (const auto& camera : getCameras())
-    {
-        if (!camera->isVisible())
-            continue;
-
-        Camera::_visitingCamera = camera;
-
-        camera->setAdditionalTransform(eyeTransform.getInversed());
-        _director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-        _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION,
-                              Camera::_visitingCamera->getViewProjectionMatrix());
-
-        camera->apply();
-        // clear background with max depth
-        camera->clearBackground();
-        // visit the scene
-        Node::visit();
-
-        _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    }
-
-    Camera::_visitingCamera = nullptr;
 }
 
 void Scene::removeAllChildren()

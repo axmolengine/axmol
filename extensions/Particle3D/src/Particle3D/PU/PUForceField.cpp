@@ -98,7 +98,7 @@ Vec3 PUForceFieldCalculationFactory::getWorldSize() const
 void PUForceFieldCalculationFactory::setWorldSize(const Vec3& worldSize)
 {
     // The worldsize cannot be zero
-    if (worldSize == Vec3::ZERO)
+    if (worldSize == Vec3::zero)
         return;
 
     _worldSize = worldSize;
@@ -121,7 +121,7 @@ void PURealTimeForceFieldCalculationFactory::generate(unsigned int /*forceFieldS
     _worldSize   = worldSize;
     _noise3D.initialise(octaves, frequency, amplitude, persistence);
 
-    if (worldSize != Vec3::ZERO)
+    if (worldSize != Vec3::zero)
     {
         _mapScale.x = 1.0f / worldSize.x;  // Remark: forceFieldSize is not used, because it is a unit cube
         _mapScale.y = 1.0f / worldSize.y;

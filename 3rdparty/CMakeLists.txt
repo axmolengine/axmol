@@ -140,6 +140,9 @@ if(ANDROID)
 endif()
 
 ax_add_3rd(fmt)
+if (TARGET fmt-c)
+  set_target_properties(fmt-c PROPERTIES FOLDER "3rdparty")
+endif()
 
 # bellow are non header only libs
 
@@ -324,6 +327,7 @@ if(AX_ENABLE_AUDIO)
     ax_add_3rd(openal EXCLUDE_FROM_ALL TARGETS OpenAL;alsoft.common OPTIONS ${alsoft_opts})
 
     set_target_properties(OpenAL alsoft.common PROPERTIES CXX_STANDARD ${_AX_CXX_STD})
+    set_target_properties(alsoft.default_hrtf_data PROPERTIES FOLDER "3rdparty")
 
     if(AX_USE_ALSOFT_STATIC)
       target_compile_definitions(3rdparty INTERFACE AL_LIBTYPE_STATIC=1)
@@ -354,10 +358,13 @@ if((WINDOWS AND NOT WINRT) OR MACOSX OR LINUX)
     list(APPEND _glfw_options "GLFW_BUILD_X11 ON")
     if(AX_ENABLE_WAYLAND)
       list(APPEND _glfw_options "GLFW_BUILD_WAYLAND ON")
+    else()
+      list(APPEND _glfw_options "GLFW_BUILD_WAYLAND OFF")
     endif()
   endif()
   ax_add_3rd(glfw OPTIONS ${_glfw_options})
   set_target_properties(glfw PROPERTIES OUTPUT_NAME glfw)
+  set_target_properties(update_mappings PROPERTIES FOLDER "3rdparty")
 
   if(NOT WINDOWS)
     target_link_libraries(3rdparty INTERFACE pthread)
@@ -422,6 +429,13 @@ ax_add_3rd(yasio)
 
 # simdjson
 ax_add_3rd(simdjson)
+
+# openxr
+if (AX_ENABLE_OPENXR)
+  _1kfetch(openxr)
+  ax_add_3rd(${openxr_SOURCE_DIR} TARGETS openxr_loader)
+  set_target_properties(openxr_loader PROPERTIES DEBUG_POSTFIX "")
+endif()
 
 if(ANDROID)
   function(config_android_shared_libs package_name target_folder)

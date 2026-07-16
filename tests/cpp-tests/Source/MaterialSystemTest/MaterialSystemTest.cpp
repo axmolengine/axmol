@@ -26,8 +26,7 @@
 
 #include "MaterialSystemTest.h"
 
-#include <ctime>
-#include <spine/spine-cocos2dx.h>
+#include <spine/spine-axmol.h>
 
 #include "../testResource.h"
 #include "axmol/axmol.h"
@@ -302,10 +301,10 @@ void Material_setTechnique::onEnter()
     mesh->setMaterial(mat);
 
     // lights
-    auto light1 = AmbientLight::create(Color32::RED);
+    auto light1 = AmbientLight::create(Color32::red);
     addChild(light1);
 
-    auto light2 = DirectionLight::create(Vec3(-1, 1, 0), Color32::GREEN);
+    auto light2 = DirectionLight::create(Vec3(-1, 1, 0), Color32::green);
     addChild(light2);
 
     this->schedule(AX_CALLBACK_1(Material_setTechnique::changeMaterial, this), 1, "cookie");
@@ -448,7 +447,7 @@ void Material_parsePerformance::onEnter()
 
 void Material_parsePerformance::parsingTesting(unsigned int count)
 {
-    std::clock_t begin = std::clock();
+    auto begin = ::clock();
 
     for (unsigned int i = 0; i < count; i++)
     {
@@ -456,7 +455,7 @@ void Material_parsePerformance::parsingTesting(unsigned int count)
         Material::createWithFilename("Materials/3d_effects.material");
     }
 
-    std::clock_t end    = std::clock();
+    auto end            = ::clock();
     double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
     Label* label        = dynamic_cast<Label*>(this->getChildByTag(SHOW_LEBAL_TAG));
     if (label)

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright(c) Live2D Inc. All rights reserved.
  *
  * Use of this source code is governed by the Live2D Open Software license
@@ -149,6 +149,11 @@ csmBool CubismMotionQueueEntry::IsTriggeredFadeOut()
 csmFloat32 CubismMotionQueueEntry::GetFadeOutSeconds()
 {
     return this->_fadeOutSeconds;
+}
+
+ACubismMotion* CubismMotionQueueEntry::GetCubismMotion()
+{
+    return _motion;
 }
 
 }}}

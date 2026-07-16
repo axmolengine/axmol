@@ -41,7 +41,7 @@ namespace ax
 
 class Node;
 class SpriteFrame;
-class EventCustom;
+class CustomEvent;
 
 /**
  * @addtogroup actions
@@ -64,7 +64,7 @@ then running it again in Reverse mode.
 Example:
 
 @code
-auto action = MoveBy::create(1.0f, Vec2::ONE);
+auto action = MoveBy::create(1.0f, Vec2::one);
 auto pingPongAction = Sequence::create(action, action->reverse(), nullptr);
 @endcode
 */
@@ -1493,7 +1493,7 @@ protected:
     unsigned int _executedLoops     = 0;
     Animation* _animation           = nullptr;
 
-    EventCustom* _frameDisplayedEvent = nullptr;
+    CustomEvent* _frameDisplayedEvent = nullptr;
     AnimationFrame::DisplayedEventInfo _frameDisplayedEventInfo;
 
 private:

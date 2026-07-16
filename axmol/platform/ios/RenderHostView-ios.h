@@ -140,4 +140,8 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
 - (void)showKeyboard;
 - (void)hideKeyboard;
+
+- (void)showContextMenu:(CGPoint)point hasText:(BOOL)hasText hasSelection:(BOOL)hasSelection readOnly:(BOOL)readOnly;
+- (void)hideContextMenu;
+
 @end

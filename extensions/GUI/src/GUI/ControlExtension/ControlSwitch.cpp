@@ -33,7 +33,7 @@
 #include "axmol/2d/Label.h"
 #include "axmol/2d/ClippingNode.h"
 #include "axmol/renderer/Shaders.h"
-#include "axmol/2d/RenderTexture.h"
+#include "axmol/renderer/RenderTexture.h"
 
 NS_AX_EXT_BEGIN
 // ControlSwitchSprite
@@ -225,13 +225,13 @@ void ControlSwitchSprite::needsLayout()
 
     if (_onLabel)
     {
-        _onLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+        _onLabel->setAnchorPoint(Anchors::center);
         _onLabel->setPosition(_onSprite->getPosition().x - _thumbSprite->getContentSize().width / 6,
                               _onSprite->getContentSize().height / 2);
     }
     if (_offLabel)
     {
-        _offLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+        _offLabel->setAnchorPoint(Anchors::center);
         _offLabel->setPosition(_offSprite->getPosition().x + _thumbSprite->getContentSize().width / 6,
                                _offSprite->getContentSize().height / 2);
     }
@@ -376,16 +376,20 @@ void ControlSwitch::setEnabled(bool enabled)
     }
 }
 
-Vec2 ControlSwitch::locationFromTouch(Touch* pTouch)
+Vec2 ControlSwitch::locationFromTouch(PointerEvent* pTouch)
 {
-    Vec2 touchLocation = pTouch->getLocation();                    // Get the touch position
+    Vec2 touchLocation = pTouch->getWorldPoint();                  // Get the touch position
     touchLocation      = this->convertToNodeSpace(touchLocation);  // Convert to the node space of this class
 
     return touchLocation;
 }
 
-bool ControlSwitch::onTouchBegan(Touch* pTouch, Event* /*pEvent*/)
+bool ControlSwitch::onPointerDown(PointerEvent* pTouch)
 {
+    bool ret = Control::onPointerDown(pTouch);
+    if (!ret)
+        return false;
+
     if (!isTouchInside(pTouch) || !isEnabled() || !isVisible())
     {
         return false;
@@ -397,15 +401,20 @@ bool ControlSwitch::onTouchBegan(Touch* pTouch, Event* /*pEvent*/)
 
     _initialTouchXPosition = location.x - _switchSprite->getSliderXPosition();
 
-    _switchSprite->getThumbSprite()->setColor(Color32::GRAY);
+    _switchSprite->getThumbSprite()->setColor(Color32::gray);
     _switchSprite->needsLayout();
+
+    _isPressed = true;
 
     return true;
 }
 
-void ControlSwitch::onTouchMoved(Touch* pTouch, Event* /*pEvent*/)
+void ControlSwitch::onPointerMove(PointerEvent* event)
 {
-    Vec2 location = this->locationFromTouch(pTouch);
+    if (!_isPressed)
+        return;
+
+    Vec2 location = this->locationFromTouch(event);
     location      = Vec2(location.x - _initialTouchXPosition, 0.0f);
 
     _moved = true;
@@ -413,11 +422,11 @@ void ControlSwitch::onTouchMoved(Touch* pTouch, Event* /*pEvent*/)
     _switchSprite->setSliderXPosition(location.x);
 }
 
-void ControlSwitch::onTouchEnded(Touch* pTouch, Event* /*pEvent*/)
+void ControlSwitch::onPointerUp(PointerEvent* pTouch)
 {
     Vec2 location = this->locationFromTouch(pTouch);
 
-    _switchSprite->getThumbSprite()->setColor(Color32::WHITE);
+    _switchSprite->getThumbSprite()->setColor(Color32::white);
 
     if (hasMoved())
     {
@@ -427,13 +436,15 @@ void ControlSwitch::onTouchEnded(Touch* pTouch, Event* /*pEvent*/)
     {
         setOn(!_on, true);
     }
+
+    _isPressed = false;
 }
 
-void ControlSwitch::onTouchCancelled(Touch* pTouch, Event* /*pEvent*/)
+void ControlSwitch::onPointerCancel(PointerEvent* pTouch)
 {
     Vec2 location = this->locationFromTouch(pTouch);
 
-    _switchSprite->getThumbSprite()->setColor(Color32::WHITE);
+    _switchSprite->getThumbSprite()->setColor(Color32::white);
 
     if (hasMoved())
     {

@@ -36,7 +36,7 @@
     do                          \
     {                           \
         VK_LOG_ERROR(mesg, ""); \
-        std::abort();           \
+        abort();                \
     } while (false)
 
 // Boolean expression: return false
@@ -69,7 +69,7 @@
         if (!(expr))                   \
         {                              \
             VK_LOG_ERROR(mesg, #expr); \
-            std::abort();              \
+            abort();                   \
         }                              \
     } while (false)
 
@@ -81,7 +81,7 @@
         if ((vkRet) != VK_SUCCESS)                                                                   \
         {                                                                                            \
             VK_LOG_ERROR(mesg, fmt::format("error code {}", static_cast<int>(vkRet)));               \
-            std::abort();                                                                            \
+            abort();                                                                                 \
         }                                                                                            \
     } while (false)
 
@@ -91,6 +91,9 @@ namespace ax::rhi::vk
  * @addtogroup _vk
  * @{
  */
+
+static constexpr auto SWAPCHAIN_IMAGE_USAGE_FLAGS =
+    VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
 
 struct PixelFormatInfo
 {
@@ -102,9 +105,9 @@ struct PixelFormatInfo
 
 inline namespace UtilsVK
 {
-VkFormat toVKFormat(PixelFormat pf);
+VkFormat toVkFormat(PixelFormat pf, bool useSrgb = false);
 
-const PixelFormatInfo* toVKFormatInfo(PixelFormat pf);
+const PixelFormatInfo* toVkFormatInfo(PixelFormat pf);
 };  // namespace UtilsVK
 
 /** @} */

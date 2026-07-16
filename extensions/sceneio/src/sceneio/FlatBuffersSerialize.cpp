@@ -514,7 +514,7 @@ std::string FlatBuffersSerialize::getWidgetReaderClassName(Widget* widget)
     {
         readerName = "SliderReader";
     }
-    else if (dynamic_cast<TextField*>(widget))
+    else if (dynamic_cast<InputField*>(widget))
     {
         readerName = "TextFieldReader";
     }

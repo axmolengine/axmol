@@ -63,7 +63,7 @@ void RenderTargetImpl::beginRenderPass(ID3D11DeviceContext* context)
                 _AXASSERT_HR(_device->CreateRenderTargetView(resource, nullptr, &_rtvs[0]));
             }
 
-            if (bitmask::any(_dirtyFlags, TargetBufferFlags::COLOR))
+            if (bitmask::any(_dirtyFlags, TargetBufferFlags::DEPTH_AND_STENCIL))
             {
                 SafeRelease(_dsv);
 
@@ -91,8 +91,31 @@ void RenderTargetImpl::beginRenderPass(ID3D11DeviceContext* context)
                         if (textureInfo.texture)
                         {
                             ++_rtvCuont;
-                            _device->CreateRenderTargetView(
-                                static_cast<TextureImpl*>(textureInfo.texture)->internalHandle(), nullptr, &_rtvs[i]);
+
+                            auto texture = static_cast<TextureImpl*>(textureInfo.texture);
+                            auto fmtInfo = dxutils::toDxgiFormatInfo(texture->getPixelFormat());
+                            auto handle  = texture->internalHandle();
+                            D3D11_TEXTURE2D_DESC texDesc{};
+                            handle.resource->GetDesc(&texDesc);
+
+                            D3D11_RENDER_TARGET_VIEW_DESC rtvDesc{};
+                            // The texture created by openxr will be: DXGI_FORMAT_R8G8B8A8_TYPELESS
+                            // so we need map to DXGI_FORMAT_R8G8B8A8_UNORM, otherwise, CreateRenderTargetView
+                            // will failed with E_INVALARG
+                            rtvDesc.Format = fmtInfo->format;
+
+                            if (texDesc.SampleDesc.Count > 1)
+                            {
+                                rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DMS;
+                            }
+                            else
+                            {
+                                rtvDesc.ViewDimension      = D3D11_RTV_DIMENSION_TEXTURE2D;
+                                rtvDesc.Texture2D.MipSlice = textureInfo.level;
+                            }
+
+                            auto hr = _device->CreateRenderTargetView(handle.resource, &rtvDesc, &_rtvs[i]);
+                            _AXASSERT_HR(hr);
                         }
                     }
                 }
@@ -107,8 +130,11 @@ void RenderTargetImpl::beginRenderPass(ID3D11DeviceContext* context)
                     D3D11_DEPTH_STENCIL_VIEW_DESC desc{};
                     desc.Format        = fmtInfo->fmtDsv;
                     desc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-                    _device->CreateDepthStencilView(static_cast<TextureImpl*>(_depthStencil.texture)->internalHandle(),
-                                                    &desc, &_dsv);
+                    auto textureImpl   = static_cast<TextureImpl*>(_depthStencil.texture);
+                    // textureImpl->updateData()
+                    auto hr = _device->CreateDepthStencilView(
+                        static_cast<TextureImpl*>(_depthStencil.texture)->internalHandle(), &desc, &_dsv);
+                    _AXASSERT_HR(hr);
                 }
             }
         }

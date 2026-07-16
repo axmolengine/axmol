@@ -26,5 +26,6 @@
 #pragma once
 
 #include "axmol/platform/PlatformDefine.h"
+#include "axmol/base/RefPtr.h"
 
 #define AX_GUI_DLL AX_API

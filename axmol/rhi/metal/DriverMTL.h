@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #import <Metal/Metal.h>
 #import <QuartzCore/CAMetalLayer.h>
 
@@ -115,14 +115,15 @@ public:
      * BufferUsage::STATIC, BufferUsage::DYNAMIC.
      * @return A Buffer object.
      */
-    Buffer* createBuffer(std::size_t size, BufferType type, BufferUsage usage, const void* initial) override;
+    Buffer* createBuffer(size_t size, BufferType type, BufferUsage usage, const void* initial) override;
 
     /**
      * New a Texture object.
      * @param descriptor Specifies texture description.
      * @return A Texture object.
      */
-    Texture* createTexture(const TextureDesc& descriptor) override;
+    Texture* createTexture(const TextureDesc& descriptor, std::optional<Color> clearColorHint = std::nullopt) override;
+    Texture* createTextureFromNativeHandle(const ExternalTextureDesc& descriptor) override;
 
     RenderTarget* createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment) override;
 

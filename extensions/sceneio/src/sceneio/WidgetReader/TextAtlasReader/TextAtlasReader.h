@@ -45,7 +45,7 @@ public:
     void setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* pCocoNode) override;
     flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                                          flatbuffers::FlatBufferBuilder* builder);
-    void setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* textAtlasOptions);
-    ax::Node* createNodeWithFlatBuffers(const flatbuffers::Table* textAtlasOptions);
+    void setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* textAtlasOptions) override;
+    ax::Node* createNodeWithFlatBuffers(const flatbuffers::Table* textAtlasOptions) override;
 };
 }  // namespace ax::ext

@@ -27,7 +27,7 @@ THE SOFTWARE.
 #include "axmol/platform/win32/FileUtils-win32.h"
 #include "axmol/platform/Common.h"
 #include <Shlobj.h>
-#include <cstdlib>
+#include <stdlib.h>
 #include <regex>
 #include <sstream>
 

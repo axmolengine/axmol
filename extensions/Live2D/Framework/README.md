@@ -1,82 +1,115 @@
+[English](README.md) / [日本語](README.ja.md)
+
+---
+
 # Cubism Native Framework
 
-Live2D Cubism 4 Editor で出力したモデルをアプリケーションで利用するためのフレームワークです。
+This is a framework for using models output by Live2D Cubism Editor in applications.
 
-モデルを表示、操作するための各種機能を提供します。
-モデルをロードするには Cubism Core ライブラリと組み合わせて使用します。
-
-
-## ライセンス
-
-本フレームワークを使用する前に、[ライセンス](LICENSE.md)をご確認ください。
+It provides various functions for displaying and manipulating the model.
+It is used in conjunction with the Cubism Core library to load the model.
 
 
-## コンポーネント
+## License
+
+Please check the [license](LICENSE.md) before using this framework.
+
+## Translation
+
+Comments of the source codes are being translated into English.
+Please [Go Here](./TRANSLATION.md) for the status.
+
+
+## Compatibility with Cubism 5.3 new features and previous Cubism SDK versions
+
+This SDK is compatible with Cubism 5.3.  
+For SDK compatibility with new features in Cubism 5.3 Editor, please refer to [here](https://docs.live2d.com/en/cubism-sdk-manual/cubism-5-3-new-functions/).  
+For compatibility with previous versions of Cubism SDK, please refer to [here](https://docs.live2d.com/en/cubism-sdk-manual/compatibility-with-cubism-5-3/).
+
+
+## Components
 
 ### Effect
 
-自動まばたきやリップシンクなど、モデルに対してモーション情報をエフェクト的に付加する機能を提供します。
+Provides functions such as automatic blinking and lip sync to add motion information as an effect to the model.
 
 ### Id
 
-モデルに設定されたパラメータ名・パーツ名・Drawable 名を独自の型で管理する機能を提供します。
+Provides functions to manage the parameter name, part name, and Drawable name set in the model with unique types.
 
 ### Math
 
-行列計算やベクトル計算など、モデルの操作や描画に必要な算術演算の機能を提供します。
+Provides arithmetic functions required for manipulating and drawing the model, such as matrix and vector calculations.
 
 ### Model
 
-モデルを取り扱うための各種機能（生成、更新、破棄）を提供します。
+Provides various functions (generate, update, destroy) for handling the model.
 
 ### Motion
 
-モデルにモーションデータを適用するための各種機能（モーション再生、パラメータブレンド）を提供します。
+Provides various functions (motion playback, parameter blending) for applying motion data to the model.
 
 ### Physics
 
-モデルに物理演算による変形操作を適用するための機能を提供します。
+Provides functions for applying transformation manipulations due to physics to the model.
 
 ### Rendering
 
-各種プラットフォームでモデルを描画するためのグラフィックス命令を実装したレンダラを提供します。
+Provides a renderer that implements graphics instructions for drawing the model on various platforms.
 
 ### Type
 
-本フレームワーク内で使用する C++ 型定義を提供します。
+Provides C++ type definitions used within this framework.
 
 ### Utils
 
-JSON パーサーやログ出力などのユーティリティ機能を提供します。
+Provides utility functions such as JSON parser and log output.
 
 
 ## Live2D Cubism Core for Native
 
-当リポジトリには Live2D Cubism Core for Native は同梱されていません。
+Live2D Cubism Core for Native is not included in this repository.
 
-ダウンロードするには[こちら](https://www.live2d.com/download/cubism-sdk/download-native/)のページを参照ください。
+To download, please refer to [this](https://www.live2d.com/download/cubism-sdk/download-native/) page.
 
 
-## サンプル
+## Samples
 
-標準的なアプリケーションの実装例については、下記サンプルリポジトリを参照ください。
+Please refer to the following sample repository for implementation examples of standard applications.
 
 [CubismNativeSamples](https://github.com/Live2D/CubismNativeSamples)
 
 
-## マニュアル
+## Manual
 
 [Cubism SDK Manual](https://docs.live2d.com/cubism-sdk-manual/top/)
 
 
-## 変更履歴
+## Changelog
 
-当リポジトリの変更履歴については [CHANGELOG.md](CHANGELOG.md) を参照ください。
+Please refer to [CHANGELOG.md](CHANGELOG.md) for the changelog of this repository.
 
 
-## コミュニティ
+## Contributing
 
-ユーザー同士でCubism SDKの活用方法の提案や質問をしたい場合は、是非コミュニティをご活用ください。
+There are many ways to contribute to the project: logging bugs, submitting pull requests on this GitHub, and reporting issues and making suggestions in Live2D Community.
 
-- [Live2D 公式コミュニティ](https://creatorsforum.live2d.com/)
-- [Live2D community(English)](http://community.live2d.com/)
+### Forking And Pull Requests
+
+We very much appreciate your pull requests, whether they bring fixes, improvements, or even new features. To keep the main repository as clean as possible, create a personal fork and feature branches there as needed.
+
+### Bugs
+
+We are regularly checking issue-reports and feature requests at Live2D Community. Before filing a bug report, please do a search in Live2D Community to see if the issue-report or feature request has already been posted. If you find your issue already exists, make relevant comments and add your reaction.
+
+### Suggestions
+
+We're also interested in your feedback for the future of the SDK. You can submit a suggestion or feature request at Live2D Community. To make this process more effective, we're asking that you include more information to help define them more clearly.
+
+
+## Forum
+
+If you want to suggest or ask questions about how to use the Cubism SDK between users, please use the forum.
+
+- [Live2D Creator's Forum](https://community.live2d.com/)
+- [Live2D 公式クリエイターズフォーラム (Japanese)](https://creatorsforum.live2d.com/)

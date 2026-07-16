@@ -40,7 +40,8 @@ USING_NS_AX_EXT;
 Size g_resourceSize(960, 640);
 Size g_designSize(480, 320);
 
-const Color g_testsDefaultClearColor = Color32{0x36, 0x3B, 0x44, 0xFF};
+// const Color g_testsDefaultClearColor = Color32{0x36, 0x3B, 0x44, 0xFF};
+const Color g_testsDefaultClearColor = Color32{0x33, 0x33, 0x33, 0xFF};
 
 TestBase::TestBase() : _parentTest(nullptr), _isTestList(false) {}
 
@@ -71,39 +72,15 @@ public:
         return table;
     }
 
-    virtual void onTouchEnded(Touch* touch, Event* event) override
+    bool onPointerScroll(PointerEvent* event) override
     {
-        if (!this->isVisible())
-        {
-            return;
-        }
-
-        if (_touchedCell)
-        {
-            auto label = (Label*)_touchedCell->getChildByTag(TABEL_LABEL_TAG);
-
-            Rect bbox   = label->getBoundingBox();
-            bbox.origin = _touchedCell->convertToWorldSpace(bbox.origin);
-
-            if (bbox.containsPoint(touch->getLocation()) && _tableViewDelegate != nullptr)
-            {
-                _tableViewDelegate->tableCellUnhighlight(this, _touchedCell);
-                _tableViewDelegate->tableCellTouched(this, _touchedCell);
-            }
-
-            _touchedCell = nullptr;
-        }
-
-        ScrollView::onTouchEnded(touch, event);
-    }
-
-    bool onMouseScroll(Event* event)
-    {
-        auto mouseEvent = static_cast<EventMouse*>(event);
-        float moveY     = mouseEvent->getScrollY() * 20;
+        float moveY = event->getScrollY() * 20;
 
         auto minOffset = this->minContainerOffset();
         auto maxOffset = this->maxContainerOffset();
+
+        if (minOffset.y >= maxOffset.y)
+            return true;
 
         auto offset = this->getContentOffset();
         offset.y += moveY;
@@ -119,14 +96,6 @@ public:
         this->setContentOffset(offset);
 
         return true;
-    }
-
-protected:
-    TestCustomTableView()
-    {
-        auto mouseListener           = EventListenerMouse::create();
-        mouseListener->onMouseScroll = AX_CALLBACK_1(TestCustomTableView::onMouseScroll, this);
-        _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
     }
 };
 
@@ -170,7 +139,7 @@ void TestList::runThisTest()
      * otherwise, the layout will incorrect
      */
 
-    RenderViewImpl* renderView = (RenderViewImpl*)Director::getInstance()->getRenderView();
+    RenderView* renderView = (RenderView*)Director::getInstance()->getRenderView();
 #if defined(AX_PLATFORM_GLFW)
     renderView->setWindowed(g_resourceSize.width, g_resourceSize.height);
 #endif
@@ -206,7 +175,7 @@ void TestList::runThisTest()
         auto menuItem = MenuItemLabel::create(label, std::bind(&TestBase::backsUpOneLevel, this));
         auto menu     = Menu::create(menuItem, nullptr);
 
-        menu->setPosition(Vec2::ZERO);
+        menu->setPosition(Vec2::zero);
         menuItem->setPosition(Vec2(VisibleRect::right().x - 50, VisibleRect::bottom().y + 25));
 
         scene->addChild(menu, 1);
@@ -227,7 +196,7 @@ void TestList::runThisTest()
         autoTestItem->setPosition(Vec2(VisibleRect::left().x + 60, VisibleRect::bottom().y + 50));
 
         auto menu = Menu::create(closeItem, autoTestItem, nullptr);
-        menu->setPosition(Vec2::ZERO);
+        menu->setPosition(Vec2::zero);
         scene->addChild(menu, 1);
     }
 
@@ -462,7 +431,7 @@ bool TestCase::init()
 
         auto menu = Menu::create(_priorTestItem, _restartTestItem, _nextTestItem, backItem, nullptr);
 
-        menu->setPosition(Vec2::ZERO);
+        menu->setPosition(Vec2::zero);
         _priorTestItem->setPosition(VisibleRect::center().x - _restartTestItem->getContentSize().width * 2,
                                     VisibleRect::bottom().y + _restartTestItem->getContentSize().height / 2);
         _restartTestItem->setPosition(VisibleRect::center().x,
@@ -478,12 +447,12 @@ bool TestCase::init()
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_MAC || \
     AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
         // fullscreen toggle
-        EventListenerKeyboard* listener = EventListenerKeyboard::create();
-        listener->onKeyPressed          = [this](EventKeyboard::KeyCode code, Event* event) {
-            auto keyEvent   = static_cast<EventKeyboard*>(event);
-            auto renderView = static_cast<RenderViewImpl*>(_director->getRenderView());
+        KeyboardEventListener* listener = KeyboardEventListener::create();
+        listener->onKeyPressed          = [this](KeyboardEvent* event) {
+            auto keyEvent   = static_cast<KeyboardEvent*>(event);
+            auto renderView = static_cast<RenderView*>(_director->getRenderView());
             bool altPressed = renderView->isKeyPressed(GLFW_KEY_LEFT_ALT);
-            if (code == EventKeyboard::KeyCode::KEY_ENTER && !keyEvent->isRepeat())
+            if (altPressed && event->getKeyCode() == KeyboardEvent::KeyCode::KEY_ENTER)
             {
                 if (!renderView->isFullscreen())
                 {

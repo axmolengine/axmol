@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include <cstdint>
+#include <stdint.h>
 
 #include "axmol/base/Object.h"
 #include "axmol/base/Data.h"
@@ -40,14 +40,9 @@
 #include <memory>
 #include <vector>
 
-namespace ax
-{
-struct PipelineDesc;
-}
-
 namespace ax::rhi
 {
-
+struct PipelineDesc;
 class RenderPass;
 class RenderPipeline;
 class Buffer;
@@ -172,12 +167,9 @@ public:
      * @param count For each instance, the number of indexes to draw
      * @see `drawElements(PrimitiveType primitiveType, IndexFormat indexType, unsigned int count, unsigned int offset)`
      */
-    virtual void drawArrays(std::size_t start, std::size_t count, bool wireframe = false) = 0;
+    virtual void drawArrays(size_t start, size_t count, bool wireframe = false) = 0;
 
-    virtual void drawArraysInstanced(std::size_t start,
-                                     std::size_t count,
-                                     int instanceCount,
-                                     bool wireframe = false) = 0;
+    virtual void drawArraysInstanced(size_t start, size_t count, int instanceCount, bool wireframe = false) = 0;
 
     /**
      * Draw primitives with an index list.
@@ -187,7 +179,7 @@ public:
      * @see `setIndexBuffer(Buffer* buffer)`
      * @see `drawArrays(PrimitiveType primitiveType, unsigned int start,  unsigned int count)`
      */
-    virtual void drawElements(IndexFormat indexType, std::size_t count, std::size_t offset, bool wireframe = false) = 0;
+    virtual void drawElements(IndexFormat indexType, size_t count, size_t offset, bool wireframe = false) = 0;
 
     /**
      * Draw primitives with an index list instanced.
@@ -199,8 +191,8 @@ public:
      * @see `drawArrays(PrimitiveType primitiveType, unsigned int start,  unsigned int count)`
      */
     virtual void drawElementsInstanced(IndexFormat indexType,
-                                       std::size_t count,
-                                       std::size_t offset,
+                                       size_t count,
+                                       size_t offset,
                                        int instanceCount,
                                        bool wireframe = false) = 0;
 
@@ -215,6 +207,12 @@ public:
     virtual void endFrame() = 0;
 
     /**
+     * Submit currently encoded frame commands without presenting the default surface.
+     * External runtimes such as OpenXR call this before releasing acquired swapchain images.
+     */
+    virtual void submitCurrentFrameCommands(bool waitForCompletion);
+
+    /**
      * Fixed-function state
      * @param x, y Specifies the lower left corner of the scissor box
      * @param wdith Specifies the width of the scissor box
@@ -226,13 +224,9 @@ public:
      * Read pixels from the specified render target.
      *
      * @param rt              The render target to read pixels from.
-     * @param preserveAxisHint A hint indicating whether to preserve the original axis orientation
-     *                         (e.g., avoid vertical flip). Note: support may vary across drivers/backends.
      * @param callback        A callback invoked with the resulting pixel buffer description.
      */
-    virtual void readPixels(RenderTarget* rt,
-                            bool preserveAxisHint,
-                            std::function<void(const PixelBufferDesc&)> callback) = 0;
+    virtual void readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback) = 0;
 
     /**
      * This property controls whether or not the drawables'

@@ -1,4 +1,4 @@
-﻿
+
 #include "Effekseer.DefaultFile.h"
 #include <assert.h>
 #include <stdio.h>

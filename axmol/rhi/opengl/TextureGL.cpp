@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 #include "axmol/rhi/opengl/TextureGL.h"
-#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/CustomEventListener.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/EventType.h"
 #include "axmol/base/Director.h"
@@ -41,6 +41,22 @@ namespace ax::rhi::gl
 TextureImpl::TextureImpl(const TextureDesc& desc)
 {
     updateTextureDesc(desc);
+}
+
+TextureImpl::TextureImpl(GLuint texture, uint32_t width, uint32_t height)
+    : _nativeTexture(texture), _ownsNativeTexture(false)
+{
+    _desc.width        = static_cast<uint16_t>(width);
+    _desc.height       = static_cast<uint16_t>(height);
+    _desc.pixelFormat  = PixelFormat::RGBA8;
+    _desc.textureType  = TextureType::TEXTURE_2D;
+    _desc.arraySize    = 1;
+    _desc.mipLevels    = 1;
+    _desc.textureUsage = TextureUsage::RENDER_TARGET;
+
+    UtilsGL::toGLTypes(_desc.pixelFormat, _nativeDesc.internalFormat, _nativeDesc.format, _nativeDesc.type);
+    _nativeDesc.target = GL_TEXTURE_2D;
+    Texture::updateTextureDesc(_desc);
 }
 
 void TextureImpl::updateTextureDesc(const TextureDesc& desc)
@@ -63,12 +79,11 @@ void TextureImpl::updateTextureDesc(const TextureDesc& desc)
 
 TextureImpl::~TextureImpl()
 {
-    if (_nativeTexture)
+    if (_nativeTexture && _ownsNativeTexture)
     {
         __state->deleteTexture(_nativeTexture);
-        _nativeTexture = 0;
     }
-
+    _nativeTexture = 0;
     _nativeSampler = 0;
 }
 
@@ -110,7 +125,7 @@ void TextureImpl::updateData(const void* data, int width, int height, int level,
 void TextureImpl::updateCompressedData(const void* data,
                                        int width,
                                        int height,
-                                       std::size_t dataSize,
+                                       size_t dataSize,
                                        int level,
                                        int layerIndex)
 {
@@ -166,7 +181,7 @@ void TextureImpl::updateCompressedSubData(int xoffset,
                                           int yoffset,
                                           int width,
                                           int height,
-                                          std::size_t dataSize,
+                                          size_t dataSize,
                                           int level,
                                           const void* data,
                                           int layerIndex)

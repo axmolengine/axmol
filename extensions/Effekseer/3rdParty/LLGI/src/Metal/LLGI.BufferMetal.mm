@@ -21,9 +21,11 @@ BufferMetal::BufferMetal()
 BufferMetal::~BufferMetal()
 {
     if (isExternalResource_)
+    {
         return;
+    }
     
-	if (buffer_ != nullptr)
+	if (buffer_ != nil)
 	{
 		[buffer_ release];
 		buffer_ = nullptr;

@@ -31,7 +31,7 @@
 namespace ax
 {
 
-PUAffector::PUAffector() : _affectorScale(Vec3::ONE), _affectSpecialisation(AFSP_DEFAULT), _mass(1.0f) {}
+PUAffector::PUAffector() : _affectorScale(Vec3::one), _affectSpecialisation(AFSP_DEFAULT), _mass(1.0f) {}
 
 PUAffector::~PUAffector()
 {

@@ -30,7 +30,7 @@
 
 #pragma once
 
-#include <cstdint>
+#include <stdint.h>
 #include "axmol/base/Macros.h"
 #include "axmol/base/Vector.h"
 #include "axmol/base/Protocols.h"
@@ -44,7 +44,7 @@ namespace ax
 {
 
 class GridBase;
-class Touch;
+class PointerEvent;
 class Action;
 class LabelProtocol;
 class Scheduler;
@@ -57,12 +57,14 @@ class Renderer;
 class Director;
 class Material;
 class Camera;
+class PointerEvent;
 class Rigidbody2D;
 
 namespace rhi
 {
 class ProgramState;
-}
+class VertexLayout;
+}  // namespace rhi
 
 /**
  * @addtogroup _2d
@@ -79,6 +81,7 @@ enum
 };
 
 class EventListener;
+class EventDispatcher;
 
 typedef std::map<uint64_t, Node*> NodeIndexerMap_t;
 
@@ -114,6 +117,8 @@ Node and override `draw`.
 
 class AX_DLL Node : public Object
 {
+    friend class EventDispatcher;
+
 public:
     /** Default tag used for all the nodes */
     static const int INVALID_TAG = -1;
@@ -563,16 +568,6 @@ public:
     virtual const Vec2& getContentSize() const;
 
     /**
-     * The basic node hit test, since axmol-1.0
-     *
-     * @param worldPoint   The coord in GL world space.
-     *
-     * @return Whether the worldPoint is inside this node
-     *
-     */
-    virtual bool hitTest(const Vec2& worldPoint) const;
-
-    /**
      * Sets whether the node is visible.
      *
      * The default value is true, a node is default to visible.
@@ -628,7 +623,7 @@ public:
      *
      * @param quat The rotation in quaternion, note that the quat must be normalized.
      */
-    virtual void setRotationQuat(const Quaternion& quat);
+    virtual void setRotationQuat(const Quat& quat);
 
     /**
      * Return the rotation by quaternion, Note that when _rotationZ_X == _rotationZ_Y, the returned quaternion equals to
@@ -636,7 +631,7 @@ public:
      *
      * @return The rotation in quaternion.
      */
-    virtual Quaternion getRotationQuat() const;
+    virtual Quat getRotationQuat() const;
 
     /**
      * Sets the X rotation (angle) of the node in degrees which performs a horizontal rotational skew.
@@ -1129,7 +1124,7 @@ public:
      * @param parentFlags Renderer flag.
      */
     virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags);
-    virtual void visit();
+    virtual void visit() final;
 
     /** Returns the Scene that contains the Node.
      It returns `nullptr` if the node doesn't belong to any Scene.
@@ -1146,6 +1141,13 @@ public:
      * @return An AABB (axis-aligned bounding-box) in its parent's coordinate system
      */
     virtual Rect getBoundingBox() const;
+
+    /**
+     * Returns an AABB (axis-aligned bounding-box) in its world's coordinate system.
+     *
+     * @return An AABB (axis-aligned bounding-box) in its world's coordinate system
+     */
+    virtual Rect getWorldBoundingBox() const;
 
     /** Set event dispatcher for scene.
      *
@@ -1586,7 +1588,7 @@ public:
      * @param touch A given touch.
      * @return A point in world space coordinates.
      */
-    Vec2 convertTouchToNodeSpace(Touch* touch) const;
+    Vec2 convertPointerToNodeSpace(PointerEvent* event) const;
 
     /**
      * converts a Touch (world coordinates) into a local coordinate. This method is AR (Anchor Relative).
@@ -1594,7 +1596,7 @@ public:
      * @param touch A given touch.
      * @return A point in world space coordinates, anchor relative.
      */
-    Vec2 convertTouchToNodeSpaceAR(Touch* touch) const;
+    Vec2 convertPointerToNodeSpaceAR(PointerEvent* event) const;
 
     /**
      * Gets position of node in world space.
@@ -1852,6 +1854,40 @@ public:
 
     void updateProgramStateTexture(Texture2D* texture);
 
+    /**
+    * Performs pointer hit testing for this node under the specified camera.
+    *
+    * This function is used by EventDispatcher before dispatching pointer events
+    * to scene-graph-priority PointerEventListener instances. The listener will
+    * receive the pointer event only if this function returns true for one of the
+    * candidate cameras.
+    *
+    * The default implementation tests the node's local content rectangle against
+    * the ray carried by the PointerEvent (obtained via PointerEvent::getRay()).
+    * The ray is computed per-camera by EventDispatcher using
+    * Camera::screenToRay() from the pointer's screen position.
+    *
+    * Derived classes may override this function to provide custom hit testing,
+    * such as clipping-aware UI hit testing, non-rectangular 2D hit areas, terrain
+    * picking, mesh picking, or physics ray casting.
+    *
+    * @param event       The pointer event being tested. The ray for this hit-test
+    *                    is available via event->getRay().
+    * @param outHitPoint Optional output parameter for the hit point. When provided,
+    * ```
+                     implementations should store the hit point in
+      ```
+    * ```
+                     world coordinate space. Pass nullptr if the hit point is
+      ```
+    * ```
+                     not needed.
+      ```
+    *
+    * @return true if the pointer hits this node for the specified camera, false otherwise.
+      */
+    virtual bool onPointerHitTest(PointerEvent* event, Vec3* outHitPoint);
+
     /*
      * Reset child state with resources cleanup, internal use, please don't invoke this API.
      */
@@ -1879,7 +1915,7 @@ protected:
     /// Convert axmol coordinates to UI windows coordinate.
     Vec2 convertToScreenSpace(const Vec2& nodePoint) const;
 
-    AX_DEPRECATED(3.0) Vec2 convertToWindowSpace(const Vec2& nodePoint) const
+    AX_DEPRECATED("3.0") Vec2 convertToWindowSpace(const Vec2& nodePoint) const
     {
         return convertToScreenSpace(nodePoint);
     }
@@ -1920,8 +1956,8 @@ protected:
     float _rotationZ_X;  ///< rotation angle on Z-axis, component X
     float _rotationZ_Y;  ///< rotation angle on Z-axis, component Y
 
-    Quaternion _rotationQuat;  /// rotation using quaternion, if _rotationZ_X == _rotationZ_Y, _rotationQuat =
-                               /// RotationZ_X * RotationY * RotationX, else _rotationQuat = RotationY * RotationX
+    Quat _rotationQuat;  /// rotation using quaternion, if _rotationZ_X == _rotationZ_Y, _rotationQuat =
+                         /// RotationZ_X * RotationY * RotationX, else _rotationQuat = RotationY * RotationX
     rhi::VertexLayout* _vertexLayout = nullptr;
     float _scaleX;  ///< scaling factor on x-axis
     float _scaleY;  ///< scaling factor on y-axis
@@ -1950,26 +1986,26 @@ protected:
     {
         struct
         {
-            std::uint32_t _orderOfArrival;
-            std::int32_t _localZOrder;
+            uint32_t _orderOfArrival;
+            int32_t _localZOrder;
         };
-        std::int64_t _localZOrder$Arrival;
+        int64_t _localZOrder$Arrival;
     };
 #else
     union
     {
         struct
         {
-            std::int32_t _localZOrder;
-            std::uint32_t _orderOfArrival;
+            int32_t _localZOrder;
+            uint32_t _orderOfArrival;
         };
-        std::int64_t _localZOrder$Arrival;
+        int64_t _localZOrder$Arrival;
     };
 #endif
 
     float _globalZOrder;  ///< Global order used to sort the node
 
-    static std::uint32_t s_globalOrderOfArrival;
+    static uint32_t s_globalOrderOfArrival;
 
     Vector<Node*> _children;             ///< array of children nodes
     NodeIndexerMap_t* _childrenIndexer;  ///< The children indexer for fast find child
@@ -2050,23 +2086,6 @@ inline _Ty* Component::getComponent() const
 {
     return _owner ? _owner->template getComponent<_Ty>() : nullptr;
 }
-
-/**
- * This is a helper function, checks a GL screen point is in content rectangle space.
- *
- * The content rectangle defined by origin(0,0) and content size.
- * This function convert GL screen point to near and far planes as points Pn and Pf,
- * then calculate the intersect point P which the line PnPf intersect with content rectangle.
- * If P in content rectangle means this node be hit.
- *
- * @param pt        The point in GL screen space.
- * @param camera    Which camera used to unproject pt to near/far planes.
- * @param w2l       World to local transform matrix, used to convert Pn and Pf to rectangle space.
- * @param rect      The test rectangle in local space.
- * @parma p         Point to a Vec3 for store the intersect point, if don't need them set to nullptr.
- * @return true if the point is in content rectangle, false otherwise.
- */
-bool AX_DLL isScreenPointInRect(const Vec2& pt, const Camera* camera, const Mat4& w2l, const Rect& rect, Vec3* p);
 
 // end of _2d group
 /// @}

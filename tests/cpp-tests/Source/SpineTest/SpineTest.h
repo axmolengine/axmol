@@ -28,7 +28,7 @@
 
 #include "axmol/axmol.h"
 #include "../BaseTest.h"
-#include <spine/spine-cocos2dx.h>
+#include <spine/spine-axmol.h>
 
 #ifdef _AX_DEBUG
 #    include <spine/Debug.h>
@@ -69,15 +69,8 @@ class BatchingExample : public SpineTestLayer
 {
 public:
     CREATE_FUNC(BatchingExample);
-    ~BatchingExample();
 
     virtual bool init();
-
-protected:
-    spine::Atlas* _atlas;
-    spine::AttachmentLoader* _attachmentLoader;
-    spine::SkeletonData* _skeletonData;
-    spine::AnimationStateData* _stateData;
 };
 
 class CoinExample : public SpineTestLayer
@@ -112,12 +105,6 @@ public:
     CREATE_FUNC(MixAndMatchExample);
 
     virtual bool init();
-
-    virtual ~MixAndMatchExample();
-
-private:
-    spine::Skin* skin;
-    spine::Skin* skin2;
 };
 
 class RaptorExample : public SpineTestLayer
@@ -143,7 +130,7 @@ public:
     virtual void update(float deltaTime);
 
 private:
-    spine::SkeletonRenderer* frontNode;
+    spine::SkeletonAnimation* frontNode;
     ax::DrawNode* betweenNode;
 };
 

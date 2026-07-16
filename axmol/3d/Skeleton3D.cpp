@@ -198,7 +198,7 @@ void Bone3D::updateLocalMat()
     if (_blendStates.size())
     {
         Vec3 translate, scale;
-        Quaternion quat(Quaternion::ZERO);
+        Quat quat(Quat::zero);
 
         float total = 0.f;
         for (const auto& it : _blendStates)
@@ -226,12 +226,12 @@ void Bone3D::updateLocalMat()
                     scale.z += it.localScale.z * weight;
                     if (!quat.isZero())
                     {
-                        Quaternion& q = _blendStates[0].localRot;
+                        Quat& q = _blendStates[0].localRot;
                         if (q.x * quat.x + q.y * quat.y + q.z * quat.z + q.w * quat.w < 0)
                             weight = -weight;
                     }
-                    quat = Quaternion(it.localRot.x * weight + quat.x, it.localRot.y * weight + quat.y,
-                                      it.localRot.z * weight + quat.z, it.localRot.w * weight + quat.w);
+                    quat = Quat(it.localRot.x * weight + quat.x, it.localRot.y * weight + quat.y,
+                                it.localRot.z * weight + quat.z, it.localRot.w * weight + quat.w);
                 }
                 quat.normalize();
             }

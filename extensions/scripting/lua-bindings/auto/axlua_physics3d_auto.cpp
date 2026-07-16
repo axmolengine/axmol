@@ -3746,7 +3746,7 @@ int lua_ax_physics3d_Rigidbody3D_setRotation(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1)
     {
-        ax::Quaternion arg0;
+        ax::Quat arg0;
 
         ok &= luaval_to_quat(tolua_S, 2, &arg0, "ax.Rigidbody3D:setRotation");
         if(!ok)
@@ -3760,7 +3760,7 @@ int lua_ax_physics3d_Rigidbody3D_setRotation(lua_State* tolua_S)
     }
     if (argc == 2)
     {
-        ax::Quaternion arg0;
+        ax::Quat arg0;
         bool arg1;
 
         ok &= luaval_to_quat(tolua_S, 2, &arg0, "ax.Rigidbody3D:setRotation");
@@ -8212,7 +8212,7 @@ static int lua_ax_physics3d_ContactEvent3D_finalize(lua_State* tolua_S)
 int lua_register_ax_physics3d_ContactEvent3D(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.ContactEvent3D");
-    tolua_cclass(tolua_S,"ContactEvent3D","ax.ContactEvent3D","ax.EventCustom",nullptr);
+    tolua_cclass(tolua_S,"ContactEvent3D","ax.ContactEvent3D","ax.CustomEvent",nullptr);
 
     tolua_beginmodule(tolua_S,"ContactEvent3D");
         tolua_function(tolua_S,"getActorA",lua_ax_physics3d_ContactEvent3D_getActorA);
@@ -8269,7 +8269,7 @@ static int lua_ax_physics3d_ContactEventListener3D_finalize(lua_State* tolua_S)
 int lua_register_ax_physics3d_ContactEventListener3D(lua_State* tolua_S)
 {
     tolua_usertype(tolua_S,"ax.ContactEventListener3D");
-    tolua_cclass(tolua_S,"ContactEventListener3D","ax.ContactEventListener3D","ax.EventListenerCustom",nullptr);
+    tolua_cclass(tolua_S,"ContactEventListener3D","ax.ContactEventListener3D","ax.CustomEventListener",nullptr);
 
     tolua_beginmodule(tolua_S,"ContactEventListener3D");
         tolua_function(tolua_S,"create", lua_ax_physics3d_ContactEventListener3D_create);

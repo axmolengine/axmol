@@ -30,7 +30,7 @@
 #include "axmol/2d/FontFreeType.h"
 #include "axmol/base/text_utils.h"
 #include "axmol/base/Director.h"
-#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/CustomEventListener.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/EventType.h"
 
@@ -38,6 +38,7 @@
 #include "zlib.h"
 #include "axmol/base/ZipUtils.h"
 #include "axmol/base/json.h"
+#include "axmol/base/Utils.h"
 
 namespace ax
 {
@@ -160,7 +161,7 @@ FontAtlas::FontAtlas(Font* theFont, int atlasWidth, int atlasHeight, float scale
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
         auto eventDispatcher = Director::getInstance()->getEventDispatcher();
 
-        _rendererRecreatedListener = EventListenerCustom::create(
+        _rendererRecreatedListener = CustomEventListener::create(
             EVENT_RENDERER_RECREATED, AX_CALLBACK_1(FontAtlas::listenRendererRecreated, this));
         eventDispatcher->addEventListenerWithFixedPriority(_rendererRecreatedListener, 1);
 #endif
@@ -275,7 +276,7 @@ void FontAtlas::clearTexturesAtlas()
     }
 }
 
-void FontAtlas::listenRendererRecreated(EventCustom* /*event*/)
+void FontAtlas::listenRendererRecreated(CustomEvent* /*event*/)
 {
     clearTexturesAtlas();
 }

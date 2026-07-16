@@ -73,7 +73,7 @@ static D3D11_BIND_FLAG translateBindFlag(BufferType t)
     }
 }
 
-static inline std::size_t alignTo(std::size_t value, std::size_t alignment)
+static inline size_t alignTo(size_t value, size_t alignment)
 {
     return (value + alignment - 1) & ~(alignment - 1);
 }
@@ -81,7 +81,7 @@ static inline std::size_t alignTo(std::size_t value, std::size_t alignment)
 /* -------------------------------------------------- ctor */
 BufferImpl::BufferImpl(ID3D11Device* device,
                        ID3D11DeviceContext* context,
-                       std::size_t size,
+                       size_t size,
                        BufferType type,
                        BufferUsage usage,
                        const void* initial)
@@ -123,7 +123,7 @@ void BufferImpl::createNativeBuffer(const void* initial)
 }
 
 /* -------------------------------------------------- updateData */
-void BufferImpl::updateData(const void* data, std::size_t size)
+void BufferImpl::updateData(const void* data, size_t size)
 {
     assert(size <= _size);
     assert(data);
@@ -132,7 +132,7 @@ void BufferImpl::updateData(const void* data, std::size_t size)
     {
         D3D11_MAPPED_SUBRESOURCE mapped{};
         _context->Map(_buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
-        std::memcpy(mapped.pData, data, size);
+        ::memcpy(mapped.pData, data, size);
         _context->Unmap(_buffer.Get(), 0);
     }
     else if (_nativeUsage == D3D11_USAGE_IMMUTABLE)
@@ -152,7 +152,7 @@ void BufferImpl::updateData(const void* data, std::size_t size)
 }
 
 /* -------------------------------------------------- updateSubData */
-void BufferImpl::updateSubData(const void* data, std::size_t offset, std::size_t size)
+void BufferImpl::updateSubData(const void* data, size_t offset, size_t size)
 {
     assert(data && (offset + size <= _size));
 
@@ -160,7 +160,7 @@ void BufferImpl::updateSubData(const void* data, std::size_t offset, std::size_t
     {
         D3D11_MAPPED_SUBRESOURCE mapped{};
         _context->Map(_buffer.Get(), 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &mapped);
-        std::memcpy(static_cast<uint8_t*>(mapped.pData) + offset, data, size);
+        ::memcpy(static_cast<uint8_t*>(mapped.pData) + offset, data, size);
         _context->Unmap(_buffer.Get(), 0);
     }
     else if (_nativeUsage == D3D11_USAGE_IMMUTABLE)
@@ -184,7 +184,7 @@ void BufferImpl::updateSubData(const void* data, std::size_t offset, std::size_t
     }
 
     if (_needDefaultStoredData)
-        std::memcpy(_defaultData.data() + offset, data, size);
+        ::memcpy(_defaultData.data() + offset, data, size);
 }
 
 /* -------------------------------------------------- usingDefaultStoredData */

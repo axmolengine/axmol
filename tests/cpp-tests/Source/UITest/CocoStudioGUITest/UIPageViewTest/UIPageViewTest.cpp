@@ -115,9 +115,9 @@ bool UIPageViewTest::init()
     return false;
 }
 
-void UIPageViewTest::pageViewEvent(Object* pSender, PageView::EventType type)
+void UIPageViewTest::pageViewEvent(Object* pSender, PageView::EventType event)
 {
-    switch (type)
+    switch (event)
     {
     case PageView::EventType::TURNING:
     {
@@ -205,8 +205,7 @@ bool UIPageViewButtonTest::init()
 
         pageView->removeItem(0);
 
-        pageView->addEventListener(
-            (PageView::ccPageViewCallback)AX_CALLBACK_2(UIPageViewButtonTest::pageViewEvent, this));
+        pageView->addEventListener(AX_CALLBACK_2(UIPageViewButtonTest::pageViewEvent, this));
 
         _uiLayer->addChild(pageView);
 
@@ -223,9 +222,9 @@ void UIPageViewButtonTest::onButtonClicked(Object* sender, Widget::TouchEventTyp
     }
 }
 
-void UIPageViewButtonTest::pageViewEvent(Object* pSender, PageView::EventType type)
+void UIPageViewButtonTest::pageViewEvent(Object* pSender, PageView::EventType event)
 {
-    switch (type)
+    switch (event)
     {
     case PageView::EventType::TURNING:
     {
@@ -276,7 +275,7 @@ bool UIPageViewTouchPropagationTest::init()
         pageView->setAnchorPoint(Vec2(0.5f, 0.5f));
         Size backgroundSize = background->getContentSize();
         pageView->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
-        pageView->setBackGroundColor(Color32::GREEN);
+        pageView->setBackGroundColor(Color32::green);
         pageView->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
 
         int pageCount = 4;
@@ -309,8 +308,7 @@ bool UIPageViewTouchPropagationTest::init()
             pageView->insertCustomItem(outerBox, i);
         }
 
-        pageView->addEventListener(
-            (PageView::ccPageViewCallback)AX_CALLBACK_2(UIPageViewTouchPropagationTest::pageViewEvent, this));
+        pageView->addEventListener(AX_CALLBACK_2(UIPageViewTouchPropagationTest::pageViewEvent, this));
         pageView->setName("pageView");
         pageView->addTouchEventListener([](Object* sender, Widget::TouchEventType type) {
             if (type == Widget::TouchEventType::BEGAN)
@@ -334,13 +332,13 @@ bool UIPageViewTouchPropagationTest::init()
 
         Text* propagationText = Text::create("Allow Propagation", "Arial", 10);
         propagationText->setAnchorPoint(Vec2(0.0f, 0.5f));
-        propagationText->setTextColor(Color32::RED);
+        propagationText->setTextColor(Color32::red);
         propagationText->setPosition(Vec2(0.0f, pageView->getPosition().y + 50));
         _uiLayer->addChild(propagationText);
 
         Text* swallowTouchText = Text::create("Swallow Touches", "Arial", 10);
         swallowTouchText->setAnchorPoint(Vec2(0.f, 0.5f));
-        swallowTouchText->setTextColor(Color32::RED);
+        swallowTouchText->setTextColor(Color32::red);
         swallowTouchText->setPosition(Vec2(0.0f, pageView->getPosition().y));
         _uiLayer->addChild(swallowTouchText);
 
@@ -364,8 +362,8 @@ bool UIPageViewTouchPropagationTest::init()
         checkBox2->setName("swallow");
         _uiLayer->addChild(checkBox2);
 
-        auto eventListener          = EventListenerTouchOneByOne::create();
-        eventListener->onTouchBegan = [](Touch* touch, Event* event) -> bool {
+        auto eventListener           = PointerEventListener::create();
+        eventListener->onPointerDown = [](PointerEvent* event) -> bool {
             AXLOGD("layout receives touches");
             return true;
         };
@@ -387,24 +385,20 @@ void UIPageViewTouchPropagationTest::onButtonClicked(Object* pSender, Widget::To
     {
         if (ck1->isSelected())
         {
-            btn->setPropagateTouchEvents(true);
-            pageView->setPropagateTouchEvents(true);
+            btn->setPropagatePointerEvents(true);
+            pageView->setPropagatePointerEvents(true);
         }
         else
         {
-            btn->setPropagateTouchEvents(false);
-            pageView->setPropagateTouchEvents(false);
+            btn->setPropagatePointerEvents(false);
+            pageView->setPropagatePointerEvents(false);
         }
 
         if (ck2->isSelected())
         {
-            btn->setSwallowTouches(true);
-            pageView->setSwallowTouches(true);
         }
         else
         {
-            btn->setSwallowTouches(false);
-            pageView->setSwallowTouches(false);
         }
     }
     if (type == Widget::TouchEventType::ENDED)
@@ -413,9 +407,9 @@ void UIPageViewTouchPropagationTest::onButtonClicked(Object* pSender, Widget::To
     }
 }
 
-void UIPageViewTouchPropagationTest::pageViewEvent(Object* pSender, PageView::EventType type)
+void UIPageViewTouchPropagationTest::pageViewEvent(Object* pSender, PageView::EventType event)
 {
-    switch (type)
+    switch (event)
     {
     case PageView::EventType::TURNING:
     {
@@ -467,7 +461,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
         pageView->setAnchorPoint(Vec2(0.5f, 0.5f));
         Size backgroundSize = background->getContentSize();
         pageView->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
-        pageView->setBackGroundColor(Color32::GREEN);
+        pageView->setBackGroundColor(Color32::green);
         pageView->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
         pageView->setIndicatorEnabled(true);
         pageView->setIndicatorSpaceBetweenIndexNodes(10);
@@ -501,8 +495,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
             pageView->insertCustomItem(outerBox, i);
         }
 
-        pageView->addEventListener(
-            (PageView::ccPageViewCallback)AX_CALLBACK_2(UIPageViewDynamicAddAndRemoveTest::pageViewEvent, this));
+        pageView->addEventListener(AX_CALLBACK_2(UIPageViewDynamicAddAndRemoveTest::pageViewEvent, this));
         pageView->setName("pageView");
         _uiLayer->addChild(pageView);
 
@@ -512,7 +505,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
         button->setTitleText("Add A Page");
         button->setZoomScale(0.3f);
         button->setPressedActionEnabled(true);
-        button->setTitleColor(Color32::RED);
+        button->setTitleColor(Color32::red);
         button->addClickEventListener([this, pageView](Object* /*sender*/) {
             HBox* outerBox = HBox::create();
             outerBox->setContentSize(Size(240.0f, 130.0f));
@@ -546,7 +539,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
         button2->setTitleText("Remove A Page");
         button2->setZoomScale(0.3f);
         button2->setPressedActionEnabled(true);
-        button2->setTitleColor(Color32::RED);
+        button2->setTitleColor(Color32::red);
         button2->addClickEventListener([this, pageView](Object* /*sender*/) {
             if (pageView->getItems().size() > 0)
             {
@@ -567,7 +560,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
         button3->setTitleText("Remove All Pages");
         button3->setZoomScale(0.3f);
         button3->setPressedActionEnabled(true);
-        button3->setTitleColor(Color32::RED);
+        button3->setTitleColor(Color32::red);
         button3->addClickEventListener([this, pageView](Object* /*sender*/) {
             pageView->removeAllItems();
             _displayValueLabel->setString(
@@ -590,9 +583,9 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
     return false;
 }
 
-void UIPageViewDynamicAddAndRemoveTest::pageViewEvent(Object* pSender, PageView::EventType type)
+void UIPageViewDynamicAddAndRemoveTest::pageViewEvent(Object* pSender, PageView::EventType ev)
 {
-    switch (type)
+    switch (ev)
     {
     case PageView::EventType::TURNING:
     {
@@ -761,8 +754,7 @@ bool UIPageViewVerticalTest::init()
             pageView->insertCustomItem(layout, i);
         }
 
-        pageView->addEventListener(
-            (PageView::ccPageViewCallback)AX_CALLBACK_2(UIPageViewVerticalTest::pageViewEvent, this));
+        pageView->addEventListener(AX_CALLBACK_2(UIPageViewVerticalTest::pageViewEvent, this));
 
         _uiLayer->addChild(pageView);
 
@@ -771,9 +763,9 @@ bool UIPageViewVerticalTest::init()
     return false;
 }
 
-void UIPageViewVerticalTest::pageViewEvent(Object* pSender, PageView::EventType type)
+void UIPageViewVerticalTest::pageViewEvent(Object* pSender, PageView::EventType ev)
 {
-    switch (type)
+    switch (ev)
     {
     case PageView::EventType::TURNING:
     {
@@ -904,14 +896,13 @@ bool UIPageViewChildSizeTest::init()
 
             Text* label = Text::create(fmt::format("page {}", (i + 1)), "fonts/Marker Felt.ttf", 30);
             label->setColor(Color32(192, 192, 192));
-            label->setAnchorPoint(Vec2::ZERO);
+            label->setAnchorPoint(Vec2::zero);
             imageView->addChild(label);
 
             pageView->insertCustomItem(imageView, i);
         }
 
-        pageView->addEventListener(
-            (PageView::ccPageViewCallback)AX_CALLBACK_2(UIPageViewChildSizeTest::pageViewEvent, this));
+        pageView->addEventListener(AX_CALLBACK_2(UIPageViewChildSizeTest::pageViewEvent, this));
 
         _uiLayer->addChild(pageView);
 
@@ -920,9 +911,9 @@ bool UIPageViewChildSizeTest::init()
     return false;
 }
 
-void UIPageViewChildSizeTest::pageViewEvent(Object* pSender, PageView::EventType type)
+void UIPageViewChildSizeTest::pageViewEvent(Object* pSender, PageView::EventType ev)
 {
-    switch (type)
+    switch (ev)
     {
     case PageView::EventType::TURNING:
     {
@@ -983,7 +974,7 @@ bool UIPageViewIndicatorTest::init()
         pageView->setIndicatorSpaceBetweenIndexNodes(5);
         pageView->setIndicatorIndexNodesScale(0.5);
         pageView->setIndicatorIndexNodesTexture("cocosui/green_edit.png");
-        pageView->setIndicatorIndexNodesColor(Color32::RED);
+        pageView->setIndicatorIndexNodesColor(Color32::red);
 
         int pageCount = 4;
         for (int i = 0; i < pageCount; ++i)

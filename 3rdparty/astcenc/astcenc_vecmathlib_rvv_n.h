@@ -648,6 +648,8 @@ ASTCENC_SIMD_INLINE vfloat operator/(float a, vfloat b)
 
 /**
  * @brief Overload: vector by vector equality.
+ *
+ * Returns vector of false mask values if a or b is NaN.
  */
 ASTCENC_SIMD_INLINE vmask operator==(vfloat a, vfloat b)
 {
@@ -656,6 +658,8 @@ ASTCENC_SIMD_INLINE vmask operator==(vfloat a, vfloat b)
 
 /**
  * @brief Overload: vector by vector inequality.
+ *
+ * Returns vector of true mask values if a or b is NaN.
  */
 ASTCENC_SIMD_INLINE vmask operator!=(vfloat a, vfloat b)
 {

@@ -33,7 +33,7 @@
 #include <spine/Skeleton.h>
 
 #include <spine/Animation.h>
-#include <spine/ContainerUtil.h>
+#include <spine/ArrayUtils.h>
 #include <spine/EventData.h>
 #include <spine/Property.h>
 #include <spine/Slot.h>
@@ -49,30 +49,32 @@ EventTimeline::EventTimeline(size_t frameCount) : Timeline(frameCount, 1) {
 	PropertyId ids[] = {((PropertyId) Property_Event << 32)};
 	setPropertyIds(ids, 1);
 	_events.setSize(frameCount, NULL);
+	_instant = true;
 }
 
 EventTimeline::~EventTimeline() {
-	ContainerUtil::cleanUpVectorOfPointers(_events);
+	ArrayUtils::deleteElements(_events);
 }
 
-void EventTimeline::apply(Skeleton &skeleton, float lastTime, float time, Vector<Event *> *pEvents, float alpha,
-						  MixBlend blend, MixDirection direction) {
+void EventTimeline::apply(Skeleton &skeleton, float lastTime, float time, Array<Event *> *pEvents, float alpha, MixFrom from, bool add, bool out,
+						  bool appliedPose) {
+	SP_UNUSED(skeleton);
 	if (pEvents == NULL) return;
 
-	Vector<Event *> &events = *pEvents;
+	Array<Event *> &events = *pEvents;
 
 	size_t frameCount = _frames.size();
 
 	if (lastTime > time) {
-		// Fire events after last time for looped animations.
-		apply(skeleton, lastTime, FLT_MAX, pEvents, alpha, blend, direction);
+		// Apply after lastTime for looped animations.
+		apply(skeleton, lastTime, FLT_MAX, pEvents, 0, MixFrom_Current, false, false, false);
 		lastTime = -1.0f;
 	} else if (lastTime >= _frames[frameCount - 1]) {
-		// Last time is after last i.
+		// Last time is after last frame.
 		return;
 	}
 
-	if (time < _frames[0]) return;// Time is before first i.
+	if (time < _frames[0]) return;// Time is before first frame.
 
 	int i;
 	if (lastTime < _frames[0]) {
@@ -81,19 +83,24 @@ void EventTimeline::apply(Skeleton &skeleton, float lastTime, float time, Vector
 		i = Animation::search(_frames, lastTime) + 1;
 		float frameTime = _frames[i];
 		while (i > 0) {
-			// Fire multiple events with the same i.
+			// Fire multiple events with the same frame.
 			if (_frames[i - 1] != frameTime) break;
 			i--;
 		}
 	}
 
-	for (; (size_t) i < frameCount && time >= _frames[i]; i++)
-		events.add(_events[i]);
+	for (; (size_t) i < frameCount && time >= _frames[i]; i++) events.add(_events[i]);
 }
 
-void EventTimeline::setFrame(size_t frame, Event *event) {
-	_frames[frame] = event->getTime();
-	_events[frame] = event;
+void EventTimeline::setFrame(size_t frame, Event &event) {
+	_frames[frame] = event.getTime();
+	_events[frame] = &event;
 }
 
-Vector<Event *> &EventTimeline::getEvents() { return _events; }
+size_t EventTimeline::getFrameCount() {
+	return _frames.size();
+}
+
+Array<Event *> &EventTimeline::getEvents() {
+	return _events;
+}

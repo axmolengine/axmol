@@ -30,12 +30,30 @@
 #ifndef Spine_RotateMode_h
 #define Spine_RotateMode_h
 
+#include <string.h>
+
 namespace spine {
+	/// Controls how bones are rotated, translated, and scaled to match the path.
+	///
+	/// @see https://esotericsoftware.com/spine-path-constraints#Rotate-Mix Rotate mode in the Spine User Guide.
 	enum RotateMode {
 		RotateMode_Tangent = 0,
 		RotateMode_Chain,
+		/// When chain scale, constrained bones should all have the same parent. That way when the path constraint scales a bone, it
+		/// doesn't affect other constrained bones.
 		RotateMode_ChainScale
 	};
+
+	inline RotateMode RotateMode_valueOf(const char *value) {
+		if (strcmp(value, "tangent") == 0)
+			return RotateMode_Tangent;
+		else if (strcmp(value, "chain") == 0)
+			return RotateMode_Chain;
+		else if (strcmp(value, "chainScale") == 0)
+			return RotateMode_ChainScale;
+		else
+			return RotateMode_Tangent;// default
+	}
 }
 
 #endif /* Spine_RotateMode_h */

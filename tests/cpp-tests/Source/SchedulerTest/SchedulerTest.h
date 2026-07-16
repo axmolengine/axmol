@@ -349,7 +349,7 @@ public:
 
     virtual void update(float dt) override;
 
-    bool onTouchBegan(ax::Touch* touch, ax::Event* event);
+    bool onPointerDown(ax::PointerEvent* event);
 };
 
 class SchedulerIssue10232 : public SchedulerTestLayer

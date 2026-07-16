@@ -7,12 +7,12 @@
 
 #pragma once
 
-#include "axmol/2d/RenderTexture.h"
+#include "axmol/renderer/RenderTexture.h"
 #include <CubismFramework.hpp>
 #include <Model/CubismUserModel.hpp>
 #include <ICubismModelSetting.hpp>
 #include <Type/csmRectF.hpp>
-#include <Rendering/axmol/CubismOffscreenSurface_Cocos2dx.hpp>
+#include <Rendering/axmol/CubismOffscreenSurface_Axmol.hpp>
 #include "LAppDefine.hpp"
 #include "AppDelegate.h"
 
@@ -58,7 +58,7 @@ public:
      *
      * @param[in]  matrix  View-Projection行列
      */
-    void Draw(Csm::Rendering::CubismCommandBuffer_Cocos2dx* commandBuffer, Csm::CubismMatrix44& matrix);
+    void Draw(Csm::Rendering::CubismCommandBuffer_Axmol* commandBuffer, Csm::CubismMatrix44& matrix);
 
     /**
      * @brief   引数で指定したモーションの再生を開始する。
@@ -186,6 +186,8 @@ private:
     Csm::ICubismModelSetting* _modelSetting;        ///< モデルセッティング情報
     Csm::csmString _modelHomeDir;                   ///< モデルセッティングが置かれたディレクトリ
     Csm::csmFloat32 _userTimeSeconds;               ///< デルタ時間の積算値[秒]
+    Csm::csmFloat32 _dragX;                         ///< Drag X value.
+    Csm::csmFloat32 _dragY;                         ///< Drag Y value.
 
     Csm::csmVector<Csm::CubismIdHandle> _eyeBlinkIds; ///< モデルに設定されたまばたき機能用パラメータID
     Csm::csmVector<Csm::CubismIdHandle> _lipSyncIds;  ///< モデルに設定されたリップシンク機能用パラメータID
@@ -203,11 +205,11 @@ private:
     const Csm::CubismId* _idParamEyeBallX;          ///< パラメータID: ParamEyeBallX
     const Csm::CubismId* _idParamEyeBallY;          ///< パラメータID: ParamEyeBallXY
 
-    Csm::Rendering::CubismOffscreenFrame_Cocos2dx*  _renderBuffer;  ///< モードによってはCubismOffscreenFrameのテクスチャを描画
-    ax::RenderTexture* _renderSprite;          ///< _renderBufferを描画するスプライト
+    Csm::Rendering::CubismOffscreenFrame_Axmol*  _renderBuffer;  ///< モードによってはCubismOffscreenFrameのテクスチャを描画
+    ax::RenderTexture* _renderSprite;          ///< _renderBufferを描画するレンダーテクスチャ
+    ax::Sprite* _renderSpriteDisplay;          ///< レンダーテクスチャ表示用スプライト
     float _clearColor[4];                           ///< _renderBufferをクリアする際の色
     Csm::csmVector<ax::Texture2D*> _loadedTextures;
 };
-
 
 

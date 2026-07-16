@@ -1,9 +1,7 @@
-
-
 #include "sceneio/WidgetReader/PageViewReader/PageViewReader.h"
 
-#include "axmol/ui/UIPageView.h"
-#include "axmol/ui/UILayout.h"
+#include "axmol/ui/PageView.h"
+#include "axmol/ui/LayoutGroup.h"
 #include "axmol/platform/FileUtils.h"
 #include "axmol/2d/SpriteFrameCache.h"
 #include "sceneext/CocoLoader.h"
@@ -60,9 +58,9 @@ Offset<Table> PageViewReader::createOptionsWithFlatBuffers(pugi::xml_node object
     int resourceType = 0;
 
     bool clipEnabled     = false;
-    Color32 bgColor      = Color32::WHITE;
-    Color32 bgStartColor = Color32::WHITE;
-    Color32 bgEndColor   = Color32::WHITE;
+    Color32 bgColor      = Color32::white;
+    Color32 bgStartColor = Color32::white;
+    Color32 bgEndColor   = Color32::white;
     int colorType        = 0;
     Vec2 colorVector(0.0f, -0.5f);
     Rect capInsets;
@@ -316,7 +314,7 @@ void PageViewReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::
     pageView->setBackGroundColorVector(colorVector);
 
     int colorType = options->colorType();
-    pageView->setBackGroundColorType(Layout::BackGroundColorType(colorType));
+    pageView->setBackGroundColorType(LayoutGroup::BackGroundColorType(colorType));
 
     pageView->setBackGroundColor(bgStartColor, bgEndColor);
     pageView->setBackGroundColor(bgColor);
@@ -403,7 +401,7 @@ void PageViewReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::
     }
     else
     {
-        if (!pageView->isIgnoreContentAdaptWithSize())
+        if (!pageView->isAutoSize())
         {
             Size contentSize(widgetOptions->size()->width(), widgetOptions->size()->height());
             pageView->setContentSize(contentSize);

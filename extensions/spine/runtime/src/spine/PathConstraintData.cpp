@@ -28,109 +28,65 @@
  *****************************************************************************/
 
 #include <spine/PathConstraintData.h>
-
+#include <spine/PathConstraint.h>
 #include <spine/BoneData.h>
 #include <spine/SlotData.h>
-
-#include <assert.h>
+#include <spine/Skeleton.h>
 
 using namespace spine;
 
 RTTI_IMPL(PathConstraintData, ConstraintData)
 
-PathConstraintData::PathConstraintData(const String &name) : ConstraintData(name),
-															 _target(NULL),
-															 _positionMode(PositionMode_Fixed),
-															 _spacingMode(SpacingMode_Length),
-															 _rotateMode(RotateMode_Tangent),
-															 _offsetRotation(0),
-															 _position(0),
-															 _spacing(0),
-															 _mixRotate(0),
-															 _mixX(0),
-															 _mixY(0) {
+PathConstraintData::PathConstraintData(const String &name)
+	: ConstraintDataGeneric<PathConstraint, PathConstraintPose>(name), _slot(NULL), _positionMode(PositionMode_Fixed),
+	  _spacingMode(SpacingMode_Length), _rotateMode(RotateMode_Tangent), _offsetRotation(0) {
 }
 
-Vector<BoneData *> &PathConstraintData::getBones() {
+
+Array<BoneData *> &PathConstraintData::getBones() {
 	return _bones;
 }
 
-SlotData *PathConstraintData::getTarget() {
-	return _target;
+SlotData &PathConstraintData::getSlot() {
+	return *_slot;
 }
 
-void PathConstraintData::setTarget(SlotData *inValue) {
-	_target = inValue;
+void PathConstraintData::setSlot(SlotData &slot) {
+	_slot = &slot;
 }
 
 PositionMode PathConstraintData::getPositionMode() {
 	return _positionMode;
 }
 
-void PathConstraintData::setPositionMode(PositionMode inValue) {
-	_positionMode = inValue;
+void PathConstraintData::setPositionMode(PositionMode positionMode) {
+	_positionMode = positionMode;
 }
 
 SpacingMode PathConstraintData::getSpacingMode() {
 	return _spacingMode;
 }
 
-void PathConstraintData::setSpacingMode(SpacingMode inValue) {
-	_spacingMode = inValue;
+void PathConstraintData::setSpacingMode(SpacingMode spacingMode) {
+	_spacingMode = spacingMode;
 }
 
 RotateMode PathConstraintData::getRotateMode() {
 	return _rotateMode;
 }
 
-void PathConstraintData::setRotateMode(RotateMode inValue) {
-	_rotateMode = inValue;
+void PathConstraintData::setRotateMode(RotateMode rotateMode) {
+	_rotateMode = rotateMode;
 }
 
 float PathConstraintData::getOffsetRotation() {
 	return _offsetRotation;
 }
 
-void PathConstraintData::setOffsetRotation(float inValue) {
-	_offsetRotation = inValue;
+void PathConstraintData::setOffsetRotation(float offsetRotation) {
+	_offsetRotation = offsetRotation;
 }
 
-float PathConstraintData::getPosition() {
-	return _position;
-}
-
-void PathConstraintData::setPosition(float inValue) {
-	_position = inValue;
-}
-
-float PathConstraintData::getSpacing() {
-	return _spacing;
-}
-
-void PathConstraintData::setSpacing(float inValue) {
-	_spacing = inValue;
-}
-
-float PathConstraintData::getMixRotate() {
-	return _mixRotate;
-}
-
-void PathConstraintData::setMixRotate(float inValue) {
-	_mixRotate = inValue;
-}
-
-float PathConstraintData::getMixX() {
-	return _mixX;
-}
-
-void PathConstraintData::setMixX(float inValue) {
-	_mixX = inValue;
-}
-
-float PathConstraintData::getMixY() {
-	return _mixY;
-}
-
-void PathConstraintData::setMixY(float inValue) {
-	_mixY = inValue;
+Constraint &PathConstraintData::create(Skeleton &skeleton) {
+	return *(new (__FILE__, __LINE__) PathConstraint(*this, skeleton));
 }

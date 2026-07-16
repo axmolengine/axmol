@@ -1,4 +1,4 @@
-﻿#include "WorldClock.h"
+#include "WorldClock.h"
 
 DRAGONBONES_NAMESPACE_BEGIN
 
@@ -39,7 +39,7 @@ void WorldClock::advanceTime(float passedTime)
         time += passedTime;
     }
 
-    std::size_t i = 0, r = 0, l = _animatebles.size();
+    size_t i = 0, r = 0, l = _animatebles.size();
     for (; i < l; ++i)
     {
         const auto animatable = _animatebles[i];

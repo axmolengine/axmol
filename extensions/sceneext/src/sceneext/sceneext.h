@@ -49,7 +49,6 @@ THE SOFTWARE.
 #include "sceneext/ComAudio.h"
 #include "sceneext/ComController.h"
 #include "sceneext/ComRender.h"
-#include "sceneext/InputDelegate.h"
 #include "sceneext/DictionaryHelper.h"
 #include "sceneext/SGUIReader.h"
 #include "sceneext/SSceneReader.h"

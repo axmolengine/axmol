@@ -22,11 +22,10 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include <cstdlib>
-#include <cstring>
-#include <cassert>
+#include <stdlib.h>
+#include <string.h>
+#include <assert.h>
 #include <cmath>
-#include <cstddef>
 
 #include <string>
 #include <vector>
@@ -666,7 +665,7 @@ std::string LoadMtl(tlx::string_map<int>& material_map, std::vector<material_t>&
         }
         if (_space)
         {
-            std::ptrdiff_t len = _space - token;
+            ptrdiff_t len = _space - token;
             std::string key(token, len);
             std::string value = _space + 1;
             material.unknown_parameter.emplace(std::move(key), std::move(value));

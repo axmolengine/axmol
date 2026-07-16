@@ -33,7 +33,7 @@
 #include "axmol/renderer/Renderer.h"
 #include "axmol/renderer/TextureCache.h"
 #include "axmol/renderer/Shaders.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include "axmol/rhi/Buffer.h"
 #include "axmol/base/Director.h"
 #include "axmol/3d/MeshRenderer.h"
@@ -284,7 +284,7 @@ void PUParticle3DQuadRender::render(Renderer* renderer, const Mat4& transform, P
         auto uColor = Vec4(1, 1, 1, 1);
         _programState->setUniform(_locColor, &uColor, sizeof(uColor));
 
-        auto& projectionMatrix = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+        const auto& projectionMatrix = Camera::getVisitingViewProjectionMatrix();
         _programState->setUniform(_locPMatrix, &projectionMatrix.m, sizeof(projectionMatrix.m));
 
         renderer->addCommand(&_meshCommand);
@@ -534,7 +534,7 @@ void PUParticle3DModelRender::render(Renderer* renderer, const Mat4& transform, 
     Mat4 mat;
     Mat4 rotMat;
     Mat4 sclMat;
-    Quaternion q;
+    Quat q;
     transform.decompose(nullptr, &q, nullptr);
     unsigned int index = 0;
     for (auto&& iter : activeParticleList)
@@ -785,7 +785,7 @@ void PUParticle3DBoxRender::render(Renderer* renderer, const Mat4& transform, Pa
             _programState->setTexture(_locTexture, 0, _texture->getRHITexture());
         }
 
-        auto& projectionMatrix = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+        const auto& projectionMatrix = Camera::getVisitingViewProjectionMatrix();
         _programState->setUniform(_locPMatrix, &projectionMatrix.m, sizeof(projectionMatrix.m));
 
         _meshCommand.setIndexDrawInfo(0, _indices.size());
@@ -956,7 +956,7 @@ void PUSphereRender::render(Renderer* renderer, const Mat4& transform, ParticleS
             _programState->setTexture(_locTexture, 0, _texture->getRHITexture());
         }
 
-        auto& projectionMatrix = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+        const auto& projectionMatrix = Camera::getVisitingViewProjectionMatrix();
         _programState->setUniform(_locPMatrix, &projectionMatrix.m, sizeof(projectionMatrix.m));
 
         renderer->addCommand(&_meshCommand);
@@ -988,7 +988,7 @@ void PUSphereRender::buildBuffers(unsigned short count)
                 vi.position.set(x0, y0, z0);
 
                 // Colour
-                vi.color = Color::WHITE;
+                vi.color = Color::white;
 
                 // Texture Coordinates
                 vi.texCoord.x = (float)segment / (float)_numberOfSegments;

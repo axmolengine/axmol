@@ -1,4 +1,4 @@
-﻿#include "Effekseer.EffectNodeRing.h"
+#include "Effekseer.EffectNodeRing.h"
 
 #include "Effekseer.Effect.h"
 #include "Effekseer.EffectNode.h"

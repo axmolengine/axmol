@@ -54,7 +54,7 @@ public:
      * @param size Specifies the size in bytes of the data store region being replaced.
      * @see `updateSubData(void* data, unsigned int offset, unsigned int size)`
      */
-    virtual void updateData(const void* data, std::size_t size) = 0;
+    virtual void updateData(const void* data, size_t size) = 0;
 
     /**
      * @brief Update buffer sub-region data
@@ -64,7 +64,7 @@ public:
      * @param size Specifies the size in bytes of the data store region being replaced.
      * @see `updateData(void* data, unsigned int size)`
      */
-    virtual void updateSubData(const void* data, std::size_t offset, std::size_t size) = 0;
+    virtual void updateSubData(const void* data, size_t offset, size_t size) = 0;
 
     /**
      * By default, static buffer data will automatically stored when it comes to foreground.
@@ -78,11 +78,11 @@ public:
      * Get buffer size in bytes.
      * @return The buffer size in bytes.
      */
-    std::size_t getSize() const { return _size; }
+    size_t getSize() const { return _size; }
 
-    std::size_t getCapacity() const { return _capacity; }
+    size_t getCapacity() const { return _capacity; }
 
-    bool resize(std::size_t newSize)
+    bool resize(size_t newSize)
     {
         if (newSize <= _capacity)
         {
@@ -105,14 +105,13 @@ protected:
      * @param usage Specifies the expected usage pattern of the data store. The symbolic constant must be
      * GL_STREAM_DRAW, GL_STATIC_DRAW, or GL_DYNAMIC_DRAW.
      */
-    Buffer(std::size_t size, BufferType type, BufferUsage usage)
-        : _usage(usage), _type(type), _size(size), _capacity(size)
+    Buffer(size_t size, BufferType type, BufferUsage usage) : _usage(usage), _type(type), _size(size), _capacity(size)
     {}
 
-    BufferUsage _usage    = BufferUsage::DYNAMIC;  ///< Buffer usage.
-    BufferType _type      = BufferType::VERTEX;    ///< Buffer type.
-    std::size_t _capacity = 0;
-    std::size_t _size     = 0;  ///< buffer size in bytes.
+    BufferUsage _usage = BufferUsage::DYNAMIC;  ///< Buffer usage.
+    BufferType _type   = BufferType::VERTEX;    ///< Buffer type.
+    size_t _capacity   = 0;
+    size_t _size       = 0;  ///< buffer size in bytes.
     uint64_t _lastFenceValue{0};
 };
 

@@ -163,7 +163,7 @@ void GRoot::createModalLayer()
 {
     _modalLayer = GGraph::create();
     _modalLayer->retain();
-    _modalLayer->drawRect(getWidth(), getHeight(), 0, ax::Color::WHITE, UIConfig::modalLayerColor);
+    _modalLayer->drawRect(getWidth(), getHeight(), 0, ax::Color::white, UIConfig::modalLayerColor);
     _modalLayer->addRelation(this, RelationType::Size);
 }
 
@@ -404,7 +404,7 @@ ax::Vec2 GRoot::getPoupPosition(GObject* popup, GObject* target, PopupDirection 
     Vec2 size;
     if (target != nullptr)
     {
-        pos = target->localToGlobal(Vec2::ZERO);
+        pos = target->localToGlobal(Vec2::zero);
         pos = this->globalToLocal(pos);
         size = target->localToGlobal(target->getSize());
         size = this->globalToLocal(size);
@@ -557,7 +557,7 @@ bool GRoot::initWithScene(ax::Scene* scene, int zOrder)
     _inputProcessor->setCaptureCallback(AX_CALLBACK_1(GRoot::onTouchEvent, this));
 
 #if defined(AX_PLATFORM_PC)
-    _windowSizeListener = Director::getInstance()->getEventDispatcher()->addCustomEventListener(RenderViewImpl::EVENT_WINDOW_RESIZED, AX_CALLBACK_0(GRoot::onWindowSizeChanged, this));
+    _windowSizeListener = Director::getInstance()->getEventDispatcher()->addCustomEventListener(RenderView::EVENT_WINDOW_RESIZED, AX_CALLBACK_0(GRoot::onWindowSizeChanged, this));
 #endif
     onWindowSizeChanged();
 

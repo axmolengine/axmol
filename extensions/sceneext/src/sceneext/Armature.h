@@ -158,7 +158,7 @@ public:
 #if ENABLE_PHYSICS_BOX2D_DETECT
     virtual void setColliderFilter(ColliderFilter* filter);
 #elif ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
-    AX_DEPRECATED(2.1) virtual void drawContour();
+    AX_DEPRECATED("3.0") virtual void drawContour();
 #endif
 
     virtual void setArmatureData(ArmatureData* armatureData) { _armatureData = armatureData; }

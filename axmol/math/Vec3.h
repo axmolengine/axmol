@@ -34,7 +34,7 @@
 NS_AX_MATH_BEGIN
 
 class Mat4;
-class Quaternion;
+class Quat;
 
 /**
  * Defines a 3-element floating point vector.
@@ -533,16 +533,24 @@ public:
     bool operator!=(const Vec3& v) const { return x != v.x || y != v.y || z != v.z; }
 
     /** equals to Vec3(0,0,0) */
-    static const Vec3 ZERO;
+    static const Vec3 zero;
     /** equals to Vec3(1,1,1) */
-    static const Vec3 ONE;
+    static const Vec3 one;
     /** equals to Vec3(1,0,0) */
-    static const Vec3 UNIT_X;
+    static const Vec3 xAxis;
     /** equals to Vec3(0,1,0) */
-    static const Vec3 UNIT_Y;
+    static const Vec3 yAxis;
     /** equals to Vec3(0,0,1) */
-    static const Vec3 UNIT_Z;
+    static const Vec3 zAxis;
 };
+
+#if !(defined(AX_DLLEXPORT) || defined(AX_DLLIMPORT))
+inline constexpr Vec3 Vec3::zero{0.0f, 0.0f, 0.0f};
+inline constexpr Vec3 Vec3::one{1.0f, 1.0f, 1.0f};
+inline constexpr Vec3 Vec3::xAxis{1.0f, 0.0f, 0.0f};
+inline constexpr Vec3 Vec3::yAxis{0.0f, 1.0f, 0.0f};
+inline constexpr Vec3 Vec3::zAxis{0.0f, 0.0f, 1.0f};
+#endif
 
 /**
  * Calculates the scalar product of the given vector with the given value.
@@ -557,14 +565,6 @@ inline Vec3 operator*(float x, const Vec3& v)
     result.scale(x);
     return result;
 }
-
-#if !(defined(AX_DLLEXPORT) || defined(AX_DLLIMPORT))
-inline constexpr Vec3 Vec3::ZERO(0.0f, 0.0f, 0.0f);
-inline constexpr Vec3 Vec3::ONE(1.0f, 1.0f, 1.0f);
-inline constexpr Vec3 Vec3::UNIT_X(1.0f, 0.0f, 0.0f);
-inline constexpr Vec3 Vec3::UNIT_Y(0.0f, 1.0f, 0.0f);
-inline constexpr Vec3 Vec3::UNIT_Z(0.0f, 0.0f, 1.0f);
-#endif
 
 NS_AX_MATH_END
 /**

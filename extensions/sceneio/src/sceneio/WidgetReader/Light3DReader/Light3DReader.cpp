@@ -169,17 +169,16 @@ Node* Light3DReader::createNodeWithFlatBuffers(const flatbuffers::Table* light3D
     switch (type)
     {
     case ax::LightType::DIRECTIONAL:
-        light = DirectionLight::create(Vec3::UNIT_Z, Color32::WHITE);
+        light = DirectionLight::create(Vec3::zAxis, Color32::white);
         break;
     case ax::LightType::POINT:
-        light = PointLight::create(Vec3::ZERO, Color32::WHITE, range);
+        light = PointLight::create(Vec3::zero, Color32::white, range);
         break;
     case ax::LightType::SPOT:
-        light =
-            SpotLight::create(Vec3::UNIT_Z, Vec3::ZERO, Color32::WHITE, 0, AX_DEGREES_TO_RADIANS(outerAngle), range);
+        light = SpotLight::create(Vec3::zAxis, Vec3::zero, Color32::white, 0, AX_DEGREES_TO_RADIANS(outerAngle), range);
         break;
     case ax::LightType::AMBIENT:
-        light = AmbientLight::create(Color32::WHITE);
+        light = AmbientLight::create(Color32::white);
         break;
     default:
         break;

@@ -58,7 +58,7 @@ HttpClientTest::HttpClientTest() : _labelStatusCode(nullptr)
     const int RIGHT  = canvasSize.width / 4 * 3;
 
     auto menuRequest = Menu::create();
-    menuRequest->setPosition(Vec2::ZERO);
+    menuRequest->setPosition(Vec2::zero);
     addChild(menuRequest);
 
     // Get
@@ -375,7 +375,7 @@ HttpClientClearRequestsTest::HttpClientClearRequestsTest() : _labelStatusCode(nu
     const int CENTER = canvasSize.width / 2;
 
     auto menuRequest = Menu::create();
-    menuRequest->setPosition(Vec2::ZERO);
+    menuRequest->setPosition(Vec2::zero);
     addChild(menuRequest);
 
     // Get

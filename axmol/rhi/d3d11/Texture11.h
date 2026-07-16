@@ -94,12 +94,8 @@ public:
      * @param level Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
      * reduction image.
      */
-    void updateCompressedData(const void* data,
-                              int width,
-                              int height,
-                              std::size_t dataSize,
-                              int level,
-                              int layerIndex = 0) override;
+    void updateCompressedData(const void* data, int width, int height, size_t dataSize, int level, int layerIndex = 0)
+        override;
 
     /**
      * Update a two-dimensional texture subimage
@@ -129,7 +125,7 @@ public:
                                  int yoffset,
                                  int width,
                                  int height,
-                                 std::size_t dataSize,
+                                 size_t dataSize,
                                  int level,
                                  const void* data,
                                  int layerIndex = 0) override;

@@ -31,40 +31,48 @@
 #define Spine_InheritTimeline_h
 
 #include <spine/Timeline.h>
-
+#include <spine/BoneTimeline.h>
 #include <spine/Animation.h>
 #include <spine/Property.h>
 #include <spine/Inherit.h>
 
 namespace spine {
 
-	class SP_API InheritTimeline : public Timeline {
+	/// Changes a bone's inherit mode.
+	class SP_API InheritTimeline : public Timeline, public BoneTimeline {
 		friend class SkeletonBinary;
 
 		friend class SkeletonJson;
 
-	RTTI_DECL
+		RTTI_DECL
 
 	public:
 		explicit InheritTimeline(size_t frameCount, int boneIndex);
 
 		virtual ~InheritTimeline();
 
-        void setFrame(int frame, float time, Inherit inherit);
+		/// Sets the inherit transform mode for the specified frame.
+		/// @param frame Between 0 and frameCount, inclusive.
+		/// @param time The frame time in seconds.
+		void setFrame(int frame, float time, Inherit inherit);
 
-		virtual void
-		apply(Skeleton &skeleton, float lastTime, float time, Vector<Event *> *pEvents, float alpha, MixBlend blend,
-			  MixDirection direction);
+		virtual void apply(Skeleton &skeleton, float lastTime, float time, Array<Event *> *events, float alpha, MixFrom from, bool add, bool out,
+						   bool appliedPose) override;
 
-		int getBoneIndex() { return _boneIndex; }
 
-		void setBoneIndex(int inValue) { _boneIndex = inValue; }
+		virtual int getBoneIndex() const override {
+			return _boneIndex;
+		}
+
+		void setBoneIndex(int inValue) override {
+			_boneIndex = inValue;
+		}
 
 	private:
 		int _boneIndex;
 
-        static const int ENTRIES = 2;
-        static const int INHERIT = 1;
+		static const int ENTRIES = 2;
+		static const int INHERIT = 1;
 	};
 }
 

@@ -114,12 +114,12 @@
  *         | 4 components | RGBA             | .rgba            |
  *
  * The 1 and 2 component modes recommend sampling from "g" to recover the luminance value as this
- * provide best compatibility with other texture formats where the green component may be stored at
- * higher precision than the others, such as RGB565. For ASTC any of the RGB components can be used;
- * the luminance endpoint component will be returned for all three.
+ * provides the best compatibility with other texture formats where the green component may be
+ * stored at higher precision than the others, such as RGB565. For ASTC any of the RGB components
+ * can be used; the luminance endpoint component will be returned for all three.
  *
  * When using the normal map compression mode ASTC will store normals as a two component X+Y map.
- * Input images must contain unit-length normalized and should be passed in using a two component
+ * Input images must contain unit-length normals and they should be passed in using a two component
  * swizzle. The astcenc command line tool defaults to an RRRG swizzle, but some developers prefer
  * to use GGGR for compatibility with BC5n which will work just as well. The Z component can be
  * recovered programmatically in shader code, using knowledge that the vector is unit length and
@@ -324,7 +324,7 @@ ASTCENC_EXTERN_C typedef void (*astcenc_progress_callback)(float);
 /**
  * @brief Enable normal map compression.
  *
- * Input data will be treated a two component normal map, storing X and Y, and the codec will
+ * Input data will be treated as a two component normal map, storing X and Y, and the codec will
  * optimize for angular error rather than simple linear PSNR. In this mode the input swizzle should
  * be e.g. rrrg (the default ordering for ASTC normals on the command line) or gggr (the ordering
  * used by BC5n).
@@ -713,7 +713,7 @@ struct astcenc_block_info
  * @param      block_y   ASTC block size Y dimension.
  * @param      block_z   ASTC block size Z dimension.
  * @param      quality   Search quality preset / effort level. Either an
- *                       @c ASTCENC_PRE_* value, or a effort level between 0
+ *                       @c ASTCENC_PRE_* value, or an effort level between 0
  *                       and 100. Performance is not linear between 0 and 100.
 
  * @param      flags     A valid set of @c ASTCENC_FLG_* flag bits.
@@ -743,7 +743,7 @@ ASTCENC_PUBLIC enum astcenc_error astcenc_config_init(
  * another context using the same target configuration into @c parent_context. A child will use the
  * read-only data tables it needs from the ancestor "root" context, rather than creating its own,
  * which saves a considerable amount of memory per child. You must only free the root context once
- * all descendent contexts have been freed. When you pass a @c parent_context the config is taken
+ * all descendant contexts have been freed. When you pass a @c parent_context the config is taken
  * from the parent, and so @c context must be @c nullptr.
  *
  * Contexts can be allocated to support only decompression using the @c ASTCENC_FLG_DECOMPRESS_ONLY
@@ -884,7 +884,7 @@ ASTCENC_PUBLIC enum astcenc_error astcenc_get_block_info(
 	struct astcenc_block_info* info);
 
 /**
- * @brief Get a printable string for specific status code.
+ * @brief Get a printable string for a specific status code.
  *
  * @param status   The status value.
  *

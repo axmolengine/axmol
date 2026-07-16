@@ -31,7 +31,7 @@
 #include "extensions/ExtensionMacros.h"
 #include "sceneext/SceneExtMacros.h"
 #include "axmol/platform/PlatformMacros.h"
-#include "axmol/ui/UIWidget.h"
+#include "axmol/ui/Widget.h"
 
 #include "pugixml/pugixml.hpp"
 #include "flatbuffers/flatbuffer_builder.h"

@@ -25,7 +25,7 @@
 #pragma once
 
 #include "axmol/platform/GL.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include "axmol/rhi/DriverFactory.h"
 #include "axmol/rhi/opengl/OpenGLState.h"
 #include "axmol/tlx/hlookup.hpp"
@@ -84,14 +84,15 @@ public:
      * BufferUsage::STATIC, BufferUsage::DYNAMIC.
      * @return A Buffer object.
      */
-    Buffer* createBuffer(std::size_t size, BufferType type, BufferUsage usage, const void* initial) override;
+    Buffer* createBuffer(size_t size, BufferType type, BufferUsage usage, const void* initial) override;
 
     /**
      * New a Texture object, not auto released.
      * @param descriptor Specifies texture description.
      * @return A Texture object.
      */
-    Texture* createTexture(const TextureDesc& descriptor) override;
+    Texture* createTexture(const TextureDesc& descriptor, std::optional<Color> clearColorHint = std::nullopt) override;
+    Texture* createTextureFromNativeHandle(const ExternalTextureDesc& descriptor) override;
 
     RenderTarget* createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment) override;
 

@@ -1,4 +1,4 @@
-﻿
+
 #include "EffekseerRenderer.Renderer.h"
 #include "EffekseerRenderer.Renderer_Impl.h"
 #include "ModelLoader.h"

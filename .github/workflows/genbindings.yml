@@ -10,7 +10,7 @@ on:
       - '**/*.md.in'
       - 'docs/**'
       - '.github/workflows/publish.yml'
-      - 'tools/ci/make-pkg.ps1'
+      - 'tools/cmdline/make-pkg.ps1'
       - '.github/workflows/debian.yml'
 
   workflow_dispatch:
@@ -27,7 +27,7 @@ jobs:
         python-version: '3.12.10' # python-3.12 is last release that support axmol traditional binding generator
 
     - name: Genbindings
-      run: tools\ci\genbindings.ps1
+      run: tools\cmdline\genbindings.ps1
 
     - name: Create pull request
       if: ${{ env.BINDING_NO_CHANGES != 'true' }}

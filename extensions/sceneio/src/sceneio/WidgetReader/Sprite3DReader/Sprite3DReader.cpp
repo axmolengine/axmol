@@ -68,7 +68,7 @@ void Sprite3DReader::destroyInstance()
 Vec2 Sprite3DReader::getVec2Attribute(pugi::xml_attribute attribute) const
 {
     if (!attribute)
-        return Vec2::ZERO;
+        return Vec2::zero;
 
     Vec2 ret;
     std::string attriname;

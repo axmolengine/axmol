@@ -56,7 +56,7 @@ public:
     public:
         Element();
 
-        Element(const Vec3& position, float width, float texCoord, const Color& colour, const Quaternion& orientation);
+        Element(const Vec3& position, float width, float texCoord, const Color& colour, const Quat& orientation);
 
         Vec3 position;
         float width;
@@ -65,7 +65,7 @@ public:
         Color color;
 
         // Only used when mFaceCamera == false
-        Quaternion orientation;
+        Quat orientation;
     };
     typedef std::vector<Element> ElementList;
 
@@ -218,7 +218,7 @@ public:
     matrix, the segment corresponding to that point will be facing towards UNIT_Z
     This vector is internally normalized.
     */
-    void setFaceCamera(bool faceCamera, const Vec3& normalVector = Vec3::UNIT_X);
+    void setFaceCamera(bool faceCamera, const Vec3& normalVector = Vec3::xAxis);
 
     void setDepthTest(bool isDepthTest);
     void setDepthWrite(bool isDepthWrite);

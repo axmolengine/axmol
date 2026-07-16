@@ -21,15 +21,6 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-
-//
-//  Bug-15594.cpp
-//  cocos2d_tests
-//
-//  Created by Ricardo Quesada on 5/24/16.
-//
-//
-
 // https://github.com/cocos2d/cocos2d-x/pull/15594
 
 #include "Bug-15594.h"

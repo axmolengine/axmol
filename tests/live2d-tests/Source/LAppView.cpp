@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright(c) Live2D Inc. All rights reserved.
  *
  * Use of this source code is governed by the Live2D Open Software license
@@ -74,12 +74,13 @@ void LAppView::onEnter()
     );
 
     // イベントリスナー作成
-    EventListenerTouchAllAtOnce* listener = EventListenerTouchAllAtOnce::create();
+    auto listener = PointerEventListener::create();
 
     // タッチメソッド設定
-    listener->onTouchesBegan = AX_CALLBACK_2(LAppView::onTouchesBegan, this);
-    listener->onTouchesMoved = AX_CALLBACK_2(LAppView::onTouchesMoved, this);
-    listener->onTouchesEnded = AX_CALLBACK_2(LAppView::onTouchesEnded, this);
+    listener->onPointerHitTest = [](PointerEvent*, Vec3*) { return true; };
+    listener->onPointerDown = AX_CALLBACK_1(LAppView::onPointerDown, this);
+    listener->onPointerMove = AX_CALLBACK_1(LAppView::onPointerMove, this);
+    listener->onPointerUp = AX_CALLBACK_1(LAppView::onPointerUp, this);
 
     // 優先度100でディスパッチャーに登録
     this->getEventDispatcher()->addEventListenerWithFixedPriority(listener, 100);
@@ -104,9 +105,6 @@ void LAppView::onDraw(const ax::Mat4& transform, uint32_t flags)
 {
     _commandBuffer.PushCommandGroup();
 
-    Director::getInstance()->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    Director::getInstance()->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, transform);
-
     LAppLive2DManager* Live2DMgr = LAppLive2DManager::GetInstance();
 
     Live2DMgr->SetViewMatrix(viewMatrix);
@@ -119,61 +117,55 @@ void LAppView::onDraw(const ax::Mat4& transform, uint32_t flags)
         drawDebugRects(Live2DMgr);
     }
 
-    Director::getInstance()->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-
     _commandBuffer.PopCommandGroup();
 }
 
-void LAppView::onTouchesBegan(const std::vector<Touch*>& touches, Event* event)
+bool LAppView::onPointerDown(PointerEvent* event)
 {
     // タッチ開始
-    size_t touchNum = touches.size();
-
-    if (touchNum == 1)
+    if (event->isPrimaryPressed())
     {
-        Point pt = touches[0]->getLocationInView();
+        Point pt = event->getPoint();
         if (DebugTouchLogEnable)LAppPal::PrintLog("[APP]touchesBegan x:%.0f y:%.0f", pt.x, pt.y);
         touchMgr->touchesBegan(pt.x, pt.y);
+        return true;
     }
+    return false;
 }
 
-void LAppView::onTouchesMoved(const std::vector<Touch*>& touches, Event* event)
+void LAppView::onPointerMove(PointerEvent* event)
 {
     // タッチ中
-    size_t touchNum = touches.size();
+    if (!event->isCaptured())
+        return;
 
     float screenX = this->transformScreenX(touchMgr->getX());
     float screenY = this->transformScreenY(touchMgr->getY());
     float viewX = this->transformViewX(touchMgr->getX());
     float viewY = this->transformViewY(touchMgr->getY());
 
-    if (touchNum == 1)
-    {
-        Point pt = touches[0]->getLocationInView();
+    auto pt = event->getPoint();
 
-        if (DebugTouchLogEnable)
-            LAppPal::PrintLog("[APP]touchesMoved device{x:%.0f y:%.0f} screen{x:%.2f y:%.2f} view{x:%.2f y:%.2f}", pt.x, pt.y, screenX, screenY, viewX, viewY);
+    if (DebugTouchLogEnable)
+        LAppPal::PrintLog("[APP]touchesMoved device{x:%.0f y:%.0f} screen{x:%.2f y:%.2f} view{x:%.2f y:%.2f}", pt.x, pt.y, screenX, screenY, viewX, viewY);
 
-        touchMgr->touchesMoved(pt.x, pt.y);
-    }
+    touchMgr->touchesMoved(pt.x, pt.y);
+
     LAppLive2DManager* live2DMgr = LAppLive2DManager::GetInstance();
     live2DMgr->OnDrag(viewX, viewY);
 }
 
-void LAppView::onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event)
+void LAppView::onPointerUp(PointerEvent* event)
 {
     // タッチ終了
     LAppLive2DManager* live2DMgr = LAppLive2DManager::GetInstance();
     live2DMgr->OnDrag(0, 0);
 
-    if (touches.size() == 1)
-    {
-        // シングルタップ
-        float x = deviceToScreen->TransformX(touchMgr->getX()); // 論理座標変換した座標を取得。
-        float y = deviceToScreen->TransformY(touchMgr->getY()); // 論理座標変換した座標を取得。
-        if (DebugTouchLogEnable) LAppPal::PrintLog("[APP]touchesEnded x:%.2f y:%.2f", x, y);
-        live2DMgr->OnTap(x, y);
-    }
+    // シングルタップ
+    float x = deviceToScreen->TransformX(touchMgr->getX()); // 論理座標変換した座標を取得。
+    float y = deviceToScreen->TransformY(touchMgr->getY()); // 論理座標変換した座標を取得。
+    if (DebugTouchLogEnable) LAppPal::PrintLog("[APP]touchesEnded x:%.2f y:%.2f", x, y);
+    live2DMgr->OnTap(x, y);
 }
 
 void LAppView::updateViewMatrix(float dx, float dy, float cx, float cy, float scale)

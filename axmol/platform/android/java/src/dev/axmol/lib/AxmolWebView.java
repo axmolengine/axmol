@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
 
@@ -29,6 +30,7 @@ import android.content.Context;
 import android.util.Log;
 import android.view.Gravity;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
@@ -78,10 +80,14 @@ public class AxmolWebView extends WebView {
         this.setFocusable(true);
         this.setFocusableInTouchMode(true);
 
-        this.getSettings().setSupportZoom(false);
+        WebSettings settings = getSettings();
 
-        this.getSettings().setDomStorageEnabled(true);
-        this.getSettings().setJavaScriptEnabled(true);
+        settings.setSupportZoom(false);
+        settings.setDomStorageEnabled(true);
+        settings.setJavaScriptEnabled(true);
+
+        settings.setSupportMultipleWindows(true);
+        settings.setAllowUniversalAccessFromFileURLs(true);
 
         // `searchBoxJavaBridge_` has big security risk. http://jvn.jp/en/jp/JVN53768697
         try {
@@ -92,7 +98,23 @@ public class AxmolWebView extends WebView {
         }
 
         this.setWebViewClient(new AxmolWebViewClient());
-        this.setWebChromeClient(new WebChromeClient());
+//        this.setWebChromeClient(new WebChromeClient());
+
+        this.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public boolean onConsoleMessage(android.webkit.ConsoleMessage consoleMessage) {
+                String logMsg = consoleMessage.message() + " -- From line "
+                    + consoleMessage.lineNumber() + " of "
+                    + consoleMessage.sourceId();
+
+                if (consoleMessage.messageLevel() == android.webkit.ConsoleMessage.MessageLevel.ERROR) {
+                    Log.e("AxmolWebView_JS", logMsg);
+                } else {
+                    Log.d("AxmolWebView_JS", logMsg);
+                }
+                return true;
+            }
+        });
     }
 
     public void setJavascriptInterfaceScheme(String scheme) {
@@ -160,6 +182,11 @@ public class AxmolWebView extends WebView {
                     WebViewHelper._didFailLoading(mViewTag, failingUrl);
                 }
             });
+        }
+
+        @Override
+        public void onPageStarted(WebView view, String url, android.graphics.Bitmap favicon) {
+            super.onPageStarted(view, url, favicon);
         }
     }
 

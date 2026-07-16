@@ -80,8 +80,9 @@ template <typename... Ts>
 struct select1st;
 
 template <typename First, typename... Rest>
-struct select1st<First, Rest...> {
-  using type = First;
+struct select1st<First, Rest...>
+{
+    using type = First;
 };
 
 template <typename... Ts>

@@ -28,12 +28,13 @@
 #    include <stddef.h>  // offsetof
 #    include "axmol/base/Types.h"
 #    include "axmol/rhi/ProgramState.h"
-#    include "axmol/rhi/DriverContext.h"
+#    include "axmol/rhi/GraphicsCore.h"
 #    include "axmol/renderer/Renderer.h"
 #    include "axmol/renderer/RenderState.h"
 #    include "axmol/renderer/Shaders.h"
 #    include "axmol/base/Director.h"
 #    include "axmol/base/Macros.h"
+#    include "axmol/scene/Camera.h"
 
 namespace ax
 {
@@ -50,7 +51,7 @@ void NavMeshDebugDraw::initCustomCommand(CustomCommand& command)
 {
     command.set3D(true);
     command.setTransparent(true);
-    command.init(0, Mat4::IDENTITY, Node::FLAGS_RENDER_AS_3D);
+    command.init(0, Mat4::identity, Node::FLAGS_RENDER_AS_3D);
     command.setDrawType(CustomCommand::DrawType::ARRAY);
     command.setWeakPSVL(_programState, _vertexLayout);
 
@@ -151,12 +152,12 @@ rhi::PrimitiveType NavMeshDebugDraw::getPrimitiveType(duDebugDrawPrimitives prim
 
 void NavMeshDebugDraw::draw(Renderer* renderer)
 {
-    auto& transform    = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    auto beforeCommand = renderer->nextCallbackCommand();
-    auto afterCommand  = renderer->nextCallbackCommand();
+    const auto& transform = Camera::getVisitingViewProjectionMatrix();
+    auto beforeCommand    = renderer->nextCallbackCommand();
+    auto afterCommand     = renderer->nextCallbackCommand();
 
-    beforeCommand->init(0, Mat4::IDENTITY, Node::FLAGS_RENDER_AS_3D);
-    afterCommand->init(0, Mat4::IDENTITY, Node::FLAGS_RENDER_AS_3D);
+    beforeCommand->init(0, Mat4::identity, Node::FLAGS_RENDER_AS_3D);
+    afterCommand->init(0, Mat4::identity, Node::FLAGS_RENDER_AS_3D);
 
     beforeCommand->func = AX_CALLBACK_0(NavMeshDebugDraw::onBeforeVisitCmd, this);
     afterCommand->func  = AX_CALLBACK_0(NavMeshDebugDraw::onAfterVisitCmd, this);

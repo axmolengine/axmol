@@ -47,14 +47,14 @@ struct AX_EXT_API Particle3D
     Particle3D();
     virtual ~Particle3D();
     // property of particles
-    Vec3 position;           // position
-    Quaternion orientation;  //  Orientation of the particle.
-    Color color;             // particle color
-    Vec2 lb_uv;              // left bottom uv
-    Vec2 rt_uv;              // right top uv
-    float width;             // Own width
-    float height;            // Own height
-    float depth;             // Own depth
+    Vec3 position;     // position
+    Quat orientation;  //  Orientation of the particle.
+    Color color;       // particle color
+    Vec2 lb_uv;        // left bottom uv
+    Vec2 rt_uv;        // right top uv
+    float width;       // Own width
+    float height;      // Own height
+    float depth;       // Own depth
 
     // user defined property
     std::unordered_map<std::string, void*> userDefs;

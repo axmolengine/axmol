@@ -233,7 +233,7 @@ const Vec3& PUForceFieldAffector::getMovement() const
 void PUForceFieldAffector::setMovement(const Vec3& movement)
 {
     _movement    = movement;
-    _movementSet = (movement != Vec3::ZERO);
+    _movementSet = (movement != Vec3::zero);
 }
 //-----------------------------------------------------------------------
 void PUForceFieldAffector::suppressGeneration(bool suppress)

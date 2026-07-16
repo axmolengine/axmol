@@ -92,10 +92,8 @@ bool UIListViewTest_Vertical::init()
         _listView->setBackGroundImageScale9Enabled(true);
         _listView->setContentSize(Size(240.0f, 130.0f));
         _listView->setPosition(Vec2((widgetSize - _listView->getContentSize()) / 2.0f));
-        _listView->addEventListener(
-            (ui::ListView::ccListViewCallback)AX_CALLBACK_2(UIListViewTest_Vertical::selectedItemEvent, this));
-        _listView->addEventListener((ui::ListView::ccScrollViewCallback)AX_CALLBACK_2(
-            UIListViewTest_Vertical::selectedItemEventScrollView, this));
+        _listView->addEventListener(AX_CALLBACK_2(UIListViewTest_Vertical::selectedItemEvent, this));
+        _listView->addEventListener(AX_CALLBACK_2(UIListViewTest_Vertical::selectedItemEventScrollView, this));
         _listView->setScrollBarPositionFromCorner(Vec2(7, 7));
         _uiLayer->addChild(_listView);
 
@@ -157,15 +155,15 @@ bool UIListViewTest_Vertical::init()
             float position = 75;
             // Labels
             _indexLabels[0] = Text::create(" ", "fonts/Marker Felt.ttf", 12);
-            _indexLabels[0]->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+            _indexLabels[0]->setAnchorPoint(Anchors::center);
             _indexLabels[0]->setPosition(_uiLayer->getContentSize() / 2 + Size(0.0f, position));
             _uiLayer->addChild(_indexLabels[0]);
             _indexLabels[1] = Text::create("  ", "fonts/Marker Felt.ttf", 12);
-            _indexLabels[1]->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+            _indexLabels[1]->setAnchorPoint(Anchors::center);
             _indexLabels[1]->setPosition(_uiLayer->getContentSize() / 2 + Size(140.0f, 0.0f));
             _uiLayer->addChild(_indexLabels[1]);
             _indexLabels[2] = Text::create(" ", "fonts/Marker Felt.ttf", 12);
-            _indexLabels[2]->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+            _indexLabels[2]->setAnchorPoint(Anchors::center);
             _indexLabels[2]->setPosition(_uiLayer->getContentSize() / 2 + Size(0.0f, -position));
             _uiLayer->addChild(_indexLabels[2]);
 
@@ -230,23 +228,24 @@ void UIListViewTest_Vertical::update(float dt)
         auto itemPos = this->getItemPositionYInView(item);
         if (isDown)
         {
-            if (itemPos < -_bufferZone && item->getPosition().y + _reuseItemOffset < totalHeight)
+            while (itemPos < -_bufferZone && item->getPosition().y + _reuseItemOffset < totalHeight)
             {
                 int itemID = item->getTag() - (int)items.size();
                 item->setPositionY(item->getPositionY() + _reuseItemOffset);
                 AXLOGD("itemPos = {}, itemID = {}, templateID = {}", itemPos, itemID, i);
                 this->updateItem(itemID, i);
+                itemPos = this->getItemPositionYInView(item);
             }
         }
         else
         {
-            if (itemPos > _bufferZone + listViewHeight && item->getPosition().y - _reuseItemOffset >= 0)
+            while (itemPos > _bufferZone + listViewHeight && item->getPosition().y - _reuseItemOffset >= 0)
             {
-
                 item->setPositionY(item->getPositionY() - _reuseItemOffset);
                 int itemID = item->getTag() + (int)items.size();
                 AXLOGD("itemPos = {}, itemID = {}, templateID = {}", itemPos, itemID, i);
                 this->updateItem(itemID, i);
+                itemPos = this->getItemPositionYInView(item);
             }
         }
     }
@@ -254,9 +253,9 @@ void UIListViewTest_Vertical::update(float dt)
     this->_lastContentPosY = this->_listView->getInnerContainer()->getPosition().y;
 }
 
-void UIListViewTest_Vertical::selectedItemEvent(Object* pSender, ListView::EventType type)
+void UIListViewTest_Vertical::selectedItemEvent(Object* pSender, ListView::EventType ev)
 {
-    switch (type)
+    switch (ev)
     {
     case ax::ui::ListView::EventType::ON_SELECTED_ITEM_START:
     {
@@ -277,9 +276,9 @@ void UIListViewTest_Vertical::selectedItemEvent(Object* pSender, ListView::Event
     }
 }
 
-void UIListViewTest_Vertical::selectedItemEventScrollView(Object* pSender, ui::ScrollView::EventType type)
+void UIListViewTest_Vertical::selectedItemEventScrollView(Object* pSender, ui::ScrollView::EventType ev)
 {
-    switch (type)
+    switch (ev)
     {
     case ui::ScrollView::EventType::SCROLL_TO_BOTTOM:
         AXLOGD("SCROLL_TO_BOTTOM");
@@ -345,8 +344,7 @@ bool UIListViewTest_Horizontal::init()
                                         (backgroundSize.width - _listView->getContentSize().width) / 2.0f,
                                     (widgetSize.height - backgroundSize.height) / 2.0f +
                                         (backgroundSize.height - _listView->getContentSize().height) / 2.0f));
-        _listView->addEventListener(
-            (ui::ListView::ccListViewCallback)AX_CALLBACK_2(UIListViewTest_Horizontal::selectedItemEvent, this));
+        _listView->addEventListener(AX_CALLBACK_2(UIListViewTest_Horizontal::selectedItemEvent, this));
         _listView->setScrollBarPositionFromCorner(Vec2(7, 7));
         _uiLayer->addChild(_listView);
 
@@ -459,9 +457,9 @@ void UIListViewTest_Horizontal::update(float dt)
     this->_lastContentPosX = this->_listView->getInnerContainer()->getPosition().x;
 }
 
-void UIListViewTest_Horizontal::selectedItemEvent(Object* pSender, ListView::EventType type)
+void UIListViewTest_Horizontal::selectedItemEvent(Object* pSender, ListView::EventType ev)
 {
-    switch (type)
+    switch (ev)
     {
     case ax::ui::ListView::EventType::ON_SELECTED_ITEM_START:
     {
@@ -521,7 +519,7 @@ bool Issue12692::init()
                                        (backgroundSize.height - listView->getContentSize().height) / 2.0f));
         listView->setScrollBarPositionFromCorner(Vec2(7, 7));
         listView->setClippingEnabled(true);
-        listView->setClippingType(ui::Layout::ClippingType::SCISSOR);
+        listView->setClippingType(ui::LayoutGroup::ClippingType::SCISSOR);
         listView->setName("listview1");
         _uiLayer->addChild(listView);
 
@@ -532,7 +530,7 @@ bool Issue12692::init()
         list2->setBackGroundImageScale9Enabled(true);
         list2->setContentSize(Size(240, 65));
         list2->setClippingEnabled(true);
-        list2->setClippingType(ui::Layout::ClippingType::SCISSOR);
+        list2->setClippingType(ui::LayoutGroup::ClippingType::SCISSOR);
         list2->setName("listview2");
         listView->insertCustomItem(list2, 0);
 
@@ -614,7 +612,7 @@ bool Issue8316::init()
                                        (backgroundSize.height - listView->getContentSize().height) / 2.0f));
         listView->setScrollBarPositionFromCorner(Vec2(7, 7));
         listView->setClippingEnabled(true);
-        listView->setClippingType(ui::Layout::ClippingType::SCISSOR);
+        listView->setClippingType(ui::LayoutGroup::ClippingType::SCISSOR);
         listView->setName("listview1");
 
         {
@@ -656,7 +654,7 @@ bool UIListViewTest_ScrollToItem::init()
     static int NUMBER_OF_ITEMS = 31;
     _nextIndex                 = 0;
     _titleLabel                = Text::create("Scroll to item", "fonts/Marker Felt.ttf", 32);
-    _titleLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _titleLabel->setAnchorPoint(Anchors::center);
     _titleLabel->setPosition(Vec2(layerSize / 2) + Vec2(0.0f, _titleLabel->getContentSize().height * 3.15f));
     _uiLayer->addChild(_titleLabel, 3);
 
@@ -669,7 +667,7 @@ bool UIListViewTest_ScrollToItem::init()
     _listView->setContentSize(layerSize / 2);
     _listView->setScrollBarPositionFromCorner(Vec2(7, 7));
     _listView->setItemsMargin(2.0f);
-    _listView->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _listView->setAnchorPoint(Anchors::center);
     _listView->setPosition(layerSize / 2);
     _uiLayer->addChild(_listView);
 
@@ -694,12 +692,12 @@ bool UIListViewTest_ScrollToItem::init()
 
     // Button
     auto pButton = Button::create("cocosui/backtotoppressed.png", "cocosui/backtotopnormal.png");
-    pButton->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+    pButton->setAnchorPoint(Anchors::leftCenter);
     pButton->setScale(0.8f);
     pButton->setPosition(Vec2(layerSize / 2) + Vec2(120.0f, -60.0f));
     pButton->setTitleText(fmt::format("Go to '{}'", _nextIndex));
     pButton->addClickEventListener([this, pButton](Object*) {
-        _listView->scrollToItem(_nextIndex, Vec2::ANCHOR_MIDDLE, Vec2::ANCHOR_MIDDLE);
+        _listView->scrollToItem(_nextIndex, Anchors::center, Anchors::center);
         _nextIndex = (_nextIndex + (NUMBER_OF_ITEMS / 2)) % NUMBER_OF_ITEMS;
         pButton->setTitleText(fmt::format("Go to '{}'", _nextIndex));
     });
@@ -729,7 +727,7 @@ bool UIListViewTest_Magnetic::init()
     Size layerSize = _uiLayer->getContentSize();
 
     _titleLabel = Text::create("Magnetic scroll", "fonts/Marker Felt.ttf", 32);
-    _titleLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _titleLabel->setAnchorPoint(Anchors::center);
     _titleLabel->setPosition(Vec2(layerSize / 2) + Vec2(0.0f, _titleLabel->getContentSize().height * 3.15f));
     _uiLayer->addChild(_titleLabel, 3);
 
@@ -742,7 +740,7 @@ bool UIListViewTest_Magnetic::init()
     _listView->setContentSize(layerSize / 2);
     _listView->setScrollBarPositionFromCorner(Vec2(7, 7));
     _listView->setItemsMargin(2.0f);
-    _listView->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _listView->setAnchorPoint(Anchors::center);
     _listView->setPosition(layerSize / 2);
     _uiLayer->addChild(_listView);
 
@@ -770,7 +768,7 @@ bool UIListViewTest_Magnetic::init()
         for (int i = 0; i < 5; ++i)
         {
             _indexLabels[i] = Text::create(" ", "fonts/Marker Felt.ttf", 12);
-            _indexLabels[i]->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+            _indexLabels[i]->setAnchorPoint(Anchors::center);
             _uiLayer->addChild(_indexLabels[i]);
         }
         float deltaX = 145, deltaY = 90;
@@ -781,9 +779,9 @@ bool UIListViewTest_Magnetic::init()
         _indexLabels[4]->setPosition(_uiLayer->getContentSize() / 2 + Size(deltaX, deltaY));  // center
 
         // Callback
-        _listView->ScrollView::addEventListener([this](Object* ref, ScrollView::EventType eventType) {
+        _listView->ScrollView::addEventListener([this](Object* ref, ScrollView::EventType ev) {
             ListView* listView = dynamic_cast<ListView*>(ref);
-            if (listView == nullptr || eventType != ScrollView::EventType::CONTAINER_MOVED)
+            if (listView == nullptr || ev != ScrollView::EventType::CONTAINER_MOVED)
             {
                 return;
             }
@@ -807,7 +805,7 @@ bool UIListViewTest_Magnetic::init()
 
     // Magnetic change button
     auto pButton = Button::create("cocosui/backtotoppressed.png", "cocosui/backtotopnormal.png");
-    pButton->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+    pButton->setAnchorPoint(Anchors::leftCenter);
     pButton->setScale(0.8f);
     pButton->setPosition(Vec2(layerSize / 2) + Vec2(130.0f, -60.0f));
     pButton->setTitleText("Next Magnetic");
@@ -887,7 +885,7 @@ bool UIListViewTest_Padding::init()
     Size layerSize = _uiLayer->getContentSize();
 
     _titleLabel = Text::create("Set Padding", "fonts/Marker Felt.ttf", 32);
-    _titleLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _titleLabel->setAnchorPoint(Anchors::center);
     _titleLabel->setPosition(Vec2(layerSize / 2) + Vec2(0.0f, _titleLabel->getContentSize().height * 3.15f));
     _uiLayer->addChild(_titleLabel, 3);
 
@@ -900,7 +898,7 @@ bool UIListViewTest_Padding::init()
     _listView->setContentSize(layerSize / 2);
     _listView->setScrollBarPositionFromCorner(Vec2(7, 7));
     _listView->setItemsMargin(2.0f);
-    _listView->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    _listView->setAnchorPoint(Anchors::center);
     _listView->setGravity(ListView::Gravity::TOP);
     _listView->setPosition(layerSize / 2);
     _uiLayer->addChild(_listView);
@@ -927,7 +925,7 @@ bool UIListViewTest_Padding::init()
     // Slider for setting padding
     {
         auto title = Text::create("Padding", "fonts/Marker Felt.ttf", 14);
-        title->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+        title->setAnchorPoint(Anchors::center);
         title->setPosition(Vec2(30.0f, 170.0f));
         _uiLayer->addChild(title);
         for (int i = 0; i < 4; ++i)
@@ -957,14 +955,14 @@ bool UIListViewTest_Padding::init()
             // Show title of slider
             {
                 auto text = Text::create(str, "fonts/Marker Felt.ttf", 12);
-                text->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+                text->setAnchorPoint(Anchors::leftCenter);
                 text->setPosition(Vec2(3, 150 - (25 * i)));
                 _uiLayer->addChild(text);
             }
             // Show value of paddings
             {
                 auto text = Text::create(str + "\nPadding=0", "fonts/Marker Felt.ttf", 12);
-                text->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+                text->setAnchorPoint(Anchors::leftCenter);
                 text->setPosition(Vec2(layerSize.width - 65, 200.0f - (40 * i)));
                 _uiLayer->addChild(text);
 
@@ -978,7 +976,7 @@ bool UIListViewTest_Padding::init()
         for (int i = 0; i < 5; ++i)
         {
             _indexLabels[i] = Text::create(" ", "fonts/Marker Felt.ttf", 12);
-            _indexLabels[i]->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+            _indexLabels[i]->setAnchorPoint(Anchors::center);
             _uiLayer->addChild(_indexLabels[i]);
         }
         float deltaX = 145, deltaY = 90;
@@ -989,9 +987,9 @@ bool UIListViewTest_Padding::init()
         _indexLabels[4]->setPosition(_uiLayer->getContentSize() / 2 + Size(deltaX, deltaY));  // center
 
         // Callback
-        _listView->ScrollView::addEventListener([this](Object* ref, ScrollView::EventType eventType) {
+        _listView->ScrollView::addEventListener([this](Object* ref, ScrollView::EventType event) {
             ListView* listView = dynamic_cast<ListView*>(ref);
-            if (listView == nullptr || eventType != ScrollView::EventType::CONTAINER_MOVED)
+            if (listView == nullptr || event != ScrollView::EventType::CONTAINER_MOVED)
             {
                 return;
             }

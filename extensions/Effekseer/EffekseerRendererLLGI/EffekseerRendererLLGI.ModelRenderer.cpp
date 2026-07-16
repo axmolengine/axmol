@@ -1,4 +1,4 @@
-﻿
+
 #include "EffekseerRendererLLGI.RenderState.h"
 #include "EffekseerRendererLLGI.RendererImplemented.h"
 

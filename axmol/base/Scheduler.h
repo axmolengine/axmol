@@ -458,21 +458,6 @@ public:
       */
     void resumeTargets(const std::set<void*>& targetsToResume);
 
-    /** Calls a function on the axmol thread. Useful when you need to call a axmol function from another thread.
-     This function is thread safe.
-     @param function The function to be run in axmol thread.
-     @since axmol
-     */
-    void runOnAxmolThread(std::function<void()> action);
-
-    /**
-     * Remove all pending functions queued to be performed with Scheduler::runOnAxmolThread
-     * Functions unscheduled in this manner will not be executed
-     * This function is thread safe
-     * @since v3.14
-     */
-    void removeAllPendingActions();
-
 protected:
     /** Schedules the 'callback' function for a given target with a given priority.
      The 'callback' selector will be called every frame.
@@ -523,10 +508,6 @@ protected:
 #if AX_ENABLE_SCRIPT_BINDING
     Vector<SchedulerScriptHandlerEntry*> _scriptHandlerEntries;
 #endif
-
-    // Used for "perform action"
-    std::vector<std::function<void()>> _actionsToPerform;
-    std::mutex _performMutex;
 };
 
 // end of base group

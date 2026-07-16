@@ -1,4 +1,4 @@
-﻿
+
 #ifndef __EFFEKSEER_CURVE_H__
 #define __EFFEKSEER_CURVE_H__
 

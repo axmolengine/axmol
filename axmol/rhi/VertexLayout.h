@@ -29,7 +29,7 @@
 #include "axmol/base/Object.h"
 
 #include <string>
-#include <cstdint>
+#include <stdint.h>
 #include <vector>
 #include <unordered_map>
 
@@ -70,7 +70,7 @@ struct AX_DLL InputBindingDesc
     InputBindingDesc() = default;
     InputBindingDesc(std::string_view _semantic,
                      int _index,
-                     VertexFormat _format,
+                     VertexElementType _format,
                      unsigned int _offset,
                      bool needToBeNormallized,
                      uint8_t instanceStepRate);
@@ -78,7 +78,7 @@ struct AX_DLL InputBindingDesc
     char semantic[32]        = {};  ///< semantic is used in d3d11
     unsigned int offset      = 0;
     int index                = 0;  ///< index is used in metal
-    VertexFormat format      = VertexFormat::INT3;
+    VertexElementType format = VertexElementType::INT3;
     bool needToBeNormallized = false;
     uint8_t instanceStepRate = 0;
 };
@@ -103,8 +103,8 @@ struct AX_DLL VertexLayoutDesc
      */
     void addAttrib(std::string_view name,
                    const VertexInputDesc* desc,
-                   VertexFormat format,
-                   std::size_t offset,
+                   VertexElementType format,
+                   size_t offset,
                    bool needNormalized,
                    uint8_t instanceStepRate = 0);
 

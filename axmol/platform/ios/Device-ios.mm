@@ -29,7 +29,7 @@
 #include "axmol/platform/Device.h"
 #include "axmol/base/Types.h"
 #include "axmol/base/EventDispatcher.h"
-#include "axmol/base/EventAcceleration.h"
+#include "axmol/base/AccelerationEvent.h"
 #include "axmol/base/Director.h"
 #include "axmol/platform/apple/Device-apple.h"
 
@@ -304,7 +304,7 @@ static CCAccelerometerDispatcher* s_pAccelerometerDispatcher;
         NSAssert(false, @"unknown orientation");
     }
 
-    ax::EventAcceleration event(*_acceleration);
+    ax::AccelerationEvent event(*_acceleration);
     auto dispatcher = ax::Director::getInstance()->getEventDispatcher();
     dispatcher->dispatchEvent(&event);
 }
@@ -993,6 +993,42 @@ Device::Orientation Device::resolveOrientation()
         resolvedOrientation = pickFirstSupported(supported);
 
     return resolvedOrientation;
+}
+
+void Device::getClipboardText(std::function<void(std::string_view)> callback)
+{
+    if (!callback)
+        return;
+#if TARGET_OS_IOS
+    @autoreleasepool
+    {
+        NSString* text = [UIPasteboard generalPasteboard].string;
+        if (text)
+            callback(std::string_view([text UTF8String]));
+        else
+            callback(std::string_view{});
+    }
+#endif
+}
+
+void Device::setClipboardText(std::string_view text)
+{
+#if TARGET_OS_IOS
+    @autoreleasepool
+    {
+        NSString* s = [[NSString alloc] initWithBytes:text.data() length:text.length() encoding:NSUTF8StringEncoding];
+        if (!s)
+            s = @"";
+        [UIPasteboard generalPasteboard].string = s;
+    }
+#endif
+}
+
+void Device::clearClipboard()
+{
+#if TARGET_OS_IOS
+    [UIPasteboard generalPasteboard].string = nil;
+#endif
 }
 
 }  // namespace ax

@@ -50,7 +50,7 @@ class IndexArray
 public:
     // Public aliases preserved (iterator types were byte_buffer iterators in original).
     // Here, expose typed iterators via getters instead of typedefs to raw byte iterators.
-    using size_type = std::size_t;
+    using size_type = size_t;
 
     static constexpr unsigned int formatToStride(rhi::IndexFormat format)
     {
@@ -130,7 +130,7 @@ public:
     {
         // Note: position/first/last are expected to come from us; if external, make sure they match format.
         auto& vec      = std::get<tlx::pod_vector<_Ty>>(_cont);
-        auto pos_index = static_cast<std::size_t>(position - vec.data());
+        auto pos_index = static_cast<size_t>(position - vec.data());
         vec.insert(vec.begin() + pos_index, first, last);
     }
 
@@ -164,7 +164,7 @@ public:
     _Ty* erase(_Ty* position)
     {
         auto& vec = std::get<tlx::pod_vector<_Ty>>(_cont);
-        auto idx  = static_cast<std::size_t>(position - vec.data());
+        auto idx  = static_cast<size_t>(position - vec.data());
         auto it   = vec.erase(vec.begin() + idx);
         return it != vec.end() ? vec.data() + (it - vec.begin()) : vec.data() + vec.size();
     }
@@ -174,8 +174,8 @@ public:
     _Ty* erase(_Ty* first, _Ty* last)
     {
         auto& vec = std::get<tlx::pod_vector<_Ty>>(_cont);
-        auto s    = static_cast<std::size_t>(first - vec.data());
-        auto e    = static_cast<std::size_t>(last - vec.data());
+        auto s    = static_cast<size_t>(first - vec.data());
+        auto e    = static_cast<size_t>(last - vec.data());
         auto it   = vec.erase(vec.begin() + s, vec.begin() + e);
         return it != vec.end() ? vec.data() + (it - vec.begin()) : vec.data() + vec.size();
     }

@@ -24,7 +24,7 @@
 #include "axmol/rhi/d3d12/DepthStencilState12.h"
 #include "axmol/tlx/hash.hpp"
 #include "axmol/base/Logging.h"
-#include <cstring>
+#include <string.h>
 
 namespace ax::rhi::d3d12
 {

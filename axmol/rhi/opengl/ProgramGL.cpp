@@ -43,7 +43,7 @@ ProgramImpl::ProgramImpl(Data& vsData, Data& fsData) : Program(vsData, fsData)
     compileProgram();
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     _backToForegroundListener =
-        EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) { this->reloadProgram(); });
+        CustomEventListener::create(EVENT_RENDERER_RECREATED, [this](CustomEvent*) { this->reloadProgram(); });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
 #endif
 }

@@ -85,22 +85,24 @@ private:
 class TextureImpl : public rhi::Texture
 {
 public:
-    TextureImpl(DriverImpl*, const TextureDesc& desc);
+    TextureImpl(DriverImpl*, const TextureDesc& desc, std::optional<Color> clearColorHint = std::nullopt);
     TextureImpl(DriverImpl*, ComPtr<ID3D12Resource> existingResource);
+    TextureImpl(DriverImpl*,
+                ComPtr<ID3D12Resource> existingResource,
+                const TextureDesc& desc,
+                D3D12_RESOURCE_STATES initialState,
+                D3D12_RESOURCE_STATES renderTargetFinalState);
     ~TextureImpl();
 
     void transitionState(ID3D12GraphicsCommandList* cmd, D3D12_RESOURCE_STATES newState);
 
     D3D12_RESOURCE_STATES getCurrentState() const;
     void setKnownState(D3D12_RESOURCE_STATES state);
+    D3D12_RESOURCE_STATES getRenderTargetFinalState() const { return _renderTargetFinalState; }
 
     void updateData(const void* data, int width, int height, int level, int layerIndex = 0) override;
-    void updateCompressedData(const void* data,
-                              int width,
-                              int height,
-                              std::size_t dataSize,
-                              int level,
-                              int layerIndex = 0) override;
+    void updateCompressedData(const void* data, int width, int height, size_t dataSize, int level, int layerIndex = 0)
+        override;
 
     void updateSubData(int xoffset, int yoffset, int width, int height, int level, const void* data, int layerIndex = 0)
         override;
@@ -108,7 +110,7 @@ public:
                                  int yoffset,
                                  int width,
                                  int height,
-                                 std::size_t dataSize,
+                                 size_t dataSize,
                                  int level,
                                  const void* data,
                                  int layerIndex = 0) override;
@@ -127,7 +129,8 @@ public:
     uint64_t getLastFenceValue() const { return _lastFenceValue; }
 
 private:
-    D3D12_RESOURCE_STATES ensureNativeTexture(bool prepareForCopyDest);
+    D3D12_RESOURCE_STATES ensureNativeTexture(bool prepareForCopyDest,
+                                              std::optional<Color> clearColorHint = std::nullopt);
     void createShaderResourceView(const dxutils::PixelFormatInfo* fmtInfo,
                                   uint32_t mipLevels,
                                   uint32_t arrayLayers,
@@ -141,6 +144,7 @@ private:
     TextureHandle _nativeTexture{};
     TextureDesc _desc{};
     DescriptorHandle* _sampler{nullptr};  // weak ref
+    D3D12_RESOURCE_STATES _renderTargetFinalState{D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE};
 };
 
 }  // namespace ax::rhi::d3d12

@@ -22,13 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __MAIN_H__
-#define __MAIN_H__
+#pragma once
 
-#define WIN32_LEAN_AND_MEAN  // Exclude rarely-used stuff from Windows headers
-
-// Windows Header Files:
-#include <windows.h>
-#include <tchar.h>
-
-#endif  // __WINMAIN_H__
+// C RunTime Header Files
+#include "axmol/platform/StdC.h"

@@ -43,20 +43,16 @@ public:
     bool init() override;
     void update(float delta) override;
 
-    // touch
-    void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
-    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
-    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    // PointerEvent touch/mouse
+    bool onPointerDown(ax::PointerEvent* ev);
+    void onPointerMove(ax::PointerEvent* ev);
+    void onPointerUp(ax::PointerEvent* ev);
 
-    // mouse
-    bool onMouseDown(ax::Event* event);
-    bool onMouseUp(ax::Event* event);
-    bool onMouseMove(ax::Event* event);
-    bool onMouseScroll(ax::Event* event);
+    bool onPointerScroll(ax::PointerEvent* ev);
 
     // Keyboard
-    void onKeyPressed(ax::EventKeyboard::KeyCode code, ax::Event* event);
-    void onKeyReleased(ax::EventKeyboard::KeyCode code, ax::Event* event);
+    void onKeyPressed(ax::KeyboardEvent* ev);
+    void onKeyReleased(ax::KeyboardEvent* ev);
 
     // a selector callback
     void menuCloseCallback(ax::Object* sender);
@@ -65,9 +61,8 @@ public:
     ~MainScene() override;
 
 private:
-    GameState _gameState                            = GameState::init;
-    ax::EventListenerTouchAllAtOnce* _touchListener = nullptr;
-    ax::EventListenerKeyboard* _keyboardListener    = nullptr;
-    ax::EventListenerMouse* _mouseListener          = nullptr;
-    int _sceneID                                    = 0;
+    GameState _gameState                         = GameState::init;
+    ax::PointerEventListener* _pointerListener   = nullptr;
+    ax::EventListenerKeyboard* _keyboardListener = nullptr;
+    int _sceneID                                 = 0;
 };

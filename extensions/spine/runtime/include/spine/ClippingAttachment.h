@@ -43,21 +43,38 @@ namespace spine {
 
 		friend class SkeletonClipping;
 
-	RTTI_DECL
+		RTTI_DECL
 
 	public:
 		explicit ClippingAttachment(const String &name);
 
+		/// Clipping is performed between the clipping attachment's slot and the end slot. If NULL, clipping is done until
+		/// the end of the skeleton's rendering.
 		SlotData *getEndSlot();
 
 		void setEndSlot(SlotData *inValue);
 
+		/// When true the clipping polygon is treated as convex for more efficient clipping. If the polygon deforms to concave then the
+		/// convex hull is used. When false the clipping polygon can be concave and if so has an additional CPU cost. Inverse clipping
+		/// always uses convex.
+		bool getConvex();
+
+		void setConvex(bool convex);
+
+		/// When false, everything inside the clipping polygon is visible. When true, everything outside the clipping polygon is
+		/// visible and clipping is convex.
+		bool getInverse();
+
+		void setInverse(bool inverse);
+
 		Color &getColor();
 
-		virtual Attachment *copy();
+		virtual Attachment &copy() override;
 
 	private:
 		SlotData *_endSlot;
+		bool _convex;
+		bool _inverse;
 		Color _color;
 	};
 }

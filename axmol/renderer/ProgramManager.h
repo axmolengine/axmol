@@ -31,6 +31,7 @@
 #include <string_view>
 #include "axmol/rhi/Program.h"
 #include "axmol/renderer/ProgramStateRegistry.h"
+#include "axmol/renderer/VertexLayoutManager.h"
 
 struct XXH64_state_s;
 

@@ -24,6 +24,7 @@
  ****************************************************************************/
 
 #include "axmol/rhi/opengl/DriverGL.h"
+#include "axmol/platform/Common.h"
 #include "axmol/rhi/opengl/RenderPipelineGL.h"
 #include "axmol/rhi/opengl/BufferGL.h"
 #include "axmol/rhi/opengl/ShaderModuleGL.h"
@@ -196,14 +197,25 @@ RenderContext* DriverImpl::createRenderContext(SurfaceHandle)
     return new RenderContextImpl(this);
 }
 
-Buffer* DriverImpl::createBuffer(std::size_t size, BufferType type, BufferUsage usage, const void* initial)
+Buffer* DriverImpl::createBuffer(size_t size, BufferType type, BufferUsage usage, const void* initial)
 {
     return new BufferImpl(size, type, usage, initial);
 }
 
-Texture* DriverImpl::createTexture(const TextureDesc& desc)
+Texture* DriverImpl::createTexture(const TextureDesc& desc, std::optional<Color>)
 {
     return new TextureImpl(desc);
+}
+
+Texture* DriverImpl::createTextureFromNativeHandle(const ExternalTextureDesc& descriptor)
+{
+    auto nativeTexture = static_cast<GLuint>(descriptor.nativeTexture.u64);
+    if (!nativeTexture)
+        return nullptr;
+
+    auto texture = new TextureImpl(nativeTexture, descriptor.desc.width, descriptor.desc.height);
+    texture->updateTextureDesc(descriptor.desc);
+    return texture;
 }
 
 RenderTarget* DriverImpl::createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment)

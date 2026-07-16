@@ -27,14 +27,14 @@ THE SOFTWARE.
 #pragma once
 
 #include "axmol/platform/Common.h"
-#include "axmol/platform/ApplicationBase.h"
+#include "axmol/platform/ApplicationCore.h"
 #include <string>
 #include <chrono>
 
 namespace ax
 {
 
-class AX_DLL Application : public ApplicationBase
+class AX_DLL Application : public ApplicationCore
 {
 public:
     /**
@@ -51,17 +51,7 @@ public:
     */
     void setAnimationInterval(float interval) override;
 
-    /**
-    @brief  Run the message loop.
-    * @lua NA
-    */
-    int run();
-
-    /**
-    @brief  Get current application instance.
-    @return Current application instance pointer.
-    */
-    static Application* getInstance();
+    int run() override;
 
     /**
     @brief Get current language config
@@ -92,16 +82,9 @@ public:
      */
     bool openURL(std::string_view url) override;
 
-    void setStartupScriptFilename(std::string_view startupScriptFile);
-
-    std::string_view getStartupScriptFilename();
-
 protected:
-    static Application* sm_pSharedApplication;
-
     std::chrono::nanoseconds _animationInterval;  // nano second
     std::string _resourceRootPath;
-    std::string _startupScriptFilename;
 };
 
 }  // namespace ax

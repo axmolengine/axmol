@@ -1,4 +1,4 @@
-﻿
+
 #pragma once
 
 #include "../EffekseerRendererCommon/EffekseerRenderer.IndexBufferBase.h"

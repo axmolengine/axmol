@@ -538,17 +538,14 @@ std::string NodeToWorld3D::subtitle() const
 void CameraOrbitTest::onEnter()
 {
     TestNodeDemo::onEnter();
-    _preProjection = Director::getInstance()->getProjection();
     Director::getInstance()->getRenderer()->setDepthTest(true);
     Director::getInstance()->getRenderer()->setDepthWrite(true);
-    Director::getInstance()->setProjection(Director::Projection::_3D);
 }
 
 void CameraOrbitTest::onExit()
 {
     Director::getInstance()->getRenderer()->setDepthTest(false);
     Director::getInstance()->getRenderer()->setDepthWrite(false);
-    Director::getInstance()->setProjection(_preProjection);
     TestNodeDemo::onExit();
 }
 
@@ -611,13 +608,10 @@ std::string CameraOrbitTest::subtitle() const
 void CameraZoomTest::onEnter()
 {
     TestNodeDemo::onEnter();
-    _preProjection = Director::getInstance()->getProjection();
-    Director::getInstance()->setProjection(Director::Projection::_3D);
 }
 
 void CameraZoomTest::onExit()
 {
-    Director::getInstance()->setProjection(_preProjection);
     TestNodeDemo::onExit();
 }
 
@@ -679,14 +673,11 @@ std::string CameraZoomTest::subtitle() const
 void CameraCenterTest::onEnter()
 {
     TestNodeDemo::onEnter();
-    _preProjection = Director::getInstance()->getProjection();
-    Director::getInstance()->setProjection(Director::Projection::_3D);
 }
 
 void CameraCenterTest::onExit()
 {
     TestNodeDemo::onExit();
-    Director::getInstance()->setProjection(_preProjection);
 }
 
 CameraCenterTest::CameraCenterTest()
@@ -700,7 +691,7 @@ CameraCenterTest::CameraCenterTest()
     sprite = Sprite::create("Images/white-512x512.png");
     addChild(sprite, 0);
     sprite->setPosition(Vec2(s.width / 5 * 1, s.height / 5 * 1));
-    sprite->setColor(Color32::RED);
+    sprite->setColor(Color32::red);
     sprite->setTextureRect(Rect(0.0f, 0.0f, 120.0f, 50.0f));
     orbit = OrbitCamera::create(10.0f, 1.0f, 0.0f, 0.0f, 360.0f, 0.0f, 0.0f);
     sprite->runAction(RepeatForever::create(orbit));
@@ -710,7 +701,7 @@ CameraCenterTest::CameraCenterTest()
     sprite = Sprite::create("Images/white-512x512.png");
     addChild(sprite, 0, 40);
     sprite->setPosition(Vec2(s.width / 5 * 1, s.height / 5 * 4));
-    sprite->setColor(Color32::BLUE);
+    sprite->setColor(Color32::blue);
     sprite->setTextureRect(Rect(0.0f, 0.0f, 120.0f, 50.0f));
     orbit = OrbitCamera::create(10.0f, 1.0f, 0.0f, 0.0f, 360.0f, 0.0f, 0.0f);
     sprite->runAction(RepeatForever::create(orbit));
@@ -719,7 +710,7 @@ CameraCenterTest::CameraCenterTest()
     sprite = Sprite::create("Images/white-512x512.png");
     addChild(sprite, 0);
     sprite->setPosition(Vec2(s.width / 5 * 4, s.height / 5 * 1));
-    sprite->setColor(Color32::YELLOW);
+    sprite->setColor(Color32::yellow);
     sprite->setTextureRect(Rect(0.0f, 0.0f, 120.0f, 50.0f));
     orbit = OrbitCamera::create(10.0f, 1.0f, 0.0f, 0.0f, 360.0f, 0.0f, 0.0f);
     sprite->runAction(RepeatForever::create(orbit));
@@ -728,7 +719,7 @@ CameraCenterTest::CameraCenterTest()
     sprite = Sprite::create("Images/white-512x512.png");
     addChild(sprite, 0, 40);
     sprite->setPosition(Vec2(s.width / 5 * 4, s.height / 5 * 4));
-    sprite->setColor(Color32::GREEN);
+    sprite->setColor(Color32::green);
     sprite->setTextureRect(Rect(0.0f, 0.0f, 120.0f, 50.0f));
     orbit = OrbitCamera::create(10.0f, 1.0f, 0.0f, 0.0f, 360.0f, 0.0f, 0.0f);
     sprite->runAction(RepeatForever::create(orbit));
@@ -737,7 +728,7 @@ CameraCenterTest::CameraCenterTest()
     sprite = Sprite::create("Images/white-512x512.png");
     addChild(sprite, 0, 40);
     sprite->setPosition(Vec2(s.width / 2, s.height / 2));
-    sprite->setColor(Color32::WHITE);
+    sprite->setColor(Color32::white);
     sprite->setTextureRect(Rect(0.0f, 0.0f, 120.0f, 50.0f));
     orbit = OrbitCamera::create(10.0f, 1.0f, 0.0f, 0.0f, 360.0f, 0.0f, 0.0f);
     sprite->runAction(RepeatForever::create(orbit));
@@ -760,8 +751,8 @@ std::string CameraCenterTest::subtitle() const
 //------------------------------------------------------------------
 ConvertToNode::ConvertToNode()
 {
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = AX_CALLBACK_2(ConvertToNode::onTouchesEnded, this);
+    auto listener         = PointerEventListener::create();
+    listener->onPointerUp = AX_CALLBACK_1(ConvertToNode::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto s = Director::getInstance()->getCanvasSize();
@@ -781,7 +772,7 @@ ConvertToNode::ConvertToNode()
         switch (i)
         {
         case 0:
-            sprite->setAnchorPoint(Vec2::ZERO);
+            sprite->setAnchorPoint(Vec2::zero);
             break;
         case 1:
             sprite->setAnchorPoint(Vec2(0.5f, 0.5f));
@@ -798,22 +789,19 @@ ConvertToNode::ConvertToNode()
     }
 }
 
-void ConvertToNode::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+void ConvertToNode::onPointerUp(PointerEvent* event)
 {
-    for (auto& touch : touches)
+    auto location = event->getWorldPoint();
+
+    for (int i = 0; i < 3; i++)
     {
-        auto location = touch->getLocation();
+        auto node = getChildByTag(100 + i);
+        Vec2 p1, p2;
 
-        for (int i = 0; i < 3; i++)
-        {
-            auto node = getChildByTag(100 + i);
-            Vec2 p1, p2;
+        p1 = node->convertToNodeSpaceAR(location);
+        p2 = node->convertToNodeSpace(location);
 
-            p1 = node->convertToNodeSpaceAR(location);
-            p2 = node->convertToNodeSpace(location);
-
-            AXLOGD("AR: x={:.2}, y={:.2} -- Not AR: x={:.2}, y={:.2}", p1.x, p1.y, p2.x, p2.y);
-        }
+        AXLOGD("AR: x={:.2}, y={:.2} -- Not AR: x={:.2}, y={:.2}", p1.x, p1.y, p2.x, p2.y);
     }
 }
 
@@ -837,7 +825,7 @@ NodeOpaqueTest::NodeOpaqueTest()
     {
         background = Sprite::create("Images/background1.png");
         background->setBlendFunc(BlendFunc::ALPHA_PREMULTIPLIED);
-        background->setAnchorPoint(Vec2::ZERO);
+        background->setAnchorPoint(Vec2::zero);
         addChild(background);
     }
 }
@@ -862,7 +850,7 @@ NodeNonOpaqueTest::NodeNonOpaqueTest()
     {
         background = Sprite::create("Images/background1.jpg");
         background->setBlendFunc(BlendFunc::DISABLE);
-        background->setAnchorPoint(Vec2::ZERO);
+        background->setAnchorPoint(Vec2::zero);
         addChild(background);
     }
 }
@@ -968,7 +956,7 @@ bool MySprite::setProgramState(rhi::ProgramState* programState, bool ownPS /* = 
 
 void MySprite::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
-    const auto& projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    const auto& projectionMat = Camera::getVisitingViewProjectionMatrix();
     auto mvpMatrix            = projectionMat * transform;
     _customCommand.unsafePS()->setUniform(_mvpMatrixLocation, mvpMatrix.m, sizeof(mvpMatrix.m));
     _customCommand.init(_globalZOrder, transform, flags);
@@ -984,15 +972,12 @@ void MySprite::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 void CameraTest1::onEnter()
 {
     TestNodeDemo::onEnter();
-    _preProjection = Director::getInstance()->getProjection();
-    Director::getInstance()->setProjection(Director::Projection::_3D);
     Director::getInstance()->getRenderer()->setDepthTest(true);
     Director::getInstance()->getRenderer()->setDepthWrite(true);
 }
 
 void CameraTest1::onExit()
 {
-    Director::getInstance()->setProjection(_preProjection);
     Director::getInstance()->getRenderer()->setDepthTest(false);
     Director::getInstance()->getRenderer()->setDepthWrite(false);
     TestNodeDemo::onExit();
@@ -1035,15 +1020,12 @@ std::string CameraTest1::subtitle() const
 void CameraTest2::onEnter()
 {
     TestNodeDemo::onEnter();
-    _preProjection = Director::getInstance()->getProjection();
-    Director::getInstance()->setProjection(Director::Projection::_3D);
     Director::getInstance()->getRenderer()->setDepthTest(true);
     Director::getInstance()->getRenderer()->setDepthWrite(true);
 }
 
 void CameraTest2::onExit()
 {
-    Director::getInstance()->setProjection(_preProjection);
     Director::getInstance()->getRenderer()->setDepthTest(false);
     Director::getInstance()->getRenderer()->setDepthWrite(false);
     TestNodeDemo::onExit();
@@ -1495,9 +1477,9 @@ void Issue16735Test::onEnter()
 
     auto d = DrawNode::create();
     d->drawLine(Vec2(origin.x, origin.y + visibleSize.height / 2),
-                Vec2(origin.x + visibleSize.width, origin.y + visibleSize.height / 2), Color::RED);
+                Vec2(origin.x + visibleSize.width, origin.y + visibleSize.height / 2), Color::red);
     d->drawLine(Vec2(origin.x + visibleSize.width / 2, origin.y),
-                Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height), Color::RED);
+                Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height), Color::red);
 
     addChild(d);
 }

@@ -145,8 +145,8 @@ public:
      * @param count For each instance, the number of indexes to draw
      * @see `drawElements(IndexFormat indexType, unsigned int count, unsigned int offset)`
      */
-    void drawArrays(std::size_t start, std::size_t count, bool wireframe) override;
-    void drawArraysInstanced(std::size_t start, std::size_t count, int instanceCount, bool wireframe = false) override;
+    void drawArrays(size_t start, size_t count, bool wireframe) override;
+    void drawArraysInstanced(size_t start, size_t count, int instanceCount, bool wireframe = false) override;
 
     /**
      * Draw primitives with an index list.
@@ -156,10 +156,10 @@ public:
      * @see `setIndexBuffer(Buffer* buffer)`
      * @see `drawArrays(PrimitiveType primitiveType, unsigned int start,  unsigned int count)`
      */
-    void drawElements(IndexFormat indexType, std::size_t count, std::size_t offset, bool wireframe) override;
+    void drawElements(IndexFormat indexType, size_t count, size_t offset, bool wireframe) override;
     void drawElementsInstanced(IndexFormat indexType,
-                               std::size_t count,
-                               std::size_t offset,
+                               size_t count,
+                               size_t offset,
                                int instanceCount,
                                bool wireframe = false) override;
 
@@ -172,6 +172,7 @@ public:
      * Present a drawable and commit a command buffer so it can be executed as soon as possible.
      */
     void endFrame() override;
+    void submitCurrentFrameCommands(bool waitForCompletion) override;
 
     void endEncoding();
 
@@ -183,15 +184,15 @@ public:
      */
     void setScissorRect(bool enabled, float x, float y, float width, float height) override;
 
-    void readPixels(RenderTarget* rt,
-                    bool preserveAxisHint,
-                    std::function<void(const PixelBufferDesc&)> callback) override;
+    void readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback) override;
 
     id<MTLRenderCommandEncoder> getRenderCommandEncoder() const { return _mtlRenderEncoder; }
 
     CAMetalLayer* getMetalLayer() { return _mtlLayer; }
 
     id<CAMetalDrawable> acquireDrawable();
+
+    id<MTLCommandBuffer> getCommandBuffer() const { return _currentCmdBuffer; }
 
 protected:
     /**
@@ -205,10 +206,10 @@ protected:
      * @remark: !!!this function only can call after endFrame, then it's could be works well.
      */
     void readPixels(id<MTLTexture> texture,
-                    std::size_t origX,
-                    std::size_t origY,
-                    std::size_t rectWidth,
-                    std::size_t rectHeight,
+                    size_t origX,
+                    size_t origY,
+                    size_t rectWidth,
+                    size_t rectHeight,
                     PixelBufferDesc& pbd);
 
     /**

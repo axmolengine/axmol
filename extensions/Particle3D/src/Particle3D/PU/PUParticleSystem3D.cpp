@@ -130,10 +130,10 @@ PUParticle3D::PUParticle3D()
     , originalDirectionLength(0.0f)
     , originalVelocity(0.0f)
     , originalScaledDirectionLength(0.0f)
-    , rotationAxis(Vec3::UNIT_Z)
+    , rotationAxis(Vec3::zAxis)
     ,
-    // color(Vec4::ONE),
-    originalColor(Vec4::ONE)
+    // color(Vec4::one),
+    originalColor(Vec4::one)
     ,
     // zRotation(0.0f),
     zRotationSpeed(0.0f)
@@ -844,8 +844,8 @@ bool PUParticleSystem3D::isExpired(PUParticle3D* particle, float timeElapsed)
 
 ax::Vec3 PUParticleSystem3D::getDerivedPosition()
 {
-    // if (_parentParticleSystem && _parentParticleSystem->isKeepLocal()) return Vec3::ZERO;
-    // if (_keepLocal) return Vec3::ZERO;
+    // if (_parentParticleSystem && _parentParticleSystem->isKeepLocal()) return Vec3::zero;
+    // if (_keepLocal) return Vec3::zero;
     if (_isMarkedForEmission)
     {
         return Vec3(_position.x, _position.y, _positionZ);
@@ -857,17 +857,17 @@ ax::Vec3 PUParticleSystem3D::getDerivedPosition()
     }
 }
 
-ax::Quaternion PUParticleSystem3D::getDerivedOrientation()
+ax::Quat PUParticleSystem3D::getDerivedOrientation()
 {
-    // if (_parentParticleSystem && _parentParticleSystem->isKeepLocal()) return Quaternion();
-    // if (_keepLocal) return Quaternion();
+    // if (_parentParticleSystem && _parentParticleSystem->isKeepLocal()) return Quat();
+    // if (_keepLocal) return Quat();
     if (_isMarkedForEmission)
     {
         return getRotationQuat();
     }
     else
     {
-        Quaternion q;
+        Quat q;
         Mat4 mat = getNodeToWorldTransform();
         mat.decompose(nullptr, &q, nullptr);
         return q;
@@ -876,8 +876,8 @@ ax::Quaternion PUParticleSystem3D::getDerivedOrientation()
 
 ax::Vec3 PUParticleSystem3D::getDerivedScale()
 {
-    // if (_parentParticleSystem && _parentParticleSystem->isKeepLocal()) return Vec3::ONE;
-    // if (_keepLocal) return Vec3::ONE;
+    // if (_parentParticleSystem && _parentParticleSystem->isKeepLocal()) return Vec3::one;
+    // if (_keepLocal) return Vec3::one;
     if (_isMarkedForEmission)
     {
         return Vec3(_scaleX, _scaleY, _scaleZ);
@@ -1323,7 +1323,7 @@ void PUParticleSystem3D::processParticle(ParticlePool& pool,
     PUParticle3D* particle = static_cast<PUParticle3D*>(pool.getFirst());
     // Mat4 ltow = getNodeToWorldTransform();
     // Vec3 scl;
-    // Quaternion rot;
+    // Quat rot;
     // ltow.decompose(&scl, &rot, nullptr);
     while (particle)
     {
@@ -1518,7 +1518,7 @@ void PUParticleSystem3D::calulateRotationOffset(void)
     /** Use the derived orientation, which is the particle systems' own scenenode orientation,
         or the orientation of the uber particle system, if this particle system is emitted itself.
     */
-    Quaternion latestOrientationInverse = _latestOrientation;
+    Quat latestOrientationInverse = _latestOrientation;
     latestOrientationInverse.inverse();
     _rotationOffset = getDerivedOrientation() * latestOrientationInverse;
 }

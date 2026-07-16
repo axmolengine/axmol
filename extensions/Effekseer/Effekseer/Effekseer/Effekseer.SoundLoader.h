@@ -1,4 +1,4 @@
-﻿
+
 #ifndef __EFFEKSEER_SOUNDLOADER_H__
 #define __EFFEKSEER_SOUNDLOADER_H__
 

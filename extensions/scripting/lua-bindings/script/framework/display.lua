@@ -38,7 +38,7 @@ if not view then
             height = AX_DESIGN_RESOLUTION.height
         end
     end
-    view = ax.RenderViewImpl:createWithRect("Axmol-Lua", ax.rect(0, 0, width, height))
+    view = ax.RenderView:createWithRect("Axmol-Lua", ax.rect(0, 0, width, height))
     director:setRenderView(view)
 end
 

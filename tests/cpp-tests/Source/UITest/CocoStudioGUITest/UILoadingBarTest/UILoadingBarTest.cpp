@@ -309,7 +309,7 @@ bool UILoadingBarTest_Scale9_State_Change::init()
         // Create the loading bar
         LoadingBar* loadingBar = LoadingBar::create("cocosui/sliderThumb.png");
         loadingBar->setTag(0);
-        loadingBar->ignoreContentAdaptWithSize(false);
+        loadingBar->setAutoSize(true);
         // loadingBar->setScale9Enabled(true);
         loadingBar->setCapInsets(Rect(0, 0, 0, 0));
         loadingBar->setContentSize(Size(200, 80));
@@ -360,7 +360,7 @@ bool UILoadingBarReloadTexture::init()
 
         LoadingBar* loadingBar = LoadingBar::create("cocosui/slider_bar_active_9patch.png");
         loadingBar->setTag(0);
-        loadingBar->ignoreContentAdaptWithSize(false);
+        loadingBar->setAutoSize(true);
         //        loadingBar->setScale9Enabled(true);
         loadingBar->setCapInsets(Rect(0, 0, 0, 0));
         loadingBar->setContentSize(Size(300, 13));

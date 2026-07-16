@@ -41,7 +41,7 @@ PUGeometryRotator::PUGeometryRotator()
     , _scaledRotationSpeed(0.0f)
     , _useOwnRotationSpeed(DEFAULT_USE_OWN)
     ,
-    // mQ(Quaternion::IDENTITY),
+    // mQ(Quat::IDENTITY),
     _rotationAxis(DEFAULT_ROTATION_AXIS)
     , _rotationAxisSet(false)
 {
@@ -150,7 +150,7 @@ void PUGeometryRotator::updatePUAffector(PUParticle3D* particle, float deltaTime
         }
 
         _q.set(0.0f, 0.0f, 0.0f, 1.0f);
-        //_q = Quaternion::IDENTITY;
+        //_q = Quat::IDENTITY;
         if (_rotationAxisSet)
         {
             _q.set(_rotationAxis, _scaledRotationSpeed);

@@ -11,7 +11,8 @@ on:
       - 'docs/**'
       - '.github/workflows/publish.yml'
       - '.github/workflows/debian.yml'
-      - 'tools/ci/make-pkg.ps1'
+      - '.github/workflows/source-tidy.yml'
+      - 'tools/cmdline/make-pkg.ps1'
   pull_request:
     types: [opened, synchronize, reopened]
     paths-ignore:
@@ -35,14 +36,20 @@ env:
 run-name: 'build@c++${{ inputs.cxxstd || 23 }}'
 
 jobs:
+  source-check:
+    uses: ./.github/workflows/source-tidy.yml
+    with:
+      lint_mode: check_only
+
   win32:
+    needs: [source-check]
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v6
     - name: Build
       shell: pwsh
       run: |
-        .\tools\cmdline\axmol -p win32 -a x64 -xc '-DAX_RENDER_API=d3d11;d3d12;gl;vk' -O3
+        .\tools\cmdline\axmol -p win32 -a x64 -xc '-DAX_RENDER_API=d3d11;d3d12;gl;vk,-DAX_ENABLE_VR=ON,-DAX_ENABLE_OPENXR=ON' -O3 -t cpp-tests
     - name: Check prebuilt workflow
       shell: pwsh
       run: |
@@ -55,13 +62,14 @@ jobs:
         path: |
           build/bin/cpp-tests/**/*
   win32-arm64:
+    needs: [source-check]
     runs-on: windows-11-arm
     steps:
     - uses: actions/checkout@v6
     - name: Build
       shell: pwsh
       run: |
-        .\tools\cmdline\axmol -p win32 -a arm64 -xc '-DAX_RENDER_API=d3d11;d3d12;gl;vk' -O3
+        .\tools\cmdline\axmol -p win32 -a arm64 -xc '-DAX_RENDER_API=d3d11;d3d12;gl;vk' -O3 -t cpp-tests
         .\tools\cmdline\axmol run -p win32 -a arm64 -t unit-tests -O3
     - name: Check prebuilt workflow
       shell: pwsh
@@ -70,29 +78,33 @@ jobs:
         axmol new HelloCpp
         axmol -d .\HelloCpp -xc '-DAX_PREBUILT_DIR=build' -O3
   winuwp:
-        runs-on: windows-latest
-        steps:
-        - uses: actions/checkout@v6
+    needs: [source-check]
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v6
 
-        - name: Build
-          shell: pwsh
-          run: .\tools\cmdline\axmol -p winuwp -a x64 -O3 -xc '-DAX_RENDER_API=d3d11;d3d12;gl'
+    - name: Build
+      shell: pwsh
+      run: .\tools\cmdline\axmol -p winuwp -a x64 -O3 -xc '-DAX_RENDER_API=d3d11;d3d12;gl' -t cpp-tests
   win32-clang:
-        runs-on: windows-latest
-        steps:
-        - uses: actions/checkout@v6
+    needs: [source-check]
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v6
 
-        - name: Build
-          shell: pwsh
-          run: .\tools\cmdline\axmol -p win32 -a 'x64' -cc clang -O3 -xc '-DAX_RENDER_API=d3d11;d3d12;gl;vk'
+    - name: Build
+      shell: pwsh
+      run: .\tools\cmdline\axmol -p win32 -a 'x64' -cc clang -O3 -xc '-DAX_RENDER_API=d3d11;d3d12;gl;vk' -t cpp-tests
   win32-dll:
-        runs-on: windows-latest
-        steps:
-        - uses: actions/checkout@v6
-        - name: Build
-          shell: pwsh
-          run: .\tools\cmdline\axmol -p win32 -a x64 -dll -xc '-DAX_RENDER_API=d3d11;d3d12;gl;vk'
+    needs: [source-check]
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v6
+    - name: Build
+      shell: pwsh
+      run: .\tools\cmdline\axmol -p win32 -a x64 -dll -xc '-DAX_RENDER_API=d3d11;d3d12;gl;vk' -t cpp-tests
   linux:
+    needs: [source-check]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6
@@ -106,6 +118,7 @@ jobs:
       shell: pwsh
       run: ./tools/cmdline/axmol -p linux -a x64 -t 'cpp-tests,lua-tests' -xc '-DAX_RENDER_API=vk;gl' && ./tools/cmdline/axmol run -p linux -a x64 -t unit-tests -wait
   linux-arm64:
+    needs: [source-check]
     runs-on: ubuntu-24.04-arm
     steps:
     - uses: actions/checkout@v6
@@ -119,6 +132,7 @@ jobs:
       shell: pwsh
       run: ./tools/cmdline/axmol -p linux -a arm64 -t 'cpp-tests,lua-tests' -xc '-DAX_RENDER_API=vk;gl' && ./tools/cmdline/axmol run -p linux -a arm64 -t unit-tests -wait
   osx-arm64:
+    needs: [source-check]
     runs-on: macos-15
     steps:
     - uses: actions/checkout@v6
@@ -128,8 +142,9 @@ jobs:
         xcode-version: '${{ env.GH_XCODE_VER }}'
     - name: Build
       shell: pwsh
-      run: ./tools/cmdline/axmol -p osx -a arm64 && ./tools/cmdline/axmol run -p osx -a arm64 -t unit-tests
+      run: ./tools/cmdline/axmol -p osx -a arm64 -t cpp-tests && ./tools/cmdline/axmol run -p osx -a arm64 -t unit-tests
   osx-x64:
+    needs: [source-check]
     runs-on: macos-15-intel
     steps:
     - uses: actions/checkout@v6
@@ -139,8 +154,9 @@ jobs:
         xcode-version: '${{ env.GH_XCODE_VER }}'
     - name: Build
       shell: pwsh
-      run: ./tools/cmdline/axmol -p osx -a x64
+      run: ./tools/cmdline/axmol -p osx -a x64 -t cpp-tests
   android:
+    needs: [source-check]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -158,7 +174,7 @@ jobs:
       shell: pwsh
       run: |
         $AX_ROOT = $(Get-Location).Path
-        ./tools/cmdline/axmol -p android -a $env:BUILD_ARCH -xc "-DAX_RENDER_API=vk;gl"
+        ./tools/cmdline/axmol -p android -a $env:BUILD_ARCH -xc "-DAX_RENDER_API=vk;gl" -t cpp-tests
     - uses: actions/upload-artifact@v6
       with:
         name: android_${{ matrix.arch }}
@@ -166,6 +182,7 @@ jobs:
           templates/**/*.apk
           tests/**/*.apk
   ios-sim-x64:
+    needs: [source-check]
     runs-on: macos-15
     strategy:
       matrix:
@@ -182,8 +199,9 @@ jobs:
         xcode-version: '${{ env.GH_XCODE_VER }}'
     - name: Build
       shell: pwsh
-      run: ./tools/cmdline/axmol -p $env:TARGET_OS -a 'x64'
+      run: ./tools/cmdline/axmol -p $env:TARGET_OS -a 'x64' -t cpp-tests
   ios-sim-arm64:
+    needs: [source-check]
     runs-on: macos-15
     strategy:
       matrix:
@@ -201,8 +219,9 @@ jobs:
     - name: Build
       shell: pwsh
       # axmol cmdline can't guess ios arm64 as simulator, so need specify by option '-sdk'
-      run: ./tools/cmdline/axmol -p $env:TARGET_OS -a 'arm64' -sdk 'simulator'
+      run: ./tools/cmdline/axmol -p $env:TARGET_OS -a 'arm64' -sdk 'simulator' -t cpp-tests
   wasm:
+    needs: [source-check]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6
@@ -216,6 +235,7 @@ jobs:
         path: build_wasm/bin/**/*
         if-no-files-found: error
   wasm64:
+    needs: [source-check]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6

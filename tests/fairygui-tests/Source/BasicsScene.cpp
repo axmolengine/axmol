@@ -186,7 +186,7 @@ void BasicsScene::playDepth()
         startPos.x += 10;
         startPos.y += 10;
         graph->setPosition(startPos.x, startPos.y);
-        graph->drawRect(150, 150, 1, Color::BLACK, Color::RED);
+        graph->drawRect(150, 150, 1, Color::black, Color::red);
         obj->getChild("n22")->as<GComponent>()->addChild(graph);
     },
                                             EventTag(this)); //avoid duplicate register
@@ -196,7 +196,7 @@ void BasicsScene::playDepth()
         startPos.x += 10;
         startPos.y += 10;
         graph->setPosition(startPos.x, startPos.y);
-        graph->drawRect(150, 150, 1, Color::BLACK, Color::GREEN);
+        graph->drawRect(150, 150, 1, Color::black, Color::green);
         graph->setSortingOrder(200);
         obj->getChild("n22")->as<GComponent>()->addChild(graph);
     },
@@ -224,7 +224,7 @@ void BasicsScene::playDragDrop()
     });
 
     GObject* bounds = obj->getChild("n7");
-    Rect rect = bounds->transformRect(Rect(Vec2::ZERO, bounds->getSize()), _groot);
+    Rect rect = bounds->transformRect(Rect(Vec2::zero, bounds->getSize()), _groot);
 
     //---!!Because at this time the container is on the right side of the stage and beginning to move to left(transition), so we need to caculate the final position
     rect.origin.x -= obj->getParent()->getX();

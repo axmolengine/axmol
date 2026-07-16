@@ -31,10 +31,10 @@ void InspectorNodePropertyHandler::drawProperties(Node* node)
         ImGui::Text("User data: %p", userData);
     }
 
-    auto pos      = node->getPosition();
-    float _pos[2] = {pos.x, pos.y};
-    ImGui::DragFloat2("Position", _pos);
-    node->setPosition({_pos[0], _pos[1]});
+    auto pos      = node->getPosition3D();
+    float _pos[3] = {pos.x, pos.y, pos.z};
+    ImGui::DragFloat3("Position", _pos);
+    node->setPosition3D({_pos[0], _pos[1], _pos[2]});
 
     // need to use getScaleX() because of assert
     float _scale[3] = {node->getScaleX(), node->getScaleX(), node->getScaleY()};
@@ -185,14 +185,14 @@ void Inspector::init()
     addPropertyHandler("__LABEL_PROTOCOL__", std::make_unique<InspectorLabelProtocolPropertyHandler>());
 
     _beforeNewSceneEventListener = Director::getInstance()->getEventDispatcher()->addCustomEventListener(
-        Director::EVENT_BEFORE_SET_NEXT_SCENE, [this](EventCustom*) {
+        Director::EVENT_BEFORE_SET_NEXT_SCENE, [this](CustomEvent*) {
         if (!_autoAddToScenes)
             return;
 
         getInstance()->close();
     });
     _afterNewSceneEventListener = Director::getInstance()->getEventDispatcher()->addCustomEventListener(
-        Director::EVENT_AFTER_SET_NEXT_SCENE, [this](EventCustom*) {
+        Director::EVENT_AFTER_SET_NEXT_SCENE, [this](CustomEvent*) {
         if (!_autoAddToScenes)
             return;
 

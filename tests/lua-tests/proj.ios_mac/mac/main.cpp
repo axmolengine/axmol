@@ -30,5 +30,5 @@ using namespace ax;
 int main(int argc, char* argv[])
 {
     AppDelegate app;
-    return Application::getInstance()->run();
+    return Application::getInstance()->launch(argc, argv);
 }

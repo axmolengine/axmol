@@ -24,6 +24,7 @@
  ****************************************************************************/
 
 #include "axmol/rhi/RenderContext.h"
+#include "axmol/rhi/PipelineDesc.h"
 #include "axmol/rhi/RenderTarget.h"
 
 #include <limits>
@@ -55,6 +56,8 @@ bool RenderContext::updateSurface(SurfaceHandle /*surface*/, uint32_t /*width*/,
 }
 
 void RenderContext::setFrameBufferOnly(bool /*frameBufferOnly*/) {}
+
+void RenderContext::submitCurrentFrameCommands(bool /*waitForCompletion*/) {}
 
 uint64_t RenderContext::getCompletedFenceValue() const
 {

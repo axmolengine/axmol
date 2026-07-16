@@ -38,24 +38,21 @@ THE SOFTWARE.
 
 namespace ax
 {
-
-Application* Application::sm_pSharedApplication = nullptr;
-
 Application::Application() : _animationInterval(16666667)
 {
-    AXASSERT(!sm_pSharedApplication, "sm_pSharedApplication already exist");
-    sm_pSharedApplication = this;
+    AXASSERT(!s_axmolApp, "s_axmolApp already exist");
+    s_axmolApp = this;
 }
 
 Application::~Application()
 {
-    AXASSERT(this == sm_pSharedApplication, "sm_pSharedApplication != this");
-    sm_pSharedApplication = 0;
+    AXASSERT(this == s_axmolApp, "s_axmolApp != this");
+    s_axmolApp = 0;
 }
 
 int Application::run()
 {
-    initContextAttrs();
+    applicationWillLaunch();
     if (!applicationDidFinishLaunching())
     {
         return 1;
@@ -75,8 +72,8 @@ int Application::run()
     {
         lastTime = std::chrono::steady_clock::now();
 
-        director->renderFrame();
-        renderView->pollEvents();
+        director->performFrameBoundaryTasks();
+        director->stepFrame();
 
         auto interval     = std::chrono::steady_clock::now() - lastTime;
         auto waitDuration = _animationInterval - interval - _1ms;
@@ -87,14 +84,14 @@ int Application::run()
     }
 
     /* Only work on Desktop
-     *  Director::renderFrame is really one frame logic
+     *  Director::stepFrame is really one frame logic
      *  when we want to close the window, we should call Director::end();
-     *  then call Director::renderFrame to do release of internal resources
+     *  then call Director::stepFrame to do release of internal resources
      */
     if (renderView->isGfxContextReady())
     {
         director->end();
-        director->renderFrame();
+        director->stepFrame();
     }
 
     renderView->release();
@@ -121,16 +118,6 @@ std::string Application::getVersion()
         return [version UTF8String];
     }
     return "";
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// static member function
-//////////////////////////////////////////////////////////////////////////////////////////////////
-
-Application* Application::getInstance()
-{
-    AXASSERT(sm_pSharedApplication, "sm_pSharedApplication not set");
-    return sm_pSharedApplication;
 }
 
 const char* Application::getCurrentLanguageCode()
@@ -167,17 +154,6 @@ bool Application::openURL(std::string_view url)
     NSString* msg = [NSString stringWithCString:url.data() encoding:NSUTF8StringEncoding];
     NSURL* nsUrl  = [NSURL URLWithString:msg];
     return [[NSWorkspace sharedWorkspace] openURL:nsUrl];
-}
-
-void Application::setStartupScriptFilename(std::string_view startupScriptFile)
-{
-    _startupScriptFilename = startupScriptFile;
-    std::replace(_startupScriptFilename.begin(), _startupScriptFilename.end(), '\\', '/');
-}
-
-std::string_view Application::getStartupScriptFilename()
-{
-    return _startupScriptFilename;
 }
 
 }  // namespace ax

@@ -41,7 +41,7 @@ THE SOFTWARE.
 namespace ax
 {
 
-class EventCustom;
+class CustomEvent;
 
 /** @class Environment
  * @brief Environment contains some Engine caps and user settings
@@ -72,12 +72,6 @@ public:
      * @return The OpenGL Max texture size.
      */
     int getMaxTextureSize() const;
-
-    /** OpenGL Max Modelview Stack Depth.
-     *
-     * @return The OpenGL Max Modelview Stack Depth.
-     */
-    int getMaxModelviewStackDepth() const;
 
     /** Returns the maximum texture units.
      *
@@ -248,7 +242,6 @@ private:
     static std::string s_configfile;
 
 protected:
-    int _maxModelviewStackDepth;
     bool _supportsPVRTC;
     bool _supportsETC1;
     bool _supportsETC2;
@@ -271,7 +264,7 @@ protected:
 
     ValueMap _valueDict;
 
-    EventCustom* _loadedEvent;
+    CustomEvent* _loadedEvent;
 };
 
 }  // namespace ax

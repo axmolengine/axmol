@@ -45,20 +45,14 @@ namespace ax
 
 float AudioPlayerSettings::distanceScale = 1.f;
 
-const int AudioEngine::INVALID_AUDIO_ID = -1;
-const float AudioEngine::TIME_UNKNOWN   = -1.0f;
-
 // audio file path,audio IDs
-tlx::string_map<std::list<AUDIO_ID>> AudioEngine::_audioPathIDMap;
+tlx::string_map<std::list<AudioId>> AudioEngine::_audioPathIDMap;
 // profileName,ProfileHelper
 tlx::string_map<AudioEngine::ProfileHelper> AudioEngine::_audioPathProfileHelperMap;
-unsigned int AudioEngine::_maxInstances                        = MAX_AUDIOINSTANCES;
+AudioEngineSettings AudioEngine::_settings;
 AudioEngine::ProfileHelper* AudioEngine::_defaultProfileHelper = nullptr;
-std::unordered_map<AUDIO_ID, AudioEngine::AudioInfo> AudioEngine::_audioIDInfoMap;
+std::unordered_map<AudioId, AudioEngine::AudioInfo> AudioEngine::_audioIDInfoMap;
 AudioEngineImpl* AudioEngine::_audioEngineImpl = nullptr;
-
-bool AudioEngine::_isEnabled = true;
-
 AudioEngine::AudioInfo::AudioInfo()
     : profileHelper(nullptr), volume(1.0f), loop(false), duration(TIME_UNKNOWN), state(AudioState::INITIALIZING)
 {}
@@ -71,8 +65,7 @@ void AudioEngine::end()
     // fix #127
     uncacheAll();
 
-    delete _audioEngineImpl;
-    _audioEngineImpl = nullptr;
+    AX_SAFE_RELEASE_NULL(_audioEngineImpl);
 
     delete _defaultProfileHelper;
     _defaultProfileHelper = nullptr;
@@ -83,10 +76,9 @@ bool AudioEngine::lazyInit()
     if (_audioEngineImpl == nullptr)
     {
         _audioEngineImpl = new AudioEngineImpl();
-        if (!_audioEngineImpl->init())
+        if (!_audioEngineImpl->init(_settings))
         {
-            delete _audioEngineImpl;
-            _audioEngineImpl = nullptr;
+            AX_SAFE_RELEASE(_audioEngineImpl);
             return false;
         }
     }
@@ -94,16 +86,14 @@ bool AudioEngine::lazyInit()
     return true;
 }
 
-AUDIO_ID AudioEngine::play2d(std::string_view filePath, bool loop, float volume, const AudioProfile* profile)
+AudioId AudioEngine::play2d(std::string_view filePath, bool loop, float volume, const AudioProfile* profile)
 {
     return play2d(filePath, ax::AudioPlayerSettings{loop, volume, 0.0f}, profile);
 }
 
-AUDIO_ID AudioEngine::play2d(std::string_view filePath,
-                             const AudioPlayerSettings& settings,
-                             const AudioProfile* profile)
+AudioId AudioEngine::play2d(std::string_view filePath, const AudioPlayerSettings& settings, const AudioProfile* profile)
 {
-    AUDIO_ID ret = AudioEngine::INVALID_AUDIO_ID;
+    AudioId ret = AudioEngine::INVALID_AUDIO_ID;
 
     do
     {
@@ -130,7 +120,7 @@ AUDIO_ID AudioEngine::play2d(std::string_view filePath,
             profileHelper->profile = *profile;
         }
 
-        if (_audioIDInfoMap.size() >= _maxInstances)
+        if (_audioIDInfoMap.size() >= _settings.maxInstances)
         {
             AXLOGE("Fail to play {} cause by limited max instance of AudioEngine", filePath);
             break;
@@ -197,11 +187,9 @@ int AudioEngine::play3d(std::string_view filePath,
     return play3d(filePath, ax::AudioPlayerSettings{loop, volume, 0.0f, position});
 }
 
-AUDIO_ID AudioEngine::play3d(std::string_view filePath,
-                             const AudioPlayerSettings& settings,
-                             const AudioProfile* profile)
+AudioId AudioEngine::play3d(std::string_view filePath, const AudioPlayerSettings& settings, const AudioProfile* profile)
 {
-    AUDIO_ID ret = AudioEngine::INVALID_AUDIO_ID;
+    AudioId ret = AudioEngine::INVALID_AUDIO_ID;
 
     do
     {
@@ -228,7 +216,7 @@ AUDIO_ID AudioEngine::play3d(std::string_view filePath,
             profileHelper->profile = *profile;
         }
 
-        if (_audioIDInfoMap.size() >= _maxInstances)
+        if (_audioIDInfoMap.size() >= _settings.maxInstances)
         {
             AXLOGE("Fail to play {} cause by limited max instance of AudioEngine", filePath);
             break;
@@ -287,7 +275,7 @@ AUDIO_ID AudioEngine::play3d(std::string_view filePath,
     return ret;
 }
 
-void AudioEngine::setLoop(AUDIO_ID audioID, bool loop)
+void AudioEngine::setLoop(AudioId audioID, bool loop)
 {
     auto it = _audioIDInfoMap.find(audioID);
     if (it != _audioIDInfoMap.end() && it->second.loop != loop)
@@ -297,7 +285,7 @@ void AudioEngine::setLoop(AUDIO_ID audioID, bool loop)
     }
 }
 
-void AudioEngine::setVolume(AUDIO_ID audioID, float volume)
+void AudioEngine::setVolume(AudioId audioID, float volume)
 {
     auto it = _audioIDInfoMap.find(audioID);
     if (it != _audioIDInfoMap.end())
@@ -312,7 +300,7 @@ void AudioEngine::setVolume(AUDIO_ID audioID, float volume)
     }
 }
 
-void AudioEngine::setPitch(AUDIO_ID audioID, float pitch)
+void AudioEngine::setPitch(AudioId audioID, float pitch)
 {
     auto it = _audioIDInfoMap.find(audioID);
     if (it != _audioIDInfoMap.end())
@@ -327,7 +315,7 @@ void AudioEngine::setPitch(AUDIO_ID audioID, float pitch)
     }
 }
 
-float AudioEngine::getPitch(AUDIO_ID audioID)
+float AudioEngine::getPitch(AudioId audioID)
 {
     auto tmpIterator = _audioIDInfoMap.find(audioID);
     if (tmpIterator != _audioIDInfoMap.end())
@@ -339,7 +327,7 @@ float AudioEngine::getPitch(AUDIO_ID audioID)
     return 0.0f;
 }
 
-void AudioEngine::pause(AUDIO_ID audioID)
+void AudioEngine::pause(AudioId audioID)
 {
     auto it = _audioIDInfoMap.find(audioID);
     if (it != _audioIDInfoMap.end() && it->second.state == AudioState::PLAYING)
@@ -362,7 +350,7 @@ void AudioEngine::pauseAll()
     }
 }
 
-void AudioEngine::resume(AUDIO_ID audioID)
+void AudioEngine::resume(AudioId audioID)
 {
     auto it = _audioIDInfoMap.find(audioID);
     if (it != _audioIDInfoMap.end() && it->second.state == AudioState::PAUSED)
@@ -385,7 +373,7 @@ void AudioEngine::resumeAll()
     }
 }
 
-void AudioEngine::stop(AUDIO_ID audioID)
+void AudioEngine::stop(AudioId audioID)
 {
     auto it = _audioIDInfoMap.find(audioID);
     if (it != _audioIDInfoMap.end())
@@ -396,7 +384,7 @@ void AudioEngine::stop(AUDIO_ID audioID)
     }
 }
 
-void AudioEngine::remove(AUDIO_ID audioID)
+void AudioEngine::remove(AudioId audioID)
 {
     auto it = _audioIDInfoMap.find(audioID);
     if (it != _audioIDInfoMap.end())
@@ -441,9 +429,9 @@ void AudioEngine::uncache(std::string_view filePath)
         //@Note: For safely iterating elements from the audioID list, we need to copy the list
         // since 'AudioEngine::remove' may be invoked in '_audioEngineImpl->stop' synchronously.
         // If this happens, it will break the iteration, and crash will appear on some devices.
-        std::list<AUDIO_ID> copiedIDs(audioIDsIter->second);
+        std::list<AudioId> copiedIDs(audioIDsIter->second);
 
-        for (AUDIO_ID audioID : copiedIDs)
+        for (AudioId audioID : copiedIDs)
         {
             _audioEngineImpl->stop(audioID);
 
@@ -476,7 +464,7 @@ void AudioEngine::uncacheAll()
     _audioEngineImpl->uncacheAll();
 }
 
-float AudioEngine::getDuration(AUDIO_ID audioID)
+float AudioEngine::getDuration(AudioId audioID)
 {
     auto it = _audioIDInfoMap.find(audioID);
     if (it != _audioIDInfoMap.end() && it->second.state != AudioState::INITIALIZING)
@@ -491,7 +479,7 @@ float AudioEngine::getDuration(AUDIO_ID audioID)
     return TIME_UNKNOWN;
 }
 
-bool AudioEngine::setCurrentTime(AUDIO_ID audioID, float time)
+bool AudioEngine::setCurrentTime(AudioId audioID, float time)
 {
     auto it = _audioIDInfoMap.find(audioID);
     if (it != _audioIDInfoMap.end() && it->second.state != AudioState::INITIALIZING)
@@ -502,7 +490,7 @@ bool AudioEngine::setCurrentTime(AUDIO_ID audioID, float time)
     return false;
 }
 
-float AudioEngine::getCurrentTime(AUDIO_ID audioID)
+float AudioEngine::getCurrentTime(AudioId audioID)
 {
     auto it = _audioIDInfoMap.find(audioID);
     if (it != _audioIDInfoMap.end() && it->second.state != AudioState::INITIALIZING)
@@ -512,7 +500,7 @@ float AudioEngine::getCurrentTime(AUDIO_ID audioID)
     return 0.0f;
 }
 
-void AudioEngine::setFinishCallback(AUDIO_ID audioID, const std::function<void(AUDIO_ID, std::string_view)>& callback)
+void AudioEngine::setFinishCallback(AudioId audioID, const std::function<void(AudioId, std::string_view)>& callback)
 {
     auto it = _audioIDInfoMap.find(audioID);
     if (it != _audioIDInfoMap.end())
@@ -525,14 +513,14 @@ bool AudioEngine::setMaxAudioInstance(int maxInstances)
 {
     if (maxInstances > 0 && maxInstances <= MAX_AUDIOINSTANCES)
     {
-        _maxInstances = maxInstances;
+        _settings.maxInstances = maxInstances;
         return true;
     }
 
     return false;
 }
 
-bool AudioEngine::isLoop(AUDIO_ID audioID)
+bool AudioEngine::isLoop(AudioId audioID)
 {
     auto tmpIterator = _audioIDInfoMap.find(audioID);
     if (tmpIterator != _audioIDInfoMap.end())
@@ -544,7 +532,7 @@ bool AudioEngine::isLoop(AUDIO_ID audioID)
     return false;
 }
 
-float AudioEngine::getVolume(AUDIO_ID audioID)
+float AudioEngine::getVolume(AudioId audioID)
 {
     auto tmpIterator = _audioIDInfoMap.find(audioID);
     if (tmpIterator != _audioIDInfoMap.end())
@@ -556,7 +544,7 @@ float AudioEngine::getVolume(AUDIO_ID audioID)
     return 0.0f;
 }
 
-AudioEngine::AudioState AudioEngine::getState(AUDIO_ID audioID)
+AudioEngine::AudioState AudioEngine::getState(AudioId audioID)
 {
     auto tmpIterator = _audioIDInfoMap.find(audioID);
     if (tmpIterator != _audioIDInfoMap.end())
@@ -567,7 +555,7 @@ AudioEngine::AudioState AudioEngine::getState(AUDIO_ID audioID)
     return AudioState::ERROR;
 }
 
-AudioProfile* AudioEngine::getProfile(AUDIO_ID audioID)
+AudioProfile* AudioEngine::getProfile(AudioId audioID)
 {
     auto it = _audioIDInfoMap.find(audioID);
     if (it != _audioIDInfoMap.end())
@@ -637,13 +625,13 @@ int AudioEngine::getPlayingAudioCount()
     return static_cast<int>(_audioIDInfoMap.size());
 }
 
-void AudioEngine::setEnabled(bool isEnabled)
+void AudioEngine::setEnabled(bool enabled)
 {
-    if (_isEnabled != isEnabled)
+    if (_settings.enabled != enabled)
     {
-        _isEnabled = isEnabled;
+        _settings.enabled = enabled;
 
-        if (!_isEnabled)
+        if (!_settings.enabled)
         {
             stopAll();
         }
@@ -652,7 +640,7 @@ void AudioEngine::setEnabled(bool isEnabled)
 
 bool AudioEngine::isEnabled()
 {
-    return _isEnabled;
+    return _settings.enabled;
 }
 
 void AudioEngine::setPan(int audioId, float value, float distance)
@@ -737,4 +725,20 @@ void AudioEngine::setReverbProperties(int audioId, const ReverbProperties* rever
 
     return _audioEngineImpl->setReverbProperties(audioId, reverbProperties);
 }
+
+void AudioEngine::setHRTFEnabled(bool enabled)
+{
+#if AX_USE_ALSOFT
+    if (_settings.hrtfEnabled == enabled)
+        return;
+    if (_audioEngineImpl && _audioEngineImpl->setHRTFEnabled(enabled))
+        _settings.hrtfEnabled = enabled;
+#endif
+}
+
+bool AudioEngine::isHRTFEnabled()
+{
+    return _settings.hrtfEnabled;
+}
+
 }  // namespace ax

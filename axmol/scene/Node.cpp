@@ -64,8 +64,8 @@ AX_DLL uint64_t hashNodeName(std::string_view name)
 
 // FIXME:: Yes, nodes might have a sort problem once every 30 days if the game runs at 60 FPS and each frame sprites are
 // reordered.
-std::uint32_t Node::s_globalOrderOfArrival = 0;
-int Node::__attachedNodeCount              = 0;
+uint32_t Node::s_globalOrderOfArrival = 0;
+int Node::__attachedNodeCount         = 0;
 
 // MARK: Constructor, Destructor, Init
 
@@ -83,7 +83,7 @@ Node::Node()
     , _skewX(0.0f)
     , _skewY(0.0f)
     , _anchorPoint(0, 0)
-    , _contentSize(Vec2::ZERO)
+    , _contentSize(Vec2::zero)
     , _contentSizeDirty(true)
     , _transformDirty(true)
     , _inverseDirty(true)
@@ -113,8 +113,8 @@ Node::Node()
     , _updateScriptHandler(0)
 #endif
     , _componentContainer(nullptr)
-    , _displayedColor(Color32::WHITE)
-    , _realColor(Color32::WHITE)
+    , _displayedColor(Color32::white)
+    , _realColor(Color32::white)
     , _childFollowCameraMask(false)
     , _cascadeMode(0)
     , _cameraMask(1)
@@ -132,7 +132,7 @@ Node::Node()
     _eventDispatcher = _director->getEventDispatcher();
     _eventDispatcher->retain();
 
-    _transform = _inverse = Mat4::IDENTITY;
+    _transform = _inverse = Mat4::identity;
 }
 
 Node* Node::create()
@@ -225,7 +225,7 @@ void Node::cleanup()
     // NOTE: Although it was correct that removing event listeners associated with current node in Node::cleanup.
     // But it broke the compatibility to the versions before v3.16 .
     // User code may call `node->removeFromParent(true)` which will trigger node's cleanup method, when the node
-    // is added to scene again, event listeners like EventListenerTouchOneByOne will be lost.
+    // is added to scene again, event listeners like PointerEventListener will be lost.
     // In fact, user's code should use `node->removeFromParent(false)` in order not to do a cleanup and just remove node
     // from its parent. For more discussion about why we revert this change is at
     // https://github.com/cocos2d/cocos2d-x/issues/18104. We need to consider more before we want to correct the old and
@@ -384,14 +384,14 @@ void Node::updateRotation3D()
     _rotationZ_X = _rotationZ_Y = -AX_RADIANS_TO_DEGREES(_rotationZ_X);
 }
 
-void Node::setRotationQuat(const Quaternion& quat)
+void Node::setRotationQuat(const Quat& quat)
 {
     _rotationQuat = quat;
     updateRotation3D();
     _transformUpdated = _transformDirty = _inverseDirty = true;
 }
 
-Quaternion Node::getRotationQuat() const
+Quat Node::getRotationQuat() const
 {
     return _rotationQuat;
 }
@@ -653,13 +653,6 @@ void Node::setContentSize(const Vec2& size)
     }
 }
 
-bool Node::hitTest(const Vec2& worldPoint) const
-{
-    auto p  = this->convertToNodeSpace(worldPoint);
-    auto& s = this->getContentSize();
-    return Rect{0.f, 0.f, s.width, s.height}.containsPoint(p);
-}
-
 // isRunning getter
 bool Node::isRunning() const
 {
@@ -801,6 +794,13 @@ Rect Node::getBoundingBox() const
 {
     Rect rect(0, 0, _contentSize.width, _contentSize.height);
     return RectApplyAffineTransform(rect, getNodeToParentAffineTransform());
+}
+
+Rect Node::getWorldBoundingBox() const
+{
+    auto& contentSize = getContentSize();
+    Rect rect         = Rect(0, 0, contentSize.width, contentSize.height);
+    return RectApplyTransform(rect, getNodeToWorldTransform());
 }
 
 // MARK: Children logic
@@ -1225,9 +1225,8 @@ void Node::draw(Renderer* /*renderer*/, const Mat4& /*transform*/, uint32_t /*fl
 
 void Node::visit()
 {
-    auto renderer         = _director->getRenderer();
-    auto& parentTransform = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    visit(renderer, parentTransform, FLAGS_TRANSFORM_DIRTY);
+    auto renderer = _director->getRenderer();
+    visit(renderer, Mat4::identity, FLAGS_TRANSFORM_DIRTY);
 }
 
 uint32_t Node::processParentFlags(const Mat4& parentTransform, uint32_t parentFlags)
@@ -1280,12 +1279,6 @@ void Node::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t paren
 
     uint32_t flags = processParentFlags(parentTransform, parentFlags);
 
-    // IMPORTANT:
-    // To ease the migration to v3.0, we still support the Mat4 stack,
-    // but it is deprecated and your code should not rely on it
-    _director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
-
     bool visibleByCamera = isVisitableByVisitingCamera();
 
     int i = 0;
@@ -1314,8 +1307,6 @@ void Node::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t paren
     {
         this->draw(renderer, _modelViewTransform, flags);
     }
-
-    _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 
     // FIX ME: Why need to set _orderOfArrival to 0??
     // Please refer to https://github.com/cocos2d/cocos2d-x/pull/6920
@@ -1917,18 +1908,18 @@ Vec2 Node::convertToWorldSpaceAR(const Vec2& nodePoint) const
 Vec2 Node::convertToScreenSpace(const Vec2& nodePoint) const
 {
     Vec2 worldPoint(this->convertToWorldSpace(nodePoint));
-    return _director->worldToScreen(worldPoint);
+    return Camera::getDefaultCamera()->projectWorldToScreen(Vec3(worldPoint.x, worldPoint.y, 0.0f));
 }
 
-// convenience methods which take a Touch instead of Vec2
-Vec2 Node::convertTouchToNodeSpace(Touch* touch) const
+// convenience methods which take a PointerEvent instead of Vec2
+Vec2 Node::convertPointerToNodeSpace(PointerEvent* event) const
 {
-    return this->convertToNodeSpace(touch->getLocation());
+    return this->convertToNodeSpace(event->getWorldPoint());
 }
 
-Vec2 Node::convertTouchToNodeSpaceAR(Touch* touch) const
+Vec2 Node::convertPointerToNodeSpaceAR(PointerEvent* event) const
 {
-    Vec2 point = touch->getLocation();
+    Vec2 point = event->getWorldPoint();
     return this->convertToNodeSpaceAR(point);
 }
 
@@ -2170,7 +2161,7 @@ void Node::setCascadeColorEnabled(bool cascadeColorEnabled)
 
 void Node::updateCascadeColor()
 {
-    Color32 parentColor = Color32::WHITE;
+    Color32 parentColor = Color32::white;
     if (_parent && _parent->isCascadeColorEnabled())
     {
         parentColor = _parent->getDisplayedColor();
@@ -2183,56 +2174,8 @@ void Node::disableCascadeColor()
 {
     for (const auto& child : _children)
     {
-        child->updateDisplayedColor(Color32::WHITE);
+        child->updateDisplayedColor(Color32::white);
     }
-}
-
-bool isScreenPointInRect(const Vec2& pt, const Camera* camera, const Mat4& w2l, const Rect& rect, Vec3* p)
-{
-    if (nullptr == camera || rect.size.width <= 0 || rect.size.height <= 0)
-    {
-        return false;
-    }
-
-    // first, convert pt to near/far plane, get Pn and Pf
-    Vec3 Pn(pt.x, pt.y, -1), Pf(pt.x, pt.y, 1);
-    Pn = camera->unprojectGL(Pn);
-    Pf = camera->unprojectGL(Pf);
-
-    //  then convert Pn and Pf to node space
-    w2l.transformPoint(&Pn);
-    w2l.transformPoint(&Pf);
-
-    // Pn and Pf define a line Q(t) = D + t * E which D = Pn
-    auto E = Pf - Pn;
-
-    // second, get three points which define content plane
-    //  these points define a plane P(u, w) = A + uB + wC
-    Vec3 A = Vec3(rect.origin.x, rect.origin.y, 0);
-    Vec3 B(rect.origin.x + rect.size.width, rect.origin.y, 0);
-    Vec3 C(rect.origin.x, rect.origin.y + rect.size.height, 0);
-    B = B - A;
-    C = C - A;
-
-    //  the line Q(t) intercept with plane P(u, w)
-    //  calculate the intercept point P = Q(t)
-    //      (BxC).A - (BxC).D
-    //  t = -----------------
-    //          (BxC).E
-    Vec3 BxC;
-    Vec3::cross(B, C, &BxC);
-    auto BxCdotE = BxC.dot(E);
-    if (BxCdotE == 0)
-    {
-        return false;
-    }
-    auto t = (BxC.dot(A) - BxC.dot(Pn)) / BxCdotE;
-    Vec3 P = Pn + t * E;
-    if (p)
-    {
-        *p = P;
-    }
-    return rect.containsPoint(Vec2(P.x, P.y));
 }
 
 void Node::applyMaskOnEnter(bool applyChildren)
@@ -2303,6 +2246,35 @@ void Node::updateProgramStateTexture(Texture2D* texture)
 rhi::ProgramState* Node::getProgramState() const
 {
     return _programState;
+}
+
+bool Node::onPointerHitTest(PointerEvent* event, Vec3* outHitPoint)
+{
+    if (!event || !isVisible())
+        return false;
+
+    const Ray& ray = event->getRay();
+    if (ray.direction == Vec3())
+        return false;
+
+    Ray localRay(ray);
+    localRay.transform(getWorldToNodeTransform());
+
+    if (localRay.direction.z == 0.0f)
+        return false;
+
+    float t = -localRay.origin.z / localRay.direction.z;
+    if (t < 0.0f)
+        return false;
+
+    Vec3 hitPoint = localRay.origin + t * localRay.direction;
+
+    if (outHitPoint)
+        getNodeToWorldTransform().transformPoint(hitPoint, outHitPoint);
+
+    Rect rect;
+    rect.size = getContentSize();
+    return rect.containsPoint(Vec2(hitPoint.x, hitPoint.y));
 }
 
 }  // namespace ax

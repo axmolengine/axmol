@@ -94,7 +94,7 @@ void PUCircleEmitter::setRandom(const bool random)
     _random = random;
 }
 //-----------------------------------------------------------------------
-const Quaternion& PUCircleEmitter::getOrientation() const
+const Quat& PUCircleEmitter::getOrientation() const
 {
     return _orientation;
 }
@@ -106,8 +106,8 @@ const Vec3& PUCircleEmitter::getNormal() const
 //-----------------------------------------------------------------------
 void PUCircleEmitter::setNormal(const Vec3& normal)
 {
-    //_orientation = Vec3::UNIT_Y.getRotationTo(normal, Vec3::UNIT_X);
-    _orientation = getRotationTo(Vec3::UNIT_Y, normal, Vec3::UNIT_X);
+    //_orientation = Vec3::yAxis.getRotationTo(normal, Vec3::xAxis);
+    _orientation = getRotationTo(Vec3::yAxis, normal, Vec3::xAxis);
     _normal      = normal;
 }
 //-----------------------------------------------------------------------
@@ -194,12 +194,12 @@ PUCircleEmitter* PUCircleEmitter::create()
     return pe;
 }
 
-ax::Quaternion PUCircleEmitter::getRotationTo(const Vec3& src,
-                                              const Vec3& dest,
-                                              const Vec3& fallbackAxis /*= Vec3::ZERO*/) const
+ax::Quat PUCircleEmitter::getRotationTo(const Vec3& src,
+                                        const Vec3& dest,
+                                        const Vec3& fallbackAxis /*= Vec3::zero*/) const
 {
     // Based on Stan Melax's article in Game Programming Gems
-    Quaternion q;
+    Quat q;
     // Copy, since cannot modify local
     Vec3 v0 = src;
     Vec3 v1 = dest;
@@ -210,11 +210,11 @@ ax::Quaternion PUCircleEmitter::getRotationTo(const Vec3& src,
     // If dot == 1, vectors are the same
     if (d >= 1.0f)
     {
-        return Quaternion();
+        return Quat();
     }
     if (d < (1e-6f - 1.0f))
     {
-        if (fallbackAxis != Vec3::ZERO)
+        if (fallbackAxis != Vec3::zero)
         {
             // rotate 180 degrees about the fallback axis
             q.set(fallbackAxis, (float)M_PI);
@@ -223,11 +223,11 @@ ax::Quaternion PUCircleEmitter::getRotationTo(const Vec3& src,
         else
         {
             // Generate an axis
-            Vec3 axis /* = Vec3::UNIT_X.crossProduct(*this)*/;
-            Vec3::cross(Vec3::UNIT_X, src, &axis);
+            Vec3 axis /* = Vec3::xAxis.crossProduct(*this)*/;
+            Vec3::cross(Vec3::xAxis, src, &axis);
             if (axis.lengthSquared() < (1e-06 * 1e-06))  // pick another if colinear
-                // axis = Vec3::UNIT_Y.crossProduct(*this);
-                Vec3::cross(Vec3::UNIT_Y, src, &axis);
+                // axis = Vec3::yAxis.crossProduct(*this);
+                Vec3::cross(Vec3::yAxis, src, &axis);
             axis.normalize();
 
             // q.FromAngleAxis(Radian(Math::PI), axis);

@@ -1,4 +1,4 @@
-﻿#include "ModelLoader.h"
+#include "ModelLoader.h"
 
 namespace Effekseer
 {

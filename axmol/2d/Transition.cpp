@@ -28,6 +28,8 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "axmol/2d/Transition.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/renderer/RenderTexturePass.h"
 #include "axmol/2d/ActionInterval.h"
 #include "axmol/2d/ActionInstant.h"
 #include "axmol/2d/ActionEase.h"
@@ -35,10 +37,13 @@ THE SOFTWARE.
 #include "axmol/2d/ActionTiledGrid.h"
 #include "axmol/2d/ActionGrid.h"
 #include "axmol/2d/Layer.h"
-#include "axmol/2d/RenderTexture.h"
+#include "axmol/renderer/RenderTexture.h"
 #include "axmol/2d/NodeGrid.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/EventDispatcher.h"
+#include "axmol/platform/RenderView.h"
+#include "axmol/scene/Camera.h"
+#include "axmol/scene/Scene.h"
 
 namespace ax
 {
@@ -1043,7 +1048,7 @@ TransitionFade* TransitionFade::create(float duration, Scene* scene, const Color
 
 TransitionFade* TransitionFade::create(float duration, Scene* scene)
 {
-    return TransitionFade::create(duration, scene, Color32::BLACK);
+    return TransitionFade::create(duration, scene, Color32::black);
 }
 
 bool TransitionFade::initWithDuration(float duration, Scene* scene, const Color32& color)
@@ -1060,7 +1065,7 @@ bool TransitionFade::initWithDuration(float duration, Scene* scene, const Color3
 
 bool TransitionFade::initWithDuration(float t, Scene* scene)
 {
-    this->initWithDuration(t, scene, Color32::BLACK);
+    this->initWithDuration(t, scene, Color32::black);
     return true;
 }
 
@@ -1121,48 +1126,53 @@ void TransitionCrossFade::onEnter()
     Vec2 size         = _director->getCanvasSize();
     LayerColor* layer = LayerColor::create(color);
 
+    auto camera = Camera::createOrthographicView(_director->getCanvasSize(), -1024, 1024);
+
     // create the first render texture for inScene
     RenderTexture* inTexture =
-        RenderTexture::create((int)size.width, (int)size.height, rhi::PixelFormat::RGBA8, PixelFormat::D24S8, false);
+        RenderTexture::create(_director->canvasToPixels(size), rhi::PixelFormat::RGBA8, PixelFormat::D24S8);
 
-    if (nullptr == inTexture)
-    {
-        return;
-    }
-
-    inTexture->setPosition(size.width / 2, size.height / 2);
-    inTexture->setAnchorPoint(Vec2(0.5f, 0.5f));
+    RefPtr<RenderTexturePass> pass{RenderTexturePass::obtain(inTexture), tlx::adopt_object};
 
     // render inScene to its texturebuffer
-    inTexture->begin();
-    _inScene->visit();
-    inTexture->end();
+    pass->begin(camera);
+    _inScene->visit(_director->getRenderer(), _inScene->getNodeToParentTransform(), 0);
+    pass->end();
+
+    _director->getRenderer()->render();
+
+    Sprite* inSprite = Sprite::createWithTexture(inTexture);
+    inSprite->setPosition(size.width / 2, size.height / 2);
+    inSprite->setAnchorPoint(Vec2(0.5f, 0.5f));
 
     // create the second render texture for outScene
     RenderTexture* outTexture =
-        RenderTexture::create((int)size.width, (int)size.height, rhi::PixelFormat::RGBA8, PixelFormat::D24S8, false);
-
-    outTexture->setPosition(size.width / 2, size.height / 2);
-    outTexture->setAnchorPoint(Vec2(0.5f, 0.5f));
+        RenderTexture::create(_director->canvasToPixels(size), rhi::PixelFormat::RGBA8, PixelFormat::D24S8);
 
     // render outScene to its texturebuffer
-    outTexture->begin();
-    _outScene->visit();
-    outTexture->end();
+    pass->setTarget(outTexture);
 
-    // create blend functions
+    pass->begin(camera);
+    _outScene->visit(_director->getRenderer(), _outScene->getNodeToParentTransform(), 0);
+    pass->end();
+
+    _director->getRenderer()->render();
+
+    Sprite* outSprite = Sprite::createWithTexture(outTexture);
+    outSprite->setPosition(size.width / 2, size.height / 2);
+    outSprite->setAnchorPoint(Vec2(0.5f, 0.5f));
 
     // set blendfunctions
-    inTexture->getSprite()->setBlendFunc(BlendFunc::DISABLE);
-    outTexture->getSprite()->setBlendFunc(BlendFunc::ALPHA_PREMULTIPLIED);
+    inSprite->setBlendFunc(BlendFunc::DISABLE);
+    outSprite->setBlendFunc(BlendFunc::ALPHA_PREMULTIPLIED);
 
-    // add render textures to the layer
-    layer->addChild(inTexture);
-    layer->addChild(outTexture);
+    // add sprites to the layer
+    layer->addChild(inSprite);
+    layer->addChild(outSprite);
 
     // initial opacity:
-    inTexture->getSprite()->setOpacity(255);
-    outTexture->getSprite()->setOpacity(255);
+    inSprite->setOpacity(255);
+    outSprite->setOpacity(255);
 
     // create the blend action
     Action* layerAction = Sequence::create(FadeTo::create(_duration, 0),
@@ -1170,9 +1180,9 @@ void TransitionCrossFade::onEnter()
                                            CallFunc::create(AX_CALLBACK_0(TransitionScene::finish, this)), nullptr);
 
     // run the blend action
-    outTexture->getSprite()->runAction(layerAction);
+    outSprite->runAction(layerAction);
 
-    // add the layer (which contains our two rendertextures) to the scene
+    // add the layer (which contains our two sprites) to the scene
     addChild(layer, 2, kSceneFade);
 }
 
@@ -1390,6 +1400,7 @@ void TransitionFadeTR::onEnter()
     TransitionScene::onEnter();
 
     _outSceneProxy->setTarget(_outScene);
+    _outSceneProxy->setProjectGridBlitToVisitingCamera(_director->getRenderView()->isVRActive());
     _outSceneProxy->onEnter();
 
     Vec2 s       = _director->getCanvasSize();

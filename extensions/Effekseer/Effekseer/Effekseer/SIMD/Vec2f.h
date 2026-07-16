@@ -1,4 +1,4 @@
-﻿
+
 #ifndef __EFFEKSEER_SIMD_VEC2F_H__
 #define __EFFEKSEER_SIMD_VEC2F_H__
 

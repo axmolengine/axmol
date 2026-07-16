@@ -25,12 +25,12 @@ public:
 
 #if defined(AX_VERSION)
     bool setBMFontFilePath(std::string_view bmfontFilePath,
-                           const ax::Rect& imageRect = ax::Rect::ZERO,
+                           const ax::Rect& imageRect = ax::Rect::zero,
                            bool imageRotated = false,
                            float fontSize = 0) override;
 #else
     bool setBMFontFilePath(std::string_view bmfontFilePath,
-                                   const ax::Vec2& imageOffset = ax::Vec2::ZERO,
+                                   const ax::Vec2& imageOffset = ax::Vec2::zero,
                                    float fontSize              = 0) override;
 #endif
     void setGrayed(bool value);

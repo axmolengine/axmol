@@ -58,7 +58,7 @@
 namespace ax
 {
 
-class EventListenerCustom;
+class CustomEventListener;
 
 namespace network
 {
@@ -440,7 +440,7 @@ protected:
     tlx::sbyte_buffer _receivedData;
     std::recursive_mutex _receivedDataMtx;
 
-    EventListenerCustom* _resetDirectorListener;
+    CustomEventListener* _resetDirectorListener;
 
     ConcurrentDeque<Event*> _eventQueue;
     std::vector<std::string> _headers;  /// custom headers

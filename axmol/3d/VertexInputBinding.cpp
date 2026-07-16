@@ -124,7 +124,7 @@ bool VertexInputBinding::init(MeshIndexData* meshIndexData, Pass* pass, MeshComm
     {
         auto program = _programState->getProgram();
         desc.addAttrib(rhi::VERTEX_INPUT_NAME_INSTANCE, program->getVertexInputDesc(rhi::VertexInputKind::INSTANCE),
-                       rhi::VertexFormat::MAT4, 0, false, 1);
+                       rhi::VertexElementType::MAT4, 0, false, 1);
     }
 
     /*
@@ -156,7 +156,7 @@ bool VertexInputBinding::hasAttribute(const shaderinfos::VertexKey& key) const
 
 void VertexInputBinding::setVertexInputPointer(VertexLayoutDesc& desc,
                                                std::string_view name,
-                                               rhi::VertexFormat type,
+                                               rhi::VertexElementType type,
                                                bool normalized,
                                                int offset,
                                                int flag)

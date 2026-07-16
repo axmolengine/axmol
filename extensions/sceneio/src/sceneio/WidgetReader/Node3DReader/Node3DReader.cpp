@@ -63,7 +63,7 @@ void Node3DReader::destroyInstance()
 Vec3 Node3DReader::getVec3Attribute(pugi::xml_attribute attribute) const
 {
     if (!attribute)
-        return Vec3::ZERO;
+        return Vec3::zero;
 
     Vec3 ret;
     std::string attriname;
@@ -97,17 +97,17 @@ Offset<Table> Node3DReader::createOptionsWithFlatBuffersForNode(pugi::xml_node o
 {
     std::string name;
     long actionTag    = 0;
-    Vec2 rotationSkew = Vec2::ZERO;
+    Vec2 rotationSkew = Vec2::zero;
     int zOrder        = 0;
     bool visible      = true;
     uint8_t alpha     = 255;
     int tag           = 0;
-    Vec2 position     = Vec2::ZERO;
+    Vec2 position     = Vec2::zero;
     Vec2 scale        = Vec2(1.0f, 1.0f);
-    Vec2 anchorPoint  = Vec2::ZERO;
+    Vec2 anchorPoint  = Vec2::zero;
     Color32 color(255, 255, 255, 255);
 
-    Vec2 size         = Vec2::ZERO;
+    Vec2 size         = Vec2::zero;
     bool flipX        = false;
     bool flipY        = false;
     bool ignoreSize   = false;

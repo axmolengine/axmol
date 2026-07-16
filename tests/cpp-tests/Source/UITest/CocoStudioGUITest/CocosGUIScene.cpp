@@ -34,7 +34,6 @@
 #include "UITextAtlasTest/UITextAtlasTest.h"
 #include "UITextTest/UITextTest.h"
 #include "UITextBMFontTest/UITextBMFontTest.h"
-#include "UITextFieldTest/UITextFieldTest.h"
 #include "UILayoutTest/UILayoutTest.h"
 #include "UIScrollViewTest/UIScrollViewTest.h"
 #include "UIPageViewTest/UIPageViewTest.h"
@@ -43,8 +42,9 @@
 #include "UIRichTextTest/UIRichTextTest.h"
 #include "UIFocusTest/UIFocusTest.h"
 #include "UITabControlTest/UITabControlTest.h"
+#include "UIInputFieldTest/UIInputFieldTest.h"
 
-#if defined(AX_ENABLE_MEDIA)
+#if defined(AX_ENABLE_VIDEO)
 #    include "UIVideoPlayerTest/UIVideoPlayerTest.h"
 #endif
 
@@ -64,7 +64,7 @@
 
 GUIDynamicCreateTests::GUIDynamicCreateTests()
 {
-#if defined(AX_ENABLE_MEDIA)
+#if defined(AX_ENABLE_VIDEO)
     addTest("VideoPlayer Test", []() { return new VideoPlayerTests; });
 #endif
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS) && \
@@ -91,7 +91,6 @@ GUIDynamicCreateTests::GUIDynamicCreateTests()
 
     addTest("Text Test", []() { return new UITextTests; });
     addTest("TextBMFont Test", []() { return new UITextBMFontTests; });
-    addTest("TextField Test", []() { return new UITextFieldTests; });
     addTest("Layout Test", []() { return new UILayoutTests; });
 
     addTest("ScrollView Test", []() { return new UIScrollViewTests; });
@@ -102,4 +101,5 @@ GUIDynamicCreateTests::GUIDynamicCreateTests()
     addTest("RichText Test", []() { return new UIRichTextTests; });
 
     addTest("TabControl Test", []() { return new UITabControlTests; });
+    addTest("InputField Test", []() { return new UIInputFieldTests; });
 }

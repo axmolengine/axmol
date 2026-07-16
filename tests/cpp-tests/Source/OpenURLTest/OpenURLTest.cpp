@@ -37,8 +37,8 @@ OpenURLTest::OpenURLTest()
     addChild(label, 0);
     label->setPosition(VisibleRect::center().x, VisibleRect::top().y - 50);
 
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = AX_CALLBACK_2(OpenURLTest::onTouchesEnded, this);
+    auto listener         = PointerEventListener::create();
+    listener->onPointerUp = AX_CALLBACK_1(OpenURLTest::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     // create a label to display the tip string
@@ -49,7 +49,7 @@ OpenURLTest::OpenURLTest()
     _label->retain();
 }
 
-void OpenURLTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+void OpenURLTest::onPointerUp(PointerEvent* event)
 {
     Application::getInstance()->openURL("https://axmol.dev/");
 }

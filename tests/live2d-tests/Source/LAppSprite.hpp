@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include "Rendering/axmol/CubismRenderer_Cocos2dx.hpp"
-#include "Rendering/axmol/CubismCommandBuffer_Cocos2dx.hpp"
+#include "Rendering/axmol/CubismRenderer_Axmol.hpp"
+#include "Rendering/axmol/CubismCommandBuffer_Axmol.hpp"
 #include "axmol/cocos2d.h"
 
 using namespace ax;
@@ -55,7 +55,7 @@ public:
     * @brief テクスチャIDを指定して描画する
     *
     */
-    void RenderImmidiate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* commandBuffer, rhi::Texture* texture, float uvVertex[8]) const;
+    void RenderImmidiate(Csm::Rendering::CubismCommandBuffer_Axmol* commandBuffer, rhi::Texture* texture, float uvVertex[8]) const;
 
     /**
      * @brief 色設定

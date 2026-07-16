@@ -121,8 +121,8 @@ public:
     /** Constructor **/
     MeshInfo(std::string_view meshName,
              const MeshSurfaceDistribution distribution = MSD_HOMOGENEOUS,
-             const Quaternion& orientation              = Quaternion(),
-             const Vec3& scale                          = Vec3::ZERO);
+             const Quat& orientation                    = Quat(),
+             const Vec3& scale                          = Vec3::zero);
 
     /** Destructor **/
     ~MeshInfo();
@@ -133,9 +133,9 @@ public:
 
     ///** Retrieve vertex info **/
     // void getMeshInformation(Ogre::MeshPtr mesh,
-    //						const Vec3& position = Vec3::ZERO,
-    //						const Quaternion& orient = Quaternion(),
-    //						const Vec3& scale = Vec3::ONE);
+    //						const Vec3& position = Vec3::zero,
+    //						const Quat& orient = Quat(),
+    //						const Vec3& scale = Vec3::one);
 
     /** Get a triangle based on the index. */
     const PUTriangle& getTriangle(size_t triangleIndex);
@@ -240,7 +240,7 @@ public:
 
 protected:
     std::string _meshName;
-    Quaternion _orientation;
+    Quat _orientation;
     Vec3 _scale;
     MeshInfo::MeshSurfaceDistribution _distribution;
     MeshInfo* _meshInfo;

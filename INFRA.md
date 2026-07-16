@@ -3,7 +3,7 @@
 ## Microsoft.Windows.CppWinRT
 
 - [![nuget](https://img.shields.io/nuget/v/Microsoft.Windows.CppWinRT?label=Upstream)](https://www.nuget.org/packages/Microsoft.Windows.CppWinRT)
-- Version: 2.0.250303.1
+- Version: 3.0.260520.1
 - License: MIT
 - Platform: WinRT/WinUWP
 - Manged by: `cmake/Modules/AXConfigDefine.cmake`
@@ -19,7 +19,7 @@
 ## gradle
 
 - [![github](https://img.shields.io/github/v/release/gradle/gradle?label=Upstream)](https://github.com/gradle/gradle)
-- Version: 9.5.0
+- Version: 9.6.1
 - License: Apache-2.0
 - Platform: Android
 - Manged by: `1k/build.profiles`
@@ -27,7 +27,7 @@
 ## emsdk
 
 - [![github](https://img.shields.io/github/v/tag/emscripten-core/emsdk?label=Upstream)](https://github.com/emscripten-core/emsdk)
-- Version: 5.0.7
+- Version: 6.0.2
 - License: Apache-2.0
 - Platform: Android
 - Manged by: `1k/build.profiles`

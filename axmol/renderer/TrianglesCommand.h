@@ -26,7 +26,6 @@
 #pragma once
 
 #include "axmol/renderer/RenderCommand.h"
-#include "axmol/renderer/PipelineDesc.h"
 
 /**
  * @addtogroup renderer

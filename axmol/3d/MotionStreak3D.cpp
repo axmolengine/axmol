@@ -36,6 +36,7 @@ THE SOFTWARE.
 #include "axmol/renderer/Renderer.h"
 #include "axmol/renderer/RenderState.h"
 #include "axmol/renderer/Shaders.h"
+#include "axmol/scene/Camera.h"
 
 namespace ax
 {
@@ -99,8 +100,8 @@ bool MotionStreak3D::initWithFade(float fade, float minSeg, float stroke, const 
 
 bool MotionStreak3D::initWithFade(float fade, float minSeg, float stroke, const Color32& color, Texture2D* texture)
 {
-    Node::setPosition(Vec2::ZERO);
-    setAnchorPoint(Vec2::ZERO);
+    Node::setPosition(Vec2::zero);
+    setAnchorPoint(Vec2::zero);
     setIgnoreAnchorPointForPosition(true);
     _startingPositionInitialized = false;
 
@@ -182,7 +183,7 @@ void MotionStreak3D::setPosition3D(const Vec3& position)
 
 void MotionStreak3D::setRotation3D(const Vec3& /*rotation*/) {}
 
-void MotionStreak3D::setRotationQuat(const Quaternion& /*quat*/) {}
+void MotionStreak3D::setRotationQuat(const Quat& /*quat*/) {}
 
 const Vec2& MotionStreak3D::getPosition() const
 {
@@ -408,7 +409,7 @@ void MotionStreak3D::draw(Renderer* renderer, const Mat4& transform, uint32_t fl
     afterCommand->init(_globalZOrder);
     _customCommand.init(_globalZOrder, transform, flags);
 
-    auto pmatrix   = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    auto pmatrix   = Camera::getVisitingViewProjectionMatrix();
     auto mvpMatrix = pmatrix * transform;
 
     _programState->setUniform(_locMVP, mvpMatrix.m, sizeof(mvpMatrix.m));

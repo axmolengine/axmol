@@ -8,7 +8,7 @@ Color32 ToolSet::hexToColor(const char* str)
 {
     ssize_t len = strlen(str);
     if (len < 7 || str[0] != '#')
-        return Color32::BLACK;
+        return Color32::black;
 
     char temp[3];
     memset(temp, 0, 3);

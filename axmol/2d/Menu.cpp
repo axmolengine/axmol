@@ -28,12 +28,14 @@ THE SOFTWARE.
 #include "axmol/2d/Menu.h"
 #include "axmol/scene/Camera.h"
 #include "axmol/base/Director.h"
-#include "axmol/base/Touch.h"
-#include "axmol/base/EventListenerTouch.h"
+#include "axmol/base/PointerEvent.h"
+#include "axmol/base/PointerEventListener.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/text_utils.h"
 #include "axmol/platform/StdC.h"
 
+#include <cmath>
+#include <limits>
 #include <vector>
 
 using namespace std;
@@ -45,6 +47,35 @@ enum
 {
     kDefaultPadding = 5,
 };
+
+static bool hitTestNodeWithPointer(PointerEvent* event, Node* node, Vec3* outWorldHit)
+{
+    if (!event || !node)
+        return false;
+
+    Rect rect;
+    rect.size = node->getContentSize();
+    if (rect.size.width <= 0.0f || rect.size.height <= 0.0f)
+        return false;
+
+    Ray localRay(event->getRay());
+    localRay.transform(node->getWorldToNodeTransform());
+
+    if (std::abs(localRay.direction.z) <= std::numeric_limits<float>::epsilon())
+        return false;
+
+    const float t = -localRay.origin.z / localRay.direction.z;
+    if (t < 0.0f)
+        return false;
+
+    Vec3 localHit = localRay.origin + t * localRay.direction;
+    if (!rect.containsPoint(Vec2(localHit.x, localHit.y)))
+        return false;
+
+    if (outWorldHit)
+        node->getNodeToWorldTransform().transformPoint(localHit, outWorldHit);
+    return true;
+}
 
 //
 // CCMenu
@@ -142,15 +173,14 @@ bool Menu::initWithArray(const Vector<MenuItem*>& arrayOfItems)
         // enable cascade color and opacity on menus
         setCascadeColorEnabled(true);
 
-        auto touchListener = EventListenerTouchOneByOne::create();
-        touchListener->setSwallowTouches(true);
+        _pointerListener = PointerEventListener::create();
 
-        touchListener->onTouchBegan     = AX_CALLBACK_2(Menu::onTouchBegan, this);
-        touchListener->onTouchMoved     = AX_CALLBACK_2(Menu::onTouchMoved, this);
-        touchListener->onTouchEnded     = AX_CALLBACK_2(Menu::onTouchEnded, this);
-        touchListener->onTouchCancelled = AX_CALLBACK_2(Menu::onTouchCancelled, this);
+        _pointerListener->onPointerDown   = AX_CALLBACK_1(Menu::onPointerDown, this);
+        _pointerListener->onPointerMove   = AX_CALLBACK_1(Menu::onPointerMove, this);
+        _pointerListener->onPointerUp     = AX_CALLBACK_1(Menu::onPointerUp, this);
+        _pointerListener->onPointerCancel = AX_CALLBACK_1(Menu::onPointerCancel, this);
 
-        _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
+        _eventDispatcher->addEventListenerWithSceneGraphPriority(_pointerListener, this);
 
         return true;
     }
@@ -194,10 +224,12 @@ void Menu::onExit()
         if (_selectedItem)
         {
             _selectedItem->unselected();
-            _selectedItem = nullptr;
         }
 
-        _state = Menu::State::WAITING;
+        _selectedItem       = nullptr;
+        _pressedItem        = nullptr;
+        _selectedWithCamera = nullptr;
+        _state              = Menu::State::WAITING;
     }
 
     Node::onExit();
@@ -212,82 +244,130 @@ void Menu::removeChild(Node* child, bool cleanup)
         _selectedItem = nullptr;
     }
 
+    if (_pressedItem == child)
+    {
+        _pressedItem = nullptr;
+    }
+
     Node::removeChild(child, cleanup);
 }
 
 // Menu - Events
 
-bool Menu::onTouchBegan(Touch* touch, Event* /*event*/)
+bool Menu::onPointerHitTest(PointerEvent* event, Vec3* outHitPoint)
 {
-    auto camera = Camera::getVisitingCamera();
-    if (_state != Menu::State::WAITING || !_visible || !_enabled || !camera)
-    {
+    if (!event)
         return false;
-    }
+
+    const bool isControllerRay = event->getPointerType() == PointerType::Controller;
+    if (!event->isPrimaryPressed() && !isControllerRay)
+        return false;
+
+    if (_state != Menu::State::WAITING || !_visible || !_enabled)
+        return false;
 
     for (Node* c = this->_parent; c != nullptr; c = c->getParent())
     {
-        if (c->isVisible() == false)
-        {
+        if (!c->isVisible())
             return false;
+    }
+
+    _pressedItem = this->hitTestItem(event, outHitPoint);
+    return _pressedItem != nullptr;
+}
+
+bool Menu::onPointerDown(PointerEvent* event)
+{
+    if (!event || !event->isPrimaryPressed())
+        return false;
+
+    auto camera = event->getCamera();
+    if (_state != Menu::State::WAITING || !_visible || !_enabled || !camera)
+    {
+        _pressedItem  = nullptr;
+        _selectedItem = nullptr;
+        return false;
+    }
+
+    if (!_pressedItem)
+        return false;
+
+    _state              = Menu::State::TRACKING_TOUCH;
+    _selectedWithCamera = camera;
+    _selectedItem       = _pressedItem;
+
+    _selectedItem->selected();
+
+    return true;
+}
+
+void Menu::onPointerMove(PointerEvent* event)
+{
+    if (_state != Menu::State::TRACKING_TOUCH || !_pressedItem)
+        return;
+
+    MenuItem* currentItem = this->hitTestItem(event, nullptr);
+
+    if (currentItem == _pressedItem)
+    {
+        if (_selectedItem != _pressedItem)
+        {
+            _selectedItem = _pressedItem;
+            _selectedItem->selected();
         }
     }
-    _selectedItem = this->getItemForTouch(touch, camera);
-
-    if (_selectedItem)
-    {
-        _state              = Menu::State::TRACKING_TOUCH;
-        _selectedWithCamera = camera;
-        _selectedItem->selected();
-
-        return true;
-    }
-
-    return false;
-}
-
-void Menu::onTouchEnded(Touch* /*touch*/, Event* /*event*/)
-{
-    AXASSERT(_state == Menu::State::TRACKING_TOUCH, "[Menu ccTouchEnded] -- invalid state");
-    this->retain();
-    if (_selectedItem)
-    {
-        _selectedItem->unselected();
-        _selectedItem->activate();
-    }
-    _state              = Menu::State::WAITING;
-    _selectedWithCamera = nullptr;
-    this->release();
-}
-
-void Menu::onTouchCancelled(Touch* /*touch*/, Event* /*event*/)
-{
-    AXASSERT(_state == Menu::State::TRACKING_TOUCH, "[Menu ccTouchCancelled] -- invalid state");
-    this->retain();
-    if (_selectedItem)
-    {
-        _selectedItem->unselected();
-    }
-    _state = Menu::State::WAITING;
-    this->release();
-}
-
-void Menu::onTouchMoved(Touch* touch, Event* /*event*/)
-{
-    AXASSERT(_state == Menu::State::TRACKING_TOUCH, "[Menu ccTouchMoved] -- invalid state");
-    MenuItem* currentItem = this->getItemForTouch(touch, _selectedWithCamera);
-    if (currentItem != _selectedItem)
+    else
     {
         if (_selectedItem)
         {
             _selectedItem->unselected();
-        }
-        _selectedItem = currentItem;
-        if (_selectedItem)
-        {
-            _selectedItem->selected();
+            _selectedItem = nullptr;
         }
     }
+}
+
+void Menu::onPointerUp(PointerEvent* event)
+{
+    AXASSERT(_state == Menu::State::TRACKING_TOUCH, "[Menu onPointerUp] -- invalid state");
+
+    RefPtr<Menu> guard(this);
+
+    auto* itemToActivate = (_selectedItem == _pressedItem) ? _pressedItem : nullptr;
+
+    if (_selectedItem)
+    {
+        _selectedItem->unselected();
+    }
+
+    _selectedItem       = nullptr;
+    _pressedItem        = nullptr;
+    _state              = Menu::State::WAITING;
+    _selectedWithCamera = nullptr;
+
+    if (itemToActivate)
+    {
+        RefPtr<MenuItem> guardItem(itemToActivate);
+        itemToActivate->activate();
+    }
+}
+
+void Menu::onPointerCancel(PointerEvent* /*event*/)
+{
+    AXASSERT(_state == Menu::State::TRACKING_TOUCH, "[Menu onPointerCancel] -- invalid state");
+
+    this->retain();
+
+    if (_selectedItem)
+    {
+        _selectedItem->unselected();
+    }
+
+    _selectedItem       = nullptr;
+    _pressedItem        = nullptr;
+    _state              = Menu::State::WAITING;
+    _selectedWithCamera = nullptr;
+
+    this->release();
 }
 
 // Menu - Alignment
@@ -526,19 +606,17 @@ void Menu::alignItemsInRowsWithArray(const ValueVector& columns)
     }
 }
 
-MenuItem* Menu::getItemForTouch(Touch* touch, const Camera* camera)
+MenuItem* Menu::hitTestItem(PointerEvent* event, Vec3* outHitPoint)
 {
-    Vec2 touchLocation = touch->getLocation();
     for (const auto& item : _children)
     {
         MenuItem* child = dynamic_cast<MenuItem*>(item);
-        if (nullptr == child || false == child->isVisible() || false == child->isEnabled())
+        if (!child || !child->isVisible() || !child->isEnabled())
         {
             continue;
         }
-        Rect rect;
-        rect.size = child->getContentSize();
-        if (isScreenPointInRect(touchLocation, camera, child->getWorldToNodeTransform(), rect, nullptr))
+
+        if (hitTestNodeWithPointer(event, child, outHitPoint))
         {
             return child;
         }

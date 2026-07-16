@@ -30,49 +30,49 @@
 #include "axmol/rhi/metal/DepthStencilStateMTL.h"
 #include "axmol/rhi/metal/UtilsMTL.h"
 #include "axmol/rhi/metal/ProgramMTL.h"
-#include "xxhash.h"
+#include "xxhash/xxhash.h"
 
 namespace ax::rhi::mtl
 {
 
 namespace
 {
-static MTLVertexFormat toMTLVertexFormat(VertexFormat vertexFormat, bool needNormalize)
+static MTLVertexFormat toMTLVertexFormat(VertexElementType vertexFormat, bool needNormalize)
 {
     MTLVertexFormat ret = MTLVertexFormatFloat4;
     switch (vertexFormat)
     {
-    case VertexFormat::FLOAT4:
+    case VertexElementType::FLOAT4:
         ret = MTLVertexFormatFloat4;
         break;
-    case VertexFormat::FLOAT3:
+    case VertexElementType::FLOAT3:
         ret = MTLVertexFormatFloat3;
         break;
-    case VertexFormat::FLOAT2:
+    case VertexElementType::FLOAT2:
         ret = MTLVertexFormatFloat2;
         break;
-    case VertexFormat::FLOAT:
+    case VertexElementType::FLOAT:
         ret = MTLVertexFormatFloat;
         break;
-    case VertexFormat::INT4:
+    case VertexElementType::INT4:
         ret = MTLVertexFormatInt4;
         break;
-    case VertexFormat::INT3:
+    case VertexElementType::INT3:
         ret = MTLVertexFormatInt3;
         break;
-    case VertexFormat::INT2:
+    case VertexElementType::INT2:
         ret = MTLVertexFormatInt2;
         break;
-    case VertexFormat::INT:
+    case VertexElementType::INT:
         ret = MTLVertexFormatInt;
         break;
-    case VertexFormat::USHORT4:
+    case VertexElementType::USHORT4:
         ret = MTLVertexFormatUShort4;
         break;
-    case VertexFormat::USHORT2:
+    case VertexElementType::USHORT2:
         ret = MTLVertexFormatUShort2;
         break;
-    case VertexFormat::UBYTE4:
+    case VertexElementType::UBYTE4:
         if (needNormalize)
             ret = MTLVertexFormatUChar4Normalized;
         else
@@ -247,7 +247,7 @@ void RenderPipelineImpl::setVertexLayout(MTLRenderPipelineDescriptor* mtlDesc, c
     unsigned int instanceAttribCount = 0;
     for (const auto& bindingDesc : vertexLayout->getBindings())
     {
-        if (bindingDesc.format != VertexFormat::MAT4)
+        if (bindingDesc.format != VertexElementType::MAT4)
         {
             auto attrib   = vertexDesc.attributes[bindingDesc.index];
             attrib.format = toMTLVertexFormat(bindingDesc.format, bindingDesc.needToBeNormallized);

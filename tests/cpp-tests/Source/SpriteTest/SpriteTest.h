@@ -49,7 +49,7 @@ public:
     virtual std::string subtitle() const override;
 
     void addNewSpriteWithCoords(ax::Vec2 p);
-    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onPointerUp(ax::PointerEvent* event);
 };
 
 class SpriteBatchNode1 : public SpriteTestDemo
@@ -58,7 +58,7 @@ public:
     CREATE_FUNC(SpriteBatchNode1);
     SpriteBatchNode1();
     void addNewSpriteWithCoords(ax::Vec2 p);
-    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onPointerUp(ax::PointerEvent* event);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };
@@ -313,7 +313,7 @@ public:
     SpriteNewTexture();
     virtual ~SpriteNewTexture();
     void addNewSprite();
-    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onPointerUp(ax::PointerEvent* event);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
@@ -330,7 +330,7 @@ public:
     SpriteBatchNodeNewTexture();
     virtual ~SpriteBatchNodeNewTexture();
     void addNewSprite();
-    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onPointerUp(ax::PointerEvent* event);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 

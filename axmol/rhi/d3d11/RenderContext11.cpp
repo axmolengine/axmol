@@ -29,7 +29,7 @@
 #include "axmol/rhi/d3d11/Program11.h"
 #include "axmol/rhi/d3d11/VertexLayout11.h"
 #include "axmol/rhi/d3d11/Texture11.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include <dxgi1_2.h>
 #include <dxgi1_3.h>
 #include <dxgi1_5.h>
@@ -564,20 +564,20 @@ void RenderContextImpl::setInstanceBuffer(Buffer* buffer)
     _instanceBuffer = static_cast<BufferImpl*>(buffer);
 }
 
-void RenderContextImpl::drawArrays(std::size_t start, std::size_t count, bool /*wireframe*/)
+void RenderContextImpl::drawArrays(size_t start, size_t count, bool /*wireframe*/)
 {
     prepareDrawing();
     _d3d11Context->Draw(static_cast<UINT>(count), static_cast<UINT>(start));
 }
 
-void RenderContextImpl::drawArraysInstanced(std::size_t start, std::size_t count, int instanceCount, bool /*wireframe*/)
+void RenderContextImpl::drawArraysInstanced(size_t start, size_t count, int instanceCount, bool /*wireframe*/)
 {
     prepareDrawing();
     _d3d11Context->DrawInstanced(static_cast<UINT>(count), static_cast<UINT>(instanceCount), static_cast<UINT>(start),
                                  0);
 }
 
-void RenderContextImpl::drawElements(IndexFormat indexType, std::size_t count, std::size_t offset, bool /*wireframe*/)
+void RenderContextImpl::drawElements(IndexFormat indexType, size_t count, size_t offset, bool /*wireframe*/)
 {
     prepareDrawing();
 
@@ -594,8 +594,8 @@ void RenderContextImpl::drawElements(IndexFormat indexType, std::size_t count, s
 }
 
 void RenderContextImpl::drawElementsInstanced(IndexFormat indexType,
-                                              std::size_t count,
-                                              std::size_t offset,
+                                              size_t count,
+                                              size_t offset,
                                               int instanceCount,
                                               bool /*wireframe*/)
 {
@@ -714,9 +714,29 @@ void RenderContextImpl::endFrame()
 #endif
 }
 
-void RenderContextImpl::readPixels(RenderTarget* rt,
-                                   bool /*preserveAxisHint*/,
-                                   std::function<void(const PixelBufferDesc&)> callback)
+void RenderContextImpl::submitCurrentFrameCommands(bool waitForCompletion)
+{
+    if (waitForCompletion)
+    {
+        D3D11_QUERY_DESC desc{};
+        desc.Query = D3D11_QUERY_EVENT;
+
+        ID3D11Query* query = nullptr;
+        if (SUCCEEDED(_driver->getDevice()->CreateQuery(&desc, &query)) && query)
+        {
+            _d3d11Context->End(query);
+            _d3d11Context->Flush();
+            while (_d3d11Context->GetData(query, nullptr, 0, 0) == S_FALSE)
+                Sleep(0);
+            SafeRelease(query);
+            return;
+        }
+    }
+
+    _d3d11Context->Flush();
+}
+
+void RenderContextImpl::readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback)
 {
     PixelBufferDesc pbd;
 

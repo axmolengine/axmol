@@ -111,9 +111,6 @@ public:
     static void setGlobalSDFEnabled(bool enabled) { _globalSDFEnabled = enabled; }
     static bool isGlobalSDFEnabled() { return _globalSDFEnabled; }
 
-    AX_DEPRECATED(2.9.2) static void setShareDistanceFieldEnabled(bool enabled) { setGlobalSDFEnabled(enabled); }
-    AX_DEPRECATED(2.9.2) static bool isShareDistanceFieldEnabled() { return isGlobalSDFEnabled(); }
-
     /**
      * @brief TrueType fonts with native bytecode hinting * *
      *

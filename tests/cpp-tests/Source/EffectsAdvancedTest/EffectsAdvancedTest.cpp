@@ -217,8 +217,6 @@ void Effect5::onEnter()
 {
     EffectAdvanceBaseTest::onEnter();
 
-    // CCDirector::getInstance()->setProjection(DirectorProjection2D);
-
     auto effect = Liquid::create(2, Size(32, 24), 1, 20);
 
     auto stopEffect = Sequence::create(effect, DelayTime::create(2), StopGrid::create(),
@@ -238,8 +236,6 @@ std::string Effect5::title() const
 void Effect5::onExit()
 {
     EffectAdvanceBaseTest::onExit();
-
-    Director::getInstance()->setProjection(Director::Projection::_3D);
 }
 
 //------------------------------------------------------------------

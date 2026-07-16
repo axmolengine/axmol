@@ -31,14 +31,12 @@
 #import "axmol/math/Math.h"
 #import "axmol/platform/ios/DirectorCaller-ios.h"
 #import "axmol/base/Utils.h"
+#import "axmol/base/Director.h"
 
 #include "AxmolAppController.h"
 
 namespace ax
 {
-
-Application* Application::sm_pSharedApplication = nullptr;
-
 // Force the Objective‑C runtime to reference AxmolAppController,
 // ensuring the class symbol is linked into the final binary
 // (prevents the linker from stripping it out when inside a static library).
@@ -46,14 +44,14 @@ __attribute__((unused)) static Class kForceLink_AxmolAppController = [AxmolAppCo
 
 Application::Application()
 {
-    AX_ASSERT(!sm_pSharedApplication);
-    sm_pSharedApplication = this;
+    AX_ASSERT(!s_axmolApp);
+    s_axmolApp = this;
 }
 
 Application::~Application()
 {
-    AX_ASSERT(this == sm_pSharedApplication);
-    sm_pSharedApplication = 0;
+    AX_ASSERT(this == s_axmolApp);
+    s_axmolApp = 0;
 }
 
 int Application::run()
@@ -68,16 +66,6 @@ int Application::run()
 void Application::setAnimationInterval(float interval)
 {
     [[CCDirectorCaller sharedDirectorCaller] setAnimationInterval:interval];
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// static member function
-//////////////////////////////////////////////////////////////////////////////////////////////////
-
-Application* Application::getInstance()
-{
-    AX_ASSERT(sm_pSharedApplication);
-    return sm_pSharedApplication;
 }
 
 const char* Application::getCurrentLanguageCode()
@@ -135,6 +123,13 @@ bool Application::openURL(std::string_view url)
 
     id application = [UIApplication sharedApplication];
     [application openURL:nsUrl options:@{} completionHandler:nil];
+}
+
+void Application::postBoundaryTaskSignal()
+{
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^(void) {
+      ax::Director::getInstance()->performFrameBoundaryTasks();
+    }];
 }
 
 }  // namespace ax

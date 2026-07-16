@@ -84,8 +84,8 @@ public:
     virtual void onExit() override;
     virtual std::string subtitle() const override;
 
-    void onWindowPositioned(ax::EventCustom* e);
-    void onWindowResized(ax::EventCustom* e);
+    void onWindowPositioned(ax::CustomEvent* e);
+    void onWindowResized(ax::CustomEvent* e);
 
 private:
     ax::Label* label1;
@@ -100,7 +100,7 @@ public:
     virtual void onExit() override;
     virtual std::string subtitle() const override;
 
-    void onWindowClose(ax::EventCustom* e);
+    void onWindowClose(ax::CustomEvent* e);
 
 private:
     ax::Label* label;

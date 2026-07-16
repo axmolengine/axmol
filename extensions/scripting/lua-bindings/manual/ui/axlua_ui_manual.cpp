@@ -54,7 +54,7 @@
 #include "lua-bindings/manual/LuaValue.h"
 #include "axmol/ui/CocosGUI.h"
 #include "lua-bindings/manual/LuaEngine.h"
-#include "axmol/base/EventListenerFocus.h"
+#include "axmol/base/FocusEventListener.h"
 
 using namespace ui;
 
@@ -465,26 +465,26 @@ static void extendSlider(lua_State* L)
     lua_pop(L, 1);
 }
 
-static int axlua_TextField_addEventListener(lua_State* L)
+static int axlua_InputField_addEventListener(lua_State* L)
 {
     if (nullptr == L)
         return 0;
 
-    int argc        = 0;
-    TextField* self = nullptr;
+    int argc         = 0;
+    InputField* self = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
-    if (!tolua_isusertype(L, 1, "axui.TextField", 0, &tolua_err))
+    if (!tolua_isusertype(L, 1, "axui.InputField", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
-    self = static_cast<TextField*>(tolua_tousertype(L, 1, 0));
+    self = static_cast<InputField*>(tolua_tousertype(L, 1, 0));
 
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        tolua_error(L, "invalid 'self' in function 'axlua_TextField_addEventListener'\n", NULL);
+        tolua_error(L, "invalid 'self' in function 'axlua_InputField_addEventListener'\n", NULL);
         return 0;
     }
 #endif
@@ -500,13 +500,13 @@ static int axlua_TextField_addEventListener(lua_State* L)
         LUA_FUNCTION handler = (toluafix_ref_function(L, 2, 0));
 
         self->addEventListener(
-            [=](ax::Object* ref, TextField::EventType eventType) { handleUIEvent(handler, ref, (int)eventType); });
+            [=](ax::Object* ref, InputField::EventType eventType) { handleUIEvent(handler, ref, (int)eventType); });
 
         ScriptHandlerMgr::getInstance()->addCustomHandler((void*)self, handler);
         return 0;
     }
 
-    luaL_error(L, "'addEventListener' function of TextField has wrong number of arguments: %d, was expecting %d\n",
+    luaL_error(L, "'addEventListener' function of InputField has wrong number of arguments: %d, was expecting %d\n",
                argc, 1);
 
     return 0;
@@ -518,13 +518,13 @@ tolua_lerror:
 #endif
 }
 
-static void extendTextField(lua_State* L)
+static void extendInputField(lua_State* L)
 {
-    lua_pushstring(L, "axui.TextField");
+    lua_pushstring(L, "axui.InputField");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {
-        tolua_function(L, "addEventListener", axlua_TextField_addEventListener);
+        tolua_function(L, "addEventListener", axlua_InputField_addEventListener);
     }
     lua_pop(L, 1);
 }
@@ -565,7 +565,7 @@ static int axlua_PageView_addEventListener(lua_State* L)
         auto pageViewHandler = [=](ax::Object* ref, PageView::EventType eventType) {
             handleUIEvent(handler, ref, (int)eventType);
         };
-        self->addEventListener((PageView::ccPageViewCallback)pageViewHandler);
+        self->addEventListener((PageView::PageViewCallback)pageViewHandler);
 
         ScriptHandlerMgr::getInstance()->addCustomHandler((void*)self, handler);
         return 0;
@@ -695,7 +695,7 @@ static int axlua_ListView_addEventListener(lua_State* L)
         auto listViewCallback = [=](ax::Object* ref, ListView::EventType eventType) {
             handleUIEvent(handler, ref, (int)eventType);
         };
-        self->addEventListener((ui::ListView::ccListViewCallback)listViewCallback);
+        self->addEventListener((ui::ListView::ListViewCallback)listViewCallback);
 
         ScriptHandlerMgr::getInstance()->addCustomHandler((void*)self, handler);
         return 0;
@@ -750,7 +750,7 @@ static int axlua_ListView_addScrollViewEventListener(lua_State* L)
         auto scrollViewCallback = [=](ax::Object* ref, ui::ScrollView::EventType eventType) {
             handleUIEvent(handler, ref, (int)eventType);
         };
-        self->addEventListener((ui::ScrollView::ccScrollViewCallback)scrollViewCallback);
+        self->addEventListener((ui::ScrollView::ScrollViewCallback)scrollViewCallback);
 
         ScriptHandlerMgr::getInstance()->addCustomHandler((void*)self, handler);
         return 0;
@@ -1045,7 +1045,7 @@ int register_all_ax_ui_manual(lua_State* L)
     extendRadioButton(L);
     extendRadioButtonGroup(L);
     extendSlider(L);
-    extendTextField(L);
+    extendInputField(L);
     extendPageView(L);
     extendScrollView(L);
     extendListView(L);
@@ -1055,7 +1055,7 @@ int register_all_ax_ui_manual(lua_State* L)
     return 0;
 }
 
-static int toaxlua_EventListenerFocus_create(lua_State* L)
+static int toaxlua_FocusEventListener_create(lua_State* L)
 {
     if (nullptr == L)
         return 0;
@@ -1063,7 +1063,7 @@ static int toaxlua_EventListenerFocus_create(lua_State* L)
     int argc = 0;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
-    if (!tolua_isusertable(L, 1, "ax.EventListenerFocus", 0, &tolua_err))
+    if (!tolua_isusertable(L, 1, "ax.FocusEventListener", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
@@ -1071,28 +1071,28 @@ static int toaxlua_EventListenerFocus_create(lua_State* L)
 
     if (argc == 0)
     {
-        ax::EventListenerFocus* tolua_ret = ax::EventListenerFocus::create();
+        ax::FocusEventListener* tolua_ret = ax::FocusEventListener::create();
         if (nullptr == tolua_ret)
             return 0;
 
         int ID     = (int)tolua_ret->_ID;
         int* luaID = &tolua_ret->_luaID;
-        toluafix_pushusertype_object(L, ID, luaID, (void*)tolua_ret, "ax.EventListenerFocus");
+        toluafix_pushusertype_object(L, ID, luaID, (void*)tolua_ret, "ax.FocusEventListener");
 
         return 1;
     }
 
-    luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n", "ax.EventListenerFocus:create", argc, 1);
+    luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n", "ax.FocusEventListener:create", argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
 tolua_lerror:
-    tolua_error(L, "#ferror in function 'toaxlua_EventListenerFocus_create'.", &tolua_err);
+    tolua_error(L, "#ferror in function 'toaxlua_FocusEventListener_create'.", &tolua_err);
     return 0;
 #endif
 }
 
-static void cloneFocusHandler(const EventListenerFocus* src, EventListenerFocus* dst)
+static void cloneFocusHandler(const FocusEventListener* src, FocusEventListener* dst)
 {
     if (nullptr == src || nullptr == dst)
         return;
@@ -1120,24 +1120,24 @@ static void cloneFocusHandler(const EventListenerFocus* src, EventListenerFocus*
     }
 }
 
-static int toaxlua_EventListenerFocus_clone(lua_State* L)
+static int toaxlua_FocusEventListener_clone(lua_State* L)
 {
     if (nullptr == L)
         return 0;
 
     int argc                 = 0;
-    EventListenerFocus* self = nullptr;
+    FocusEventListener* self = nullptr;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
-    if (!tolua_isusertype(L, 1, "ax.EventListenerFocus", 0, &tolua_err))
+    if (!tolua_isusertype(L, 1, "ax.FocusEventListener", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
-    self = static_cast<EventListenerFocus*>(tolua_tousertype(L, 1, 0));
+    self = static_cast<FocusEventListener*>(tolua_tousertype(L, 1, 0));
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        tolua_error(L, "invalid 'self' in function 'toaxlua_EventListenerFocus_clone'\n", nullptr);
+        tolua_error(L, "invalid 'self' in function 'toaxlua_FocusEventListener_clone'\n", nullptr);
         return 0;
     }
 #endif
@@ -1146,7 +1146,7 @@ static int toaxlua_EventListenerFocus_clone(lua_State* L)
 
     if (argc == 0)
     {
-        ax::EventListenerFocus* tolua_ret = ax::EventListenerFocus::create();
+        ax::FocusEventListener* tolua_ret = ax::FocusEventListener::create();
         if (nullptr == tolua_ret)
             return 0;
 
@@ -1154,39 +1154,39 @@ static int toaxlua_EventListenerFocus_clone(lua_State* L)
 
         int ID     = (int)tolua_ret->_ID;
         int* luaID = &tolua_ret->_luaID;
-        toluafix_pushusertype_object(L, ID, luaID, (void*)tolua_ret, "ax.EventListenerFocus");
+        toluafix_pushusertype_object(L, ID, luaID, (void*)tolua_ret, "ax.FocusEventListener");
 
         return 1;
     }
 
-    luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n", "ax.EventListenerFocus:clone", argc, 0);
+    luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n", "ax.FocusEventListener:clone", argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
 tolua_lerror:
-    tolua_error(L, "#ferror in function 'toaxlua_EventListenerFocus_clone'.", &tolua_err);
+    tolua_error(L, "#ferror in function 'toaxlua_FocusEventListener_clone'.", &tolua_err);
     return 0;
 #endif
 }
 
-static int toaxlua_EventListenerFocus_registerScriptHandler(lua_State* L)
+static int toaxlua_FocusEventListener_registerScriptHandler(lua_State* L)
 {
     if (nullptr == L)
         return 0;
 
     int argc                 = 0;
-    EventListenerFocus* self = nullptr;
+    FocusEventListener* self = nullptr;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
-    if (!tolua_isusertype(L, 1, "ax.EventListenerFocus", 0, &tolua_err))
+    if (!tolua_isusertype(L, 1, "ax.FocusEventListener", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
-    self = static_cast<EventListenerFocus*>(tolua_tousertype(L, 1, 0));
+    self = static_cast<FocusEventListener*>(tolua_tousertype(L, 1, 0));
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        tolua_error(L, "invalid 'self' in function 'toaxlua_EventListenerFocus_registerScriptHandler'\n", nullptr);
+        tolua_error(L, "invalid 'self' in function 'toaxlua_FocusEventListener_registerScriptHandler'\n", nullptr);
         return 0;
     }
 #endif
@@ -1220,25 +1220,25 @@ static int toaxlua_EventListenerFocus_registerScriptHandler(lua_State* L)
     }
 
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n",
-               "ax.EventListenerFocus:registerScriptHandler", argc, 1);
+               "ax.FocusEventListener:registerScriptHandler", argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
 tolua_lerror:
-    tolua_error(L, "#ferror in function 'toaxlua_EventListenerFocus_registerScriptHandler'.", &tolua_err);
+    tolua_error(L, "#ferror in function 'toaxlua_FocusEventListener_registerScriptHandler'.", &tolua_err);
     return 0;
 #endif
 }
 
-static void extendEventListenerFocusEvent(lua_State* L)
+static void extendFocusEventListenerEvent(lua_State* L)
 {
-    lua_pushstring(L, "ax.EventListenerFocus");
+    lua_pushstring(L, "ax.FocusEventListener");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {
-        tolua_function(L, "create", toaxlua_EventListenerFocus_create);
-        tolua_function(L, "registerScriptHandler", toaxlua_EventListenerFocus_registerScriptHandler);
-        tolua_function(L, "clone", toaxlua_EventListenerFocus_clone);
+        tolua_function(L, "create", toaxlua_FocusEventListener_create);
+        tolua_function(L, "registerScriptHandler", toaxlua_FocusEventListener_registerScriptHandler);
+        tolua_function(L, "clone", toaxlua_FocusEventListener_clone);
     }
     lua_pop(L, 1);
 }
@@ -1272,7 +1272,7 @@ int register_ui_module(lua_State* L)
         register_all_ax_video_manual(L);
 #    endif
 #endif
-        extendEventListenerFocusEvent(L);
+        extendFocusEventListenerEvent(L);
     }
     lua_pop(L, 1);
 

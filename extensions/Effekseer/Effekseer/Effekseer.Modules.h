@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "Effekseer.h"
 #include "Effekseer.SIMD.h"

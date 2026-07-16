@@ -1,4 +1,4 @@
-﻿#include "Effekseer.InstanceGroup.h"
+#include "Effekseer.InstanceGroup.h"
 
 #include "Effekseer.ManagerImplemented.h"
 

@@ -24,7 +24,7 @@
 
 #include "sceneio/WidgetReader/RadioButtonReader/RadioButtonReader.h"
 
-#include "axmol/ui/UIRadioButton.h"
+#include "axmol/ui/RadioButton.h"
 #include "axmol/platform/FileUtils.h"
 #include "axmol/2d/SpriteFrameCache.h"
 #include "sceneext/CocoLoader.h"

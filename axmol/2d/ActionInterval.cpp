@@ -36,7 +36,7 @@ THE SOFTWARE.
 #include "axmol/2d/SpriteFrame.h"
 #include "axmol/2d/ActionInstant.h"
 #include "axmol/base/Director.h"
-#include "axmol/base/EventCustom.h"
+#include "axmol/base/CustomEvent.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/platform/StdC.h"
 #include "axmol/base/ScriptSupport.h"
@@ -471,6 +471,9 @@ void Repeat::stop()
 // container action like Repeat, Sequence, Ease, etc..
 void Repeat::update(float dt)
 {
+    if (isDone())
+        return;
+
     if (dt >= _nextDt)
     {
         while (dt >= _nextDt && _total < _times)
@@ -506,15 +509,17 @@ void Repeat::update(float dt)
             else
             {
                 // issue #390 prevent jerk, use right update
-                if (!(sendUpdateEventToScript(dt - (_nextDt - _innerAction->getDuration() / _duration), _innerAction)))
-                    _innerAction->update(dt - (_nextDt - _innerAction->getDuration() / _duration));
+                const auto innerDt = dt - (_nextDt - _innerAction->getDuration() / _duration);
+                if (!(sendUpdateEventToScript(innerDt, _innerAction)))
+                    _innerAction->update(innerDt);
             }
         }
     }
     else
     {
-        if (!(sendUpdateEventToScript(fmodf(dt * _times, 1.0f), _innerAction)))
-            _innerAction->update(fmodf(dt * _times, 1.0f));
+        const auto innerDt = fmodf(dt * _times, 1.0f);
+        if (!(sendUpdateEventToScript(innerDt, _innerAction)))
+            _innerAction->update(innerDt);
     }
 }
 
@@ -2591,7 +2596,7 @@ void Animate::update(float t)
             if (!dict.empty())
             {
                 if (_frameDisplayedEvent == nullptr)
-                    _frameDisplayedEvent = new EventCustom(AnimationFrameDisplayedNotification);
+                    _frameDisplayedEvent = new CustomEvent(AnimationFrameDisplayedNotification);
 
                 _frameDisplayedEventInfo.target   = _target;
                 _frameDisplayedEventInfo.userInfo = &dict;

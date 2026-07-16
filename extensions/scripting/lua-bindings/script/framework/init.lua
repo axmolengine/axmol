@@ -45,7 +45,7 @@ require("axmol.framework.extends.UIListView")
 require("axmol.framework.extends.UIPageView")
 require("axmol.framework.extends.UIScrollView")
 require("axmol.framework.extends.UISlider")
-require("axmol.framework.extends.UITextField")
+require("axmol.framework.extends.UIInputField")
 end
 
 require("axmol.framework.package_support")

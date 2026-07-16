@@ -25,19 +25,22 @@
 
 #include "main.h"
 #include "AppDelegate.h"
-#include "axmol/platform/Application.h"
 
 // Uncomment to enable win32 console
 #define USE_WIN32_CONSOLE
 
 using namespace ax;
 
-int axmol_main()
+static int axmol_main(int argc, TCHAR** argv)
 {
+    UNREFERENCED_PARAMETER(argc);
+    UNREFERENCED_PARAMETER(argv);
+
     // create the application instance
     AppDelegate app;
-    int ret = Application::getInstance()->run();
-    return ret;
+    // Use launch instead of run if you want Axmol to parse builtin launch arguments.
+    // Application::getInstance()->launch(argc, argv);
+    return Application::getInstance()->run();
 }
 
 #if !defined(_CONSOLE)
@@ -50,7 +53,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 #        include "axmol/platform/win32/EmbedConsole.h"
 #    endif
 
-    auto result = axmol_main();
+    auto result = axmol_main(__argc, __targv);
 
 #    if AX_OBJECT_LEAK_DETECTION
     Object::printLeaks();
@@ -59,9 +62,9 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
     return result;
 }
 #else
-int main(int, char**)
+int _tmain(int argc, TCHAR** argv)
 {
-    auto result = axmol_main();
+    auto result = axmol_main(argc, argv);
 
 #    if AX_OBJECT_LEAK_DETECTION
     Object::printLeaks();

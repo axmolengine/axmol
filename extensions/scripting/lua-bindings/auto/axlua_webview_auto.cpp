@@ -1,5 +1,5 @@
 #include "lua-bindings/auto/axlua_webview_auto.hpp"
-#include "axmol/ui/UIWebView/UIWebView.h"
+#include "axmol/ui/WebView/WebView.h"
 #include "lua-bindings/manual/tolua_fix.h"
 #include "lua-bindings/manual/LuaBasicConversions.h"
 

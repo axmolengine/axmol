@@ -120,7 +120,7 @@ void TransformHelp::nodeToMatrix(const BaseData& node, AffineTransform& matrix)
 
 void TransformHelp::nodeToMatrix(const BaseData& node, Mat4& matrix)
 {
-    matrix = Mat4::IDENTITY;
+    matrix = Mat4::identity;
 
     if (node.skewX == -node.skewY)
     {

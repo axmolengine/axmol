@@ -66,7 +66,7 @@ void SpritePolygonTestCase::onEnter()
 
 void SpritePolygonTestCase::onExit()
 {
-    Director::getInstance()->setClearColor(Color::BLACK);
+    Director::getInstance()->setClearColor(Color::black);
     TestCase::onExit();
 }
 
@@ -101,8 +101,8 @@ bool SpritePolygonTestCase::init()
             });
 
             auto menu = Menu::create(menuItem, nullptr);
-            menu->setPosition(Vec2::ZERO);
-            menuItem->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+            menu->setPosition(Vec2::zero);
+            menuItem->setAnchorPoint(Anchors::topLeft);
             menuItem->setPosition(VisibleRect::leftBottom() + Vec2(0.0f, VisibleRect::leftTop().y / 4));
             this->addChild(menu, 9999);
         }
@@ -131,15 +131,15 @@ void SpritePolygonTestCase::updateDrawNode()
                 // draw 3 lines
                 Vec3 from = verts[indices[i * 3]].position;
                 Vec3 to   = verts[indices[i * 3 + 1]].position;
-                drawnode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color::BLUE);
+                drawnode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color::blue);
 
                 from = verts[indices[i * 3 + 1]].position;
                 to   = verts[indices[i * 3 + 2]].position;
-                drawnode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color::GREEN);
+                drawnode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color::green);
 
                 from = verts[indices[i * 3 + 2]].position;
                 to   = verts[indices[i * 3]].position;
-                drawnode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color::RED);
+                drawnode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color::red);
             }
         }
     }
@@ -162,10 +162,12 @@ void SpritePolygonTestDemo::initTouches()
 {
     if (_polygonSprite)
     {
-        auto touchListener          = EventListenerTouchOneByOne::create();
-        touchListener->onTouchBegan = [&](Touch* touch, Event* event) { return true; };
-        touchListener->onTouchMoved = [&](Touch* touch, Event* event) {
-            auto pos       = touch->getDelta();
+        auto touchListener           = PointerEventListener::create();
+        touchListener->onPointerDown = [&](PointerEvent* event) { return true; };
+        touchListener->onPointerMove = [&](PointerEvent* event) {
+            if (!event->isCaptured())
+                return;
+            auto pos       = (event->getWorldPoint() - event->getPrevWorldPoint());
             float newScale = clampf(_polygonSprite->getScale() + pos.x * 0.01f, 0.1f, 2.f);
             _polygonSprite->setScale(newScale);
             _normalSprite->setScale(newScale);
@@ -340,7 +342,7 @@ void SpritePolygonTestSlider::changeEpsilon(ax::Object* pSender, ax::ui::Slider:
             {
                 Sprite* sp = (Sprite*)child;
                 auto file  = sp->getName();
-                auto pinfo = AutoPolygon::generatePolygon(file, Rect::ZERO, epsilon);
+                auto pinfo = AutoPolygon::generatePolygon(file, Rect::zero, epsilon);
                 sp->setPolygonInfo(pinfo);
                 updateLabel(sp, pinfo);
             }
@@ -445,10 +447,12 @@ bool SpritePolygonTest5::init()
 
 void SpritePolygonTest5::initTouch()
 {
-    auto touchListener          = EventListenerTouchOneByOne::create();
-    touchListener->onTouchBegan = [&](Touch* touch, Event* event) { return true; };
-    touchListener->onTouchEnded = [&](Touch* touch, Event* event) {
-        auto pos = touch->getLocation();
+    auto touchListener           = PointerEventListener::create();
+    touchListener->onPointerDown = [&](PointerEvent* event) { return true; };
+    touchListener->onPointerUp   = [&](PointerEvent* event) {
+        if (!event->isCaptured())
+            return;
+        auto pos = event->getWorldPoint();
         addSpritePolygon(pos);
     };
     _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
@@ -474,7 +478,7 @@ void SpritePolygonTest5::loadDefaultSprites()
         drawNode->clear();
         sprites[i]->addChild(drawNode);
     }
-    sprites[0]->setColor(Color32::RED);
+    sprites[0]->setColor(Color32::red);
     sprites[1]->setOpacity(100);
     sprites[2]->setTexture(Director::getInstance()->getTextureCache()->addImage("Images/grossinis_sister1.png"));
     sprites[3]->setTextureRect(Rect(0.0f, 0.0f, 100.0f, 30.0f));
@@ -690,7 +694,7 @@ SpritePolygonTestNoCrash::SpritePolygonTestNoCrash()
 void SpritePolygonTestNoCrash::initSprites()
 {
     auto s      = Director::getInstance()->getCanvasSize();
-    auto pinfo  = AutoPolygon::generatePolygon("Images/sprite_polygon_crash.png", Rect::ZERO, 0.5);
+    auto pinfo  = AutoPolygon::generatePolygon("Images/sprite_polygon_crash.png", Rect::zero, 0.5);
     auto sprite = Sprite::create(pinfo);
     addChild(sprite);
     sprite->setPosition(s.width / 2, s.height / 2);
@@ -747,7 +751,7 @@ void SpritePolygonTestAutoPolyIsland::initSprites()
 {
     auto s = Director::getInstance()->getCanvasSize();
 
-    auto pinfo  = AutoPolygon::generatePolygon("Images/island_polygon.png", Rect::ZERO, 1);
+    auto pinfo  = AutoPolygon::generatePolygon("Images/island_polygon.png", Rect::zero, 1);
     auto sprite = Sprite::create(pinfo);
     addChild(sprite);
     sprite->setPosition(s.width / 2, s.height / 2);
@@ -901,8 +905,8 @@ SpritePolygonTestPerformance::SpritePolygonTestPerformance()
     addChild(_spritesAnchor);
 
     _totalSprites = Label::createWithTTF(TTFConfig("fonts/arial.ttf"), "sprites");
-    _totalSprites->setColor(Color32::YELLOW);
-    _totalSprites->enableOutline(Color32::RED, 2);
+    _totalSprites->setColor(Color32::yellow);
+    _totalSprites->enableOutline(Color32::red, 2);
     _totalSprites->setPosition(s.width / 2, s.height / 2);
 
     addChild(_totalSprites);
@@ -923,8 +927,8 @@ void SpritePolygonTestPerformance::createSprite()
     // AutoPolygonSprite
     auto sprite = Sprite::create(pinfo);
 
-    float x = ((float)std::rand()) / RAND_MAX;
-    float y = ((float)std::rand()) / RAND_MAX;
+    float x = ax::rand_0_1();
+    float y = ax::rand_0_1();
 
     sprite->setPosition(Vec2(x * s.width, y * s.height));
     _spritesAnchor->addChild(sprite);

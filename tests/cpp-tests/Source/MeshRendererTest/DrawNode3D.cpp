@@ -96,7 +96,7 @@ bool DrawNode3D::init()
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     // Need to listen the event only when not use batchnode, because it will use VBO
-    auto listener = EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, [this](EventCustom* event) {
+    auto listener = CustomEventListener::create(EVENT_COME_TO_FOREGROUND, [this](CustomEvent* event) {
         /** listen the event that coming to foreground on Android */
         this->init();
     });
@@ -129,8 +129,8 @@ void DrawNode3D::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 
 void DrawNode3D::updateCommand(ax::Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
-    auto& matrixP = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    auto mvp      = matrixP * transform;
+    const auto& matrixP = Camera::getVisitingViewProjectionMatrix();
+    auto mvp            = matrixP * transform;
 
     _customCommand.unsafePS()->setUniform(_locMVPMatrix, mvp.m, sizeof(mvp.m));
 

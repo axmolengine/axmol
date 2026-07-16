@@ -36,9 +36,9 @@ const bool PUEmitter::DEFAULT_ENABLED = true;
 const Vec3 PUEmitter::DEFAULT_POSITION(0, 0, 0);
 const bool PUEmitter::DEFAULT_KEEP_LOCAL = false;
 const Vec3 PUEmitter::DEFAULT_DIRECTION(0, 1, 0);
-const Quaternion PUEmitter::DEFAULT_ORIENTATION(1, 0, 0, 0);
-const Quaternion PUEmitter::DEFAULT_ORIENTATION_RANGE_START(1, 0, 0, 0);
-const Quaternion PUEmitter::DEFAULT_ORIENTATION_RANGE_END(1, 0, 0, 0);
+const Quat PUEmitter::DEFAULT_ORIENTATION(1, 0, 0, 0);
+const Quat PUEmitter::DEFAULT_ORIENTATION_RANGE_START(1, 0, 0, 0);
+const Quat PUEmitter::DEFAULT_ORIENTATION_RANGE_END(1, 0, 0, 0);
 // const Particle::ParticleType PUEmitter::DEFAULT_EMITS = VisualParticle::PT_VISUAL;
 const unsigned short PUEmitter::DEFAULT_START_TEXTURE_COORDS = 0;
 const unsigned short PUEmitter::DEFAULT_END_TEXTURE_COORDS   = 0;
@@ -63,13 +63,13 @@ const float PUEmitter::DEFAULT_DEPTH         = 0.0f;
 PUEmitter::PUEmitter()
     :  // mEmitsType(DEFAULT_EMITS),
     // mEmitsName(StringUtil::BLANK),
-    _emitterScale(Vec3::ONE)
+    _emitterScale(Vec3::one)
     , _particleDirection(DEFAULT_DIRECTION)
     , _originalParticleDirection(DEFAULT_DIRECTION)
     ,
-    // mParticleOrientation(Quaternion::IDENTITY),
-    // mParticleOrientationRangeStart(Quaternion::IDENTITY),
-    // mParticleOrientationRangeEnd(Quaternion::IDENTITY),
+    // mParticleOrientation(Quat::IDENTITY),
+    // mParticleOrientationRangeStart(Quat::IDENTITY),
+    // mParticleOrientationRangeEnd(Quat::IDENTITY),
     _particleOrientationRangeSet(false)
     , _dynParticleAllDimensionsSet(false)
     , _dynParticleWidthSet(false)
@@ -206,8 +206,8 @@ void PUEmitter::initParticleOrientation(PUParticle3D* particle)
     if (_particleOrientationRangeSet)
     {
         // Generate random orientation 'between' start en end.
-        Quaternion::lerp(_particleOrientationRangeStart, _particleOrientationRangeEnd, AXRANDOM_0_1(),
-                         &particle->orientation);
+        Quat::lerp(_particleOrientationRangeStart, _particleOrientationRangeEnd, AXRANDOM_0_1(),
+                   &particle->orientation);
     }
     else
     {
@@ -660,33 +660,33 @@ const Vec3& PUEmitter::getOriginalParticleDirection() const
     return _originalParticleDirection;
 }
 //-----------------------------------------------------------------------
-const Quaternion& PUEmitter::getParticleOrientation() const
+const Quat& PUEmitter::getParticleOrientation() const
 {
     return _particleOrientation;
 }
 //-----------------------------------------------------------------------
-void PUEmitter::setParticleOrientation(const Quaternion& orientation)
+void PUEmitter::setParticleOrientation(const Quat& orientation)
 {
     _particleOrientation = orientation;
 }
 //-----------------------------------------------------------------------
-const Quaternion& PUEmitter::getParticleOrientationRangeStart() const
+const Quat& PUEmitter::getParticleOrientationRangeStart() const
 {
     return _particleOrientationRangeStart;
 }
 //-----------------------------------------------------------------------
-void PUEmitter::setParticleOrientationRangeStart(const Quaternion& orientationRangeStart)
+void PUEmitter::setParticleOrientationRangeStart(const Quat& orientationRangeStart)
 {
     _particleOrientationRangeStart = orientationRangeStart;
     _particleOrientationRangeSet   = true;
 }
 //-----------------------------------------------------------------------
-const Quaternion& PUEmitter::getParticleOrientationRangeEnd() const
+const Quat& PUEmitter::getParticleOrientationRangeEnd() const
 {
     return _particleOrientationRangeEnd;
 }
 //-----------------------------------------------------------------------
-void PUEmitter::setParticleOrientationRangeEnd(const Quaternion& orientationRangeEnd)
+void PUEmitter::setParticleOrientationRangeEnd(const Quat& orientationRangeEnd)
 {
     _particleOrientationRangeEnd = orientationRangeEnd;
     _particleOrientationRangeSet = true;

@@ -37,7 +37,7 @@ void GLoader::handleInit()
 {
     _content = FUISprite::create();
     _content->retain();
-    _content->setAnchorPoint(Vec2::ZERO);
+    _content->setAnchorPoint(Vec2::zero);
     _content->setCascadeOpacityEnabled(true);
 
     FUIContainer* c = FUIContainer::create();
@@ -281,7 +281,7 @@ void GLoader::loadExternal()
     auto tex = Director::getInstance()->getTextureCache()->addImage(_url);
     if (tex)
     {
-        auto sf = SpriteFrame::createWithTexture(tex, Rect(Vec2::ZERO, tex->getContentSize()));
+        auto sf = SpriteFrame::createWithTexture(tex, Rect(Vec2::zero, tex->getContentSize()));
         onExternalLoadSuccess(sf);
     }
     else
@@ -364,7 +364,7 @@ void GLoader::updateLayout()
             else
             {
                 _content->setScale(1, 1);
-                _content->setAnchorPoint(Vec2::ZERO);
+                _content->setAnchorPoint(Vec2::zero);
                 _content->setPosition(0, 0);
             }
             return;
@@ -427,7 +427,7 @@ void GLoader::updateLayout()
             {
                 _content->setScale(1, 1);
                 _content->setContentSize(sourceSize);
-                _content->setTextureRect(Rect(Vec2::ZERO, contentSize));
+                _content->setTextureRect(Rect(Vec2::zero, contentSize));
             }
             else
             {
@@ -440,7 +440,7 @@ void GLoader::updateLayout()
             _content->setContentSize(sourceSize);
             _content->setScale(sx, sy);
         }
-        _content->setAnchorPoint(Vec2::ZERO);
+        _content->setAnchorPoint(Vec2::zero);
     }
 
     float nx;
@@ -593,7 +593,7 @@ GObject* GLoader::hitTest(const Vec2& worldPoint, const Camera* camera)
 
     Rect rect;
     rect.size = _size;
-    //if (isScreenPointInRect(worldPoint, camera, _displayObject->getWorldToNodeTransform(), rect, nullptr))
+    //if (camera->isWorldPointInRect(worldPoint, _displayObject->getWorldToNodeTransform(), rect))
     if (rect.containsPoint(_displayObject->convertToNodeSpace(worldPoint)))
         return this;
     else

@@ -33,7 +33,7 @@ namespace ax
 PUPlane::PUPlane()
 {
     // Vec3 default constructor zero
-    // normal = Vec3::ZERO;
+    // normal = Vec3::zero;
     d = 0.0;
 }
 //-----------------------------------------------------------------------

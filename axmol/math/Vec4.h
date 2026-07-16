@@ -39,7 +39,7 @@ struct AX_DLL Vec4Base
 {
     constexpr Vec4Base() : x(0.0f), y(0.0f), z(0.0f), w(0.0f) {}
     constexpr Vec4Base(float xx, float yy, float zz, float ww) : x(xx), y(yy), z(zz), w(ww) {}
-    explicit Vec4Base(const float* src) { this->set(src); }
+    constexpr explicit Vec4Base(const float* src) : x(src[0]), y(src[1]), z(src[2]), w(src[3]) {}
 
     /**
      * Sets the elements of this vector to those in the specified vector.
@@ -75,10 +75,8 @@ struct AX_DLL Vec4Base
      *
      * @param array An array containing the elements of the vector in the order x, y, z, w.
      */
-    void set(const float* array)
+    constexpr void set(const float* array)
     {
-        AX_ASSERT(array);
-
         this->x = array[0];
         this->y = array[1];
         this->z = array[2];
@@ -473,26 +471,14 @@ public:
     static void subtract(const Vec4& v1, const Vec4& v2, Vec4* dst);
 
     /** equals to Vec4(0,0,0,0) */
-    static const Vec4 ZERO;
+    static const Vec4 zero;
     /** equals to Vec4(1,1,1,1) */
-    static const Vec4 ONE;
-    /** equals to Vec4(1,0,0,0) */
-    static const Vec4 UNIT_X;
-    /** equals to Vec4(0,1,0,0) */
-    static const Vec4 UNIT_Y;
-    /** equals to Vec4(0,0,1,0) */
-    static const Vec4 UNIT_Z;
-    /** equals to Vec4(0,0,0,1) */
-    static const Vec4 UNIT_W;
+    static const Vec4 one;
 };
 
 #if !(defined(AX_DLLEXPORT) || defined(AX_DLLIMPORT))
-inline constexpr Vec4 Vec4::ZERO   = Vec4(0.0f, 0.0f, 0.0f, 0.0f);
-inline constexpr Vec4 Vec4::ONE    = Vec4(1.0f, 1.0f, 1.0f, 1.0f);
-inline constexpr Vec4 Vec4::UNIT_X = Vec4(1.0f, 0.0f, 0.0f, 0.0f);
-inline constexpr Vec4 Vec4::UNIT_Y = Vec4(0.0f, 1.0f, 0.0f, 0.0f);
-inline constexpr Vec4 Vec4::UNIT_Z = Vec4(0.0f, 0.0f, 1.0f, 0.0f);
-inline constexpr Vec4 Vec4::UNIT_W = Vec4(0.0f, 0.0f, 0.0f, 1.0f);
+inline constexpr Vec4 Vec4::zero{0.0f, 0.0f, 0.0f, 0.0f};
+inline constexpr Vec4 Vec4::one{1.0f, 1.0f, 1.0f, 1.0f};
 #endif
 
 NS_AX_MATH_END

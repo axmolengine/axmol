@@ -1,4 +1,4 @@
-﻿#include "Effekseer.InternalScript.h"
+#include "Effekseer.InternalScript.h"
 #include "Utils/Effekseer.BinaryReader.h"
 #include <assert.h>
 

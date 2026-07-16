@@ -1,0 +1,244 @@
+name: source-tidy
+
+on:
+  workflow_dispatch:
+    inputs:
+      lint_mode:
+        description: 'Select lint mode: check_only, auto_commit, or create_pr'
+        required: true
+        default: 'check_only'
+        type: choice
+        options:
+          - check_only
+          - create_pr
+          - auto_commit
+
+  workflow_call:
+    inputs:
+      lint_mode:
+        description: 'Select lint mode: check_only, auto_commit, or create_pr'
+        required: false
+        default: 'check_only'
+        type: string
+      should_run:
+        description: 'Whether clang-format should actually run'
+        required: false
+        default: true
+        type: boolean
+      head_repo:
+        description: 'Repository to checkout'
+        required: false
+        default: ''
+        type: string
+      head_ref:
+        description: 'Ref to checkout'
+        required: false
+        default: ''
+        type: string
+
+  issue_comment:
+    types: [created] # Listen for new comments on issues/PRs
+
+env:
+  LLVM_VER: '21'
+
+jobs:
+  source-tidy:
+    runs-on: ubuntu-latest
+    # Run if:
+    # - workflow_dispatch
+    # - pull_request/push from build.yml reusable workflow calls
+    # - issue_comment on a PR with /clang-format AND commenter is halx99
+    #
+    # Note:
+    # When called from build.yml, github.event_name keeps the caller event name
+    # such as pull_request, push, or workflow_dispatch. It is not workflow_call.
+    # The job itself must not be skipped when should_run is false; only the
+    # clang-format steps should be skipped so build.yml jobs that need
+    # [format-check] can continue.
+    if: |
+      (github.event_name == 'pull_request') ||
+      (github.event_name == 'push') ||
+      (github.event_name == 'workflow_dispatch') ||
+      (github.event_name == 'issue_comment' &&
+       github.event.issue.pull_request != null &&
+       startsWith(github.event.comment.body, '/clang-format') &&
+       contains(fromJSON('["halx99"]'), github.event.comment.user.login))
+
+    steps:
+    # Reply start message when triggered by comment
+    - name: Reply start message
+      if: github.event_name == 'issue_comment'
+      uses: peter-evans/create-or-update-comment@v5
+      with:
+        token: ${{ secrets.AX_BOT_TOKEN || github.token }}
+        comment-id: ${{ github.event.comment.id }}
+        reactions: eyes
+
+    # Get PR info when triggered by a comment
+    - name: Get PR info (for comment trigger)
+      if: github.event_name == 'issue_comment'
+      id: pr
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{ secrets.AX_BOT_TOKEN || github.token }}
+        script: |
+          const { data: pr } = await github.rest.pulls.get({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: context.payload.issue.number
+          });
+          core.setOutput('head_ref', pr.head.ref);
+          core.setOutput('head_repo', pr.head.repo.full_name);
+
+    # Determine whether to run, checkout target, and lint mode
+    - name: Prepare clang-format lint
+      id: pp
+      shell: pwsh
+      run: |
+        $should_run = '${{ inputs.should_run || true }}'
+
+        if ($env:GITHUB_EVENT_NAME -eq 'issue_comment') {
+          $head_repo = "${{ steps.pr.outputs.head_repo }}"
+          $head_ref  = "${{ steps.pr.outputs.head_ref }}"
+        }
+        elseif ($env:GITHUB_EVENT_NAME -eq 'pull_request') {
+          $head_repo = "${{ github.event.pull_request.head.repo.full_name }}"
+          $head_ref  = "${{ github.event.pull_request.head.ref }}"
+        }
+        else {
+          $head_repo = "${{ github.repository }}"
+          $head_ref  = "${{ github.head_ref || github.ref_name }}"
+        }
+
+        if ($should_run -eq 'true' -and (!$head_repo -or !$head_ref)) {
+          Write-Error "❌ head_repo or head_ref is empty"
+          exit 1
+        }
+
+        if ($env:GITHUB_EVENT_NAME -eq 'issue_comment') {
+          echo "Set lint_mode=auto_commit for ${{ github.event.comment.user.login }} Command **/clang-format**"
+          $lint_mode = 'auto_commit'
+        }
+        else {
+          $lint_mode = "${{ inputs.lint_mode || 'check_only' }}"
+        }
+
+        echo "should_run=$should_run" >> ${env:GITHUB_OUTPUT}
+        echo "head_repo=$head_repo" >> ${env:GITHUB_OUTPUT}
+        echo "head_ref=$head_ref" >> ${env:GITHUB_OUTPUT}
+        echo "lint_mode=$lint_mode" >> ${env:GITHUB_OUTPUT}
+
+        Write-Host "should_run=$should_run, head_repo=$head_repo, head_ref=$head_ref, lint_mode=$lint_mode"
+
+    - name: Skip clang-format
+      if: ${{ steps.pp.outputs.should_run != 'true' }}
+      run: echo "clang-format skipped for this caller event."
+
+    # Checkout correct branch
+    - uses: actions/checkout@v6
+      if: ${{ steps.pp.outputs.should_run == 'true' }}
+      with:
+        repository: ${{ steps.pp.outputs.head_repo }}
+        ref: ${{ steps.pp.outputs.head_ref }}
+        token: ${{ secrets.AX_BOT_TOKEN || github.token }}
+    
+    - name: Lint Axmol source files (UTF-8 BOM & cstd headers)
+      if: ${{ steps.pp.outputs.should_run == 'true' }}
+      shell: pwsh
+      run: ./tools/cmdline/source-lint.ps1
+
+    - name: Install llvm clang-format
+      if: ${{ steps.pp.outputs.should_run == 'true' }}
+      shell: pwsh
+      run: |
+        # Install clang-format
+        ./1k/llvm.ps1 install $env:LLVM_VER clang-format
+
+    - name: Format Axmol source files
+      if: ${{ steps.pp.outputs.should_run == 'true' }}
+      shell: pwsh
+      run: |
+        ./tools/cmdline/clang-format.ps1 -ver $env:LLVM_VER
+
+    # check_only mode
+    - name: Check for uncommitted changes
+      if: ${{ steps.pp.outputs.should_run == 'true' && steps.pp.outputs.lint_mode == 'check_only' }}
+      shell: pwsh
+      run: |
+        git diff --quiet
+        if ($LASTEXITCODE -ne 0) {
+          Write-Host "❌ clang-format check failed: Uncommitted formatting changes detected."
+          Write-Host "=== The following differences require formatting ==="
+          git --no-pager diff
+          Write-Host "===================================================="
+          exit 1
+        }
+        else {
+          Write-Host "✅ clang-format check passed: No formatting changes needed."
+        }
+
+    - name: Prepare for create pull request
+      if: ${{ steps.pp.outputs.should_run == 'true' && steps.pp.outputs.lint_mode == 'create_pr' }}
+      id: ppr
+      shell: pwsh
+      run: |
+        $head_commit_sha = $(git rev-parse --short HEAD)
+        echo "head_commit_sha=$head_commit_sha" >> ${env:GITHUB_OUTPUT}
+        Write-Host "ppr: head_commit_sha=$head_commit_sha"
+
+    # create_pr mode
+    - name: Create pull request
+      if: ${{ steps.pp.outputs.should_run == 'true' && steps.pp.outputs.lint_mode == 'create_pr' }}
+      id: cpr
+      uses: peter-evans/create-pull-request@v8
+      with:
+        token: ${{ secrets.AX_BOT_TOKEN || github.token }}
+        push-to-fork: axmol-bot/axmol
+        commit-message: Committing clang-format changes
+        signoff: false
+        branch: clang_format_for_${{ steps.ppr.outputs.head_commit_sha }}
+        delete-branch: true
+        title: 'Committing clang-format changes ${{ steps.ppr.outputs.head_commit_sha }}'
+        body: |
+          RT
+          - Auto-generated by [create-pull-request][1]
+
+          [1]: https://github.com/peter-evans/create-pull-request
+        labels: |
+          clang-format
+          automated pr
+          pinned
+        assignees: axmol-bot
+        reviewers: halx99
+        draft: false
+
+    - name: Check pull request outputs
+      if: ${{ steps.pp.outputs.should_run == 'true' && steps.pp.outputs.lint_mode == 'create_pr' && steps.cpr.outputs.pull-request-number }}
+      run: |
+        echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
+        echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
+
+    # auto_commit mode, including comment trigger
+    - name: Commit clang-format changes to PR source branch
+      if: ${{ steps.pp.outputs.should_run == 'true' && steps.pp.outputs.lint_mode == 'auto_commit' }}
+      uses: EndBug/add-and-commit@v10
+      with:
+        author_name: axmol-bot
+        author_email: 116471739+axmol-bot@users.noreply.github.com
+        committer_name: GitHub Actions
+        committer_email: 41898282+github-actions[bot]@users.noreply.github.com
+        message: 'Committing clang-format changes'
+        new_branch: ${{ steps.pp.outputs.head_ref }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.AX_BOT_TOKEN || github.token }}
+
+    # Reply failure message if job fails
+    - name: Reply failure message
+      if: ${{ failure() && github.event_name == 'issue_comment' }}
+      uses: peter-evans/create-or-update-comment@v5
+      with:
+        token: ${{ secrets.AX_BOT_TOKEN || github.token }}
+        issue-number: ${{ github.event.issue.number }}
+        body: |
+          ❌ Formatting failed. Please check the GitHub Actions logs for details.

@@ -1,4 +1,4 @@
-﻿
+
 #ifndef __EFFEKSEER_EFFECT_H__
 #define __EFFEKSEER_EFFECT_H__
 

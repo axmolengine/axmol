@@ -27,6 +27,7 @@
 
 #include "axmol/base/Data.h"
 #include "axmol/base/Logging.h"
+#include "axmol/base/Macros.h"
 
 namespace ax
 {

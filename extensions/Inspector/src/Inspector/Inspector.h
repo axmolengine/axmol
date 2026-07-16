@@ -5,7 +5,7 @@
 #include "axmol/base/Config.h"
 #include <string>
 #include <unordered_map>
-#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/CustomEventListener.h"
 #include "axmol/base/RefPtr.h"
 #include "axmol/scene/Node.h"
 
@@ -82,8 +82,8 @@ private:
     ax::Scene* _target                  = nullptr;
 
     std::unordered_map<std::string, std::unique_ptr<InspectPropertyHandler>> _propertyHandlers;
-    RefPtr<EventListenerCustom> _beforeNewSceneEventListener;
-    RefPtr<EventListenerCustom> _afterNewSceneEventListener;
+    RefPtr<CustomEventListener> _beforeNewSceneEventListener;
+    RefPtr<CustomEventListener> _afterNewSceneEventListener;
 
     bool _autoAddToScenes = false;
     std::string _fontPath;

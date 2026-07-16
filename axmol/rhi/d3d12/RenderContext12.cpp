@@ -243,8 +243,8 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface) 
 
     createDescriptorHeaps();
 
-    bitmask::set(_inFlightDynamicDirtyBits[0], PIPELINE_REQUIRED_DYNAMIC_BITS);
-    bitmask::set(_inFlightDynamicDirtyBits[1], PIPELINE_REQUIRED_DYNAMIC_BITS);
+    for (auto& stateBits : _inFlightDynamicDirtyBits)
+        bitmask::set(stateBits, PIPELINE_REQUIRED_DYNAMIC_BITS);
 }
 
 RenderContextImpl::~RenderContextImpl()
@@ -432,6 +432,39 @@ void RenderContextImpl::endRenderPass()
     AX_SAFE_RELEASE_NULL(_instanceBuffer);
 }
 
+void RenderContextImpl::submitCurrentFrameCommands(bool /*waitForCompletion*/)
+{
+    if (!_inFrame || !_currentCmdList)
+        return;
+
+    HRESULT hr = _currentCmdList->Close();
+    AXASSERT(SUCCEEDED(hr), "CommandList Close failed");
+
+    ID3D12CommandList* lists[] = {_currentCmdList};
+    _graphicsQueue->ExecuteCommandLists(1, lists);
+
+    auto& currentFence = _inflightFences[_frameIndex];
+    _graphicsQueue->Signal(currentFence.handle, currentFence.value);
+    _completedFenceValue = currentFence.wait();
+    _driver->processDisposalQueue(_completedFenceValue);
+
+    currentFence.value = ++_frameFenceValue;
+
+    hr = _commandAllocators[_frameIndex]->Reset();
+    AXASSERT(SUCCEEDED(hr), "CommandAllocator Reset failed");
+    hr = _currentCmdList->Reset(_commandAllocators[_frameIndex].Get(), nullptr);
+    AXASSERT(SUCCEEDED(hr), "CommandList Reset failed");
+
+    _boundRootSig = nullptr;
+    _boundPSO     = nullptr;
+    bitmask::set(_inFlightDynamicDirtyBits[_frameIndex], PIPELINE_REQUIRED_DYNAMIC_BITS);
+
+    auto samplerHeap               = _driver->getSamplerHeap();
+    auto srvHeap                   = _srvHeaps[_frameIndex].Get();
+    ID3D12DescriptorHeap* heaps[2] = {srvHeap, samplerHeap};
+    _currentCmdList->SetDescriptorHeaps(2, heaps);
+}
+
 void RenderContextImpl::endFrame()
 {
     // Close and execute command list
@@ -454,7 +487,7 @@ void RenderContextImpl::endFrame()
             AXLOGE("SwapChain Present failed: hr=0x{:X}", hr);
         }
 
-        std::abort();
+        abort();
     }
 
     // Signal fence for this frame
@@ -653,7 +686,7 @@ void RenderContextImpl::setInstanceBuffer(Buffer* buffer)
     _instanceBuffer = static_cast<BufferImpl*>(buffer);
 }
 
-void RenderContextImpl::drawArrays(std::size_t start, std::size_t count, bool /*wireframe*/)
+void RenderContextImpl::drawArrays(size_t start, size_t count, bool /*wireframe*/)
 {
     AXASSERT(_renderPipeline && _vertexBuffer, "Pipeline and vertex buffer must be set");
 
@@ -662,7 +695,7 @@ void RenderContextImpl::drawArrays(std::size_t start, std::size_t count, bool /*
     _currentCmdList->DrawInstanced(static_cast<UINT>(count), 1, static_cast<UINT>(start), 0);
 }
 
-void RenderContextImpl::drawArraysInstanced(std::size_t start, std::size_t count, int instanceCount, bool /*wireframe*/)
+void RenderContextImpl::drawArraysInstanced(size_t start, size_t count, int instanceCount, bool /*wireframe*/)
 {
     AXASSERT(_renderPipeline && _vertexBuffer, "Pipeline and vertex buffer must be set");
 
@@ -672,7 +705,7 @@ void RenderContextImpl::drawArraysInstanced(std::size_t start, std::size_t count
                                    0);
 }
 
-void RenderContextImpl::drawElements(IndexFormat indexType, std::size_t count, std::size_t offset, bool /*wireframe*/)
+void RenderContextImpl::drawElements(IndexFormat indexType, size_t count, size_t offset, bool /*wireframe*/)
 {
     AXASSERT(_renderPipeline && _vertexBuffer && _indexBuffer, "Pipeline, vertex and index buffers must be set");
 
@@ -691,8 +724,8 @@ void RenderContextImpl::drawElements(IndexFormat indexType, std::size_t count, s
 }
 
 void RenderContextImpl::drawElementsInstanced(IndexFormat indexType,
-                                              std::size_t count,
-                                              std::size_t offset,
+                                              size_t count,
+                                              size_t offset,
                                               int instanceCount,
                                               bool /*wireframe*/)
 {
@@ -805,7 +838,7 @@ void RenderContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
     }
 }
 
-void RenderContextImpl::createUniformRingBuffers(std::size_t capacityBytes)
+void RenderContextImpl::createUniformRingBuffers(size_t capacityBytes)
 {
     // Enforce minimum alignment-friendly capacity
     if (capacityBytes == 0)
@@ -881,16 +914,16 @@ void RenderContextImpl::resetUniformRingForCurrentFrame(UINT frameIndex)
 }
 
 // Allocate an aligned slice for the given frame
-RenderContextImpl::UniformSlice RenderContextImpl::allocateUniformSlice(UINT frameIndex, std::size_t size)
+RenderContextImpl::UniformSlice RenderContextImpl::allocateUniformSlice(UINT frameIndex, size_t size)
 {
     AXASSERT(frameIndex < _uniformRings.size(), "Invalid frame index");
     auto& ring = _uniformRings[frameIndex];
     AXASSERT(ring.valid(), "Uniform ring buffer not initialized");
 
     // Align size and head to 256-byte boundary to satisfy CBV requirements
-    auto alignMask          = ring.align - 1;
-    std::size_t alignedSize = (size + alignMask) & ~alignMask;
-    std::size_t alignedHead = (ring.writeHead + alignMask) & ~alignMask;
+    auto alignMask     = ring.align - 1;
+    size_t alignedSize = (size + alignMask) & ~alignMask;
+    size_t alignedHead = (ring.writeHead + alignMask) & ~alignMask;
 
     // Simple wrap-around strategy: reset if not enough room
     if (alignedHead + alignedSize > ring.capacity)
@@ -912,9 +945,7 @@ RenderContextImpl::UniformSlice RenderContextImpl::allocateUniformSlice(UINT fra
     return slice;
 }
 
-void RenderContextImpl::readPixels(RenderTarget* rt,
-                                   bool preserveAxisHint,
-                                   std::function<void(const PixelBufferDesc&)> callback)
+void RenderContextImpl::readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback)
 {
     if (!rt)
     {
@@ -923,16 +954,14 @@ void RenderContextImpl::readPixels(RenderTarget* rt,
     }
     rt->retain();
 
-    _frameCompletionOps.emplace_back([this, rt, preserveAxisHint, callback = std::move(callback)](uint64_t) mutable {
-        readPixelsInternal(rt, preserveAxisHint, callback);
+    _frameCompletionOps.emplace_back([this, rt, callback = std::move(callback)](uint64_t) mutable {
+        readPixelsInternal(rt, callback);
 
         rt->release();
     });
 }
 
-void RenderContextImpl::readPixelsInternal(RenderTarget* rt,
-                                           bool preserveAxisHint,
-                                           std::function<void(const PixelBufferDesc&)>& callback)
+void RenderContextImpl::readPixelsInternal(RenderTarget* rt, std::function<void(const PixelBufferDesc&)>& callback)
 {
     PixelBufferDesc pbd{};
     auto* rtImpl = static_cast<RenderTargetImpl*>(rt);

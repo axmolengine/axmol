@@ -333,22 +333,19 @@ void RenderContextImpl::setIndexBuffer(Buffer* buffer)
     [_mtlIndexBuffer retain];
 }
 
-void RenderContextImpl::drawArrays(std::size_t start, std::size_t count, bool wireframe /* unused */)
+void RenderContextImpl::drawArrays(size_t start, size_t count, bool wireframe /* unused */)
 {
     prepareDrawing();
     [_mtlRenderEncoder drawPrimitives:_primitiveType vertexStart:start vertexCount:count];
 }
 
-void RenderContextImpl::drawArraysInstanced(std::size_t start,
-                                            std::size_t count,
-                                            int instanceCount,
-                                            bool wireframe /* unused */)
+void RenderContextImpl::drawArraysInstanced(size_t start, size_t count, int instanceCount, bool wireframe /* unused */)
 {
     prepareDrawing();
     [_mtlRenderEncoder drawPrimitives:_primitiveType vertexStart:start vertexCount:count instanceCount:instanceCount];
 }
 
-void RenderContextImpl::drawElements(IndexFormat indexType, std::size_t count, std::size_t offset, bool /* wireframe */)
+void RenderContextImpl::drawElements(IndexFormat indexType, size_t count, size_t offset, bool /* wireframe */)
 {
     prepareDrawing();
     [_mtlRenderEncoder drawIndexedPrimitives:_primitiveType
@@ -359,8 +356,8 @@ void RenderContextImpl::drawElements(IndexFormat indexType, std::size_t count, s
 }
 
 void RenderContextImpl::drawElementsInstanced(IndexFormat indexType,
-                                              std::size_t count,
-                                              std::size_t offset,
+                                              size_t count,
+                                              size_t offset,
                                               int instanceCount,
                                               bool /* wireframe */)
 {
@@ -378,9 +375,7 @@ void RenderContextImpl::endRenderPass()
     afterDraw();
 }
 
-void RenderContextImpl::readPixels(RenderTarget* rt,
-                                   bool /*preserveAxisHint*/,
-                                   std::function<void(const PixelBufferDesc&)> callback)
+void RenderContextImpl::readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback)
 {
     auto rtMTL = static_cast<RenderTargetImpl*>(rt);
 
@@ -409,6 +404,29 @@ void RenderContextImpl::endFrame()
 
     releaseDrawable();
     [_autoReleasePool drain];
+}
+
+void RenderContextImpl::submitCurrentFrameCommands(bool waitForCompletion)
+{
+    endEncoding();
+
+    if (_currentCmdBuffer)
+    {
+        assert(_currentCmdBuffer.status != MTLCommandBufferStatusCommitted);
+        [_currentCmdBuffer commit];
+        if (waitForCompletion)
+            [_currentCmdBuffer waitUntilCompleted];
+
+        flushCaptureCommands();
+
+        [_currentCmdBuffer release];
+        _currentCmdBuffer = nil;
+    }
+
+    _currentCmdBuffer = [_mtlCmdQueue commandBuffer];
+    [_currentCmdBuffer retain];
+    _currentRenderPassDesc = {};
+    _currentRT             = nullptr;
 }
 
 void RenderContextImpl::endEncoding()
@@ -581,10 +599,10 @@ void RenderContextImpl::setScissorRect(bool enabled, float x, float y, float wid
 }
 
 void RenderContextImpl::readPixels(id<MTLTexture> texture,
-                                   std::size_t origX,
-                                   std::size_t origY,
-                                   std::size_t rectWidth,
-                                   std::size_t rectHeight,
+                                   size_t origX,
+                                   size_t origY,
+                                   size_t rectWidth,
+                                   size_t rectHeight,
                                    PixelBufferDesc& pbd)
 {
     NSUInteger texWidth   = texture.width;

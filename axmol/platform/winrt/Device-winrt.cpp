@@ -33,18 +33,25 @@ THE SOFTWARE.
 #    include <wincodec.h>
 #    include <Shlwapi.h>
 #    include <shellapi.h>
+#    include <winstring.h>
 #    include "ntcvt/ntcvt.hpp"
 #    include "axmol/platform/StdC.h"
 #    include "axmol/platform/Device.h"
 #    include "axmol/platform/FileUtils.h"
 #    include "axmol/platform/winrt/WinRTUtils.h"
-#    include "axmol/platform/winrt/RenderViewImpl-winrt.h"
+#    include "axmol/platform/winrt/RenderView-winrt.h"
 #    include <winrt/Windows.Devices.Sensors.h>
+#    include <winrt/Windows.ApplicationModel.DataTransfer.h>
+#    include <winrt/Windows.ApplicationModel.Core.h>
+#    include <atomic>
 
 using namespace winrt;
 using namespace Windows::Graphics::Display;
 using namespace Windows::Devices::Sensors;
 using namespace Windows::Foundation;
+using namespace Windows::UI::Core;
+using namespace Windows::ApplicationModel::Core;
+using namespace Windows::ApplicationModel::DataTransfer;
 
 #    if (WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP)
 using namespace Windows::Phone::Devices::Notification;
@@ -53,9 +60,66 @@ using namespace Windows::Phone::Devices::Notification;
 namespace ax
 {
 
+namespace
+{
+std::atomic<float> s_dpi{96.0f};
+}
+
+void Device::getClipboardText(std::function<void(std::string_view)> callback)
+{
+    if (!callback)
+        return;
+
+    try
+    {
+        DataPackageView view = Clipboard::GetContent();
+        if (!view)
+            return callback(std::string_view{});
+
+        hstring hs = view.GetTextAsync().get();
+        callback(ntcvt::from_chars(std::wstring_view{hs.c_str(), hs.size()}, CP_UTF8));
+    }
+    catch (hresult_error const&)
+    {
+        return callback(std::string_view{});
+    }
+}
+
+void Device::setClipboardText(std::string_view text)
+{
+    DataPackage dp;
+    dp.RequestedOperation(DataPackageOperation::Copy);
+    dp.SetText(winrt::to_hstring(text));
+
+    auto dispatcher = CoreApplication::MainView().CoreWindow().Dispatcher();
+    dispatcher.RunAsync(CoreDispatcherPriority::Normal, [dp]() mutable {
+        try
+        {
+            Clipboard::SetContent(dp);
+        }
+        catch (hresult_error const& e)
+        {}
+    });
+}
+
+void Device::clearClipboard()
+{
+    try
+    {
+        Clipboard::Clear();
+    }
+    catch (hresult_error const&)
+    {}
+}
+
 int Device::getDPI()
 {
-    return static_cast<int>(ax::RenderViewImpl::sharedRenderView()->GetDPI());
+    return static_cast<int>(s_dpi.load(std::memory_order_acquire));
+}
+
+void Device::setDPI(float dpi)
+{
+    s_dpi.store(dpi, std::memory_order_release);
 }
 
 float Device::getPixelRatio()
@@ -107,7 +171,7 @@ void Device::setAccelerometerEnabled(bool isEnabled)
             acc.z         = reading.AccelerationZ();
             acc.timestamp = 0;
 
-            auto orientation = RenderViewImpl::sharedRenderView()->getDeviceOrientation();
+            auto orientation = RenderView::sharedRenderView()->getDeviceOrientation();
 
             if (isWindowsPhone())
             {
@@ -171,8 +235,15 @@ void Device::setAccelerometerEnabled(bool isEnabled)
                 }
             }
 
-            std::shared_ptr<ax::InputEvent> event(new AccelerometerEvent(acc));
-            ax::RenderViewImpl::sharedRenderView()->QueueEvent(event);
+            // std::shared_ptr<ax::InputEvent> event(new AccelerometerEvent(acc));
+            // ax::RenderView::sharedRenderView()->QueueEvent(event);
+
+            Director::getInstance()->postTask([acc]() {
+                // std::shared_ptr<ax::InputEvent> event(new AccelerometerEvent(acc));
+                // ax::RenderView::sharedRenderView()->QueueEvent(event);
+                ax::AccelerationEvent accEvent(acc);
+                InputSystem::getInstance()->dispatchEvent(&accEvent);
+            });
         });
     }
 }

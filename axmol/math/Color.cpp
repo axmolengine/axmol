@@ -25,12 +25,30 @@ THE SOFTWARE.
 
 #include "axmol/math/Color.h"
 
-#if defined(_WIN32)
-#    pragma push_macro("TRANSPARENT")
-#    undef TRANSPARENT
-#endif
-
 NS_AX_MATH_BEGIN
+
+#if defined(AX_DLLEXPORT) || defined(AX_DLLIMPORT)
+const Color32 Color32::white{255, 255, 255, 255};
+const Color32 Color32::yellow{255, 255, 0, 255};
+const Color32 Color32::blue{0, 0, 255, 255};
+const Color32 Color32::green{0, 255, 0, 255};
+const Color32 Color32::red{255, 0, 0, 255};
+const Color32 Color32::magenta{255, 0, 255, 255};
+const Color32 Color32::black{0, 0, 0, 255};
+const Color32 Color32::orange{255, 127, 0, 255};
+const Color32 Color32::gray{166, 166, 166, 255};
+const Color32 Color32::clear{0, 0, 0, 0};
+const Color Color::white{1, 1, 1, 1};
+const Color Color::yellow{1, 1, 0, 1};
+const Color Color::blue{0, 0, 1, 1};
+const Color Color::green{0, 1, 0, 1};
+const Color Color::red{1, 0, 0, 1};
+const Color Color::magenta{1, 0, 1, 1};
+const Color Color::black{0, 0, 0, 1};
+const Color Color::orange{1, 0.5f, 0, 1};
+const Color Color::gray{0.65f, 0.65f, 0.65f, 1};
+const Color Color::clear{0, 0, 0, 0};
+#endif
 
 /**
  * Color32
@@ -69,28 +87,6 @@ bool Color::operator!=(const Color32& right) const
 {
     return !(*this == right);
 }
-
-const Color32 Color32::WHITE(255, 255, 255, 255);
-const Color32 Color32::YELLOW(255, 255, 0, 255);
-const Color32 Color32::GREEN(0, 255, 0, 255);
-const Color32 Color32::BLUE(0, 0, 255, 255);
-const Color32 Color32::RED(255, 0, 0, 255);
-const Color32 Color32::MAGENTA(255, 0, 255, 255);
-const Color32 Color32::BLACK(0, 0, 0, 255);
-const Color32 Color32::ORANGE(255, 127, 0, 255);
-const Color32 Color32::GRAY(166, 166, 166, 255);
-const Color32 Color32::TRANSPARENT(0, 0, 0, 0);
-
-const Color Color::WHITE(1, 1, 1, 1);
-const Color Color::YELLOW(1, 1, 0, 1);
-const Color Color::GREEN(0, 1, 0, 1);
-const Color Color::BLUE(0, 0, 1, 1);
-const Color Color::RED(1, 0, 0, 1);
-const Color Color::MAGENTA(1, 0, 1, 1);
-const Color Color::BLACK(0, 0, 0, 1);
-const Color Color::ORANGE(1, 0.5f, 0, 1);
-const Color Color::GRAY(0.65f, 0.65f, 0.65f, 1);
-const Color Color::TRANSPARENT(0, 0, 0, 0);
 
 HSV::HSV() {}
 
@@ -314,7 +310,3 @@ Color32 HSL::toColor32() const
 }
 
 NS_AX_MATH_END
-
-#if defined(_WIN32)
-#    pragma pop_macro("TRANSPARENT")
-#endif

@@ -31,8 +31,7 @@
 #    include "lua-bindings/manual/LuaBasicConversions.h"
 #    include "lua-bindings/manual/base/LuaScriptHandlerMgr.h"
 #    include "lua-bindings/manual/LuaValue.h"
-#    include "spine/spine.h"
-#    include "spine/spine-cocos2dx.h"
+#    include "spine/spine-axmol.h"
 #    include "lua-bindings/manual/spine/LuaSkeletonAnimation.h"
 #    include "lua-bindings/manual/LuaEngine.h"
 
@@ -122,7 +121,7 @@ int executeSpineEvent(LuaSkeletonAnimation* skeletonAnimation,
 
     int ret = 0;
 
-    std::string animationName = (entry && entry->getAnimation()) ? entry->getAnimation()->getName().buffer() : "";
+    std::string animationName = entry ? entry->getAnimation().getName().buffer() : "";
     std::string eventTypeName = "";
 
     switch (eventType)
@@ -163,27 +162,20 @@ int executeSpineEvent(LuaSkeletonAnimation* skeletonAnimation,
     }
 
     LuaValueDict spineEvent;
-    spineEvent.insert(spineEvent.end(), LuaValueDict::value_type("type", LuaValue::stringValue(eventTypeName)));
-    spineEvent.insert(spineEvent.end(),
-                      LuaValueDict::value_type("trackIndex", LuaValue::intValue(entry->getTrackIndex())));
-    spineEvent.insert(spineEvent.end(), LuaValueDict::value_type("animation", LuaValue::stringValue(animationName)));
-    spineEvent.insert(spineEvent.end(),
-                      LuaValueDict::value_type("loopCount", LuaValue::intValue(std::floor(entry->getTrackTime() /
-                                                                                          entry->getAnimationEnd()))));
+    spineEvent["type"]       = LuaValue::stringValue(eventTypeName);
+    spineEvent["trackIndex"] = LuaValue::intValue(entry ? entry->getTrackIndex() : 0);
+    spineEvent["animation"]  = LuaValue::stringValue(animationName);
+    spineEvent["loopCount"]  = LuaValue::intValue(
+        entry && entry->getAnimationEnd() > 0 ? std::floor(entry->getTrackTime() / entry->getAnimationEnd()) : 0);
 
     if (nullptr != event)
     {
         LuaValueDict eventData;
-        eventData.insert(eventData.end(),
-                         LuaValueDict::value_type("name", LuaValue::stringValue(event->getData().getName().buffer())));
-        eventData.insert(eventData.end(),
-                         LuaValueDict::value_type("intValue", LuaValue::intValue(event->getData().getIntValue())));
-        eventData.insert(eventData.end(), LuaValueDict::value_type(
-                                              "floatValue", LuaValue::floatValue(event->getData().getFloatValue())));
-        eventData.insert(
-            eventData.end(),
-            LuaValueDict::value_type("stringValue", LuaValue::stringValue(event->getData().getStringValue().buffer())));
-        spineEvent.insert(spineEvent.end(), LuaValueDict::value_type("eventData", LuaValue::dictValue(eventData)));
+        eventData["name"]        = LuaValue::stringValue(event->getData().getName().buffer());
+        eventData["intValue"]    = LuaValue::intValue(event->getInt());
+        eventData["floatValue"]  = LuaValue::floatValue(event->getFloat());
+        eventData["stringValue"] = LuaValue::stringValue(event->getString().buffer());
+        spineEvent["eventData"]  = LuaValue::dictValue(eventData);
     }
 
     stack->pushLuaValueDict(spineEvent);
@@ -531,30 +523,31 @@ static int axlua_spine_SkeletonAnimation_findBone(lua_State* tolua_S)
 
         if (NULL != bone)
         {
+            auto& bonePose = bone->getAppliedPose();
             lua_pushstring(tolua_S, "x");
-            lua_pushnumber(tolua_S, bone->getX());
+            lua_pushnumber(tolua_S, bonePose.getX());
             lua_rawset(tolua_S, -3); /* bone.x */
 
             lua_pushstring(tolua_S, "y");
-            lua_pushnumber(tolua_S, bone->getY());
+            lua_pushnumber(tolua_S, bonePose.getY());
             lua_rawset(tolua_S, -3); /* bone.y */
 
             lua_pushstring(tolua_S, "rotation");
-            lua_pushnumber(tolua_S, bone->getRotation());
+            lua_pushnumber(tolua_S, bonePose.getRotation());
             lua_rawset(tolua_S, -3); /* bone.rotation */
 
             lua_pushstring(tolua_S, "scaleX");
-            lua_pushnumber(tolua_S, bone->getScaleX());
+            lua_pushnumber(tolua_S, bonePose.getScaleX());
             lua_rawset(tolua_S, -3); /* bone.scaleX */
             lua_pushstring(tolua_S, "scaleY");
-            lua_pushnumber(tolua_S, bone->getScaleY());
+            lua_pushnumber(tolua_S, bonePose.getScaleY());
             lua_rawset(tolua_S, -3); /* bone.scaleY */
 
             lua_pushstring(tolua_S, "worldX");
-            lua_pushnumber(tolua_S, bone->getWorldX());
+            lua_pushnumber(tolua_S, bonePose.getWorldX());
             lua_rawset(tolua_S, -3); /* bone.worldX */
             lua_pushstring(tolua_S, "worldY");
-            lua_pushnumber(tolua_S, bone->getWorldY());
+            lua_pushnumber(tolua_S, bonePose.getWorldY());
             lua_rawset(tolua_S, -3); /* bone.worldY */
         }
         return 1;

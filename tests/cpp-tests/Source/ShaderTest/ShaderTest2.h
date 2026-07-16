@@ -56,7 +56,7 @@ protected:
     ax::rhi::VertexLayout* _vertexLayout = nullptr;
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
     std::string _fragSource;
-    ax::EventListenerCustom* _backgroundListener;
+    ax::CustomEventListener* _backgroundListener;
 #endif
 };
 
@@ -83,9 +83,9 @@ public:
     virtual std::string subtitle() const { return "Sprite Lamp effects"; }
     // callback
 public:
-    virtual void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* unused_event);
-    virtual void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* unused_event);
-    virtual void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* unused_event);
+    virtual bool onPointerDown(ax::PointerEvent*);
+    virtual void onPointerMove(ax::PointerEvent*);
+    virtual void onPointerUp(ax::PointerEvent*);
 
 protected:
     EffectSprite* _sprite;

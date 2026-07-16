@@ -26,7 +26,6 @@
 #pragma once
 
 #include <vector>
-#include <stack>
 #include <array>
 #include <deque>
 #include <optional>
@@ -56,16 +55,17 @@ class RenderPass;
 class Texture;
 class RenderTarget;
 struct PixelBufferDesc;
+struct PipelineDesc;
 }  // namespace rhi
 
-class EventListenerCustom;
+class CustomEventListener;
 class TrianglesCommand;
 class MeshCommand;
 class GroupCommand;
 class CallbackCommand;
-struct PipelineDesc;
 class Texture2D;
 class RenderView;
+class Scene;
 
 /** Class that knows how to sort `RenderCommand` objects.
  Since the commands that have `z == 0` are "pushed back" in
@@ -133,7 +133,7 @@ Whenever possible prefer to use `TrianglesCommand` objects since the renderer wi
  */
 class AX_DLL Renderer
 {
-    friend class RenderView;
+    friend class RenderViewCore;
 
 public:
     /**The max number of vertices in a vertex buffer object.*/
@@ -175,6 +175,9 @@ public:
     /** Renders into the RenderView all the queued `RenderCommand` objects */
     void render();
 
+    /** Submit currently encoded RHI commands without presenting the default surface. */
+    void submitCurrentFrameCommands(bool waitForCompletion);
+
     /** Cleans all `RenderCommand`s in the queue */
     void clean();
 
@@ -201,9 +204,6 @@ public:
     void setRenderTarget(rhi::RenderTarget* rt) { _currentRT = rt; };
 
     rhi::RenderTarget* getDefaultRenderTarget() const { return _defaultRT; }
-
-    /* The offscreen render target for RenderTexture to share it */
-    rhi::RenderTarget* getOffscreenRenderTarget();
 
     /**
     Set clear values for each attachment.
@@ -416,13 +416,7 @@ public:
     bool checkVisibility(const Mat4& transform, const Vec2& size);
 
     /** read pixels from RenderTarget or screen framebuffer */
-    void readPixels(rhi::RenderTarget* rt, std::function<void(const rhi::PixelBufferDesc&)> callback)
-    {
-        readPixels(rt, false, std::move(callback));
-    }
-    void readPixels(rhi::RenderTarget* rt,
-                    bool preserveAxisHint,
-                    std::function<void(const rhi::PixelBufferDesc&)> callback);
+    void readPixels(rhi::RenderTarget* rt, std::function<void(const rhi::PixelBufferDesc&)> callback);
 
     uint64_t getCompletedFenceValue() const;
 
@@ -512,7 +506,7 @@ protected:
     CullMode _cullMode = CullMode::NONE;
     Winding _winding   = Winding::COUNTER_CLOCK_WISE;  // default front face is CCW in GL
 
-    std::stack<int> _commandGroupStack;
+    LinearStack<int> _commandGroupStack;
 
     std::vector<RenderQueue> _renderGroups;
 
@@ -571,9 +565,7 @@ protected:
     rhi::RenderTarget* _defaultRT = nullptr;
     rhi::RenderTarget* _currentRT = nullptr;  // weak ref
 
-    rhi::RenderTarget* _offscreenRT = nullptr;
-
-    Color _clearColor = Color::BLACK;
+    Color _clearColor = Color::black;
     ClearFlag _clearFlag;
 
     struct ScissorState
@@ -590,7 +582,7 @@ protected:
         rhi::CullMode cullMode = rhi::CullMode::NONE;
     };
 
-    std::deque<StateBlock> _stateBlockStack;
+    LinearStack<StateBlock> _stateBlockStack;
 };
 
 }  // namespace ax

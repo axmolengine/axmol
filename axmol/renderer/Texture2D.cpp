@@ -41,14 +41,10 @@ THE SOFTWARE.
 #include "axmol/base/text_utils.h"
 #include "axmol/base/Environment.h"
 #include "axmol/platform/PlatformMacros.h"
-#include "axmol/base/Director.h"
 #include "axmol/base/NinePatchImageParser.h"
-#include "axmol/rhi/DriverContext.h"
-#include "axmol/rhi/ProgramState.h"
-#include "axmol/renderer/Shaders.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include "axmol/rhi/RHIUtils.h"
-#include "axmol/rhi/DriverContext.h"
-#include "axmol/renderer/Renderer.h"
+#include "axmol/rhi/GraphicsCore.h"
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
 #    include "axmol/renderer/TextureCache.h"
@@ -135,8 +131,8 @@ void Texture2D::chooseSamplerDesc(bool antialiasEnabled, bool mipEnabled, rhi::S
 
 Texture2D::Texture2D()
     : _originalPF(rhi::PixelFormat::NONE)
-    , _pixelsWide(0)
-    , _pixelsHigh(0)
+    , _width(0)
+    , _height(0)
     , _rhiTexture(nullptr)
     , _maxS(0.0)
     , _maxT(0.0)
@@ -154,22 +150,11 @@ Texture2D::~Texture2D()
     AX_SAFE_DELETE(_ninePatchInfo);
 
     AX_SAFE_RELEASE(_rhiTexture);
-    _customCommand.releasePSVL();
 }
 
 rhi::PixelFormat Texture2D::getPixelFormat() const
 {
     return _originalPF;
-}
-
-int Texture2D::getPixelsWide() const
-{
-    return _pixelsWide;
-}
-
-int Texture2D::getPixelsHigh() const
-{
-    return _pixelsHigh;
 }
 
 rhi::Texture* Texture2D::getRHITexture() const
@@ -179,16 +164,8 @@ rhi::Texture* Texture2D::getRHITexture() const
 
 Vec2 Texture2D::getContentSize() const
 {
-    Vec2 ret;
-    ret.width  = _contentSize.width / AX_CONTENT_SCALE_FACTOR();
-    ret.height = _contentSize.height / AX_CONTENT_SCALE_FACTOR();
-
-    return ret;
-}
-
-const Vec2& Texture2D::getContentSizeInPixels()
-{
-    return _contentSize;
+    auto factor = AX_CONTENT_SCALE_FACTOR();
+    return Vec2{_width / factor, _height / factor};
 }
 
 float Texture2D::getMaxS() const
@@ -311,6 +288,24 @@ bool Texture2D::initWithSpec(rhi::TextureDesc desc,
                              PixelFormat renderFormat,
                              bool preMultipliedAlpha)
 {
+    return initWithSpecInternal(desc, subDatas, renderFormat, preMultipliedAlpha, std::nullopt);
+}
+
+bool Texture2D::initWithSpec(rhi::TextureDesc desc,
+                             std::span<const TextureSliceData> subDatas,
+                             PixelFormat renderFormat,
+                             bool preMultipliedAlpha,
+                             const Color& clearColorHint)
+{
+    return initWithSpecInternal(desc, subDatas, renderFormat, preMultipliedAlpha, clearColorHint);
+}
+
+bool Texture2D::initWithSpecInternal(rhi::TextureDesc desc,
+                                     std::span<const TextureSliceData> subDatas,
+                                     PixelFormat renderFormat,
+                                     bool preMultipliedAlpha,
+                                     std::optional<Color> clearColorHint)
+{
     if (renderFormat == rhi::PixelFormat::NONE)
         renderFormat = desc.pixelFormat;
 
@@ -325,7 +320,7 @@ bool Texture2D::initWithSpec(rhi::TextureDesc desc,
     if (!pfd.bpp)
     {
         AXLOGW("WARNING: unsupported pixelformat: {:x}", (uint32_t)desc.pixelFormat);
-        if (rhi::DriverContext::isMetal())
+        if (rhi::GraphicsCore::isMetal())
             AXASSERT(false, "pixeformat not found in _pixelFormatInfoTables, register required!");
 
         return false;
@@ -343,7 +338,7 @@ bool Texture2D::initWithSpec(rhi::TextureDesc desc,
     }
 
     // !override renderFormat since some render format by RHI
-    const auto driverType = rhi::DriverContext::currentDriverType();
+    const auto driverType = rhi::GraphicsCore::currentDriverType();
     if (driverType == rhi::DriverType::Metal)
     {
         switch (renderFormat)
@@ -390,17 +385,16 @@ bool Texture2D::initWithSpec(rhi::TextureDesc desc,
         }
     }
 
-    _originalPF  = desc.pixelFormat;
-    _contentSize = Vec2((float)desc.width, (float)desc.height);
-    _pixelsWide  = desc.width;
-    _pixelsHigh  = desc.height;
-    _maxS        = 1;
-    _maxT        = 1;
+    _originalPF = desc.pixelFormat;
+    _width      = desc.width;
+    _height     = desc.height;
+    _maxS       = 1;
+    _maxT       = 1;
 
     desc.pixelFormat = renderFormat;
 
     chooseSamplerDesc(true, desc.mipLevels != 1, desc.samplerDesc);
-    _rhiTexture = static_cast<rhi::Texture*>(axdrv->createTexture(desc));
+    _rhiTexture = static_cast<rhi::Texture*>(axdrv->createTexture(desc, clearColorHint));
 
     updateData(subDatas, renderFormat, compressed);
 
@@ -436,7 +430,7 @@ bool Texture2D::initWithString(std::string_view text,
     tempDef._dimensions    = dimensions;
     tempDef._alignment     = hAlignment;
     tempDef._vertAlignment = vAlignment;
-    tempDef._fontFillColor = Color32::WHITE;
+    tempDef._fontFillColor = Color32::white;
     tempDef._enableWrap    = enableWrap;
     tempDef._overflow      = overflow;
 
@@ -519,8 +513,8 @@ void Texture2D::updateData(std::span<const TextureSliceData> subDatas, PixelForm
 {
     for (auto& subres : subDatas)
     {
-        auto width  = (std::max)(1, _pixelsWide >> subres.mipLevel);
-        auto height = (std::max)(1, _pixelsHigh >> subres.mipLevel);
+        auto width  = (std::max)(1, _width >> subres.mipLevel);
+        auto height = (std::max)(1, _height >> subres.mipLevel);
 
         if (!subres.data) [[unlikely]]
         {
@@ -713,88 +707,6 @@ void Texture2D::removeSpriteFrameCapInset(SpriteFrame* spriteFrame)
 void Texture2D::setTexParameters(const Texture2D::TexParams& desc)
 {
     _rhiTexture->updateSamplerDesc(desc);
-}
-
-void Texture2D::initProgram()
-{
-    if (_customCommand.unsafePS())
-        return;
-
-    // create program state
-    auto* program      = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_TEXTURE);
-    auto programState  = new ax::rhi::ProgramState(program);
-    _mvpMatrixLocation = programState->getUniformLocation("u_MVPMatrix");
-    _textureLocation   = programState->getUniformLocation("u_tex0");
-
-    _customCommand.setOwnPSVL(programState, program->getVertexLayout(), RenderCommand::ADOPT_FLAG_PS);
-
-    // create vertex buffer
-    _customCommand.setDrawType(CustomCommand::DrawType::ARRAY);
-    _customCommand.setPrimitiveType(CustomCommand::PrimitiveType::TRIANGLE_STRIP);
-    _customCommand.createVertexBuffer(sizeof(Vec3) + sizeof(Vec2), 4, CustomCommand::BufferUsage::DYNAMIC);
-
-    // setup blend state
-    BlendFunc blendFunc;
-    if (hasPremultipliedAlpha())
-    {
-        blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
-    }
-    else
-    {
-        blendFunc = BlendFunc::ALPHA_NON_PREMULTIPLIED;
-    }
-
-    auto& blendDesc                = _customCommand.blendDesc();
-    blendDesc.blendEnabled         = true;
-    blendDesc.sourceRGBBlendFactor = blendDesc.sourceAlphaBlendFactor = blendFunc.src;
-    blendDesc.destinationRGBBlendFactor = blendDesc.destinationAlphaBlendFactor = blendFunc.dst;
-
-    programState->setTexture(_textureLocation, 0, _rhiTexture);
-}
-
-void Texture2D::drawAtPoint(const Vec2& point, float globalZOrder)
-{
-    float width  = (float)_pixelsWide * _maxS;
-    float height = (float)_pixelsHigh * _maxT;
-    Rect rect    = {point.x, point.y, width, height};
-    drawInRect(rect, globalZOrder);
-}
-
-void Texture2D::drawInRect(const Rect& rect, float globalZOrder)
-{
-    initProgram();
-    _customCommand.init(globalZOrder);
-    auto director          = Director::getInstance();
-    const auto& modelView  = director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    const auto& projection = director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-
-    Mat4 matrixMVP = projection * modelView;
-
-    // vertex layout is: V3F_T2F
-    float vertexData[] = {rect.origin.x,
-                          rect.origin.y,
-                          0.0f,
-                          0.0f,
-                          _maxT,
-                          rect.size.width + rect.origin.x,
-                          rect.origin.y,
-                          0.0f,
-                          _maxS,
-                          _maxT,
-                          rect.origin.x,
-                          rect.size.height + rect.origin.y,
-                          0.0f,
-                          0.0f,
-                          0.0f,
-                          rect.size.width + rect.origin.x,
-                          rect.size.height + rect.origin.y,
-                          0.0f,
-                          _maxS,
-                          0.0f};
-
-    _customCommand.unsafePS()->setUniform(_mvpMatrixLocation, matrixMVP.m, sizeof(matrixMVP.m));
-    _customCommand.updateVertexBuffer(vertexData, sizeof(vertexData));
-    Director::getInstance()->getRenderer()->addCommand(&_customCommand);
 }
 
 }  // namespace ax

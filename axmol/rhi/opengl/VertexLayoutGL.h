@@ -25,6 +25,7 @@
 
 #include "axmol/rhi/VertexLayout.h"
 #include "axmol/rhi/RHITypes.h"
+#include "axmol/platform/GL.h"
 
 namespace ax::rhi::gl
 {

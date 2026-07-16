@@ -57,13 +57,9 @@ public:
     ~UIRadioButtonTwoGroupsTest();
 
     virtual bool init() override;
-    void onChangedRadioButtonGroup1(ax::ui::RadioButton* radioButton,
-                                    int index,
-                                    ax::ui::RadioButtonGroup::EventType type);
-    void onChangedRadioButtonGroup2(ax::ui::RadioButton* radioButton,
-                                    int index,
-                                    ax::ui::RadioButtonGroup::EventType type);
-    void onChangedRadioButtonSelect(ax::ui::RadioButton* radioButton, ax::ui::RadioButton::EventType type);
+    void onChangedRadioButtonGroup1(ax::ui::RadioButton* sender, int index, ax::ui::RadioButtonGroup::EventType type);
+    void onChangedRadioButtonGroup2(ax::ui::RadioButton* sender, int index, ax::ui::RadioButtonGroup::EventType type);
+    void onChangedRadioButtonSelect(ax::Object* sender, ax::ui::RadioButton::EventType type);
     void clearRadioButtonGroup(Object* sender);
 
 protected:

@@ -24,6 +24,7 @@
  ****************************************************************************/
 
 #include "axmol/rhi/RHIUtils.h"
+#include "axmol/base/Logging.h"
 
 namespace ax::rhi
 {

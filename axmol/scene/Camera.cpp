@@ -32,6 +32,7 @@
 #include "axmol/scene/Scene.h"
 #include "axmol/renderer/Renderer.h"
 #include "axmol/renderer/QuadCommand.h"
+#include "axmol/renderer/RenderTexture.h"
 
 namespace ax
 {
@@ -41,18 +42,39 @@ Viewport Camera::_defaultViewport;
 
 // start static methods
 
-Camera* Camera::create()
+Camera* Camera::create(CameraMode mode)
 {
-    Camera* camera = new Camera();
-    camera->initDefault();
-    camera->autorelease();
-
-    return camera;
+    auto& size = Director::getInstance()->getCanvasSize();
+    switch (mode)
+    {
+    case CameraMode::Ortho:
+    {
+        auto cam = Camera::createOrthographicView(size, -1024.0f, 1024.0f);
+        return cam;
+    }
+    case CameraMode::Perspective:
+    {
+        auto cam = Camera::createPerspective(60.0f, size.width / size.height, 0.3f, 1000.0f);
+        cam->setPosition3D(Vec3(0.0f, 1.5f, 5.0f));
+        cam->lookAt(Vec3(0, 0, 0));
+        return cam;
+    }
+    case CameraMode::Classic:
+    {
+        Camera* camera = new Camera();
+        camera->initClassic();
+        camera->autorelease();
+        return camera;
+    }
+    }
+    AXASSERT(false, "Invalid CameraMode");
+    return nullptr;
 }
 
 Camera* Camera::createPerspective(float fieldOfView, float aspectRatio, float nearPlane, float farPlane)
 {
-    auto ret = new Camera();
+    auto ret         = new Camera();
+    ret->_cameraMode = CameraMode::Perspective;
     ret->initPerspective(fieldOfView, aspectRatio, nearPlane, farPlane);
     ret->autorelease();
     return ret;
@@ -60,8 +82,18 @@ Camera* Camera::createPerspective(float fieldOfView, float aspectRatio, float ne
 
 Camera* Camera::createOrthographic(float zoomX, float zoomY, float nearPlane, float farPlane)
 {
-    auto ret = new Camera();
+    auto ret         = new Camera();
+    ret->_cameraMode = CameraMode::Ortho;
     ret->initOrthographic(zoomX, zoomY, nearPlane, farPlane);
+    ret->autorelease();
+    return ret;
+}
+
+Camera* Camera::createOrthographicView(const Vec2& size, float nearPlane, float farPlane)
+{
+    auto ret         = new Camera();
+    ret->_cameraMode = CameraMode::Ortho;
+    ret->initOrthographicView(size, nearPlane, farPlane);
     ret->autorelease();
     return ret;
 }
@@ -81,14 +113,16 @@ const Viewport& Camera::getDefaultViewport()
 {
     return _defaultViewport;
 }
+
+const Mat4& Camera::getVisitingViewProjectionMatrix()
+{
+    AXASSERT(_visitingCamera, "Camera::getVisitingViewProjectionMatrix() requires a visiting camera");
+    return _visitingCamera ? _visitingCamera->getViewProjectionMatrix() : Mat4::identity;
+}
+
 void Camera::setDefaultViewport(const Viewport& vp)
 {
     _defaultViewport = vp;
-}
-
-const Camera* Camera::getVisitingCamera()
-{
-    return _visitingCamera;
 }
 
 // end static methods
@@ -103,16 +137,23 @@ Camera::Camera()
 {
     // minggo comment
     // _frustum.setClipZ(true);
+    _renderView = _director->getRenderView();
 }
 
 Camera::~Camera()
 {
     AX_SAFE_RELEASE(_clearBrush);
+    AX_SAFE_RELEASE(_targetTexture);
 }
 
 const Mat4& Camera::getProjectionMatrix() const
 {
     return _projection;
+}
+void Camera::setProjectionMatrix(const Mat4& mat)
+{
+    _projection          = mat;
+    _viewProjectionDirty = true;
 }
 const Mat4& Camera::getViewMatrix() const
 {
@@ -121,11 +162,9 @@ const Mat4& Camera::getViewMatrix() const
     if (memcmp(viewInv.m, _viewInv.m, count) != 0)
     {
         _viewProjectionDirty = true;
-#if defined(AX_ENABLE_3D)
-        _frustumDirty = true;
-#endif
-        _viewInv = viewInv;
-        _view    = viewInv.getInversed();
+        _frustumDirty        = true;
+        _viewInv             = viewInv;
+        _view                = viewInv.getInversed();
     }
     return _view;
 }
@@ -161,8 +200,8 @@ void Camera::lookAt(const Vec3& lookAtPos, const Vec3& up)
     rotation.m[10] = zaxis.z;
     rotation.m[11] = 0;
 
-    Quaternion quaternion;
-    Quaternion::createFromRotationMatrix(rotation, &quaternion);
+    Quat quaternion;
+    Quat::createFromRotationMatrix(rotation, &quaternion);
     quaternion.normalize();
     setRotationQuat(quaternion);
 }
@@ -185,39 +224,20 @@ void Camera::setAdditionalProjection(const Mat4& mat)
     getViewProjectionMatrix();
 }
 
-void Camera::initDefault()
+void Camera::initClassic()
 {
-    auto& size = _director->getCanvasSize();
-    switch (_director->getProjection())
-    {
-    case Director::Projection::_2D:
-    {
-        _fieldOfView = 60.0F;
-        _nearPlane   = -1024.0F;
-        _farPlane    = 1024.0F;
-        initOrthographic(size.width, size.height, _nearPlane, _farPlane);
-        setPosition3D(Vec3(size.width / 2.0F, size.height / 2.0F, 0.f));
-        setRotation3D(Vec3(0.f, 0.f, 0.f));
-        break;
-    }
-
-    case Director::Projection::_3D:
-    {
-        float zeye   = _director->getZEye();
-        _fieldOfView = 60.0F;
-        _nearPlane   = 0.5F;
-        _farPlane    = zeye + size.height / 2.0f;
-        initPerspective(_fieldOfView, (float)size.width / size.height, _nearPlane, _farPlane);
-        Vec3 eye(size.width / 2.0f, size.height / 2.0f, zeye), center(size.width / 2.0f, size.height / 2.0f, 0.0f),
-            up(0.0f, 1.0f, 0.0f);
-        setPosition3D(eye);
-        lookAt(center, up);
-        _eyeZdistance = eye.z;
-        break;
-    }
-    default:
-        break;
-    }
+    // Classic mode only - calibrated perspective
+    auto& size   = _director->getCanvasSize();
+    float zeye   = _director->getZEye();
+    _fieldOfView = 60.0F;
+    _nearPlane   = 0.5F;
+    _farPlane    = zeye + size.height / 2.0f;
+    initPerspective(_fieldOfView, (float)size.width / size.height, _nearPlane, _farPlane);
+    Vec3 eye(size.width / 2.0f, size.height / 2.0f, zeye), center(size.width / 2.0f, size.height / 2.0f, 0.0f),
+        up(0.0f, 1.0f, 0.0f);
+    setPosition3D(eye);
+    lookAt(center, up);
+    _eyeZdistance = eye.z;
 
     setDepth(0);
 
@@ -228,16 +248,19 @@ void Camera::initDefault()
 void Camera::updateTransform()
 {
     auto& size = _director->getCanvasSize();
-    // create default camera
-    switch (_director->getProjection())
+    switch (_cameraMode)
     {
-    case Director::Projection::_2D:
+    case CameraMode::Ortho:
     {
-        initOrthographic(size.width, size.height, _nearPlane, _farPlane);
+        initOrthographicView(size, _nearPlane, _farPlane);
         break;
     }
-
-    case Director::Projection::_3D:
+    case CameraMode::Perspective:
+    {
+        initPerspective(_fieldOfView, (float)size.width / size.height, _nearPlane, _farPlane);
+        break;
+    }
+    case CameraMode::Classic:
     {
         float zeye = _director->getZEye();
         initPerspective(_fieldOfView, (float)size.width / size.height, _nearPlane, _farPlane);
@@ -246,8 +269,6 @@ void Camera::updateTransform()
         _eyeZdistance = eye.z;
         break;
     }
-    default:
-        break;
     }
 }
 
@@ -264,9 +285,7 @@ bool Camera::initPerspective(float fieldOfView, float aspectRatio, float nearPla
 
     Mat4::createPerspective(_fieldOfView, aspectRatio, _nearPlane, _farPlane, &_projection);
     _viewProjectionDirty = true;
-#if defined(AX_ENABLE_3D)
-    _frustumDirty = true;
-#endif
+    _frustumDirty        = true;
 
     return true;
 }
@@ -279,18 +298,27 @@ bool Camera::initOrthographic(float zoomX, float zoomY, float nearPlane, float f
     _farPlane  = farPlane;
     Mat4::createOrthographic(_zoom[0] * _zoomFactor, _zoom[1] * _zoomFactor, _nearPlane, _farPlane, &_projection);
     _viewProjectionDirty = true;
-#if defined(AX_ENABLE_3D)
-    _frustumDirty = true;
-#endif
+    _frustumDirty        = true;
 
     return true;
 }
 
-Vec2 Camera::project(const Vec3& src) const
+bool Camera::initOrthographicView(const Vec2& size, float nearPlane, float farPlane)
+{
+    initOrthographic(size.width, size.height, nearPlane, farPlane);
+    setPosition3D(Vec3(size.width / 2.0F, size.height / 2.0F, 0.0F));
+    setRotation3D(Vec3(0.0F, 0.0F, 0.0F));
+    return true;
+}
+
+Vec2 Camera::projectWorldToScreen(const Vec3& src) const
 {
     Vec2 screenPos;
 
-    auto worldSize = _director->getCanvasSize();
+    // 1. Fetch the full viewport rect which contains the physical origin (black bars offset) and size
+    auto& viewport = _renderView->getViewportRect();
+    auto& vpSize   = viewport.size;
+
     Vec4 clipPos;
     getViewProjectionMatrix().transformVector(Vec4(src.x, src.y, src.z, 1.0f), &clipPos);
 
@@ -298,16 +326,62 @@ Vec2 Camera::project(const Vec3& src) const
     float ndcX = clipPos.x / clipPos.w;
     float ndcY = clipPos.y / clipPos.w;
 
-    screenPos.x = (ndcX + 1.0f) * 0.5f * worldSize.width;
-    screenPos.y = (1.0f - (ndcY + 1.0f) * 0.5f) * worldSize.height;
+    // 2. Calculate the local coordinates relative to the active viewport area
+    float localX = (ndcX + 1.0f) * 0.5f * vpSize.width;
+    float localY = (1.0f - (ndcY + 1.0f) * 0.5f) * vpSize.height;
+
+    // 3. Counter stretching bars using uniform physical pixel metrics.
+    float renderHeight = _renderView->getRenderSize().height;
+    if (renderHeight == 0.0f)
+        renderHeight = vpSize.height;  // Fallback container
+
+    float viewportTopOffset = renderHeight - (viewport.origin.y + vpSize.height);
+
+    screenPos.x = localX + viewport.origin.x;
+    screenPos.y = localY + viewportTopOffset;
+
     return screenPos;
 }
 
-Vec2 Camera::projectGL(const Vec3& src) const
+Vec3 Camera::deprojectScreenToWorld(const Vec3& src) const
+{
+    // 1. Fetch the full viewport rect to account for asymmetric window stretching bars
+    auto& viewport = _renderView->getViewportRect();
+    auto& vpSize   = viewport.size;
+
+    // 2. Counter stretching bars: Subtract the physical offset caused by black bars
+    float localX = src.x - viewport.origin.x;
+
+    // Convert Bottom-Left axmol viewport origin Y to Top-Left Window origin Y offset
+    float renderHeight = _renderView->getRenderSize().height;
+    if (renderHeight == 0.0f)
+        renderHeight = vpSize.height;  // Fallback container
+
+    float viewportTopOffset = renderHeight - (viewport.origin.y + vpSize.height);
+    float localY            = src.y - viewportTopOffset;
+
+    // 3. Perform standard NDC mapping within the normalized viewport dimensions [0, 1] -> [-1, 1]
+    Vec4 result(localX / vpSize.width, (vpSize.height - localY) / vpSize.height, src.z, 1.0f);
+    result.x = result.x * 2.0f - 1.0f;
+    result.y = result.y * 2.0f - 1.0f;
+    result.z = result.z * 2.0f - 1.0f;
+
+    getViewProjectionMatrix().getInversed().transformVector(result, &result);
+    if (result.w != 0.0f)
+    {
+        result.x /= result.w;
+        result.y /= result.w;
+        result.z /= result.w;
+    }
+
+    return Vec3{result.x, result.y, result.z};
+}
+
+Vec2 Camera::projectWorldToCanvas(const Vec3& src) const
 {
     Vec2 screenPos;
 
-    auto worldSize = _director->getCanvasSize();
+    auto&& canvasSize = _director->getCanvasSize();
     Vec4 clipPos;
     getViewProjectionMatrix().transformVector(Vec4(src.x, src.y, src.z, 1.0f), &clipPos);
 
@@ -317,66 +391,11 @@ Vec2 Camera::projectGL(const Vec3& src) const
     float ndcX = clipPos.x / clipPos.w;
     float ndcY = clipPos.y / clipPos.w;
 
-    screenPos.x = (ndcX + 1.0f) * 0.5f * worldSize.width;
-    screenPos.y = (ndcY + 1.0f) * 0.5f * worldSize.height;
+    screenPos.x = (ndcX + 1.0f) * 0.5f * canvasSize.width;
+    screenPos.y = (ndcY + 1.0f) * 0.5f * canvasSize.height;
     return screenPos;
 }
 
-Vec3 Camera::unproject(const Vec3& src) const
-{
-    Vec3 dst;
-    unproject(_director->getCanvasSize(), &src, &dst);
-    return dst;
-}
-
-Vec3 Camera::unprojectGL(const Vec3& src) const
-{
-    Vec3 dst;
-    unprojectGL(_director->getCanvasSize(), &src, &dst);
-    return dst;
-}
-
-void Camera::unproject(const Vec2& viewport, const Vec3* src, Vec3* dst) const
-{
-    AXASSERT(src && dst, "vec3 can not be null");
-
-    Vec4 screen(src->x / viewport.width, ((viewport.height - src->y)) / viewport.height, src->z, 1.0f);
-    screen.x = screen.x * 2.0f - 1.0f;
-    screen.y = screen.y * 2.0f - 1.0f;
-    screen.z = screen.z * 2.0f - 1.0f;
-
-    getViewProjectionMatrix().getInversed().transformVector(screen, &screen);
-    if (screen.w != 0.0f)
-    {
-        screen.x /= screen.w;
-        screen.y /= screen.w;
-        screen.z /= screen.w;
-    }
-
-    dst->set(screen.x, screen.y, screen.z);
-}
-
-void Camera::unprojectGL(const Vec2& viewport, const Vec3* src, Vec3* dst) const
-{
-    AXASSERT(src && dst, "vec3 can not be null");
-
-    Vec4 screen(src->x / viewport.width, src->y / viewport.height, src->z, 1.0f);
-    screen.x = screen.x * 2.0f - 1.0f;
-    screen.y = screen.y * 2.0f - 1.0f;
-    screen.z = screen.z * 2.0f - 1.0f;
-
-    getViewProjectionMatrix().getInversed().transformVector(screen, &screen);
-    if (screen.w != 0.0f)
-    {
-        screen.x /= screen.w;
-        screen.y /= screen.w;
-        screen.z /= screen.w;
-    }
-
-    dst->set(screen.x, screen.y, screen.z);
-}
-
-#if defined(AX_ENABLE_3D)
 bool Camera::isVisibleInFrustum(const AABB* aabb) const
 {
     if (_frustumDirty)
@@ -386,7 +405,6 @@ bool Camera::isVisibleInFrustum(const AABB* aabb) const
     }
     return !_frustum.isOutOfFrustum(*aabb);
 }
-#endif
 
 float Camera::getDepthInView(const Mat4& transform) const
 {
@@ -418,14 +436,15 @@ void Camera::setZoom(float factor)
 
 void Camera::applyZoom()
 {
-    switch (_director->getProjection())
+    switch (_cameraMode)
     {
-    case ax::Director::Projection::_2D:
+    case CameraMode::Ortho:
     {
         Mat4::createOrthographic(_zoom[0] * _zoomFactor, _zoom[1] * _zoomFactor, _nearPlane, _farPlane, &_projection);
         break;
     }
-    case ax::Director::Projection::_3D:
+    case CameraMode::Perspective:
+    case CameraMode::Classic:
     {
         // Push the far plane farther the more we zoom out.
         if (_zoomFactorFarPlane * _zoomFactor > _farPlane)
@@ -444,8 +463,6 @@ void Camera::applyZoom()
         this->setPositionZ(_eyeZdistance * _zoomFactor);
         break;
     }
-    default:
-        break;
     }
 }
 
@@ -471,30 +488,29 @@ void Camera::onExit()
 
 void Camera::setScene(Scene* scene)
 {
-    if (_scene != scene)
+    if (_scene == scene)
+        return;
+
+    if (_scene)
     {
-        // remove old scene
-        if (_scene)
-        {
-            auto& cameras = _scene->_cameras;
-            auto it       = std::find(cameras.begin(), cameras.end(), this);
-            if (it != cameras.end())
-                cameras.erase(it);
-            _scene = nullptr;
-        }
-        // set new scene
-        if (scene)
-        {
-            _scene        = scene;
-            auto& cameras = _scene->_cameras;
-            auto it       = std::find(cameras.begin(), cameras.end(), this);
-            if (it == cameras.end())
-            {
-                _scene->_cameras.emplace_back(this);
-                // notify scene that the camera order is dirty
-                _scene->setCameraOrderDirty();
-            }
-        }
+        _scene->unregisterCamera(this);
+        _scene = nullptr;
+    }
+
+    if (scene)
+    {
+        _scene = scene;
+        _scene->registerCamera(this);
+    }
+}
+
+void Camera::setTargetTexture(RenderTexture* target)
+{
+    if (_targetTexture != target)
+    {
+        AX_SAFE_RETAIN(target);
+        AX_SAFE_RELEASE(_targetTexture);
+        _targetTexture = target;
     }
 }
 
@@ -508,7 +524,7 @@ void Camera::clearBackground()
 
 void Camera::apply()
 {
-    _viewProjectionUpdated = _transformUpdated;
+    updateViewProjectionState();
     applyViewport();
 }
 
@@ -560,6 +576,57 @@ void Camera::setBackgroundBrush(CameraBackgroundBrush* clearBrush)
 bool Camera::isBrushValid()
 {
     return _clearBrush != nullptr && _clearBrush->isValid();
+}
+
+Ray Camera::screenToRay(const Vec2& screenPoint) const
+{
+    Vec3 nearP = deprojectScreenToWorld(Vec3(screenPoint.x, screenPoint.y, 0.0f));
+    Vec3 farP  = deprojectScreenToWorld(Vec3(screenPoint.x, screenPoint.y, 1.0f));
+    Vec3 dir   = (farP - nearP);
+    dir.normalize();
+    return Ray{nearP, dir};
+}
+
+bool Camera::isWorldPointInRect(const Vec2& pt, const Mat4& w2l, const Rect& rect, Vec3* p)
+{
+    if (rect.size.width <= 0 || rect.size.height <= 0)
+        return false;
+
+    // first, convert pt to near/far plane, get Pn and Pf
+    Vec3 Pn(pt.x, pt.y, -1), Pf(pt.x, pt.y, 1);
+
+    //  then convert Pn and Pf to node space
+    w2l.transformPoint(&Pn);
+    w2l.transformPoint(&Pf);
+
+    // Pn and Pf define a line Q(t) = D + t * E which D = Pn
+    auto E = Pf - Pn;
+
+    // second, get three points which define content plane
+    //  these points define a plane P(u, w) = A + uB + wC
+    Vec3 A = Vec3(rect.origin.x, rect.origin.y, 0);
+    Vec3 B(rect.origin.x + rect.size.width, rect.origin.y, 0);
+    Vec3 C(rect.origin.x, rect.origin.y + rect.size.height, 0);
+    B = B - A;
+    C = C - A;
+
+    //  the line Q(t) intercept with plane P(u, w)
+    //  calculate the intercept point P = Q(t)
+    //      (BxC).A - (BxC).D
+    //  t = -----------------
+    //          (BxC).E
+    Vec3 BxC;
+    Vec3::cross(B, C, &BxC);
+    auto BxCdotE = BxC.dot(E);
+    if (BxCdotE == 0)
+    {
+        return false;
+    }
+    auto t = (BxC.dot(A) - BxC.dot(Pn)) / BxCdotE;
+    Vec3 P = Pn + t * E;
+    if (p)
+        *p = P;
+    return rect.containsPoint(Vec2(P.x, P.y));
 }
 
 }  // namespace ax

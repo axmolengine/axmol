@@ -37,7 +37,7 @@ THE SOFTWARE.
 #include "axmol/base/Director.h"
 #include "axmol/base/Environment.h"
 #include "axmol/base/EventDispatcher.h"
-#include "axmol/base/EventListenerCustom.h"
+#include "axmol/base/CustomEventListener.h"
 #include "axmol/renderer/TextureCache.h"
 #include "axmol/renderer/Renderer.h"
 #include "axmol/renderer/Texture2D.h"

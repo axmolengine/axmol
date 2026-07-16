@@ -1,7 +1,7 @@
 set(_AX_MATH_HEADER
   math/Vec2.h
   math/Mat4.h
-  math/Quaternion.h
+  math/Quat.h
   math/TransformUtils.h
   math/Vec4.h
   math/AffineTransform.h
@@ -13,6 +13,11 @@ set(_AX_MATH_HEADER
   math/Rect.h
   math/FastRNG.h
   math/Color.h
+  math/AABB.h
+  math/Frustum.h
+  math/OBB.h
+  math/Plane.h
+  math/Ray.h
 )
 
 set(_AX_MATH_SRC
@@ -20,11 +25,16 @@ set(_AX_MATH_SRC
   math/Vertex.cpp
   math/Mat4.cpp
   math/MathUtil.cpp
-  math/Quaternion.cpp
+  math/Quat.cpp
   math/TransformUtils.cpp
   math/Vec2.cpp
   math/Vec3.cpp
   math/Vec4.cpp
   math/Rect.cpp
   math/Color.cpp
+  math/AABB.cpp
+  math/Frustum.cpp
+  math/OBB.cpp
+  math/Plane.cpp
+  math/Ray.cpp
 )

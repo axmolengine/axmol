@@ -166,7 +166,7 @@ void Window::layoutModalWaitPane()
 {
     if (_contentArea != nullptr)
     {
-        Vec2 pt = _frame->localToGlobal(Vec2::ZERO);
+        Vec2 pt = _frame->localToGlobal(Vec2::zero);
         pt = globalToLocal(pt);
         _modalWaitPane->setPosition((int)pt.x + _contentArea->getX(), (int)pt.y + _contentArea->getY());
         _modalWaitPane->setSize(_contentArea->getWidth(), _contentArea->getHeight());

@@ -34,7 +34,7 @@
 #include "Control.h"
 #include "Invocation.h"
 #include "axmol/base/Map.h"
-#include "axmol/ui/UIScale9Sprite.h"
+#include "axmol/ui/Scale9Sprite.h"
 
 NS_AX_EXT_BEGIN
 
@@ -66,7 +66,7 @@ public:
     void setSelected(bool enabled) override;
     void setHighlighted(bool enabled) override;
 
-    bool isPushed() const { return _isPushed; }
+    bool isPushed() const { return _isPressed; }
 
     /**
      * Returns the title used for a state.
@@ -178,10 +178,10 @@ public:
     void setAdjustBackgroundImage(bool adjustBackgroundImage);
 
     // Overrides
-    bool onTouchBegan(Touch* touch, Event* event) override;
-    void onTouchMoved(Touch* touch, Event* event) override;
-    void onTouchEnded(Touch* touch, Event* event) override;
-    void onTouchCancelled(Touch* touch, Event* event) override;
+    bool onPointerDown(PointerEvent* event) override;
+    void onPointerMove(PointerEvent* event) override;
+    void onPointerUp(PointerEvent* event) override;
+    void onPointerCancel(PointerEvent* event) override;
 
     void setOpacity(uint8_t var) override;
     void updateDisplayedOpacity(uint8_t parentOpacity) override;
@@ -207,7 +207,6 @@ public:
     virtual bool initWithTitleAndFontNameAndFontSize(std::string_view title, std::string_view fontName, float fontSize);
 
 protected:
-    bool _isPushed;
     bool _parentInited;
     bool _doesAdjustBackgroundImage;
 

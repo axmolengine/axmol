@@ -35,8 +35,11 @@
 #include "axmol/platform/PlatformMacros.h"
 #include "axmol/base/EventListener.h"
 #include "axmol/base/Event.h"
+#include "axmol/base/PointerEvent.h"
+#include "axmol/base/WeakPtr.h"
 #include "axmol/platform/StdC.h"
 #include "axmol/tlx/hlookup.hpp"
+#include "axmol/tlx/inlined_vector.hpp"
 
 /**
  * @addtogroup base
@@ -47,11 +50,12 @@ namespace ax
 {
 
 class Event;
-class EventTouch;
-class EventMouse;
+class PointerEvent;
 class Node;
-class EventCustom;
-class EventListenerCustom;
+class CustomEvent;
+class CustomEventListener;
+class PointerEventListener;
+class Camera;
 
 /** @class EventDispatcher
 * @brief This class manages event listener subscriptions
@@ -89,8 +93,8 @@ public:
      * @param callback A given callback method that associated the event name.
      * @return the generated event. Needed in order to remove the event from the dispatcher
      */
-    EventListenerCustom* addCustomEventListener(std::string_view eventName,
-                                                const std::function<void(EventCustom*)>& callback,
+    CustomEventListener* addCustomEventListener(std::string_view eventName,
+                                                const std::function<void(CustomEvent*)>& callback,
                                                 int priority = 1);
 
     /////////////////////////////////////////////
@@ -280,13 +284,7 @@ protected:
      */
     void updateListeners(Event* event);
 
-    /** Touch event needs to be processed different with other events since it needs support ALL_AT_ONCE and ONE_BY_NONE
-     * mode. */
-    void dispatchTouchEvent(EventTouch* event);
-
-    /** Mouse Scroll event needs to be processed different with other events since it needs support ALL_AT_ONCE and
-     * ONE_BY_NONE mode. */
-    void dispatchMouseEvent(EventMouse* event);
+    void dispatchPointerEvent(PointerEvent* event);
 
     /** Associates node with event listener */
     void associateNodeAndEventListener(Node* node, EventListener* listener);
@@ -297,18 +295,14 @@ protected:
     /** Dispatches event to listeners with a specified listener type */
     void dispatchEventToListeners(EventListenerVector* listeners, const std::function<bool(EventListener*)>& onEvent);
 
-    /** Special version dispatchEventToListeners for touch/mouse event.
-     *
-     *  Touch/mouse event process flow different with common event,
-     *      for scene graph node listeners, touch event process flow should
-     *      order by viewport/camera first, because the touch location convert
-     *      to 3D world space is different by different camera.
-     *  When listener process touch event, can get current camera by Camera::getVisitingCamera().
-     */
-    void dispatchTouchEventToListeners(EventListenerVector* listeners,
-                                       const std::function<bool(EventListener*)>& onEvent);
+    void removeCapturedPointerListener(EventListener* listener);
+    void removeCapturedPointerListenersForTarget(Node* target);
 
     void releaseListener(EventListener* listener);
+
+    static const Camera* findHitCameraForListener(PointerEvent* event,
+                                                  PointerEventListener* listener,
+                                                  const std::vector<Camera*>& cameras);
 
     /// Priority dirty flag
     enum class DirtyFlag
@@ -329,6 +323,17 @@ protected:
     /** Remove all listeners in _toRemoveListeners list and cleanup */
     void cleanToRemovedListeners();
 
+    using PointerCaptureId = uint64_t;
+    struct PointerCaptureEntry
+    {
+        WeakPtr<PointerEventListener> listener{nullptr};
+        PointerEvent::CaptureBits captureBits{PointerEvent::CAPTURE_NONE};
+        WeakPtr<Camera> camera{nullptr};
+    };
+
+    bool dispatchCapturedPointerEvent(PointerEvent* event);
+    void dispatchUncapturedPointerEvent(PointerEvent* event, PointerCaptureId captureId);
+
     /** Listeners map */
     tlx::string_map<EventListenerVector*> _listenerMap;
 
@@ -336,13 +341,15 @@ protected:
     tlx::string_map<DirtyFlag> _priorityDirtyFlagMap;
 
     /** The map of node and event listeners */
-    std::unordered_map<Node*, std::vector<EventListener*>*> _nodeListenersMap;
+    tlx::hash_map<Node*, std::vector<EventListener*>*> _nodeListenersMap;
 
     /** The map of node and its event priority */
-    std::unordered_map<Node*, int> _nodePriorityMap;
+    tlx::hash_map<Node*, int> _nodePriorityMap;
 
     /** key: Global Z Order, value: Sorted Nodes */
-    std::unordered_map<float, std::vector<Node*>> _globalZOrderNodeMap;
+    tlx::hash_map<float, std::vector<Node*>> _globalZOrderNodeMap;
+
+    tlx::hash_map<PointerCaptureId, PointerCaptureEntry> _capturedPointerListeners;
 
     /** The listeners to be added after dispatching event */
     std::vector<EventListener*> _toAddedListeners;

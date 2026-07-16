@@ -23,7 +23,7 @@
  ****************************************************************************/
 #include "axmol/rhi/vulkan/DepthStencilStateVK.h"
 #include "axmol/tlx/hash.hpp"
-#include <cstring>
+#include <string.h>
 
 namespace ax::rhi::vk
 {

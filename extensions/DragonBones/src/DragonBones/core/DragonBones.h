@@ -24,7 +24,7 @@
 #define DRAGONBONES_H
 
 #include <cmath>
-#include <cstdint>
+#include <stdint.h>
 #include <string>
 #include <algorithm>
 #include <vector>
@@ -56,24 +56,24 @@ public:                       \
 
 #define BIND_CLASS_TYPE(CLASS)                                   \
 public:                                                          \
-    static std::size_t getTypeIndex()                            \
+    static size_t getTypeIndex()                                 \
     {                                                            \
         static const auto typeIndex = typeid(CLASS).hash_code(); \
         return typeIndex;                                        \
     }                                                            \
-    virtual std::size_t getClassTypeIndex() const override       \
+    virtual size_t getClassTypeIndex() const override            \
     {                                                            \
         return CLASS::getTypeIndex();                            \
     }
 
 #define BIND_CLASS_TYPE_A(CLASS)                                 \
 public:                                                          \
-    static std::size_t getTypeIndex()                            \
+    static size_t getTypeIndex()                                 \
     {                                                            \
         static const auto typeIndex = typeid(CLASS).hash_code(); \
         return typeIndex;                                        \
     }                                                            \
-    virtual std::size_t getClassTypeIndex() const override       \
+    virtual size_t getClassTypeIndex() const override            \
     {                                                            \
         return CLASS::getTypeIndex();                            \
     }                                                            \
@@ -94,12 +94,12 @@ private:                                                         \
 
 #define BIND_CLASS_TYPE_B(CLASS)                                 \
 public:                                                          \
-    static std::size_t getTypeIndex()                            \
+    static size_t getTypeIndex()                                 \
     {                                                            \
         static const auto typeIndex = typeid(CLASS).hash_code(); \
         return typeIndex;                                        \
     }                                                            \
-    virtual std::size_t getClassTypeIndex() const override       \
+    virtual size_t getClassTypeIndex() const override            \
     {                                                            \
         return CLASS::getTypeIndex();                            \
     }                                                            \
@@ -363,7 +363,7 @@ std::string to_string(const T& value)
 template <class T>
 inline int indexOf(const std::vector<T>& vector, const T& value)
 {
-    for (std::size_t i = 0, l = vector.size(); i < l; ++i)
+    for (size_t i = 0, l = vector.size(); i < l; ++i)
     {
         if (vector[i] == value)
         {

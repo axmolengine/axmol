@@ -92,21 +92,39 @@ function(_1kfetch_dist package_name)
 endfunction()
 
 function(_1kfetch uri)
-  set(oneValueArgs NAME REV)
+  set(oneValueArgs NAME REV PREFIX FOLDER)
   cmake_parse_arguments(opt "" "${oneValueArgs}" "" ${ARGN})
 
   _1kparse_name(${uri} "${opt_NAME}")
 
-  set(_pkg_store "${_1kfetch_cache_dir}/${_pkg_name}")
+  if(opt_PREFIX)
+    set(_prefix "${opt_PREFIX}")
+  else()
+    set(_prefix ${_1kfetch_cache_dir})
+  endif()
+
+  if(opt_FOLDER)
+    set(_pkg_store "${_prefix}/${opt_FOLDER}")
+  else()
+    set(_pkg_store "${_prefix}/${_pkg_name}")
+  endif()
 
   get_property(_fetched GLOBAL PROPERTY "${_pkg_name}_fetched")
 
   if(NOT _fetched)
     set(_fetch_args
       -uri "${uri}"
-      -prefix "${_1kfetch_cache_dir}"
       -name "${_pkg_name}"
     )
+
+    # prefix
+    if(opt_PREFIX)
+      list(APPEND _fetch_args -prefix ${opt_PREFIX})
+    endif()
+
+    if(opt_FOLDER)
+      list(APPEND _fetch_args -folder ${opt_FOLDER})
+    endif()
 
     # rev: the explicit rev to checkout, i.e. git release tag name
     if(opt_REV)
@@ -147,10 +165,10 @@ function(_1kfetch_fast uri)
   set(_sentry_file "${_pkg_store}/_1kiss")
 
   if(NOT _mirrors_conf)
-    file(READ "${CMAKE_CURRENT_LIST_DIR}/mirrors.json" _mirrors_conf)
+    file(READ "${CMAKE_CURRENT_LIST_DIR}/sources.json" _mirrors_conf)
   endif()
 
-  string(JSON _url GET "${_mirrors_conf}" "mirrors" "github" "${_pkg_name}")
+  string(JSON _url GET "${_mirrors_conf}" "sources" "origin" "${_pkg_name}")
   string(JSON _version GET "${_mirrors_conf}" "versions" "${_pkg_name}")
   string(PREPEND _url "https://github.com/")
 

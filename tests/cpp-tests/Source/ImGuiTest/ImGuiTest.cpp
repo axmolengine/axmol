@@ -18,7 +18,7 @@ static ImVec4 clear_color       = ImColor(114, 144, 154);
 ImGuiTests::ImGuiTests()
 {
 #    if defined(AX_PLATFORM_GLFW)
-    static_cast<ax::RenderViewImpl*>(ax::Director::getInstance()->getRenderView())->setWindowed(1280, 720);
+    static_cast<ax::RenderView*>(ax::Director::getInstance()->getRenderView())->setWindowed(1280, 720);
 #    endif
 
     ADD_TEST_CASE(ImGuiTest);

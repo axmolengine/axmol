@@ -31,7 +31,7 @@
 namespace ax
 {
 
-Particle3D::Particle3D() : color(Vec4::ONE), rt_uv(Vec2::ONE), width(1.0f), height(1.0f), depth(1.0f) {}
+Particle3D::Particle3D() : color(Vec4::one), rt_uv(Vec2::one), width(1.0f), height(1.0f), depth(1.0f) {}
 
 Particle3D::~Particle3D() {}
 

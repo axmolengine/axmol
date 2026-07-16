@@ -6,7 +6,7 @@
 #include "../../3rdParty/LLGI/src/Metal/LLGI.GraphicsMetal.h"
 #include "../../EffekseerRendererCommon/ModelLoader.h"
 #include "axmol/rhi/metal/TextureMTL.h"
-#include "axmol/rhi/metal/CommandBufferMTL.h"
+#include "axmol/rhi/metal/RenderContextMTL.h"
 #include "axmol/rhi/metal/UtilsMTL.h"
 #include <Metal/LLGI.TextureMetal.h>
 
@@ -16,8 +16,8 @@ void SetMTLObjectsFromCocos2d(Effekseer::RefPtr<EffekseerRenderer::CommandList> 
 {
     auto d = cocos2d::Director::getInstance();
     auto renderer = d->getRenderer();
-    auto buffer = renderer->getCommandBuffer();
-    auto bufferM = static_cast<cocos2d::rhi::CommandBufferMTL*>(buffer);
+    auto buffer = renderer->getContext();
+    auto bufferM = static_cast<ax::rhi::mtl::RenderContextImpl*>(buffer);
 
     // use render pass descriptor from Cocos and add depth test
     // auto descriptor = d->getRenderPassDescriptor();
@@ -70,14 +70,14 @@ DistortingCallbackMetal::~DistortingCallbackMetal()
 bool DistortingCallbackMetal::OnDistorting(EffekseerRenderer::Renderer* renderer)
 {
     // to get viewport
-    auto drawable = cocos2d::rhi::DriverMTL::getCurrentDrawable();
+    auto drawable = static_cast<ax::rhi::mtl::RenderContextImpl*>(ax::Director::getInstance()->getRenderer()->getContext())->acquireDrawable();
 
     if(textureInternal_ == nullptr)
     {
-        auto driver = static_cast<cocos2d::rhi::DriverMTL*>(axdrv);
+        auto driver = static_cast<ax::rhi::mtl::DriverImpl*>(axdrv);
 
         MTLTextureDescriptor* textureDescriptor =
-        [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:cocos2d::rhi::UtilsMTL::getDefaultColorAttachmentPixelFormat()
+        [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:ax::rhi::mtl::UtilsMTL::getDefaultColorAttachmentPixelFormat()
                                                            width:drawable.texture.width
                                                           height:drawable.texture.height
                                                        mipmapped:NO];
@@ -87,7 +87,7 @@ bool DistortingCallbackMetal::OnDistorting(EffekseerRenderer::Renderer* renderer
     }
 
     auto rendererAX = cocos2d::Director::getInstance()->getRenderer();
-    auto commandBuffer = static_cast<cocos2d::rhi::CommandBufferMTL*>(rendererAX->getCommandBuffer());
+    auto commandBuffer = static_cast<ax::rhi::mtl::RenderContextImpl*>(rendererAX->getContext());
     commandBuffer->endEncoding();
 
     EffekseerRendererMetal::EndCommandList(commandList_);
@@ -98,7 +98,7 @@ bool DistortingCallbackMetal::OnDistorting(EffekseerRenderer::Renderer* renderer
         {texture.width, texture.height, 1}  // MTLSize
     };
 
-    id<MTLBlitCommandEncoder> blitEncoder = [commandBuffer->getMTLCommandBuffer() blitCommandEncoder];
+    id<MTLBlitCommandEncoder> blitEncoder = [commandBuffer->getCommandBuffer() blitCommandEncoder];
 
     [blitEncoder copyFromTexture:drawable.texture sourceSlice:0 sourceLevel:0 sourceOrigin:region.origin sourceSize:region.size toTexture:texture destinationSlice:0 destinationLevel:0 destinationOrigin:{0, 0, 0}];
     [blitEncoder endEncoding];
@@ -175,7 +175,7 @@ void UpdateTextureData(::Effekseer::TextureRef textureData, cocos2d::Texture2D* 
     auto textureImpl = static_cast<ax::rhi::mtl::TextureImpl*>(texture->getRHITexture());
 	auto device = EffekseerGraphicsDevice::create().DownCast<::EffekseerRendererLLGI::Backend::GraphicsDevice>();
 
-    auto backend = device->CreateTexture(textureImpl->internalHandle(), []() -> void {});
+    auto backend = device->CreateTexture(std::bit_cast<uintptr_t>(textureImpl->internalHandle()), []() -> void {});
 	textureData->SetBackend(backend);
 }
 
@@ -209,8 +209,8 @@ void EffectManager::CreateRenderer(int32_t spriteSize)
     auto device = EffekseerGraphicsDevice::create();
     renderer2d = EffekseerRendererMetal::Create(device,
                                                 spriteSize,
-                                                cocos2d::rhi::UtilsMTL::getDefaultColorAttachmentPixelFormat(),
-                                                cocos2d::rhi::UtilsMTL::getDefaultDepthStencilAttachmentPixelFormat(),
+                                                ax::rhi::mtl::UtilsMTL::getDefaultColorAttachmentPixelFormat(),
+                                                ax::rhi::mtl::UtilsMTL::getDefaultDepthStencilAttachmentPixelFormat(),
                                                 false);
 
     memoryPool_ = EffekseerRenderer::CreateSingleFrameMemoryPool(device);

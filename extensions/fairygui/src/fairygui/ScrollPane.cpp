@@ -68,7 +68,7 @@ ScrollPane::ScrollPane(GComponent* owner)
       _decelerationRate(UIConfig::defaultScrollDecelerationRate),
       _touchEffect(UIConfig::defaultScrollTouchEffect),
       _bouncebackEffect(UIConfig::defaultScrollBounceEffect),
-      _pageSize(Vec2::ONE)
+      _pageSize(Vec2::one)
 {
     _maskContainer = FUIContainer::create();
     _maskContainer->setCascadeOpacityEnabled(true);

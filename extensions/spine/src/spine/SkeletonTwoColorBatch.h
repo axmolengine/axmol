@@ -3,6 +3,9 @@
  * Last updated April 5, 2025. Replaces all prior versions.
  *
  * Copyright (c) 2013-2025, Esoteric Software LLC
+ * Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+ *
+ * https://axmol.dev/
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -27,11 +30,13 @@
  * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#ifndef SPINE_SKELETONTWOCOLORBATCH_H_
-#define SPINE_SKELETONTWOCOLORBATCH_H_
+#pragma once
 
-#include "axmol/axmol.h"
 #include "axmol/rhi/ProgramState.h"
+#include "axmol/renderer/CustomCommand.h"
+#include "axmol/renderer/TrianglesCommand.h"
+#include "axmol/renderer/Renderer.h"
+#include "axmol/renderer/Texture2D.h"
 #include "axmol/rhi/VertexLayout.h"
 #include <spine/spine.h>
 #include <vector>
@@ -130,7 +135,6 @@ namespace spine {
 		TwoColorTrianglesCommand *nextFreeCommand();
 
         ax::EventListener* _event1{nullptr};
-        ax::EventListener* _event2{nullptr};
 
 		// pool of commands
 		std::vector<TwoColorTrianglesCommand *> _commandsPool;
@@ -141,7 +145,7 @@ namespace spine {
 		uint32_t _numVertices;
 
 		// pool of indices
-		Vector<unsigned short> _indices;
+		spine::Array<unsigned short> _indices;
 
 
         ax::rhi::ProgramState* _twoColorProgramState{nullptr};
@@ -162,5 +166,3 @@ namespace spine {
 		uint32_t _numBatches;
 	};
 }// namespace spine
-
-#endif// SPINE_SKELETONTWOCOLORBATCH_H_

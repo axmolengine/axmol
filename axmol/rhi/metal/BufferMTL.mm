@@ -29,11 +29,7 @@
 namespace ax::rhi::mtl
 {
 
-BufferImpl::BufferImpl(id<MTLDevice> mtlDevice,
-                       std::size_t size,
-                       BufferType type,
-                       BufferUsage usage,
-                       const void* initial)
+BufferImpl::BufferImpl(id<MTLDevice> mtlDevice, size_t size, BufferType type, BufferUsage usage, const void* initial)
     : Buffer(size, type, usage)
 {
     if (BufferUsage::DYNAMIC == usage)
@@ -76,14 +72,14 @@ BufferImpl::~BufferImpl()
     }
 }
 
-void BufferImpl::updateData(const void* data, std::size_t size)
+void BufferImpl::updateData(const void* data, size_t size)
 {
     assert(size <= _size);
     updateIndex();
     memcpy((uint8_t*)_mtlBuffer.contents, data, size);
 }
 
-void BufferImpl::updateSubData(const void* data, std::size_t offset, std::size_t size)
+void BufferImpl::updateSubData(const void* data, size_t offset, size_t size)
 {
     assert(offset + size <= _size);
     updateIndex();

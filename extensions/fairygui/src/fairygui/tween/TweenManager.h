@@ -21,7 +21,7 @@ public:
     static void init();
 
 private:
-    static void reset(ax::EventCustom*);
+    static void reset(ax::CustomEvent*);
 
     static GTweener** _activeTweens;
     static std::vector<GTweener*> _tweenerPool;

@@ -602,7 +602,7 @@ bool BaseFactory::replaceSkin(Armature* armature,
 
         auto displayList = slot->getDisplayList();  // Copy.
         displayList.resize(displays->size(), std::make_pair(nullptr, DisplayType::Image));
-        for (std::size_t i = 0, l = displays->size(); i < l; ++i)
+        for (size_t i = 0, l = displays->size(); i < l; ++i)
         {
             const auto displayData = displays->at(i);
             if (displayData != nullptr)

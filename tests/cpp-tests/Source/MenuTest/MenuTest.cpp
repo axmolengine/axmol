@@ -58,12 +58,11 @@ MenuTests::MenuTests()
 //------------------------------------------------------------------
 MenuLayerMainMenu::MenuLayerMainMenu()
 {
-    _touchListener = EventListenerTouchOneByOne::create();
-    _touchListener->setSwallowTouches(true);
-    _touchListener->onTouchBegan     = AX_CALLBACK_2(MenuLayerMainMenu::touchBegan, this);
-    _touchListener->onTouchMoved     = AX_CALLBACK_2(MenuLayerMainMenu::touchMoved, this);
-    _touchListener->onTouchEnded     = AX_CALLBACK_2(MenuLayerMainMenu::touchEnded, this);
-    _touchListener->onTouchCancelled = AX_CALLBACK_2(MenuLayerMainMenu::touchCancelled, this);
+    _touchListener                  = PointerEventListener::create();
+    _touchListener->onPointerDown   = AX_CALLBACK_1(MenuLayerMainMenu::touchBegan, this);
+    _touchListener->onPointerMove   = AX_CALLBACK_1(MenuLayerMainMenu::touchMoved, this);
+    _touchListener->onPointerUp     = AX_CALLBACK_1(MenuLayerMainMenu::touchEnded, this);
+    _touchListener->onPointerCancel = AX_CALLBACK_1(MenuLayerMainMenu::touchCancelled, this);
     _eventDispatcher->addEventListenerWithFixedPriority(_touchListener, 1);
 
     // Font Item
@@ -144,16 +143,19 @@ MenuLayerMainMenu::MenuLayerMainMenu()
     menu->runAction(ScaleTo::create(1, 1));
 }
 
-bool MenuLayerMainMenu::touchBegan(Touch* touch, Event* event)
+bool MenuLayerMainMenu::touchBegan(PointerEvent* event)
 {
     return true;
 }
 
-void MenuLayerMainMenu::touchEnded(Touch* touch, Event* event) {}
+void MenuLayerMainMenu::touchEnded(PointerEvent* event) {}
 
-void MenuLayerMainMenu::touchCancelled(Touch* touch, Event* event) {}
+void MenuLayerMainMenu::touchCancelled(PointerEvent* event) {}
 
-void MenuLayerMainMenu::touchMoved(Touch* touch, Event* event) {}
+bool MenuLayerMainMenu::touchMoved(PointerEvent* event)
+{
+    return true;
+}
 
 MenuLayerMainMenu::~MenuLayerMainMenu()
 {
@@ -512,11 +514,10 @@ RemoveMenuItemWhenMove::RemoveMenuItemWhenMove()
     menu->setPosition(Vec2(s.width / 2, s.height / 2));
 
     // Register Touch Event
-    _touchListener = EventListenerTouchOneByOne::create();
-    _touchListener->setSwallowTouches(false);
+    _touchListener = PointerEventListener::create();
 
-    _touchListener->onTouchBegan = AX_CALLBACK_2(RemoveMenuItemWhenMove::onTouchBegan, this);
-    _touchListener->onTouchMoved = AX_CALLBACK_2(RemoveMenuItemWhenMove::onTouchMoved, this);
+    _touchListener->onPointerDown = AX_CALLBACK_1(RemoveMenuItemWhenMove::onPointerDown, this);
+    _touchListener->onPointerMove = AX_CALLBACK_1(RemoveMenuItemWhenMove::onPointerMove, this);
 
     _eventDispatcher->addEventListenerWithFixedPriority(_touchListener, -129);
 }
@@ -532,18 +533,20 @@ RemoveMenuItemWhenMove::~RemoveMenuItemWhenMove()
     AX_SAFE_RELEASE(item);
 }
 
-bool RemoveMenuItemWhenMove::onTouchBegan(Touch* touch, Event* event)
+bool RemoveMenuItemWhenMove::onPointerDown(PointerEvent* event)
 {
     return true;
 }
 
-void RemoveMenuItemWhenMove::onTouchMoved(Touch* touch, Event* event)
+void RemoveMenuItemWhenMove::onPointerMove(PointerEvent* event)
 {
     if (item)
     {
         item->removeFromParentAndCleanup(true);
         item->release();
         item = nullptr;
+
+        return;
     }
 }
 

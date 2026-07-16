@@ -46,8 +46,8 @@ public:
 
     flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                                          flatbuffers::FlatBufferBuilder* builder);
-    void setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* buttonOptions);
-    ax::Node* createNodeWithFlatBuffers(const flatbuffers::Table* buttonOptions);
+    void setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* buttonOptions) override;
+    ax::Node* createNodeWithFlatBuffers(const flatbuffers::Table* buttonOptions) override;
 
     int getResourceType(std::string_view key);
 };

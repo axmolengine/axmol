@@ -31,11 +31,173 @@
 #define SPINE_LOG_H
 
 #include <spine/Extension.h>
-#include <spine/Vector.h>
+#include <spine/Array.h>
 
-#include <map>
+#ifndef SPINE_NO_CPP_RT
+#include <unordered_map>
+#endif
 
 namespace spine {
+
+#ifdef SPINE_NO_CPP_RT
+	// Need a copy as HashMap extends SpineObject, which would trigger
+	// infinite recursion when used in DebugExtension
+	template<typename K, typename V>
+	class DebugHashMap {
+	private:
+		class DebugEntry;
+
+	public:
+		class SP_API DebugPair {
+		public:
+			explicit DebugPair(K &k, V &v) : key(k), value(v) {
+			}
+
+			K &key;
+			V &value;
+		};
+
+		class SP_API DebugEntries {
+		public:
+			friend class DebugHashMap;
+
+			explicit DebugEntries(DebugEntry *entry) : _hasChecked(false) {
+				_start.next = entry;
+				_entry = &_start;
+			}
+
+			DebugPair next() {
+				assert(_entry);
+				assert(_hasChecked);
+				_entry = _entry->next;
+				DebugPair pair(_entry->_key, _entry->_value);
+				_hasChecked = false;
+				return pair;
+			}
+
+			bool hasNext() {
+				_hasChecked = true;
+				return _entry->next;
+			}
+
+		private:
+			bool _hasChecked;
+			DebugEntry _start;
+			DebugEntry *_entry;
+		};
+
+		DebugHashMap() : _head(NULL), _size(0) {
+		}
+
+		~DebugHashMap() {
+			clear();
+		}
+
+		void clear() {
+			for (DebugEntry *entry = _head; entry != NULL;) {
+				DebugEntry *next = entry->next;
+				delete entry;
+				entry = next;
+			}
+			_head = NULL;
+			_size = 0;
+		}
+
+		size_t size() {
+			return _size;
+		}
+
+		void put(const K &key, const V &value) {
+			DebugEntry *entry = find(key);
+			if (entry) {
+				entry->_key = key;
+				entry->_value = value;
+			} else {
+				entry = new DebugEntry();
+				entry->_key = key;
+				entry->_value = value;
+
+				DebugEntry *oldHead = _head;
+
+				if (oldHead) {
+					_head = entry;
+					oldHead->prev = entry;
+					entry->next = oldHead;
+				} else {
+					_head = entry;
+				}
+				_size++;
+			}
+		}
+
+		bool addAll(Array<K> &keys, const V &value) {
+			size_t oldSize = _size;
+			for (size_t i = 0; i < keys.size(); i++) {
+				put(keys[i], value);
+			}
+			return _size != oldSize;
+		}
+
+		bool containsKey(const K &key) {
+			return find(key) != NULL;
+		}
+
+		bool remove(const K &key) {
+			DebugEntry *entry = find(key);
+			if (!entry) return false;
+
+			DebugEntry *prev = entry->prev;
+			DebugEntry *next = entry->next;
+
+			if (prev)
+				prev->next = next;
+			else
+				_head = next;
+			if (next) next->prev = entry->prev;
+
+			delete entry;
+			_size--;
+
+			return true;
+		}
+
+		V operator[](const K &key) {
+			DebugEntry *entry = find(key);
+			if (entry)
+				return entry->_value;
+			else {
+				assert(false);
+				return 0;
+			}
+		}
+
+		DebugEntries getEntries() const {
+			return DebugEntries(_head);
+		}
+
+	private:
+		DebugEntry *find(const K &key) {
+			for (DebugEntry *entry = _head; entry != NULL; entry = entry->next) {
+				if (entry->_key == key) return entry;
+			}
+			return NULL;
+		}
+
+		class SP_API DebugEntry {
+		public:
+			K _key;
+			V _value;
+			DebugEntry *next;
+			DebugEntry *prev;
+
+			DebugEntry() : next(NULL), prev(NULL) {
+			}
+		};
+
+		DebugEntry *_head;
+		size_t _size;
+	};
+#endif// SPINE_NO_CPP_RT
 
 	class SP_API DebugExtension : public SpineExtension {
 		struct Allocation {
@@ -52,17 +214,23 @@ namespace spine {
 		};
 
 	public:
-		DebugExtension(SpineExtension *extension) : _extension(extension), _allocations(0), _reallocations(0),
-													_frees(0) {
+		DebugExtension(SpineExtension *extension) : _extension(extension), _allocations(0), _reallocations(0), _frees(0) {
 		}
 
 		void reportLeaks() {
-			for (std::map<void *, Allocation>::iterator it = _allocated.begin(); it != _allocated.end(); it++) {
-				printf("\"%s:%i (%zu bytes at %p)\n", it->second.fileName, it->second.line, it->second.size,
-					   it->second.address);
+#ifdef SPINE_NO_CPP_RT
+			DebugHashMap<void *, Allocation>::DebugEntries entries = _allocated.getEntries();
+			while (entries.hasNext()) {
+				DebugHashMap<void *, Allocation>::DebugPair pair = entries.next();
+				printf("\"%s:%i (%zu bytes at %p)\n", pair.value.fileName, pair.value.line, pair.value.size, pair.value.address);
 			}
+#else
+			for (const auto &pair : _allocated) {
+				printf("\"%s:%i (%zu bytes at %p)\n", pair.second.fileName, pair.second.line, pair.second.size, pair.second.address);
+			}
+#endif
 			printf("allocations: %zu, reallocations: %zu, frees: %zu\n", _allocations, _reallocations, _frees);
-			if (_allocated.empty()) printf("No leaks detected\n");
+			if (_allocated.size() == 0) printf("No leaks detected\n");
 		}
 
 		void clearAllocations() {
@@ -72,7 +240,11 @@ namespace spine {
 
 		virtual void *_alloc(size_t size, const char *file, int line) {
 			void *result = _extension->_alloc(size, file, line);
+#ifdef SPINE_NO_CPP_RT
+			_allocated.put(result, Allocation(result, size, file, line));
+#else
 			_allocated[result] = Allocation(result, size, file, line);
+#endif
 			_allocations++;
 			_usedMemory += size;
 			return result;
@@ -80,45 +252,98 @@ namespace spine {
 
 		virtual void *_calloc(size_t size, const char *file, int line) {
 			void *result = _extension->_calloc(size, file, line);
+#ifdef SPINE_NO_CPP_RT
+			_allocated.put(result, Allocation(result, size, file, line));
+#else
 			_allocated[result] = Allocation(result, size, file, line);
+#endif
 			_allocations++;
 			_usedMemory += size;
 			return result;
 		}
 
 		virtual void *_realloc(void *ptr, size_t size, const char *file, int line) {
-			if (_allocated.count(ptr)) _usedMemory -= _allocated[ptr].size;
-			_allocated.erase(ptr);
+#ifdef SPINE_NO_CPP_RT
+			if (_allocated.containsKey(ptr)) {
+				// Find and store the size before removing
+				DebugHashMap<void *, Allocation>::DebugEntries entries = _allocated.getEntries();
+				while (entries.hasNext()) {
+					DebugHashMap<void *, Allocation>::DebugPair pair = entries.next();
+					if (pair.key == ptr) {
+						_usedMemory -= pair.value.size;
+						break;
+					}
+				}
+				_allocated.remove(ptr);
+			}
+#else
+			auto it = _allocated.find(ptr);
+			if (it != _allocated.end()) {
+				_usedMemory -= it->second.size;
+				_allocated.erase(it);
+			}
+#endif
 			void *result = _extension->_realloc(ptr, size, file, line);
 			_reallocations++;
+#ifdef SPINE_NO_CPP_RT
+			_allocated.put(result, Allocation(result, size, file, line));
+#else
 			_allocated[result] = Allocation(result, size, file, line);
+#endif
 			_usedMemory += size;
 			return result;
 		}
 
 		virtual void _free(void *mem, const char *file, int line) {
-			if (_allocated.count(mem)) {
+#ifdef SPINE_NO_CPP_RT
+			if (_allocated.containsKey(mem)) {
 				_extension->_free(mem, file, line);
 				_frees++;
-				_usedMemory -= _allocated[mem].size;
-				_allocated.erase(mem);
+				// Find and store the size before removing
+				DebugHashMap<void *, Allocation>::DebugEntries entries = _allocated.getEntries();
+				while (entries.hasNext()) {
+					DebugHashMap<void *, Allocation>::DebugPair pair = entries.next();
+					if (pair.key == mem) {
+						_usedMemory -= pair.value.size;
+						break;
+					}
+				}
+				_allocated.remove(mem);
 				return;
 			}
+#else
+			auto it = _allocated.find(mem);
+			if (it != _allocated.end()) {
+				_extension->_free(mem, file, line);
+				_frees++;
+				_usedMemory -= it->second.size;
+				_allocated.erase(it);
+				return;
+			}
+#endif
 
 			printf("%s:%i (address %p): Double free or not allocated through SpineExtension\n", file, line, mem);
 			_extension->_free(mem, file, line);
 		}
 
 		virtual char *_readFile(const String &path, int *length) {
-            auto data = _extension->_readFile(path, length);
+			auto data = _extension->_readFile(path, length);
 
-            if (_allocated.count(data) == 0) {
-                _allocated[data] = Allocation(data, sizeof(char) * (*length), nullptr, 0);
-                _allocations++;
-                _usedMemory += sizeof(char) * (*length);
-            }
+#ifdef SPINE_NO_CPP_RT
+			if (!_allocated.containsKey(data)) {
+				_allocated.put(data, Allocation(data, sizeof(char) * (*length), nullptr, 0));
+				_allocations++;
+				_usedMemory += sizeof(char) * (*length);
+			}
+#else
+			if (_allocated.find(data) == _allocated.end()) {
+				_allocated[data] = Allocation(data, sizeof(char) * (*length), nullptr, 0);
+				_allocations++;
+				_usedMemory += sizeof(char) * (*length);
+			}
+#endif
 
-            return data;
+			return data;
 		}
 
 		size_t getUsedMemory() {
@@ -127,7 +352,11 @@ namespace spine {
 
 	private:
 		SpineExtension *_extension;
-		std::map<void *, Allocation> _allocated;
+#ifdef SPINE_NO_CPP_RT
+		DebugHashMap<void *, Allocation> _allocated;
+#else
+		std::unordered_map<void *, Allocation> _allocated;
+#endif
 		size_t _allocations;
 		size_t _reallocations;
 		size_t _frees;
@@ -136,4 +365,4 @@ namespace spine {
 }
 
 
-#endif //SPINE_LOG_H
+#endif//SPINE_LOG_H

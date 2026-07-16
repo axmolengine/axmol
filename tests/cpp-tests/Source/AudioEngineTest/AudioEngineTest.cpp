@@ -95,30 +95,29 @@ public:
         _enabled = enabled;
         if (_enabled)
         {
-            this->setColor(Color32::WHITE);
+            this->setColor(Color32::white);
         }
         else
         {
-            this->setColor(Color32::GRAY);
+            this->setColor(Color32::gray);
         }
     }
 
 private:
     TextButton() : _onTriggered(nullptr), _enabled(true)
     {
-        auto listener = EventListenerTouchOneByOne::create();
-        listener->setSwallowTouches(true);
+        auto listener = PointerEventListener::create();
 
-        listener->onTouchBegan     = AX_CALLBACK_2(TextButton::onTouchBegan, this);
-        listener->onTouchEnded     = AX_CALLBACK_2(TextButton::onTouchEnded, this);
-        listener->onTouchCancelled = AX_CALLBACK_2(TextButton::onTouchCancelled, this);
+        listener->onPointerDown   = AX_CALLBACK_1(TextButton::onPointerDown, this);
+        listener->onPointerUp     = AX_CALLBACK_1(TextButton::onPointerUp, this);
+        listener->onPointerCancel = AX_CALLBACK_1(TextButton::onPointerCancel, this);
 
         _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
     }
 
-    bool touchHits(Touch* touch)
+    bool touchHits(PointerEvent* touch)
     {
-        auto hitPos = this->convertToNodeSpace(touch->getLocation());
+        auto hitPos = this->convertToNodeSpace(touch->getWorldPoint());
         if (hitPos.x >= 0 && hitPos.y >= 0 && hitPos.x <= _contentSize.width && hitPos.y <= _contentSize.height)
         {
             return true;
@@ -126,9 +125,9 @@ private:
         return false;
     }
 
-    bool onTouchBegan(Touch* touch, Event* event)
+    bool onPointerDown(PointerEvent* event)
     {
-        auto hits = touchHits(touch);
+        auto hits = touchHits(event);
         if (hits)
         {
             scaleButtonTo(0.95f);
@@ -136,11 +135,11 @@ private:
         return hits;
     }
 
-    void onTouchEnded(Touch* touch, Event* event)
+    void onPointerUp(PointerEvent* event)
     {
         if (_enabled)
         {
-            auto hits = touchHits(touch);
+            auto hits = touchHits(event);
             if (hits && _onTriggered)
             {
                 _onTriggered(this);
@@ -150,7 +149,7 @@ private:
         scaleButtonTo(1);
     }
 
-    void onTouchCancelled(Touch* touch, Event* event) { scaleButtonTo(1); }
+    void onPointerCancel(PointerEvent* event) { scaleButtonTo(1); }
 
     void scaleButtonTo(float scale)
     {
@@ -231,6 +230,7 @@ bool AudioControlTest::init()
     auto ret          = AudioEngineTestDemo::init();
     _audioID          = AudioEngine::INVALID_AUDIO_ID;
     _loopEnabled      = false;
+    _hrtfEnabled      = AudioEngine::isHRTFEnabled();
     _volume           = 1.0f;
     _duration         = AudioEngine::TIME_UNKNOWN;
     _timeRatio        = 0.0f;
@@ -324,8 +324,19 @@ bool AudioControlTest::init()
             button->setString("enable-loop");
         }
     });
-    loopItem->setPosition(layerSize.width * 0.5f, layerSize.height * 0.5f);
+    loopItem->setPosition(layerSize.width * 0.35f, layerSize.height * 0.5f);
     addChild(loopItem);
+
+    auto hrtfItem = TextButton::create(_hrtfEnabled ? "disable-hrtf" : "enable-hrtf", [&](TextButton* button) {
+        _hrtfEnabled = !_hrtfEnabled;
+        AudioEngine::setHRTFEnabled(_hrtfEnabled);
+        if (_hrtfEnabled)
+            button->setString("disable-hrtf");
+        else
+            button->setString("enable-hrtf");
+    });
+    hrtfItem->setPosition(layerSize.width * 0.65f, layerSize.height * 0.5f);
+    addChild(hrtfItem);
 
     auto volumeSlider = SliderEx::create();
     volumeSlider->setPercent(100);
@@ -370,13 +381,13 @@ bool AudioControlTest::init()
     auto& volumeSliderPos = volumeSlider->getPosition();
     auto& sliderSize      = volumeSlider->getContentSize();
     auto volumeLabel      = Label::createWithTTF("volume:  ", fontFilePath, 20);
-    volumeLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
+    volumeLabel->setAnchorPoint(Anchors::rightCenter);
     volumeLabel->setPosition(volumeSliderPos.x - sliderSize.width / 2, volumeSliderPos.y);
     addChild(volumeLabel);
 
     auto& timeSliderPos = timeSlider->getPosition();
     auto timeLabel      = Label::createWithTTF("time:  ", fontFilePath, 20);
-    timeLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
+    timeLabel->setAnchorPoint(Anchors::rightCenter);
     timeLabel->setPosition(timeSliderPos.x - sliderSize.width / 2, timeSliderPos.y);
     addChild(timeLabel);
 
@@ -683,13 +694,13 @@ bool AudioProfileTest::init()
 
     auto profileInfoLabel =
         Label::createWithTTF("AudioProfile Info:\n    max instance:3  \n    minimum delay:1.0", fontFilePath, 12);
-    profileInfoLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+    profileInfoLabel->setAnchorPoint(Anchors::leftCenter);
     profileInfoLabel->setPosition(Vec2(origin.x, origin.y + size.height * 0.65f));
     addChild(profileInfoLabel);
 
     _audioCount = 0;
     _showLabel  = Label::createWithTTF("audio count:0", fontFilePath, 12);
-    _showLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+    _showLabel->setAnchorPoint(Anchors::leftCenter);
     _showLabel->setPosition(Vec2(origin.x, origin.y + size.height * 0.5f));
     addChild(_showLabel);
 
@@ -765,7 +776,7 @@ bool LargeAudioFileTest::init()
 
     auto playItem = TextButton::create("play large audio file",
                                        [&](TextButton* button) { AudioEngine::play2d("audio/LuckyDay.mp3"); });
-    playItem->setPositionNormalized(Vec2::ANCHOR_MIDDLE);
+    playItem->setPositionNormalized(Anchors::center);
     this->addChild(playItem);
 
     return ret;
@@ -1211,7 +1222,7 @@ void AudioPlayInFinishedCB::onEnter()
     item->setPosition(VisibleRect::center());
 
     auto menu = Menu::create(item, nullptr);
-    menu->setPosition(Vec2::ANCHOR_BOTTOM_LEFT);
+    menu->setPosition(Anchors::bottomLeft);
     addChild(menu);
 }
 
@@ -1436,19 +1447,19 @@ bool AudioPanningTest::init()
     auto& volumeSliderPos = volumeSlider->getPosition();
     auto& sliderSize      = volumeSlider->getContentSize();
     auto volumeLabel      = Label::createWithTTF("volume:  ", fontFilePath, 20);
-    volumeLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
+    volumeLabel->setAnchorPoint(Anchors::rightCenter);
     volumeLabel->setPosition(volumeSliderPos.x - sliderSize.width / 2, volumeSliderPos.y);
     addChild(volumeLabel);
 
     auto& timeSliderPos = timeSlider->getPosition();
     auto timeLabel      = Label::createWithTTF("time:  ", fontFilePath, 20);
-    timeLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
+    timeLabel->setAnchorPoint(Anchors::rightCenter);
     timeLabel->setPosition(timeSliderPos.x - sliderSize.width / 2, timeSliderPos.y);
     addChild(timeLabel);
 
     auto& panningPos = panningSlider->getPosition();
     auto panLabel    = Label::createWithTTF("pan:  ", fontFilePath, 20);
-    panLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
+    panLabel->setAnchorPoint(Anchors::rightCenter);
     panLabel->setPosition(panningPos.x - sliderSize.width / 2, panningPos.y);
     addChild(panLabel);
 
@@ -1507,7 +1518,7 @@ bool AudioReverbTest::init()
     addChild(_playOverLabel, 99999);
 
     auto reverbLabel = Label::createWithTTF("", fontFilePath, 20);
-    reverbLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+    reverbLabel->setAnchorPoint(Anchors::center);
     reverbLabel->setPosition(layerSize.width / 2, layerSize.height * 0.60f);
     addChild(reverbLabel);
 
@@ -1576,7 +1587,7 @@ bool AudioReverbTest::init()
     resumeItem->setPosition(layerSize.width * 0.7f, layerSize.height * 0.7f);
     addChild(resumeItem);
 
-    auto loopItem = TextButton::create("disable-loop", [&](TextButton* button) {
+    auto loopItem = TextButton::create("enable-loop", [&](TextButton* button) {
         _loopEnabled = !_loopEnabled;
 
         if (_audioID != AudioEngine::INVALID_AUDIO_ID)
@@ -1659,13 +1670,13 @@ bool AudioReverbTest::init()
     auto& volumeSliderPos = volumeSlider->getPosition();
     auto& sliderSize      = volumeSlider->getContentSize();
     auto volumeLabel      = Label::createWithTTF("volume:  ", fontFilePath, 20);
-    volumeLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
+    volumeLabel->setAnchorPoint(Anchors::rightCenter);
     volumeLabel->setPosition(volumeSliderPos.x - sliderSize.width / 2, volumeSliderPos.y);
     addChild(volumeLabel);
 
     auto& timeSliderPos = timeSlider->getPosition();
     auto timeLabel      = Label::createWithTTF("time:  ", fontFilePath, 20);
-    timeLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
+    timeLabel->setAnchorPoint(Anchors::rightCenter);
     timeLabel->setPosition(timeSliderPos.x - sliderSize.width / 2, timeSliderPos.y);
     addChild(timeLabel);
 

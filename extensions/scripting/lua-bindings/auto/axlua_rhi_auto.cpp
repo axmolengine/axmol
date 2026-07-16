@@ -3,7 +3,7 @@
 #include "axmol/rhi/ProgramState.h"
 #include "axmol/rhi/Texture.h"
 #include "axmol/rhi/VertexLayout.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include "axmol/rhi/RenderTarget.h"
 #include "lua-bindings/manual/tolua_fix.h"
 #include "lua-bindings/manual/LuaBasicConversions.h"
@@ -60,32 +60,6 @@ int lua_register_ax_rhi_ShaderStage(lua_State* tolua_S)
     auto typeName = typeid(ax::rhi::ShaderStage).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axr.ShaderStage";
     g_typeCast[typeName] = "axr.ShaderStage";
-    return 1;
-}
-
-
-int lua_register_ax_rhi_VertexFormat(lua_State* tolua_S)
-{
-    tolua_module(tolua_S, "VertexFormat", 0);
-    tolua_beginmodule(tolua_S,"VertexFormat");
-        tolua_constant(tolua_S, "FLOAT4", 0);
-        tolua_constant(tolua_S, "FLOAT3", 1);
-        tolua_constant(tolua_S, "FLOAT2", 2);
-        tolua_constant(tolua_S, "FLOAT", 3);
-        tolua_constant(tolua_S, "INT4", 4);
-        tolua_constant(tolua_S, "INT3", 5);
-        tolua_constant(tolua_S, "INT2", 6);
-        tolua_constant(tolua_S, "INT", 7);
-        tolua_constant(tolua_S, "USHORT4", 8);
-        tolua_constant(tolua_S, "USHORT2", 9);
-        tolua_constant(tolua_S, "UBYTE4", 10);
-        tolua_constant(tolua_S, "MAT4", 11);
-        tolua_constant(tolua_S, "COUNT", 12);
-    tolua_endmodule(tolua_S);
-
-    auto typeName = typeid(ax::rhi::VertexFormat).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axr.VertexFormat";
-    g_typeCast[typeName] = "axr.VertexFormat";
     return 1;
 }
 
@@ -723,7 +697,7 @@ int lua_ax_rhi_Program_getUniformBufferSize(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getUniformBufferSize();
-        #pragma warning NO CONVERSION FROM NATIVE FOR ??;
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axr.Program:getUniformBufferSize",argc, 0);
@@ -1050,265 +1024,6 @@ int lua_register_ax_rhi_Program(lua_State* tolua_S)
     auto typeName = typeid(ax::rhi::Program).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axr.Program";
     g_typeCast[typeName] = "axr.Program";
-    return 1;
-}
-
-int lua_ax_rhi_VertexLayout_getDesc(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::rhi::VertexLayout* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"axr.VertexLayout",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::rhi::VertexLayout*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_VertexLayout_getDesc'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_VertexLayout_getDesc'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->getDesc();
-        #pragma warning NO CONVERSION FROM NATIVE FOR VertexLayoutDesc;
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axr.VertexLayout:getDesc",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_VertexLayout_getDesc'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_rhi_VertexLayout_getStride(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::rhi::VertexLayout* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"axr.VertexLayout",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::rhi::VertexLayout*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_VertexLayout_getStride'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_VertexLayout_getStride'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->getStride();
-        tolua_pushnumber(tolua_S,(lua_Number)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axr.VertexLayout:getStride",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_VertexLayout_getStride'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_rhi_VertexLayout_getInstanceStride(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::rhi::VertexLayout* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"axr.VertexLayout",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::rhi::VertexLayout*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_VertexLayout_getInstanceStride'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_VertexLayout_getInstanceStride'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->getInstanceStride();
-        tolua_pushnumber(tolua_S,(lua_Number)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axr.VertexLayout:getInstanceStride",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_VertexLayout_getInstanceStride'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_rhi_VertexLayout_getHash(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::rhi::VertexLayout* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"axr.VertexLayout",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::rhi::VertexLayout*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_VertexLayout_getHash'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_VertexLayout_getHash'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->getHash();
-        tolua_pushnumber(tolua_S,(lua_Number)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axr.VertexLayout:getHash",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_VertexLayout_getHash'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_rhi_VertexLayout_getBuiltinId(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::rhi::VertexLayout* obj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"axr.VertexLayout",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    obj = (ax::rhi::VertexLayout*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_VertexLayout_getBuiltinId'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_VertexLayout_getBuiltinId'", nullptr);
-            return 0;
-        }
-        auto&& ret = obj->getBuiltinId();
-        tolua_pushnumber(tolua_S,(lua_Number)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axr.VertexLayout:getBuiltinId",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_VertexLayout_getBuiltinId'.",&tolua_err);
-#endif
-
-    return 0;
-}
-static int lua_ax_rhi_VertexLayout_finalize(lua_State* tolua_S)
-{
-    AXLOGV("luabindings: finalizing LUA object (VertexLayout)");
-    return 0;
-}
-
-int lua_register_ax_rhi_VertexLayout(lua_State* tolua_S)
-{
-    tolua_usertype(tolua_S,"axr.VertexLayout");
-    tolua_cclass(tolua_S,"VertexLayout","axr.VertexLayout","ax.Object",nullptr);
-
-    tolua_beginmodule(tolua_S,"VertexLayout");
-        tolua_function(tolua_S,"getDesc",lua_ax_rhi_VertexLayout_getDesc);
-        tolua_function(tolua_S,"getStride",lua_ax_rhi_VertexLayout_getStride);
-        tolua_function(tolua_S,"getInstanceStride",lua_ax_rhi_VertexLayout_getInstanceStride);
-        tolua_function(tolua_S,"getHash",lua_ax_rhi_VertexLayout_getHash);
-        tolua_function(tolua_S,"getBuiltinId",lua_ax_rhi_VertexLayout_getBuiltinId);
-    tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::rhi::VertexLayout).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axr.VertexLayout";
-    g_typeCast[typeName] = "axr.VertexLayout";
     return 1;
 }
 
@@ -2229,6 +1944,72 @@ int lua_ax_rhi_Texture_updateData(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_rhi_Texture_updateCompressedData(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::rhi::Texture* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axr.Texture",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Texture_updateCompressedData'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 6)
+    {
+        const void* arg0;
+        int arg1;
+        int arg2;
+        unsigned int arg3;
+        int arg4;
+        int arg5;
+
+        #pragma warning NO CONVERSION TO NATIVE FOR void*
+        ok = false;
+
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axr.Texture:updateCompressedData");
+
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "axr.Texture:updateCompressedData");
+
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "axr.Texture:updateCompressedData");
+
+        ok &= luaval_to_int(tolua_S, 6, &arg4, "axr.Texture:updateCompressedData");
+
+        ok &= luaval_to_int(tolua_S, 7, &arg5, "axr.Texture:updateCompressedData");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Texture_updateCompressedData'", nullptr);
+            return 0;
+        }
+        obj->updateCompressedData(arg0, arg1, arg2, arg3, arg4, arg5);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axr.Texture:updateCompressedData",argc, 6);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_Texture_updateCompressedData'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_rhi_Texture_updateSubData(lua_State* tolua_S)
 {
     int argc = 0;
@@ -2294,6 +2075,78 @@ int lua_ax_rhi_Texture_updateSubData(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_Texture_updateSubData'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_rhi_Texture_updateCompressedSubData(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::rhi::Texture* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axr.Texture",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Texture_updateCompressedSubData'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 8)
+    {
+        int arg0;
+        int arg1;
+        int arg2;
+        int arg3;
+        unsigned int arg4;
+        int arg5;
+        const void* arg6;
+        int arg7;
+
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axr.Texture:updateCompressedSubData");
+
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axr.Texture:updateCompressedSubData");
+
+        ok &= luaval_to_int(tolua_S, 4, &arg2, "axr.Texture:updateCompressedSubData");
+
+        ok &= luaval_to_int(tolua_S, 5, &arg3, "axr.Texture:updateCompressedSubData");
+
+        ok &= luaval_to_int(tolua_S, 6, &arg4, "axr.Texture:updateCompressedSubData");
+
+        ok &= luaval_to_int(tolua_S, 7, &arg5, "axr.Texture:updateCompressedSubData");
+
+        #pragma warning NO CONVERSION TO NATIVE FOR void*
+        ok = false;
+
+        ok &= luaval_to_int(tolua_S, 9, &arg7, "axr.Texture:updateCompressedSubData");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Texture_updateCompressedSubData'", nullptr);
+            return 0;
+        }
+        obj->updateCompressedSubData(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axr.Texture:updateCompressedSubData",argc, 8);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_Texture_updateCompressedSubData'.",&tolua_err);
 #endif
 
     return 0;
@@ -2433,13 +2286,274 @@ int lua_register_ax_rhi_Texture(lua_State* tolua_S)
         tolua_function(tolua_S,"getWidth",lua_ax_rhi_Texture_getWidth);
         tolua_function(tolua_S,"getHeight",lua_ax_rhi_Texture_getHeight);
         tolua_function(tolua_S,"updateData",lua_ax_rhi_Texture_updateData);
+        tolua_function(tolua_S,"updateCompressedData",lua_ax_rhi_Texture_updateCompressedData);
         tolua_function(tolua_S,"updateSubData",lua_ax_rhi_Texture_updateSubData);
+        tolua_function(tolua_S,"updateCompressedSubData",lua_ax_rhi_Texture_updateCompressedSubData);
         tolua_function(tolua_S,"updateFaceData",lua_ax_rhi_Texture_updateFaceData);
         tolua_function(tolua_S,"shouldGenMipmaps",lua_ax_rhi_Texture_shouldGenMipmaps);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::rhi::Texture).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axr.Texture";
     g_typeCast[typeName] = "axr.Texture";
+    return 1;
+}
+
+int lua_ax_rhi_VertexLayout_getDesc(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::rhi::VertexLayout* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axr.VertexLayout",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::rhi::VertexLayout*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_VertexLayout_getDesc'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_VertexLayout_getDesc'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getDesc();
+        #pragma warning NO CONVERSION FROM NATIVE FOR VertexLayoutDesc;
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axr.VertexLayout:getDesc",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_VertexLayout_getDesc'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_rhi_VertexLayout_getStride(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::rhi::VertexLayout* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axr.VertexLayout",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::rhi::VertexLayout*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_VertexLayout_getStride'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_VertexLayout_getStride'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getStride();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axr.VertexLayout:getStride",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_VertexLayout_getStride'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_rhi_VertexLayout_getInstanceStride(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::rhi::VertexLayout* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axr.VertexLayout",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::rhi::VertexLayout*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_VertexLayout_getInstanceStride'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_VertexLayout_getInstanceStride'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getInstanceStride();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axr.VertexLayout:getInstanceStride",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_VertexLayout_getInstanceStride'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_rhi_VertexLayout_getHash(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::rhi::VertexLayout* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axr.VertexLayout",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::rhi::VertexLayout*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_VertexLayout_getHash'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_VertexLayout_getHash'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getHash();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axr.VertexLayout:getHash",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_VertexLayout_getHash'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_rhi_VertexLayout_getBuiltinId(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::rhi::VertexLayout* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axr.VertexLayout",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::rhi::VertexLayout*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_VertexLayout_getBuiltinId'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_VertexLayout_getBuiltinId'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getBuiltinId();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axr.VertexLayout:getBuiltinId",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_VertexLayout_getBuiltinId'.",&tolua_err);
+#endif
+
+    return 0;
+}
+static int lua_ax_rhi_VertexLayout_finalize(lua_State* tolua_S)
+{
+    AXLOGV("luabindings: finalizing LUA object (VertexLayout)");
+    return 0;
+}
+
+int lua_register_ax_rhi_VertexLayout(lua_State* tolua_S)
+{
+    tolua_usertype(tolua_S,"axr.VertexLayout");
+    tolua_cclass(tolua_S,"VertexLayout","axr.VertexLayout","ax.Object",nullptr);
+
+    tolua_beginmodule(tolua_S,"VertexLayout");
+        tolua_function(tolua_S,"getDesc",lua_ax_rhi_VertexLayout_getDesc);
+        tolua_function(tolua_S,"getStride",lua_ax_rhi_VertexLayout_getStride);
+        tolua_function(tolua_S,"getInstanceStride",lua_ax_rhi_VertexLayout_getInstanceStride);
+        tolua_function(tolua_S,"getHash",lua_ax_rhi_VertexLayout_getHash);
+        tolua_function(tolua_S,"getBuiltinId",lua_ax_rhi_VertexLayout_getBuiltinId);
+    tolua_endmodule(tolua_S);
+    auto typeName = typeid(ax::rhi::VertexLayout).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axr.VertexLayout";
+    g_typeCast[typeName] = "axr.VertexLayout";
     return 1;
 }
 
@@ -3273,7 +3387,7 @@ int lua_register_ax_rhi_DriverBase(lua_State* tolua_S)
     return 1;
 }
 
-int lua_ax_rhi_DriverContext_setVulkanMinAndroidApiLevel(lua_State* tolua_S)
+int lua_ax_rhi_GraphicsCore_setDriverPreference(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -3283,7 +3397,43 @@ int lua_ax_rhi_DriverContext_setVulkanMinAndroidApiLevel(lua_State* tolua_S)
 #endif
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"axr.DriverContext",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(tolua_S,1,"axr.GraphicsCore",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 1)
+    {
+        ax::rhi::DriverType arg0;
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axr.GraphicsCore:setDriverPreference");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_GraphicsCore_setDriverPreference'", nullptr);
+            return 0;
+        }
+        ax::rhi::GraphicsCore::setDriverPreference(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.GraphicsCore:setDriverPreference",argc, 1);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_GraphicsCore_setDriverPreference'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_rhi_GraphicsCore_setVulkanMinAndroidApiLevel(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"axr.GraphicsCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     argc = lua_gettop(tolua_S) - 1;
@@ -3291,25 +3441,25 @@ int lua_ax_rhi_DriverContext_setVulkanMinAndroidApiLevel(lua_State* tolua_S)
     if (argc == 1)
     {
         int arg0;
-        ok &= luaval_to_int(tolua_S, 2, &arg0, "axr.DriverContext:setVulkanMinAndroidApiLevel");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axr.GraphicsCore:setVulkanMinAndroidApiLevel");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverContext_setVulkanMinAndroidApiLevel'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_GraphicsCore_setVulkanMinAndroidApiLevel'", nullptr);
             return 0;
         }
-        ax::rhi::DriverContext::setVulkanMinAndroidApiLevel(arg0);
+        ax::rhi::GraphicsCore::setVulkanMinAndroidApiLevel(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.DriverContext:setVulkanMinAndroidApiLevel",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.GraphicsCore:setVulkanMinAndroidApiLevel",argc, 1);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_DriverContext_setVulkanMinAndroidApiLevel'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_GraphicsCore_setVulkanMinAndroidApiLevel'.",&tolua_err);
 #endif
     return 0;
 }
-int lua_ax_rhi_DriverContext_setDriverPriority(lua_State* tolua_S)
+int lua_ax_rhi_GraphicsCore_setVulkanInterop(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -3319,7 +3469,43 @@ int lua_ax_rhi_DriverContext_setDriverPriority(lua_State* tolua_S)
 #endif
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"axr.DriverContext",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(tolua_S,1,"axr.GraphicsCore",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 1)
+    {
+        ax::rhi::VulkanInterop* arg0;
+        ok &= luaval_to_object<ax::rhi::VulkanInterop>(tolua_S, 2, "axr.VulkanInterop",&arg0, "axr.GraphicsCore:setVulkanInterop");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_GraphicsCore_setVulkanInterop'", nullptr);
+            return 0;
+        }
+        ax::rhi::GraphicsCore::setVulkanInterop(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.GraphicsCore:setVulkanInterop",argc, 1);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_GraphicsCore_setVulkanInterop'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_rhi_GraphicsCore_setDriverPriority(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"axr.GraphicsCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     argc = lua_gettop(tolua_S) - 1;
@@ -3328,26 +3514,26 @@ int lua_ax_rhi_DriverContext_setDriverPriority(lua_State* tolua_S)
     {
         ax::rhi::DriverType arg0;
         int arg1;
-        ok &= luaval_to_int(tolua_S, 2, &arg0, "axr.DriverContext:setDriverPriority");
-        ok &= luaval_to_int(tolua_S, 3, &arg1, "axr.DriverContext:setDriverPriority");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axr.GraphicsCore:setDriverPriority");
+        ok &= luaval_to_int(tolua_S, 3, &arg1, "axr.GraphicsCore:setDriverPriority");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverContext_setDriverPriority'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_GraphicsCore_setDriverPriority'", nullptr);
             return 0;
         }
-        ax::rhi::DriverContext::setDriverPriority(arg0, arg1);
+        ax::rhi::GraphicsCore::setDriverPriority(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.DriverContext:setDriverPriority",argc, 2);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.GraphicsCore:setDriverPriority",argc, 2);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_DriverContext_setDriverPriority'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_GraphicsCore_setDriverPriority'.",&tolua_err);
 #endif
     return 0;
 }
-int lua_ax_rhi_DriverContext_getDriverPriority(lua_State* tolua_S)
+int lua_ax_rhi_GraphicsCore_getDriverPriority(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -3357,7 +3543,7 @@ int lua_ax_rhi_DriverContext_getDriverPriority(lua_State* tolua_S)
 #endif
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"axr.DriverContext",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(tolua_S,1,"axr.GraphicsCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     argc = lua_gettop(tolua_S) - 1;
@@ -3365,25 +3551,25 @@ int lua_ax_rhi_DriverContext_getDriverPriority(lua_State* tolua_S)
     if (argc == 1)
     {
         ax::rhi::DriverType arg0;
-        ok &= luaval_to_int(tolua_S, 2, &arg0, "axr.DriverContext:getDriverPriority");
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "axr.GraphicsCore:getDriverPriority");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverContext_getDriverPriority'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_GraphicsCore_getDriverPriority'", nullptr);
             return 0;
         }
-        auto&& ret = ax::rhi::DriverContext::getDriverPriority(arg0);
+        auto&& ret = ax::rhi::GraphicsCore::getDriverPriority(arg0);
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.DriverContext:getDriverPriority",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.GraphicsCore:getDriverPriority",argc, 1);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_DriverContext_getDriverPriority'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_GraphicsCore_getDriverPriority'.",&tolua_err);
 #endif
     return 0;
 }
-int lua_ax_rhi_DriverContext_makeCurrentDriver(lua_State* tolua_S)
+int lua_ax_rhi_GraphicsCore_makeCurrentDriver(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -3393,7 +3579,7 @@ int lua_ax_rhi_DriverContext_makeCurrentDriver(lua_State* tolua_S)
 #endif
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"axr.DriverContext",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(tolua_S,1,"axr.GraphicsCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     argc = lua_gettop(tolua_S) - 1;
@@ -3402,22 +3588,22 @@ int lua_ax_rhi_DriverContext_makeCurrentDriver(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverContext_makeCurrentDriver'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_GraphicsCore_makeCurrentDriver'", nullptr);
             return 0;
         }
-        ax::rhi::DriverContext::makeCurrentDriver();
+        ax::rhi::GraphicsCore::makeCurrentDriver();
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.DriverContext:makeCurrentDriver",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.GraphicsCore:makeCurrentDriver",argc, 0);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_DriverContext_makeCurrentDriver'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_GraphicsCore_makeCurrentDriver'.",&tolua_err);
 #endif
     return 0;
 }
-int lua_ax_rhi_DriverContext_activateCurrentDriver(lua_State* tolua_S)
+int lua_ax_rhi_GraphicsCore_activateCurrentDriver(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -3427,7 +3613,7 @@ int lua_ax_rhi_DriverContext_activateCurrentDriver(lua_State* tolua_S)
 #endif
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"axr.DriverContext",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(tolua_S,1,"axr.GraphicsCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     argc = lua_gettop(tolua_S) - 1;
@@ -3436,22 +3622,22 @@ int lua_ax_rhi_DriverContext_activateCurrentDriver(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverContext_activateCurrentDriver'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_GraphicsCore_activateCurrentDriver'", nullptr);
             return 0;
         }
-        ax::rhi::DriverContext::activateCurrentDriver();
+        ax::rhi::GraphicsCore::activateCurrentDriver();
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.DriverContext:activateCurrentDriver",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.GraphicsCore:activateCurrentDriver",argc, 0);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_DriverContext_activateCurrentDriver'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_GraphicsCore_activateCurrentDriver'.",&tolua_err);
 #endif
     return 0;
 }
-int lua_ax_rhi_DriverContext_destroyCurrentDriver(lua_State* tolua_S)
+int lua_ax_rhi_GraphicsCore_destroyCurrentDriver(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -3461,7 +3647,7 @@ int lua_ax_rhi_DriverContext_destroyCurrentDriver(lua_State* tolua_S)
 #endif
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"axr.DriverContext",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(tolua_S,1,"axr.GraphicsCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     argc = lua_gettop(tolua_S) - 1;
@@ -3470,22 +3656,22 @@ int lua_ax_rhi_DriverContext_destroyCurrentDriver(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverContext_destroyCurrentDriver'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_GraphicsCore_destroyCurrentDriver'", nullptr);
             return 0;
         }
-        ax::rhi::DriverContext::destroyCurrentDriver();
+        ax::rhi::GraphicsCore::destroyCurrentDriver();
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.DriverContext:destroyCurrentDriver",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.GraphicsCore:destroyCurrentDriver",argc, 0);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_DriverContext_destroyCurrentDriver'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_GraphicsCore_destroyCurrentDriver'.",&tolua_err);
 #endif
     return 0;
 }
-int lua_ax_rhi_DriverContext_currentDriver(lua_State* tolua_S)
+int lua_ax_rhi_GraphicsCore_currentDriver(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -3495,7 +3681,7 @@ int lua_ax_rhi_DriverContext_currentDriver(lua_State* tolua_S)
 #endif
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"axr.DriverContext",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(tolua_S,1,"axr.GraphicsCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     argc = lua_gettop(tolua_S) - 1;
@@ -3504,22 +3690,22 @@ int lua_ax_rhi_DriverContext_currentDriver(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverContext_currentDriver'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_GraphicsCore_currentDriver'", nullptr);
             return 0;
         }
-        auto&& ret = ax::rhi::DriverContext::currentDriver();
+        auto&& ret = ax::rhi::GraphicsCore::currentDriver();
         object_to_luaval<ax::rhi::DriverBase>(tolua_S, "axr.DriverBase",(ax::rhi::DriverBase*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.DriverContext:currentDriver",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.GraphicsCore:currentDriver",argc, 0);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_DriverContext_currentDriver'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_GraphicsCore_currentDriver'.",&tolua_err);
 #endif
     return 0;
 }
-int lua_ax_rhi_DriverContext_currentDriverType(lua_State* tolua_S)
+int lua_ax_rhi_GraphicsCore_currentDriverType(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -3529,7 +3715,7 @@ int lua_ax_rhi_DriverContext_currentDriverType(lua_State* tolua_S)
 #endif
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"axr.DriverContext",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(tolua_S,1,"axr.GraphicsCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     argc = lua_gettop(tolua_S) - 1;
@@ -3538,22 +3724,22 @@ int lua_ax_rhi_DriverContext_currentDriverType(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverContext_currentDriverType'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_GraphicsCore_currentDriverType'", nullptr);
             return 0;
         }
-        int ret = (int)ax::rhi::DriverContext::currentDriverType();
+        int ret = (int)ax::rhi::GraphicsCore::currentDriverType();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.DriverContext:currentDriverType",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.GraphicsCore:currentDriverType",argc, 0);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_DriverContext_currentDriverType'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_GraphicsCore_currentDriverType'.",&tolua_err);
 #endif
     return 0;
 }
-int lua_ax_rhi_DriverContext_isOpenGL(lua_State* tolua_S)
+int lua_ax_rhi_GraphicsCore_isOpenGL(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -3563,7 +3749,7 @@ int lua_ax_rhi_DriverContext_isOpenGL(lua_State* tolua_S)
 #endif
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"axr.DriverContext",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(tolua_S,1,"axr.GraphicsCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     argc = lua_gettop(tolua_S) - 1;
@@ -3572,22 +3758,22 @@ int lua_ax_rhi_DriverContext_isOpenGL(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverContext_isOpenGL'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_GraphicsCore_isOpenGL'", nullptr);
             return 0;
         }
-        auto&& ret = ax::rhi::DriverContext::isOpenGL();
+        auto&& ret = ax::rhi::GraphicsCore::isOpenGL();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.DriverContext:isOpenGL",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.GraphicsCore:isOpenGL",argc, 0);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_DriverContext_isOpenGL'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_GraphicsCore_isOpenGL'.",&tolua_err);
 #endif
     return 0;
 }
-int lua_ax_rhi_DriverContext_isMetal(lua_State* tolua_S)
+int lua_ax_rhi_GraphicsCore_isMetal(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -3597,7 +3783,7 @@ int lua_ax_rhi_DriverContext_isMetal(lua_State* tolua_S)
 #endif
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"axr.DriverContext",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(tolua_S,1,"axr.GraphicsCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     argc = lua_gettop(tolua_S) - 1;
@@ -3606,22 +3792,22 @@ int lua_ax_rhi_DriverContext_isMetal(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverContext_isMetal'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_GraphicsCore_isMetal'", nullptr);
             return 0;
         }
-        auto&& ret = ax::rhi::DriverContext::isMetal();
+        auto&& ret = ax::rhi::GraphicsCore::isMetal();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.DriverContext:isMetal",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.GraphicsCore:isMetal",argc, 0);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_DriverContext_isMetal'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_GraphicsCore_isMetal'.",&tolua_err);
 #endif
     return 0;
 }
-int lua_ax_rhi_DriverContext_isD3D11(lua_State* tolua_S)
+int lua_ax_rhi_GraphicsCore_isD3D11(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -3631,7 +3817,7 @@ int lua_ax_rhi_DriverContext_isD3D11(lua_State* tolua_S)
 #endif
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"axr.DriverContext",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(tolua_S,1,"axr.GraphicsCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     argc = lua_gettop(tolua_S) - 1;
@@ -3640,22 +3826,22 @@ int lua_ax_rhi_DriverContext_isD3D11(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverContext_isD3D11'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_GraphicsCore_isD3D11'", nullptr);
             return 0;
         }
-        auto&& ret = ax::rhi::DriverContext::isD3D11();
+        auto&& ret = ax::rhi::GraphicsCore::isD3D11();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.DriverContext:isD3D11",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.GraphicsCore:isD3D11",argc, 0);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_DriverContext_isD3D11'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_GraphicsCore_isD3D11'.",&tolua_err);
 #endif
     return 0;
 }
-int lua_ax_rhi_DriverContext_isD3D12(lua_State* tolua_S)
+int lua_ax_rhi_GraphicsCore_isD3D12(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -3665,7 +3851,7 @@ int lua_ax_rhi_DriverContext_isD3D12(lua_State* tolua_S)
 #endif
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"axr.DriverContext",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(tolua_S,1,"axr.GraphicsCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     argc = lua_gettop(tolua_S) - 1;
@@ -3674,22 +3860,22 @@ int lua_ax_rhi_DriverContext_isD3D12(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverContext_isD3D12'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_GraphicsCore_isD3D12'", nullptr);
             return 0;
         }
-        auto&& ret = ax::rhi::DriverContext::isD3D12();
+        auto&& ret = ax::rhi::GraphicsCore::isD3D12();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.DriverContext:isD3D12",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.GraphicsCore:isD3D12",argc, 0);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_DriverContext_isD3D12'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_GraphicsCore_isD3D12'.",&tolua_err);
 #endif
     return 0;
 }
-int lua_ax_rhi_DriverContext_isVulkan(lua_State* tolua_S)
+int lua_ax_rhi_GraphicsCore_isVulkan(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -3699,7 +3885,7 @@ int lua_ax_rhi_DriverContext_isVulkan(lua_State* tolua_S)
 #endif
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"axr.DriverContext",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(tolua_S,1,"axr.GraphicsCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     argc = lua_gettop(tolua_S) - 1;
@@ -3708,22 +3894,22 @@ int lua_ax_rhi_DriverContext_isVulkan(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverContext_isVulkan'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_GraphicsCore_isVulkan'", nullptr);
             return 0;
         }
-        auto&& ret = ax::rhi::DriverContext::isVulkan();
+        auto&& ret = ax::rhi::GraphicsCore::isVulkan();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.DriverContext:isVulkan",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.GraphicsCore:isVulkan",argc, 0);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_DriverContext_isVulkan'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_GraphicsCore_isVulkan'.",&tolua_err);
 #endif
     return 0;
 }
-int lua_ax_rhi_DriverContext_currentShaderLang(lua_State* tolua_S)
+int lua_ax_rhi_GraphicsCore_currentShaderLang(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -3733,7 +3919,7 @@ int lua_ax_rhi_DriverContext_currentShaderLang(lua_State* tolua_S)
 #endif
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"axr.DriverContext",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(tolua_S,1,"axr.GraphicsCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     argc = lua_gettop(tolua_S) - 1;
@@ -3742,22 +3928,22 @@ int lua_ax_rhi_DriverContext_currentShaderLang(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverContext_currentShaderLang'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_GraphicsCore_currentShaderLang'", nullptr);
             return 0;
         }
-        auto&& ret = ax::rhi::DriverContext::currentShaderLang();
+        auto&& ret = ax::rhi::GraphicsCore::currentShaderLang();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.DriverContext:currentShaderLang",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.GraphicsCore:currentShaderLang",argc, 0);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_DriverContext_currentShaderLang'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_GraphicsCore_currentShaderLang'.",&tolua_err);
 #endif
     return 0;
 }
-int lua_ax_rhi_DriverContext_currentShaderProfile(lua_State* tolua_S)
+int lua_ax_rhi_GraphicsCore_currentShaderProfile(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -3767,7 +3953,7 @@ int lua_ax_rhi_DriverContext_currentShaderProfile(lua_State* tolua_S)
 #endif
 
 #if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"axr.DriverContext",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(tolua_S,1,"axr.GraphicsCore",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     argc = lua_gettop(tolua_S) - 1;
@@ -3776,52 +3962,54 @@ int lua_ax_rhi_DriverContext_currentShaderProfile(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_DriverContext_currentShaderProfile'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_GraphicsCore_currentShaderProfile'", nullptr);
             return 0;
         }
-        auto&& ret = ax::rhi::DriverContext::currentShaderProfile();
+        auto&& ret = ax::rhi::GraphicsCore::currentShaderProfile();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.DriverContext:currentShaderProfile",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axr.GraphicsCore:currentShaderProfile",argc, 0);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_DriverContext_currentShaderProfile'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_GraphicsCore_currentShaderProfile'.",&tolua_err);
 #endif
     return 0;
 }
-static int lua_ax_rhi_DriverContext_finalize(lua_State* tolua_S)
+static int lua_ax_rhi_GraphicsCore_finalize(lua_State* tolua_S)
 {
-    AXLOGV("luabindings: finalizing LUA object (DriverContext)");
+    AXLOGV("luabindings: finalizing LUA object (GraphicsCore)");
     return 0;
 }
 
-int lua_register_ax_rhi_DriverContext(lua_State* tolua_S)
+int lua_register_ax_rhi_GraphicsCore(lua_State* tolua_S)
 {
-    tolua_usertype(tolua_S,"axr.DriverContext");
-    tolua_cclass(tolua_S,"DriverContext","axr.DriverContext","",nullptr);
+    tolua_usertype(tolua_S,"axr.GraphicsCore");
+    tolua_cclass(tolua_S,"GraphicsCore","axr.GraphicsCore","",nullptr);
 
-    tolua_beginmodule(tolua_S,"DriverContext");
-        tolua_function(tolua_S,"setVulkanMinAndroidApiLevel", lua_ax_rhi_DriverContext_setVulkanMinAndroidApiLevel);
-        tolua_function(tolua_S,"setDriverPriority", lua_ax_rhi_DriverContext_setDriverPriority);
-        tolua_function(tolua_S,"getDriverPriority", lua_ax_rhi_DriverContext_getDriverPriority);
-        tolua_function(tolua_S,"makeCurrentDriver", lua_ax_rhi_DriverContext_makeCurrentDriver);
-        tolua_function(tolua_S,"activateCurrentDriver", lua_ax_rhi_DriverContext_activateCurrentDriver);
-        tolua_function(tolua_S,"destroyCurrentDriver", lua_ax_rhi_DriverContext_destroyCurrentDriver);
-        tolua_function(tolua_S,"currentDriver", lua_ax_rhi_DriverContext_currentDriver);
-        tolua_function(tolua_S,"currentDriverType", lua_ax_rhi_DriverContext_currentDriverType);
-        tolua_function(tolua_S,"isOpenGL", lua_ax_rhi_DriverContext_isOpenGL);
-        tolua_function(tolua_S,"isMetal", lua_ax_rhi_DriverContext_isMetal);
-        tolua_function(tolua_S,"isD3D11", lua_ax_rhi_DriverContext_isD3D11);
-        tolua_function(tolua_S,"isD3D12", lua_ax_rhi_DriverContext_isD3D12);
-        tolua_function(tolua_S,"isVulkan", lua_ax_rhi_DriverContext_isVulkan);
-        tolua_function(tolua_S,"currentShaderLang", lua_ax_rhi_DriverContext_currentShaderLang);
-        tolua_function(tolua_S,"currentShaderProfile", lua_ax_rhi_DriverContext_currentShaderProfile);
+    tolua_beginmodule(tolua_S,"GraphicsCore");
+        tolua_function(tolua_S,"setDriverPreference", lua_ax_rhi_GraphicsCore_setDriverPreference);
+        tolua_function(tolua_S,"setVulkanMinAndroidApiLevel", lua_ax_rhi_GraphicsCore_setVulkanMinAndroidApiLevel);
+        tolua_function(tolua_S,"setVulkanInterop", lua_ax_rhi_GraphicsCore_setVulkanInterop);
+        tolua_function(tolua_S,"setDriverPriority", lua_ax_rhi_GraphicsCore_setDriverPriority);
+        tolua_function(tolua_S,"getDriverPriority", lua_ax_rhi_GraphicsCore_getDriverPriority);
+        tolua_function(tolua_S,"makeCurrentDriver", lua_ax_rhi_GraphicsCore_makeCurrentDriver);
+        tolua_function(tolua_S,"activateCurrentDriver", lua_ax_rhi_GraphicsCore_activateCurrentDriver);
+        tolua_function(tolua_S,"destroyCurrentDriver", lua_ax_rhi_GraphicsCore_destroyCurrentDriver);
+        tolua_function(tolua_S,"currentDriver", lua_ax_rhi_GraphicsCore_currentDriver);
+        tolua_function(tolua_S,"currentDriverType", lua_ax_rhi_GraphicsCore_currentDriverType);
+        tolua_function(tolua_S,"isOpenGL", lua_ax_rhi_GraphicsCore_isOpenGL);
+        tolua_function(tolua_S,"isMetal", lua_ax_rhi_GraphicsCore_isMetal);
+        tolua_function(tolua_S,"isD3D11", lua_ax_rhi_GraphicsCore_isD3D11);
+        tolua_function(tolua_S,"isD3D12", lua_ax_rhi_GraphicsCore_isD3D12);
+        tolua_function(tolua_S,"isVulkan", lua_ax_rhi_GraphicsCore_isVulkan);
+        tolua_function(tolua_S,"currentShaderLang", lua_ax_rhi_GraphicsCore_currentShaderLang);
+        tolua_function(tolua_S,"currentShaderProfile", lua_ax_rhi_GraphicsCore_currentShaderProfile);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::rhi::DriverContext).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axr.DriverContext";
-    g_typeCast[typeName] = "axr.DriverContext";
+    auto typeName = typeid(ax::rhi::GraphicsCore).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axr.GraphicsCore";
+    g_typeCast[typeName] = "axr.GraphicsCore";
     return 1;
 }
 TOLUA_API int register_all_ax_rhi(lua_State* tolua_S)
@@ -3834,7 +4022,6 @@ TOLUA_API int register_all_ax_rhi(lua_State* tolua_S)
     lua_register_ax_rhi_BufferUsage(tolua_S);
     lua_register_ax_rhi_BufferType(tolua_S);
     lua_register_ax_rhi_ShaderStage(tolua_S);
-    lua_register_ax_rhi_VertexFormat(tolua_S);
     lua_register_ax_rhi_PixelFormat(tolua_S);
     lua_register_ax_rhi_TextureUsage(tolua_S);
     lua_register_ax_rhi_IndexFormat(tolua_S);
@@ -3849,11 +4036,11 @@ TOLUA_API int register_all_ax_rhi(lua_State* tolua_S)
     lua_register_ax_rhi_TextureCubeFace(tolua_S);
     lua_register_ax_rhi_ShaderCache(tolua_S);
     lua_register_ax_rhi_Program(tolua_S);
-    lua_register_ax_rhi_VertexLayout(tolua_S);
     lua_register_ax_rhi_ProgramState(tolua_S);
     lua_register_ax_rhi_Texture(tolua_S);
+    lua_register_ax_rhi_VertexLayout(tolua_S);
     lua_register_ax_rhi_DriverBase(tolua_S);
-    lua_register_ax_rhi_DriverContext(tolua_S);
+    lua_register_ax_rhi_GraphicsCore(tolua_S);
 
     tolua_endmodule(tolua_S);
     return 1;

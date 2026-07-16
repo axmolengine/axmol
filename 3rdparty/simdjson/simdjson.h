@@ -1,4 +1,4 @@
-/* auto-generated on 2026-04-17 17:22:06 -0400. version 4.6.3 Do not edit! */
+/* auto-generated on 2026-05-06 17:28:39 -0400. version 4.6.4 Do not edit! */
 /* including simdjson.h:  */
 /* begin file simdjson.h */
 #ifndef SIMDJSON_H
@@ -2538,7 +2538,7 @@ namespace std {
 #define SIMDJSON_SIMDJSON_VERSION_H
 
 /** The version of simdjson being used (major.minor.revision) */
-#define SIMDJSON_VERSION "4.6.3"
+#define SIMDJSON_VERSION "4.6.4"
 
 namespace simdjson {
 enum {
@@ -2553,7 +2553,7 @@ enum {
   /**
    * The revision (major.minor.REVISION) of simdjson being used.
    */
-  SIMDJSON_VERSION_REVISION = 3
+  SIMDJSON_VERSION_REVISION = 4
 };
 } // namespace simdjson
 
@@ -39794,6 +39794,7 @@ simdjson_warn_unused simdjson_result<std::string> extract_fractured_json(
 /* begin file simdjson/generic/builder/json_string_builder-inl.h for arm64 */
 #include <array>
 #include <cstring>
+#include <limits>
 #include <type_traits>
 #ifndef SIMDJSON_GENERIC_STRING_BUILDER_INL_H
 
@@ -40549,6 +40550,11 @@ simdjson_inline void string_builder::append(number_type v) noexcept {
 simdjson_inline void
 string_builder::escape_and_append(std::string_view input) noexcept {
   // escaping might turn a control character into \x00xx so 6 characters.
+  // Guard against size_t overflow in the multiplication below.
+  if (input.size() > (std::numeric_limits<size_t>::max)() / 6) {
+    set_valid(false);
+    return;
+  }
   if (capacity_check(6 * input.size())) {
     position += write_string_escaped(input, buffer.get() + position);
   }
@@ -40557,6 +40563,11 @@ string_builder::escape_and_append(std::string_view input) noexcept {
 simdjson_inline void
 string_builder::escape_and_append_with_quotes(std::string_view input) noexcept {
   // escaping might turn a control character into \x00xx so 6 characters.
+  // Guard against size_t overflow in the arithmetic below.
+  if (input.size() > ((std::numeric_limits<size_t>::max)() - 2) / 6) {
+    set_valid(false);
+    return;
+  }
   if (capacity_check(2 + 6 * input.size())) {
     buffer.get()[position++] = '"';
     position += write_string_escaped(input, buffer.get() + position);
@@ -41878,6 +41889,7 @@ simdjson_warn_unused simdjson_result<std::string> extract_fractured_json(
 /* begin file simdjson/generic/builder/json_string_builder-inl.h for fallback */
 #include <array>
 #include <cstring>
+#include <limits>
 #include <type_traits>
 #ifndef SIMDJSON_GENERIC_STRING_BUILDER_INL_H
 
@@ -42633,6 +42645,11 @@ simdjson_inline void string_builder::append(number_type v) noexcept {
 simdjson_inline void
 string_builder::escape_and_append(std::string_view input) noexcept {
   // escaping might turn a control character into \x00xx so 6 characters.
+  // Guard against size_t overflow in the multiplication below.
+  if (input.size() > (std::numeric_limits<size_t>::max)() / 6) {
+    set_valid(false);
+    return;
+  }
   if (capacity_check(6 * input.size())) {
     position += write_string_escaped(input, buffer.get() + position);
   }
@@ -42641,6 +42658,11 @@ string_builder::escape_and_append(std::string_view input) noexcept {
 simdjson_inline void
 string_builder::escape_and_append_with_quotes(std::string_view input) noexcept {
   // escaping might turn a control character into \x00xx so 6 characters.
+  // Guard against size_t overflow in the arithmetic below.
+  if (input.size() > ((std::numeric_limits<size_t>::max)() - 2) / 6) {
+    set_valid(false);
+    return;
+  }
   if (capacity_check(2 + 6 * input.size())) {
     buffer.get()[position++] = '"';
     position += write_string_escaped(input, buffer.get() + position);
@@ -44449,6 +44471,7 @@ simdjson_warn_unused simdjson_result<std::string> extract_fractured_json(
 /* begin file simdjson/generic/builder/json_string_builder-inl.h for haswell */
 #include <array>
 #include <cstring>
+#include <limits>
 #include <type_traits>
 #ifndef SIMDJSON_GENERIC_STRING_BUILDER_INL_H
 
@@ -45204,6 +45227,11 @@ simdjson_inline void string_builder::append(number_type v) noexcept {
 simdjson_inline void
 string_builder::escape_and_append(std::string_view input) noexcept {
   // escaping might turn a control character into \x00xx so 6 characters.
+  // Guard against size_t overflow in the multiplication below.
+  if (input.size() > (std::numeric_limits<size_t>::max)() / 6) {
+    set_valid(false);
+    return;
+  }
   if (capacity_check(6 * input.size())) {
     position += write_string_escaped(input, buffer.get() + position);
   }
@@ -45212,6 +45240,11 @@ string_builder::escape_and_append(std::string_view input) noexcept {
 simdjson_inline void
 string_builder::escape_and_append_with_quotes(std::string_view input) noexcept {
   // escaping might turn a control character into \x00xx so 6 characters.
+  // Guard against size_t overflow in the arithmetic below.
+  if (input.size() > ((std::numeric_limits<size_t>::max)() - 2) / 6) {
+    set_valid(false);
+    return;
+  }
   if (capacity_check(2 + 6 * input.size())) {
     buffer.get()[position++] = '"';
     position += write_string_escaped(input, buffer.get() + position);
@@ -47020,6 +47053,7 @@ simdjson_warn_unused simdjson_result<std::string> extract_fractured_json(
 /* begin file simdjson/generic/builder/json_string_builder-inl.h for icelake */
 #include <array>
 #include <cstring>
+#include <limits>
 #include <type_traits>
 #ifndef SIMDJSON_GENERIC_STRING_BUILDER_INL_H
 
@@ -47775,6 +47809,11 @@ simdjson_inline void string_builder::append(number_type v) noexcept {
 simdjson_inline void
 string_builder::escape_and_append(std::string_view input) noexcept {
   // escaping might turn a control character into \x00xx so 6 characters.
+  // Guard against size_t overflow in the multiplication below.
+  if (input.size() > (std::numeric_limits<size_t>::max)() / 6) {
+    set_valid(false);
+    return;
+  }
   if (capacity_check(6 * input.size())) {
     position += write_string_escaped(input, buffer.get() + position);
   }
@@ -47783,6 +47822,11 @@ string_builder::escape_and_append(std::string_view input) noexcept {
 simdjson_inline void
 string_builder::escape_and_append_with_quotes(std::string_view input) noexcept {
   // escaping might turn a control character into \x00xx so 6 characters.
+  // Guard against size_t overflow in the arithmetic below.
+  if (input.size() > ((std::numeric_limits<size_t>::max)() - 2) / 6) {
+    set_valid(false);
+    return;
+  }
   if (capacity_check(2 + 6 * input.size())) {
     buffer.get()[position++] = '"';
     position += write_string_escaped(input, buffer.get() + position);
@@ -49706,6 +49750,7 @@ simdjson_warn_unused simdjson_result<std::string> extract_fractured_json(
 /* begin file simdjson/generic/builder/json_string_builder-inl.h for ppc64 */
 #include <array>
 #include <cstring>
+#include <limits>
 #include <type_traits>
 #ifndef SIMDJSON_GENERIC_STRING_BUILDER_INL_H
 
@@ -50461,6 +50506,11 @@ simdjson_inline void string_builder::append(number_type v) noexcept {
 simdjson_inline void
 string_builder::escape_and_append(std::string_view input) noexcept {
   // escaping might turn a control character into \x00xx so 6 characters.
+  // Guard against size_t overflow in the multiplication below.
+  if (input.size() > (std::numeric_limits<size_t>::max)() / 6) {
+    set_valid(false);
+    return;
+  }
   if (capacity_check(6 * input.size())) {
     position += write_string_escaped(input, buffer.get() + position);
   }
@@ -50469,6 +50519,11 @@ string_builder::escape_and_append(std::string_view input) noexcept {
 simdjson_inline void
 string_builder::escape_and_append_with_quotes(std::string_view input) noexcept {
   // escaping might turn a control character into \x00xx so 6 characters.
+  // Guard against size_t overflow in the arithmetic below.
+  if (input.size() > ((std::numeric_limits<size_t>::max)() - 2) / 6) {
+    set_valid(false);
+    return;
+  }
   if (capacity_check(2 + 6 * input.size())) {
     buffer.get()[position++] = '"';
     position += write_string_escaped(input, buffer.get() + position);
@@ -52709,6 +52764,7 @@ simdjson_warn_unused simdjson_result<std::string> extract_fractured_json(
 /* begin file simdjson/generic/builder/json_string_builder-inl.h for westmere */
 #include <array>
 #include <cstring>
+#include <limits>
 #include <type_traits>
 #ifndef SIMDJSON_GENERIC_STRING_BUILDER_INL_H
 
@@ -53464,6 +53520,11 @@ simdjson_inline void string_builder::append(number_type v) noexcept {
 simdjson_inline void
 string_builder::escape_and_append(std::string_view input) noexcept {
   // escaping might turn a control character into \x00xx so 6 characters.
+  // Guard against size_t overflow in the multiplication below.
+  if (input.size() > (std::numeric_limits<size_t>::max)() / 6) {
+    set_valid(false);
+    return;
+  }
   if (capacity_check(6 * input.size())) {
     position += write_string_escaped(input, buffer.get() + position);
   }
@@ -53472,6 +53533,11 @@ string_builder::escape_and_append(std::string_view input) noexcept {
 simdjson_inline void
 string_builder::escape_and_append_with_quotes(std::string_view input) noexcept {
   // escaping might turn a control character into \x00xx so 6 characters.
+  // Guard against size_t overflow in the arithmetic below.
+  if (input.size() > ((std::numeric_limits<size_t>::max)() - 2) / 6) {
+    set_valid(false);
+    return;
+  }
   if (capacity_check(2 + 6 * input.size())) {
     buffer.get()[position++] = '"';
     position += write_string_escaped(input, buffer.get() + position);
@@ -55186,6 +55252,7 @@ simdjson_warn_unused simdjson_result<std::string> extract_fractured_json(
 /* begin file simdjson/generic/builder/json_string_builder-inl.h for lsx */
 #include <array>
 #include <cstring>
+#include <limits>
 #include <type_traits>
 #ifndef SIMDJSON_GENERIC_STRING_BUILDER_INL_H
 
@@ -55941,6 +56008,11 @@ simdjson_inline void string_builder::append(number_type v) noexcept {
 simdjson_inline void
 string_builder::escape_and_append(std::string_view input) noexcept {
   // escaping might turn a control character into \x00xx so 6 characters.
+  // Guard against size_t overflow in the multiplication below.
+  if (input.size() > (std::numeric_limits<size_t>::max)() / 6) {
+    set_valid(false);
+    return;
+  }
   if (capacity_check(6 * input.size())) {
     position += write_string_escaped(input, buffer.get() + position);
   }
@@ -55949,6 +56021,11 @@ string_builder::escape_and_append(std::string_view input) noexcept {
 simdjson_inline void
 string_builder::escape_and_append_with_quotes(std::string_view input) noexcept {
   // escaping might turn a control character into \x00xx so 6 characters.
+  // Guard against size_t overflow in the arithmetic below.
+  if (input.size() > ((std::numeric_limits<size_t>::max)() - 2) / 6) {
+    set_valid(false);
+    return;
+  }
   if (capacity_check(2 + 6 * input.size())) {
     buffer.get()[position++] = '"';
     position += write_string_escaped(input, buffer.get() + position);
@@ -57686,6 +57763,7 @@ simdjson_warn_unused simdjson_result<std::string> extract_fractured_json(
 /* begin file simdjson/generic/builder/json_string_builder-inl.h for lasx */
 #include <array>
 #include <cstring>
+#include <limits>
 #include <type_traits>
 #ifndef SIMDJSON_GENERIC_STRING_BUILDER_INL_H
 
@@ -58441,6 +58519,11 @@ simdjson_inline void string_builder::append(number_type v) noexcept {
 simdjson_inline void
 string_builder::escape_and_append(std::string_view input) noexcept {
   // escaping might turn a control character into \x00xx so 6 characters.
+  // Guard against size_t overflow in the multiplication below.
+  if (input.size() > (std::numeric_limits<size_t>::max)() / 6) {
+    set_valid(false);
+    return;
+  }
   if (capacity_check(6 * input.size())) {
     position += write_string_escaped(input, buffer.get() + position);
   }
@@ -58449,6 +58532,11 @@ string_builder::escape_and_append(std::string_view input) noexcept {
 simdjson_inline void
 string_builder::escape_and_append_with_quotes(std::string_view input) noexcept {
   // escaping might turn a control character into \x00xx so 6 characters.
+  // Guard against size_t overflow in the arithmetic below.
+  if (input.size() > ((std::numeric_limits<size_t>::max)() - 2) / 6) {
+    set_valid(false);
+    return;
+  }
   if (capacity_check(2 + 6 * input.size())) {
     buffer.get()[position++] = '"';
     position += write_string_escaped(input, buffer.get() + position);
@@ -60190,6 +60278,7 @@ simdjson_warn_unused simdjson_result<std::string> extract_fractured_json(
 /* begin file simdjson/generic/builder/json_string_builder-inl.h for rvv_vls */
 #include <array>
 #include <cstring>
+#include <limits>
 #include <type_traits>
 #ifndef SIMDJSON_GENERIC_STRING_BUILDER_INL_H
 
@@ -60945,6 +61034,11 @@ simdjson_inline void string_builder::append(number_type v) noexcept {
 simdjson_inline void
 string_builder::escape_and_append(std::string_view input) noexcept {
   // escaping might turn a control character into \x00xx so 6 characters.
+  // Guard against size_t overflow in the multiplication below.
+  if (input.size() > (std::numeric_limits<size_t>::max)() / 6) {
+    set_valid(false);
+    return;
+  }
   if (capacity_check(6 * input.size())) {
     position += write_string_escaped(input, buffer.get() + position);
   }
@@ -60953,6 +61047,11 @@ string_builder::escape_and_append(std::string_view input) noexcept {
 simdjson_inline void
 string_builder::escape_and_append_with_quotes(std::string_view input) noexcept {
   // escaping might turn a control character into \x00xx so 6 characters.
+  // Guard against size_t overflow in the arithmetic below.
+  if (input.size() > ((std::numeric_limits<size_t>::max)() - 2) / 6) {
+    set_valid(false);
+    return;
+  }
   if (capacity_check(2 + 6 * input.size())) {
     buffer.get()[position++] = '"';
     position += write_string_escaped(input, buffer.get() + position);

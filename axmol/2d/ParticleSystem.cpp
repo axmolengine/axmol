@@ -797,7 +797,7 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
                 val        = powf(val, 1 / shape.edgeBias);
                 auto point = Vec2(0.0F, val * shape.innerRadius);
                 point      = point.rotateByAngle(
-                    Vec2::ZERO, -AX_DEGREES_TO_RADIANS(shape.coneOffset + shape.coneAngle / 2 * _rng.rangef()));
+                    Vec2::zero, -AX_DEGREES_TO_RADIANS(shape.coneOffset + shape.coneAngle / 2 * _rng.rangef()));
                 _particleData.posx[i] = _sourcePosition.x + shape.x + point.x / 2;
                 _particleData.posy[i] = _sourcePosition.y + shape.y + point.y / 2;
 
@@ -810,7 +810,7 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
                 auto point = Vec2(0.0F, ((val * (shape.outerRadius - shape.innerRadius) + shape.outerRadius) -
                                          (shape.outerRadius - shape.innerRadius)));
                 point      = point.rotateByAngle(
-                    Vec2::ZERO, -AX_DEGREES_TO_RADIANS(shape.coneOffset + shape.coneAngle / 2 * _rng.rangef()));
+                    Vec2::zero, -AX_DEGREES_TO_RADIANS(shape.coneOffset + shape.coneAngle / 2 * _rng.rangef()));
                 _particleData.posx[i] = _sourcePosition.x + shape.x + point.x / 2;
                 _particleData.posy[i] = _sourcePosition.y + shape.y + point.y / 2;
 
@@ -840,7 +840,7 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
                 point.x = point.x / size.x * overrideSize.x * scale.x;
                 point.y = point.y / size.y * overrideSize.y * scale.y;
 
-                point = point.rotateByAngle(Vec2::ZERO, -AX_DEGREES_TO_RADIANS(angle));
+                point = point.rotateByAngle(Vec2::zero, -AX_DEGREES_TO_RADIANS(angle));
 
                 _particleData.posx[i] = _sourcePosition.x + shape.x + point.x;
                 _particleData.posy[i] = _sourcePosition.y + shape.y + point.y;
@@ -1026,7 +1026,7 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
     Vec2 pos;
     if (_positionType == PositionType::FREE)
     {
-        pos = this->convertToWorldSpace(Vec2::ZERO);
+        pos = this->convertToWorldSpace(Vec2::zero);
     }
     else if (_positionType == PositionType::RELATIVE)
     {
@@ -1369,16 +1369,16 @@ void ParticleSystem::setMultiAnimationRandom()
 void ParticleSystem::setAnimationIndicesAtlas()
 {
     // VERTICAL
-    if (_texture->getPixelsHigh() > _texture->getPixelsWide())
+    if (_texture->getHeight() > _texture->getWidth())
     {
-        setAnimationIndicesAtlas(_texture->getPixelsWide(), ParticleSystem::TexAnimDir::VERTICAL);
+        setAnimationIndicesAtlas(_texture->getWidth(), ParticleSystem::TexAnimDir::VERTICAL);
         return;
     }
 
     // HORIZONTAL
-    if (_texture->getPixelsWide() > _texture->getPixelsHigh())
+    if (_texture->getWidth() > _texture->getHeight())
     {
-        setAnimationIndicesAtlas(_texture->getPixelsHigh(), ParticleSystem::TexAnimDir::HORIZONTAL);
+        setAnimationIndicesAtlas(_texture->getHeight(), ParticleSystem::TexAnimDir::HORIZONTAL);
         return;
     }
 
@@ -1391,8 +1391,8 @@ void ParticleSystem::setAnimationIndicesAtlas(unsigned int unifiedCellSize, TexA
 
     resetAnimationIndices();
 
-    auto texWidth  = _texture->getPixelsWide();
-    auto texHeight = _texture->getPixelsHigh();
+    auto texWidth  = _texture->getWidth();
+    auto texHeight = _texture->getHeight();
 
     switch (direction)
     {
@@ -2337,8 +2337,8 @@ void ParticleEmissionMaskCache::bakeEmissionMask(std::string_view maskId,
 
     iter->second = desc;
 
-    AXLOGD("Particle emission mask '{}' baked ({}x{}), {} samples generated taking {:.2f}mb of memory.",
-           (unsigned int)htonl(fourccId), w, h, desc.points.size(), desc.points.size() * 8 / 1e+6);
+    AXLOGD("Particle emission mask '{}' baked ({}x{}), {} samples generated taking {:.2f}mb of memory.", fourccId, w, h,
+           desc.points.size(), desc.points.size() * 8 / 1e+6);
 }
 
 const ParticleEmissionMaskDesc& ParticleEmissionMaskCache::getEmissionMask(uint32_t fourccId)

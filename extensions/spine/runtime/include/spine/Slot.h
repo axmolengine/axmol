@@ -30,20 +30,23 @@
 #ifndef Spine_Slot_h
 #define Spine_Slot_h
 
-#include <spine/Vector.h>
-#include <spine/SpineObject.h>
+#include <spine/Posed.h>
+#include <spine/SlotData.h>
+#include <spine/SlotPose.h>
+#include <spine/Array.h>
 #include <spine/Color.h>
+#include <spine/Update.h>
 
 namespace spine {
-	class SlotData;
-
 	class Bone;
-
 	class Skeleton;
-
 	class Attachment;
 
-	class SP_API Slot : public SpineObject {
+	/// Organizes attachments for Skeleton drawOrder purposes and provide a place to store state for an attachment.
+	///
+	/// State cannot be stored in an attachment itself because attachments are stateless and may be shared across multiple
+	/// skeletons.
+	class SP_API Slot : public PosedGeneric<SlotData, SlotPose, SlotPose> {
 		friend class VertexAttachment;
 
 		friend class Skeleton;
@@ -51,6 +54,8 @@ namespace spine {
 		friend class SkeletonBounds;
 
 		friend class SkeletonClipping;
+
+		friend class SlotCurveTimeline;
 
 		friend class AttachmentTimeline;
 
@@ -88,49 +93,20 @@ namespace spine {
 
 		friend class TwoColorTimeline;
 
+		friend class AnimationState;
+
 	public:
-		Slot(SlotData &data, Bone &bone);
+		Slot(SlotData &data, Skeleton &skeleton);
 
-		void setToSetupPose();
-
-		SlotData &getData();
-
+		/// The bone this slot belongs to.
 		Bone &getBone();
 
-		Skeleton &getSkeleton();
-
-		Color &getColor();
-
-		Color &getDarkColor();
-
-		bool hasDarkColor();
-
-		/// May be NULL.
-		Attachment *getAttachment();
-
-		void setAttachment(Attachment *inValue);
-
-		int getAttachmentState();
-
-		void setAttachmentState(int state);
-
-		Vector<float> &getDeform();
-
-		int getSequenceIndex();
-
-		void setSequenceIndex(int index);
+		void setupPose() override;
 
 	private:
-		SlotData &_data;
-		Bone &_bone;
 		Skeleton &_skeleton;
-		Color _color;
-		Color _darkColor;
-		bool _hasDarkColor;
-		Attachment *_attachment;
+		Bone &_bone;
 		int _attachmentState;
-		int _sequenceIndex;
-		Vector<float> _deform;
 	};
 }
 

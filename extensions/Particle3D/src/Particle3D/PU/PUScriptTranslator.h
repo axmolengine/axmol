@@ -668,11 +668,11 @@ public:
                     Color* result,
                     int maxEntries = 4);
 
-    /** Parse Quaternion
+    /** Parse Quat
      */
     bool getQuaternion(PUAbstractNodeList::const_iterator i,
                        PUAbstractNodeList::const_iterator end,
-                       Quaternion* result,
+                       Quat* result,
                        int maxEntries = 4);
 
     /** Validate a property.
@@ -729,7 +729,7 @@ public:
      */
     bool passValidatePropertyValidVector4(PUScriptCompiler* compiler, PUPropertyAbstractNode* prop);
 
-    /** Validate whether the value is a correct Quaternion.
+    /** Validate whether the value is a correct Quat.
      */
     bool passValidatePropertyValidQuaternion(PUScriptCompiler* compiler, PUPropertyAbstractNode* prop);
 

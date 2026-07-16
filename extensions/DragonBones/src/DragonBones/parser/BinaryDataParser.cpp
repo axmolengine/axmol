@@ -1,4 +1,4 @@
-﻿#include "BinaryDataParser.h"
+#include "BinaryDataParser.h"
 
 DRAGONBONES_NAMESPACE_BEGIN
 
@@ -26,7 +26,7 @@ TimelineData* BinaryDataParser::_parseBinaryTimeline(TimelineType type, unsigned
         timeline->frameIndicesOffset = frameIndicesOffset;
         frameIndices.resize(frameIndicesOffset + totalFrameCount);
 
-        for (std::size_t i = 0, iK = 0, frameStart = 0, frameCount = 0; i < totalFrameCount; ++i)
+        for (size_t i = 0, iK = 0, frameStart = 0, frameCount = 0; i < totalFrameCount; ++i)
         {
             if (frameStart + frameCount <= i && iK < keyFrameCount)
             {
@@ -69,7 +69,7 @@ void BinaryDataParser::_parseVertices(const rapidjson::Value& rawData, VerticesD
         const auto boneCount   = (unsigned)_intArray[weightOffset + (unsigned)BinaryOffset::WeigthBoneCount];
         weight->offset         = weightOffset;
 
-        for (std::size_t i = 0; i < boneCount; ++i)
+        for (size_t i = 0; i < boneCount; ++i)
         {
             const auto boneIndex = _intArray[weightOffset + (unsigned)BinaryOffset::WeigthBoneIndices + i];
             weight->addBone(_rawBones[boneIndex]);
@@ -77,7 +77,7 @@ void BinaryDataParser::_parseVertices(const rapidjson::Value& rawData, VerticesD
 
         auto boneIndicesOffset = weightOffset + (unsigned)BinaryOffset::WeigthBoneIndices + boneCount;
         unsigned weightCount   = 0;
-        for (std::size_t i = 0, l = vertexCount; i < l; ++i)
+        for (size_t i = 0, l = vertexCount; i < l; ++i)
         {
             const auto vertexBoneCount = (unsigned)_intArray[boneIndicesOffset++];
             weightCount += vertexBoneCount;
@@ -138,7 +138,7 @@ AnimationData* BinaryDataParser::_parseAnimation(const rapidjson::Value& rawData
             }
 
             const auto& rawTimelines = *&(iterator->value);
-            for (std::size_t i = 0, l = rawTimelines.Size(); i < l; i += 2)
+            for (size_t i = 0, l = rawTimelines.Size(); i < l; i += 2)
             {
                 const auto timelineType   = (TimelineType)rawTimelines[i].GetInt();
                 const auto timelineOffset = rawTimelines[i + 1].GetUint();
@@ -160,7 +160,7 @@ AnimationData* BinaryDataParser::_parseAnimation(const rapidjson::Value& rawData
             }
 
             const auto& rawTimelines = *&(iterator->value);
-            for (std::size_t i = 0, l = rawTimelines.Size(); i < l; i += 2)
+            for (size_t i = 0, l = rawTimelines.Size(); i < l; i += 2)
             {
                 const auto timelineType   = (TimelineType)rawTimelines[i].GetInt();
                 const auto timelineOffset = rawTimelines[i + 1].GetUint();
@@ -182,7 +182,7 @@ AnimationData* BinaryDataParser::_parseAnimation(const rapidjson::Value& rawData
             }
 
             const auto& rawTimelines = *&(iterator->value);
-            for (std::size_t i = 0, l = rawTimelines.Size(); i < l; i += 2)
+            for (size_t i = 0, l = rawTimelines.Size(); i < l; i += 2)
             {
                 const auto timelineType   = (TimelineType)rawTimelines[i].GetInt();
                 const auto timelineOffset = rawTimelines[i + 1].GetUint();
@@ -220,7 +220,7 @@ DragonBonesData* BinaryDataParser::parseDragonBonesData(const char* rawData, flo
         return nullptr;
     }
 
-    const auto headerLength = (std::size_t)(((uint32_t*)(rawData + 8))[0]);
+    const auto headerLength = (size_t)(((uint32_t*)(rawData + 8))[0]);
     const auto headerBytes  = rawData + 8 + 4;
     rapidjson::Document document;
     document.Parse(headerBytes, headerLength);

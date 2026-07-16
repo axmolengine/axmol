@@ -41,7 +41,7 @@
 #    include "axmol/scene/Scene.h"
 #    include "axmol/base/Director.h"
 #    include "axmol/base/EventDispatcher.h"
-#    include "axmol/base/EventCustom.h"
+#    include "axmol/base/CustomEvent.h"
 #    include "axmol/base/JobSystem.h"
 #    include "box2d/constants.h"
 

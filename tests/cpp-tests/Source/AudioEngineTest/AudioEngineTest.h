@@ -66,6 +66,7 @@ public:
 private:
     int _audioID;
     bool _loopEnabled;
+    bool _hrtfEnabled;
     float _volume;
     float _duration;
     float _timeRatio;

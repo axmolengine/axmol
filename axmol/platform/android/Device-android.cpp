@@ -38,6 +38,24 @@ static const char* deviceHelperClassName = "dev.axmol.lib.AxmolEngine";
 namespace ax
 {
 
+void Device::getClipboardText(std::function<void(std::string_view)> callback)
+{
+    if (!callback)
+        return;
+    std::string text = JniHelper::callStaticStringMethod(deviceHelperClassName, "getClipboardText");
+    callback(text);
+}
+
+void Device::setClipboardText(std::string_view text)
+{
+    JniHelper::callStaticVoidMethod(deviceHelperClassName, "setClipboardText", std::string{text}.c_str());
+}
+
+void Device::clearClipboard()
+{
+    JniHelper::callStaticVoidMethod(deviceHelperClassName, "clearClipboard");
+}
+
 int Device::getDPI()
 {
     static int dpi = -1;

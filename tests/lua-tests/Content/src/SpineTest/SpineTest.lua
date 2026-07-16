@@ -56,8 +56,8 @@ function SpineTestLayerNormal:init()
   skeletonNode:setPosition(ax.p(windowSize.width / 2, 20))
   self:addChild(skeletonNode)
 
-  local listener = ax.EventListenerTouchOneByOne:create()
-  listener:registerScriptHandler(function (touch, event)
+  local listener = ax.PointerEventListener:create()
+  listener:registerScriptHandler(function(event)
         if not skeletonNode:getDebugBonesEnabled() then
             skeletonNode:setDebugBonesEnabled(true)
         elseif skeletonNode:getTimeScale() == 1 then
@@ -68,7 +68,7 @@ function SpineTestLayerNormal:init()
         end
 
         return true
-    end,ax.Handler.EVENT_TOUCH_BEGAN )
+    end,ax.Handler.EVENT_POINTER_DOWN )
 
   local eventDispatcher = self:getEventDispatcher()
   eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)
@@ -107,8 +107,8 @@ function SpineTestLayerFFD:init()
   skeletonNode:setPosition(ax.p(windowSize.width / 2, 20))
   self:addChild(skeletonNode)
 
-  local listener = ax.EventListenerTouchOneByOne:create()
-  listener:registerScriptHandler(function (touch, event)
+  local listener = ax.PointerEventListener:create()
+  listener:registerScriptHandler(function(event)
         if not skeletonNode:getDebugBonesEnabled() then
             skeletonNode:setDebugBonesEnabled(true)
         elseif skeletonNode:getTimeScale() == 1 then
@@ -119,7 +119,7 @@ function SpineTestLayerFFD:init()
         end
 
         return true
-    end,ax.Handler.EVENT_TOUCH_BEGAN )
+    end,ax.Handler.EVENT_POINTER_DOWN )
 
   local eventDispatcher = self:getEventDispatcher()
   eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)

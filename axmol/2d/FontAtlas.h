@@ -46,8 +46,8 @@ namespace ax
 {
 
 class Font;
-class EventCustom;
-class EventListenerCustom;
+class CustomEvent;
+class CustomEventListener;
 class FontFreeType;
 
 struct FontLetterDefinition
@@ -106,7 +106,7 @@ public:
     /** listen the event that renderer was recreated on Android/WP8
      It only has effect on Android and WP8.
      */
-    void listenRendererRecreated(EventCustom* event);
+    void listenRendererRecreated(CustomEvent* event);
 
     /** Clear textures atlas.
      It will clear the textures atlas and if multiple texture exist in the FontAtlas.
@@ -175,7 +175,7 @@ protected:
     int _letterEdgeExtend   = 0;
 
     int _fontAscender                               = 0;
-    EventListenerCustom* _rendererRecreatedListener = nullptr;
+    CustomEventListener* _rendererRecreatedListener = nullptr;
     bool _antialiasEnabled                          = true;
     int _currLineHeight                             = 0;
 

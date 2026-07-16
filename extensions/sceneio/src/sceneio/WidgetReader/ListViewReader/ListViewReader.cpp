@@ -24,7 +24,7 @@
 
 #include "sceneio/WidgetReader/ListViewReader/ListViewReader.h"
 
-#include "axmol/ui/UIListView.h"
+#include "axmol/ui/ListView.h"
 #include "axmol/platform/FileUtils.h"
 #include "axmol/2d/SpriteFrameCache.h"
 #include "sceneext/CocoLoader.h"
@@ -562,7 +562,7 @@ void ListViewReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::
     }
     else
     {
-        if (!listView->isIgnoreContentAdaptWithSize())
+        if (!listView->isAutoSize())
         {
             Size contentSize(widgetOptions->size()->width(), widgetOptions->size()->height());
             listView->setContentSize(contentSize);

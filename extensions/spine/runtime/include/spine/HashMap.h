@@ -30,37 +30,38 @@
 #ifndef Spine_HashMap_h
 #define Spine_HashMap_h
 
-#include <spine/Vector.h>
+#include <spine/Array.h>
 #include <spine/SpineObject.h>
 
 // Required for new with line number and file name in MSVC
 #ifdef _MSC_VER
-#pragma warning(disable:4291)
+#pragma warning(disable : 4291)
 
-#pragma warning(disable:4251)
+#pragma warning(disable : 4251)
 
 #endif
 
 namespace spine {
 	template<typename K, typename V>
-	class SP_API HashMap : public SpineObject {
+	class HashMap : public SpineObject {
 	private:
 		class Entry;
 
 	public:
-		class SP_API Pair {
+		class Pair {
 		public:
-			explicit Pair(K &k, V &v) : key(k), value(v) {}
+			explicit Pair(K &k, V &v) : key(k), value(v) {
+			}
 
 			K &key;
 			V &value;
 		};
 
-		class SP_API Entries {
+		class Entries {
 		public:
 			friend class HashMap;
 
-			explicit Entries(Entry *entry) : _entry(NULL), _hasChecked(false) {
+			explicit Entries(Entry *entry) : _hasChecked(false) {
 				_start.next = entry;
 				_entry = &_start;
 			}
@@ -85,9 +86,7 @@ namespace spine {
 			Entry *_entry;
 		};
 
-		HashMap() :
-				_head(NULL),
-				_size(0) {
+		HashMap() : _head(NULL), _size(0) {
 		}
 
 		~HashMap() {
@@ -114,7 +113,7 @@ namespace spine {
 				entry->_key = key;
 				entry->_value = value;
 			} else {
-				entry = new(__FILE__, __LINE__) Entry();
+				entry = new (__FILE__, __LINE__) Entry();
 				entry->_key = key;
 				entry->_value = value;
 
@@ -131,7 +130,7 @@ namespace spine {
 			}
 		}
 
-		bool addAll(Vector <K> &keys, const V &value) {
+		bool addAll(Array<K> &keys, const V &value) {
 			size_t oldSize = _size;
 			for (size_t i = 0; i < keys.size(); i++) {
 				put(keys[i], value);
@@ -150,8 +149,10 @@ namespace spine {
 			Entry *prev = entry->prev;
 			Entry *next = entry->next;
 
-			if (prev) prev->next = next;
-			else _head = next;
+			if (prev)
+				prev->next = next;
+			else
+				_head = next;
 			if (next) next->prev = entry->prev;
 
 			delete entry;
@@ -162,7 +163,8 @@ namespace spine {
 
 		V operator[](const K &key) {
 			Entry *entry = find(key);
-			if (entry) return entry->_value;
+			if (entry)
+				return entry->_value;
 			else {
 				assert(false);
 				return 0;
@@ -176,8 +178,7 @@ namespace spine {
 	private:
 		Entry *find(const K &key) {
 			for (Entry *entry = _head; entry != NULL; entry = entry->next) {
-				if (entry->_key == key)
-					return entry;
+				if (entry->_key == key) return entry;
 			}
 			return NULL;
 		}
@@ -189,7 +190,8 @@ namespace spine {
 			Entry *next;
 			Entry *prev;
 
-			Entry() : next(NULL), prev(NULL) {}
+			Entry() : next(NULL), prev(NULL) {
+			}
 		};
 
 		Entry *_head;

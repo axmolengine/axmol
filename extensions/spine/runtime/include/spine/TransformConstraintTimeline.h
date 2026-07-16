@@ -31,29 +31,38 @@
 #define Spine_TransformConstraintTimeline_h
 
 #include <spine/CurveTimeline.h>
+#include <spine/ConstraintTimeline.h>
 
 namespace spine {
 
-	class SP_API TransformConstraintTimeline : public CurveTimeline {
+	/// Changes a transform constraint's rotate, x, y, scaleX, scaleY, and shearY mix values.
+	class SP_API TransformConstraintTimeline : public CurveTimeline, public ConstraintTimeline {
 		friend class SkeletonBinary;
 
 		friend class SkeletonJson;
 
-	RTTI_DECL
+		RTTI_DECL
 
 	public:
 		explicit TransformConstraintTimeline(size_t frameCount, size_t bezierCount, int transformConstraintIndex);
 
-		virtual void
-		apply(Skeleton &skeleton, float lastTime, float time, Vector<Event *> *pEvents, float alpha, MixBlend blend,
-			  MixDirection direction);
+		virtual ~TransformConstraintTimeline();
 
-		void setFrame(size_t frameIndex, float time, float mixRotate, float mixX, float mixY, float mixScaleX,
-					  float mixScaleY, float mixShearY);
+		virtual void apply(Skeleton &skeleton, float lastTime, float time, Array<Event *> *events, float alpha, MixFrom from, bool add, bool out,
+						   bool appliedPose) override;
 
-		int getTransformConstraintIndex() { return _constraintIndex; }
+		/// Sets the time, rotate mix, translate mix, scale mix, and shear mix for the specified frame.
+		/// @param frame Between 0 and frameCount, inclusive.
+		/// @param time The frame time in seconds.
+		void setFrame(int frame, float time, float mixRotate, float mixX, float mixY, float mixScaleX, float mixScaleY, float mixShearY);
 
-		void setTransformConstraintIndex(int inValue) { _constraintIndex = inValue; }
+		virtual int getConstraintIndex() const override {
+			return _constraintIndex;
+		}
+
+		virtual void setConstraintIndex(int inValue) override {
+			_constraintIndex = inValue;
+		}
 
 	private:
 		int _constraintIndex;

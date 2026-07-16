@@ -118,6 +118,8 @@ static void fromD3DTexDesc(TextureDesc& td, const D3D11_TEXTURE2D_DESC& desc)
 TextureImpl::TextureImpl(ID3D11Device* device, const TextureDesc& desc) : _device(device)
 {
     updateTextureDesc(desc);
+    if (desc.textureUsage == TextureUsage::RENDER_TARGET)
+        ensureNativeTexture();
 }
 
 TextureImpl::TextureImpl(ID3D11Device* device, ID3D11Texture2D* texture) : _device(device)
@@ -166,7 +168,7 @@ void TextureImpl::updateData(const void* data, int width, int height, int level,
 void TextureImpl::updateCompressedData(const void* data,
                                        int width,
                                        int height,
-                                       std::size_t dataSize,
+                                       size_t dataSize,
                                        int level,
                                        int layerIndex /*=0*/)
 {
@@ -210,7 +212,7 @@ void TextureImpl::updateCompressedSubData(int xoffset,
                                           int yoffset,
                                           int width,
                                           int height,
-                                          std::size_t /*dataSize*/,
+                                          size_t /*dataSize*/,
                                           int level,
                                           const void* data,
                                           int layerIndex /*=0*/)

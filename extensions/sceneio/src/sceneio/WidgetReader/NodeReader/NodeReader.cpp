@@ -30,7 +30,7 @@
 #include "sceneext/ComExtensionData.h"
 
 #include "flatbuffers/flatbuffers.h"
-#include "axmol/ui/UILayoutComponent.h"
+#include "axmol/ui/LayoutComponent.h"
 
 using namespace flatbuffers;
 

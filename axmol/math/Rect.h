@@ -164,11 +164,11 @@ public:
     /**Compute the min rect which can contain this and rect, assign it to this.*/
     void merge(const Rect& rect);
     /**An empty Rect.*/
-    static const Rect ZERO;
+    static const Rect zero;
 };
 
 #if !(defined(AX_DLLEXPORT) || defined(AX_DLLIMPORT))
-inline constexpr Rect Rect::ZERO(0, 0, 0, 0);
+inline constexpr Rect Rect::zero{0, 0, 0, 0};
 #endif
 
 }  // namespace ax

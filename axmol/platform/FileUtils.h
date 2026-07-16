@@ -746,7 +746,7 @@ protected:
         // As axmol uses c++17+, we will use std::bind to leverage move sematics to
         // move our arguments into our lambda, to potentially avoid copying.
         auto lambda = std::bind([](const T& actionIn, const R& callbackIn, const ARGS&... argsIn) {
-            Director::getInstance()->getScheduler()->runOnAxmolThread(std::bind(callbackIn, actionIn(argsIn...)));
+            Director::getInstance()->postTask(std::bind(callbackIn, actionIn(argsIn...)));
         }, std::forward<T>(action), std::forward<R>(callback), std::forward<ARGS>(args)...);
 
         Director::getInstance()->getJobSystem()->enqueue(std::move(lambda));

@@ -22,14 +22,13 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __cocos2d_tests__Bug_14327__
-#define __cocos2d_tests__Bug_14327__
+#pragma once
 
 #include "BugsTest.h"
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 
-#    include "axmol/ui/UIEditBox/UIEditBox.h"
+#    include "axmol/ui/EditBox/EditBox.h"
 
 class Bug14327Layer : public BugsTestBase, public ax::ui::EditBoxDelegate
 {
@@ -55,5 +54,3 @@ private:
 };
 
 #endif
-
-#endif /* defined(__cocos2d_tests__Bug_14327__) */

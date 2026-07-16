@@ -53,7 +53,7 @@ public:
 
     void createSpriteTest();
     void createNewSpriteTest();
-    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onPointerUp(ax::PointerEvent* event);
 
 protected:
     NewSpriteTest();
@@ -80,9 +80,9 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
-    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
-    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    bool onPointerDown(ax::PointerEvent* event);
+    void onPointerMove(ax::PointerEvent* event);
+    void onPointerUp(ax::PointerEvent* event);
 
 protected:
     NewClippingNodeTest();
@@ -114,8 +114,8 @@ public:
 protected:
     NewCullingTest();
     virtual ~NewCullingTest();
-    bool onTouchBegan(ax::Touch* touch, ax::Event* event);
-    void onTouchMoved(ax::Touch* touch, ax::Event* event);
+    bool onPointerDown(ax::PointerEvent* event);
+    void onPointerMove(ax::PointerEvent* event);
     ax::Vec2 _lastPos;
 };
 

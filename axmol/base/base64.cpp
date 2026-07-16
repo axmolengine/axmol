@@ -48,7 +48,7 @@ AX_DLL signed char const* get_inverse()
     return &tab[0];
 }
 
-AX_DLL std::size_t encode(void* dest, void const* src, std::size_t len)
+AX_DLL size_t encode(void* dest, void const* src, size_t len)
 {
     char* out      = static_cast<char*>(dest);
     char const* in = static_cast<char const*>(src);
@@ -86,7 +86,7 @@ AX_DLL std::size_t encode(void* dest, void const* src, std::size_t len)
     return out - static_cast<char*>(dest);
 }
 
-AX_DLL std::size_t decode(void* dest, char const* src, std::size_t len)
+AX_DLL size_t decode(void* dest, char const* src, size_t len)
 {
     char* out = static_cast<char*>(dest);
     auto in   = reinterpret_cast<unsigned char const*>(src);

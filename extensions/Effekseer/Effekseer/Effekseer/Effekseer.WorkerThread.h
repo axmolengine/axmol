@@ -1,4 +1,4 @@
-﻿
+
 #ifndef __EFFEKSEER_WORKER_THREAD_H__
 #define __EFFEKSEER_WORKER_THREAD_H__
 

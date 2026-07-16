@@ -46,21 +46,18 @@ static void PVRFrameEnableControlWindow(bool bEnable);
 namespace ax
 {
 
-// sharedApplication pointer
-Application* Application::sm_pSharedApplication = nullptr;
-
 Application::Application() : _instance(nullptr), _accelTable(nullptr)
 {
     _instance                   = GetModuleHandle(nullptr);
     _animationInterval.QuadPart = 0;
-    AX_ASSERT(!sm_pSharedApplication);
-    sm_pSharedApplication = this;
+    AX_ASSERT(!s_axmolApp);
+    s_axmolApp = this;
 }
 
 Application::~Application()
 {
-    AX_ASSERT(this == sm_pSharedApplication);
-    sm_pSharedApplication = nullptr;
+    AX_ASSERT(this == s_axmolApp);
+    s_axmolApp = nullptr;
 }
 
 int Application::run()
@@ -84,7 +81,7 @@ int Application::run()
 
     QueryPerformanceCounter(&nLast);
 
-    initContextAttrs();
+    applicationWillLaunch();
 
     // Initialize instance and axmol.
     if (!applicationDidFinishLaunching())
@@ -107,12 +104,14 @@ int Application::run()
     while (!renderView->windowShouldClose())
     {
         QueryPerformanceCounter(&nNow);
+
+        director->performFrameBoundaryTasks();
+
         interval = nNow.QuadPart - nLast.QuadPart;
         if (interval >= _animationInterval.QuadPart)
         {
             nLast.QuadPart = nNow.QuadPart;
-            director->renderFrame();
-            renderView->pollEvents();
+            director->stepFrame();
         }
         else
         {
@@ -131,7 +130,7 @@ int Application::run()
     if (renderView->isGfxContextReady())
     {
         director->end();
-        director->renderFrame();
+        director->stepFrame();
         director = nullptr;
     }
     renderView->release();
@@ -144,15 +143,6 @@ void Application::setAnimationInterval(float interval)
     LARGE_INTEGER freq;
     QueryPerformanceFrequency(&freq);
     _animationInterval.QuadPart = (LONGLONG)(interval * freq.QuadPart);
-}
-
-//////////////////////////////////////////////////////////////////////////
-// static member function
-//////////////////////////////////////////////////////////////////////////
-Application* Application::getInstance()
-{
-    AX_ASSERT(sm_pSharedApplication);
-    return sm_pSharedApplication;
 }
 
 LanguageType Application::getCurrentLanguage()
@@ -303,12 +293,6 @@ bool Application::openURL(std::string_view url)
     std::wstring wURL = ntcvt::from_chars(url, CP_UTF8);
     HINSTANCE r       = ShellExecuteW(NULL, L"open", wURL.c_str(), NULL, NULL, SW_SHOWNORMAL);
     return (size_t)r > 32;
-}
-
-void Application::setStartupScriptFilename(std::string_view startupScriptFile)
-{
-    _startupScriptFilename = startupScriptFile;
-    std::replace(_startupScriptFilename.begin(), _startupScriptFilename.end(), '\\', '/');
 }
 
 }  // namespace ax

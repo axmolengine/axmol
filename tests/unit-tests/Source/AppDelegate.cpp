@@ -33,7 +33,7 @@ using namespace ax;
 
 static Vec2 gWindowSize = Vec2(1024, 768);
 
-void AppDelegate::initContextAttrs()
+void AppDelegate::applicationWillLaunch()
 {
     // set context attributes: red,green,blue,alpha,depth,stencil
     ContextAttrs contextAttrs = {8, 8, 8, 8, 24, 8, 0};
@@ -56,9 +56,9 @@ bool AppDelegate::applicationDidFinishLaunching()
     {
         std::string title = "Unit Tests";
 #ifdef AX_PLATFORM_GLFW
-        renderView = RenderViewImpl::createWithRect(title, Rect(0, 0, gWindowSize.x, gWindowSize.y), 1.0F, true);
+        renderView = RenderView::createWithRect(title, Rect(0, 0, gWindowSize.x, gWindowSize.y), 1.0F, true);
 #else
-        renderView = RenderViewImpl::createWithRect(title, Rect(0, 0, gWindowSize.x, gWindowSize.y));
+        renderView = RenderView::createWithRect(title, Rect(0, 0, gWindowSize.x, gWindowSize.y));
 #endif
         director->setRenderView(renderView);
     }

@@ -28,10 +28,10 @@ THE SOFTWARE.
 
 #include "axmol/base/Environment.h"
 #include "axmol/platform/FileUtils.h"
-#include "axmol/base/EventCustom.h"
+#include "axmol/base/CustomEvent.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/EventDispatcher.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 
 namespace ax
 {
@@ -43,8 +43,7 @@ Environment* Environment::s_sharedEnvironment = nullptr;
 const char* Environment::CONFIG_FILE_LOADED = "config_file_loaded";
 
 Environment::Environment()
-    : _maxModelviewStackDepth(0)
-    , _supportsPVRTC(false)
+    : _supportsPVRTC(false)
     , _supportsETC1(false)
     , _supportsETC2(false)
     , _supportsS3TC(false)
@@ -62,7 +61,7 @@ Environment::Environment()
     , _maxSpotLightInShader(1)
     , _animate3DQuality(Animate3DQuality::QUALITY_LOW)
 {
-    _loadedEvent = new EventCustom(CONFIG_FILE_LOADED);
+    _loadedEvent = new CustomEvent(CONFIG_FILE_LOADED);
 }
 
 bool Environment::init()
@@ -202,11 +201,6 @@ void Environment::destroyInstance()
 int Environment::getMaxTextureSize() const
 {
     return axdrv->getMaxTextureSize();
-}
-
-int Environment::getMaxModelviewStackDepth() const
-{
-    return _maxModelviewStackDepth;
 }
 
 int Environment::getMaxTextureUnits() const

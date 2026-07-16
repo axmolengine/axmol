@@ -88,7 +88,7 @@ enum class ShaderStage : int16_t
     DEFAULT = FRAGMENT
 };
 
-enum class VertexFormat : uint16_t
+enum class VertexElementType : uint16_t
 {
     FLOAT4,
     FLOAT3,
@@ -167,7 +167,6 @@ enum class PixelFormat : uint8_t
     RGBA8,
     //! 32-bit texture: BGRA8888
     BGRA8,
-    //! 24-bit texture: RGBA888
     RGB8,
     //! 16-bit texture without Alpha channel
     RGB565,  // !render as BGR565
@@ -509,6 +508,11 @@ using SamplerHandle = Handle64;
 /**
  * Store texture description.
  */
+enum class ColorSpace : uint8_t
+{
+    Linear = 0,
+    Srgb   = 1,
+};
 struct TextureDesc
 {
     uint16_t width     = 1;
@@ -519,7 +523,25 @@ struct TextureDesc
     TextureType textureType   = TextureType::TEXTURE_2D;
     PixelFormat pixelFormat   = PixelFormat::RGBA8;
     TextureUsage textureUsage = TextureUsage::READ;
+    ColorSpace colorSpace     = ColorSpace::Linear;
     SamplerDesc samplerDesc{};
+};
+
+/**
+ * Describes a texture owned by an external graphics runtime, such as an OpenXR swapchain image.
+ *
+ * The RHI wrapper does not own nativeTexture when externalOwned is true. Native usage/state fields are
+ * backend-specific integer payloads; unsupported backends ignore fields they do not need.
+ */
+struct ExternalTextureDesc
+{
+    TextureDesc desc{};
+    Handle64 nativeTexture{};
+    Handle64 nativeTextureView{};
+    uint64_t nativeUsage{0};
+    uint64_t nativeState{0};
+    uint64_t nativeFinalState{0};
+    bool externalOwned{true};
 };
 
 /**
@@ -600,7 +622,7 @@ struct UniformLocation
 
 struct UniformLocationHash
 {
-    size_t operator()(UniformLocation const& u) const noexcept { return std::size_t(u.location); }
+    size_t operator()(UniformLocation const& u) const noexcept { return size_t(u.location); }
 };
 
 // vertex input descriptor in vertex shader
@@ -705,7 +727,14 @@ struct ProgramType
 
 struct RectI
 {
-    RectI() { this->x = this->y = this->w = this->h = 0; }
+    constexpr RectI() { this->x = this->y = this->w = this->h = 0; }
+    constexpr RectI(int xx, int yy, int ww, int hh)
+    {
+        this->x = xx;
+        this->y = yy;
+        this->w = ww;
+        this->h = hh;
+    }
     int x;
     int y;
 

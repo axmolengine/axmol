@@ -36,8 +36,8 @@
 namespace ax
 {
 
-class EventListenerCustom;
-class EventCustom;
+class CustomEventListener;
+class CustomEvent;
 class Material;
 
 // it is a common mesh
@@ -74,12 +74,12 @@ public:
     void init(float globalZOrder, const Mat4& transform);
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-    void listenRendererRecreated(EventCustom* event);
+    void listenRendererRecreated(CustomEvent* event);
 #endif
 
 protected:
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-    EventListenerCustom* _rendererRecreatedListener;
+    CustomEventListener* _rendererRecreatedListener;
 #endif
 };
 

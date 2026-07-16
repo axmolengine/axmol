@@ -137,8 +137,8 @@ void App::OnResuming(IInspectable const& sender, IInspectable const& args)
     (void)sender;  // Unused parameter
     (void)args;    // Unused parameter
 
-    if (mPage)
-        mPage.as<SwapChainPage>()->SetVisibility(true);
+    // if (mPage)
+    //     mPage.as<SwapChainPage>()->SetVisibility(true);
 }
 
 /// <summary>

@@ -62,9 +62,11 @@
 #define LIFETIMEBOUND
 #endif
 
-// Axmol spec: The attribute is non-standard and may not provide functional benefit here, 
-// so disabling it avoids compatibility issues without affecting behavior.
+#if HAS_ATTRIBUTE(clang::nonblocking) && !defined(_MSVC_STL_UPDATE)
+#define NONBLOCKING [[clang::nonblocking]]
+#else
 #define NONBLOCKING
+#endif
 
 namespace al {
 

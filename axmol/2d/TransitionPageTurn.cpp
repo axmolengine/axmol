@@ -134,7 +134,7 @@ void TransitionPageTurn::onEnter()
 void TransitionPageTurn::onExit()
 {
     _outSceneProxy->setTarget(nullptr);
-    _outSceneProxy->setTarget(nullptr);
+    _inSceneProxy->setTarget(nullptr);
     _outSceneProxy->onExit();
     _inSceneProxy->onExit();
 

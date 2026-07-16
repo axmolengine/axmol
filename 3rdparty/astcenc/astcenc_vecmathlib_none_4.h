@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // ----------------------------------------------------------------------------
-// Copyright 2019-2025 Arm Limited
+// Copyright 2019-2026 Arm Limited
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy
@@ -764,6 +764,8 @@ ASTCENC_SIMD_INLINE vfloat4 operator/(vfloat4 a, vfloat4 b)
 
 /**
  * @brief Overload: vector by vector equality.
+ *
+ * Returns vector of false mask values if a or b is NaN.
  */
 ASTCENC_SIMD_INLINE vmask4 operator==(vfloat4 a, vfloat4 b)
 {
@@ -775,6 +777,8 @@ ASTCENC_SIMD_INLINE vmask4 operator==(vfloat4 a, vfloat4 b)
 
 /**
  * @brief Overload: vector by vector inequality.
+ *
+ * Returns vector of true mask values if a or b is NaN.
  */
 ASTCENC_SIMD_INLINE vmask4 operator!=(vfloat4 a, vfloat4 b)
 {

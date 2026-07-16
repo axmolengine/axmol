@@ -3,15 +3,17 @@
 #include "axmol/base/Director.h"
 #include "axmol/base/Data.h"
 #if defined(AX_PLATFORM_GLFW)
-#    include "axmol/platform/RenderViewImpl.h"
+#    include "axmol/platform/RenderView.h"
 #endif
 #include "axmol/rhi/Program.h"
 #include "axmol/rhi/ProgramState.h"
 #include "axmol/renderer/ProgramManager.h"
 #include "axmol/renderer/Shaders.h"
 #include "axmol/renderer/Renderer.h"
+#include "axmol/renderer/CustomCommand.h"
 #include "axmol/renderer/CallbackCommand.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/scene/Camera.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include "axmol/rhi/Buffer.h"
 
 using namespace ax;
@@ -284,7 +286,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_Init()
     bd->IndexBufferAllocator  = new BufferPoolAllocator(1 * 1024 * 1024, BufferType::INDEX, BufferUsage::DYNAMIC);
 
 #if (!defined(AX_GLES_PROFILE) || AX_GLES_PROFILE >= 300)
-    if (rhi::DriverContext::isOpenGL())
+    if (rhi::GraphicsCore::isOpenGL())
         io.BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset;  // We can honor the ImDrawCmd::VtxOffset field,
                                                                     // allowing for large meshes.
 #endif
@@ -359,6 +361,8 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderDrawData(ImDrawData* draw_data)
 
     ImGui_ImplAxmol_SetupRenderState(renderer, draw_data, fb_width, fb_height);
 
+    auto drawCallback_ResetState = ImGui::GetPlatformIO().DrawCallback_ResetRenderState;
+
     // Will project scissor/clipping rectangles into framebuffer space
     ImVec2 clip_off   = draw_data->DisplayPos;        // (0,0) unless using multi-viewports
     ImVec2 clip_scale = draw_data->FramebufferScale;  // (1,1) unless using retina display which are often (2,2)
@@ -389,7 +393,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderDrawData(ImDrawData* draw_data)
                 // User callback, registered via ImDrawList::AddCallback()
                 // (ImDrawCallback_ResetRenderState is a special callback value used by the user
                 // to request the renderer to reset render state.)
-                if (pcmd->UserCallback == ImDrawCallback_ResetRenderState)
+                if (pcmd->UserCallback == drawCallback_ResetState)
                     ImGui_ImplAxmol_SetupRenderState(renderer, draw_data, fb_width, fb_height);
                 else
                 {
@@ -415,7 +419,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderDrawData(ImDrawData* draw_data)
 
                     auto bd = ImGui_ImplAxmol_GetBackendData();
 
-                    if (typeid(*((Object*)pcmd->TexRef.GetTexID())) == typeid(Texture2D))
+                    if (dynamic_cast<Texture2D*>((Object*)pcmd->TexRef.GetTexID()))
                     {
                         auto tex = (Texture2D*)(uintptr_t)(pcmd->TexRef.GetTexID());
                         auto cmd = std::make_shared<CustomCommand>();
@@ -446,8 +450,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderDrawData(ImDrawData* draw_data)
                         const auto tr = node->getNodeToParentTransform();
                         node->setVisible(true);
                         node->setNodeToParentTransform(tr);
-                        const auto& proj =
-                            Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+                        const auto& proj = Camera::getDefaultCamera()->getViewProjectionMatrix();
                         node->visit(Director::getInstance()->getRenderer(), proj.getInversed() * bd->Projection, 0);
                         node->setVisible(false);
                     }
@@ -468,7 +471,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderPlatform()
 
 #if defined(AX_PLATFORM_GLFW)
         // restore context
-        if (rhi::DriverContext::isOpenGL())
+        if (rhi::GraphicsCore::isOpenGL())
         {
             GLFWwindow* prev_current_context = glfwGetCurrentContext();
             ImGui_ImplAxmol_PostCommand([=]() { ImGui_ImplAxmol_MakeCurrent(prev_current_context, nullptr); });
@@ -480,7 +483,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderPlatform()
 IMGUI_IMPL_API void ImGui_ImplAxmol_MakeCurrent(GLFWwindow* window, ImGuiViewport* viewport)
 {
 #if defined(GLFW_VERSION_MAJOR) && AX_ENABLE_GL
-    if (!rhi::DriverContext::isOpenGL())
+    if (!rhi::GraphicsCore::isOpenGL())
         return;
     glfwMakeContextCurrent(window);
     auto state = static_cast<gl::OpenGLState*>(glfwGetWindowUserPointer(window));
@@ -509,7 +512,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_MakeCurrent(GLFWwindow* window, ImGuiViewpor
 IMGUI_IMPL_API void ImGui_ImplAxmol_OnDestroyWindow(GLFWwindow* window, ImGuiViewport* viewport)
 {
 #if defined(GLFW_VERSION_MAJOR) && AX_ENABLE_GL
-    if (!rhi::DriverContext::isOpenGL())
+    if (!rhi::GraphicsCore::isOpenGL())
         return;
     if (viewport->RendererUserData)
     {
@@ -569,9 +572,9 @@ IMGUI_IMPL_API bool ImGui_ImplAxmol_CreateDeviceObjects()
 
     auto layoutDesc = axvlm->allocateVertexLayoutDesc();
     layoutDesc.startLayout(3);
-    layoutDesc.addAttrib("a_position", info.position, VertexFormat::FLOAT2, 0, false);
-    layoutDesc.addAttrib("a_texCoord", info.uv, VertexFormat::FLOAT2, offsetof(ImDrawVert, uv), false);
-    layoutDesc.addAttrib("a_color", info.color, VertexFormat::UBYTE4, offsetof(ImDrawVert, col), true);
+    layoutDesc.addAttrib("a_position", info.position, VertexElementType::FLOAT2, 0, false);
+    layoutDesc.addAttrib("a_texCoord", info.uv, VertexElementType::FLOAT2, offsetof(ImDrawVert, uv), false);
+    layoutDesc.addAttrib("a_color", info.color, VertexElementType::UBYTE4, offsetof(ImDrawVert, col), true);
     layoutDesc.endLayout();
 
     Object::assign(info.layout, axvlm->getVertexLayout(std::forward<VertexLayoutDesc>(layoutDesc)));

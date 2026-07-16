@@ -59,7 +59,7 @@ void HtmlObjectContext::destroyInstance()
 HtmlObjectContext::HtmlObjectContext()
 {
     _beforeGfxDestroyListener = Director::getInstance()->getEventDispatcher()->addCustomEventListener(
-        Director::EVENT_BEFORE_GFX_DROP, [](EventCustom*) {
+        Director::EVENT_BEFORE_GFX_DROP, [](CustomEvent*) {
         s_isGfxDidDrop = true;
         HtmlObjectContext::destroyInstance();
     });

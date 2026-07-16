@@ -30,13 +30,15 @@
 #ifndef Spine_AnimationState_h
 #define Spine_AnimationState_h
 
-#include <spine/Vector.h>
+#include <spine/Array.h>
+#include <spine/Map.h>
 #include <spine/Pool.h>
 #include <spine/Property.h>
-#include <spine/MixBlend.h>
 #include <spine/SpineObject.h>
 #include <spine/SpineString.h>
+#include <spine/Timeline.h>
 #include <spine/HasRendererObject.h>
+#include <spine/Interpolation.h>
 #include "Slot.h"
 
 #ifdef SPINE_USE_STD_FUNCTION
@@ -48,8 +50,8 @@ namespace spine {
 		EventType_Start = 0,
 		EventType_Interrupt,
 		EventType_End,
-		EventType_Complete,
 		EventType_Dispose,
+		EventType_Complete,
 		EventType_Event
 	};
 
@@ -70,10 +72,10 @@ namespace spine {
 	class AttachmentTimeline;
 
 #ifdef SPINE_USE_STD_FUNCTION
-	typedef std::function<void (AnimationState* state, EventType type, TrackEntry* entry, Event* event)> AnimationStateListener;
+	typedef std::function<void(AnimationState *state, EventType type, TrackEntry *entry, Event *event)> AnimationStateListener;
 #else
 
-	typedef void (*AnimationStateListener)(AnimationState *state, EventType type, TrackEntry *entry, Event *event);
+	typedef void (*AnimationStateListener)(AnimationState *state, EventType type, TrackEntry *entry, Event *event, void *userData);
 
 #endif
 
@@ -83,6 +85,7 @@ namespace spine {
 		AnimationStateListenerObject() {};
 
 		virtual ~AnimationStateListenerObject() {};
+
 	public:
 		/// The callback function to be called
 		virtual void callback(AnimationState *state, EventType type, TrackEntry *entry, Event *event) = 0;
@@ -103,7 +106,10 @@ namespace spine {
 		int getTrackIndex();
 
 		/// The animation to apply for this track entry.
-		Animation *getAnimation();
+		Animation &getAnimation();
+
+		/// Sets the animation for this track entry.
+		void setAnimation(Animation &animation);
 
 		TrackEntry *getPrevious();
 
@@ -112,20 +118,11 @@ namespace spine {
 
 		void setLoop(bool inValue);
 
-		/// If true, when mixing from the previous animation to this animation, the previous animation is applied as normal instead
-		/// of being mixed out.
-		///
-		/// When mixing between animations that key the same property, if a lower track also keys that property then the value will
-		/// briefly dip toward the lower track value during the mix. This happens because the first animation mixes from 100% to 0%
-		/// while the second animation mixes from 0% to 100%. Setting holdPrevious to true applies the first animation
-		/// at 100% during the mix so the lower track value is overwritten. Such dipping does not occur on the lowest track which
-		/// keys the property, only when a higher track also keys the property.
-		///
-		/// Snapping will occur if holdPrevious is true and this animation does not key all the same properties as the
-		/// previous animation.
-		bool getHoldPrevious();
+		/// When true, timelines in this animation that support additive have their values added to the setup or current pose values
+		/// instead of replacing them. Additive can be set for a new track entry only before AnimationState::apply() is next called.
+		bool getAdditive();
 
-		void setHoldPrevious(bool inValue);
+		void setAdditive(bool inValue);
 
 		bool getReverse();
 
@@ -135,40 +132,50 @@ namespace spine {
 
 		void setShortestRotation(bool inValue);
 
-		/// Seconds to postpone playing the animation. When a track entry is the current track entry, delay postpones incrementing
-		/// the track time. When a track entry is queued, delay is the time from the start of the previous animation to when the
-		/// track entry will become the current track entry.
+		/// Seconds to postpone playing the animation. Must be >= 0. When this track entry is the current track entry,
+		/// delay postpones incrementing the track time. When this track entry is queued, delay is the time from the start of the
+		/// previous animation to when this track entry will become the current track entry (ie when the previous track entry's track
+		/// time >= this track entry's delay).
+		///
+		/// Time scale affects the delay.
+		///
+		/// When passing delay <= 0 to AnimationState::addAnimation(int, Animation, bool, float), this delay is set using a mix
+		/// duration from AnimationStateData. To change the mix duration afterward, use setMixDuration(float, float) so this delay is
+		/// adjusted.
 		float getDelay();
 
 		void setDelay(float inValue);
 
-		/// Current time in seconds this track entry has been the current track entry. The track time determines
-		/// TrackEntry.AnimationTime. The track time can be set to start the animation at a time other than 0, without affecting looping.
+		/// The time in seconds this track entry has been the current track entry, starting at 0 and increasing forever.
+		/// Compare to getAnimationTime(), which is always between animationStart and animationEnd.
+		///
+		/// The track time can be set to start the animation at a time other than 0, without affecting looping. When doing so,
+		/// animationLast can be set to the same value to avoid firing events from the start of the animation.
 		float getTrackTime();
 
 		void setTrackTime(float inValue);
 
-		/// The track time in seconds when this animation will be removed from the track. Defaults to the animation duration for
-		/// non-looping animations and to int.MaxValue for looping animations. If the track end time is reached and no
-		/// other animations are queued for playback, and mixing from any previous animations is complete, properties keyed by the animation,
-		/// are set to the setup pose and the track is cleared.
+		/// The track time in seconds when this animation will be removed from the track. Defaults to the highest possible float
+		/// value, meaning the animation will be applied until a new animation is set or the track is cleared. If the track end time
+		/// is reached, no other animations are queued for playback, and mixing from any previous animations is complete, then the
+		/// properties keyed by the animation are set to the setup pose and the track is cleared.
 		///
-		/// It may be desired to use AnimationState.addEmptyAnimation(int, float, float) to mix the properties back to the
-		/// setup pose over time, rather than have it happen instantly.
+		/// It may be desired to use AnimationState::addEmptyAnimation(int, float, float) rather than have the animation
+		/// abruptly cease being applied, leaving the current pose.
 		float getTrackEnd();
 
 		void setTrackEnd(float inValue);
 
-		/// Seconds when this animation starts, both initially and after looping. Defaults to 0.
+		/// The time in seconds for the first frame of this animation, both initially and after looping. Defaults to 0.
 		///
-		/// When changing the animation start time, it often makes sense to set TrackEntry.AnimationLast to the same value to
-		/// prevent timeline keys before the start time from triggering.
+		/// When setting the animation start time, animationLast can be set to the same value to avoid firing events from the
+		/// start of the animation.
 		float getAnimationStart();
 
 		void setAnimationStart(float inValue);
 
-		/// Seconds for the last frame of this animation. Non-looping animations won't play past this time. Looping animations will
-		/// loop back to TrackEntry.AnimationStart at this time. Defaults to the animation duration.
+		/// The time in seconds for the last frame of this animation. Past this time, non-looping animations hold the pose at this
+		/// time while looping animations will loop back to animationStart. Defaults to the animation duration.
 		float getAnimationEnd();
 
 		void setAnimationEnd(float inValue);
@@ -180,12 +187,22 @@ namespace spine {
 
 		void setAnimationLast(float inValue);
 
-		/// Uses TrackEntry.TrackTime to compute the animation time between TrackEntry.AnimationStart. and
-		/// TrackEntry.AnimationEnd. When the track time is 0, the animation time is equal to the animation start time.
+		/// Uses the track time to compute animationTime, which is always between animationStart and animationEnd. When trackTime is
+		/// 0, animationTime is equal to animationStart.
 		float getAnimationTime();
 
-		/// Multiplier for the delta time when the animation state is updated, causing time for this animation to play slower or
+		/// Multiplier for the delta time when this track entry is updated, causing time for this animation to pass slower or
 		/// faster. Defaults to 1.
+		///
+		/// Values < 0 are not supported. To play an animation in reverse, use reverse.
+		///
+		/// mixTime is not affected by track entry time scale, so mixDuration may need to be adjusted to match the animation speed.
+		///
+		/// When using AnimationState::addAnimation(int, Animation, bool, float) with a delay <= 0, delay is set using the mix
+		/// duration from AnimationStateData, assuming time scale to be 1. If the time scale is not 1, the delay may need to be
+		/// adjusted.
+		///
+		/// See AnimationState::getTimeScale() for affecting all animations.
 		float getTimeScale();
 
 		void setTimeScale(float inValue);
@@ -200,28 +217,26 @@ namespace spine {
 		void setAlpha(float inValue);
 
 		///
-		/// When the mix percentage (mix time / mix duration) is less than the event threshold, event timelines for the animation
-		/// being mixed out will be applied. Defaults to 0, so event timelines are not applied for an animation being mixed out.
+		/// When the interpolated mix percentage is less than the event threshold, event timelines for the animation being mixed out
+		/// will be applied. Defaults to 0, so event timelines are not applied for an animation being mixed out.
 		float getEventThreshold();
 
 		void setEventThreshold(float inValue);
 
-		/// When the mix percentage (mix time / mix duration) is less than the attachment threshold, attachment timelines for the
-		/// animation being mixed out will be applied. Defaults to 0, so attachment timelines are not applied for an animation being
-		/// mixed out.
+		/// When the interpolated mix percentage is less than the attachment threshold, attachment timelines for the animation being
+		/// mixed out will be applied. Defaults to 0, so attachment timelines are not applied for an animation being mixed out.
 		float getMixAttachmentThreshold();
 
 		void setMixAttachmentThreshold(float inValue);
 
-        /// When getAlpha() is greater than alphaAttachmentThreshold, attachment timelines are applied.
-	    /// Defaults to 0, so attachment timelines are always applied. */
-        float getAlphaAttachmentThreshold();
+		/// When the computed alpha is greater than alphaAttachmentThreshold, attachment timelines are applied. The computed alpha
+		/// includes alpha and the interpolated mix percentage. Defaults to 0, so attachment timelines are always applied.
+		float getAlphaAttachmentThreshold();
 
-        void setAlphaAttachmentThreshold(float inValue);
+		void setAlphaAttachmentThreshold(float inValue);
 
-		/// When the mix percentage (mix time / mix duration) is less than the draw order threshold, draw order timelines for the
-		/// animation being mixed out will be applied. Defaults to 0, so draw order timelines are not applied for an animation being
-		/// mixed out.
+		/// When the interpolated mix percentage is less than the draw order threshold, draw order timelines for the animation being
+		/// mixed out will be applied. Defaults to 0, so draw order timelines are not applied for an animation being mixed out.
 		float getMixDrawOrderThreshold();
 
 		void setMixDrawOrderThreshold(float inValue);
@@ -233,7 +248,7 @@ namespace spine {
 		bool isComplete();
 
 		/// Seconds from 0 to the mix duration when mixing from the previous animation to this animation. May be slightly more than
-		/// TrackEntry.MixDuration when the mix is complete.
+		/// mixDuration when the mix is complete.
 		float getMixTime();
 
 		void setMixTime(float inValue);
@@ -250,18 +265,25 @@ namespace spine {
 
 		void setMixDuration(float inValue);
 
-        void setMixDuration(float mixDuration, float delay);
+		/// Sets both mixDuration and delay.
+		/// @param delay If > 0, sets delay. If <= 0, the delay set is the duration of the previous track
+		///           entry minus the specified mix duration plus the specified delay (ie the mix ends at
+		///           (delay = 0) or before (delay < 0) the previous track entry duration). If the previous
+		///           entry is looping, its next loop completion is used instead of its duration.
+		void setMixDuration(float mixDuration, float delay);
 
-		MixBlend getMixBlend();
+		/// The interpolation to apply to the mix percentage (mix time / mix duration) when mixing from the previous animation to
+		/// this animation. Defaults to linear.
+		Interpolation &getMixInterpolation();
 
-		void setMixBlend(MixBlend blend);
+		void setMixInterpolation(Interpolation &mixInterpolation);
 
-		/// The track entry for the previous animation when mixing from the previous animation to this animation, or NULL if no
-		/// mixing is currently occuring. When mixing from multiple animations, MixingFrom makes up a double linked list with MixingTo.
+		/// The track entry for the previous animation when mixing to this animation, or NULL if no mixing is currently occurring.
+		/// When mixing from multiple animations, MixingFrom makes up a doubly linked list with MixingTo.
 		TrackEntry *getMixingFrom();
 
-		/// The track entry for the next animation when mixing from this animation, or NULL if no mixing is currently occuring.
-		/// When mixing from multiple animations, MixingTo makes up a double linked list with MixingFrom.
+		/// The track entry for the next animation when mixing from this animation, or NULL if no mixing is currently occurring.
+		/// When mixing to multiple animations, MixingTo makes up a doubly linked list with MixingFrom.
 		TrackEntry *getMixingTo();
 
 		/// Resets the rotation directions for mixing this entry's rotate timelines. This can be useful to avoid bones rotating the
@@ -275,20 +297,36 @@ namespace spine {
 
 		float getTrackComplete();
 
+#ifdef SPINE_USE_STD_FUNCTION
 		void setListener(AnimationStateListener listener);
+#else
+		void setListener(AnimationStateListener listener, void *userData = NULL);
+#endif
 
 		void setListener(AnimationStateListenerObject *listener);
 
-        /// Returns true if this track entry has been applied at least once.
-        ///
-        /// See AnimationState::apply(Skeleton).
-        bool wasApplied();
+		/// Returns true if this entry is for the empty animation.
+		bool isEmptyAnimation();
 
-        /// Returns true if there is a getNext() track entry that is ready to become the current track entry during the
-        /// next AnimationState::update(float)}
-        bool isNextReady () {
-            return _next != NULL && _nextTrackLast - _next->_delay >= 0;
-        }
+		/// Returns true if this track entry has been applied at least once.
+		///
+		/// See AnimationState::apply(Skeleton).
+		bool wasApplied();
+
+		/// Returns true if there is a next track entry that is ready to become the current track entry during the
+		/// next AnimationState::update(float)}
+		bool isNextReady() {
+			return _next != NULL && _nextTrackLast - _next->_delay >= 0;
+		}
+
+		// The AnimationState this track entry belongs to. May be NULL if TrackEntry is directly instantiated.
+		AnimationState *getAnimationState() {
+			return _state;
+		}
+
+		void setAnimationState(AnimationState *state) {
+			_state = state;
+		}
 
 	private:
 		Animation *_animation;
@@ -298,17 +336,23 @@ namespace spine {
 		TrackEntry *_mixingTo;
 		int _trackIndex;
 
-		bool _loop, _holdPrevious, _reverse, _shortestRotation;
+		bool _loop, _additive, _reverse, _shortestRotation, _keepHold;
 		float _eventThreshold, _mixAttachmentThreshold, _alphaAttachmentThreshold, _mixDrawOrderThreshold;
 		float _animationStart, _animationEnd, _animationLast, _nextAnimationLast;
 		float _delay, _trackTime, _trackLast, _nextTrackLast, _trackEnd, _timeScale;
-		float _alpha, _mixTime, _mixDuration, _interruptAlpha, _totalAlpha;
-		MixBlend _mixBlend;
-		Vector<int> _timelineMode;
-		Vector<TrackEntry *> _timelineHoldMix;
-		Vector<float> _timelinesRotation;
+		float _alpha, _mixTime, _mixDuration, _totalAlpha;
+		Interpolation *_mixInterpolation;
+		Array<int> _timelineMode;
+		Array<TrackEntry *> _timelineHoldMix;
+		Array<float> _timelinesRotation;
 		AnimationStateListener _listener;
+#ifndef SPINE_USE_STD_FUNCTION
+		void *_listenerUserData;
+#endif
 		AnimationStateListenerObject *_listenerObject;
+		AnimationState *_state;
+
+		float mix();
 
 		void reset();
 	};
@@ -328,7 +372,7 @@ namespace spine {
 		friend class AnimationState;
 
 	private:
-		Vector<EventQueueEntry> _eventQueueEntries;
+		Array<EventQueueEntry> _eventQueueEntries;
 		AnimationState &_state;
 		bool _drainDisabled;
 
@@ -356,91 +400,138 @@ namespace spine {
 		void drain();
 	};
 
+	/// Applies animations over time, queues animations for later playback, mixes (crossfading) between animations, and applies
+	/// multiple animations on top of each other (layering).
+	///
+	/// See <a href='https://esotericsoftware.com/spine-applying-animations#AnimationState-API'>Applying Animations</a> in the
+	/// Spine Runtimes Guide.
 	class SP_API AnimationState : public SpineObject, public HasRendererObject {
 		friend class TrackEntry;
 
 		friend class EventQueue;
 
 	public:
-		explicit AnimationState(AnimationStateData *data);
+		explicit AnimationState(AnimationStateData &data);
 
 		~AnimationState();
 
-		/// Increments the track entry times, setting queued animations as current if needed
-		/// @param delta delta time
+		/// Increments each track entry's track time, setting queued animations as current if needed.
 		void update(float delta);
 
-		/// Poses the skeleton using the track entry animations. There are no side effects other than invoking listeners, so the
-		/// animation state can be applied to multiple skeletons to pose them identically.
+		/// Poses the skeleton using the track entry animations. The animation state is not changed, so can be applied to multiple
+		/// skeletons to pose them identically.
+		/// @return True if any animations were applied.
 		bool apply(Skeleton &skeleton);
 
-		/// Removes all animations from all tracks, leaving skeletons in their previous pose.
-		/// It may be desired to use AnimationState.setEmptyAnimations(float) to mix the skeletons back to the setup pose,
-		/// rather than leaving them in their previous pose.
+		/// Removes all animations from all tracks, leaving skeletons in their current pose.
+		///
+		/// It may be desired to use AnimationState::setEmptyAnimations(float) to mix the skeletons back to the setup pose,
+		/// rather than leaving them in their current pose.
 		void clearTracks();
 
-		/// Removes all animations from the tracks, leaving skeletons in their previous pose.
-		/// It may be desired to use AnimationState.setEmptyAnimations(float) to mix the skeletons back to the setup pose,
-		/// rather than leaving them in their previous pose.
+		/// Removes all animations from the track, leaving skeletons in their current pose.
+		///
+		/// It may be desired to use AnimationState::setEmptyAnimation(int, float) to mix the skeletons back to the setup pose,
+		/// rather than leaving them in their current pose.
 		void clearTrack(size_t trackIndex);
 
-		/// Sets an animation by name. setAnimation(int, Animation, bool)
-		TrackEntry *setAnimation(size_t trackIndex, const String &animationName, bool loop);
+		/// Sets an animation by name.
+		///
+		/// See setAnimation(int, Animation, bool).
+		TrackEntry &setAnimation(size_t trackIndex, const String &animationName, bool loop);
 
 		/// Sets the current animation for a track, discarding any queued animations.
+		///
+		/// If the formerly current track entry is for the same animation and was never applied to a skeleton, it is replaced (not mixed
+		/// from).
 		/// @param loop If true, the animation will repeat.
 		/// If false, it will not, instead its last frame is applied if played beyond its duration.
 		/// In either case TrackEntry.TrackEnd determines when the track is cleared.
 		/// @return
 		/// A track entry to allow further customization of animation playback. References to the track entry must not be kept
 		/// after AnimationState.Dispose.
-		TrackEntry *setAnimation(size_t trackIndex, Animation *animation, bool loop);
+		TrackEntry &setAnimation(size_t trackIndex, Animation &animation, bool loop);
 
 		/// Queues an animation by name.
-		/// addAnimation(int, Animation, bool, float)
-		TrackEntry *addAnimation(size_t trackIndex, const String &animationName, bool loop, float delay);
+		///
+		/// See addAnimation(int, Animation, bool, float).
+		TrackEntry &addAnimation(size_t trackIndex, const String &animationName, bool loop, float delay);
 
 		/// Adds an animation to be played delay seconds after the current or last queued animation
-		/// for a track. If the track is empty, it is equivalent to calling setAnimation.
+		/// for a track. If the track has no entries, this is equivalent to calling setAnimation.
 		/// @param delay
 		/// Seconds to begin this animation after the start of the previous animation. May be &lt;= 0 to use the animation
 		/// duration of the previous track minus any mix duration plus the negative delay.
 		///
 		/// @return A track entry to allow further customization of animation playback. References to the track entry must not be kept
 		/// after AnimationState.Dispose
-		TrackEntry *addAnimation(size_t trackIndex, Animation *animation, bool loop, float delay);
+		TrackEntry &addAnimation(size_t trackIndex, Animation &animation, bool loop, float delay);
 
-		/// Sets an empty animation for a track, discarding any queued animations, and mixes to it over the specified mix duration.
-		TrackEntry *setEmptyAnimation(size_t trackIndex, float mixDuration);
-
-		/// Adds an empty animation to be played after the current or last queued animation for a track, and mixes to it over the
-		/// specified mix duration.
-		/// @return
-		/// A track entry to allow further customization of animation playback. References to the track entry must not be kept after AnimationState.Dispose.
+		/// Sets an empty animation for a track, discarding any queued animations, and sets the track entry's
+		/// TrackEntry::getMixDuration(). An empty animation has no timelines and serves as a placeholder for mixing in or out.
 		///
-		/// @param trackIndex Track number.
-		/// @param mixDuration Mix duration.
-		/// @param delay Seconds to begin this animation after the start of the previous animation. May be &lt;= 0 to use the animation
-		/// duration of the previous track minus any mix duration plus the negative delay.
-		TrackEntry *addEmptyAnimation(size_t trackIndex, float mixDuration, float delay);
+		/// Mixing out is done by setting an empty animation with a mix duration using either setEmptyAnimation(int, float),
+		/// setEmptyAnimations(float), or addEmptyAnimation(int, float, float). Mixing to an empty animation causes
+		/// the previous animation to be applied less and less over the mix duration. Properties keyed in the previous animation
+		/// transition to the value from lower tracks or to the setup pose value if no lower tracks key the property. A mix duration of
+		/// 0 still mixes out over one frame.
+		///
+		/// Mixing in is done by first setting an empty animation, then adding an animation using
+		/// addAnimation(int, Animation, bool, float) with the desired delay (an empty animation has a duration of 0) and on
+		/// the returned track entry set TrackEntry::setMixDuration(float). Mixing from an empty animation causes the new
+		/// animation to be applied more and more over the mix duration. Properties keyed in the new animation transition from the value
+		/// from lower tracks or from the setup pose value if no lower tracks key the property to the value keyed in the new animation.
+		///
+		/// See <a href='https://esotericsoftware.com/spine-applying-animations#Empty-animations'>Empty animations</a> in the Spine
+		/// Runtimes Guide.
+		TrackEntry &setEmptyAnimation(size_t trackIndex, float mixDuration);
+
+		/// Adds an empty animation to be played after the current or last queued animation for a track, and sets the track entry's
+		/// TrackEntry::getMixDuration(). If the track has no entries, it is equivalent to calling
+		/// setEmptyAnimation(int, float).
+		///
+		/// See setEmptyAnimation(int, float) and
+		/// <a href='https://esotericsoftware.com/spine-applying-animations#Empty-animations'>Empty animations</a> in the Spine
+		/// Runtimes Guide.
+		/// @param delay If > 0, sets TrackEntry::getDelay(). If <= 0, the delay set is the duration of the previous track entry
+		/// minus any mix duration plus the specified <code>delay</code> (ie the mix ends at (<code>delay</code> = 0) or before
+		/// (<code>delay</code> < 0) the previous track entry duration). If the previous entry is looping, its next loop completion
+		/// is used instead of its duration.
+		/// @return A track entry to allow further customization of animation playback. References to the track entry must not be kept
+		/// after the AnimationStateListener::dispose(TrackEntry) event occurs.
+		TrackEntry &addEmptyAnimation(size_t trackIndex, float mixDuration, float delay);
 
 		/// Sets an empty animation for every track, discarding any queued animations, and mixes to it over the specified mix duration.
+		///
+		/// See <a href='https://esotericsoftware.com/spine-applying-animations#Empty-animations'>Empty animations</a> in the Spine
+		/// Runtimes Guide.
 		void setEmptyAnimations(float mixDuration);
 
 		/// @return The track entry for the animation currently playing on the track, or NULL if no animation is currently playing.
-		TrackEntry *getCurrent(size_t trackIndex);
+		TrackEntry *getTrack(size_t trackIndex);
 
-		AnimationStateData *getData();
+		/// The AnimationStateData to look up mix durations.
+		AnimationStateData &getData();
 
-		/// A list of tracks that have animations, which may contain NULLs.
-		Vector<TrackEntry *> &getTracks();
+		/// The list of tracks that have had animations, which may contain null entries for tracks that currently have no animation.
+		Array<TrackEntry *> &getTracks();
 
+		/// Multiplier for the delta time when the animation state is updated, causing time for all animations and mixes to play slower
+		/// or faster. Defaults to 1.
+		///
+		/// See TrackEntry::getTimeScale() for affecting a single animation.
 		float getTimeScale();
 
 		void setTimeScale(float inValue);
 
+		/// Adds a listener to receive events for all track entries.
+#ifdef SPINE_USE_STD_FUNCTION
 		void setListener(AnimationStateListener listener);
+#else
+		void setListener(AnimationStateListener listener, void *userData = NULL);
+#endif
 
+		/// Adds a listener to receive events for all track entries.
 		void setListener(AnimationStateListenerObject *listener);
 
 		void disableQueue();
@@ -449,31 +540,34 @@ namespace spine {
 
 		void setManualTrackEntryDisposal(bool inValue);
 
-        bool getManualTrackEntryDisposal();
+		bool getManualTrackEntryDisposal();
 
 		void disposeTrackEntry(TrackEntry *entry);
 
 	private:
-		static const int Subsequent = 0;
-		static const int First = 1;
-		static const int HoldSubsequent = 2;
-		static const int HoldFirst = 3;
-		static const int HoldMix = 4;
-
+		static const int Current = 0;
 		static const int Setup = 1;
-		static const int Current = 2;
+		static const int First = 2;
+		static const int Mode = 3;
+		static const int Hold = 4;
+
+		static const int AttachSetup = 1;
+		static const int AttachRetain = 2;
 
 		AnimationStateData *_data;
 
 		Pool<TrackEntry> _trackEntryPool;
-		Vector<TrackEntry *> _tracks;
-		Vector<Event *> _events;
+		Array<TrackEntry *> _tracks;
+		Array<Event *> _events;
 		EventQueue *_queue;
 
-		HashMap<PropertyId, bool> _propertyIDs;
+		Map<PropertyId, TrackEntry *> _propertyIDs;
 		bool _animationsChanged;
 
 		AnimationStateListener _listener;
+#ifndef SPINE_USE_STD_FUNCTION
+		void *_listenerUserData;
+#endif
 		AnimationStateListenerObject *_listenerObject;
 
 		int _unkeyedState;
@@ -484,24 +578,28 @@ namespace spine {
 
 		static Animation *getEmptyAnimation();
 
-		static void
-		applyRotateTimeline(RotateTimeline *rotateTimeline, Skeleton &skeleton, float time, float alpha, MixBlend pose,
-							Vector<float> &timelinesRotation, size_t i, bool firstFrame);
+		/// Applies the rotate timeline, mixing with the current pose while keeping the same rotation direction chosen as the shortest
+		/// the first time the mixing was applied.
+		static void applyRotateTimeline(RotateTimeline *rotateTimeline, Skeleton &skeleton, float time, float alpha, MixFrom from,
+										Array<float> &timelinesRotation, size_t i, bool firstFrame);
 
-		void applyAttachmentTimeline(AttachmentTimeline *attachmentTimeline, Skeleton &skeleton, float animationTime,
-									 MixBlend pose, bool firstFrame);
+		/// Applies the attachment timeline and sets Slot::attachmentState.
+		/// @param retain True if the attachment remains after apply, false if temporary for deform timelines.
+		void applyAttachmentTimeline(AttachmentTimeline *attachmentTimeline, Skeleton &skeleton, float animationTime, MixFrom from, bool retain);
 
 		/// Returns true when all mixing from entries are complete.
 		bool updateMixingFrom(TrackEntry *to, float delta);
 
-		float applyMixingFrom(TrackEntry *to, Skeleton &skeleton, MixBlend currentPose);
+		float applyMixingFrom(TrackEntry *to, Skeleton &skeleton);
 
 		void queueEvents(TrackEntry *entry, float animationTime);
 
-		/// Sets the active TrackEntry for a given track number.
-		void setCurrent(size_t index, TrackEntry *current, bool interrupt);
+		void eventsReverse(TrackEntry *entry, float animationLast, float animationTime);
 
-		/// Removes the next entry and all entries after it for the specified entry. */
+		/// Sets the active TrackEntry for a given track number.
+		void setTrack(size_t index, TrackEntry *current, bool interrupt);
+
+		/// Removes the specified entry's next track entry and all entries after it.
 		void clearNext(TrackEntry *entry);
 
 		TrackEntry *expandToIndex(size_t index);
@@ -512,9 +610,9 @@ namespace spine {
 
 		void animationsChanged();
 
-		void computeHold(TrackEntry *entry);
+		void computeHold(TrackEntry *entry, TrackEntry *track);
 
-		void setAttachment(Skeleton &skeleton, spine::Slot &slot, const String &attachmentName, bool attachments);
+		int from(TrackEntry *track, Timeline *timeline, Array<PropertyId> &ids);
 	};
 }
 

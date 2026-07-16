@@ -28,6 +28,7 @@ THE SOFTWARE.
 #pragma once
 
 #include "axmol/base/Object.h"
+#include "axmol/base/RefPtr.h"
 #include "axmol/base/Types.h"
 #include "axmol/base/Director.h"
 #include "axmol/renderer/GroupCommand.h"
@@ -39,6 +40,8 @@ namespace ax
 
 class Texture2D;
 class Node;
+class NodeGrid;
+class RenderTexturePass;
 
 namespace rhi
 {
@@ -122,9 +125,6 @@ public:
     void afterDraw(Node* target);
     /**@}*/
 
-    /**Change projection to 2D for grabbing.*/
-    void set2DProjection();
-
     /**
      * @brief Set the effect grid rect.
      * @param rect The effect grid rect.
@@ -137,6 +137,13 @@ public:
     const Rect& getGridRect() const { return _gridRect; }
 
 protected:
+    friend class NodeGrid;
+
+    /** Internal NodeGrid hook: project uploaded blit vertices/UVs through
+     *  the capture camera while still drawing with the grid ortho camera.
+     */
+    void setScreenProjectionForBlit(const Mat4* projection, const Vec2& size);
+
     void updateBlendState();
 
     bool _active   = false;
@@ -144,8 +151,7 @@ protected:
     Vec2 _gridSize;
     Texture2D* _texture = nullptr;
     Vec2 _step;
-    bool _isTextureFlipped                   = false;
-    Director::Projection _directorProjection = Director::Projection::_2D;
+    bool _isTextureFlipped = false;
     Rect _gridRect;
 
     Color _clearColor = {0, 0, 0, 0};
@@ -156,9 +162,8 @@ protected:
     // CallbackCommand _beforeBlitCommand;
     // CallbackCommand _afterBlitCommand;
 
-    // New
-    rhi::RenderTarget* _oldRenderTarget = nullptr;
-    rhi::RenderTarget* _renderTarget    = nullptr;
+    rhi::RenderTarget* _renderTarget = nullptr;
+    RefPtr<RenderTexturePass> _renderTexturePass;
 
     rhi::UniformLocation _mvpMatrixLocation;
     rhi::UniformLocation _textureLocation;
@@ -166,6 +171,10 @@ protected:
     rhi::VertexLayout* _vertexLayout = nullptr;
 
     BlendFunc _blendFunc;
+
+    bool _screenProjectionForBlitEnabled = false;
+    Mat4 _screenProjectionForBlit        = Mat4::identity;
+    Vec2 _screenProjectionForBlitSize;
 };
 
 /**

@@ -78,7 +78,7 @@ Parallax1::Parallax1()
     // NOW add the 3 layers to the 'void' node
 
     // background image is moved at a ratio of 0.4x, 0.5y
-    voidNode->addChild(background, -1, Vec2(0.4f, 0.5f), Vec2::ZERO);
+    voidNode->addChild(background, -1, Vec2(0.4f, 0.5f), Vec2::zero);
 
     // tiles are moved at a ratio of 2.2x, 1.0y
     voidNode->addChild(tilemap, 1, Vec2(2.2f, 1.0f), Vec2(0, -200));
@@ -112,8 +112,9 @@ std::string Parallax1::title() const
 
 Parallax2::Parallax2()
 {
-    auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesMoved = AX_CALLBACK_2(Parallax2::onTouchesMoved, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = [](PointerEvent* /*event*/) { return true; };
+    listener->onPointerMove = AX_CALLBACK_1(Parallax2::onPointerMove, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     // Top Layer, a simple image
@@ -146,7 +147,7 @@ Parallax2::Parallax2()
     // NOW add the 3 layers to the 'void' node
 
     // background image is moved at a ratio of 0.4x, 0.5y
-    voidNode->addChild(background, -1, Vec2(0.4f, 0.5f), Vec2::ZERO);
+    voidNode->addChild(background, -1, Vec2(0.4f, 0.5f), Vec2::zero);
 
     // tiles are moved at a ratio of 1.0, 1.0y
     voidNode->addChild(tilemap, 1, Vec2(1.0f, 1.0f), Vec2(0, -200));
@@ -156,9 +157,12 @@ Parallax2::Parallax2()
     addChild(voidNode, 0, kTagNode);
 }
 
-void Parallax2::onTouchesMoved(const std::vector<Touch*>& touches, Event* event)
+void Parallax2::onPointerMove(PointerEvent* event)
 {
-    auto diff = touches[0]->getDelta();
+    if (!event->isCaptured())
+        return;
+
+    auto diff = (event->getWorldPoint() - event->getPrevWorldPoint());
 
     auto node       = getChildByTag(kTagNode);
     auto currentPos = node->getPosition();

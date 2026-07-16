@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // ----------------------------------------------------------------------------
-// Copyright 2011-2025 Arm Limited
+// Copyright 2011-2026 Arm Limited
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy
@@ -778,36 +778,38 @@ static void hdr_alpha_unpack(
 	int& output0,
 	int& output1
 ) {
-
 	int v6 = input[0];
 	int v7 = input[1];
 
-	int selector = ((v6 >> 7) & 1) | ((v7 >> 6) & 2);
+	int modeval = ((v6 >> 7) & 1) | ((v7 >> 6) & 2);
 	v6 &= 0x7F;
 	v7 &= 0x7F;
-	if (selector == 3)
+
+	// Directly specified 12-bit alpha values
+	if (modeval == 3)
 	{
 		output0 = v6 << 5;
 		output1 = v7 << 5;
 	}
+	// Packed base + delta alpha values
 	else
 	{
-		v6 |= (v7 << (selector + 1)) & 0x780;
-		v7 &= (0x3f >> selector);
-		v7 ^= 32 >> selector;
-		v7 -= 32 >> selector;
-		v6 <<= (4 - selector);
-		v7 <<= (4 - selector);
-		v7 += v6;
+		// Transfer 1-3 high bits of v7 to make an 8-10 bit base
+		v6 |= (v7 << (modeval + 1)) & 0x780;
 
-		if (v7 < 0)
-		{
-			v7 = 0;
-		}
-		else if (v7 > 0xFFF)
-		{
-			v7 = 0xFFF;
-		}
+		// Extract remaining 4-6 bits and unbias to make signed delta
+		v7 &= (0x3f >> modeval);
+		v7 ^= 32 >> modeval;
+		v7 -= 32 >> modeval;
+
+		// Scale unsigned base to 12 bits
+		v6 = v6 << (4 - modeval);
+
+		// Scale signed delta to 6-10 bits
+		v7 = safe_signed_lsh(v7, 4 - modeval);
+
+		// Clamp computed base+delta value to valid range
+		v7 = astc::clamp(v6 + v7, 0, 0xFFF);
 
 		output0 = v6;
 		output1 = v7;

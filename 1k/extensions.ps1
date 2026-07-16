@@ -303,3 +303,11 @@ function Global:Get-NativeArchitecture {
 
     return $arch
 }
+
+function Global:eval($code) {
+    return Invoke-Expression $code
+}
+
+function Global:expand_str($str) {
+    return $ExecutionContext.InvokeCommand.ExpandString($str)
+}

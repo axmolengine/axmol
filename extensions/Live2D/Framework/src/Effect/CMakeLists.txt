@@ -4,6 +4,8 @@ target_sources(${LIB_NAME}
     ${CMAKE_CURRENT_SOURCE_DIR}/CubismBreath.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/CubismEyeBlink.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/CubismEyeBlink.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismLook.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismLook.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/CubismPose.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/CubismPose.hpp
 )

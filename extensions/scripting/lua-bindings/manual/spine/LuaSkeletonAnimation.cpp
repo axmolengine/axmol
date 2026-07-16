@@ -29,8 +29,8 @@ THE SOFTWARE.
 #include "lua-bindings/manual/base/LuaScriptHandlerMgr.h"
 #include "lua-bindings/manual/LuaStack.h"
 #include "lua-bindings/manual/LuaEngine.h"
+#include "spine/SkeletonAssetCache.h"
 
-using namespace spine;
 using namespace ax;
 
 LuaSkeletonAnimation::LuaSkeletonAnimation() : spine::SkeletonAnimation() {}
@@ -40,15 +40,17 @@ LuaSkeletonAnimation::~LuaSkeletonAnimation()
     ScriptHandlerMgr::getInstance()->removeObjectAllHandlers((void*)this);
 }
 
-LuaSkeletonAnimation* LuaSkeletonAnimation::createWithFile(const char* skeletonDataFile,
-                                                           const char* atlasFile,
+LuaSkeletonAnimation* LuaSkeletonAnimation::createWithFile(std::string_view dataFile,
+                                                           std::string_view atlasFile,
                                                            float scale)
 {
+
+    auto asset = spine::SkeletonAssetCache::getInstance()->loadAsset(dataFile, atlasFile, scale);
+    if (!asset)
+        return nullptr;
+
     LuaSkeletonAnimation* node = new LuaSkeletonAnimation();
-    if (FileUtils::getPathExtension(skeletonDataFile) == ".json")
-        node->initWithJsonFile(skeletonDataFile, atlasFile, scale);
-    else
-        node->initWithBinaryFile(skeletonDataFile, atlasFile, scale);
+    node->initWithAsset(asset);
     node->autorelease();
     return node;
 }

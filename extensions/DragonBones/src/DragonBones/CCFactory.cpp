@@ -97,7 +97,7 @@ Slot* CCFactory::_buildSlot(const BuildArmaturePackage& dataPackage, const SlotD
 
     rawDisplay->setCascadeOpacityEnabled(true);
     rawDisplay->setCascadeColorEnabled(true);
-    rawDisplay->setAnchorPoint(ax::Vec2::ZERO);
+    rawDisplay->setAnchorPoint(ax::Vec2::zero);
     rawDisplay->setLocalZOrder(slotData->zOrder);
 
     slot->init(slotData, armature, rawDisplay, rawDisplay);

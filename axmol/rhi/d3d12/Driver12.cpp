@@ -530,14 +530,27 @@ void DriverImpl::removeCachedPipelineObjects(Program* key)
         _currentRenderContext->removeCachedPipelineObjects(key);
 }
 
-Buffer* DriverImpl::createBuffer(std::size_t size, BufferType type, BufferUsage usage, const void* initial)
+Buffer* DriverImpl::createBuffer(size_t size, BufferType type, BufferUsage usage, const void* initial)
 {
     return new BufferImpl(this, size, type, usage, initial);
 }
 
-Texture* DriverImpl::createTexture(const TextureDesc& descriptor)
+Texture* DriverImpl::createTexture(const TextureDesc& descriptor, std::optional<Color> clearColorHint)
 {
-    return new TextureImpl(this, descriptor);
+    return new TextureImpl(this, descriptor, clearColorHint);
+}
+
+Texture* DriverImpl::createTextureFromNativeHandle(const ExternalTextureDesc& descriptor)
+{
+    auto nativeResource = static_cast<ID3D12Resource*>(descriptor.nativeTexture.ptr);
+    if (!nativeResource)
+        return nullptr;
+
+    ComPtr<ID3D12Resource> resource = nativeResource;
+    auto initialState = descriptor.nativeState ? static_cast<D3D12_RESOURCE_STATES>(descriptor.nativeState)
+                                               : D3D12_RESOURCE_STATE_COMMON;
+    auto finalState   = static_cast<D3D12_RESOURCE_STATES>(descriptor.nativeFinalState);
+    return new TextureImpl(this, std::move(resource), descriptor.desc, initialState, finalState);
 }
 
 RenderTarget* DriverImpl::createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment)
@@ -791,12 +804,14 @@ uint64_t DriverImpl::finishIsolateSubmission(IsolateSubmission& submission, bool
 
 void DriverImpl::queueDisposal(ID3D12Resource* res, uint64_t fenceValue)
 {
+    assert(res);
     queueDisposalInternal(
         DisposableResource{.type = DisposableResource::Type::Resource, .fenceValue = fenceValue, .resource = res});
 }
 
 void DriverImpl::queueDisposal(DescriptorHandle* handle, DisposableResource::Type type, uint64_t fenceValue)
 {
+    assert(handle);
     queueDisposalInternal(DisposableResource{.type = type, .fenceValue = fenceValue, .handle = handle});
 }
 

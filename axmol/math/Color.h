@@ -27,11 +27,6 @@ THE SOFTWARE.
 
 #include "axmol/math/Vec4.h"
 
-#if defined(_WIN32)
-#    pragma push_macro("TRANSPARENT")
-#    undef TRANSPARENT
-#endif
-
 NS_AX_MATH_BEGIN
 
 struct Color32;
@@ -44,10 +39,10 @@ struct HSV;
  */
 struct AX_DLL Color32
 {
-    Color32() : value(0) {}
-    Color32(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a) : r(_r), g(_g), b(_b), a(_a) {}
+    constexpr Color32() : value(0) {}
+    constexpr Color32(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a) : r(_r), g(_g), b(_b), a(_a) {}
 
-    Color32(uint8_t _r, uint8_t _g, uint8_t _b) : r(_r), g(_g), b(_b), a(255) {}
+    constexpr Color32(uint8_t _r, uint8_t _g, uint8_t _b) : r(_r), g(_g), b(_b), a(255) {}
 
     template <class _Other,
               typename = std::enable_if_t<std::is_unsigned_v<decltype(_Other{}.r)> &&
@@ -76,7 +71,7 @@ struct AX_DLL Color32
                                           std::is_same_v<decltype(_Other{}.r), decltype(_Other{}.g)> &&
                                           std::is_same_v<decltype(_Other{}.r), decltype(_Other{}.b)> &&
                                           std::is_same_v<decltype(_Other{}.r), decltype(_Other{}.a)>>>
-    Color32& operator=(const _Other& other) noexcept
+    Color32& operator=(const _Other & other) noexcept
     {
         set(static_cast<uint8_t>(other.r * 255.f + 0.5f), static_cast<uint8_t>(other.g * 255.f + 0.5f),
             static_cast<uint8_t>(other.b * 255.f + 0.5f), static_cast<uint8_t>(other.a * 255.f + 0.5f));
@@ -121,17 +116,30 @@ struct AX_DLL Color32
         uint32_t value;
     };
 
-    static const Color32 WHITE;
-    static const Color32 YELLOW;
-    static const Color32 BLUE;
-    static const Color32 GREEN;
-    static const Color32 RED;
-    static const Color32 MAGENTA;
-    static const Color32 BLACK;
-    static const Color32 ORANGE;
-    static const Color32 GRAY;
-    static const Color32 TRANSPARENT;  // TRANSPARENT is defined on wingdi.h /*Background Modes*/
+    static const Color32 white;
+    static const Color32 yellow;
+    static const Color32 blue;
+    static const Color32 green;
+    static const Color32 red;
+    static const Color32 magenta;
+    static const Color32 black;
+    static const Color32 orange;
+    static const Color32 gray;
+    static const Color32 clear;
 };
+
+#if !(defined(AX_DLLEXPORT) || defined(AX_DLLIMPORT))
+inline constexpr Color32 Color32::white{255, 255, 255, 255};
+inline constexpr Color32 Color32::yellow{255, 255, 0, 255};
+inline constexpr Color32 Color32::blue{0, 0, 255, 255};
+inline constexpr Color32 Color32::green{0, 255, 0, 255};
+inline constexpr Color32 Color32::red{255, 0, 0, 255};
+inline constexpr Color32 Color32::magenta{255, 0, 255, 255};
+inline constexpr Color32 Color32::black{0, 0, 0, 255};
+inline constexpr Color32 Color32::orange{255, 127, 0, 255};
+inline constexpr Color32 Color32::gray{166, 166, 166, 255};
+inline constexpr Color32 Color32::clear{0, 0, 0, 0};
+#endif
 
 /**
  * RGBA color composed of 4 floats.
@@ -139,9 +147,9 @@ struct AX_DLL Color32
  */
 struct AX_DLL Color : public Vec4Adapter<Color>
 {
-    Color() {}
-    Color(float _r, float _g, float _b, float _a) : Vec4Adapter(_r, _g, _b, _a) {}
-    Color(float _r, float _g, float _b) : Vec4Adapter(_r, _g, _b, 1.0f) {}
+    constexpr Color() {}
+    constexpr Color(float _r, float _g, float _b, float _a) : Vec4Adapter(_r, _g, _b, _a) {}
+    constexpr Color(float _r, float _g, float _b) : Vec4Adapter(_r, _g, _b, 1.0f) {}
     explicit Color(const Color32& color)
         : Vec4Adapter(color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f)
     {}
@@ -185,17 +193,30 @@ struct AX_DLL Color : public Vec4Adapter<Color>
 
     bool equals(const Color& other) const { return (*this == other); }
 
-    static const Color WHITE;
-    static const Color YELLOW;
-    static const Color BLUE;
-    static const Color GREEN;
-    static const Color RED;
-    static const Color MAGENTA;
-    static const Color BLACK;
-    static const Color ORANGE;
-    static const Color GRAY;
-    static const Color TRANSPARENT;  // TRANSPARENT is defined on wingdi.h /*Background Modes*/
+    static const Color white;
+    static const Color yellow;
+    static const Color blue;
+    static const Color green;
+    static const Color red;
+    static const Color magenta;
+    static const Color black;
+    static const Color orange;
+    static const Color gray;
+    static const Color clear;
 };
+
+#if !(defined(AX_DLLEXPORT) || defined(AX_DLLIMPORT))
+inline constexpr Color Color::white{1, 1, 1, 1};
+inline constexpr Color Color::yellow{1, 1, 0, 1};
+inline constexpr Color Color::blue{0, 0, 1, 1};
+inline constexpr Color Color::green{0, 1, 0, 1};
+inline constexpr Color Color::red{1, 0, 0, 1};
+inline constexpr Color Color::magenta{1, 0, 1, 1};
+inline constexpr Color Color::black{0, 0, 0, 1};
+inline constexpr Color Color::orange{1, 0.5f, 0, 1};
+inline constexpr Color Color::gray{0.65f, 0.65f, 0.65f, 1};
+inline constexpr Color Color::clear{0, 0, 0, 0};
+#endif
 
 /**
  * Hue Saturation Value color space composed of 4 floats.
@@ -247,7 +268,3 @@ inline Color32::operator Color() const
 }
 
 NS_AX_MATH_END
-
-#if defined(_WIN32)
-#    pragma pop_macro("TRANSPARENT")
-#endif

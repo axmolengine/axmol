@@ -22,14 +22,6 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-//
-//  Bug-Child.cpp
-//  cocos2d_tests
-//
-//  Created by NiTe Luo on 5/12/14.
-//
-//
-
 #include "Bug-Child.h"
 
 using namespace ax;

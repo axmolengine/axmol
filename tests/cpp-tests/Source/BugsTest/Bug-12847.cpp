@@ -22,34 +22,18 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-//
-//  Bug-12847.cpp
-//  cocos2d_tests
-//
-//  Issue: https://github.com/cocos2d/cocos2d-x/issues/12847
-//  Please test in iPhone5 +
-//
-//
-
 #include "Bug-12847.h"
 
 using namespace ax;
 
-Bug12847Layer::Bug12847Layer()
-{
-    _projection = Director::getInstance()->getProjection();
-}
+Bug12847Layer::Bug12847Layer() {}
 
-Bug12847Layer::~Bug12847Layer()
-{
-    Director::getInstance()->setProjection(_projection);
-}
+Bug12847Layer::~Bug12847Layer() {}
 
 bool Bug12847Layer::init()
 {
     if (BugsTestBase::init())
     {
-        Director::getInstance()->setProjection(Director::Projection::_2D);
         auto _visibleSize = Director::getInstance()->getVisibleSize();
 
         // Create with Sprite
@@ -97,11 +81,11 @@ void Bug12847Layer::update(float dt)
 void Bug12847Layer::onEnter()
 {
     BugsTestBase::onEnter();
-    Director::getInstance()->setClearColor(Color::RED);
+    Director::getInstance()->setClearColor(Color::red);
 }
 
 void Bug12847Layer::onExit()
 {
-    Director::getInstance()->setClearColor(Color::BLACK);
+    Director::getInstance()->setClearColor(Color::black);
     BugsTestBase::onExit();
 }

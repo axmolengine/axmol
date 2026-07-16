@@ -24,12 +24,13 @@
  ****************************************************************************/
 
 #include "axmol/renderer/ProgramManager.h"
-#include "axmol/rhi/DriverContext.h"
+#include "axmol/rhi/GraphicsCore.h"
 #include "axmol/rhi/ShaderModule.h"
 #include "axmol/renderer/VertexLayoutManager.h"
 #include "axmol/renderer/Shaders.h"
 #include "axmol/base/Macros.h"
 #include "axmol/base/Environment.h"
+#include "axmol/platform/FileUtils.h"
 
 #include "xxhash/xxhash.h"
 

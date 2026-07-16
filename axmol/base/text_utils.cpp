@@ -42,14 +42,14 @@ namespace text_utils
 std::string_view ltrim(std::string_view s)
 {
     size_t i = 0;
-    while (i < s.size() && std::isspace(static_cast<unsigned char>(s[i])))
+    while (i < s.size() && isspace(static_cast<unsigned char>(s[i])))
         ++i;
     return s.substr(i);
 }
 
 std::string_view rtrim(std::string_view s)
 {
-    while (!s.empty() && std::isspace(static_cast<unsigned char>(s.back())))
+    while (!s.empty() && isspace(static_cast<unsigned char>(s.back())))
         s.remove_suffix(1);
     return s;
 }
@@ -337,19 +337,19 @@ std::vector<char16_t> getChar16VectorFromUTF16String(const std::u16string& utf16
     return std::vector<char16_t>(utf16.begin(), utf16.end());
 }
 
-size_t getCharacterCountInUTF8String(std::string_view utf8)
+size_t getCharacterCountInUTF8String(std::string_view strUTF8)
 {
-    return countUTF8Chars(utf8);
+    return countUTF8Chars(strUTF8);
 }
 
-size_t countUTF8Chars(std::string_view utf8)
+size_t countUTF8Chars(std::string_view strUTF8)
 {
     int count = 0;
 
-    if (!utf8.empty())
+    if (!strUTF8.empty())
     {
-        const UTF8* source    = (const UTF8*)utf8.data();
-        const UTF8* sourceEnd = (const UTF8*)utf8.data() + utf8.length();
+        const UTF8* source    = (const UTF8*)strUTF8.data();
+        const UTF8* sourceEnd = (const UTF8*)strUTF8.data() + strUTF8.length();
         while (source != sourceEnd)
         {
             auto size = getUTF8SequenceSize(source, sourceEnd);
@@ -364,6 +364,36 @@ size_t countUTF8Chars(std::string_view utf8)
     }
 
     return count;
+}
+
+UTF8CountResult countUTF8WithLimit(std::string_view strUTF8, size_t charLimit)
+{
+    UTF8CountResult result{};
+
+    if (!strUTF8.empty() && charLimit > 0)
+    {
+        const UTF8* const sourceStart = (const UTF8*)strUTF8.data();
+        const UTF8* const sourceEnd   = sourceStart + strUTF8.length();
+        const UTF8* source            = sourceStart;
+
+        while (source != sourceEnd && result.charCount < charLimit)
+        {
+            auto size = getUTF8SequenceSize(source, sourceEnd);
+            if (size == 0)
+            {
+                // Invalid UTF-8 sequence found
+                result.success = false;
+                break;
+            }
+            source += size;
+            ++result.charCount;
+        }
+
+        // Calculate total bytes consumed by subtracting pointers
+        result.byteCount = static_cast<size_t>(source - sourceStart);
+    }
+
+    return result;
 }
 
 size_t getUTF8ByteOffset(std::string_view utf8, size_t utf8CharOffset)
@@ -474,7 +504,7 @@ void u8char_span::reset(std::string_view newStr)
 
         while (*sequenceUtf8)
         {
-            std::size_t lengthChar = getNumBytesForUTF8(*sequenceUtf8);
+            size_t lengthChar = getNumBytesForUTF8(*sequenceUtf8);
 
             CharUTF8 charUTF8;
             charUTF8._char = std::string_view((char*)sequenceUtf8, lengthChar);
@@ -489,15 +519,15 @@ void u8char_span::reset(std::string_view newStr)
 
 std::string_view u8char_span::view() const
 {
-    return this->subview(0, std::numeric_limits<std::size_t>::max());
+    return this->subview(0, std::numeric_limits<size_t>::max());
 }
 
-std::string_view u8char_span::subview(std::size_t pos) const
+std::string_view u8char_span::subview(size_t pos) const
 {
-    return this->subview(pos, std::numeric_limits<std::size_t>::max());
+    return this->subview(pos, std::numeric_limits<size_t>::max());
 }
 
-std::string_view u8char_span::subview(std::size_t pos, std::size_t len) const
+std::string_view u8char_span::subview(size_t pos, size_t len) const
 {
     if (!_str.empty())
     {

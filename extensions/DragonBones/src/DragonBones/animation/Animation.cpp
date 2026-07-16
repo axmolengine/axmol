@@ -162,7 +162,7 @@ void Animation::advanceTime(float passedTime)
     }
     else if (animationStateCount > 1)
     {
-        for (std::size_t i = 0, r = 0; i < animationStateCount; ++i)
+        for (size_t i = 0, r = 0; i < animationStateCount; ++i)
         {
             const auto animationState = _animationStates[i];
             if (animationState->_fadeState > 0 && animationState->_subFadeState > 0)
@@ -334,7 +334,7 @@ AnimationState* Animation::playConfig(AnimationConfig* animationConfig)
     if (!_animationStates.empty())
     {
         auto added = false;
-        for (std::size_t i = 0, l = _animationStates.size(); i < l; ++i)
+        for (size_t i = 0, l = _animationStates.size(); i < l; ++i)
         {
             if (animationState->layer > _animationStates[i]->layer)
             {

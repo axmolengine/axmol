@@ -47,7 +47,7 @@ std::string WindowTest::title() const
 void WindowTestWindowed1::onEnter()
 {
     WindowTest::onEnter();
-    RenderViewImpl* view = (RenderViewImpl*)Director::getInstance()->getRenderView();
+    RenderView* view = (RenderView*)Director::getInstance()->getRenderView();
     view->setWindowed(480, 320);
 }
 
@@ -59,7 +59,7 @@ std::string WindowTestWindowed1::subtitle() const
 void WindowTestWindowed2::onEnter()
 {
     WindowTest::onEnter();
-    RenderViewImpl* view = (RenderViewImpl*)Director::getInstance()->getRenderView();
+    RenderView* view = (RenderView*)Director::getInstance()->getRenderView();
     view->setWindowed(960, 640);
 }
 
@@ -72,7 +72,7 @@ bool WindowTestFullscreen1::init()
 {
     // @remark: Set full screen before layout renderer elements to ensure VisibleRect is
     // correct with full screen window size
-    RenderViewImpl* view = (RenderViewImpl*)Director::getInstance()->getRenderView();
+    RenderView* view = (RenderView*)Director::getInstance()->getRenderView();
     view->setFullscreen();
     return WindowTest::init();
 }
@@ -84,7 +84,7 @@ std::string WindowTestFullscreen1::subtitle() const
 
 bool WindowTestFullscreen2::init()
 {
-    RenderViewImpl* view = (RenderViewImpl*)Director::getInstance()->getRenderView();
+    RenderView* view = (RenderView*)Director::getInstance()->getRenderView();
     view->setFullscreen(1);
     return WindowTest::init();
 }
@@ -96,7 +96,7 @@ std::string WindowTestFullscreen2::subtitle() const
 
 bool WindowTestFullscreen3::init()
 {
-    RenderViewImpl* view = (RenderViewImpl*)Director::getInstance()->getRenderView();
+    RenderView* view = (RenderView*)Director::getInstance()->getRenderView();
     view->setFullscreen(2);
     return WindowTest::init();
 }
@@ -111,7 +111,7 @@ void WindowTestResizedAndPositioned::onEnter()
     WindowTest::onEnter();
 
     auto s          = _director->getCanvasSize();
-    auto renderView = static_cast<RenderViewImpl*>(_director->getRenderView());
+    auto renderView = static_cast<RenderView*>(_director->getRenderView());
 
     int x = 0;
     int y = 0;
@@ -128,17 +128,16 @@ void WindowTestResizedAndPositioned::onEnter()
     addChild(label2);
 
     _director->getEventDispatcher()->addCustomEventListener(
-        RenderViewImpl::EVENT_WINDOW_POSITIONED,
-        AX_CALLBACK_1(WindowTestResizedAndPositioned::onWindowPositioned, this));
+        RenderView::EVENT_WINDOW_POSITIONED, AX_CALLBACK_1(WindowTestResizedAndPositioned::onWindowPositioned, this));
     _director->getEventDispatcher()->addCustomEventListener(
-        RenderViewImpl::EVENT_WINDOW_RESIZED, AX_CALLBACK_1(WindowTestResizedAndPositioned::onWindowResized, this));
+        RenderView::EVENT_WINDOW_RESIZED, AX_CALLBACK_1(WindowTestResizedAndPositioned::onWindowResized, this));
 }
 
 void WindowTestResizedAndPositioned::onExit()
 {
     WindowTest::onExit();
-    _director->getEventDispatcher()->removeCustomEventListeners(RenderViewImpl::EVENT_WINDOW_POSITIONED);
-    _director->getEventDispatcher()->removeCustomEventListeners(RenderViewImpl::EVENT_WINDOW_RESIZED);
+    _director->getEventDispatcher()->removeCustomEventListeners(RenderView::EVENT_WINDOW_POSITIONED);
+    _director->getEventDispatcher()->removeCustomEventListeners(RenderView::EVENT_WINDOW_RESIZED);
 }
 
 std::string WindowTestResizedAndPositioned::subtitle() const
@@ -146,7 +145,7 @@ std::string WindowTestResizedAndPositioned::subtitle() const
     return "Window Position And Size";
 }
 
-void WindowTestResizedAndPositioned::onWindowPositioned(EventCustom* e)
+void WindowTestResizedAndPositioned::onWindowPositioned(CustomEvent* e)
 {
     auto pos = static_cast<Vec2*>(e->getUserData());
     if (pos == nullptr)
@@ -155,7 +154,7 @@ void WindowTestResizedAndPositioned::onWindowPositioned(EventCustom* e)
     label1->setString(fmt::format("pos : {}, {}", (int)pos->x, (int)pos->y));
 }
 
-void WindowTestResizedAndPositioned::onWindowResized(EventCustom* e)
+void WindowTestResizedAndPositioned::onWindowResized(CustomEvent* e)
 {
     auto size = static_cast<Size*>(e->getUserData());
     if (size == nullptr)
@@ -170,14 +169,14 @@ void WindowTestClose::onEnter()
 
     label = nullptr;
 
-    _director->getEventDispatcher()->addCustomEventListener(RenderViewImpl::EVENT_WINDOW_CLOSE,
+    _director->getEventDispatcher()->addCustomEventListener(RenderView::EVENT_WINDOW_CLOSE,
                                                             AX_CALLBACK_1(WindowTestClose::onWindowClose, this));
 }
 
 void WindowTestClose::onExit()
 {
     WindowTest::onExit();
-    _director->getEventDispatcher()->removeCustomEventListeners(RenderViewImpl::EVENT_WINDOW_CLOSE);
+    _director->getEventDispatcher()->removeCustomEventListeners(RenderView::EVENT_WINDOW_CLOSE);
 }
 
 std::string WindowTestClose::subtitle() const
@@ -185,7 +184,7 @@ std::string WindowTestClose::subtitle() const
     return "Window close callback test";
 }
 
-void WindowTestClose::onWindowClose(EventCustom* e)
+void WindowTestClose::onWindowClose(CustomEvent* e)
 {
     auto isClose = static_cast<bool*>(e->getUserData());
     if (isClose == nullptr)

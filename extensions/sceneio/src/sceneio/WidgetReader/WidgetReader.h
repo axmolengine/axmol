@@ -139,7 +139,7 @@ extern const char* P_Path;
 #define AX_BASIC_PROPERTY_BINARY_READER                                                                              \
     if (key == P_IgnoreSize)                                                                                         \
     {                                                                                                                \
-        widget->ignoreContentAdaptWithSize(valueToBool(value));                                                      \
+        widget->setAutoSize(valueToBool(value));                                                                     \
     }                                                                                                                \
     else if (key == P_SizeType)                                                                                      \
     {                                                                                                                \

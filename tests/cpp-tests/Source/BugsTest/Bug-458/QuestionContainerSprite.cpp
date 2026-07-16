@@ -51,11 +51,11 @@ bool QuestionContainerSprite::init()
         static int a = 0;
 
         if (a == 0)
-            label->setColor(Color32::BLUE);
+            label->setColor(Color32::blue);
         else
         {
             AXLOGD("Color changed");
-            label->setColor(Color32::RED);
+            label->setColor(Color32::red);
         }
         a++;
         addChild(layer);

@@ -30,35 +30,28 @@
 #ifndef Spine_PathConstraintPositionTimeline_h
 #define Spine_PathConstraintPositionTimeline_h
 
-#include <spine/CurveTimeline.h>
+#include <spine/ConstraintTimeline1.h>
 
 namespace spine {
 
-	class SP_API PathConstraintPositionTimeline : public CurveTimeline1 {
+	/// Changes a path constraint's position.
+	class SP_API PathConstraintPositionTimeline : public ConstraintTimeline1 {
 		friend class SkeletonBinary;
 
 		friend class SkeletonJson;
 
-	RTTI_DECL
+		RTTI_DECL
 
 	public:
 		static const int ENTRIES;
 
-		explicit PathConstraintPositionTimeline(size_t frameCount, size_t bezierCount, int pathConstraintIndex);
+		explicit PathConstraintPositionTimeline(size_t frameCount, size_t bezierCount, int constraintIndex);
 
 		virtual ~PathConstraintPositionTimeline();
 
-		virtual void
-		apply(Skeleton &skeleton, float lastTime, float time, Vector<Event *> *pEvents, float alpha, MixBlend blend,
-			  MixDirection direction);
-
-		int getPathConstraintIndex() { return _constraintIndex; }
-
-		void setPathConstraintIndex(int inValue) { _constraintIndex = inValue; }
-
-	protected:
-		int _constraintIndex;
+		virtual void apply(Skeleton &skeleton, float lastTime, float time, Array<Event *> *events, float alpha, MixFrom from, bool add, bool out,
+						   bool appliedPose) override;
 	};
-}
+}// namespace spine
 
 #endif /* Spine_PathConstraintPositionTimeline_h */

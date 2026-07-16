@@ -13,7 +13,7 @@
 #include <Motion/CubismMotion.hpp>
 #include <Physics/CubismPhysics.hpp>
 #include <CubismDefaultParameterId.hpp>
-#include <Rendering/axmol/CubismRenderer_Cocos2dx.hpp>
+#include <Rendering/axmol/CubismRenderer_Axmol.hpp>
 #include <Utils/CubismString.hpp>
 #include <Id/CubismIdManager.hpp>
 #include "Motion/CubismMotionQueueEntry.hpp"
@@ -60,7 +60,10 @@ LAppModel::LAppModel()
     : CubismUserModel()
     , _modelSetting(NULL)
     , _userTimeSeconds(0.0f)
+    , _dragX(0.0f)
+    , _dragY(0.0f)
     , _renderSprite(NULL)
+    , _renderSpriteDisplay(NULL)
 {
     if (DebugLogEnable)
     {
@@ -79,7 +82,7 @@ LAppModel::LAppModel()
     _clearColor[2] = 1.0f;
     _clearColor[3] = 0.0f;
 
-    _renderBuffer = new Csm::Rendering::CubismOffscreenFrame_Cocos2dx;
+    _renderBuffer = new Csm::Rendering::CubismOffscreenFrame_Axmol;
 }
 
 LAppModel::~LAppModel()
@@ -88,24 +91,33 @@ LAppModel::~LAppModel()
 
     if (_renderSprite)
     {
-        // Cocos本体が消滅した後ではこの呼び出しが出来ないことに注意
-        _renderSprite->removeFromParentAndCleanup(true);
+        if (_renderSpriteDisplay)
+        {
+            _renderSpriteDisplay->removeFromParentAndCleanup(true);
+            _renderSpriteDisplay = NULL;
+        }
         _renderSprite = NULL;
     }
     _renderBuffer->DestroyOffscreenFrame();
+    delete _renderBuffer;
+    _renderBuffer = NULL;
 
     ReleaseMotions();
     ReleaseExpressions();
 
-    for (csmInt32 i = 0; i < _modelSetting->GetMotionGroupCount(); i++)
+    if (_modelSetting)
     {
-        const csmChar* group = _modelSetting->GetMotionGroupName(i);
-        ReleaseMotionGroup(group);
+        for (csmInt32 i = 0; i < _modelSetting->GetMotionGroupCount(); i++)
+        {
+            const csmChar* group = _modelSetting->GetMotionGroupName(i);
+            ReleaseMotionGroup(group);
+        }
+        CSM_DELETE(_modelSetting);
     }
-    CSM_DELETE(_modelSetting);
 
-    //cocos2d
-    Director::getInstance()->getTextureCache()->removeAllTextures();
+    for (csmUint32 i = 0; i < _loadedTextures.GetSize(); ++i)
+        Director::getInstance()->getTextureCache()->removeTexture(_loadedTextures[i]);
+    _loadedTextures.Clear();
 }
 
 void LAppModel::LoadAssets(const csmChar* dir, const csmChar* fileName)
@@ -123,7 +135,8 @@ void LAppModel::LoadAssets(const csmChar* dir, const csmChar* fileName)
 
     SetupModel(setting);
 
-    CreateRenderer();
+    const auto windowSize = Director::getInstance()->getRenderView()->getWindowSize();
+    CreateRenderer(static_cast<csmUint32>(windowSize.width), static_cast<csmUint32>(windowSize.height));
 
     SetupTextures();
 }
@@ -438,7 +451,7 @@ void LAppModel::Update()
     }
 
     // リップシンクの設定
-    if (_lipSync)
+    if (_lipSyncIds.GetSize() > 0)
     {
         csmFloat32 value = 0; // リアルタイムでリップシンクを行う場合、システムから音量を取得して0～1の範囲で値を入力します。
 
@@ -540,14 +553,14 @@ void LAppModel::DoDraw()
 {
     if (_model == NULL)return;
 
-    GetRenderer<Rendering::CubismRenderer_Cocos2dx>()->DrawModel();
+    GetRenderer<Rendering::CubismRenderer_Axmol>()->DrawModel();
 }
 
-void LAppModel::Draw(Csm::Rendering::CubismCommandBuffer_Cocos2dx* commandBuffer, CubismMatrix44& matrix)
+void LAppModel::Draw(Csm::Rendering::CubismCommandBuffer_Axmol* commandBuffer, CubismMatrix44& matrix)
 {
     if (_model == NULL)return;
 
-    Csm::Rendering::CubismRenderer_Cocos2dx::StartFrame(commandBuffer);
+    Csm::Rendering::CubismRenderer_Axmol::StartFrame(commandBuffer);
 
     //commandBuffer->PushCommandGroup();
 
@@ -559,7 +572,7 @@ void LAppModel::Draw(Csm::Rendering::CubismCommandBuffer_Cocos2dx* commandBuffer
 
     matrix.MultiplyByMatrix(_modelMatrix);
 
-    GetRenderer<Rendering::CubismRenderer_Cocos2dx>()->SetMvpMatrix(&matrix);
+    GetRenderer<Rendering::CubismRenderer_Axmol>()->SetMvpMatrix(&matrix);
 
     DoDraw();
 
@@ -592,7 +605,7 @@ void LAppModel::SetExpression(const csmChar* expressionID)
     if (_debugMode) LAppPal::PrintLog("[APP]expression: [%s]", expressionID);
     if (motion != NULL)
     {
-        _expressionManager->StartMotionPriority(motion, false, PriorityForce);
+        _expressionManager->StartMotion(motion, false);
     }
     else
     {
@@ -623,7 +636,8 @@ void LAppModel::ReloadRnederer()
 {
     DeleteRenderer();
 
-    CreateRenderer();
+    const auto windowSize = Director::getInstance()->getRenderView()->getWindowSize();
+    CreateRenderer(static_cast<csmUint32>(windowSize.width), static_cast<csmUint32>(windowSize.height));
 
     SetupTextures();
 }
@@ -652,10 +666,10 @@ void LAppModel::SetupTextures()
         _loadedTextures.PushBack(texture);
 
         //Cocos2d
-        GetRenderer<Rendering::CubismRenderer_Cocos2dx>()->BindTexture(modelTextureNumber, texture);
+        GetRenderer<Rendering::CubismRenderer_Axmol>()->BindTexture(modelTextureNumber, texture);
     }
 
-    GetRenderer<Rendering::CubismRenderer_Cocos2dx>()->IsPremultipliedAlpha(true);
+    GetRenderer<Rendering::CubismRenderer_Axmol>()->IsPremultipliedAlpha(true);
 
 }
 
@@ -757,7 +771,7 @@ void LAppModel::MakeRenderingTarget()
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
         // Retina対策でこっちからとる
-        RenderViewImpl *glimpl = (RenderViewImpl *)Director::getInstance()->getRenderView();
+        RenderView *glimpl = (RenderView *)Director::getInstance()->getRenderView();
         int renderW = frameW;
         int renderH = frameH;
         glfwGetFramebufferSize(glimpl->getWindow(), &frameW, &frameH);
@@ -768,29 +782,32 @@ void LAppModel::MakeRenderingTarget()
         Point origin = Director::getInstance()->getVisibleOrigin();
 
         _renderSprite = RenderTexture::create(frameW, frameH, ax::rhi::PixelFormat::RGBA8);
-        _renderSprite->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
-        _renderSprite->getSprite()->getTexture()->setAntiAliasTexParameters();
-        _renderSprite->getSprite()->setBlendFunc(BlendFunc::ALPHA_NON_PREMULTIPLIED);
-        _renderSprite->getSprite()->setOpacityModifyRGB(false);
-        // サンプルシーンへ登録
-        SampleScene::getInstance()->addChild(_renderSprite);
-        _renderSprite->setVisible(true);
 
-        // _renderSpriteのテクスチャを作成する
-        _renderSprite->getSprite()->getTexture()->setTexParameters(ax::Texture2D::TexParams{});
+        // create a display sprite from the render texture
+        _renderSpriteDisplay = Sprite::createWithTexture(_renderSprite);
+        _renderSpriteDisplay->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
+        _renderSpriteDisplay->getTexture()->setAntiAliasTexParameters();
+        _renderSpriteDisplay->setBlendFunc(BlendFunc::ALPHA_NON_PREMULTIPLIED);
+        _renderSpriteDisplay->setOpacityModifyRGB(false);
+        // サンプルシーンへ登録
+        SampleScene::getInstance()->addChild(_renderSpriteDisplay);
+        _renderSpriteDisplay->setVisible(true);
+
+        // _renderSpriteDisplayのテクスチャを作成する
+        _renderSprite->setTexParameters(ax::Texture2D::TexParams{});
 
         // レンダリングバッファの描画先をそのテクスチャにする
         _renderBuffer->CreateOffscreenFrame(frameW, frameH, _renderSprite);
 
-        _renderSprite->setScale(aspectFactor);
+        _renderSpriteDisplay->setScale(aspectFactor);
     }
 }
 
 void LAppModel::SetSpriteColor(float r, float g, float b, float a)
 {
-    if (_renderSprite != NULL)
+    if (_renderSpriteDisplay != NULL)
     {
-        _renderSprite->getSprite()->setColor(
+        _renderSpriteDisplay->setColor(
             Color32(static_cast<unsigned char>(255.0f * r), static_cast<unsigned char>(255.0f * g),
                     static_cast<unsigned char>(255.0f * b), static_cast<unsigned char>(255.0f * a)));
     }
