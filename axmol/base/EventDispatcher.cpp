@@ -47,6 +47,7 @@
 #include "axmol/scene/Camera.h"
 #include "axmol/scene/Node.h"
 #include "axmol/2d/ProtectedNode.h"
+#include "axmol/base/Profiling.h"
 
 #define DUMP_LISTENER_ITEM_PRIORITY_INFO 0
 
@@ -944,6 +945,8 @@ void EventDispatcher::dispatchEventToListeners(EventListenerVector* listeners,
 
 void EventDispatcher::dispatchEvent(Event* event, bool forced)
 {
+    AX_PROFILER_ZONE_SCOPED;
+
     if (!_isEnabled && !forced)
         return;
 

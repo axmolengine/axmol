@@ -35,6 +35,7 @@
 #    include "axmol/physics/3d/Rigidbody3D.h"
 #    include "axmol/renderer/Renderer.h"
 #    include "axmol/scene/Scene.h"
+#    include "axmol/base/Profiling.h"
 
 #    include <Jolt/Core/Factory.h>
 #    include <Jolt/Core/IssueReporting.h>
@@ -354,6 +355,7 @@ void PhysicsWorld3D::debugDraw(Renderer* renderer)
 
 void PhysicsWorld3D::stepSimulation(float dt)
 {
+    AX_PROFILER_ZONE_SCOPED;
 
     for (auto* actor : _physicsActors)
         actor->preSimulate();

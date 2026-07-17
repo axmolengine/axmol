@@ -37,6 +37,7 @@ THE SOFTWARE.
 #include "axmol/base/text_utils.h"
 #include "axmol/renderer/Renderer.h"
 #include "axmol/scene/SceneCompositor.h"
+#include "axmol/base/Profiling.h"
 
 #if defined(AX_ENABLE_PHYSICS_2D)
 #    include "axmol/physics/2d/PhysicsWorld2D.h"
@@ -211,6 +212,7 @@ void Scene::setDebugCamera(Camera* camera)
 
 void Scene::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags)
 {
+    AX_PROFILER_ZONE_SCOPED;
     Node::visit(renderer, parentTransform, parentFlags);
 }
 
@@ -287,6 +289,8 @@ void Scene::setFixedDeltaTime(float fixedStep)
 
 void Scene::tick(float deltaTime)
 {
+    AX_PROFILER_ZONE_SCOPED;
+
     if (_fixedUpdateEnabled)
     {
         // apply time scale and clamp to avoid huge dt spikes

@@ -392,6 +392,8 @@ ssize_t ActionManager::getNumberOfRunningActions() const
 // main loop
 void ActionManager::update(float dt)
 {
+    AX_PROFILER_ZONE_SCOPED;
+
     for (auto actionIt = _targets.begin(); actionIt != _targets.end();)
     {
         auto elt               = &actionIt->second;

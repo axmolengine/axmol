@@ -1373,6 +1373,8 @@ void Director::activate(SetIntervalReason reason)
 
     _axmol_thread_id = std::this_thread::get_id();
 
+    AX_PROFILER_THREAD_NAME("MainThread");
+
     Application::getInstance()->setAnimationInterval(_animationInterval);
 
     // fix issue #3509, skip one fps to avoid incorrect time calculation.
