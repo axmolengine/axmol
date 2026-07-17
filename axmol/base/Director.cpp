@@ -71,7 +71,7 @@ THE SOFTWARE.
 #    include "axmol/base/ScriptSupport.h"
 #endif
 
-#include "axmol/rhi/SamplerCache.h"
+#include "axmol/rhi/SamplerRegistry.h"
 #include "axmol/rhi/GraphicsCore.h"
 #include "axmol/renderer/VertexLayoutManager.h"
 
@@ -192,7 +192,7 @@ bool Director::init()
     // listen the event that renderer was recreated on Android/WP8
     _rendererRecreatedListener = CustomEventListener::create(EVENT_RENDERER_RECREATED, [this](CustomEvent*) {
         _isStatusLabelUpdated = true;  // Force recreation of textures
-        rhi::SamplerCache::getInstance()->rebuild();
+        rhi::SamplerRegistry::getInstance()->rebuild();
         rhi::ShaderCache::getInstance()->recompileAll();
     });
 
@@ -948,7 +948,7 @@ void Director::reset()
     MeshMaterial::releaseCachedMaterial();
 #endif
 
-    rhi::SamplerCache::destroyInstance();
+    rhi::SamplerRegistry::destroyInstance();
 }
 
 void Director::cleanupDirector()

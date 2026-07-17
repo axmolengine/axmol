@@ -23,7 +23,7 @@
  ****************************************************************************/
 #include "axmol/rhi/d3d12/Texture12.h"
 #include "axmol/rhi/d3d12/Driver12.h"
-#include "axmol/rhi/SamplerCache.h"
+#include "axmol/rhi/SamplerRegistry.h"
 #include "axmol/rhi/RHIUtils.h"
 #include "axmol/base/Logging.h"
 #include <assert.h>
@@ -392,9 +392,9 @@ void TextureImpl::updateSamplerDesc(const SamplerDesc& samplerDesc)
 {
     _desc.samplerDesc = samplerDesc;
 
-    auto samplerCache = SamplerCache::getInstance();
-    auto samplerIndex = samplerCache->registerSampler(samplerDesc);
-    _sampler          = static_cast<DescriptorHandle*>(samplerCache->getSampler(samplerIndex));
+    auto samplerRegistry = SamplerRegistry::getInstance();
+    auto samplerIndex    = samplerRegistry->registerSampler(samplerDesc);
+    _sampler             = static_cast<DescriptorHandle*>(samplerRegistry->getSampler(samplerIndex));
 }
 
 void TextureImpl::updateTextureDesc(const TextureDesc& desc)

@@ -27,7 +27,7 @@
 #include "axmol/rhi/metal/UtilsMTL.h"
 #include "axmol/base/Macros.h"
 #include "axmol/rhi/RHIUtils.h"
-#include "axmol/rhi/SamplerCache.h"
+#include "axmol/rhi/SamplerRegistry.h"
 
 namespace ax::rhi::mtl
 {
@@ -101,7 +101,7 @@ TextureImpl::~TextureImpl()
 
 void TextureImpl::updateSamplerDesc(const SamplerDesc& desc)
 {
-    _mtlSamplerState = static_cast<id<MTLSamplerState>>(SamplerCache::getInstance()->getSampler(desc));
+    _mtlSamplerState = static_cast<id<MTLSamplerState>>(SamplerRegistry::getInstance()->getSampler(desc));
 }
 
 void TextureImpl::updateTextureDesc(const TextureDesc& desc)

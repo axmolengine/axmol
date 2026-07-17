@@ -89,7 +89,7 @@ Program::~Program()
 
 bool Program::isValid() const
 {
-    return _vsModule && _fsModule && _vsModule->isCompiled() && _fsModule->isCompiled();
+    return _samplersResolved && _vsModule && _fsModule && _vsModule->isCompiled() && _fsModule->isCompiled();
 }
 
 void Program::setProgramIds(uint32_t progType, uint64_t progId)
@@ -368,7 +368,7 @@ void Program::reflectSamplers(SLCReflectContext* context)
         uniform.varType     = SC_TYPE_HALF + imageDim;
         ibs->advance(static_cast<ptrdiff_t>(sizeof(uint8_t)));  // skip bits: multisample, arrayed, reserved
         uniform.count = (std::max)(1, static_cast<int>(ibs->read<uint16_t>()));
-        ibs->advance(static_cast<ptrdiff_t>(sizeof(uint8_t) * 2));  // sampler source + reserved
+        ibs->advance(static_cast<ptrdiff_t>(sizeof(uint16_t)));  // reserved
 
         const auto reflectedId = makeTextureNameKey(name);
         auto ret               = _activeUniformInfos.emplace(reflectedId, uniform);
@@ -398,39 +398,38 @@ void Program::reflectSamplers(SLCReflectContext* context)
     for (uint32_t i = 0; i < context->refl->num_samplers; ++i)
     {
         SamplerBindingInfo sampler;
-        sampler.name           = _sc_read_name(ibs);
-        sampler.binding        = ibs->read<int32_t>();
-        sampler.textureBinding = ibs->read<int32_t>();
-        sampler.descriptorSet  = ibs->read<uint16_t>();
-        sampler.count       = ibs->read<uint16_t>();
-        sampler.presetIndex = ibs->read<int16_t>();
-        sampler.comparison  = ibs->read<uint8_t>() != 0;
+        sampler.name          = _sc_read_name(ibs);
+        sampler.binding       = ibs->read<int32_t>();
+        sampler.descriptorSet = ibs->read<uint16_t>();
+        sampler.count         = ibs->read<uint16_t>();
+        sampler.presetIndex   = ibs->read<int16_t>();
+        sampler.comparison    = ibs->read<uint8_t>() != 0;
         ibs->advance(static_cast<ptrdiff_t>(sizeof(uint8_t)));  // reserved
 
-        const auto samplerIndex = _activeSamplerInfos.size();
-        _activeSamplerInfos.emplace_back(sampler);
-
-        if (sampler.presetIndex < 0 && sampler.textureBinding >= 0)
+        sampler.samplerId = SamplerRegistry::getInstance()->find(sampler.name);
+        if (!sampler.samplerId)
         {
-            if (samplerIndex > static_cast<size_t>((std::numeric_limits<int16_t>::max)()))
-            {
-                AXLOGE("Too many active samplers in shader reflection");
-                continue;
-            }
-
-            const auto textureBinding = static_cast<size_t>(sampler.textureBinding);
-            if (_textureOwnedSamplerIndices.size() <= textureBinding)
-                _textureOwnedSamplerIndices.resize(textureBinding + 1, -1);
-
-            auto& textureOwnedSamplerIndex = _textureOwnedSamplerIndices[textureBinding];
-            if (textureOwnedSamplerIndex >= 0)
-            {
-                AXLOGE("Duplicate texture-owned sampler for texture binding {}", sampler.textureBinding);
-                continue;
-            }
-
-            textureOwnedSamplerIndex = static_cast<int16_t>(samplerIndex);
+            AXLOGE("Sampler '{}' is referenced by the shader but has not been registered. "
+                   "Register it before creating the shader Program.",
+                   sampler.name);
+            _samplersResolved = false;
         }
+
+        if (sampler.binding >= 0 && sampler.binding <= (std::numeric_limits<uint16_t>::max)())
+        {
+            _samplerBindings.push_back(ProgramSamplerBinding{
+                .descriptorSet = sampler.descriptorSet,
+                .binding       = static_cast<uint16_t>(sampler.binding),
+                .samplerId     = sampler.samplerId,
+            });
+        }
+        else
+        {
+            AXLOGE("Sampler '{}' has invalid shader binding {}", sampler.name, sampler.binding);
+            _samplersResolved = false;
+        }
+
+        _activeSamplerInfos.emplace_back(sampler);
     }
 }
 

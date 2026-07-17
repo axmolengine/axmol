@@ -47,7 +47,6 @@ cbuffer vs_ub
 };
 
 Texture2D u_tex0;
-SamplerState u_tex0Sampler;
 ```
 
 `axslcc` keeps the engine's deterministic backend assignments internally:
@@ -55,13 +54,14 @@ SamplerState u_tex0Sampler;
 - vertex uniform buffers start at `b0, space0`;
 - fragment uniform buffers start at `b1, space0`;
 - textures are assigned to `tN, space1`;
-- sampler preset and TextureOwned sampler slots are assigned by `axslcc`.
+- built-in sampler slots are assigned by `axslcc` with fixed bindings matching
+  the `SamplerPreset` enum.
 
 Those bindings are reflection/backend details, not user-authored HLSL syntax.
 
 ## Which sampler style should I use?
 
-Use the built-in sampler presets from `base.hlsli` for most shaders:
+Use the built-in sampler presets from `base.hlsli` for all shaders:
 
 ```hlsl
 Texture2D u_tex0;
@@ -69,24 +69,18 @@ Texture2D u_tex0;
 float4 c = u_tex0.Sample(LinearClamp, uv);
 ```
 
-This is the most predictable cross-backend path.
+This is the only supported cross-backend path. Custom sampler names are
+rejected by `axslcc` at compile time.
 
-## What does `presetIndex < 0` mean internally?
+## Does Axmol support custom sampler names?
 
-It means the shader did not request an Axmol shader preset sampler. It does not
-mean "invalid" and it does not mean "runtime custom sampler".
+No. Only the 22 built-in sampler names from `base.hlsli` are supported.
+Declaring a custom sampler name causes `axslcc` to fail with an error.
 
-The runtime treats that path as a TextureOwned sampler. Its sampler state comes
-from exactly one associated texture recorded in reflection.
-
-## Does Axmol support arbitrary runtime custom samplers?
-
-No. Current Axmol RHI supports TextureOwned sampler state and built-in shader
-presets. There is no public runtime API for binding arbitrary `SamplerState`
-objects by shader name.
-
-If that is needed later, it should be added as an explicit third sampler source,
-not by overloading `presetIndex`.
+If per-texture sampler overrides are needed, use the `Texture2D` C++ API
+(`setTexParameters`, `setAliasTexParameters`, `setAntiAliasTexParameters`),
+which operates on the texture's own sampler state and does not require a
+custom shader sampler declaration.
 
 ## Can one texture be sampled with two different samplers?
 
@@ -98,23 +92,10 @@ float4 b = u_tex0.Sample(PointClamp, uv);
 ```
 
 D3D, Metal, and Vulkan separate samplers can represent this natively, but
-OpenGL and OpenGL ES use combined sampler uniforms. Axmol does not expose
-runtime sampling pairs, so GL/GLES lowering intentionally rejects this pattern.
+OpenGL and OpenGL ES use combined sampler uniforms. Axmol GL/GLES lowering
+intentionally rejects this pattern.
 
 Use separate texture bindings or a single sampler state for that texture.
-
-## Can two textures share one TextureOwned sampler?
-
-No. This is invalid:
-
-```hlsl
-a.Sample(sharedSampler, uv);
-b.Sample(sharedSampler, uv);
-```
-
-TextureOwned means "this sampler state comes from exactly one owner texture".
-If multiple textures should share the same sampler state, use a ShaderPreset
-such as `LinearClamp`, `LinearWrap`, or `PointClamp`.
 
 ## Why did old shaders fail after an axslcc update?
 

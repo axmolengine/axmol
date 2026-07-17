@@ -30,7 +30,7 @@
 #include "axmol/rhi/d3d11/VertexLayout11.h"
 #include "axmol/rhi/d3d11/Texture11.h"
 #include "axmol/rhi/GraphicsCore.h"
-#include "axmol/rhi/SamplerCache.h"
+#include "axmol/rhi/SamplerRegistry.h"
 #include <dxgi1_2.h>
 #include <dxgi1_3.h>
 #include <dxgi1_5.h>
@@ -673,7 +673,7 @@ void RenderContextImpl::prepareDrawing()
     auto& cpuBuffer = _programState->getUniformBuffer();
     program->bindUniformBuffers(_d3d11Context, cpuBuffer.data(), cpuBuffer.size());
 
-    // Phase 1: bind textures and their reflected TextureOwned samplers.
+    // Phase 1: bind textures.
     _textureBounds = 0;
     for (const auto& [bindingIndex, bindingSet] : _programState->getTextureBindingSets())
     {
@@ -686,40 +686,19 @@ void RenderContextImpl::prepareDrawing()
             context->PSSetShaderResources(slot, 1, &textureImpl->internalHandle().srv);
             ++_textureBounds;
         }
-
-        const auto* textureOwnedSampler = program->getTextureOwnedSamplerInfo(bindingIndex);
-        if (!textureOwnedSampler || textureOwnedSampler->binding < 0 || textureOwnedSampler->count == 0)
-            continue;
-
-        for (uint16_t i = 0; i < textureOwnedSampler->count; ++i)
-        {
-            if (i >= texs.size())
-                break;
-
-            auto textureImpl  = static_cast<TextureImpl*>(texs[i]);
-            auto samplerState = textureImpl->getSamplerState();
-            context->PSSetSamplers(textureOwnedSampler->binding + i, 1, &samplerState);
-        }
     }
 
-    // Phase 2: bind ShaderPreset samplers. They are independent of texture bindings.
-    auto samplerCache = SamplerCache::getInstance();
+    // Phase 2: bind samplers resolved by Program creation.
+    auto samplerRegistry = SamplerRegistry::getInstance();
     for (const auto& samplerInfo : program->getActiveSamplerInfos())
     {
-        if (samplerInfo.presetIndex < 0 || samplerInfo.binding < 0 || samplerInfo.count == 0)
+        if (!samplerInfo.samplerId || samplerInfo.binding < 0 || samplerInfo.count == 0)
             continue;
 
-        if (samplerInfo.presetIndex >= SamplerPreset::Count)
-        {
-            AXASSERT(false, "invalid D3D11 sampler preset index");
-            continue;
-        }
-
-        auto sampler = static_cast<ID3D11SamplerState*>(
-            samplerCache->getSampler(static_cast<SamplerPreset::enum_type>(samplerInfo.presetIndex)));
+        auto sampler = static_cast<ID3D11SamplerState*>(samplerRegistry->getSampler(samplerInfo.samplerId));
         if (!sampler)
         {
-            AXASSERT(false, "failed to resolve D3D11 sampler preset");
+            AXASSERT(false, "failed to resolve D3D11 sampler");
             continue;
         }
 

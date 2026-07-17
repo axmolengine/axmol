@@ -512,18 +512,8 @@ void RenderPipelineImpl::updatePipelineLayoutState(ProgramImpl* program)
         {
             AXASSERT(smp.descriptorSet == axslc::kPresetSamplerDescriptorSet,
                      "Vulkan sampler reflection must use descriptor set 1");
-            if (smp.presetIndex >= 0)
-            {
-                AXASSERT(smp.presetIndex < SamplerPreset::Count, "invalid Vulkan sampler preset index");
-                AXASSERT(smp.binding == axslc::kVulkanSamplerBindingShift + smp.presetIndex,
-                         "Vulkan preset sampler binding must match binding shift + preset index");
-            }
-            else
-            {
-                AXASSERT(smp.binding >=
-                             axslc::kVulkanSamplerBindingShift + static_cast<int>(axslc::kTextureSamplerBindingBase),
-                         "Vulkan texture-owned/custom sampler binding is below the reserved range");
-            }
+            AXASSERT(smp.binding >= axslc::kVulkanSamplerBindingShift,
+                     "Vulkan separate sampler binding must include the sampler binding shift");
 
             VkDescriptorSetLayoutBinding& b = resourceBindings.emplace_back();
             b.binding                       = smp.binding;

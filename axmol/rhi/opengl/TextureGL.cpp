@@ -31,7 +31,7 @@
 #include "axmol/platform/PlatformConfig.h"
 #include "axmol/rhi/opengl/MacrosGL.h"
 #include "axmol/rhi/opengl/UtilsGL.h"
-#include "axmol/rhi/SamplerCache.h"
+#include "axmol/rhi/SamplerRegistry.h"
 #include "axmol/rhi/RHIUtils.h"
 
 namespace ax::rhi::gl
@@ -96,7 +96,7 @@ void TextureImpl::invalidate()
 
 void TextureImpl::updateSamplerDesc(const SamplerDesc& desc)
 {
-    this->_nativeSampler = static_cast<GLuint>(SamplerCache::getInstance()->getSampler(desc));
+    this->_nativeSampler = static_cast<GLuint>(SamplerRegistry::getInstance()->getSampler(desc));
 }
 
 void TextureImpl::updateData(const void* data, int width, int height, int level, int layerIndex)

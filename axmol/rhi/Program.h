@@ -29,6 +29,7 @@
 #include "axmol/base/Object.h"
 #include "axmol/platform/PlatformMacros.h"
 #include "axmol/rhi/ShaderCache.h"
+#include "axmol/rhi/SamplerRegistry.h"
 #include "axmol/rhi/Buffer.h"
 #include "axmol/tlx/hlookup.hpp"
 #include "axmol/tlx/inlined_vector.hpp"
@@ -75,12 +76,19 @@ struct UniformBlockInfo
 struct SamplerBindingInfo
 {
     int binding{-1};
-    int textureBinding{-1};
     uint16_t descriptorSet{0};
     uint16_t count{1};
     int16_t presetIndex{-1};
     bool comparison{false};
+    SamplerId samplerId{};
     std::string_view name;
+};
+
+struct ProgramSamplerBinding
+{
+    uint16_t descriptorSet{0};
+    uint16_t binding{0};
+    SamplerId samplerId{};
 };
 
 struct SLCReflectContext;
@@ -166,14 +174,7 @@ public:
 
     const std::vector<TextureUniformEntry>& getActiveTextureInfos() const { return _activeTextureInfos; };
     const std::vector<SamplerBindingInfo>& getActiveSamplerInfos() const { return _activeSamplerInfos; }
-    const SamplerBindingInfo* getTextureOwnedSamplerInfo(int textureBinding) const
-    {
-        if (textureBinding < 0 || static_cast<size_t>(textureBinding) >= _textureOwnedSamplerIndices.size())
-            return nullptr;
-
-        const auto samplerIndex = _textureOwnedSamplerIndices[textureBinding];
-        return samplerIndex >= 0 ? &_activeSamplerInfos[samplerIndex] : nullptr;
-    }
+    const std::vector<ProgramSamplerBinding>& getSamplerBindings() const { return _samplerBindings; }
 
     /**
      * Get engine built-in program type.
@@ -241,7 +242,8 @@ protected:
     // unstable textures reflection, we need copy and update runtimeLocation after link program every time
     std::vector<TextureUniformEntry> _activeTextureInfos;
     std::vector<SamplerBindingInfo> _activeSamplerInfos;
-    std::vector<int16_t> _textureOwnedSamplerIndices;
+    std::vector<ProgramSamplerBinding> _samplerBindings;
+    bool _samplersResolved{true};
 
     // Populated once from ShaderModule reflection at program creation.
     // Contains stable, backend‑independent metadata for all active uniform blocks.

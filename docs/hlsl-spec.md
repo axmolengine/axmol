@@ -34,7 +34,8 @@ Write declarations without registers:
 
 ```hlsl
 Texture2D u_tex0;
-SamplerState u_tex0Sampler;
+// SamplerState is declared in base.hlsli; just sample with a built-in name.
+// Do not declare custom sampler names.
 ```
 
 ## File Names
@@ -192,17 +193,19 @@ The runtime uses reflection to bind the final backend resource locations.
 
 ## Sampler Model
 
-Axmol has two sampler sources.
+Axmol supports built-in sampler presets only. Every sampler declared in a
+shader must use one of the names listed below. Custom sampler names are rejected
+by `axslcc` at compile time.
 
 | Source | Meaning | Shader Authoring |
 | --- | --- | --- |
-| ShaderPreset | sampler state comes from one of Axmol's built-in presets | sample with `LinearClamp`, `PointClamp`, etc. |
-| TextureOwned | sampler state comes from exactly one associated texture/resource | declare one non-preset sampler for that texture |
+| Built-In | sampler state comes from one of Axmol's built-in presets | sample with `LinearClamp`, `PointClamp`, etc. |
 
-There is no runtime API for arbitrary custom sampler objects in the current RHI.
-Do not treat a non-preset sampler declaration as a user-bindable custom sampler.
+Each built-in sampler name maps to a fixed `SamplerPreset` enum value. The
+binding is independent of shader declaration order — `PointClamp` always maps to
+the same slot regardless of where it appears in the source.
 
-### ShaderPreset Samplers
+### Built-In Samplers
 
 Most Axmol HLSL should use the built-in sampler presets from `base.hlsli`:
 
@@ -228,41 +231,9 @@ Built-in presets:
 | `ShadowCmpClamp`, `ShadowCmpWrap`, `ShadowCmpMirror`, `ShadowCmpBorder` | `SamplerComparisonState` |
 | `LinearNoMipClamp`, `PointNoMipClamp` | `SamplerState` |
 
-ShaderPreset samplers are independent of texture binding numbers. For example,
+Built-in samplers are independent of texture binding numbers. For example,
 a texture internally assigned to `t3` may still sample with `LinearClamp`; the
 runtime binds the texture and the preset sampler independently.
-
-### TextureOwned Samplers
-
-TextureOwned sampling means the sampler state is taken from one associated
-texture. A TextureOwned sampler may internally reuse an existing built-in
-sampler state owned by that texture.
-
-```hlsl
-Texture2D u_albedo;
-SamplerState u_albedoSampler;
-
-float4 c = u_albedo.Sample(u_albedoSampler, uv);
-```
-
-Reflection records the sampler's owner texture binding. Runtime should use that
-metadata and must not infer ownership from equal texture/sampler slot numbers.
-
-A TextureOwned sampler must have exactly one owner texture. Do not share one
-non-preset sampler across multiple textures:
-
-```hlsl
-// Not supported for TextureOwned samplers:
-a.Sample(sharedSampler, uv);
-b.Sample(sharedSampler, uv);
-```
-
-If several textures should use the same sampler state, use a ShaderPreset such
-as `LinearClamp` instead.
-
-Internally, Axmol reserves logical sampler slots for built-in presets and
-TextureOwned samplers. Those slots are not part of the user-facing HLSL syntax;
-write declarations and let `axslcc` assign them.
 
 ### GL/GLES Combined Samplers
 
@@ -410,9 +381,8 @@ combined-mode preparation.
 - Use `vs_ub` for vertex uniforms and `fs_ub` for fragment uniforms; `axslcc`
   assigns their backend bindings.
 - Declare textures and storage resources without binding syntax.
-- Use built-in sampler presets for explicit shader sampler state.
-- Use one TextureOwned sampler per owner texture, or use a ShaderPreset for
-  sampler state shared by multiple textures.
+- Use only built-in sampler names such as `LinearClamp`. Custom sampler names
+  are not supported and will cause a compile error.
 - Do not sample one texture with multiple sampler states if GL/GLES is a target.
 - Match varyings by semantic name and index, not variable name.
 - Recompile all shaders after changing the reflection layout or axslcc runtime

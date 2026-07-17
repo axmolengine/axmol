@@ -32,7 +32,7 @@
 #include "axmol/rhi/metal/BufferManager.h"
 #include "axmol/rhi/metal/DepthStencilStateMTL.h"
 #include "axmol/rhi/metal/RenderTargetMTL.h"
-#include "axmol/rhi/SamplerCache.h"
+#include "axmol/rhi/SamplerRegistry.h"
 #include "axmol/platform/Application.h"
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_MAC
@@ -524,7 +524,7 @@ void RenderContextImpl::setTexturesAndSamplers() const
 {
     const auto program = _programState->getProgram();
 
-    // Phase 1: bind textures and their reflected TextureOwned samplers.
+    // Phase 1: bind textures.
     for (const auto& [bindingIndex, bindingSet] : _programState->getTextureBindingSets())
     {
         auto& texs     = bindingSet.texs;
@@ -535,42 +535,21 @@ void RenderContextImpl::setTexturesAndSamplers() const
             auto textureImpl = static_cast<TextureImpl*>(texs[k]);
             [_mtlRenderEncoder setFragmentTexture:textureImpl->internalHandle() atIndex:slot];
         }
-
-        const auto* textureOwnedSampler = program->getTextureOwnedSamplerInfo(bindingIndex);
-        if (!textureOwnedSampler || textureOwnedSampler->binding < 0 || textureOwnedSampler->count == 0)
-            continue;
-
-        for (uint16_t index = 0; index < textureOwnedSampler->count; ++index)
-        {
-            if (index >= texs.size())
-                break;
-
-            auto textureImpl = static_cast<TextureImpl*>(texs[index]);
-            [_mtlRenderEncoder setFragmentSamplerState:textureImpl->internalSampler()
-                                               atIndex:textureOwnedSampler->binding + index];
-        }
     }
 
-    // Phase 2: bind ShaderPreset samplers. They are independent of texture bindings.
-    auto samplerCache = SamplerCache::getInstance();
+    // Phase 2: bind samplers resolved by Program creation.
+    auto samplerRegistry = SamplerRegistry::getInstance();
     for (const auto& samplerInfo : program->getActiveSamplerInfos())
     {
-        if (samplerInfo.presetIndex < 0 || samplerInfo.binding < 0 || samplerInfo.count == 0)
+        if (!samplerInfo.samplerId || samplerInfo.binding < 0 || samplerInfo.count == 0)
             continue;
 
-        if (samplerInfo.presetIndex >= SamplerPreset::Count)
-        {
-            AXASSERT(false, "invalid Metal sampler preset index");
-            continue;
-        }
-
-        const auto samplerIndex = static_cast<SamplerPreset::enum_type>(samplerInfo.presetIndex);
-        const auto sampler      = samplerCache->getSampler(samplerIndex);
+        const auto sampler      = samplerRegistry->getSampler(samplerInfo.samplerId);
         const auto samplerState = static_cast<id<MTLSamplerState>>(sampler);
 
         if (samplerState == nil)
         {
-            AXASSERT(false, "failed to resolve Metal sampler preset");
+            AXASSERT(false, "failed to resolve Metal sampler");
             continue;
         }
 

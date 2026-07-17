@@ -17,7 +17,7 @@ set(_AX_RHI_HEADER
   rhi/ShaderModule.h
   rhi/Texture.h
   rhi/VertexLayout.h
-  rhi/SamplerCache.h
+  rhi/SamplerRegistry.h
   rhi/DriverFactory.h
   rhi/GraphicsCore.h
   rhi/VulkanInterop.h
@@ -37,7 +37,7 @@ set(_AX_RHI_SRC
   rhi/RenderTarget.cpp
   rhi/ShaderCache.cpp
   rhi/RenderPassDesc.cpp
-  rhi/SamplerCache.cpp
+  rhi/SamplerRegistry.cpp
   rhi/GraphicsCore.cpp
 )
 

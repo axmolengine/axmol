@@ -33,7 +33,7 @@
 #include "axmol/rhi/vulkan/DriverVK.h"
 #include "axmol/rhi/vulkan/SemaphorePoolVK.h"
 #include "axmol/rhi/GraphicsCore.h"
-#include "axmol/rhi/SamplerCache.h"
+#include "axmol/rhi/SamplerRegistry.h"
 #include "axmol/base/Logging.h"
 #include "axmol/math/MathUtil.h"
 
@@ -1152,44 +1152,23 @@ void RenderContextImpl::prepareDrawing()
         for (const auto& samplerInfo : activeSamplerInfos)
         {
             const size_t offset = imageInfos.size();
-            if (samplerInfo.presetIndex >= 0)
+            if (!samplerInfo.samplerId)
             {
-                AXASSERT(samplerInfo.presetIndex < SamplerPreset::Count, "invalid Vulkan sampler preset index");
-                auto sampler = static_cast<VkSampler>(SamplerCache::getInstance()->getSampler(
-                    static_cast<SamplerPreset::enum_type>(samplerInfo.presetIndex)));
-                for (uint16_t i = 0; i < samplerInfo.count; ++i)
-                {
-                    auto& imageInfo   = imageInfos.emplace_back();
-                    imageInfo.sampler = sampler;
-                }
+                AXASSERT(false, "invalid Vulkan sampler id");
+                continue;
             }
-            else
+
+            auto sampler = static_cast<VkSampler>(SamplerRegistry::getInstance()->getSampler(samplerInfo.samplerId));
+            if (!sampler)
             {
-                const auto& textureBindingSets = _programState->getTextureBindingSets();
-                auto textureBindingIt          = textureBindingSets.find(samplerInfo.textureBinding);
-                auto fallbackSampler           = static_cast<VkSampler>(
-                    SamplerCache::getInstance()->getSampler(SamplerPreset::LinearClamp));
-                const auto* texs = textureBindingIt != textureBindingSets.end() ? &textureBindingIt->second.texs : nullptr;
-                bool completeTextureBinding = texs && texs->size() >= samplerInfo.count;
-                if (texs)
-                {
-                    for (uint16_t i = 0; i < samplerInfo.count && i < texs->size(); ++i)
-                        completeTextureBinding = completeTextureBinding && (*texs)[i] != nullptr;
-                }
+                AXASSERT(false, "failed to resolve Vulkan sampler");
+                continue;
+            }
 
-                if (!completeTextureBinding)
-                {
-                    AXLOGW("Vulkan texture-owned sampler binding {} has incomplete texture binding {}: "
-                           "expected {} textures, got {}",
-                           samplerInfo.binding, samplerInfo.textureBinding, samplerInfo.count, texs ? texs->size() : 0);
-                }
-
-                for (uint16_t i = 0; i < samplerInfo.count; ++i)
-                {
-                    auto textureImpl  = texs && i < texs->size() ? static_cast<TextureImpl*>((*texs)[i]) : nullptr;
-                    auto& imageInfo   = imageInfos.emplace_back();
-                    imageInfo.sampler = textureImpl ? textureImpl->getSampler() : fallbackSampler;
-                }
+            for (uint16_t i = 0; i < samplerInfo.count; ++i)
+            {
+                auto& imageInfo   = imageInfos.emplace_back();
+                imageInfo.sampler = sampler;
             }
 
             if (imageInfos.size() == offset)

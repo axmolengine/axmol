@@ -27,6 +27,7 @@
 #include "axmol/tlx/hlookup.hpp"
 #include "axmol/tlx/vector.hpp"
 #include "RHITypes.h"
+#include <string>
 
 namespace ax::rhi
 {
@@ -37,19 +38,34 @@ namespace ax::rhi
 
 class DriverBase;
 
-class SamplerCache
+struct SamplerId
+{
+    static constexpr uint16_t INVALID = 0xffff;
+
+    uint16_t value{INVALID};
+
+    constexpr explicit operator bool() const { return value != INVALID; }
+    constexpr bool operator==(const SamplerId&) const = default;
+};
+
+class SamplerRegistry
 {
 public:
     static constexpr uint32_t MAX_SAMPLER_COUNT = 256;
 
-    static SamplerCache* getInstance();
+    static SamplerRegistry* getInstance();
     static void destroyInstance();
 
-    SamplerCache();
-    ~SamplerCache();
+    SamplerRegistry();
+    ~SamplerRegistry();
 
     void rebuild();
 
+    SamplerId registerSampler(std::string_view name, const SamplerDesc& desc);
+    SamplerId find(std::string_view name) const;
+    const SamplerDesc& getDesc(SamplerId id) const;
+
+    SamplerHandle getSampler(SamplerId samplerId);
     SamplerHandle getSampler(SamplerPreset::enum_type samplerIndex);
     SamplerHandle getSampler(const SamplerDesc& desc);
 
@@ -58,12 +74,13 @@ public:
 private:
     void removeAllSamplers();
     void createBuiltinSamplers();
-    void createBuiltinSampler(uint32_t samplerIndex, const SamplerDesc& desc);
+    SamplerId registerBuiltinSampler(SamplerPreset::enum_type preset, const SamplerDesc& desc);
 
-    tlx::pod_vector<SamplerHandle> _builtinSamplers;
-    tlx::hash_map<SamplerPreset::enum_type, SamplerHandle> _customSamplers;
+    tlx::pod_vector<SamplerHandle> _samplers;
+    tlx::pod_vector<SamplerDesc> _samplerDescs;
+    tlx::hash_map<std::string, SamplerId> _samplerIdsByName;
 
-    tlx::hash_map<uint32_t, uint32_t> _samplersRegistry;  // sampler desc => sampler index registry
+    tlx::hash_map<uint32_t, uint32_t> _samplersRegistry;  // legacy desc => sampler index registry
 
     DriverBase* _driver{nullptr};
 

@@ -75,9 +75,7 @@ struct SamplerPreset
         Count
     };
 };
-inline constexpr uint32_t kTextureSamplerBindingBase = 32;
 inline constexpr uint32_t kPresetSamplerDescriptorSet = 1;
-static_assert(static_cast<uint32_t>(SamplerPreset::Count) <= kTextureSamplerBindingBase);
 
 inline constexpr int32_t kVulkanSamplerBindingShift = 1024;
 
@@ -101,13 +99,6 @@ enum ShaderLang
     SHADER_LANG_GLSL,
     SHADER_LANG_SPIRV,
     SHADER_LANG_COUNT
-};
-
-enum SamplerSource : uint8_t
-{
-    SC_SAMPLER_SOURCE_SHADER_PRESET = 0,
-    SC_SAMPLER_SOURCE_TEXTURE_OWNED = 1,
-    SC_SAMPLER_SOURCE_CUSTOM        = 2,
 };
 
 enum SCType : uint16_t
@@ -193,18 +184,16 @@ struct sc_refl_texture
     uint8_t arrayed : 1;      // whether samplerXXArray
     uint8_t reserved : 6;     // reserved field
     uint16_t count;
-    uint8_t sampler_source;  // SamplerSource
-    uint8_t reserved2;
+    uint16_t reserved2;
 };
 
 struct sc_refl_sampler
 {
     char name[SC_NAME_LEN];
     int32_t binding;
-    int32_t texture_binding;  // owner texture binding for TextureOwned samplers, -1 for ShaderPreset
     uint16_t descriptor_set;
     uint16_t count;
-    int16_t preset_index;  // -1 when not a base.hlsli preset
+    int16_t preset_index;  // SamplerPreset enum value; -1 for custom samplers (future)
     uint8_t comparison;
     uint8_t reserved;
 };
