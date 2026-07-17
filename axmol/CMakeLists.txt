@@ -191,6 +191,9 @@ option(AX_UPDATE_BUILD_VERSION "Update build version" ON)
 option(AX_DISABLE_GLES2 "Whether disable GLES2 support" OFF)
 option(AX_CORE_PROFILE "Whether strip deprecated features" ON)
 
+set(AX_PROFILER_BACKEND "NONE" CACHE STRING "Profiling backend")
+set_property(CACHE AX_PROFILER_BACKEND PROPERTY STRINGS NONE TRACY)
+
 # default value for axmol extensions modules to Build
 # total supported extensions count: 13
 # extensions dependicies: COCOSTUDIO may depend on spine & dragonBones if they are present in buildset
