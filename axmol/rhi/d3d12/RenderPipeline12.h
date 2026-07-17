@@ -35,6 +35,7 @@ class DepthStencilStateImpl;
 class VertexLayoutImpl;
 class ProgramImpl;
 class DriverImpl;
+struct DescriptorHandle;
 
 struct RootSignatureEntry
 {
@@ -44,8 +45,13 @@ struct RootSignatureEntry
     Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSig;
 
     // RootParameter indices
-    UINT srvRootIndex     = UINT_MAX;
-    UINT samplerRootIndex = UINT_MAX;
+    UINT srvRootIndex            = UINT_MAX;
+    UINT samplerRootIndex        = UINT_MAX;
+    UINT customSamplerRootIndex  = UINT_MAX;
+
+    // Custom sampler descriptor batch
+    DescriptorHandle* customSamplerBatch = nullptr;
+    uint32_t customSamplerBatchCount     = 0;
 };
 
 /**
@@ -58,8 +64,9 @@ class RenderPipelineImpl : public RenderPipeline
 public:
     static constexpr int MAX_DESCRIPTOR_SETS = 2;
     static constexpr int SET_INDEX_UBO       = 0;
-    static constexpr int SET_INDEX_SAMPLER   = 1;
-    static constexpr int SET_INDEX_SRV       = 1;
+    static constexpr int SET_INDEX_SAMPLER        = 1;
+    static constexpr int SET_INDEX_CUSTOM_SAMPLER = 2;
+    static constexpr int SET_INDEX_SRV            = 1;
     static constexpr int SAMPLER_ROOT_INDEX  = 0;
 
     explicit RenderPipelineImpl(DriverImpl* driver);

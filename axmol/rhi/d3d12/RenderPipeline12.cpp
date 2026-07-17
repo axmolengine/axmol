@@ -136,6 +136,13 @@ RenderPipelineImpl::~RenderPipelineImpl()
     _activePSO.Reset();
     _activeRootSignature = nullptr;
 
+    for (auto& [progId, entry] : _rootSigCache)
+    {
+        if (entry.customSamplerBatch)
+        {
+            _driver->getSamplerAllocator()->deallocateBatch(entry.customSamplerBatch, entry.customSamplerBatchCount);
+        }
+    }
     _psoCache.clear();
     _rootSigCache.clear();
 }
@@ -230,6 +237,7 @@ void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
 
     // --- Sampler descriptor table (global heap) ---
     D3D12_DESCRIPTOR_RANGE samplerRange{};
+    uint32_t customSamplerCount = 0;
 
     auto& fsSamplers = program->getActiveTextureInfos();
     if (!fsSamplers.empty())
@@ -261,6 +269,31 @@ void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
 
         samplerRange.NumDescriptors = kBuiltinSamplerCount;
 
+        // --- Custom sampler descriptor table (space2, Program-local) ---
+        customSamplerCount = 0;
+        for (const auto& smp : program->getActiveSamplerInfos())
+        {
+            if (smp.presetIndex < 0)
+                customSamplerCount += smp.count;
+        }
+
+        if (customSamplerCount > 0)
+        {
+            D3D12_DESCRIPTOR_RANGE customSamplerRange{};
+            customSamplerRange.RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER;
+            customSamplerRange.NumDescriptors                    = customSamplerCount;
+            customSamplerRange.BaseShaderRegister                = 0;
+            customSamplerRange.RegisterSpace                     = SET_INDEX_CUSTOM_SAMPLER;
+            customSamplerRange.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+            D3D12_ROOT_PARAMETER& customSamplerParam               = rootParams.emplace_back();
+            customSamplerParam.ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+            customSamplerParam.DescriptorTable.NumDescriptorRanges = 1;
+            customSamplerParam.DescriptorTable.pDescriptorRanges   = &customSamplerRange;
+            customSamplerParam.ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
+            entry.customSamplerRootIndex                           = rootIndex++;
+        }
+
         // Add SRV descriptor table root parameter
         D3D12_ROOT_PARAMETER& srvParam               = rootParams.emplace_back();
         srvParam.ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
@@ -286,7 +319,40 @@ void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
                                                    IID_PPV_ARGS(&rootSig));
     AXASSERT(SUCCEEDED(hr), "Failed to create root signature");
 
-    entry.rootSig        = std::move(rootSig);
+    entry.rootSig = std::move(rootSig);
+
+    // Allocate contiguous custom sampler descriptor batch and copy native descriptors into it.
+    if (customSamplerCount > 0)
+    {
+        auto samplerAlloc = _driver->getSamplerAllocator();
+        auto batchHandle  = samplerAlloc->allocateBatch(customSamplerCount);
+        if (batchHandle)
+        {
+            auto device           = _driver->getDevice();
+            auto descriptorStride = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER);
+            auto samplerReg       = SamplerRegistry::getInstance();
+
+            uint32_t slot = 0;
+            for (const auto& smp : program->getActiveSamplerInfos())
+            {
+                if (smp.presetIndex >= 0 || !smp.samplerId)
+                    continue;
+
+                AXASSERT(smp.count == 1, "Custom sampler arrays are not supported");
+
+                D3D12_CPU_DESCRIPTOR_HANDLE dstCpu = batchHandle->cpu;
+                dstCpu.ptr += static_cast<SIZE_T>(slot) * static_cast<SIZE_T>(descriptorStride);
+
+                _driver->writeSamplerDescriptor(samplerReg->getSamplerDesc(smp.samplerId), dstCpu);
+
+                ++slot;
+            }
+
+            entry.customSamplerBatch      = batchHandle;
+            entry.customSamplerBatchCount = customSamplerCount;
+        }
+    }
+
     _activeRootSignature = &_rootSigCache.emplace(progId, std::move(entry)).first->second;
 }
 
@@ -341,7 +407,16 @@ void RenderPipelineImpl::removeCachedObjects(Program* key)
 {
     auto progId = key->getProgramId();
     if (auto it = _rootSigCache.find(progId); it != _rootSigCache.end())
+    {
+        auto& entry = it->second;
+        if (entry.customSamplerBatch)
+        {
+            _driver->getSamplerAllocator()->deallocateBatch(entry.customSamplerBatch, entry.customSamplerBatchCount);
+            entry.customSamplerBatch      = nullptr;
+            entry.customSamplerBatchCount = 0;
+        }
         _rootSigCache.erase(it);
+    }
 
     auto range = _programToPSOMap.equal_range(progId);
     if (range.first != range.second)

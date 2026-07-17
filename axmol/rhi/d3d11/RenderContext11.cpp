@@ -688,22 +688,30 @@ void RenderContextImpl::prepareDrawing()
         }
     }
 
-    // Phase 2: bind samplers resolved by Program creation.
+    // Phase 2: bind samplers with compact logical→backend slot mapping.
+    // D3D11 has only 16 sampler slots per stage, so we pack active samplers
+    // sequentially rather than using their sparse logical binding indices.
     auto samplerRegistry = SamplerRegistry::getInstance();
+    uint16_t compactSlot = 0;
     for (const auto& samplerInfo : program->getActiveSamplerInfos())
     {
-        if (!samplerInfo.samplerId || samplerInfo.binding < 0 || samplerInfo.count == 0)
+        if (!samplerInfo.samplerId || samplerInfo.count == 0)
             continue;
+
+        if (compactSlot >= 16)
+        {
+            AXLOGE("D3D11 shader exceeds 16 sampler slot limit");
+            break;
+        }
 
         auto sampler = static_cast<ID3D11SamplerState*>(samplerRegistry->getSampler(samplerInfo.samplerId));
         if (!sampler)
-        {
-            AXASSERT(false, "failed to resolve D3D11 sampler");
             continue;
-        }
 
         for (uint16_t i = 0; i < samplerInfo.count; ++i)
-            context->PSSetSamplers(samplerInfo.binding + i, 1, &sampler);
+            context->PSSetSamplers(compactSlot + i, 1, &sampler);
+
+        compactSlot += samplerInfo.count;
     }
 
     // depth stencil

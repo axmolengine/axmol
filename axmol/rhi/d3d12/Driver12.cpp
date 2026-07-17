@@ -676,11 +676,15 @@ static D3D12_SAMPLER_DESC toD3DSamplerDesc(const SamplerDesc& desc)
 
 SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
 {
-    auto sd     = toD3DSamplerDesc(desc);
     auto handle = allocateDescriptor(DisposableResource::Type::SamplerView);
-    _device->CreateSampler(&sd, handle->cpu);
-
+    writeSamplerDescriptor(desc, handle->cpu);
     return SamplerHandle(handle);
+}
+
+void DriverImpl::writeSamplerDescriptor(const SamplerDesc& desc, D3D12_CPU_DESCRIPTOR_HANDLE destination)
+{
+    const auto sd = toD3DSamplerDesc(desc);
+    _device->CreateSampler(&sd, destination);
 }
 
 void DriverImpl::destroySampler(SamplerHandle& h)

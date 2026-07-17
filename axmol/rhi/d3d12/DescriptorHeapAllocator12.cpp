@@ -85,6 +85,40 @@ static bool tryAcquireSlot(DescriptorHeapBlock& b, uint32_t& outIndex)
     return false;
 }
 
+static bool tryAcquireContiguous(DescriptorHeapBlock& b, uint32_t count, uint32_t& outBase)
+{
+    if (count == 0 || count > b.capacity)
+        return false;
+
+    uint32_t run = 0;
+    for (uint32_t i = 0; i < b.capacity; ++i)
+    {
+        uint32_t byte = i >> 3;
+        uint8_t mask  = uint8_t(1u << (i & 7));
+        if (b.freeBits[byte] & mask)
+        {
+            if (run == 0)
+                outBase = i;
+            ++run;
+            if (run >= count)
+            {
+                for (uint32_t j = outBase; j < outBase + count; ++j)
+                {
+                    uint32_t bj = j >> 3;
+                    b.freeBits[bj] &= ~uint8_t(1u << (j & 7));
+                }
+                b.used += count;
+                return true;
+            }
+        }
+        else
+        {
+            run = 0;
+        }
+    }
+    return false;
+}
+
 DescriptorHandle* DescriptorHeapAllocator::allocate()
 {
     std::lock_guard<std::mutex> lock(_mutex);
@@ -135,6 +169,83 @@ DescriptorHandle* DescriptorHeapAllocator::allocate()
         h->gpu.ptr += UINT64(idx) * UINT64(b.descriptorSize);
     }
     return h;
+}
+
+DescriptorHandle* DescriptorHeapAllocator::allocateBatch(uint32_t count)
+{
+    if (count == 0)
+        return {};
+
+    std::lock_guard<std::mutex> lock(_mutex);
+
+    for (uint32_t bi = 0; bi < _blocks.size(); ++bi)
+    {
+        auto& b      = _blocks[bi];
+        uint32_t base = 0;
+        if (tryAcquireContiguous(b, count, base))
+        {
+            DescriptorHandle* h = (DescriptorHandle*)_handlePool.allocate();
+            h->blockIndex       = bi;
+            h->slotIndex        = base;
+            h->shaderVisible    = b.shaderVisible;
+
+            h->cpu = b.cpuStart;
+            h->cpu.ptr += SIZE_T(base) * SIZE_T(b.descriptorSize);
+
+            if (b.shaderVisible)
+            {
+                h->gpu = b.gpuStart;
+                h->gpu.ptr += UINT64(base) * UINT64(b.descriptorSize);
+            }
+            return h;
+        }
+    }
+
+    if (!_allowGrow)
+        return {};
+
+    grow();
+    auto& b      = _blocks.back();
+    uint32_t base = 0;
+    if (!tryAcquireContiguous(b, count, base))
+        return {};
+
+    DescriptorHandle* h = (DescriptorHandle*)_handlePool.allocate();
+    h->blockIndex       = uint32_t(_blocks.size() - 1);
+    h->slotIndex        = base;
+    h->shaderVisible    = b.shaderVisible;
+
+    h->cpu = b.cpuStart;
+    h->cpu.ptr += SIZE_T(base) * SIZE_T(b.descriptorSize);
+    if (b.shaderVisible)
+    {
+        h->gpu = b.gpuStart;
+        h->gpu.ptr += UINT64(base) * UINT64(b.descriptorSize);
+    }
+    return h;
+}
+
+void DescriptorHeapAllocator::deallocateBatch(DescriptorHandle* h, uint32_t count)
+{
+    if (!h->valid() || count == 0)
+        return;
+    std::lock_guard<std::mutex> lock(_mutex);
+    if (h->blockIndex >= _blocks.size())
+        return;
+    auto& b = _blocks[h->blockIndex];
+    for (uint32_t i = 0; i < count; ++i)
+    {
+        uint32_t idx   = h->slotIndex + i;
+        if (idx >= b.capacity)
+            return;
+        uint32_t byte = idx >> 3;
+        uint8_t mask  = uint8_t(1u << (idx & 7));
+        if (b.freeBits[byte] & mask)
+            return; // already free
+        b.freeBits[byte] |= mask;
+        --b.used;
+    }
+    _handlePool.deallocate(h);
 }
 
 ID3D12DescriptorHeap* DescriptorHeapAllocator::getDescriptorHeap(const DescriptorHandle* handle) const

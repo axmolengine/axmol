@@ -143,6 +143,9 @@ public:
 
     void destroyStaleResources() override;
 
+    // Writes a sampler descriptor into an existing D3D12 descriptor slot.
+    void writeSamplerDescriptor(const SamplerDesc& desc, D3D12_CPU_DESCRIPTOR_HANDLE destination);
+
     ID3D12Device* getDevice() const { return _device.Get(); }
     ID3D12CommandQueue* getGraphicsQueue() const { return _gfxQueue.Get(); }
     const ComPtr<IDXGIFactory4>& getDXGIFactory() const { return _dxgiFactory; }
@@ -166,6 +169,7 @@ public:
         return _srvAllocator->getDescriptorHeap(h);
     }
     ID3D12DescriptorHeap* getSamplerHeap() const { return _samplerAllocator->getDescriptorHeapByIndex(0); }
+    DescriptorHeapAllocator* getSamplerAllocator() const { return _samplerAllocator.get(); }
     ID3D12DescriptorHeap* getRtvHeap(const DescriptorHandle* h) const { return _rtvAllocator->getDescriptorHeap(h); }
     ID3D12DescriptorHeap* getDsvHeap(const DescriptorHandle* h) const { return _dsvAllocator->getDescriptorHeap(h); }
 

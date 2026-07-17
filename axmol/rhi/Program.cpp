@@ -400,11 +400,14 @@ void Program::reflectSamplers(SLCReflectContext* context)
         SamplerBindingInfo sampler;
         sampler.name          = _sc_read_name(ibs);
         sampler.binding       = ibs->read<int32_t>();
-        sampler.descriptorSet = ibs->read<uint16_t>();
+        sampler.space         = ibs->read<uint16_t>();
         sampler.count         = ibs->read<uint16_t>();
         sampler.presetIndex   = ibs->read<int16_t>();
-        sampler.comparison    = ibs->read<uint8_t>() != 0;
+        sampler.flags          = ibs->read<uint8_t>();
         ibs->advance(static_cast<ptrdiff_t>(sizeof(uint8_t)));  // reserved
+
+        if (sampler.presetIndex < 0)
+            AXASSERT(sampler.count == 1, "Custom sampler arrays are not supported");
 
         sampler.samplerId = SamplerRegistry::getInstance()->find(sampler.name);
         if (!sampler.samplerId)
@@ -415,19 +418,11 @@ void Program::reflectSamplers(SLCReflectContext* context)
             _samplersResolved = false;
         }
 
-        if (sampler.binding >= 0 && sampler.binding <= (std::numeric_limits<uint16_t>::max)())
-        {
-            _samplerBindings.push_back(ProgramSamplerBinding{
-                .descriptorSet = sampler.descriptorSet,
-                .binding       = static_cast<uint16_t>(sampler.binding),
-                .samplerId     = sampler.samplerId,
-            });
-        }
-        else
-        {
-            AXLOGE("Sampler '{}' has invalid shader binding {}", sampler.name, sampler.binding);
-            _samplersResolved = false;
-        }
+        _samplerBindings.push_back(ProgramSamplerBinding{
+            .space     = sampler.space,
+            .binding   = static_cast<uint16_t>(sampler.binding),
+            .samplerId = sampler.samplerId,
+        });
 
         _activeSamplerInfos.emplace_back(sampler);
     }

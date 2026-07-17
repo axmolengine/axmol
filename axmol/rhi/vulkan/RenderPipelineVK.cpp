@@ -488,6 +488,7 @@ void RenderPipelineImpl::updatePipelineLayoutState(ProgramImpl* program)
     }
 
     const bool separateSamplers = !program->getActiveSamplerInfos().empty();
+    tlx::pod_vector<VkDescriptorSetLayoutBinding> customSamplerBindings;
 
     // FS sampled images / combined images -> set=1
     for (auto& [_, smp] : program->getActiveTextureInfos())
@@ -510,18 +511,50 @@ void RenderPipelineImpl::updatePipelineLayoutState(ProgramImpl* program)
     {
         for (const auto& smp : program->getActiveSamplerInfos())
         {
-            AXASSERT(smp.descriptorSet == axslc::kPresetSamplerDescriptorSet,
-                     "Vulkan sampler reflection must use descriptor set 1");
-            AXASSERT(smp.binding >= axslc::kVulkanSamplerBindingShift,
-                     "Vulkan separate sampler binding must include the sampler binding shift");
+            if (!smp.samplerId)
+                continue;
 
-            VkDescriptorSetLayoutBinding& b = resourceBindings.emplace_back();
-            b.binding                       = smp.binding;
-            b.descriptorType                = VK_DESCRIPTOR_TYPE_SAMPLER;
-            b.descriptorCount               = smp.count;
-            b.stageFlags                    = VK_SHADER_STAGE_FRAGMENT_BIT;
-            b.pImmutableSamplers            = nullptr;
-            state.samplerDescriptorCount += smp.count;
+            if (smp.presetIndex >= 0)
+            {
+                // Built-in preset sampler -> set 1 with binding shift
+                AXASSERT(smp.space == axslc::kPresetSamplerDescriptorSet,
+                         "Preset sampler must use descriptor set 1");
+                AXASSERT(smp.binding >= axslc::kVulkanSamplerBindingShift,
+                         "Preset sampler binding must include the sampler binding shift");
+
+                VkDescriptorSetLayoutBinding& b = resourceBindings.emplace_back();
+                b.binding                       = smp.binding;
+                b.descriptorType                = VK_DESCRIPTOR_TYPE_SAMPLER;
+                b.descriptorCount               = smp.count;
+                b.stageFlags                    = VK_SHADER_STAGE_FRAGMENT_BIT;
+                b.pImmutableSamplers            = nullptr;
+                state.samplerDescriptorCount += smp.count;
+            }
+            else
+            {
+                // Custom program-local sampler -> set 2, DXC-shifted binding
+                AXASSERT(smp.binding >= axslc::kVulkanSamplerBindingShift,
+                         "Custom sampler binding must include the sampler binding shift");
+
+                VkDescriptorSetLayoutBinding& b = customSamplerBindings.emplace_back();
+                b.binding                       = smp.binding;
+                b.descriptorType                = VK_DESCRIPTOR_TYPE_SAMPLER;
+                b.descriptorCount               = smp.count;
+                b.stageFlags                    = VK_SHADER_STAGE_FRAGMENT_BIT;
+                b.pImmutableSamplers            = nullptr;
+                state.samplerDescriptorCount += smp.count;
+            }
+        }
+
+        if (!customSamplerBindings.empty())
+        {
+            VkDescriptorSetLayoutCreateInfo dslCustom{};
+            dslCustom.sType        = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+            dslCustom.bindingCount = static_cast<uint32_t>(customSamplerBindings.size());
+            dslCustom.pBindings    = customSamplerBindings.data();
+            auto vr = vkCreateDescriptorSetLayout(_device, &dslCustom, nullptr,
+                                                   &state.descriptorSetLayouts[SET_INDEX_RESERVED]);
+            VK_REQUIRE(vr, "vkCreateDescriptorSetLayout for custom samplers (set 2) failed");
         }
     }
 
@@ -542,7 +575,11 @@ void RenderPipelineImpl::updatePipelineLayoutState(ProgramImpl* program)
         VK_REQUIRE(vr, "vkCreateDescriptorSetLayout failed");
     }
 
-    state.descriptorSetLayoutCount = !resourceBindings.empty() ? 2u : 1u;
+    bool hasCustomSet = !customSamplerBindings.empty();
+
+    state.descriptorSetLayoutCount = hasCustomSet ? 3u
+        : !resourceBindings.empty() ? 2u
+        : 1u;
 
     VkPipelineLayoutCreateInfo plc{};
     plc.sType                  = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;

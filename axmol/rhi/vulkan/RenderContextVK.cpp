@@ -1153,17 +1153,13 @@ void RenderContextImpl::prepareDrawing()
         {
             const size_t offset = imageInfos.size();
             if (!samplerInfo.samplerId)
-            {
-                AXASSERT(false, "invalid Vulkan sampler id");
                 continue;
-            }
 
-            auto sampler = static_cast<VkSampler>(SamplerRegistry::getInstance()->getSampler(samplerInfo.samplerId));
-            if (!sampler)
-            {
-                AXASSERT(false, "failed to resolve Vulkan sampler");
+            auto samplerHandle = SamplerRegistry::getInstance()->getSampler(samplerInfo.samplerId);
+            if (!samplerHandle)
                 continue;
-            }
+
+            auto sampler = static_cast<VkSampler>(samplerHandle);
 
             for (uint16_t i = 0; i < samplerInfo.count; ++i)
             {
@@ -1174,9 +1170,15 @@ void RenderContextImpl::prepareDrawing()
             if (imageInfos.size() == offset)
                 continue;
 
+            // Preset samplers in set 1, custom samplers in set 2.
+            // Both have DXC-shifted bindings from SPIR-V.
+            auto dstSet = samplerInfo.presetIndex >= 0
+                ? descriptorSets[SET_INDEX_RESOURCE]
+                : descriptorSets[SET_INDEX_RESERVED];
+
             VkWriteDescriptorSet& write = writes.emplace_back();
             write.sType                 = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-            write.dstSet                = descriptorSets[SET_INDEX_RESOURCE];
+            write.dstSet                = dstSet;
             write.dstBinding            = samplerInfo.binding;
             write.descriptorType        = VK_DESCRIPTOR_TYPE_SAMPLER;
             write.descriptorCount       = static_cast<uint32_t>(imageInfos.size() - offset);

@@ -76,17 +76,17 @@ struct UniformBlockInfo
 struct SamplerBindingInfo
 {
     int binding{-1};
-    uint16_t descriptorSet{0};
+    uint16_t space{0};
     uint16_t count{1};
     int16_t presetIndex{-1};
-    bool comparison{false};
+    uint8_t flags{0};  // axslc::SCSamplerFlags
     SamplerId samplerId{};
     std::string_view name;
 };
 
 struct ProgramSamplerBinding
 {
-    uint16_t descriptorSet{0};
+    uint16_t space{0};
     uint16_t binding{0};
     SamplerId samplerId{};
 };

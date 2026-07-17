@@ -94,11 +94,10 @@ SamplerId SamplerRegistry::registerSampler(std::string_view name, const SamplerD
         return {};
     }
 
-    std::string samplerName{name};
-    auto it = _samplerIdsByName.find(samplerName);
+    auto it = _samplerIdsByName.find(name);
     if (it != _samplerIdsByName.end())
     {
-        const auto& existingDesc = getDesc(it->second);
+        const auto& existingDesc = getSamplerDesc(it->second);
         if (std::bit_cast<uint32_t>(existingDesc) != std::bit_cast<uint32_t>(desc))
         {
             AXLOGE("Sampler '{}' is already registered with a different descriptor", name);
@@ -120,7 +119,7 @@ SamplerId SamplerRegistry::registerSampler(std::string_view name, const SamplerD
 
     _samplers.emplace_back(samplerHandle);
     _samplerDescs.emplace_back(desc);
-    _samplerIdsByName.emplace(std::move(samplerName), SamplerId{static_cast<uint16_t>(samplerIndex)});
+    _samplerIdsByName.emplace(name, SamplerId{static_cast<uint16_t>(samplerIndex)});
     _samplersRegistry.emplace(std::bit_cast<uint32_t>(desc), samplerIndex);
 
     return SamplerId{static_cast<uint16_t>(samplerIndex)};
@@ -132,7 +131,7 @@ SamplerId SamplerRegistry::find(std::string_view name) const
     return it != _samplerIdsByName.end() ? it->second : SamplerId{};
 }
 
-const SamplerDesc& SamplerRegistry::getDesc(SamplerId id) const
+const SamplerDesc& SamplerRegistry::getSamplerDesc(SamplerId id) const
 {
     AXASSERT(id && id.value < _samplerDescs.size(), "invalid SamplerId");
     return _samplerDescs[id.value];

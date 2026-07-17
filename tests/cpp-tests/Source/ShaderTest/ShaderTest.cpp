@@ -27,6 +27,7 @@
 #include "axmol/axmol.h"
 #include "axmol/renderer/Shaders.h"
 #include "axmol/rhi/GraphicsCore.h"
+#include "axmol/rhi/SamplerRegistry.h"
 
 using namespace ax;
 USING_NS_AX_EXT;
@@ -60,6 +61,7 @@ ShaderTests::ShaderTests()
     ADD_TEST_CASE(ShaderMonjori);
     ADD_TEST_CASE(ShaderGlow);
     ADD_TEST_CASE(ShaderMultiTexture);
+    ADD_TEST_CASE(ShaderCustomSampler);
 }
 
 ///---------------------------------------
@@ -785,4 +787,84 @@ void ShaderMultiTexture::changeTexture(Object*)
     right->setTexture(texture);
     auto programState = _sprite->getProgramState();
     SET_TEXTURE(programState, "u_tex1", 1, right->getTexture()->getRHITexture());
+}
+
+//
+// ShaderCustomSampler
+//
+ShaderCustomSampler::ShaderCustomSampler() {}
+
+std::string ShaderCustomSampler::title() const
+{
+    return "Custom Sampler Test";
+}
+
+std::string ShaderCustomSampler::subtitle() const
+{
+    return "Left: built-in Clamp (normal) | Right: custom Wrap (repeating)";
+}
+
+bool ShaderCustomSampler::init()
+{
+    if (ShaderTestDemo::init())
+    {
+        auto s = Director::getInstance()->getCanvasSize();
+
+        // Register custom sampler with WRAP addressing for obvious visual difference.
+        // The right sprite will visibly tile/repeat the texture instead of clamping.
+        rhi::SamplerDesc wrapDesc;
+        wrapDesc.minFilter    = rhi::SamplerFilter::MIN_LINEAR;
+        wrapDesc.magFilter    = rhi::SamplerFilter::MAG_LINEAR;
+        wrapDesc.mipFilter    = rhi::SamplerFilter::MIP_DEFAULT;
+        wrapDesc.sAddressMode = rhi::SamplerAddressMode::REPEAT;
+        wrapDesc.tAddressMode = rhi::SamplerAddressMode::REPEAT;
+
+        auto samplerReg = rhi::SamplerRegistry::getInstance();
+        auto samplerId  = samplerReg->registerSampler("myCustomSampler", wrapDesc);
+
+        // Left: normal sprite (built-in LinearClamp, smooth)
+        auto left = Sprite::create("Images/grossini.png");
+        if (left)
+        {
+            left->setScale(2.0f);
+            left->setPosition(Vec2(s.width / 4, s.height / 2));
+            addChild(left);
+        }
+
+        auto leftLabel = Label::createWithTTF("Normal sprite\n(LinearClamp)", "fonts/arial.ttf", 12.0f);
+        if (leftLabel)
+        {
+            leftLabel->setPosition(Vec2(s.width / 4, s.height / 2 + 120));
+            addChild(leftLabel);
+        }
+
+        // Right: sprite with custom shader using the custom Point-like sampler
+        auto right = Sprite::create("Images/grossini.png");
+        if (right)
+        {
+            auto program = ProgramManager::getInstance()->loadProgram(
+                positionTexture_vs, "custom/test_CustomSampler_fs", VertexLayoutKind::Sprite);
+            auto programState = new rhi::ProgramState(program);
+
+            SET_TEXTURE(programState, "u_tex0", 0, right->getTexture()->getRHITexture());
+
+            right->setProgramState(programState);
+            AX_SAFE_RELEASE(programState);
+
+            right->setScale(2.0f);
+            right->setPosition(Vec2(s.width * 3 / 4, s.height / 2));
+            addChild(right);
+        }
+
+        auto rightLabel = Label::createWithTTF("Custom sampler\n(Repeat 4x4)", "fonts/arial.ttf", 12.0f);
+        if (rightLabel)
+        {
+            rightLabel->setPosition(Vec2(s.width * 3 / 4, s.height / 2 + 120));
+            addChild(rightLabel);
+        }
+
+        return true;
+    }
+
+    return false;
 }

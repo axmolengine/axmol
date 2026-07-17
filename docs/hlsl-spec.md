@@ -193,19 +193,19 @@ The runtime uses reflection to bind the final backend resource locations.
 
 ## Sampler Model
 
-Axmol supports built-in sampler presets only. Every sampler declared in a
-shader must use one of the names listed below. Custom sampler names are rejected
-by `axslcc` at compile time.
+Axmol supports two sampler categories:
 
-| Source | Meaning | Shader Authoring |
+| Source | Binding | Shader Authoring |
 | --- | --- | --- |
-| Built-In | sampler state comes from one of Axmol's built-in presets | sample with `LinearClamp`, `PointClamp`, etc. |
-
-Each built-in sampler name maps to a fixed `SamplerPreset` enum value. The
-binding is independent of shader declaration order — `PointClamp` always maps to
-the same slot regardless of where it appears in the source.
+| Built-In | `space1:s0..s21`, fixed per preset | sample with `LinearClamp`, `PointClamp`, etc. |
+| Custom | `space2:s0..sN`, Program-local per declaration | declare own `SamplerState` without `#include "base.hlsli"` |
 
 ### Built-In Samplers
+
+The 22 built-in sampler presets from `base.hlsli` use fixed bindings in
+`space1`. Each name maps to a `SamplerPreset` enum value. The binding is
+independent of shader declaration order — `PointClamp` always maps to the same
+slot regardless of where it appears.
 
 Most Axmol HLSL should use the built-in sampler presets from `base.hlsli`:
 
@@ -231,9 +231,40 @@ Built-in presets:
 | `ShadowCmpClamp`, `ShadowCmpWrap`, `ShadowCmpMirror`, `ShadowCmpBorder` | `SamplerComparisonState` |
 | `LinearNoMipClamp`, `PointNoMipClamp` | `SamplerState` |
 
-Built-in samplers are independent of texture binding numbers. For example,
-a texture internally assigned to `t3` may still sample with `LinearClamp`; the
-runtime binds the texture and the preset sampler independently.
+### Custom Samplers (Program-Local)
+
+Shaders may declare their own `SamplerState` variables (without `#include
+"base.hlsli"` or in addition to it). These custom samplers are assigned
+**Program-local** bindings in `space2` by `axslcc`:
+
+```hlsl
+Texture2D u_tex0;
+SamplerState mySampler;
+
+float4 main(PS_IN input) : SV_Target0
+{
+    return u_tex0.Sample(mySampler, input.uv);
+}
+```
+
+Rules:
+
+- Custom sampler names must be unique within the shader.
+- Custom sampler arrays are **not supported** (`SamplerState arr[4]` is rejected).
+- Each custom sampler must be registered with `SamplerRegistry` **before** the
+  `Program` is created:
+  ```cpp
+  SamplerRegistry::getInstance()->registerSampler("mySampler", desc);
+  ```
+- SamplerRegistry registration order does not affect shader logical bindings.
+
+Custom sampler ABI:
+
+| Property | Value |
+| --- | --- |
+| Logical space | `2` |
+| Logical binding | `0, 1, ...` (declaration order, per Program) |
+| Reflection `preset_index` | `-1` |
 
 ### GL/GLES Combined Samplers
 
@@ -381,8 +412,10 @@ combined-mode preparation.
 - Use `vs_ub` for vertex uniforms and `fs_ub` for fragment uniforms; `axslcc`
   assigns their backend bindings.
 - Declare textures and storage resources without binding syntax.
-- Use only built-in sampler names such as `LinearClamp`. Custom sampler names
-  are not supported and will cause a compile error.
+- For basic needs, use built-in sampler names such as `LinearClamp`.
+- For custom sampler state, declare your own `SamplerState`; register it with
+  `SamplerRegistry` before creating the Program. Custom sampler arrays are not
+  supported.
 - Do not sample one texture with multiple sampler states if GL/GLES is a target.
 - Match varyings by semantic name and index, not variable name.
 - Recompile all shaders after changing the reflection layout or axslcc runtime

@@ -75,7 +75,10 @@ struct SamplerPreset
         Count
     };
 };
-inline constexpr uint32_t kPresetSamplerDescriptorSet = 1;
+inline constexpr uint16_t kPresetSamplerDescriptorSet = 1;
+inline constexpr uint16_t kCustomSamplerDescriptorSet = 2;
+
+inline constexpr int16_t kInvalidSamplerPreset = -1;
 
 inline constexpr int32_t kVulkanSamplerBindingShift = 1024;
 
@@ -187,14 +190,70 @@ struct sc_refl_texture
     uint16_t reserved2;
 };
 
+enum SCSamplerFlags : uint8_t
+{
+    SC_SAMPLER_FLAG_NONE       = 0,
+    SC_SAMPLER_FLAG_COMPARISON = 1 << 0,
+};
+
 struct sc_refl_sampler
 {
+    // Sampler variable name as declared in the source shader.
     char name[SC_NAME_LEN];
+
+    // Logical sampler register index inside descriptor_set.
+    //
+    // Built-in sampler:
+    //   descriptor_set == kPresetSamplerDescriptorSet
+    //   binding == preset_index
+    //   valid range: [0, SamplerPreset::Count)
+    //
+    // Custom sampler:
+    //   descriptor_set == kCustomSamplerDescriptorSet
+    //   binding is the Program-local custom sampler index
+    //   valid range: [0, custom_sampler_count)
+    //
+    // This value is not:
+    //   - a SamplerRegistry SamplerId;
+    //   - a D3D12 sampler heap slot;
+    //   - a Vulkan implementation-specific descriptor index;
+    //   - a Metal or D3D11 backend sampler slot.
     int32_t binding;
-    uint16_t descriptor_set;
+
+    // HLSL register space (logical shader namespace).
+    //
+    // This is NOT a Vulkan descriptor set nor any backend binding slot.
+    // Backends translate logical (space, binding) to backend-specific
+    // bindings independently.
+    //
+    // kPresetSamplerDescriptorSet for Axmol built-in presets.
+    // kCustomSamplerDescriptorSet for Program-local custom samplers.
+    uint16_t space;
+
+    // Number of sampler array elements.
+    // This is normally 1 for a non-array SamplerState declaration.
     uint16_t count;
-    int16_t preset_index;  // SamplerPreset enum value; -1 for custom samplers (future)
-    uint8_t comparison;
+
+    // SamplerPreset enum value for an Axmol built-in sampler.
+    //
+    // Built-in sampler:
+    //   preset_index >= 0
+    //   binding must equal preset_index.
+    //
+    // Custom sampler:
+    //   preset_index == kInvalidSamplerPreset.
+    int16_t preset_index;
+
+    // Bitmask of SCSamplerFlags.
+    //
+    // SC_SAMPLER_FLAG_COMPARISON may be set only when axslcc can
+    // reliably determine that the declaration is a comparison sampler.
+    // Leave this field as SC_SAMPLER_FLAG_NONE when that information
+    // cannot be determined reliably.
+    uint8_t flags;
+
+    // Reserved for future serialized sampler reflection fields.
+    // Must be initialized to zero.
     uint8_t reserved;
 };
 
@@ -224,5 +283,15 @@ typedef struct sc_refl_uniformbuffer_member
     uint16_t var_type;
 } sc_refl_ub_member;
 #pragma pack(pop)
+
+constexpr bool sc_sampler_is_preset(const sc_refl_sampler& sampler)
+{
+    return sampler.preset_index >= 0;
+}
+
+constexpr bool sc_sampler_is_custom(const sc_refl_sampler& sampler)
+{
+    return sampler.preset_index == kInvalidSamplerPreset;
+}
 
 }  // namespace axslc

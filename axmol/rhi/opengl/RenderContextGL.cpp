@@ -34,6 +34,7 @@
 #include "axmol/rhi/opengl/RenderTargetGL.h"
 #include "axmol/rhi/opengl/DriverGL.h"
 #include "axmol/rhi/opengl/VertexLayoutGL.h"
+#include "axmol/rhi/SamplerRegistry.h"
 
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/EventType.h"
@@ -393,6 +394,35 @@ void RenderContextImpl::bindUniforms(ProgramImpl* program) const
             }
 
             CHECK_GL_ERROR_DEBUG();
+        }
+
+        // Bind custom sampler objects for program-local samplers (space2).
+        // These override the default texture sampler bound by TextureImpl::apply().
+        const auto& samplerInfos = program->getActiveSamplerInfos();
+        if (!samplerInfos.empty())
+        {
+            auto samplerReg = SamplerRegistry::getInstance();
+            for (const auto& samplerInfo : samplerInfos)
+            {
+                if (samplerInfo.presetIndex >= 0)
+                    continue;
+
+                auto samplerId = samplerInfo.samplerId;
+                if (!samplerId)
+                    continue;
+
+                auto samplerHandle = samplerReg->getSampler(samplerId);
+                if (!samplerHandle)
+                    continue;
+
+                auto glSampler = static_cast<GLuint>(samplerHandle);
+
+                for (const auto& [_, bindingSet] : _programState->getTextureBindingSets())
+                {
+                    for (int slot : bindingSet.slots)
+                        __state->bindSampler(slot, glSampler);
+                }
+            }
         }
     }
 }

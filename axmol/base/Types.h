@@ -333,7 +333,6 @@ struct ContextAttrs
     bool vsync{true};                             ///< Enable vertical sync.
     bool debugLayerEnabled{false};                ///< Enable graphics API debug layer.
     uint32_t uploadBufferSize{16 * 1024 * 1024};  ///< Upload buffer size (used by D3D12 RHI).
-    bool shaderControlledSampler{false};          ///< Whether samplers are fully controlled by shaders (D3D12 style).
 
     // Window attributes
     bool visible{true};           ///< Whether the window is visible at creation.

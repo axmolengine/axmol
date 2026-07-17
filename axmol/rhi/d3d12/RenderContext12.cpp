@@ -657,6 +657,17 @@ void RenderContextImpl::updatePipelineState(const RenderTarget* rt,
         const auto samplerGpuStart = _driver->getSamplerHeap()->GetGPUDescriptorHandleForHeapStart();
         _currentCmdList->SetGraphicsRootDescriptorTable(samplerRootIndex, samplerGpuStart);
     }
+
+    const auto customSamplerRootIndex = rootSigInfo->customSamplerRootIndex;
+    if (dirtyFlags && customSamplerRootIndex != UINT_MAX)
+    {
+        D3D12_GPU_DESCRIPTOR_HANDLE customGpuHandle;
+        if (rootSigInfo->customSamplerBatch)
+            customGpuHandle = rootSigInfo->customSamplerBatch->gpu;
+        else
+            customGpuHandle = _driver->getSamplerHeap()->GetGPUDescriptorHandleForHeapStart();
+        _currentCmdList->SetGraphicsRootDescriptorTable(customSamplerRootIndex, customGpuHandle);
+    }
 }
 
 void RenderContextImpl::setVertexBuffer(Buffer* buffer)

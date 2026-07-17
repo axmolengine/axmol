@@ -76,6 +76,13 @@ public:
     // Allocate a single slot; returns a persistent handle
     DescriptorHandle* allocate();
 
+    // Allocate N consecutive slots; returns handle to the first slot
+    // Returns nullptr if no contiguous range of N slots is available.
+    DescriptorHandle* allocateBatch(uint32_t count);
+
+    // Deallocate a batch of count consecutive slots starting at h.
+    void deallocateBatch(DescriptorHandle* h, uint32_t count);
+
     // Deallocate immediately (caller ensures GPU no longer uses it)
     void deallocate(DescriptorHandle* h);
 

@@ -59,16 +59,72 @@ public:
     SamplerRegistry();
     ~SamplerRegistry();
 
+    /**
+     * Recreates all native sampler objects from the registered sampler descriptions.
+     *
+     * Used after graphics device or rendering context recreation.
+     */
     void rebuild();
 
+    /**
+     * Registers a named sampler description.
+     *
+     * If the name is already registered, the existing sampler identifier is returned.
+     *
+     * @param name Unique sampler name used by shader reflection.
+     * @param desc Sampler state description.
+     * @return Identifier of the registered sampler.
+     */
     SamplerId registerSampler(std::string_view name, const SamplerDesc& desc);
-    SamplerId find(std::string_view name) const;
-    const SamplerDesc& getDesc(SamplerId id) const;
 
+    /**
+     * Finds a previously registered sampler by name.
+     *
+     * @param name Registered sampler name.
+     * @return The sampler identifier, or an invalid identifier if not found.
+     */
+    SamplerId find(std::string_view name) const;
+
+    /**
+     * Returns the sampler description associated with an identifier.
+     *
+     * @param id Valid sampler identifier.
+     * @return The registered sampler description.
+     */
+    const SamplerDesc& getSamplerDesc(SamplerId id) const;
+
+    /**
+     * Returns the native sampler handle associated with an identifier.
+     *
+     * @param samplerId Valid sampler identifier.
+     * @return The backend-native sampler handle.
+     */
     SamplerHandle getSampler(SamplerId samplerId);
+
+    /**
+     * Returns the native sampler handle for a built-in sampler preset.
+     *
+     * @param samplerIndex Built-in sampler preset index.
+     * @return The backend-native sampler handle.
+     */
     SamplerHandle getSampler(SamplerPreset::enum_type samplerIndex);
+
+    /**
+     * Returns a cached native sampler handle matching the description.
+     *
+     * A new sampler is registered and created when no matching entry exists.
+     *
+     * @param desc Sampler state description.
+     * @return The backend-native sampler handle.
+     */
     SamplerHandle getSampler(const SamplerDesc& desc);
 
+    /**
+     * Registers or finds an unnamed sampler description.
+     *
+     * @param desc Sampler state description.
+     * @return The matching sampler preset/index.
+     */
     SamplerPreset::enum_type registerSampler(const SamplerDesc& desc);
 
 private:
@@ -78,7 +134,7 @@ private:
 
     tlx::pod_vector<SamplerHandle> _samplers;
     tlx::pod_vector<SamplerDesc> _samplerDescs;
-    tlx::hash_map<std::string, SamplerId> _samplerIdsByName;
+    tlx::string_map<SamplerId> _samplerIdsByName;
 
     tlx::hash_map<uint32_t, uint32_t> _samplersRegistry;  // legacy desc => sampler index registry
 

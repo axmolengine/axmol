@@ -1,166 +1,118 @@
 # Axmol HLSL FAQ
 
-## Should I use HLSL or GLSL for new Axmol shaders?
+## Should I write shaders in HLSL or GLSL?
 
-Use HLSL. Axmol v3 treats HLSL as the primary shader authoring language and
-uses `axslcc` to generate backend shader code and reflection.
+HLSL. Axmol v3 uses HLSL as the primary shading language. `axslcc` compiles
+your HLSL into the backend format needed by D3D11, D3D12, Vulkan, Metal, and
+OpenGL/ES.
 
-## Do HLSL variable names matter?
+## Do variable names in my shader matter?
 
-For vertex inputs, no. Axmol matches vertex data by semantic base name and
-semantic index, such as `POSITION` / `0` or `TEXCOORD` / `1`.
+For **vertex inputs**, no. Axmol matches vertices by semantic name and index
+(`POSITION`, `TEXCOORD0`), not by your variable name:
 
 ```hlsl
+// Both work identically
 float3 a_position : POSITION;
 float3 pos        : POSITION;
 ```
 
-For uniforms and textures, names still matter because engine code often looks
-them up by name, such as `u_MVPMatrix` or `u_tex0`.
+For **uniforms and textures**, names do matter because C++ code looks them up
+by name (e.g. `u_MVPMatrix`, `u_tex0`).
 
-## Is `POSITION` the same as `POSITION0`?
+## Can I write `register(t0, space1)` in my shader?
 
-Yes. In HLSL, `POSITION` means semantic index 0. Axmol stores it as
-`(POSITION, 0)`.
-
-## Can I invent custom semantics?
-
-Yes, for custom rendering code. Use stable semantic names and explicit indices:
+No. Let `axslcc` handle resource binding. Just declare resources plainly:
 
 ```hlsl
-float2 localPosition : LOCAL_POSITION0;
-float4 instanceColor : INSTANCE_COLOR0;
-```
-
-The C++ side must query the same semantic base and index. Built-in mesh data
-only maps the standard Axmol mesh semantics.
-
-## Should I write `register(tN, spaceN)` in shader code?
-
-No. Axmol v3 now lets `axslcc` own the resource layout. Declare resources
-without manual registers:
-
-```hlsl
-cbuffer vs_ub
-{
-    float4x4 u_MVPMatrix;
-};
-
+cbuffer vs_ub { float4x4 u_MVPMatrix; };
 Texture2D u_tex0;
 ```
 
-`axslcc` keeps the engine's deterministic backend assignments internally:
+`axslcc` automatically assigns:
+- Vertex UBOs → `b0, space0`
+- Fragment UBOs → `b1, space0`
+- Textures → `t0, t1, ...` in `space1`
 
-- vertex uniform buffers start at `b0, space0`;
-- fragment uniform buffers start at `b1, space0`;
-- textures are assigned to `tN, space1`;
-- built-in sampler slots are assigned by `axslcc` with fixed bindings matching
-  the `SamplerPreset` enum.
+## How do I use samplers?
 
-Those bindings are reflection/backend details, not user-authored HLSL syntax.
+### Built-in presets (recommended)
 
-## Which sampler style should I use?
+Include `base.hlsli` and use one of the 22 preset names:
 
-Use the built-in sampler presets from `base.hlsli` for all shaders:
+```hlsl
+#include "base.hlsli"
+Texture2D u_tex0;
+float4 color = u_tex0.Sample(LinearClamp, uv);
+```
+
+Presets: `LinearClamp`, `LinearWrap`, `LinearMirror`, `PointClamp`, `PointWrap`,
+`AnisoClamp`, `ShadowCmpClamp`, `LinearNoMipClamp`, and more. See `base.hlsli`
+for the full list.
+
+### Custom samplers
+
+If none of the presets fit, declare your own `SamplerState`:
 
 ```hlsl
 Texture2D u_tex0;
-
-float4 c = u_tex0.Sample(LinearClamp, uv);
+SamplerState mySampler;
+float4 color = u_tex0.Sample(mySampler, uv);
 ```
 
-This is the only supported cross-backend path. Custom sampler names are
-rejected by `axslcc` at compile time.
+Then in C++, **before** loading the Program, register it:
 
-## Does Axmol support custom sampler names?
-
-No. Only the 22 built-in sampler names from `base.hlsli` are supported.
-Declaring a custom sampler name causes `axslcc` to fail with an error.
-
-If per-texture sampler overrides are needed, use the `Texture2D` C++ API
-(`setTexParameters`, `setAliasTexParameters`, `setAntiAliasTexParameters`),
-which operates on the texture's own sampler state and does not require a
-custom shader sampler declaration.
-
-## Can one texture be sampled with two different samplers?
-
-Avoid it for cross-backend Axmol shaders:
-
-```hlsl
-float4 a = u_tex0.Sample(LinearClamp, uv);
-float4 b = u_tex0.Sample(PointClamp, uv);
+```cpp
+rhi::SamplerDesc desc;
+desc.minFilter    = rhi::SamplerFilter::MIN_LINEAR;
+desc.magFilter    = rhi::SamplerFilter::MAG_LINEAR;
+desc.sAddressMode = rhi::SamplerAddressMode::REPEAT;
+desc.tAddressMode = rhi::SamplerAddressMode::REPEAT;
+SamplerRegistry::getInstance()->registerSampler("mySampler", desc);
+// Now load the Program - the sampler name will be resolved
 ```
 
-D3D, Metal, and Vulkan separate samplers can represent this natively, but
-OpenGL and OpenGL ES use combined sampler uniforms. Axmol GL/GLES lowering
-intentionally rejects this pattern.
+**Limits**: custom sampler arrays (`SamplerState arr[4]`) are not supported.
+Each sampler must be a single non-array declaration.
 
-Use separate texture bindings or a single sampler state for that texture.
+## Can I sample one texture two different ways?
 
-## Why did old shaders fail after an axslcc update?
+Avoid it. D3D, Metal, and Vulkan can handle it, but OpenGL/ES combine texture
+and sampler into a single `sampler2D` uniform. Sampling the same texture with
+both `LinearClamp` and `PointClamp` in one shader will fail on GL/ES targets.
 
-The `.sc` reflection layout can change while Axmol v3 is still in alpha. When
-that happens, rebuild all shaders with the matching `axslcc`. Do not mix old
-compiled shader packages with a newer RHI reflection reader.
+Use separate texture bindings or pick one sampler per texture.
 
-## Does GL/GLES support separate samplers?
+## Why does OpenGL/ES work differently?
 
-The OpenGL API has sampler objects, but GLSL 330 and ESSL 300 shader interfaces
-use combined sampler uniforms such as `sampler2D`. `axslcc` lowers HLSL
-texture/sampler usage into final combined GLSL/ESSL resources at compile time.
+GLSL/ESSL uses `sampler2D` uniforms that bundle texture and sampler together.
+`axslcc` automatically merges your HLSL texture + sampler into a combined
+`sampler2D` for GL/ES targets. You don't need to do anything special, but the
+one-sampler-per-texture rule above applies.
 
-The runtime does not need sampling-pair reflection.
+## Do I need to add Y flips?
 
-## Should I add manual Y flips?
+Not mechanically. Decide based on what your coordinate data means:
 
-Only when the coordinate data requires it.
+- `uv.y = 1.0 - uv.y` — invert asset data that uses the opposite convention.
+- `AX_Y_UP(coord)` — convert a backend-dependent coordinate to Y-up.
 
-For mesh UVs, decide from the asset/shader contract:
+Don't flip just because the shader is HLSL. Check what the incoming data
+represents.
 
-```hlsl
-output.uv = input.uv;
+## How do I output point size?
 
-// Use this only when the incoming asset UV convention requires it.
-output.uv.y = 1.0 - output.uv.y;
-```
-
-For backend-dependent screen or render-target coordinates, prefer the helper:
-
-```hlsl
-float yUp = AX_Y_UP(screenCoord);
-```
-
-The short rule is:
-
-- `1.0 - uv.y` means "this input data needs to be inverted".
-- `AX_Y_UP(coord)` means "convert this target-dependent coordinate to Y-up".
-
-Do not add or remove flips purely because the shader is HLSL. Verify what the
-incoming coordinate represents.
-
-## Is `[[vk::builtin("PointSize")]]` supported?
-
-Yes. Use it for point-size output when targeting Vulkan:
+Annotate the `PSIZE` output:
 
 ```hlsl
 [[vk::builtin("PointSize")]] float pointSize : PSIZE;
 ```
 
-## Why is `SV_Position` special?
+This works on Vulkan and OpenGL/ES. D3D and Metal render points at a fixed
+1-pixel size.
 
-`SV_Position` is a system-value semantic. Vertex shaders write clip-space
-position with it. Pixel shaders can read it as screen-space position. It is not
-a normal user varying like `TEXCOORD0`.
+## Why did my shaders break after updating axslcc?
 
-## What should runtime reflection contain?
-
-Only final backend binding data:
-
-- vertex input semantics and locations;
-- textures;
-- samplers;
-- uniform buffers;
-- storage resources where applicable.
-
-It should not contain sampling pairs. Those are compiler-internal data used
-while lowering HLSL to backend resource models.
+The `.sc` shader package format may change during Axmol v3 alpha. Rebuild all
+`.hlsl` sources with the matching `axslcc` version. Don't mix old `.sc` files
+with a new engine build.
