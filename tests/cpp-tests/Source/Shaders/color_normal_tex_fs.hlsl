@@ -12,9 +12,9 @@ struct PS_IN
     float3 v_normal : NORMAL;
 };
 
-Texture2D u_sampler0 : register(t0, space1);
+Texture2D u_sampler0;
 
-cbuffer fs_ub : register(b1, space0)
+cbuffer fs_ub
 {
     float4 u_DirLightSourceColor[MAX_DIRECTIONAL_LIGHT_NUM];
     float4 u_DirLightSourceDirection[MAX_DIRECTIONAL_LIGHT_NUM];

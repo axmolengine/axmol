@@ -401,7 +401,7 @@ void Program::reflectSamplers(SLCReflectContext* context)
         sampler.name           = _sc_read_name(ibs);
         sampler.binding        = ibs->read<int32_t>();
         sampler.textureBinding = ibs->read<int32_t>();
-        ibs->advance(static_cast<ptrdiff_t>(sizeof(uint16_t)));  // descriptor set
+        sampler.descriptorSet  = ibs->read<uint16_t>();
         sampler.count       = ibs->read<uint16_t>();
         sampler.presetIndex = ibs->read<int16_t>();
         sampler.comparison  = ibs->read<uint8_t>() != 0;

@@ -12,7 +12,7 @@ struct VS_OUT {
     float f_size : TEXCOORD0;
 };
 
-cbuffer vs_ub : register(b0, space0) {
+cbuffer vs_ub {
     float4x4 u_MVPMatrix;
 };
 

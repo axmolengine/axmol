@@ -5,9 +5,9 @@ struct PS_IN {
     float4 v_color : COLOR0;
 };
 
-Texture2D u_tex0 : register(t0, space1);
+Texture2D u_tex0;
 
-cbuffer fs_ub : register(b1, space0) {
+cbuffer fs_ub {
     float4 u_color;
 };
 

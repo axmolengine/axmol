@@ -1,4 +1,4 @@
-cbuffer fs_ub : register(b1, space0)
+cbuffer fs_ub
 {
     float3 OutLineColor;
     float4 u_color;

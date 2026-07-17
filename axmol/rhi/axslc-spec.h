@@ -1,5 +1,5 @@
 // The Axmol Shader Compiler spec, define macros and structs
-// match with axslcc-3.99.2+
+// match with axslcc-3.99.0+
 
 #pragma once
 
@@ -75,9 +75,11 @@ struct SamplerPreset
         Count
     };
 };
-inline constexpr uint32_t kTextureSamplerBindingBase  = 32;
+inline constexpr uint32_t kTextureSamplerBindingBase = 32;
 inline constexpr uint32_t kPresetSamplerDescriptorSet = 1;
 static_assert(static_cast<uint32_t>(SamplerPreset::Count) <= kTextureSamplerBindingBase);
+
+inline constexpr int32_t kVulkanSamplerBindingShift = 1024;
 
 enum Dim : uint16_t
 {

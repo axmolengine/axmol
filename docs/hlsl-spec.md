@@ -1,24 +1,41 @@
 # Axmol HLSL Shader Specification
 
-This document describes the HLSL authoring rules used by Axmol v3 shaders.
-It is written for engine users and extension authors who want one HLSL source
-to work across D3D11, D3D12, Vulkan, Metal, OpenGL 3.3, and OpenGL ES 3.x.
+This document describes the HLSL authoring rules used by Axmol v3 shaders. It
+is written for engine users and extension authors who want one HLSL source to
+work across D3D11, D3D12, Vulkan, Metal, OpenGL 3.3, and OpenGL ES 3.x.
 
 For common migration questions and backend caveats, see
 [hlsl-faq.md](hlsl-faq.md).
 
-## Goals
+## Public Contract
 
-Axmol uses HLSL as the primary shader source language. The shader compiler
-generates the backend shader code and runtime reflection used by the RHI.
+Axmol uses HLSL as the primary shader source language. `axslcc` generates the
+backend shader code and runtime reflection used by the RHI.
 
 The public shader contract is:
 
 - vertex inputs are matched by semantic name and semantic index;
-- textures, samplers, and uniform buffers use explicit registers;
+- shader resources are declared by name and type, without manual
+  `: register(...)` annotations;
+- `axslcc` assigns deterministic backend bindings for uniform buffers,
+  textures, samplers, and storage resources;
 - runtime reflection contains final backend resource bindings only;
-- sampler pairs are compiler-internal lowering data and are not part of the
-  runtime reflection ABI.
+- texture/sampler sampling pairs are compiler-internal lowering data and are
+  not part of the runtime reflection ABI.
+
+Manual resource registers are intentionally rejected:
+
+```hlsl
+// Do not write this in Axmol v3 shaders:
+Texture2D u_tex0 : register(t0, space1);
+```
+
+Write declarations without registers:
+
+```hlsl
+Texture2D u_tex0;
+SamplerState u_tex0Sampler;
+```
 
 ## File Names
 
@@ -30,34 +47,7 @@ Use these suffixes for Axmol shader stages:
 | Pixel / Fragment | `_fs.hlsl` or `_ps.hlsl` | `positionTexture_fs.hlsl` |
 | Compute | `_cs.hlsl` | `particles_cs.hlsl` |
 
-`.hlsl` and `.fx` files are treated as HLSL. GLSL source files are still
-recognized by their GLSL extensions, but new Axmol shaders should use HLSL.
-
-## Entry Points
-
-Use `main` as the entry point.
-
-```hlsl
-VS_OUT main(VS_IN input)
-{
-    ...
-}
-
-float4 main(PS_IN input) : SV_Target0
-{
-    ...
-}
-```
-
-Compute shaders use the normal HLSL thread-count attribute:
-
-```hlsl
-[numthreads(8, 8, 1)]
-void main(uint3 id : SV_DispatchThreadID)
-{
-    ...
-}
-```
+Use `main` as the entry point unless a specific build rule says otherwise.
 
 ## Include `base.hlsli`
 
@@ -156,47 +146,49 @@ struct VS_OUT
 
 ## Uniform Buffers
 
-Use explicit constant buffer registers.
+Declare constant buffers without registers:
 
 ```hlsl
-cbuffer vs_ub : register(b0, space0)
+cbuffer vs_ub
 {
     float4x4 u_MVPMatrix;
 };
 
-cbuffer fs_ub : register(b1, space0)
+cbuffer fs_ub
 {
     float4 u_color;
 };
 ```
 
-Conventions:
+`axslcc` preserves Axmol's deterministic uniform-buffer convention:
 
-| Register | Use |
+| Buffer | Internal assignment |
 | --- | --- |
-| `b0, space0` | vertex-stage uniforms |
-| `b1, space0` | pixel-stage uniforms |
+| `vs_ub` and the first vertex-stage cbuffer | `b0, space0` |
+| `fs_ub` and the first fragment-stage cbuffer | `b1, space0` |
+
+Additional cbuffers in the same stage are assigned following slots in source
+order. These assignments are backend/reflection details; user shaders should
+not spell them manually.
 
 Existing engine shaders may use packing helpers from `base.hlsli`, such as
 `vfloat_def` and `vvec3_def`. New shaders should prefer ordinary HLSL types
 unless they need to match an existing packed uniform layout.
 
-## Textures
+## Textures and Storage Resources
 
-Declare textures in `space1` using `t#` registers.
-
-```hlsl
-Texture2D u_tex0 : register(t0, space1);
-Texture2D u_tex1 : register(t1, space1);
-TextureCube u_Env : register(t0, space1);
-```
-
-Texture arrays are supported when the C++ side binds an array to the same
-texture binding:
+Declare textures and storage resources without registers:
 
 ```hlsl
-Texture2D u_details[4] : register(t0, space1);
+Texture2D u_tex0;
+Texture2D u_tex1;
+TextureCube u_Env;
+Texture2D u_details[4];
 ```
+
+`axslcc` assigns textures to `tN, space1` in source order. Storage resources
+are assigned to the corresponding UAV/resource binding range in source order.
+The runtime uses reflection to bind the final backend resource locations.
 
 ## Sampler Model
 
@@ -204,20 +196,20 @@ Axmol has two sampler sources.
 
 | Source | Meaning | Shader Authoring |
 | --- | --- | --- |
+| ShaderPreset | sampler state comes from one of Axmol's built-in presets | sample with `LinearClamp`, `PointClamp`, etc. |
 | TextureOwned | sampler state comes from exactly one associated texture/resource | declare one non-preset sampler for that texture |
-| Shader preset | sampler state comes from one of Axmol's built-in presets | sample with `LinearClamp`, `PointClamp`, etc. |
 
 There is no runtime API for arbitrary custom sampler objects in the current RHI.
 Do not treat a non-preset sampler declaration as a user-bindable custom sampler.
 
-### Shader Preset Samplers
+### ShaderPreset Samplers
 
 Most Axmol HLSL should use the built-in sampler presets from `base.hlsli`:
 
 ```hlsl
 #include "base.hlsli"
 
-Texture2D u_tex0 : register(t0, space1);
+Texture2D u_tex0;
 
 float4 main(PS_IN input) : SV_Target0
 {
@@ -227,61 +219,34 @@ float4 main(PS_IN input) : SV_Target0
 
 Built-in presets:
 
-| Name | Register | Type |
-| --- | --- | --- |
-| `LinearClamp` | `s0, space1` | `SamplerState` |
-| `LinearWrap` | `s1, space1` | `SamplerState` |
-| `LinearMirror` | `s2, space1` | `SamplerState` |
-| `LinearBorder` | `s3, space1` | `SamplerState` |
-| `PointClamp` | `s4, space1` | `SamplerState` |
-| `PointWrap` | `s5, space1` | `SamplerState` |
-| `PointMirror` | `s6, space1` | `SamplerState` |
-| `PointBorder` | `s7, space1` | `SamplerState` |
-| `LinearMipClamp` | `s8, space1` | `SamplerState` |
-| `LinearMipWrap` | `s9, space1` | `SamplerState` |
-| `LinearMipMirror` | `s10, space1` | `SamplerState` |
-| `LinearMipBorder` | `s11, space1` | `SamplerState` |
-| `AnisoClamp` | `s12, space1` | `SamplerState` |
-| `AnisoWrap` | `s13, space1` | `SamplerState` |
-| `AnisoMirror` | `s14, space1` | `SamplerState` |
-| `AnisoBorder` | `s15, space1` | `SamplerState` |
-| `ShadowCmpClamp` | `s16, space1` | `SamplerComparisonState` |
-| `ShadowCmpWrap` | `s17, space1` | `SamplerComparisonState` |
-| `ShadowCmpMirror` | `s18, space1` | `SamplerComparisonState` |
-| `ShadowCmpBorder` | `s19, space1` | `SamplerComparisonState` |
-| `LinearNoMipClamp` | `s20, space1` | `SamplerState` |
-| `PointNoMipClamp` | `s21, space1` | `SamplerState` |
+| Name | Type |
+| --- | --- |
+| `LinearClamp`, `LinearWrap`, `LinearMirror`, `LinearBorder` | `SamplerState` |
+| `PointClamp`, `PointWrap`, `PointMirror`, `PointBorder` | `SamplerState` |
+| `LinearMipClamp`, `LinearMipWrap`, `LinearMipMirror`, `LinearMipBorder` | `SamplerState` |
+| `AnisoClamp`, `AnisoWrap`, `AnisoMirror`, `AnisoBorder` | `SamplerState` |
+| `ShadowCmpClamp`, `ShadowCmpWrap`, `ShadowCmpMirror`, `ShadowCmpBorder` | `SamplerComparisonState` |
+| `LinearNoMipClamp`, `PointNoMipClamp` | `SamplerState` |
 
-Shader preset samplers are independent of texture registers. For example, this
-is valid:
-
-```hlsl
-Texture2D albedo : register(t3, space1);
-
-float4 c = albedo.Sample(LinearClamp, uv); // texture t3, sampler s0
-```
+ShaderPreset samplers are independent of texture binding numbers. For example,
+a texture internally assigned to `t3` may still sample with `LinearClamp`; the
+runtime binds the texture and the preset sampler independently.
 
 ### TextureOwned Samplers
 
 TextureOwned sampling means the sampler state is taken from one associated
 texture. A TextureOwned sampler may internally reuse an existing built-in
-sampler state owned by that texture; the shader register still follows Axmol's
-sampler ABI.
-
-The texture register and sampler register do not need to have the same number,
-but TextureOwned sampler registers must use `s22` or higher because `s0` - `s21`
-are reserved binding slots for Axmol ShaderPreset samplers declared in
-`base.hlsli`:
+sampler state owned by that texture.
 
 ```hlsl
-Texture2D u_albedo : register(t3, space1);
-SamplerState u_albedoSampler : register(s22, space1);
+Texture2D u_albedo;
+SamplerState u_albedoSampler;
 
 float4 c = u_albedo.Sample(u_albedoSampler, uv);
 ```
 
-Reflection records this as `u_albedoSampler.binding = 22` and
-`u_albedoSampler.textureBinding = 3`.
+Reflection records the sampler's owner texture binding. Runtime should use that
+metadata and must not infer ownership from equal texture/sampler slot numbers.
 
 A TextureOwned sampler must have exactly one owner texture. Do not share one
 non-preset sampler across multiple textures:
@@ -295,12 +260,16 @@ b.Sample(sharedSampler, uv);
 If several textures should use the same sampler state, use a ShaderPreset such
 as `LinearClamp` instead.
 
+Internally, Axmol reserves logical sampler slots for built-in presets and
+TextureOwned samplers. Those slots are not part of the user-facing HLSL syntax;
+write declarations and let `axslcc` assign them.
+
 ### GL/GLES Combined Samplers
 
 OpenGL 3.3 and OpenGL ES 3.x use combined sampler uniforms in GLSL/ESSL.
-axslcc lowers HLSL texture + sampler usage into the final combined GLSL resource
-at compile time. Runtime reflection for GL/GLES describes the final combined
-uniforms, not the original HLSL separate image/sampler resources.
+`axslcc` lowers HLSL texture + sampler usage into the final combined GLSL
+resource at compile time. Runtime reflection for GL/GLES describes the final
+combined uniforms, not the original HLSL separate image/sampler resources.
 
 For cross-backend shaders, do not sample the same texture with multiple sampler
 states in one shader:
@@ -313,19 +282,9 @@ float4 b = u_tex0.Sample(PointClamp, uv);
 
 Use separate texture bindings or a single sampler state per texture.
 
-## Register Spaces
-
-| Resource | Space | Registers |
-| --- | --- | --- |
-| Uniform buffers | `space0` | `b0`, `b1`, ... |
-| Textures | `space1` | `t0`, `t1`, ... |
-| ShaderPreset sampler slots | `space1` | `s0` - `s21`, reserved by `base.hlsli` |
-| TextureOwned sampler slots | `space1` | `s22` and above |
-
-Axmol currently flattens runtime bindings for its RHI backends. Use the spaces
-above consistently.
-
 ## Complete Example
+
+Vertex shader:
 
 ```hlsl
 #include "base.hlsli"
@@ -344,7 +303,7 @@ struct VS_OUT
     float4 color    : COLOR0;
 };
 
-cbuffer vs_ub : register(b0, space0)
+cbuffer vs_ub
 {
     float4x4 u_MVPMatrix;
 };
@@ -359,6 +318,8 @@ VS_OUT main(VS_IN input)
 }
 ```
 
+Fragment shader:
+
 ```hlsl
 #include "base.hlsli"
 
@@ -368,7 +329,7 @@ struct PS_IN
     float4 color : COLOR0;
 };
 
-Texture2D u_tex0 : register(t0, space1);
+Texture2D u_tex0;
 
 float4 main(PS_IN input) : SV_Target0
 {
@@ -378,7 +339,7 @@ float4 main(PS_IN input) : SV_Target0
 
 ## Target Macros
 
-axslcc defines target macros while compiling each backend variant.
+`axslcc` defines target macros while compiling each backend variant.
 
 | Target | Defines |
 | --- | --- |
@@ -445,8 +406,10 @@ combined-mode preparation.
 ## Checklist
 
 - Include `base.hlsli` when using preset samplers.
-- Use `b0, space0` for vertex uniforms and `b1, space0` for pixel uniforms.
-- Use `tN, space1` for textures.
+- Do not write manual `: register(...)` annotations.
+- Use `vs_ub` for vertex uniforms and `fs_ub` for fragment uniforms; `axslcc`
+  assigns their backend bindings.
+- Declare textures and storage resources without binding syntax.
 - Use built-in sampler presets for explicit shader sampler state.
 - Use one TextureOwned sampler per owner texture, or use a ShaderPreset for
   sampler state shared by multiple textures.

@@ -37,9 +37,10 @@ class VertexLayoutImpl;
 class ProgramImpl;
 class DriverImpl;
 
-static constexpr int MAX_DESCRIPTOR_SETS = 2;
+static constexpr int MAX_DESCRIPTOR_SETS = 3;
 static constexpr int SET_INDEX_UBO       = 0;
-static constexpr int SET_INDEX_SAMPLER   = 1;
+static constexpr int SET_INDEX_RESOURCE  = 1;  // image + sampler
+static constexpr int SET_INDEX_RESERVED  = 2;  // reserved for future descriptor-set expansion
 
 static constexpr uint32_t DESCRIPTOR_POOL_MAX_SETS           = 128;
 static constexpr uint32_t DESCRIPTOR_POOL_UNIFORM_MULTIPLIER = 2;

@@ -173,6 +173,7 @@ public:
 
     UINT getSrvDescriptorStride() const { return _srvDescriptorStride; }
     UINT getSamplerDescriptorStride() const { return _samplerDescriptorStride; }
+    D3D12_RESOURCE_BINDING_TIER getResourceBindingTier() const { return _resourceBindingTier; }
 
     ComPtr<IUnknown> compileShader(std::span<uint8_t> shaderCode, ShaderStage stage, std::span<uint8_t>& blobView);
 
@@ -230,6 +231,7 @@ private:
     std::vector<DisposableResource> _disposalQueue;
 
     D3D_FEATURE_LEVEL _featureLevel{D3D_FEATURE_LEVEL_11_0};
+    D3D12_RESOURCE_BINDING_TIER _resourceBindingTier{D3D12_RESOURCE_BINDING_TIER_1};
     DXGI_ADAPTER_DESC _adapterDesc{};
     std::optional<LARGE_INTEGER> _driverVersion;
 

@@ -1056,6 +1056,10 @@ void RenderContextImpl::prepareDrawing()
     auto& descriptorSets = descriptorState->sets;
 
     assert(descriptorSets[SET_INDEX_UBO]);
+    if (descriptorState->imageDescriptorCount || descriptorState->combinedDescriptorCount)
+        assert(descriptorSets[SET_INDEX_RESOURCE]);
+    if (descriptorState->samplerDescriptorCount)
+        assert(descriptorSets[SET_INDEX_RESOURCE]);
 
     // Prepare write lists sized to expected UBO + sampler descriptors
     auto& writes = _descriptorWritesPerFrame;
@@ -1091,7 +1095,8 @@ void RenderContextImpl::prepareDrawing()
         }
     }
 
-    const bool separateSamplers = !_programState->getProgram()->getActiveSamplerInfos().empty();
+    const auto& activeSamplerInfos = _programState->getProgram()->getActiveSamplerInfos();
+    const bool separateSamplers    = !activeSamplerInfos.empty();
 
     // --- Sampled images / combined image samplers (set=1, binding=N) ---
     auto& imageInfos = _descriptorImageInfosPerFrame;
@@ -1134,7 +1139,7 @@ void RenderContextImpl::prepareDrawing()
 
         VkWriteDescriptorSet& write = writes.emplace_back();
         write.sType                 = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-        write.dstSet                = descriptorSets[SET_INDEX_SAMPLER];
+        write.dstSet                = descriptorSets[SET_INDEX_RESOURCE];
         write.dstBinding            = bindingIndex;
         write.descriptorType =
             separateSamplers ? VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE : VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
@@ -1144,7 +1149,7 @@ void RenderContextImpl::prepareDrawing()
 
     if (separateSamplers)
     {
-        for (const auto& samplerInfo : _programState->getProgram()->getActiveSamplerInfos())
+        for (const auto& samplerInfo : activeSamplerInfos)
         {
             const size_t offset = imageInfos.size();
             if (samplerInfo.presetIndex >= 0)
@@ -1162,22 +1167,28 @@ void RenderContextImpl::prepareDrawing()
             {
                 const auto& textureBindingSets = _programState->getTextureBindingSets();
                 auto textureBindingIt          = textureBindingSets.find(samplerInfo.textureBinding);
-                if (textureBindingIt == textureBindingSets.end() || textureBindingIt->second.texs.empty())
+                auto fallbackSampler           = static_cast<VkSampler>(
+                    SamplerCache::getInstance()->getSampler(SamplerPreset::LinearClamp));
+                const auto* texs = textureBindingIt != textureBindingSets.end() ? &textureBindingIt->second.texs : nullptr;
+                bool completeTextureBinding = texs && texs->size() >= samplerInfo.count;
+                if (texs)
                 {
-                    AXLOGW("Vulkan texture-owned sampler binding {} has no associated texture binding {}",
-                           samplerInfo.binding, samplerInfo.textureBinding);
-                    continue;
+                    for (uint16_t i = 0; i < samplerInfo.count && i < texs->size(); ++i)
+                        completeTextureBinding = completeTextureBinding && (*texs)[i] != nullptr;
                 }
 
-                const auto& texs = textureBindingIt->second.texs;
+                if (!completeTextureBinding)
+                {
+                    AXLOGW("Vulkan texture-owned sampler binding {} has incomplete texture binding {}: "
+                           "expected {} textures, got {}",
+                           samplerInfo.binding, samplerInfo.textureBinding, samplerInfo.count, texs ? texs->size() : 0);
+                }
+
                 for (uint16_t i = 0; i < samplerInfo.count; ++i)
                 {
-                    if (i >= texs.size())
-                        break;
-
-                    auto textureImpl  = static_cast<TextureImpl*>(texs[i]);
+                    auto textureImpl  = texs && i < texs->size() ? static_cast<TextureImpl*>((*texs)[i]) : nullptr;
                     auto& imageInfo   = imageInfos.emplace_back();
-                    imageInfo.sampler = textureImpl->getSampler();
+                    imageInfo.sampler = textureImpl ? textureImpl->getSampler() : fallbackSampler;
                 }
             }
 
@@ -1186,7 +1197,7 @@ void RenderContextImpl::prepareDrawing()
 
             VkWriteDescriptorSet& write = writes.emplace_back();
             write.sType                 = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-            write.dstSet                = descriptorSets[SET_INDEX_SAMPLER];
+            write.dstSet                = descriptorSets[SET_INDEX_RESOURCE];
             write.dstBinding            = samplerInfo.binding;
             write.descriptorType        = VK_DESCRIPTOR_TYPE_SAMPLER;
             write.descriptorCount       = static_cast<uint32_t>(imageInfos.size() - offset);

@@ -22,7 +22,7 @@ struct VS_OUT {
     float f_thickness : TEXCOORD12;
 };
 
-cbuffer vs_ub : register(b0, space0) {
+cbuffer vs_ub {
     float4x4 u_MVPMatrix;
     float u_pixelScale;
 };

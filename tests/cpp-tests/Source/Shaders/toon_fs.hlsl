@@ -5,11 +5,11 @@ struct PS_IN {
     float3 v_normal : NORMAL;
 };
 
-cbuffer fs_ub : register(b1, space0) {
+cbuffer fs_ub {
     float4 u_color;
 };
 
-Texture2D u_sampler0 : register(t0, space1);
+Texture2D u_sampler0;
 
 float4 main(PS_IN input) : SV_Target0 {
     float3 light_direction = float3(1.0, -1.0, -1.0);

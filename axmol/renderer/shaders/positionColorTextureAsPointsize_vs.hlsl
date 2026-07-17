@@ -13,7 +13,7 @@ struct VS_OUT {
     [[vk::builtin("PointSize")]] float pointSize : PSIZE;
 };
 
-cbuffer vs_ub : register(b0, space0) {
+cbuffer vs_ub {
     float u_alpha;
     float4x4 u_MVPMatrix;
 };

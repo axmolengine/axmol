@@ -15,13 +15,13 @@ struct PS_IN {
 #endif
 };
 
-Texture2D u_tex0 : register(t0, space1);
+Texture2D u_tex0;
 
 #ifdef USE_NORMAL_MAPPING
-Texture2D u_normalTex : register(t1, space1);
+Texture2D u_normalTex;
 #endif
 
-cbuffer fs_ub : register(b1, space0) {
+cbuffer fs_ub {
     vvec3_def(u_DirLightSourceColor, MAX_DIRECTIONAL_LIGHT_NUM);
     vvec3_def(u_DirLightSourceDirection, MAX_DIRECTIONAL_LIGHT_NUM);
     vvec3_def(u_PointLightSourceColor, MAX_POINT_LIGHT_NUM);

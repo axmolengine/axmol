@@ -7,7 +7,7 @@ struct PS_IN {
     float3 v_normal : NORMAL;
 };
 
-cbuffer fs_ub : register(b1, space0) {
+cbuffer fs_ub {
     vvec3_def(u_DirLightSourceColor, MAX_DIRECTIONAL_LIGHT_NUM);
     vvec3_def(u_DirLightSourceDirection, MAX_DIRECTIONAL_LIGHT_NUM);
     vvec3_def(u_PointLightSourceColor, MAX_POINT_LIGHT_NUM);

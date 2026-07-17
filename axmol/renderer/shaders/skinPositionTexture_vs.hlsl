@@ -14,7 +14,7 @@ struct VS_OUT {
     float4 position : SV_Position;
 };
 
-cbuffer vs_ub : register(b0, space0) {
+cbuffer vs_ub {
     float4 u_matrixPalette[SKINNING_JOINT_COUNT * 3];
     float4x4 u_MVPMatrix;
 };

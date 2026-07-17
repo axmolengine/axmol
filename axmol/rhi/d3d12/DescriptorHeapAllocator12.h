@@ -82,7 +82,7 @@ public:
     ID3D12DescriptorHeap* getDescriptorHeap(const DescriptorHandle* handle) const;
     ID3D12DescriptorHeap* getDescriptorHeapByIndex(size_t index) const { return _blocks[index].heap.Get(); }
 
-    void setAllowGrow(bool bval) { _allowGrow; }
+    void setAllowGrow(bool bval) { _allowGrow = bval; }
 
     // Recreate a new larger block (auto-called when full)
     void grow();

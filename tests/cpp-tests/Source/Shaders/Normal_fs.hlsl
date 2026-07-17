@@ -5,10 +5,10 @@ struct PS_IN {
     float2 v_texCoord : TEXCOORD0;
 };
 
-Texture2D u_tex0 : register(t0, space1);
-Texture2D u_normalMap : register(t1, space1);
+Texture2D u_tex0;
+Texture2D u_normalMap;
 
-cbuffer fs_ub : register(b1, space0) {
+cbuffer fs_ub {
     float u_kBump;
     float4 u_lightPosInLocalSpace;
     float2 u_contentSize;

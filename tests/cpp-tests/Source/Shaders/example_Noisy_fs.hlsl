@@ -6,13 +6,13 @@ struct PS_IN {
     float4 pixelCoord : SV_Position;
 };
 
-cbuffer fs_ub : register(b1, space0) {
+cbuffer fs_ub {
     float2 resolution;
     float4 u_Time;
     float2 u_screenSize;
 };
 
-Texture2D u_tex0 : register(t0, space1);
+Texture2D u_tex0;
 
 float3 noise(float2 uv)
 {

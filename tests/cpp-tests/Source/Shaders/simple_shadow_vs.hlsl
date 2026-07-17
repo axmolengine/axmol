@@ -11,7 +11,7 @@ struct VS_OUT {
     float4 position : SV_Position;
 };
 
-cbuffer vs_ub : register(b0, space0) {
+cbuffer vs_ub {
     float4x4 u_model_matrix;
     float4x4 u_MVPMatrix;
 };

@@ -4,7 +4,7 @@ struct VS_IN
     float3 a_normal : NORMAL;
 };
 
-cbuffer vs_ub : register(b0, space0)
+cbuffer vs_ub
 {
     float OutlineWidth;
     float4x4 u_MVPMatrix;

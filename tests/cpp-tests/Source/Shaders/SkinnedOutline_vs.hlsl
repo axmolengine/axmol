@@ -8,7 +8,7 @@ struct VS_IN
     float4 a_blendIndex : BLENDINDICES;
 };
 
-cbuffer vs_ub : register(b0, space0)
+cbuffer vs_ub
 {
     float OutlineWidth;
     float4 u_matrixPalette[SKINNING_JOINT_COUNT * 3];

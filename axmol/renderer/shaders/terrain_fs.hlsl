@@ -5,11 +5,11 @@ struct PS_IN {
     float3 v_normal : NORMAL;
 };
 
-Texture2D u_details[4] : register(t0, space1); // will take slot 0~3
-Texture2D u_alphaMap : register(t4, space1);
-Texture2D u_lightMap : register(t5, space1);
+Texture2D u_details[4]; // will take slot 0~3
+Texture2D u_alphaMap;
+Texture2D u_lightMap;
 
-cbuffer fs_ub : register(b1, space0) {
+cbuffer fs_ub {
     int u_has_alpha;
     int u_has_light_map;
     vfloat_def(u_detailSize, 4);

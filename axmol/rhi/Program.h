@@ -76,6 +76,7 @@ struct SamplerBindingInfo
 {
     int binding{-1};
     int textureBinding{-1};
+    uint16_t descriptorSet{0};
     uint16_t count{1};
     int16_t presetIndex{-1};
     bool comparison{false};

@@ -10,9 +10,9 @@ struct PS_IN {
     float2 v_texCoord : TEXCOORD0;
 };
 
-Texture2D u_tex0 : register(t0, space1);
+Texture2D u_tex0;
 
-cbuffer fs_ub : register(b1, space0) {
+cbuffer fs_ub {
     float4 u_textColor;
     float4 u_effectColor;
     float u_effectWidth;   // outline thickness in pixels

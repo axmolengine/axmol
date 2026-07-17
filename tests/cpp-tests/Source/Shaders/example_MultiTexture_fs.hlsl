@@ -5,12 +5,12 @@ struct PS_IN {
     float2 v_texCoord : TEXCOORD0;
 };
 
-cbuffer fs_ub : register(b1, space0) {
+cbuffer fs_ub {
     float u_interpolate;
 };
 
-Texture2D u_tex0 : register(t0, space1);
-Texture2D u_tex1 : register(t1, space1);
+Texture2D u_tex0;
+Texture2D u_tex1;
 
 float4 main(PS_IN input) : SV_Target0 {
     float4 color1 = u_tex0.Sample(LinearClamp, input.v_texCoord);

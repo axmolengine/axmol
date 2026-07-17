@@ -29,6 +29,7 @@
 #include "axmol/rhi/vulkan/ShaderModuleVK.h"
 #include "axmol/rhi/vulkan/DriverVK.h"
 #include "axmol/rhi/vulkan/UtilsVK.h"
+#include "axmol/rhi/axslc-spec.h"
 #include "axmol/tlx/hlookup.hpp"
 #include "axmol/tlx/hash.hpp"
 #include "axmol/tlx/inlined_vector.hpp"
@@ -173,12 +174,12 @@ void DescriptorPool::init(DescriptorAllocator* allocator, std::span<const VkDesc
     poolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
     poolInfo.pPoolSizes    = poolSizes.data();
     poolInfo.flags         = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
-    poolInfo.maxSets       = DESCRIPTOR_POOL_MAX_SETS;
+    poolInfo.maxSets       = DESCRIPTOR_POOL_MAX_SETS * MAX_DESCRIPTOR_SETS;
 
     auto ret = vkCreateDescriptorPool(_allocator->getDevice(), &poolInfo, nullptr, &_pool);
     VK_REQUIRE(ret, "vkCreateDescriptorPool failed");
 
-    _freeSetCount = _maxSetCount = DESCRIPTOR_POOL_MAX_SETS;
+    _freeSetCount = _maxSetCount = DESCRIPTOR_POOL_MAX_SETS * MAX_DESCRIPTOR_SETS;
     for (auto& poolSize : poolSizes)
     {
         if (poolSize.type == VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER)
@@ -343,7 +344,7 @@ RenderPipelineImpl::~RenderPipelineImpl()
 
     for (auto& [_, state] : _pipelineLayoutCache)
     {
-        if (state.descriptorSetLayoutCount == 2)
+        if (state.descriptorSetLayoutCount > 1)
             freeDescriptorStates(_descriptorAllocator2, state.descriptorFreeList, false);
         else
             freeDescriptorStates(_descriptorAllocator1, state.descriptorFreeList, false);
@@ -354,8 +355,8 @@ RenderPipelineImpl::~RenderPipelineImpl()
         auto& descSetLayouts = state.descriptorSetLayouts;
         if (descSetLayouts[SET_INDEX_UBO])
             vkDestroyDescriptorSetLayout(_device, descSetLayouts[SET_INDEX_UBO], nullptr);
-        if (descSetLayouts[SET_INDEX_SAMPLER])
-            vkDestroyDescriptorSetLayout(_device, descSetLayouts[SET_INDEX_SAMPLER], nullptr);
+        if (descSetLayouts[SET_INDEX_RESOURCE])
+            vkDestroyDescriptorSetLayout(_device, descSetLayouts[SET_INDEX_RESOURCE], nullptr);
     }
     _pipelineLayoutCache.clear();
 
@@ -468,7 +469,7 @@ void RenderPipelineImpl::updatePipelineLayoutState(ProgramImpl* program)
     }
 
     tlx::pod_vector<VkDescriptorSetLayoutBinding> ubBindings;
-    tlx::pod_vector<VkDescriptorSetLayoutBinding> samplerBindings;
+    tlx::pod_vector<VkDescriptorSetLayoutBinding> resourceBindings;
 
     auto& state = _pipelineLayoutCache.emplace(_activeProgId, PipelineLayoutState{}).first->second;
 
@@ -491,7 +492,7 @@ void RenderPipelineImpl::updatePipelineLayoutState(ProgramImpl* program)
     // FS sampled images / combined images -> set=1
     for (auto& [_, smp] : program->getActiveTextureInfos())
     {
-        VkDescriptorSetLayoutBinding& b = samplerBindings.emplace_back();
+        VkDescriptorSetLayoutBinding& b = resourceBindings.emplace_back();
         b.binding                       = smp->location;
         b.descriptorType =
             separateSamplers ? VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE : VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
@@ -509,7 +510,22 @@ void RenderPipelineImpl::updatePipelineLayoutState(ProgramImpl* program)
     {
         for (const auto& smp : program->getActiveSamplerInfos())
         {
-            VkDescriptorSetLayoutBinding& b = samplerBindings.emplace_back();
+            AXASSERT(smp.descriptorSet == axslc::kPresetSamplerDescriptorSet,
+                     "Vulkan sampler reflection must use descriptor set 1");
+            if (smp.presetIndex >= 0)
+            {
+                AXASSERT(smp.presetIndex < SamplerPreset::Count, "invalid Vulkan sampler preset index");
+                AXASSERT(smp.binding == axslc::kVulkanSamplerBindingShift + smp.presetIndex,
+                         "Vulkan preset sampler binding must match binding shift + preset index");
+            }
+            else
+            {
+                AXASSERT(smp.binding >=
+                             axslc::kVulkanSamplerBindingShift + static_cast<int>(axslc::kTextureSamplerBindingBase),
+                         "Vulkan texture-owned/custom sampler binding is below the reserved range");
+            }
+
+            VkDescriptorSetLayoutBinding& b = resourceBindings.emplace_back();
             b.binding                       = smp.binding;
             b.descriptorType                = VK_DESCRIPTOR_TYPE_SAMPLER;
             b.descriptorCount               = smp.count;
@@ -526,21 +542,17 @@ void RenderPipelineImpl::updatePipelineLayoutState(ProgramImpl* program)
     dsl0.pBindings    = ubBindings.data();
     vkCreateDescriptorSetLayout(_device, &dsl0, nullptr, &state.descriptorSetLayouts[SET_INDEX_UBO]);
 
-    if (!samplerBindings.empty())
+    if (!resourceBindings.empty())
     {
-        // Create DescriptorSetLayout for samplers (set=1)
-
-        state.descriptorSetLayoutCount = 2;
-
         VkDescriptorSetLayoutCreateInfo dsl1{};
         dsl1.sType        = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-        dsl1.bindingCount = static_cast<uint32_t>(samplerBindings.size());
-        dsl1.pBindings    = samplerBindings.data();
-        auto vr = vkCreateDescriptorSetLayout(_device, &dsl1, nullptr, &state.descriptorSetLayouts[SET_INDEX_SAMPLER]);
+        dsl1.bindingCount = static_cast<uint32_t>(resourceBindings.size());
+        dsl1.pBindings    = resourceBindings.data();
+        auto vr = vkCreateDescriptorSetLayout(_device, &dsl1, nullptr, &state.descriptorSetLayouts[SET_INDEX_RESOURCE]);
         VK_REQUIRE(vr, "vkCreateDescriptorSetLayout failed");
     }
-    else
-        state.descriptorSetLayoutCount = 1;
+
+    state.descriptorSetLayoutCount = !resourceBindings.empty() ? 2u : 1u;
 
     VkPipelineLayoutCreateInfo plc{};
     plc.sType                  = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
@@ -649,13 +661,13 @@ DescriptorState* RenderPipelineImpl::acquireDescriptorState()
     descriptorState         = _descriptorStatePool.construt();
     descriptorState->progId = _activeProgId;
 
-    if (_activeLayoutState->descriptorSetLayoutCount == 2) [[likely]]
+    if (_activeLayoutState->descriptorSetLayoutCount > 1) [[likely]]
     {
         _descriptorAllocator2.allocateDescriptorSets(_activeLayoutState, descriptorState);
     }
     else
     {
-        AXASSERT(_activeLayoutState->descriptorSetLayoutCount == 1, "DescriptorSetLayoutCount must be 1 or 2");
+        AXASSERT(_activeLayoutState->descriptorSetLayoutCount == 1, "DescriptorSetLayoutCount must be 1, 2 or 3");
         _descriptorAllocator1.allocateDescriptorSets(_activeLayoutState, descriptorState);
     }
     return descriptorState;
@@ -734,7 +746,7 @@ void RenderPipelineImpl::removeCachedObjects(Program* key)
         auto& layoutState = layoutIt->second;
 
         // remove descriptor sets cache
-        if (layoutState.descriptorSetLayoutCount == 2) [[likely]]
+        if (layoutState.descriptorSetLayoutCount > 1) [[likely]]
             freeDescriptorStates(_descriptorAllocator2, layoutState.descriptorFreeList, true);
         else
             freeDescriptorStates(_descriptorAllocator1, layoutState.descriptorFreeList, true);
@@ -745,8 +757,8 @@ void RenderPipelineImpl::removeCachedObjects(Program* key)
         auto& descSetLayouts = layoutState.descriptorSetLayouts;
         if (descSetLayouts[SET_INDEX_UBO])
             vkDestroyDescriptorSetLayout(_device, descSetLayouts[SET_INDEX_UBO], nullptr);
-        if (descSetLayouts[SET_INDEX_SAMPLER])
-            vkDestroyDescriptorSetLayout(_device, descSetLayouts[SET_INDEX_SAMPLER], nullptr);
+        if (descSetLayouts[SET_INDEX_RESOURCE])
+            vkDestroyDescriptorSetLayout(_device, descSetLayouts[SET_INDEX_RESOURCE], nullptr);
         _pipelineLayoutCache.erase(layoutIt);
     }
 

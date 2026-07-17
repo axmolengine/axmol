@@ -5,7 +5,7 @@ struct PS_IN {
     float4 position : SV_Position;
 };
 
-Texture2D u_tex0 : register(t0, space1);
+Texture2D u_tex0;
 
 float4 getColorByCoord(int y) {
     if (y < 5) {

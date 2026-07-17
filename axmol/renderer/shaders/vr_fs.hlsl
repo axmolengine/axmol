@@ -5,7 +5,7 @@ struct PS_IN {
     float v_vignette : TEXCOORD1;
 };
 
-Texture2D u_tex0 : register(t0, space1);
+Texture2D u_tex0;
 
 float4 main(PS_IN input) : SV_Target0
 {

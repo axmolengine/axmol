@@ -78,7 +78,7 @@ static std::string_view kCSGenerateMipsHLSL = R"(
     RWTexture2D<float4> gDst : register(u0);
 #endif
 
-SamplerState gSampler : register(s0);
+SamplerState gSampler : register(s0, space1);
 
 cbuffer MipConstants : register(b0)
 {
@@ -323,6 +323,19 @@ bool DriverImpl::init()
     }
 
     AXLOGI("D3D12 Feature level: 0x{:04x}", static_cast<int>(_featureLevel));
+
+    D3D12_FEATURE_DATA_D3D12_OPTIONS options{};
+    hr = _device->CheckFeatureSupport(D3D12_FEATURE_D3D12_OPTIONS, &options, sizeof(options));
+    if (SUCCEEDED(hr))
+    {
+        _resourceBindingTier = options.ResourceBindingTier;
+    }
+    else
+    {
+        _resourceBindingTier = D3D12_RESOURCE_BINDING_TIER_1;
+        AXLOGW("D3D12: failed to query resource binding tier, assume tier 1.");
+    }
+    AXLOGI("D3D12 Resource Binding Tier: {}", static_cast<int>(_resourceBindingTier));
 
     // adapter version
     LARGE_INTEGER version;
@@ -582,7 +595,7 @@ ShaderModule* DriverImpl::createShaderModule(ShaderStage stage, Data& chunk)
     return new ShaderModuleImpl(this, stage, chunk);
 }
 
-SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
+static D3D12_SAMPLER_DESC toD3DSamplerDesc(const SamplerDesc& desc)
 {
     static constexpr D3D12_FILTER kFilterTable[8] = {D3D12_FILTER_MIN_MAG_MIP_POINT,
                                                      D3D12_FILTER_MIN_MAG_POINT_MIP_LINEAR,
@@ -658,6 +671,12 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
     sd.MipLODBias     = 0.0f;
     sd.BorderColor[0] = sd.BorderColor[1] = sd.BorderColor[2] = sd.BorderColor[3] = 0.0f;
 
+    return sd;
+}
+
+SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
+{
+    auto sd     = toD3DSamplerDesc(desc);
     auto handle = allocateDescriptor(DisposableResource::Type::SamplerView);
     _device->CreateSampler(&sd, handle->cpu);
 
@@ -1179,7 +1198,7 @@ void DriverImpl::ensureMipmapPipeline(bool isArray)
         CD3DX12_STATIC_SAMPLER_DESC staticSampler(
             0, D3D12_FILTER_MIN_MAG_MIP_LINEAR, D3D12_TEXTURE_ADDRESS_MODE_CLAMP, D3D12_TEXTURE_ADDRESS_MODE_CLAMP,
             D3D12_TEXTURE_ADDRESS_MODE_CLAMP, 0.0f, 16, D3D12_COMPARISON_FUNC_ALWAYS,
-            D3D12_STATIC_BORDER_COLOR_OPAQUE_BLACK, 0.0f, D3D12_FLOAT32_MAX, D3D12_SHADER_VISIBILITY_ALL, 0);
+            D3D12_STATIC_BORDER_COLOR_OPAQUE_BLACK, 0.0f, D3D12_FLOAT32_MAX, D3D12_SHADER_VISIBILITY_ALL, 1);
 
         CD3DX12_ROOT_SIGNATURE_DESC rsDesc;
         rsDesc.Init(_countof(params), params, 1, &staticSampler, D3D12_ROOT_SIGNATURE_FLAG_NONE);

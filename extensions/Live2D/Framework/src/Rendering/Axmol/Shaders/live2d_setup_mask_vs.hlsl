@@ -11,7 +11,7 @@ struct VS_OUT
     float4 v_myPos : TEXCOORD1;
 };
 
-cbuffer vs_ub : register(b0, space0)
+cbuffer vs_ub
 {
     float4x4 u_clipMatrix;
 };

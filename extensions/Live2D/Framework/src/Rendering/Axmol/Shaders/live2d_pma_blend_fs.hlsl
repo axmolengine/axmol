@@ -1,4 +1,4 @@
-SamplerState LinearClamp : register(s0, space1);
+SamplerState LinearClamp;
 
 struct PS_IN
 {
@@ -6,7 +6,7 @@ struct PS_IN
     float2 v_blendCoord : TEXCOORD1;
 };
 
-cbuffer fs_ub : register(b1, space0)
+cbuffer fs_ub
 {
     float4 u_baseColor;
     float4 u_multiplyColor;
@@ -14,8 +14,8 @@ cbuffer fs_ub : register(b1, space0)
     int4 u_blendMode;
 };
 
-Texture2D u_tex0 : register(t0, space1);
-Texture2D u_blendTexture : register(t1, space1);
+Texture2D u_tex0;
+Texture2D u_blendTexture;
 
 #include "live2d_blend_common.hlsli"
 

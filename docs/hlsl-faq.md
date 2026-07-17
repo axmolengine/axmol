@@ -3,14 +3,12 @@
 ## Should I use HLSL or GLSL for new Axmol shaders?
 
 Use HLSL. Axmol v3 treats HLSL as the primary shader authoring language and
-uses axslcc to generate backend shader code and reflection.
+uses `axslcc` to generate backend shader code and reflection.
 
 ## Do HLSL variable names matter?
 
 For vertex inputs, no. Axmol matches vertex data by semantic base name and
 semantic index, such as `POSITION` / `0` or `TEXCOORD` / `1`.
-
-This means these two declarations are equivalent to the RHI:
 
 ```hlsl
 float3 a_position : POSITION;
@@ -37,12 +35,36 @@ float4 instanceColor : INSTANCE_COLOR0;
 The C++ side must query the same semantic base and index. Built-in mesh data
 only maps the standard Axmol mesh semantics.
 
+## Should I write `register(tN, spaceN)` in shader code?
+
+No. Axmol v3 now lets `axslcc` own the resource layout. Declare resources
+without manual registers:
+
+```hlsl
+cbuffer vs_ub
+{
+    float4x4 u_MVPMatrix;
+};
+
+Texture2D u_tex0;
+SamplerState u_tex0Sampler;
+```
+
+`axslcc` keeps the engine's deterministic backend assignments internally:
+
+- vertex uniform buffers start at `b0, space0`;
+- fragment uniform buffers start at `b1, space0`;
+- textures are assigned to `tN, space1`;
+- sampler preset and TextureOwned sampler slots are assigned by `axslcc`.
+
+Those bindings are reflection/backend details, not user-authored HLSL syntax.
+
 ## Which sampler style should I use?
 
 Use the built-in sampler presets from `base.hlsli` for most shaders:
 
 ```hlsl
-Texture2D u_tex0 : register(t0, space1);
+Texture2D u_tex0;
 
 float4 c = u_tex0.Sample(LinearClamp, uv);
 ```
@@ -79,42 +101,34 @@ D3D, Metal, and Vulkan separate samplers can represent this natively, but
 OpenGL and OpenGL ES use combined sampler uniforms. Axmol does not expose
 runtime sampling pairs, so GL/GLES lowering intentionally rejects this pattern.
 
-Use one TextureOwned sampler per texture, or use a ShaderPreset such as
-`LinearClamp` when multiple textures should share the same sampler state.
+Use separate texture bindings or a single sampler state for that texture.
+
+## Can two textures share one TextureOwned sampler?
+
+No. This is invalid:
+
+```hlsl
+a.Sample(sharedSampler, uv);
+b.Sample(sharedSampler, uv);
+```
+
+TextureOwned means "this sampler state comes from exactly one owner texture".
+If multiple textures should share the same sampler state, use a ShaderPreset
+such as `LinearClamp`, `LinearWrap`, or `PointClamp`.
 
 ## Why did old shaders fail after an axslcc update?
 
 The `.sc` reflection layout can change while Axmol v3 is still in alpha. When
-that happens, rebuild all shaders with the matching axslcc. Do not mix old
+that happens, rebuild all shaders with the matching `axslcc`. Do not mix old
 compiled shader packages with a newer RHI reflection reader.
 
 ## Does GL/GLES support separate samplers?
 
 The OpenGL API has sampler objects, but GLSL 330 and ESSL 300 shader interfaces
-use combined sampler uniforms such as `sampler2D`. axslcc lowers HLSL
+use combined sampler uniforms such as `sampler2D`. `axslcc` lowers HLSL
 texture/sampler usage into final combined GLSL/ESSL resources at compile time.
 
 The runtime does not need sampling-pair reflection.
-
-## Should I use `register(tN, space1)` and `register(sN, space1)`?
-
-Yes. Textures use `tN, space1`. Built-in sampler presets use `s0` - `s21,
-space1` from `base.hlsli`. Uniform buffers use `bN, space0`.
-
-For TextureOwned samplers, `tN` and `sN` do not need to be the same number.
-However, `s0` - `s21` are reserved binding slots for ShaderPreset samplers
-declared in `base.hlsli`, so TextureOwned samplers should use `s22` or higher:
-
-```hlsl
-Texture2D u_albedo : register(t3, space1);
-SamplerState u_albedoSampler : register(s22, space1);
-
-float4 c = u_albedo.Sample(u_albedoSampler, uv);
-```
-
-That means sampler `s22` gets its state from texture binding `t3`. The texture
-may internally use or reuse an existing built-in sampler state; the `s22+`
-register rule is the shader ABI.
 
 ## Should I add manual Y flips?
 

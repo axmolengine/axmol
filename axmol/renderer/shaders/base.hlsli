@@ -45,43 +45,38 @@
 //------------------------------------------------------------------------------
 
 // --- Linear sampling ---
-SamplerState LinearClamp : register(s0, space1);
-SamplerState LinearWrap : register(s1, space1);
-SamplerState LinearMirror : register(s2, space1);
-SamplerState LinearBorder : register(s3, space1);
+SamplerState LinearClamp;
+SamplerState LinearWrap;
+SamplerState LinearMirror;
+SamplerState LinearBorder;
 
 // --- Point sampling ---
-SamplerState PointClamp : register(s4, space1);
-SamplerState PointWrap : register(s5, space1);
-SamplerState PointMirror : register(s6, space1);
-SamplerState PointBorder : register(s7, space1);
+SamplerState PointClamp;
+SamplerState PointWrap;
+SamplerState PointMirror;
+SamplerState PointBorder;
 
 // --- Linear + Mipmap ---
-SamplerState LinearMipClamp : register(s8, space1);
-SamplerState LinearMipWrap : register(s9, space1);
-SamplerState LinearMipMirror : register(s10, space1);
-SamplerState LinearMipBorder : register(s11, space1);
+SamplerState LinearMipClamp;
+SamplerState LinearMipWrap;
+SamplerState LinearMipMirror;
+SamplerState LinearMipBorder;
 
 // --- Anisotropic filtering ---
-SamplerState AnisoClamp : register(s12, space1);
-SamplerState AnisoWrap : register(s13, space1);
-SamplerState AnisoMirror : register(s14, space1);
-SamplerState AnisoBorder : register(s15, space1);
+SamplerState AnisoClamp;
+SamplerState AnisoWrap;
+SamplerState AnisoMirror;
+SamplerState AnisoBorder;
 
 // --- Depth comparison samplers ---
-SamplerComparisonState ShadowCmpClamp : register(s16, space1);
-SamplerComparisonState ShadowCmpWrap : register(s17, space1);
-SamplerComparisonState ShadowCmpMirror : register(s18, space1);
-SamplerComparisonState ShadowCmpBorder : register(s19, space1);
+SamplerComparisonState ShadowCmpClamp;
+SamplerComparisonState ShadowCmpWrap;
+SamplerComparisonState ShadowCmpMirror;
+SamplerComparisonState ShadowCmpBorder;
 
 // --- Special cases ---
-SamplerState LinearNoMipClamp : register(s20, space1);
-SamplerState PointNoMipClamp : register(s21, space1);
-
-// s0-s21: predefined shader samplers
-// s22-s31: reserved
-// s32+: texture-owned samplers
-#define AX_TEXTURE_SAMPLER_BASE 32
+SamplerState LinearNoMipClamp;
+SamplerState PointNoMipClamp;
 
 //------------------------------------------------------------------------------
 // GPU Instancing

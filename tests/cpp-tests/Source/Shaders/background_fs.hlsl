@@ -4,7 +4,7 @@ struct PS_IN {
     float4 position : SV_Position;
 };
 
-cbuffer fs_ub : register(b0, space0) {
+cbuffer fs_ub {
     float2 u_resolution;
     float u_time;
     float3 u_baseColor;

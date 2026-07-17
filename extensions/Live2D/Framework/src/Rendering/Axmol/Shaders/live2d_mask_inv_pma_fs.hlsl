@@ -1,4 +1,4 @@
-SamplerState LinearClamp : register(s0, space1);
+SamplerState LinearClamp;
 
 struct PS_IN
 {
@@ -6,7 +6,7 @@ struct PS_IN
     float4 v_clipPos : TEXCOORD1;
 };
 
-cbuffer fs_ub : register(b1, space0)
+cbuffer fs_ub
 {
     float4 u_channelFlag;
     float4 u_baseColor;
@@ -14,8 +14,8 @@ cbuffer fs_ub : register(b1, space0)
     float4 u_screenColor;
 };
 
-Texture2D u_tex0 : register(t0, space1);
-Texture2D u_tex1 : register(t1, space1);
+Texture2D u_tex0;
+Texture2D u_tex1;
 
 float4 main(PS_IN input) : SV_Target0
 {

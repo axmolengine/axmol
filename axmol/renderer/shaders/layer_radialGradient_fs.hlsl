@@ -2,7 +2,7 @@ struct PS_IN {
     float4 v_position : POSITION;
 };
 
-cbuffer fs_ub : register(b1, space0) {
+cbuffer fs_ub {
     float4 u_startColor;
     float4 u_endColor;
     float2 u_center;

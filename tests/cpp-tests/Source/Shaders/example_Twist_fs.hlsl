@@ -4,10 +4,10 @@ struct PS_IN {
     float4 gl_FragCoord : SV_Position;
 };
 
-Texture2D tex0 : register(t0, space1);
-Texture2D tex1 : register(t1, space1);
+Texture2D tex0;
+Texture2D tex1;
 
-cbuffer fs_ub : register(b1, space0) {
+cbuffer fs_ub {
     float2 resolution;
     float2 u_screenSize;
     float4 u_Time;

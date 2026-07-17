@@ -10,7 +10,7 @@ struct VS_OUT
     float2 v_texCoord : TEXCOORD0;
 };
 
-cbuffer vs_ub : register(b0, space0)
+cbuffer vs_ub
 {
     float4x4 u_matrix;
 };

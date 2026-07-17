@@ -4,9 +4,9 @@ struct PS_IN {
     float3 v_reflect : TEXCOORD0;
 };
 
-TextureCube u_Env : register(t0, space1);
+TextureCube u_Env;
 
-cbuffer fs_ub : register(b1, space0) {
+cbuffer fs_ub {
     float4 u_color;
 };
 

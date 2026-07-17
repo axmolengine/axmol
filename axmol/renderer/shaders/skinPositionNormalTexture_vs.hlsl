@@ -30,7 +30,7 @@ struct VS_OUT {
     float4 position : SV_Position;
 };
 
-cbuffer vs_ub : register(b0, space0) {
+cbuffer vs_ub {
 #ifdef USE_NORMAL_MAPPING
     vvec3_def(u_DirLightSourceDirection, MAX_DIRECTIONAL_LIGHT_NUM);
     vvec3_def(u_SpotLightSourceDirection, MAX_SPOT_LIGHT_NUM);

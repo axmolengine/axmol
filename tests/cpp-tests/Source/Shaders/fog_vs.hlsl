@@ -11,7 +11,7 @@ struct VS_OUT {
     float4 position : SV_Position;
 };
 
-cbuffer vs_ub : register(b0, space0) {
+cbuffer vs_ub {
     float u_fogDensity;
     float u_fogStart;
     float u_fogEnd;

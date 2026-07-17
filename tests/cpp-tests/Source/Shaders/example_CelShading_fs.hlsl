@@ -5,14 +5,14 @@ struct PS_IN {
     float2 v_texCoord : TEXCOORD0;
 };
 
-Texture2D u_tex0 : register(t0, space1);
+Texture2D u_tex0;
 
 #define FILTER_SIZE 3
 #define COLOR_LEVELS 7.0
 #define EDGE_FILTER_SIZE 3
 #define EDGE_THRESHOLD 0.05
 
-cbuffer fs_ub : register(b1, space0) {
+cbuffer fs_ub {
     float2 resolution;
 };
 

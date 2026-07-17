@@ -18,7 +18,7 @@ struct VS_OUT
     float4 position : SV_Position;
 };
 
-cbuffer vs_ub : register(b0, space0)
+cbuffer vs_ub
 {
     float4 u_PointLightSourcePosition[MAX_POINT_LIGHT_NUM];
     float4 u_SpotLightSourcePosition[MAX_SPOT_LIGHT_NUM];

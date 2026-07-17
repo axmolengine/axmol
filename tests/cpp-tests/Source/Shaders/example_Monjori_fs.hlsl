@@ -4,7 +4,7 @@ struct PS_IN {
     float4 gl_FragCoord : SV_Position;
 };
 
-cbuffer fs_ub : register(b1, space0) {
+cbuffer fs_ub {
     float2 center;
     float2 resolution;
     float4 u_Time;

@@ -6,11 +6,11 @@ struct PS_IN {
     float2 v_texCoord : TEXCOORD0;
 };
 
-Texture2D u_tex0 : register(t0, space1); // Y sample: LumaTexture
-Texture2D u_tex1 : register(t1, space1); // U sample: ChromaTexture
-Texture2D u_tex2 : register(t2, space1); // V sample: ChromaTexture
+Texture2D u_tex0; // Y sample: LumaTexture
+Texture2D u_tex1; // U sample: ChromaTexture
+Texture2D u_tex2; // V sample: ChromaTexture
 
-cbuffer fs_ub : register(b1, space0) {
+cbuffer fs_ub {
     float4x4 colorTransform;
 };
 
