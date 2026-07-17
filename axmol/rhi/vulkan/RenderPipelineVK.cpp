@@ -517,8 +517,7 @@ void RenderPipelineImpl::updatePipelineLayoutState(ProgramImpl* program)
             if (smp.presetIndex >= 0)
             {
                 // Built-in preset sampler -> set 1 with binding shift
-                AXASSERT(smp.space == axslc::kPresetSamplerDescriptorSet,
-                         "Preset sampler must use descriptor set 1");
+                AXASSERT(smp.space == axslc::kPresetSamplerDescriptorSet, "Preset sampler must use descriptor set 1");
                 AXASSERT(smp.binding >= axslc::kVulkanSamplerBindingShift,
                          "Preset sampler binding must include the sampler binding shift");
 
@@ -552,8 +551,8 @@ void RenderPipelineImpl::updatePipelineLayoutState(ProgramImpl* program)
             dslCustom.sType        = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
             dslCustom.bindingCount = static_cast<uint32_t>(customSamplerBindings.size());
             dslCustom.pBindings    = customSamplerBindings.data();
-            auto vr = vkCreateDescriptorSetLayout(_device, &dslCustom, nullptr,
-                                                   &state.descriptorSetLayouts[SET_INDEX_RESERVED]);
+            auto vr                = vkCreateDescriptorSetLayout(_device, &dslCustom, nullptr,
+                                                                 &state.descriptorSetLayouts[SET_INDEX_RESERVED]);
             VK_REQUIRE(vr, "vkCreateDescriptorSetLayout for custom samplers (set 2) failed");
         }
     }
@@ -577,9 +576,7 @@ void RenderPipelineImpl::updatePipelineLayoutState(ProgramImpl* program)
 
     bool hasCustomSet = !customSamplerBindings.empty();
 
-    state.descriptorSetLayoutCount = hasCustomSet ? 3u
-        : !resourceBindings.empty() ? 2u
-        : 1u;
+    state.descriptorSetLayoutCount = hasCustomSet ? 3u : !resourceBindings.empty() ? 2u : 1u;
 
     VkPipelineLayoutCreateInfo plc{};
     plc.sType                  = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;

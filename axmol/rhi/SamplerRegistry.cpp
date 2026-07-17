@@ -31,12 +31,10 @@ namespace ax::rhi
 namespace
 {
 constexpr std::string_view kSamplerPresetNames[] = {
-    "LinearClamp", "LinearWrap", "LinearMirror", "LinearBorder",
-    "PointClamp", "PointWrap", "PointMirror", "PointBorder",
-    "LinearMipClamp", "LinearMipWrap", "LinearMipMirror", "LinearMipBorder",
-    "AnisoClamp", "AnisoWrap", "AnisoMirror", "AnisoBorder",
-    "ShadowCmpClamp", "ShadowCmpWrap", "ShadowCmpMirror", "ShadowCmpBorder",
-    "LinearNoMipClamp", "PointNoMipClamp",
+    "LinearClamp",     "LinearWrap",      "LinearMirror",     "LinearBorder",    "PointClamp",      "PointWrap",
+    "PointMirror",     "PointBorder",     "LinearMipClamp",   "LinearMipWrap",   "LinearMipMirror", "LinearMipBorder",
+    "AnisoClamp",      "AnisoWrap",       "AnisoMirror",      "AnisoBorder",     "ShadowCmpClamp",  "ShadowCmpWrap",
+    "ShadowCmpMirror", "ShadowCmpBorder", "LinearNoMipClamp", "PointNoMipClamp",
 };
 
 static_assert(std::size(kSamplerPresetNames) == SamplerPreset::Count);

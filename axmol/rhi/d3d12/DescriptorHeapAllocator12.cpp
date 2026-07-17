@@ -180,7 +180,7 @@ DescriptorHandle* DescriptorHeapAllocator::allocateBatch(uint32_t count)
 
     for (uint32_t bi = 0; bi < _blocks.size(); ++bi)
     {
-        auto& b      = _blocks[bi];
+        auto& b       = _blocks[bi];
         uint32_t base = 0;
         if (tryAcquireContiguous(b, count, base))
         {
@@ -205,7 +205,7 @@ DescriptorHandle* DescriptorHeapAllocator::allocateBatch(uint32_t count)
         return {};
 
     grow();
-    auto& b      = _blocks.back();
+    auto& b       = _blocks.back();
     uint32_t base = 0;
     if (!tryAcquireContiguous(b, count, base))
         return {};
@@ -235,13 +235,13 @@ void DescriptorHeapAllocator::deallocateBatch(DescriptorHandle* h, uint32_t coun
     auto& b = _blocks[h->blockIndex];
     for (uint32_t i = 0; i < count; ++i)
     {
-        uint32_t idx   = h->slotIndex + i;
+        uint32_t idx = h->slotIndex + i;
         if (idx >= b.capacity)
             return;
         uint32_t byte = idx >> 3;
         uint8_t mask  = uint8_t(1u << (idx & 7));
         if (b.freeBits[byte] & mask)
-            return; // already free
+            return;  // already free
         b.freeBits[byte] |= mask;
         --b.used;
     }

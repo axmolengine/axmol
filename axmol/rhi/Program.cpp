@@ -398,12 +398,12 @@ void Program::reflectSamplers(SLCReflectContext* context)
     for (uint32_t i = 0; i < context->refl->num_samplers; ++i)
     {
         SamplerBindingInfo sampler;
-        sampler.name          = _sc_read_name(ibs);
-        sampler.binding       = ibs->read<int32_t>();
-        sampler.space         = ibs->read<uint16_t>();
-        sampler.count         = ibs->read<uint16_t>();
-        sampler.presetIndex   = ibs->read<int16_t>();
-        sampler.flags          = ibs->read<uint8_t>();
+        sampler.name        = _sc_read_name(ibs);
+        sampler.binding     = ibs->read<int32_t>();
+        sampler.space       = ibs->read<uint16_t>();
+        sampler.count       = ibs->read<uint16_t>();
+        sampler.presetIndex = ibs->read<int16_t>();
+        sampler.flags       = ibs->read<uint8_t>();
         ibs->advance(static_cast<ptrdiff_t>(sizeof(uint8_t)));  // reserved
 
         if (sampler.presetIndex < 0)
@@ -412,9 +412,10 @@ void Program::reflectSamplers(SLCReflectContext* context)
         sampler.samplerId = SamplerRegistry::getInstance()->find(sampler.name);
         if (!sampler.samplerId)
         {
-            AXLOGE("Sampler '{}' is referenced by the shader but has not been registered. "
-                   "Register it before creating the shader Program.",
-                   sampler.name);
+            AXLOGE(
+                "Sampler '{}' is referenced by the shader but has not been registered. "
+                "Register it before creating the shader Program.",
+                sampler.name);
             _samplersResolved = false;
         }
 
