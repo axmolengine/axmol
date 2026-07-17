@@ -30,7 +30,7 @@ THE SOFTWARE.
  * Maps Axmol profiling macros to no-op implementations.
  */
 
-#define AX_PROFILER_SCOPED
-#define AX_PROFILER_SCOPED_N(...)
-#define AX_PROFILER_FRAME()
-#define AX_PROFILER_THREAD(...)
+#define AX_PROFILER_ZONE_SCOPED
+#define AX_PROFILER_ZONE_SCOPED_N(...)
+#define AX_PROFILER_FRAME_MARK
+#define AX_PROFILER_THREAD_NAME(...)
