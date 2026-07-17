@@ -661,6 +661,10 @@ function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $params =
             $isRange = $verArr.Count -gt 1
             $minimalVer = $verArr[0]
             $preferredVer = $verArr[$isRange]
+            # strip pre-release suffix e.g. 3.99.0-rc1 -> 3.99.0
+            $stripSuffix = [regex]'\-[a-z0-9]+$'
+            $minimalVer = $stripSuffix.Replace($minimalVer, '')
+            $preferredVer = $stripSuffix.Replace($preferredVer, '')
             if ($preferredVer.EndsWith('+')) {
                 $preferredVer = $preferredVer.TrimEnd('+')
                 if ($minimalVer.EndsWith('+')) { $minimalVer = $minimalVer.TrimEnd('+') }
@@ -710,8 +714,8 @@ function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $params =
                 $verStr = "$($verInfo.Major).$($verInfo.Minor).$($verInfo.Build)"
             }
 
-            # can match x.y.z-rc3 or x.y.z-65a239b
-            $matchInfo = [Regex]::Match($verStr, '(\d+\.)+(\*|\d+)(\-[a-z0-9]+)?')
+            # strip x.y.z-rc3 to x.y.z
+            $matchInfo = [Regex]::Match($verStr, '(\d+\.)+(\*|\d+)')
             $foundVer = $matchInfo.Value
         }
         else {
