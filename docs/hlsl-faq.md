@@ -73,7 +73,9 @@ SamplerRegistry::getInstance()->registerSampler("mySampler", desc);
 ```
 
 **Limits**: custom sampler arrays (`SamplerState arr[4]`) are not supported.
-Each sampler must be a single non-array declaration.
+Each sampler must be a single non-array declaration. Multiple custom sampler
+declarations are supported in one shader; register each sampler name before
+creating the `Program`.
 
 ## Can I sample one texture two different ways?
 
@@ -83,12 +85,36 @@ both `LinearClamp` and `PointClamp` in one shader will fail on GL/ES targets.
 
 Use separate texture bindings or pick one sampler per texture.
 
+Multiple custom samplers are still portable when each texture binding uses only
+one sampler state:
+
+```hlsl
+Texture2D u_clampedTex;
+Texture2D u_wrappedTex;
+SamplerState clampSampler;
+SamplerState wrapSampler;
+
+float4 a = u_clampedTex.Sample(clampSampler, uv);
+float4 b = u_wrappedTex.Sample(wrapSampler, uv);
+```
+
 ## Why does OpenGL/ES work differently?
 
 GLSL/ESSL uses `sampler2D` uniforms that bundle texture and sampler together.
 `axslcc` automatically merges your HLSL texture + sampler into a combined
 `sampler2D` for GL/ES targets. You don't need to do anything special, but the
 one-sampler-per-texture rule above applies.
+
+## Why does axslcc reject some legal HLSL resource types?
+
+Axmol supports the subset that has a defined cross-RHI binding model today.
+Some legal HLSL resource forms are intentionally rejected with a clear error
+until the engine has portable runtime support for them. Examples include:
+
+- `ConstantBuffer<T>`; use ordinary `cbuffer` declarations.
+- `Texture2DMS` and `Texture2DMSArray`.
+- `AppendStructuredBuffer<T>` and `ConsumeStructuredBuffer<T>`.
+- rasterizer ordered resources such as `RasterizerOrderedTexture2D<T>`.
 
 ## Do I need to add Y flips?
 

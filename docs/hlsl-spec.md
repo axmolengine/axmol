@@ -12,6 +12,10 @@ For common migration questions and backend caveats, see
 Axmol uses HLSL as the primary shader source language. `axslcc` generates the
 backend shader code and runtime reflection used by the RHI.
 
+Shader sources should use HLSL 2021 syntax within Axmol's Shader Model
+5.1-compatible portable subset. Some legal HLSL 2021 features are intentionally
+rejected until Axmol has a defined cross-RHI runtime model for them.
+
 The public shader contract is:
 
 - vertex inputs are matched by semantic name and semantic index;
@@ -34,8 +38,8 @@ Write declarations without registers:
 
 ```hlsl
 Texture2D u_tex0;
-// SamplerState is declared in base.hlsli; just sample with a built-in name.
-// Do not declare custom sampler names.
+// SamplerState presets are declared in base.hlsli; sample with a built-in name.
+// Custom SamplerState declarations are allowed when registered from C++.
 ```
 
 ## File Names
@@ -191,6 +195,18 @@ Texture2D u_details[4];
 are assigned to the corresponding UAV/resource binding range in source order.
 The runtime uses reflection to bind the final backend resource locations.
 
+Legal HLSL resource forms are not automatically part of Axmol's portable shader
+ABI. The compiler intentionally rejects unsupported resource forms with a clear
+diagnostic instead of silently lowering them incorrectly. Currently rejected
+examples include:
+
+- `ConstantBuffer<T>` template-style constant buffers; use ordinary `cbuffer`
+  declarations instead.
+- multisampled textures such as `Texture2DMS` and `Texture2DMSArray`;
+- append/consume buffers such as `AppendStructuredBuffer<T>` and
+  `ConsumeStructuredBuffer<T>`;
+- rasterizer ordered resources such as `RasterizerOrderedTexture2D<T>`.
+
 ## Sampler Model
 
 Axmol supports two sampler categories:
@@ -251,6 +267,9 @@ Rules:
 
 - Custom sampler names must be unique within the shader.
 - Custom sampler arrays are **not supported** (`SamplerState arr[4]` is rejected).
+- Multiple custom samplers are supported in one shader. They may use different
+  sampler states as long as each sampler name is registered before `Program`
+  creation.
 - Each custom sampler must be registered with `SamplerRegistry` **before** the
   `Program` is created:
   ```cpp
@@ -283,6 +302,20 @@ float4 b = u_tex0.Sample(PointClamp, uv);
 ```
 
 Use separate texture bindings or a single sampler state per texture.
+
+This restriction does not forbid multiple custom samplers. For GL/GLES portability,
+bind the texture through separate HLSL texture declarations when different
+sampler states are needed:
+
+```hlsl
+Texture2D u_clampedTex;
+Texture2D u_wrappedTex;
+SamplerState clampSampler;
+SamplerState wrapSampler;
+
+float4 a = u_clampedTex.Sample(clampSampler, uv);
+float4 b = u_wrappedTex.Sample(wrapSampler, uv);
+```
 
 ## Complete Example
 
@@ -412,6 +445,8 @@ combined-mode preparation.
 - Use `vs_ub` for vertex uniforms and `fs_ub` for fragment uniforms; `axslcc`
   assigns their backend bindings.
 - Declare textures and storage resources without binding syntax.
+- Avoid unsupported HLSL resource forms such as `ConstantBuffer<T>`,
+  `Texture2DMS`, `AppendStructuredBuffer<T>`, and `ConsumeStructuredBuffer<T>`.
 - For basic needs, use built-in sampler names such as `LinearClamp`.
 - For custom sampler state, declare your own `SamplerState`; register it with
   `SamplerRegistry` before creating the Program. Custom sampler arrays are not
