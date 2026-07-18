@@ -27502,7 +27502,7 @@ int lua_ax_base_Director_restart(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_Director_stopAnimation(lua_State* tolua_S)
+int lua_ax_base_Director_deactivate(lua_State* tolua_S)
 {
     int argc = 0;
     ax::Director* obj = nullptr;
@@ -27522,7 +27522,7 @@ int lua_ax_base_Director_stopAnimation(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Director_stopAnimation'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Director_deactivate'", nullptr);
         return 0;
     }
 #endif
@@ -27532,24 +27532,24 @@ int lua_ax_base_Director_stopAnimation(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_stopAnimation'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_deactivate'", nullptr);
             return 0;
         }
-        obj->stopAnimation();
+        obj->deactivate();
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:stopAnimation",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:deactivate",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_stopAnimation'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_deactivate'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_ax_base_Director_startAnimation(lua_State* tolua_S)
+int lua_ax_base_Director_activate(lua_State* tolua_S)
 {
     int argc = 0;
     ax::Director* obj = nullptr;
@@ -27569,7 +27569,7 @@ int lua_ax_base_Director_startAnimation(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Director_startAnimation'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Director_activate'", nullptr);
         return 0;
     }
 #endif
@@ -27579,19 +27579,19 @@ int lua_ax_base_Director_startAnimation(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_startAnimation'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_activate'", nullptr);
             return 0;
         }
-        obj->startAnimation();
+        obj->activate();
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:startAnimation",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:activate",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_startAnimation'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_activate'.",&tolua_err);
 #endif
 
     return 0;
@@ -28690,7 +28690,7 @@ int lua_ax_base_Director_clearPendingTasks(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_Director_isValid(lua_State* tolua_S)
+int lua_ax_base_Director_isActive(lua_State* tolua_S)
 {
     int argc = 0;
     ax::Director* obj = nullptr;
@@ -28710,7 +28710,7 @@ int lua_ax_base_Director_isValid(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Director_isValid'", nullptr);
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Director_isActive'", nullptr);
         return 0;
     }
 #endif
@@ -28720,19 +28720,19 @@ int lua_ax_base_Director_isValid(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_isValid'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_isActive'", nullptr);
             return 0;
         }
-        auto&& ret = obj->isValid();
+        auto&& ret = obj->isActive();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:isValid",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:isActive",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_isValid'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_isActive'.",&tolua_err);
 #endif
 
     return 0;
@@ -28856,8 +28856,8 @@ int lua_register_ax_base_Director(lua_State* tolua_S)
         tolua_function(tolua_S,"pause",lua_ax_base_Director_pause);
         tolua_function(tolua_S,"resume",lua_ax_base_Director_resume);
         tolua_function(tolua_S,"restart",lua_ax_base_Director_restart);
-        tolua_function(tolua_S,"stopAnimation",lua_ax_base_Director_stopAnimation);
-        tolua_function(tolua_S,"startAnimation",lua_ax_base_Director_startAnimation);
+        tolua_function(tolua_S,"deactivate",lua_ax_base_Director_deactivate);
+        tolua_function(tolua_S,"activate",lua_ax_base_Director_activate);
         tolua_function(tolua_S,"purgeCachedData",lua_ax_base_Director_purgeCachedData);
         tolua_function(tolua_S,"setDefaultValues",lua_ax_base_Director_setDefaultValues);
         tolua_function(tolua_S,"setRenderDefaults",lua_ax_base_Director_setRenderDefaults);
@@ -28880,7 +28880,7 @@ int lua_register_ax_base_Director(lua_State* tolua_S)
         tolua_function(tolua_S,"isChildrenIndexerEnabled",lua_ax_base_Director_isChildrenIndexerEnabled);
         tolua_function(tolua_S,"postTask",lua_ax_base_Director_postTask);
         tolua_function(tolua_S,"clearPendingTasks",lua_ax_base_Director_clearPendingTasks);
-        tolua_function(tolua_S,"isValid",lua_ax_base_Director_isValid);
+        tolua_function(tolua_S,"isActive",lua_ax_base_Director_isActive);
         tolua_function(tolua_S,"getInstance", lua_ax_base_Director_getInstance);
         tolua_function(tolua_S,"destroyInstance", lua_ax_base_Director_destroyInstance);
     tolua_endmodule(tolua_S);

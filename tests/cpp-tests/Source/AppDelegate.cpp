@@ -178,7 +178,7 @@ void AppDelegate::applicationDidEnterBackground()
         //        _testController->onEnterBackground();
     }
 
-    Director::getInstance()->stopAnimation();
+    Director::getInstance()->deactivate();
 }
 
 // this function will be called when the app is active again
@@ -189,7 +189,7 @@ void AppDelegate::applicationWillEnterForeground()
         //        _testController->onEnterForeground();
     }
 
-    Director::getInstance()->startAnimation();
+    Director::getInstance()->activate();
 }
 
 void AppDelegate::applicationWillQuit()

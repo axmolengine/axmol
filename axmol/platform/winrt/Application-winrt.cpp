@@ -181,7 +181,7 @@ int Application::run()
         {
             _last.QuadPart = _now.QuadPart;
 
-            director->stepFrame();
+            director->renderFrame();
             _renderView->syncCursorVisibility();
 
             if (_appShouldExit.load(std::memory_order_acquire))

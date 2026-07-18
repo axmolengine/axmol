@@ -80,12 +80,12 @@ bool AppDelegate::applicationDidFinishLaunching()
 
 void AppDelegate::applicationDidEnterBackground()
 {
-    Director::getInstance()->stopAnimation();
+    Director::getInstance()->deactivate();
 }
 
 void AppDelegate::applicationWillEnterForeground()
 {
-    Director::getInstance()->startAnimation();
+    Director::getInstance()->activate();
 }
 
 int AppDelegate::run(int argc, char** argv)
