@@ -1409,31 +1409,30 @@ void Director::performFrameTasks(FrameTaskQueue& frameTasks)
 
 void Director::renderFrame()
 {
-    if (_cleanupDirectorInNextLoop)
+    if (_renderView)
+        _renderView->pollEvents();
+
+    if (_cleanupDirectorInNextLoop) [[unlikely]]
     {
         _cleanupDirectorInNextLoop = false;
         cleanupDirector();
         return;
     }
 
-    if (_restartDirectorInNextLoop)
+    if (_restartDirectorInNextLoop) [[unlikely]]
     {
         _restartDirectorInNextLoop = false;
         restartDirector();
-        _renderView->pollEvents();
         return;
     }
 
-    if (!_active)
+    if (!_active) [[unlikely]]
         return;
 
     const auto canRender = _renderer->beginFrame();
 
     // calculate "global" dt
     calculateDeltaTime();
-
-    if (_renderView)
-        _renderView->pollEvents();
 
     // tick before glClear: issue #533
     if (!_paused)
