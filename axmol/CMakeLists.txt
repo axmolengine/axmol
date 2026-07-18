@@ -574,11 +574,7 @@ if(_simdc_defines)
 endif()
 
 # profiling configuration
-if(AX_PROFILER_BACKEND STREQUAL "TRACY")
-    target_compile_definitions(${_AX_CORE_LIB} PUBLIC AX_PROFILER_BACKEND_TRACY)
-elseif(AX_PROFILER_BACKEND STREQUAL "NONE")
-    target_compile_definitions(${_AX_CORE_LIB} PUBLIC AX_PROFILER_BACKEND_NONE)
-endif()
+ax_apply_profiler_backend(${_AX_CORE_LIB} PUBLIC)
 message(STATUS "AX_PROFILER_BACKEND=${AX_PROFILER_BACKEND}")
 
 # 3rd libs

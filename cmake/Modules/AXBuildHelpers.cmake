@@ -937,6 +937,20 @@ macro(ax_config_pred1 target_name pred)
   endif()
 endmacro()
 
+# The axmol profiler backend config helper macro.
+# Unlike ax_config_pred/ax_config_pred1 (boolean on/off), AX_PROFILER_BACKEND
+# is a string enum (NONE|TRACY), so it needs its own dedicated macro rather
+# than reusing ax_config_pred.
+macro(ax_apply_profiler_backend target_name scope)
+  if(AX_PROFILER_BACKEND STREQUAL "TRACY")
+    target_compile_definitions(${target_name} ${scope} AX_PROFILER_BACKEND_TRACY)
+  elseif(AX_PROFILER_BACKEND STREQUAL "NONE")
+    target_compile_definitions(${target_name} ${scope} AX_PROFILER_BACKEND_NONE)
+  else()
+    message(FATAL_ERROR "Unknown AX_PROFILER_BACKEND: ${AX_PROFILER_BACKEND}")
+  endif()
+endmacro()
+
 macro(source_group_by_dir proj_dir source_files)
   if(MSVC OR APPLE)
     get_filename_component(sgbd_cur_dir ${proj_dir} ABSOLUTE)
