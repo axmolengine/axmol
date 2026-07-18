@@ -32,6 +32,7 @@
 #include "axmol/base/Scheduler.h"
 #include "axmol/base/Utils.h"
 #include "axmol/base/WeakPtr.h"
+#include "axmol/base/Profiling.h"
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC
 #    import <AVFoundation/AVFoundation.h>
@@ -1005,6 +1006,8 @@ void AudioEngineImpl::setFinishCallback(AudioId audioID, const std::function<voi
 
 void AudioEngineImpl::update(float /*dt*/)
 {
+    AX_PROFILER_ZONE_SCOPED;
+    
     std::lock_guard<std::recursive_mutex> lck(_threadMutex);
     _updatePlayers(false);
 }
