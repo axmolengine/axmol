@@ -148,9 +148,9 @@ extern bool kProfilerCategoryParticles;
 }  // namespace ax
 
 #if defined(AX_PROFILER_BACKEND_TRACY)
-#    include "base/ProfilingBackendTracy.h"
+#    include "axmol/base/ProfilingBackendTracy.h"
 #elif defined(AX_PROFILER_BACKEND_NONE)
-#    include "base/ProfilingBackendNoop.h"
+#    include "axmol/base/ProfilingBackendNoop.h"
 #else
 #    error "No valid profiling backend selected"
 #endif
