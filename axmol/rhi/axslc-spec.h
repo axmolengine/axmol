@@ -75,10 +75,10 @@ struct SamplerPreset
         Count
     };
 };
-inline constexpr uint16_t kPresetSamplerDescriptorSet = 1;
-inline constexpr uint16_t kCustomSamplerDescriptorSet = 2;
-inline constexpr uint16_t kInvalidTextureSamplerRef = 0xffff;
-inline constexpr uint16_t kTextureSamplerRefCustomBit = 0x8000;
+inline constexpr uint16_t kPresetSamplerDescriptorSet   = 1;
+inline constexpr uint16_t kCustomSamplerDescriptorSet   = 2;
+inline constexpr uint16_t kInvalidTextureSamplerRef     = 0xffff;
+inline constexpr uint16_t kTextureSamplerRefCustomBit   = 0x8000;
 inline constexpr uint16_t kTextureSamplerRefBindingMask = 0x7fff;
 
 inline constexpr int16_t kInvalidSamplerPreset = -1;

@@ -37,7 +37,7 @@ class VertexLayoutImpl;
 class ProgramImpl;
 class DriverImpl;
 
-static constexpr int MAX_DESCRIPTOR_SETS = 3;
+static constexpr int MAX_DESCRIPTOR_SETS      = 3;
 static constexpr int SET_INDEX_UBO            = 0;
 static constexpr int SET_INDEX_RESOURCE       = 1;  // image + built-in preset samplers
 static constexpr int SET_INDEX_CUSTOM_SAMPLER = 2;  // program-local custom samplers

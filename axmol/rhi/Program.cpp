@@ -369,7 +369,7 @@ void Program::reflectSamplers(SLCReflectContext* context)
         const auto imageDim = ibs->read<uint8_t>();
         uniform.varType     = SC_TYPE_HALF + imageDim;
         ibs->advance(static_cast<ptrdiff_t>(sizeof(uint8_t)));  // skip bits: multisample, arrayed, reserved
-        uniform.count = (std::max)(1, static_cast<int>(ibs->read<uint16_t>()));
+        uniform.count   = (std::max)(1, static_cast<int>(ibs->read<uint16_t>()));
         auto samplerRef = ibs->read<uint16_t>();
         if (samplerRef != axslc::kInvalidTextureSamplerRef)
             textureSamplerRefs.emplace_back(uniform.location, samplerRef);
@@ -434,7 +434,7 @@ void Program::reflectSamplers(SLCReflectContext* context)
 
     for (auto [textureBinding, samplerRef] : textureSamplerRefs)
     {
-        const bool customSampler = (samplerRef & axslc::kTextureSamplerRefCustomBit) != 0;
+        const bool customSampler  = (samplerRef & axslc::kTextureSamplerRefCustomBit) != 0;
         const auto samplerBinding = static_cast<int>(samplerRef & axslc::kTextureSamplerRefBindingMask);
         const uint16_t samplerSpace =
             customSampler ? axslc::kCustomSamplerDescriptorSet : axslc::kPresetSamplerDescriptorSet;
