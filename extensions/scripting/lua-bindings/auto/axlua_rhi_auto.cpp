@@ -710,6 +710,53 @@ int lua_ax_rhi_Program_getUniformBufferSize(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_rhi_Program_getSamplerBindings(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::rhi::Program* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axr.Program",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::rhi::Program*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Program_getSamplerBindings'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Program_getSamplerBindings'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getSamplerBindings();
+        object_to_luaval<std::vector<ax::rhi::ProgramSamplerBinding>&>(tolua_S, "std::vector<ax::rhi::ProgramSamplerBinding>",(std::vector<ax::rhi::ProgramSamplerBinding>&)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axr.Program:getSamplerBindings",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_Program_getSamplerBindings'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_rhi_Program_getProgramType(lua_State* tolua_S)
 {
     int argc = 0;
@@ -1006,6 +1053,7 @@ int lua_register_ax_rhi_Program(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"Program");
         tolua_function(tolua_S,"getUniformLocation",lua_ax_rhi_Program_getUniformLocation);
         tolua_function(tolua_S,"getUniformBufferSize",lua_ax_rhi_Program_getUniformBufferSize);
+        tolua_function(tolua_S,"getSamplerBindings",lua_ax_rhi_Program_getSamplerBindings);
         tolua_function(tolua_S,"getProgramType",lua_ax_rhi_Program_getProgramType);
         tolua_function(tolua_S,"getProgramId",lua_ax_rhi_Program_getProgramId);
         tolua_function(tolua_S,"getVertexLayout",lua_ax_rhi_Program_getVertexLayout);
