@@ -71,7 +71,7 @@ int Application::run()
 
         director->performFrameBoundaryTasks();
 
-        director->stepFrame();
+        director->renderFrame();
 
         auto interval = std::chrono::steady_clock::now() - lastTime;
         if (interval < _animationInterval)
@@ -85,14 +85,14 @@ int Application::run()
         }
     }
     /* Only work on Desktop
-     *  Director::stepFrame is really one frame logic
+     *  Director::renderFrame is really one frame logic
      *  when we want to close the window, we should call Director::end();
-     *  then call Director::stepFrame to do release of internal resources
+     *  then call Director::renderFrame to do release of internal resources
      */
     if (renderView->isGfxContextReady())
     {
         director->end();
-        director->stepFrame();
+        director->renderFrame();
         director = nullptr;
     }
     renderView->release();

@@ -293,104 +293,7 @@ void Director::setRenderDefaults()
     _renderer->setDepthCompareFunc(rhi::CompareFunc::LESS_EQUAL);
 }
 
-// process 1 frame
-void Director::processFrame()
-{
-    const auto canRender = _renderer->beginFrame();
 
-    // calculate "global" dt
-    calculateDeltaTime();
-
-    if (_renderView)
-        _renderView->pollEvents();
-
-    // tick before glClear: issue #533
-    if (!_paused)
-    {
-        _eventDispatcher->dispatchEvent(_eventBeforeUpdate);
-        _scheduler->update(_deltaTime);
-        performFrameTasks(_nextUpdateTasks);
-        _eventDispatcher->dispatchEvent(_eventAfterUpdate);
-    }
-
-    if (canRender) [[likely]]
-    {
-        _renderer->clear(ClearFlag::ALL, _clearColor, 1, 0, -10000.0);
-
-        _eventDispatcher->dispatchEvent(_eventBeforeDraw);
-
-        /* to avoid flickr, nextScene MUST be here: after tick and before draw.
-         * FIXME: Which bug is this one. It seems that it can't be reproduced with v0.9
-         */
-        if (_nextScene)
-        {
-            setNextScene();
-        }
-
-        if (_runningScene)
-        {
-            _runningScene->tick(_deltaTime);
-
-            // clear draw stats
-            _renderer->clearDrawStats();
-
-            // render the scene
-            _renderView->renderScene(_renderer, _runningScene);
-
-            _eventDispatcher->dispatchEvent(_eventAfterVisit);
-        }
-
-        // draw the notifications node
-        if (_notificationNode)
-        {
-            auto previousCamera = Camera::_visitingCamera;
-            auto* overlayCamera = getOverlayCamera();
-            if (overlayCamera)
-            {
-                Camera::_visitingCamera = overlayCamera;
-                overlayCamera->apply();
-                _notificationNode->visit(_renderer, Mat4::identity, 0);
-            }
-            Camera::_visitingCamera = previousCamera;
-        }
-
-        updateFrameRate();
-
-        if (_statsDisplay)
-        {
-#if !AX_STRIP_FPS
-            showStats();
-#endif
-        }
-
-#ifdef AX_ENABLE_OPENXR
-        showVRModeIndicator();
-#endif
-
-        _renderer->render();
-
-        _eventDispatcher->dispatchEvent(_eventAfterDraw);
-
-        _totalFrames++;
-
-        // swap buffers
-        if (_renderView)
-        {
-            _renderView->swapBuffers();
-        }
-
-        _renderer->endFrame();
-    }
-
-    if (_statsDisplay)
-    {
-#if !AX_STRIP_FPS
-        calculateMPF();
-#endif
-    }
-
-    _poolManager->getCurrentPool()->clear();
-}
 
 void Director::calculateDeltaTime()
 {
@@ -651,7 +554,7 @@ void Director::runWithScene(Scene* scene)
     AXASSERT(_runningScene == nullptr, "_runningScene should be null");
 
     pushScene(scene);
-    startAnimation();
+    activate();
 }
 
 void Director::replaceScene(Scene* scene)
@@ -915,7 +818,7 @@ void Director::reset()
         _scenesStack.popBack();
     }
 
-    stopAnimation();
+    deactivate();
 
     AX_SAFE_RELEASE_NULL(_FPSLabel);
     AX_SAFE_RELEASE_NULL(_drawnBatchesLabel);
@@ -1001,7 +904,7 @@ void Director::restartDirector()
     _poolManager->getCurrentPool()->clear();
 
     // Restart animation
-    startAnimation();
+    activate();
 
     // Real restart in script level
 #if AX_ENABLE_SCRIPT_BINDING
@@ -1442,16 +1345,16 @@ void Director::setEventDispatcher(EventDispatcher* dispatcher)
     }
 }
 
-void Director::startAnimation()
+void Director::activate()
 {
-    startAnimation(SetIntervalReason::BY_ENGINE);
+    activate(SetIntervalReason::BY_ENGINE);
 }
 
-void Director::startAnimation(SetIntervalReason reason)
+void Director::activate(SetIntervalReason reason)
 {
     _lastUpdate = std::chrono::steady_clock::now();
 
-    _invalid = false;
+    _active = true;
 
     _axmol_thread_id = std::this_thread::get_id();
 
@@ -1504,35 +1407,132 @@ void Director::performFrameTasks(FrameTaskQueue& frameTasks)
     }
 }
 
-void Director::stepFrame()
+void Director::renderFrame()
 {
     if (_cleanupDirectorInNextLoop)
     {
         _cleanupDirectorInNextLoop = false;
         cleanupDirector();
+        return;
     }
-    else if (_restartDirectorInNextLoop)
+
+    if (_restartDirectorInNextLoop)
     {
         _restartDirectorInNextLoop = false;
         restartDirector();
         _renderView->pollEvents();
+        return;
     }
-    else if (!_invalid)
+
+    if (!_active)
+        return;
+
+    const auto canRender = _renderer->beginFrame();
+
+    // calculate "global" dt
+    calculateDeltaTime();
+
+    if (_renderView)
+        _renderView->pollEvents();
+
+    // tick before glClear: issue #533
+    if (!_paused)
     {
-        processFrame();
+        _eventDispatcher->dispatchEvent(_eventBeforeUpdate);
+        _scheduler->update(_deltaTime);
+        performFrameTasks(_nextUpdateTasks);
+        _eventDispatcher->dispatchEvent(_eventAfterUpdate);
     }
+
+    if (canRender) [[likely]]
+    {
+        _renderer->clear(ClearFlag::ALL, _clearColor, 1, 0, -10000.0);
+
+        _eventDispatcher->dispatchEvent(_eventBeforeDraw);
+
+        /* to avoid flickr, nextScene MUST be here: after tick and before draw.
+         * FIXME: Which bug is this one. It seems that it can't be reproduced with v0.9
+         */
+        if (_nextScene)
+        {
+            setNextScene();
+        }
+
+        if (_runningScene)
+        {
+            _runningScene->tick(_deltaTime);
+
+            // clear draw stats
+            _renderer->clearDrawStats();
+
+            // render the scene
+            _renderView->renderScene(_renderer, _runningScene);
+
+            _eventDispatcher->dispatchEvent(_eventAfterVisit);
+        }
+
+        // draw the notifications node
+        if (_notificationNode)
+        {
+            auto previousCamera = Camera::_visitingCamera;
+            auto* overlayCamera = getOverlayCamera();
+            if (overlayCamera)
+            {
+                Camera::_visitingCamera = overlayCamera;
+                overlayCamera->apply();
+                _notificationNode->visit(_renderer, Mat4::identity, 0);
+            }
+            Camera::_visitingCamera = previousCamera;
+        }
+
+        updateFrameRate();
+
+        if (_statsDisplay)
+        {
+#if !AX_STRIP_FPS
+            showStats();
+#endif
+        }
+
+#ifdef AX_ENABLE_OPENXR
+        showVRModeIndicator();
+#endif
+
+        _renderer->render();
+
+        _eventDispatcher->dispatchEvent(_eventAfterDraw);
+
+        _totalFrames++;
+
+        // swap buffers
+        if (_renderView)
+        {
+            _renderView->swapBuffers();
+        }
+
+        _renderer->endFrame();
+    }
+
+    if (_statsDisplay)
+    {
+#if !AX_STRIP_FPS
+        calculateMPF();
+#endif
+    }
+
+    _poolManager->getCurrentPool()->clear();
 }
 
-void Director::stepFrame(float dt)
+void Director::renderFrame(float dt)
 {
     _deltaTime               = dt;
     _deltaTimePassedByCaller = true;
-    stepFrame();
+    renderFrame();
 }
 
-void Director::stopAnimation()
+    void Director::deactivate()
 {
-    _invalid = true;
+    _active = false;
 }
 
 void Director::setAnimationInterval(float interval)
@@ -1543,10 +1543,10 @@ void Director::setAnimationInterval(float interval)
 void Director::setAnimationInterval(float interval, SetIntervalReason reason)
 {
     _animationInterval = interval;
-    if (!_invalid)
+    if (_active)
     {
-        stopAnimation();
-        startAnimation(reason);
+        deactivate();
+        activate(reason);
     }
 }
 

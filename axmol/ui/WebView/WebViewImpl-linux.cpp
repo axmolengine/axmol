@@ -466,7 +466,7 @@ public:
     void update()
     {
         auto director = ax::Director::getInstance();
-        if (!director->isValid() || m_WebViewHidden)
+        if (!director->isActive() || m_WebViewHidden)
             return;
 
         // Xwayland child repaint issue...

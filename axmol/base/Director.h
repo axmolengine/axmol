@@ -278,7 +278,7 @@ public:
      * Call it to run only your FIRST scene.
      * Don't call it if there is already a running scene.
      *
-     * It will call pushScene: and then it will call startAnimation
+     * It will call pushScene: and then it will call activate
      */
     void runWithScene(Scene* scene);
 
@@ -348,16 +348,30 @@ public:
      */
     void restart();
 
-    /** Stops the animation. Nothing will be drawn. The main loop won't be triggered anymore.
-     * If you don't want to pause your animation call [pause] instead.
+    /**
+     * @brief Deactivates the Director, suspending logic updates and rendering.
+     *
+     * When deactivated, `renderFrame()` will skip all internal logic updates 
+     * and rendering processes (saving CPU/GPU resources), while still allowing
+     * the OS event pump to run. This is typically invoked when the application 
+     * enters the background or loses window focus.
+     * 
+     * @note Unlike `pause()`, which only stops the logic updates but continues to render 
+     * the current frame, `deactivate()` completely freezes the engine's world.
+     * @note This safely replaces the legacy `stopAnimation()` method.
      */
-    void stopAnimation();
+    void deactivate();
 
-    /** The main loop is triggered again.
-     * Call this function only if [stopAnimation] was called earlier.
-     * @warning Don't call this function to start the main loop. To run the main loop call runWithScene.
+    /**
+     * @brief Activates the Director, enabling the main frame processing loop.
+     *
+     * When activated, the Director will process game logic, update the scheduler, 
+     * and render the scene during each `renderFrame()` call. It also resets the 
+     * delta time to prevent physics or animation spikes upon resuming.
+     * 
+     * @note This safely replaces the legacy `startAnimation()` method.
      */
-    void startAnimation();
+    void activate();
 
     // Memory Helper
 
@@ -383,12 +397,29 @@ public:
     void setClearColor(const Color& clearColor);
     const Color& getClearColor() const { return _clearColor; }
 
-    [[internal]] void stepFrame();
-    /** Invoke frame step with delta time. Then `calculateDeltaTime` can just use the delta time directly.
-     * The delta time passed may include vsync time. See issue #17806
-     * @since 3.16
+    /**
+     * @brief Drives the execution of a single engine frame.
+     *
+     * This is the core function of the engine's main loop. In a single call, it:
+     * 1. Polls underlying OS events to keep the application responsive.
+     * 2. Handles pending Director lifecycle states (e.g., restart or cleanup).
+     * 3. If the Director is active (`isActive() == true`): 
+     *    - Advances the scheduler and game logic (if not paused).
+     *    - Submits render commands via the RHI and swaps buffers.
+     * 
+     * @note This method should be called continuously by the platform-specific application loop.
+     * @note This replaces the legacy `stepFrame()` and `processFrame()` methods.
      */
-    [[internal]] void stepFrame(float dt);
+    [[internal]] void renderFrame();
+    /**
+     * @brief Drives the execution of a single engine frame with a caller-provided delta time.
+     *
+     * This overload allows the platform layer to pass in a custom delta time (e.g., from a display link),
+     * bypassing `calculateDeltaTime()`. The delta passed may include vsync time. See issue #17806.
+     * 
+     * @note This replaces the legacy `stepFrame(float dt)` method.
+     */
+    [[internal]] void renderFrame(float dt);
 
     /** The size in pixels of the surface. It could be different than the screen size.
      * High-res devices might have a higher surface size than the screen size.
@@ -518,26 +549,10 @@ public:
      */
     void clearPendingTasks(TaskTiming timing = TaskTiming::NextUpdate);
 
-    /**
-     * returns whether or not the Director is in a valid state
-     */
-    bool isValid() const { return !_invalid; }
+    /** @brief Checks whether the Director is currently active and processing frames. */
+    bool isActive() const { return _active; }
 
 protected:
-    /**
-     * Process one frame of the engine loop.
-     *
-     * This method is invoked automatically once per frame by the Director.
-     * It drives both the game logic update and the rendering pipeline:
-     *   - Calculates delta time
-     *   - Updates scheduler, actions, and scene logic
-     *   - Handles scene transitions
-     *   - Executes rendering of the current scene and overlay nodes
-     *   - Updates performance statistics and swaps buffers
-     *
-     * Do not call this method manually.
-     */
-    [[internal]] void processFrame();
 
     static void performFrameTasks(FrameTaskQueue& frameTasks);
 
@@ -552,7 +567,7 @@ protected:
      */
     void setCanvasSize(const Vec2& canvasSize);
 
-    virtual void startAnimation(SetIntervalReason reason);
+    virtual void activate(SetIntervalReason reason);
     virtual void setAnimationInterval(float interval, SetIntervalReason reason);
 
     void cleanupDirector();
@@ -686,7 +701,7 @@ protected:
     bool _isStatusLabelUpdated = true;
 
     /* whether or not the director is in a valid state */
-    bool _invalid = false;
+    bool _active = false;
 
     bool _childrenIndexerEnabled = false;
 
