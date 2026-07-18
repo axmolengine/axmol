@@ -1802,11 +1802,15 @@ else()
     add_library(${IMPL_TARGET} SHARED)
     if(CMAKE_VERSION GREATER_EQUAL 3.23)
         target_sources(${IMPL_TARGET}
-            PRIVATE ${OPENAL_SRCS} ${ALC_SRCS} ${CORE_SRCS} ${RC_CONFIG}
-            PRIVATE FILE_SET internal_headers TYPE HEADERS
-                FILES ${OPENAL_HDRS} ${ALC_HDRS} ${CORE_HDRS}
-            PUBLIC FILE_SET public_headers TYPE HEADERS
-                BASE_DIRS "${OpenAL_SOURCE_DIR}/include" FILES ${TARGET_PUBLIC_HEADERS})
+            PRIVATE ${OPENAL_SRCS} ${ALC_SRCS} ${CORE_SRCS} ${RC_CONFIG})
+        # FILE_SET of type HEADERS is incompatible with FRAMEWORK targets in CMake >= 4.4
+        if(NOT (APPLE AND ALSOFT_OSX_FRAMEWORK))
+            target_sources(${IMPL_TARGET}
+                PRIVATE FILE_SET internal_headers TYPE HEADERS
+                    FILES ${OPENAL_HDRS} ${ALC_HDRS} ${CORE_HDRS}
+                PUBLIC FILE_SET public_headers TYPE HEADERS
+                    BASE_DIRS "${OpenAL_SOURCE_DIR}/include" FILES ${TARGET_PUBLIC_HEADERS})
+        endif()
         # FIXME: Why can't I do this without CMake complaining that the private
         # alsoft.common and alsoft.fmt libs aren't in some export set? Yet
         # adding alsoft.core-modules as another lib that has the modules works
@@ -1882,6 +1886,9 @@ else()
         endif()
 
         set(_alsoft_bundle_id "org.openal-soft.openal")
+        # FILE_SET of type HEADERS is incompatible with FRAMEWORK targets in CMake >= 4.4,
+        # so use PUBLIC_HEADER and PRIVATE_HEADER properties instead
+        set(_alsoft_private_headers ${OPENAL_HDRS} ${ALC_HDRS} ${CORE_HDRS})
         set_target_properties(${IMPL_TARGET} PROPERTIES
             FRAMEWORK TRUE
             FRAMEWORK_VERSION C
@@ -1899,7 +1906,9 @@ else()
             XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR "$(inherited)"
             XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "${_alsoft_bundle_id}"
             PUBLIC_HEADER "${TARGET_PUBLIC_HEADERS}"
+            PRIVATE_HEADER "${_alsoft_private_headers}"
             MACOSX_RPATH TRUE)
+        unset(_alsoft_private_headers)
     endif()
 endif()
 
