@@ -29,7 +29,9 @@
 #include "RHITypes.h"
 #include <string>
 
-namespace ax::rhi
+namespace ax
+{
+namespace rhi
 {
 /**
  * @addtogroup _rhi
@@ -48,7 +50,7 @@ struct SamplerId
     constexpr bool operator==(const SamplerId&) const = default;
 };
 
-class SamplerRegistry
+class AX_API SamplerRegistry
 {
 public:
     static constexpr uint32_t MAX_SAMPLER_COUNT = 256;
@@ -145,5 +147,8 @@ private:
 
 // end of _rhi group
 /// @}
+}  // namespace rhi
 
-}  // namespace ax::rhi
+using SamplerRegistry = rhi::SamplerRegistry;
+
+}  // namespace ax
