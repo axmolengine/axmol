@@ -32,7 +32,7 @@ THE SOFTWARE.
 
 #include <tracy/Tracy.hpp>
 
-#define AX_PROFILER_ZONE_SCOPED           ZoneScoped
-#define AX_PROFILER_ZONE_SCOPED_N(name)   ZoneScopedN(name)
-#define AX_PROFILER_FRAME_MARK            FrameMark
-#define AX_PROFILER_THREAD_NAME(name)     tracy::SetThreadName(name)
+#define AX_PROFILER_ZONE_SCOPED         ZoneScoped
+#define AX_PROFILER_ZONE_SCOPED_N(name) ZoneScopedN(name)
+#define AX_PROFILER_FRAME_MARK          FrameMark
+#define AX_PROFILER_THREAD_NAME(name)   tracy::SetThreadName(name)

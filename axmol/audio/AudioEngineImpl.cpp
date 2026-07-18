@@ -1007,7 +1007,7 @@ void AudioEngineImpl::setFinishCallback(AudioId audioID, const std::function<voi
 void AudioEngineImpl::update(float /*dt*/)
 {
     AX_PROFILER_ZONE_SCOPED;
-    
+
     std::lock_guard<std::recursive_mutex> lck(_threadMutex);
     _updatePlayers(false);
 }
