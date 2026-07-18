@@ -293,8 +293,6 @@ void Director::setRenderDefaults()
     _renderer->setDepthCompareFunc(rhi::CompareFunc::LESS_EQUAL);
 }
 
-
-
 void Director::calculateDeltaTime()
 {
     // new delta time. Re-fixed issue #1277
@@ -1529,7 +1527,7 @@ void Director::renderFrame(float dt)
     renderFrame();
 }
 
-    void Director::deactivate()
+void Director::deactivate()
 {
     _active = false;
 }

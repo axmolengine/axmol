@@ -351,12 +351,12 @@ public:
     /**
      * @brief Deactivates the Director, suspending logic updates and rendering.
      *
-     * When deactivated, `renderFrame()` will skip all internal logic updates 
+     * When deactivated, `renderFrame()` will skip all internal logic updates
      * and rendering processes (saving CPU/GPU resources), while still allowing
-     * the OS event pump to run. This is typically invoked when the application 
+     * the OS event pump to run. This is typically invoked when the application
      * enters the background or loses window focus.
-     * 
-     * @note Unlike `pause()`, which only stops the logic updates but continues to render 
+     *
+     * @note Unlike `pause()`, which only stops the logic updates but continues to render
      * the current frame, `deactivate()` completely freezes the engine's world.
      * @note This safely replaces the legacy `stopAnimation()` method.
      */
@@ -365,10 +365,10 @@ public:
     /**
      * @brief Activates the Director, enabling the main frame processing loop.
      *
-     * When activated, the Director will process game logic, update the scheduler, 
-     * and render the scene during each `renderFrame()` call. It also resets the 
+     * When activated, the Director will process game logic, update the scheduler,
+     * and render the scene during each `renderFrame()` call. It also resets the
      * delta time to prevent physics or animation spikes upon resuming.
-     * 
+     *
      * @note This safely replaces the legacy `startAnimation()` method.
      */
     void activate();
@@ -403,10 +403,10 @@ public:
      * This is the core function of the engine's main loop. In a single call, it:
      * 1. Polls underlying OS events to keep the application responsive.
      * 2. Handles pending Director lifecycle states (e.g., restart or cleanup).
-     * 3. If the Director is active (`isActive() == true`): 
+     * 3. If the Director is active (`isActive() == true`):
      *    - Advances the scheduler and game logic (if not paused).
      *    - Submits render commands via the RHI and swaps buffers.
-     * 
+     *
      * @note This method should be called continuously by the platform-specific application loop.
      * @note This replaces the legacy `stepFrame()` and `processFrame()` methods.
      */
@@ -416,7 +416,7 @@ public:
      *
      * This overload allows the platform layer to pass in a custom delta time (e.g., from a display link),
      * bypassing `calculateDeltaTime()`. The delta passed may include vsync time. See issue #17806.
-     * 
+     *
      * @note This replaces the legacy `stepFrame(float dt)` method.
      */
     [[internal]] void renderFrame(float dt);
@@ -553,7 +553,6 @@ public:
     bool isActive() const { return _active; }
 
 protected:
-
     static void performFrameTasks(FrameTaskQueue& frameTasks);
 
     void performFrameBoundaryTasks();
