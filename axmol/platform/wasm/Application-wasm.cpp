@@ -153,7 +153,7 @@ static void stepFrame()
     auto director   = __director;
     auto renderView = director->getRenderView();
 
-    director->stepFrame();
+    director->renderFrame();
 
     if (renderView->windowShouldClose())
     {
@@ -163,7 +163,7 @@ static void stepFrame()
         if (renderView->isGfxContextReady())
         {
             director->end();
-            director->stepFrame();
+            director->renderFrame();
         }
         renderView->release();
 

@@ -299,7 +299,7 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
 - (void)layoutSubviews
 {
     auto director = ax::Director::getInstance();
-    if (!director->isValid())
+    if (!director->isActive())
         return;
 
     auto bounds           = [self bounds];
@@ -324,7 +324,7 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
 
     // Avoid flicker. Issue #350
     if ([NSThread isMainThread])
-        director->stepFrame();
+        director->renderFrame();
 }
 
 - (void)swapBuffers
