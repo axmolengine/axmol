@@ -31,6 +31,7 @@
 #include "axmol/math/Ray.h"
 #include "axmol/base/RefPtr.h"
 #include "axmol/math/Mat4.h"
+#include "axmol/math/Vec2.h"
 #include "axmol/platform/PlatformMacros.h"
 
 #include "openxr/openxr.h"
@@ -236,7 +237,9 @@ private:
     XrAction _gripPoseAction{XR_NULL_HANDLE};
     ControllerState _controllers[2];
 
+#if AX_ENABLE_VK
     std::unique_ptr<rhi::OpenXRVulkanInterop> _vulkanInterop;
+#endif
 
     float _xrToSceneScale{1.0f};
 

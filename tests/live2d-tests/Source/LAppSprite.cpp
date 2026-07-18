@@ -66,8 +66,8 @@ void LAppSprite::RenderImmidiate(Csm::Rendering::CubismCommandBuffer_Axmol* comm
     rhi::VertexLayoutDesc desc = axvlm->allocateVertexLayoutDesc();
     // attribute属性を登録
     desc.startLayout(2);
-    desc.addAttrib("a_position", _program->getVertexInputDesc("a_position"), rhi::VertexElementType::FLOAT2, 0, false);
-    desc.addAttrib("a_texCoord", _program->getVertexInputDesc("a_texCoord"), rhi::VertexElementType::FLOAT2,
+    desc.addAttrib(_program->getVertexInputDesc(rhi::VertexSemantic::POSITION), rhi::VertexElementType::FLOAT2, 0, false);
+    desc.addAttrib(_program->getVertexInputDesc(rhi::VertexSemantic::TEXCOORD0), rhi::VertexElementType::FLOAT2,
                             sizeof(float) * 2, false);
 
     // uniform属性の登録

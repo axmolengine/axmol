@@ -173,7 +173,7 @@ rhi::Buffer* Mesh::getVertexBuffer() const
     return _meshIndexData->getVertexBuffer();
 }
 
-bool Mesh::hasVertexAttrib(shaderinfos::VertexKey attrib) const
+bool Mesh::hasVertexAttrib(MeshVertexAttribute attrib) const
 {
     return _meshIndexData->getMeshVertexData()->hasVertexAttrib(attrib);
 }
@@ -212,13 +212,13 @@ Mesh* Mesh::create(const std::vector<float>& positions,
     if (!positions.empty())
     {
         perVertexSizeInFloat += 3;
-        att.vertexAttrib = shaderinfos::VertexKey::VERTEX_ATTRIB_POSITION;
+        att.vertexAttrib = MeshVertexAttribute::POSITION;
         attribs.emplace_back(att);
     }
     if (!normals.empty())
     {
         perVertexSizeInFloat += 3;
-        att.vertexAttrib = shaderinfos::VertexKey::VERTEX_ATTRIB_NORMAL;
+        att.vertexAttrib = MeshVertexAttribute::NORMAL;
         attribs.emplace_back(att);
         hasNormal = 1;
     }
@@ -226,7 +226,7 @@ Mesh* Mesh::create(const std::vector<float>& positions,
     {
         perVertexSizeInFloat += 2;
         att.type         = rhi::VertexElementType::FLOAT2;
-        att.vertexAttrib = shaderinfos::VertexKey::VERTEX_ATTRIB_TEX_COORD;
+        att.vertexAttrib = MeshVertexAttribute::TEXCOORD0;
         attribs.emplace_back(att);
         hasTexCoord = 1;
     }
@@ -643,7 +643,7 @@ void Mesh::setLightUniforms(Pass* pass, Scene* scene, const Vec4& color, unsigne
 
     auto bindings = pass->getVertexAttributeBinding();
 
-    if (bindings && bindings->hasAttribute(shaderinfos::VertexKey::VERTEX_ATTRIB_NORMAL))
+    if (bindings && bindings->hasAttribute(MeshVertexAttribute::NORMAL))
     {
         resetLightUniformValues();
 

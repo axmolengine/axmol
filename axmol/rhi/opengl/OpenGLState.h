@@ -277,8 +277,7 @@ struct AX_DLL OpenGLState
     }
     void bindSampler(GLuint slot, GLuint handle)
     {
-        auto activeLayer = _activeTexture.has_value() ? _activeTexture.value() - GL_TEXTURE0 : 0;
-        if (activeLayer == slot && slot < MAX_TEXTURE_UNITS)
+        if (slot < MAX_TEXTURE_UNITS)
             try_callx(glBindSampler, _samplerBindings[slot], slot, handle);
     }
     void deleteSampler(GLuint handle)

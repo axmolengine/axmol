@@ -1,5 +1,5 @@
 /****************************************************************************
- Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
 
@@ -31,7 +31,7 @@
 #include "axmol/base/Data.h"
 
 #include <span>
-#include <string>
+#include <string_view>
 
 namespace ax::rhi
 {
@@ -59,6 +59,13 @@ public:
 
     uint32_t getStageOffset() const { return _stageOffset; }
 
+    std::string_view getCode() const
+    {
+        return std::string_view{reinterpret_cast<const char*>(_codeSpan.data()), _codeSpan.size()};
+    }
+
+    bool isCompiled() const { return _compiled; }
+
 protected:
     ShaderModule(ShaderStage stage, Data& data);
     virtual ~ShaderModule();
@@ -73,7 +80,9 @@ protected:
     uint64_t _hash     = 0;
 
     Data _chunkData;               // owns the axslcc chunk
-    std::span<uint8_t> _codeSpan;  // view into parsed shader code
+    std::span<uint8_t> _codeSpan;  // view into parsed shader source
+    bool _compiled    = false;
+    bool _precompiled = false;  // true if bytecode (DXBC/DXIL) or SPIRV, false if source text
 
     uint32_t _stageOffset{0};
 };

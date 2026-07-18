@@ -49,7 +49,7 @@ class RenderTarget;
 class Program;
 class VertexLayout;
 
-class SamplerCache;
+class SamplerRegistry;
 class GraphicsCore;
 struct VertexLayoutDesc;
 
@@ -89,7 +89,7 @@ struct DriverCaps
 class AX_DLL DriverBase
 {
     friend class ShaderCache;
-    friend class SamplerCache;
+    friend class SamplerRegistry;
     friend class GraphicsCore;
 
 protected:

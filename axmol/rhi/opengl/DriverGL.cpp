@@ -351,6 +351,8 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
         glSamplerParameterf(sampler, GL_TEXTURE_MAX_ANISOTROPY_EXT, aniso);
     }
 
+    CHECK_GL_ERROR_DEBUG();
+
     return static_cast<uint64_t>(sampler);
 }
 

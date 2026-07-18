@@ -25,7 +25,7 @@
 #include "axmol/renderer/Pass.h"
 #include "axmol/base/Environment.h"
 #include "axmol/3d/MeshVertexIndexData.h"
-#include "axmol/3d/shaderinfos.h"
+#include "axmol/3d/MeshVertexAttribute.h"
 #include "axmol/3d/VertexInputBinding.h"
 #include "xxhash/xxhash.h"
 
@@ -115,16 +115,16 @@ bool VertexInputBinding::init(MeshIndexData* meshIndexData, Pass* pass, MeshComm
     for (auto k = 0; k < attributeCount; k++)
     {
         auto meshattribute = meshVertexData->getMeshVertexAttrib(k);
-        setVertexInputPointer(desc, shaderinfos::getAttributeName(meshattribute.vertexAttrib), meshattribute.type,
-                              false, offset, 1 << k);
+        setVertexInputPointer(desc, toVertexSemantic(meshattribute.vertexAttrib), meshattribute.type, false, offset,
+                              1 << k);
         offset += meshattribute.getAttribSizeBytes();
     }
 
     if (instancing)
     {
         auto program = _programState->getProgram();
-        desc.addAttrib(rhi::VERTEX_INPUT_NAME_INSTANCE, program->getVertexInputDesc(rhi::VertexInputKind::INSTANCE),
-                       rhi::VertexElementType::MAT4, 0, false, 1);
+        desc.addAttrib(program->getVertexInputDesc(rhi::VertexSemantic::TEXCOORD1), rhi::VertexElementType::MAT4, 0,
+                       false, 1);
     }
 
     /*
@@ -147,30 +147,28 @@ uint32_t VertexInputBinding::getVertexAttribsFlags() const
     return _vertexAttribsFlags;
 }
 
-bool VertexInputBinding::hasAttribute(const shaderinfos::VertexKey& key) const
+bool VertexInputBinding::hasAttribute(const MeshVertexAttribute& key) const
 {
-    auto& name         = shaderinfos::getAttributeName(key);
     auto& vertexInputs = _programState->getActiveVertexInputs();
-    return vertexInputs.find(name) != vertexInputs.end();
+    return vertexInputs.find(toVertexSemantic(key)) != vertexInputs.end();
 }
 
 void VertexInputBinding::setVertexInputPointer(VertexLayoutDesc& desc,
-                                               std::string_view name,
+                                               const rhi::VertexSemantic& semantic,
                                                rhi::VertexElementType type,
                                                bool normalized,
                                                int offset,
                                                int flag)
 {
-    auto v = _programState->getVertexInputDesc(name);
+    auto v = _programState->getVertexInputDesc(semantic);
     if (v)
     {
-        // AXLOGD("VertexInputBinding: set attribute '{}' location: {}, offset: {}", name, v->location, offset);
-        desc.addAttrib(name, v, type, offset, normalized);
+        desc.addAttrib(v, type, offset, normalized);
         _vertexAttribsFlags |= flag;
     }
     else
     {
-        ;  // AXLOGI("VertexInputBinding: attribute: '{}' not present in shader", name);
+        ;  // AXLOGI("VertexInputBinding: semantic '{}' not present in shader", semantic.toString());
     }
 }
 

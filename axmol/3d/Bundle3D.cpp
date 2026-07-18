@@ -257,21 +257,21 @@ bool Bundle3D::loadObj(MeshDatas& meshdatas,
 
             if (mesh.positions.size())
             {
-                attrib.vertexAttrib = shaderinfos::VertexKey::VERTEX_ATTRIB_POSITION;
+                attrib.vertexAttrib = MeshVertexAttribute::POSITION;
                 meshdata->attribs.emplace_back(attrib);
             }
             bool hasnormal = false, hastex = false;
             if (mesh.normals.size())
             {
                 hasnormal           = true;
-                attrib.vertexAttrib = shaderinfos::VertexKey::VERTEX_ATTRIB_NORMAL;
+                attrib.vertexAttrib = MeshVertexAttribute::NORMAL;
                 meshdata->attribs.emplace_back(attrib);
             }
             if (mesh.texcoords.size())
             {
                 hastex              = true;
                 attrib.type         = parseGLDataType("GL_FLOAT", 2);
-                attrib.vertexAttrib = shaderinfos::VertexKey::VERTEX_ATTRIB_TEX_COORD;
+                attrib.vertexAttrib = MeshVertexAttribute::TEXCOORD0;
                 meshdata->attribs.emplace_back(attrib);
             }
 
@@ -513,29 +513,29 @@ bool Bundle3D::loadMeshDatasBinary_0_1(MeshDatas& meshdatas)
         {
             auto vUsage = _binaryReader.read<unsigned int>();
             auto vSize  = _binaryReader.read<unsigned int>();
-            shaderinfos::VertexKey usage;
+            MeshVertexAttribute usage;
 
             MeshVertexAttrib meshVertexAttribute;
             meshVertexAttribute.type = parseGLDataType("GL_FLOAT", vSize);
             if (vUsage == VERTEX_ATTRIB_NORMAL)
             {
-                usage = shaderinfos::VertexKey::VERTEX_ATTRIB_NORMAL;
+                usage = MeshVertexAttribute::NORMAL;
             }
             else if (vUsage == VERTEX_ATTRIB_BLEND_WEIGHT)
             {
-                usage = shaderinfos::VertexKey::VERTEX_ATTRIB_BLEND_WEIGHT;
+                usage = MeshVertexAttribute::BLENDWEIGHT;
             }
             else if (vUsage == VERTEX_ATTRIB_BLEND_INDEX)
             {
-                usage = shaderinfos::VertexKey::VERTEX_ATTRIB_BLEND_INDEX;
+                usage = MeshVertexAttribute::BLENDINDICES;
             }
             else if (vUsage == VERTEX_ATTRIB_POSITION)
             {
-                usage = shaderinfos::VertexKey::VERTEX_ATTRIB_POSITION;
+                usage = MeshVertexAttribute::POSITION;
             }
             else if (vUsage == VERTEX_ATTRIB_TEX_COORD)
             {
-                usage = shaderinfos::VertexKey::VERTEX_ATTRIB_TEX_COORD;
+                usage = MeshVertexAttribute::TEXCOORD0;
             }
             else
             {
@@ -620,7 +620,7 @@ bool Bundle3D::loadMeshDatasBinary_0_2(MeshDatas& meshdatas)
         for (unsigned int i = 0; i < attribSize; ++i)
         {
             unsigned int vUsage, vSize;
-            shaderinfos::VertexKey usage = shaderinfos::VertexKey::VERTEX_ATTRIB_ERROR;
+            MeshVertexAttribute usage = MeshVertexAttribute::INVALID;
             if (_binaryReader.read_blob(vUsage) != 1 || _binaryReader.read_blob(vSize) != 1)
             {
                 AXLOGW("warning: Failed to read meshdata: usage or size '{}'.", _path);
@@ -632,23 +632,23 @@ bool Bundle3D::loadMeshDatasBinary_0_2(MeshDatas& meshdatas)
             meshVertexAttribute.type = parseGLDataType("GL_FLOAT", vSize);
             if (vUsage == VERTEX_ATTRIB_NORMAL)
             {
-                usage = shaderinfos::VertexKey::VERTEX_ATTRIB_NORMAL;
+                usage = MeshVertexAttribute::NORMAL;
             }
             else if (vUsage == VERTEX_ATTRIB_BLEND_WEIGHT)
             {
-                usage = shaderinfos::VertexKey::VERTEX_ATTRIB_BLEND_WEIGHT;
+                usage = MeshVertexAttribute::BLENDWEIGHT;
             }
             else if (vUsage == VERTEX_ATTRIB_BLEND_INDEX)
             {
-                usage = shaderinfos::VertexKey::VERTEX_ATTRIB_BLEND_INDEX;
+                usage = MeshVertexAttribute::BLENDINDICES;
             }
             else if (vUsage == VERTEX_ATTRIB_POSITION)
             {
-                usage = shaderinfos::VertexKey::VERTEX_ATTRIB_POSITION;
+                usage = MeshVertexAttribute::POSITION;
             }
             else if (vUsage == VERTEX_ATTRIB_TEX_COORD)
             {
-                usage = shaderinfos::VertexKey::VERTEX_ATTRIB_TEX_COORD;
+                usage = MeshVertexAttribute::TEXCOORD0;
             }
             meshVertexAttribute.vertexAttrib = usage;
 
@@ -2181,73 +2181,73 @@ NTextureData::Usage Bundle3D::parseGLTextureType(std::string_view str)
         return NTextureData::Usage::Unknown;
     }
 }
-shaderinfos::VertexKey Bundle3D::parseProgramAttribute(std::string_view str)
+MeshVertexAttribute Bundle3D::parseProgramAttribute(std::string_view str)
 {
     if (str == "VERTEX_ATTRIB_POSITION"sv)
     {
-        return shaderinfos::VertexKey::VERTEX_ATTRIB_POSITION;
+        return MeshVertexAttribute::POSITION;
     }
     else if (str == "VERTEX_ATTRIB_COLOR"sv)
     {
-        return shaderinfos::VertexKey::VERTEX_ATTRIB_COLOR;
+        return MeshVertexAttribute::COLOR;
     }
     else if (str == "VERTEX_ATTRIB_TEX_COORD"sv)
     {
-        return shaderinfos::VertexKey::VERTEX_ATTRIB_TEX_COORD;
+        return MeshVertexAttribute::TEXCOORD0;
     }
     else if (str == "VERTEX_ATTRIB_TEX_COORD1"sv)
     {
-        return shaderinfos::VertexKey::VERTEX_ATTRIB_TEX_COORD1;
+        return MeshVertexAttribute::TEXCOORD1;
     }
     else if (str == "VERTEX_ATTRIB_TEX_COORD2"sv)
     {
-        return shaderinfos::VertexKey::VERTEX_ATTRIB_TEX_COORD2;
+        return MeshVertexAttribute::TEXCOORD2;
     }
     else if (str == "VERTEX_ATTRIB_TEX_COORD3"sv)
     {
-        return shaderinfos::VertexKey::VERTEX_ATTRIB_TEX_COORD3;
+        return MeshVertexAttribute::TEXCOORD3;
     }
     // comment out them
     //    else if (str == "VERTEX_ATTRIB_TEX_COORD4")
     //    {
-    //        return shaderinfos::VertexKey::VERTEX_ATTRIB_TEX_COORD4;
+    //        return MeshVertexAttribute::TEXCOORD4;
     //    }
     //    else if (str == "VERTEX_ATTRIB_TEX_COORD5")
     //    {
-    //        return shaderinfos::VertexKey::VERTEX_ATTRIB_TEX_COORD5;
+    //        return MeshVertexAttribute::TEXCOORD5;
     //    }
     //    else if (str == "VERTEX_ATTRIB_TEX_COORD6")
     //    {
-    //        return shaderinfos::VertexKey::VERTEX_ATTRIB_TEX_COORD6;
+    //        return MeshVertexAttribute::TEXCOORD6;
     //    }
     //    else if (str == "VERTEX_ATTRIB_TEX_COORD7")
     //    {
-    //        return shaderinfos::VertexKey::VERTEX_ATTRIB_TEX_COORD7;
+    //        return MeshVertexAttribute::TEXCOORD7;
     //    }
     else if (str == "VERTEX_ATTRIB_NORMAL"sv)
     {
-        return shaderinfos::VertexKey::VERTEX_ATTRIB_NORMAL;
+        return MeshVertexAttribute::NORMAL;
     }
     else if (str == "VERTEX_ATTRIB_BLEND_WEIGHT"sv)
     {
-        return shaderinfos::VertexKey::VERTEX_ATTRIB_BLEND_WEIGHT;
+        return MeshVertexAttribute::BLENDWEIGHT;
     }
     else if (str == "VERTEX_ATTRIB_BLEND_INDEX"sv)
     {
-        return shaderinfos::VertexKey::VERTEX_ATTRIB_BLEND_INDEX;
+        return MeshVertexAttribute::BLENDINDICES;
     }
     else if (str == "VERTEX_ATTRIB_TANGENT"sv)
     {
-        return shaderinfos::VertexKey::VERTEX_ATTRIB_TANGENT;
+        return MeshVertexAttribute::TANGENT;
     }
     else if (str == "VERTEX_ATTRIB_BINORMAL"sv)
     {
-        return shaderinfos::VertexKey::VERTEX_ATTRIB_BINORMAL;
+        return MeshVertexAttribute::BINORMAL;
     }
     else
     {
         AXASSERT(false, "Wrong Attribute type");
-        return shaderinfos::VertexKey::VERTEX_ATTRIB_ERROR;
+        return MeshVertexAttribute::INVALID;
     }
 }
 

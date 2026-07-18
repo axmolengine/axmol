@@ -1,5 +1,5 @@
 // The Axmol Shader Compiler spec, define macros and structs
-// match with axslcc-3.4.0+
+// match with axslcc-3.99.0+
 
 #pragma once
 
@@ -17,7 +17,8 @@ namespace axslc
 #define SC_CHUNK_STAG     sc_makefourcc('S', 'T', 'A', 'G')
 #define SC_CHUNK_REFL     sc_makefourcc('R', 'E', 'F', 'L')
 #define SC_CHUNK_CODE     sc_makefourcc('C', 'O', 'D', 'E')
-#define SC_CHUNK_DATA     sc_makefourcc('D', 'A', 'T', 'A')
+
+#define SC_BYTECODE_FLAG  0x80000000U  // bit 31 of profile_ver: code is bytecode (DXBC/DXIL)
 
 #define SC_LANG_GLES      sc_makefourcc('G', 'L', 'E', 'S')
 #define SC_LANG_HLSL      sc_makefourcc('H', 'L', 'S', 'L')
@@ -30,6 +31,59 @@ namespace axslc
 #define SC_STAGE_COMPUTE  sc_makefourcc('C', 'O', 'M', 'P')
 
 #define SC_NAME_LEN       32
+
+// The axslcc sampler presets
+struct SamplerPreset
+{
+    enum enum_type : uint32_t
+    {
+        // --- Linear sampling ---
+        LinearClamp,   // Linear, clamp to edge
+        LinearWrap,    // Linear, repeat
+        LinearMirror,  // Linear, mirror repeat
+        LinearBorder,  // Linear, border color
+
+        // --- Point sampling ---
+        PointClamp,   // Nearest, clamp to edge
+        PointWrap,    // Nearest, repeat
+        PointMirror,  // Nearest, mirror repeat
+        PointBorder,  // Nearest, border color
+
+        // --- Linear + Mipmap ---
+        LinearMipClamp,   // Linear min/mag, mip linear, clamp
+        LinearMipWrap,    // Linear min/mag, mip linear, wrap
+        LinearMipMirror,  // Linear min/mag, mip linear, mirror
+        LinearMipBorder,  // Linear min/mag, mip linear, border
+
+        // --- Anisotropic filtering ---
+        AnisoClamp,   // Anisotropic, clamp to edge
+        AnisoWrap,    // Anisotropic, repeat
+        AnisoMirror,  // Anisotropic, mirror repeat
+        AnisoBorder,  // Anisotropic, border color
+
+        // --- Depth comparison samplers (shadow maps) ---
+        ShadowCmpClamp,   // Compare sampler, clamp to edge
+        ShadowCmpWrap,    // Compare sampler, repeat
+        ShadowCmpMirror,  // Compare sampler, mirror repeat
+        ShadowCmpBorder,  // Compare sampler, border color
+
+        // --- Special cases ---
+        LinearNoMipClamp,  // Linear min/mag, no mip, clamp (UI, 2D sprites)
+        PointNoMipClamp,   // Point min/mag, no mip, clamp (pixel art)
+
+        //
+        Count
+    };
+};
+inline constexpr uint16_t kPresetSamplerDescriptorSet   = 1;
+inline constexpr uint16_t kCustomSamplerDescriptorSet   = 2;
+inline constexpr uint16_t kInvalidTextureSamplerRef     = 0xffff;
+inline constexpr uint16_t kTextureSamplerRefCustomBit   = 0x8000;
+inline constexpr uint16_t kTextureSamplerRefBindingMask = 0x7fff;
+
+inline constexpr int16_t kInvalidSamplerPreset = -1;
+
+inline constexpr int32_t kVulkanSamplerBindingShift = 1024;
 
 enum Dim : uint16_t
 {
@@ -90,7 +144,7 @@ struct sc_chunk
 
 struct sc_target_entry
 {
-    uint32_t lang;  // SC_LANG_GLES / HLSL / MSL / SPIRV ...
+    uint32_t lang;  // SHADER_LANG_ESSL / HLSL / MSL / SPIRV ...
     uint32_t profile_ver;
     uint32_t offset;
 };
@@ -101,6 +155,7 @@ struct sc_chunk_refl
     char name[SC_NAME_LEN];
     uint32_t num_inputs;
     uint32_t num_textures;
+    uint32_t num_samplers;
     uint32_t num_uniform_buffers;
     uint32_t num_storage_images;
     uint32_t num_storage_buffers;
@@ -110,6 +165,7 @@ struct sc_chunk_refl
     // inputs: sc_refl_input[num_inputs]
     // uniform-buffers: sc_refl_uniformbuffer[num_uniform_buffers]
     // textures: sc_refl_texture[num_textures]
+    // samplers: sc_refl_sampler[num_samplers]
     // storage_images: sc_refl_texture[num_storage_images]
     // storage_buffers: sc_refl_buffer[num_storage_buffers]
 };
@@ -128,12 +184,85 @@ struct sc_refl_texture
 {
     char name[SC_NAME_LEN];
     int32_t binding;
+    uint16_t descriptor_set;
     uint8_t image_dim;        // @see enum Dim: Dim1D, Dim2D, Dim3D, DimCube ...
     uint8_t multisample : 1;  // whether sampler2DMS
     uint8_t arrayed : 1;      // whether samplerXXArray
     uint8_t reserved : 6;     // reserved field
-    uint8_t count;            // count: 0~255
-    uint8_t sampler_slot;     // sampler_slot: 0~255
+    uint16_t count;
+
+    // GL/GLES only: sampler reference used by this combined texture uniform.
+    //   kInvalidTextureSamplerRef: use the texture object's/default sampler.
+    //   [0, 0x7fff]: built-in preset sampler binding.
+    //   kTextureSamplerRefCustomBit | binding: custom sampler binding.
+    uint16_t sampler_ref;
+};
+
+enum SCSamplerFlags : uint8_t
+{
+    SC_SAMPLER_FLAG_NONE       = 0,
+    SC_SAMPLER_FLAG_COMPARISON = 1 << 0,
+};
+
+struct sc_refl_sampler
+{
+    // Sampler variable name as declared in the source shader.
+    char name[SC_NAME_LEN];
+
+    // Logical sampler register index inside descriptor_set.
+    //
+    // Built-in sampler:
+    //   descriptor_set == kPresetSamplerDescriptorSet
+    //   binding == preset_index
+    //   valid range: [0, SamplerPreset::Count)
+    //
+    // Custom sampler:
+    //   descriptor_set == kCustomSamplerDescriptorSet
+    //   binding is the Program-local custom sampler index
+    //   valid range: [0, custom_sampler_count)
+    //
+    // This value is not:
+    //   - a SamplerRegistry SamplerId;
+    //   - a D3D12 sampler heap slot;
+    //   - a Vulkan implementation-specific descriptor index;
+    //   - a Metal or D3D11 backend sampler slot.
+    int32_t binding;
+
+    // HLSL register space (logical shader namespace).
+    //
+    // This is NOT a Vulkan descriptor set nor any backend binding slot.
+    // Backends translate logical (space, binding) to backend-specific
+    // bindings independently.
+    //
+    // kPresetSamplerDescriptorSet for Axmol built-in presets.
+    // kCustomSamplerDescriptorSet for Program-local custom samplers.
+    uint16_t space;
+
+    // Number of sampler array elements.
+    // This is normally 1 for a non-array SamplerState declaration.
+    uint16_t count;
+
+    // SamplerPreset enum value for an Axmol built-in sampler.
+    //
+    // Built-in sampler:
+    //   preset_index >= 0
+    //   binding must equal preset_index.
+    //
+    // Custom sampler:
+    //   preset_index == kInvalidSamplerPreset.
+    int16_t preset_index;
+
+    // Bitmask of SCSamplerFlags.
+    //
+    // SC_SAMPLER_FLAG_COMPARISON may be set only when axslcc can
+    // reliably determine that the declaration is a comparison sampler.
+    // Leave this field as SC_SAMPLER_FLAG_NONE when that information
+    // cannot be determined reliably.
+    uint8_t flags;
+
+    // Reserved for future serialized sampler reflection fields.
+    // Must be initialized to zero.
+    uint8_t reserved;
 };
 
 struct sc_refl_buffer
@@ -162,5 +291,15 @@ typedef struct sc_refl_uniformbuffer_member
     uint16_t var_type;
 } sc_refl_ub_member;
 #pragma pack(pop)
+
+constexpr bool sc_sampler_is_preset(const sc_refl_sampler& sampler)
+{
+    return sampler.preset_index >= 0;
+}
+
+constexpr bool sc_sampler_is_custom(const sc_refl_sampler& sampler)
+{
+    return sampler.preset_index == kInvalidSamplerPreset;
+}
 
 }  // namespace axslc

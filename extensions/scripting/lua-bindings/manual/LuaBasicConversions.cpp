@@ -1923,7 +1923,7 @@ bool luaval_to_mesh_vertex_attrib(lua_State* L, int lo, ax::MeshVertexAttrib* re
 
         lua_pushstring(L, "vertexAttrib"); /* L: paramStack key */
         lua_gettable(L, lo);               /* L: paramStack paramStack[lo][key] */
-        ret->vertexAttrib = (shaderinfos::VertexKey)(int)lua_tonumber(L, -1);
+        ret->vertexAttrib = (MeshVertexAttribute)(int)lua_tonumber(L, -1);
         lua_pop(L, 1);
     }
 

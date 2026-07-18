@@ -49,7 +49,7 @@ public:
     ProgramImpl(Data& vsData, Data& fsData);
     ~ProgramImpl() override;
 
-    ID3DBlob* getVSBlob() const;
+    std::span<uint8_t> getVSBlob() const;
 
     inline void apply(ID3D11DeviceContext* context)
     {

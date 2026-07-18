@@ -29,7 +29,7 @@
 
 #include "axmol/3d/Bundle3DData.h"
 #include "axmol/math/AABB.h"
-#include "axmol/3d/shaderinfos.h"
+#include "axmol/3d/MeshVertexAttribute.h"
 
 #include "axmol/base/Object.h"
 #include "axmol/base/Vector.h"
@@ -135,7 +135,7 @@ public:
 
     /**has vertex attribute?*/
     // TODO: will be removed!
-    bool hasVertexAttrib(shaderinfos::VertexKey attrib) const;
+    bool hasVertexAttrib(MeshVertexAttribute attrib) const;
 
     void setVertexData(const std::vector<float>& vertexData);
 

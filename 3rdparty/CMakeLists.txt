@@ -139,7 +139,7 @@ if(ANDROID)
   )
 endif()
 
-ax_add_3rd(fmt)
+ax_add_3rd(fmt OPTIONS "FMT_MODULE OFF")
 if (TARGET fmt-c)
   set_target_properties(fmt-c PROPERTIES FOLDER "3rdparty")
 endif()

@@ -29,12 +29,14 @@
 #include "axmol/base/Object.h"
 #include "axmol/platform/PlatformMacros.h"
 #include "axmol/rhi/ShaderCache.h"
+#include "axmol/rhi/SamplerRegistry.h"
 #include "axmol/rhi/Buffer.h"
 #include "axmol/tlx/hlookup.hpp"
 #include "axmol/tlx/inlined_vector.hpp"
 #include "axmol/tlx/vector.hpp"
 
 #include <functional>
+#include <unordered_map>
 #include <vector>
 
 namespace ax
@@ -61,27 +63,33 @@ enum Uniform : uint32_t
     UNIFORM_COUNT  // Maximum uniforms
 };
 
-enum VertexInputKind : uint32_t
-{
-    POSITION,
-    COLOR,
-    TEXCOORD,
-    TEXCOORD1,
-    TEXCOORD2,
-    TEXCOORD3,
-    NORMAL,
-    INSTANCE,
-    VIK_COUNT  //
-};
-
 struct UniformBlockInfo
 {
-    int binding;          // Vulkan binding index
-    uint32_t cpuOffset;   // offset in CPU buffer
-    uint32_t sizeBytes;   // total size of the UBO
-    uint16_t numMembers;  // number of uniforms in this block
+    int binding;           // Vulkan binding index
+    int runtimeIndex{-1};  // backend program-local block index
+    uint32_t cpuOffset;    // offset in CPU buffer
+    uint32_t sizeBytes;    // total size of the UBO
+    uint16_t numMembers;   // number of uniforms in this block
     ShaderStage stage;
     std::string_view name;  // block name
+};
+
+struct SamplerBindingInfo
+{
+    int binding{-1};
+    uint16_t space{0};
+    uint16_t count{1};
+    int16_t presetIndex{-1};
+    uint8_t flags{0};  // axslc::SCSamplerFlags
+    SamplerId samplerId{};
+    std::string_view name;
+};
+
+struct ProgramSamplerBinding
+{
+    uint16_t space{0};
+    uint16_t binding{0};
+    SamplerId samplerId{};
 };
 
 struct SLCReflectContext;
@@ -156,30 +164,19 @@ public:
      */
     size_t getUniformBufferSize() const;
 
-    /**
-     * Get attribute location by attribute name.
-     * @param name Specifies the attribute name.
-     * @return The attribute location.
-     */
-    const VertexInputDesc* getVertexInputDesc(std::string_view name) const;
-
-    /**
-     * Get attribute location by engine built-in attribute enum name.
-     * @param name Specifies the engine built-in attribute enum name.
-     * @return The attribute location.
-     */
-    const VertexInputDesc* getVertexInputDesc(rhi::VertexInputKind name) const
-    {
-        return _builtinVertexInputs[(int)name];
-    }
+    const VertexInputDesc* getVertexInputDesc(const VertexSemantic& semantic) const;
 
     /**
      * Get active vertex attributes.
      * @return Active vertex attributes. key is active attribute name, Value is corresponding attribute info.
      */
-    const tlx::string_map<VertexInputDesc>& getActiveVertexInputs() const { return _activeVertexInputs; }
+    using VertexInputMap = tlx::hash_map<VertexSemantic, VertexInputDesc>;
+    const VertexInputMap& getActiveVertexInputs() const { return _activeVertexInputs; }
 
     const std::vector<TextureUniformEntry>& getActiveTextureInfos() const { return _activeTextureInfos; };
+    const std::vector<SamplerBindingInfo>& getActiveSamplerInfos() const { return _activeSamplerInfos; }
+    const std::vector<ProgramSamplerBinding>& getSamplerBindings() const { return _samplerBindings; }
+    [[internal]] SamplerId getTextureSampler(int textureBinding) const;
 
     /**
      * Get engine built-in program type.
@@ -206,6 +203,8 @@ public:
     ShaderModule* getVSModule() const { return _vsModule; }
     ShaderModule* getFSModule() const { return _fsModule; }
 
+    virtual bool isValid() const;
+
 protected:
     static uint64_t makeUniformNameKey(std::string_view name);
     static uint64_t makeTextureNameKey(std::string_view name);
@@ -219,7 +218,7 @@ protected:
     UniformInfo& getUniformInfo(uint64_t id);
 
     void parseStageReflection(ShaderStage stage, SLCReflectContext* context);
-    void resolveBuiltinBindings();
+    void resolveBuiltinUniforms();
 
     void reflectVertexInputs(SLCReflectContext* context);
     void reflectUniforms(SLCReflectContext* context);
@@ -235,7 +234,7 @@ protected:
     ShaderModule* _fsModule = nullptr;
 
     // vertex inputs
-    tlx::string_map<VertexInputDesc> _activeVertexInputs;
+    VertexInputMap _activeVertexInputs;
 
     // the active uniform infos
     UniformMap _activeUniformInfos;
@@ -244,14 +243,17 @@ protected:
 
     // unstable textures reflection, we need copy and update runtimeLocation after link program every time
     std::vector<TextureUniformEntry> _activeTextureInfos;
+    std::vector<SamplerBindingInfo> _activeSamplerInfos;
+    std::vector<ProgramSamplerBinding> _samplerBindings;
+    // GL/GLES need this reflection mapping to bind sampler objects per combined texture uniform.
+    std::unordered_map<int, SamplerId> _textureSamplerIds;
+    bool _samplersResolved{true};
 
     // Populated once from ShaderModule reflection at program creation.
     // Contains stable, backend‑independent metadata for all active uniform blocks.
     std::vector<UniformBlockInfo> _activeUniformBlockInfos;
 
     const UniformInfo* _builtinUniforms[UNIFORM_COUNT];
-    tlx::pod_vector<const VertexInputDesc*> _builtinVertexInputs;
-
     // The total uniform buffer size
     size_t _uniformBufferSize{0};
 };

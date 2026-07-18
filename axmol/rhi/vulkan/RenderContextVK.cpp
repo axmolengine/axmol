@@ -33,6 +33,7 @@
 #include "axmol/rhi/vulkan/DriverVK.h"
 #include "axmol/rhi/vulkan/SemaphorePoolVK.h"
 #include "axmol/rhi/GraphicsCore.h"
+#include "axmol/rhi/SamplerRegistry.h"
 #include "axmol/base/Logging.h"
 #include "axmol/math/MathUtil.h"
 
@@ -1055,11 +1056,16 @@ void RenderContextImpl::prepareDrawing()
     auto& descriptorSets = descriptorState->sets;
 
     assert(descriptorSets[SET_INDEX_UBO]);
+    if (descriptorState->imageDescriptorCount || descriptorState->combinedDescriptorCount)
+        assert(descriptorSets[SET_INDEX_RESOURCE]);
+    if (descriptorState->samplerDescriptorCount)
+        assert(descriptorSets[SET_INDEX_RESOURCE]);
 
     // Prepare write lists sized to expected UBO + sampler descriptors
     auto& writes = _descriptorWritesPerFrame;
     writes.clear();
-    writes.reserve(descriptorState->uniformDescriptorCount + descriptorState->samplerDescriptorCount);
+    writes.reserve(descriptorState->uniformDescriptorCount + descriptorState->imageDescriptorCount +
+                   descriptorState->samplerDescriptorCount + descriptorState->combinedDescriptorCount);
 
     _descriptorBufferInfos.clear();
     _descriptorBufferInfos.reserve(descriptorState->uniformDescriptorCount);
@@ -1089,10 +1095,14 @@ void RenderContextImpl::prepareDrawing()
         }
     }
 
-    // --- Samplers (set=1, binding=N) ---
+    const auto& activeSamplerInfos = _programState->getProgram()->getActiveSamplerInfos();
+    const bool separateSamplers    = !activeSamplerInfos.empty();
+
+    // --- Sampled images / combined image samplers (set=1, binding=N) ---
     auto& imageInfos = _descriptorImageInfosPerFrame;
     imageInfos.clear();
-    imageInfos.reserve(descriptorState->samplerDescriptorCount);
+    imageInfos.reserve(descriptorState->imageDescriptorCount + descriptorState->samplerDescriptorCount +
+                       descriptorState->combinedDescriptorCount);
 
     for (const auto& [bindingIndex, bindingSet] : _programState->getTextureBindingSets())
     {
@@ -1107,7 +1117,7 @@ void RenderContextImpl::prepareDrawing()
         {
             auto textureImpl      = static_cast<TextureImpl*>(texs[0]);
             auto& imageInfo       = imageInfos.emplace_back();
-            imageInfo.sampler     = textureImpl->getSampler();
+            imageInfo.sampler     = separateSamplers ? VK_NULL_HANDLE : textureImpl->getSampler();
             imageInfo.imageView   = textureImpl->internalHandle().view;
             imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 
@@ -1119,7 +1129,7 @@ void RenderContextImpl::prepareDrawing()
             {
                 auto textureImpl      = static_cast<TextureImpl*>(tex);
                 auto& imageInfo       = imageInfos.emplace_back();
-                imageInfo.sampler     = textureImpl->getSampler();
+                imageInfo.sampler     = separateSamplers ? VK_NULL_HANDLE : textureImpl->getSampler();
                 imageInfo.imageView   = textureImpl->internalHandle().view;
                 imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 
@@ -1129,11 +1139,50 @@ void RenderContextImpl::prepareDrawing()
 
         VkWriteDescriptorSet& write = writes.emplace_back();
         write.sType                 = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-        write.dstSet                = descriptorSets[SET_INDEX_SAMPLER];
+        write.dstSet                = descriptorSets[SET_INDEX_RESOURCE];
         write.dstBinding            = bindingIndex;
-        write.descriptorType        = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        write.descriptorCount       = static_cast<uint32_t>(texs.size());
-        write.pImageInfo            = imageInfos.data() + offset;
+        write.descriptorType =
+            separateSamplers ? VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE : VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+        write.descriptorCount = static_cast<uint32_t>(texs.size());
+        write.pImageInfo      = imageInfos.data() + offset;
+    }
+
+    if (separateSamplers)
+    {
+        for (const auto& samplerInfo : activeSamplerInfos)
+        {
+            const size_t offset = imageInfos.size();
+            if (!samplerInfo.samplerId)
+                continue;
+
+            auto samplerHandle = SamplerRegistry::getInstance()->getSampler(samplerInfo.samplerId);
+            if (!samplerHandle)
+                continue;
+
+            auto sampler = static_cast<VkSampler>(samplerHandle);
+
+            for (uint16_t i = 0; i < samplerInfo.count; ++i)
+            {
+                auto& imageInfo   = imageInfos.emplace_back();
+                imageInfo.sampler = sampler;
+            }
+
+            if (imageInfos.size() == offset)
+                continue;
+
+            // Preset samplers in set 1, custom samplers in set 2.
+            // Both have DXC-shifted bindings from SPIR-V.
+            auto dstSet = samplerInfo.presetIndex >= 0 ? descriptorSets[SET_INDEX_RESOURCE]
+                                                       : descriptorSets[SET_INDEX_CUSTOM_SAMPLER];
+
+            VkWriteDescriptorSet& write = writes.emplace_back();
+            write.sType                 = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+            write.dstSet                = dstSet;
+            write.dstBinding            = samplerInfo.binding;
+            write.descriptorType        = VK_DESCRIPTOR_TYPE_SAMPLER;
+            write.descriptorCount       = static_cast<uint32_t>(imageInfos.size() - offset);
+            write.pImageInfo            = imageInfos.data() + offset;
+        }
     }
 
     // Commit descriptor writes

@@ -24,7 +24,7 @@
 #include "axmol/rhi/vulkan/TextureVK.h"
 #include "axmol/rhi/vulkan/UtilsVK.h"
 #include "axmol/rhi/vulkan/DriverVK.h"
-#include "axmol/rhi/SamplerCache.h"
+#include "axmol/rhi/SamplerRegistry.h"
 #include "axmol/rhi/RHIUtils.h"
 #include "axmol/base/Logging.h"
 #include <assert.h>
@@ -242,7 +242,7 @@ TextureImpl::~TextureImpl()
 {
     if (_ownResources)
     {
-        _sampler = VK_NULL_HANDLE;  // SamplerCache handles sampler destruction
+        _sampler = VK_NULL_HANDLE;  // SamplerRegistry handles sampler destruction
         _nativeTexture.destroy(_driver, _lastFenceValue);
     }
     else if (_ownImageView && _nativeTexture.view != VK_NULL_HANDLE)
@@ -291,7 +291,7 @@ void TextureImpl::updateSamplerDesc(const SamplerDesc& sampler)
 {
     _desc.samplerDesc = sampler;
 
-    _sampler = static_cast<VkSampler>(SamplerCache::getInstance()->getSampler(sampler));
+    _sampler = static_cast<VkSampler>(SamplerRegistry::getInstance()->getSampler(sampler));
     assert(_sampler && "Gets vkCreateSampler failed");
 }
 

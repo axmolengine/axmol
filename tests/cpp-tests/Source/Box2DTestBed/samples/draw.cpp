@@ -310,7 +310,7 @@ bool SampleDrawNode::initWithWorld(b2WorldId worldId)
         auto pipelinePS = new rhi::ProgramState(program);
         auto vfmt       = axvlm->allocateVertexLayoutDesc();
         vfmt.startLayout(3);
-        vfmt.addAttrib("a_localPosition", program->getVertexInputDesc("a_localPosition"), rhi::VertexElementType::FLOAT2, 0,
+        vfmt.addAttrib(program->getVertexInputDesc(rhi::VertexSemantic::POSITION), rhi::VertexElementType::FLOAT2, 0,
                        false);
         cmd.createVertexBuffer(sizeof(Vec2), 6, CustomCommand::BufferUsage::STATIC);
         float a           = 1.1f;
@@ -319,9 +319,9 @@ bool SampleDrawNode::initWithWorld(b2WorldId worldId)
         cmd.setVertexDrawInfo(0, 6);
 
         // instanced attributes
-        vfmt.addAttrib("a_instanceColor", program->getVertexInputDesc("a_instanceColor"), rhi::VertexElementType::FLOAT4,
+        vfmt.addAttrib(program->getVertexInputDesc(rhi::VertexSemantic::TEXCOORD0), rhi::VertexElementType::FLOAT4,
                        offsetof(CircleData, rgba), false, 1);
-        vfmt.addAttrib("a_instancePosAndRadius", program->getVertexInputDesc("a_instancePosAndRadius"),
+        vfmt.addAttrib(program->getVertexInputDesc(rhi::VertexSemantic::TEXCOORD1),
                        rhi::VertexElementType::FLOAT4, offsetof(CircleData, position), false, 1);
         vfmt.endLayout();
 
@@ -342,7 +342,7 @@ bool SampleDrawNode::initWithWorld(b2WorldId worldId)
         auto pipelinePS = new rhi::ProgramState(program);
         auto vfmt       = axvlm->allocateVertexLayoutDesc();
         vfmt.startLayout(4);
-        vfmt.addAttrib("a_localPosition", program->getVertexInputDesc("a_localPosition"), rhi::VertexElementType::FLOAT2, 0,
+        vfmt.addAttrib(program->getVertexInputDesc(rhi::VertexSemantic::POSITION), rhi::VertexElementType::FLOAT2, 0,
                        false);
 
         cmd.createVertexBuffer(sizeof(Vec2), 6, CustomCommand::BufferUsage::STATIC);
@@ -352,11 +352,11 @@ bool SampleDrawNode::initWithWorld(b2WorldId worldId)
         cmd.setVertexDrawInfo(0, 6);
 
         // instanced attributes
-        vfmt.addAttrib("a_instanceTransform", program->getVertexInputDesc("a_instanceTransform"),
+        vfmt.addAttrib(program->getVertexInputDesc(rhi::VertexSemantic::TEXCOORD2),
                        rhi::VertexElementType::FLOAT4, offsetof(SolidCircleData, transform), false, 1);
-        vfmt.addAttrib("a_instanceColor", program->getVertexInputDesc("a_instanceColor"), rhi::VertexElementType::FLOAT4,
+        vfmt.addAttrib(program->getVertexInputDesc(rhi::VertexSemantic::TEXCOORD0), rhi::VertexElementType::FLOAT4,
                        offsetof(SolidCircleData, rgba), false, 1);
-        vfmt.addAttrib("a_instanceRadius", program->getVertexInputDesc("a_instanceRadius"), rhi::VertexElementType::FLOAT4,
+        vfmt.addAttrib(program->getVertexInputDesc(rhi::VertexSemantic::TEXCOORD1), rhi::VertexElementType::FLOAT4,
                        offsetof(SolidCircleData, radius), false, 1);
         vfmt.endLayout();
 
@@ -376,7 +376,7 @@ bool SampleDrawNode::initWithWorld(b2WorldId worldId)
         auto pipelinePS = new rhi::ProgramState(program);
         auto vfmt       = axvlm->allocateVertexLayoutDesc();
         vfmt.startLayout(4);
-        vfmt.addAttrib("a_localPosition", program->getVertexInputDesc("a_localPosition"), rhi::VertexElementType::FLOAT2, 0,
+        vfmt.addAttrib(program->getVertexInputDesc(rhi::VertexSemantic::POSITION), rhi::VertexElementType::FLOAT2, 0,
                        false);
 
         cmd.createVertexBuffer(sizeof(Vec2), 6, CustomCommand::BufferUsage::STATIC);
@@ -386,12 +386,12 @@ bool SampleDrawNode::initWithWorld(b2WorldId worldId)
         cmd.setVertexDrawInfo(0, 6);
 
         // instanced attributes
-        vfmt.addAttrib("a_instanceTransform", program->getVertexInputDesc("a_instanceTransform"),
+        vfmt.addAttrib(program->getVertexInputDesc(rhi::VertexSemantic::TEXCOORD2),
                        rhi::VertexElementType::FLOAT4, offsetof(CapsuleData, transform), false, 1);
-        vfmt.addAttrib("a_instanceColor", program->getVertexInputDesc("a_instanceColor"), rhi::VertexElementType::FLOAT4,
+        vfmt.addAttrib(program->getVertexInputDesc(rhi::VertexSemantic::TEXCOORD0), rhi::VertexElementType::FLOAT4,
                        offsetof(CapsuleData, rgba), false, 1);
-        vfmt.addAttrib("a_instanceRadiusAndLength", program->getVertexInputDesc("a_instanceRadiusAndLength"),
-                       rhi::VertexElementType::FLOAT4, offsetof(CapsuleData, radius), false, 1);
+        vfmt.addAttrib(program->getVertexInputDesc(rhi::VertexSemantic::TEXCOORD1), rhi::VertexElementType::FLOAT4,
+                       offsetof(CapsuleData, radius), false, 1);
         vfmt.endLayout();
 
         auto pipelineVL = axvlm->getVertexLayout(std::move(vfmt));

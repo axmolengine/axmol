@@ -198,6 +198,8 @@ public:
 
     static int currentShaderLang();
     static int currentShaderProfile();
+    static int currentShaderILProfile();
+    static void setCurrentShaderILProfile(int profile);
 
 private:
     struct State;

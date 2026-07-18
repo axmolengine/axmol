@@ -34,6 +34,7 @@
 #include "axmol/rhi/opengl/RenderTargetGL.h"
 #include "axmol/rhi/opengl/DriverGL.h"
 #include "axmol/rhi/opengl/VertexLayoutGL.h"
+#include "axmol/rhi/SamplerRegistry.h"
 
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/EventType.h"
@@ -393,6 +394,27 @@ void RenderContextImpl::bindUniforms(ProgramImpl* program) const
             }
 
             CHECK_GL_ERROR_DEBUG();
+        }
+
+        // Bind sampler objects selected by axslcc for GL/GLES combined texture uniforms.
+        // These override the default texture sampler bound by TextureImpl::apply().
+        if (!program->getActiveSamplerInfos().empty())
+        {
+            auto samplerReg = SamplerRegistry::getInstance();
+            for (const auto& [bindingIndex, bindingSet] : _programState->getTextureBindingSets())
+            {
+                auto samplerId = program->getTextureSampler(bindingIndex);
+                if (!samplerId)
+                    continue;
+
+                auto samplerHandle = samplerReg->getSampler(samplerId);
+                if (!samplerHandle)
+                    continue;
+
+                auto glSampler = static_cast<GLuint>(samplerHandle);
+                for (int slot : bindingSet.slots)
+                    __state->bindSampler(slot, glSampler);
+            }
         }
     }
 }

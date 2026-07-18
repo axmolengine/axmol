@@ -66,6 +66,11 @@ void ProgramImpl::reloadProgram()
 }
 #endif
 
+bool ProgramImpl::isValid() const
+{
+    return _program != 0;
+}
+
 void ProgramImpl::compileProgram()
 {
     if (_vsModule == nullptr || _fsModule == nullptr)
@@ -94,16 +99,21 @@ void ProgramImpl::compileProgram()
     {
         GLint errorInfoLen = 0;
         glGetProgramiv(_program, GL_INFO_LOG_LENGTH, &errorInfoLen);
+
+        std::string_view vsSource = _vsModule->getCode();
+        std::string_view fsSource = _fsModule->getCode();
         if (errorInfoLen > 1)
         {
             auto errorInfo = tlx::make_unique_for_overwrite<char[]>(static_cast<size_t>(errorInfoLen));
             glGetProgramInfoLog(_program, errorInfoLen, NULL, errorInfo.get());
-            AXLOGE("axmol:ERROR: {}: failed to link program: {} ", __FUNCTION__, errorInfo.get());
+            AXLOGE("axmol:ERROR: {}: failed to link program: {} \n--- vsSource ---\n{}\n --- fsSource ---\n{}",
+                   __FUNCTION__, errorInfo.get(), vsSource, fsSource);
         }
         else
-            AXLOGE("axmol:ERROR: {}: failed to link program ", __FUNCTION__);
+            AXLOGE("axmol:ERROR: {}: failed to link program", __FUNCTION__);
         glDeleteProgram(_program);
         _program = 0;
+        return;
     }
 
     /// building runtime reflections and ubos
@@ -122,7 +132,14 @@ void ProgramImpl::compileProgram()
     for (auto& uboInfo : _activeUniformBlockInfos)
     {
         const auto blockIndex = glGetUniformBlockIndex(_program, uboInfo.name.data());
-        glUniformBlockBinding(_program, blockIndex, uboInfo.binding);
+        uboInfo.runtimeIndex  = blockIndex == GL_INVALID_INDEX ? -1 : static_cast<int>(blockIndex);
+        if (blockIndex != GL_INVALID_INDEX)
+        {
+            glUniformBlockBinding(_program, blockIndex, uboInfo.binding);
+            CHECK_GL_ERROR_DEBUG();
+        }
+        else
+            AXLOGE("OpenGL uniform block '{}' was not found in linked program", uboInfo.name);
         _uniformBuffers.push_back(driver->createBuffer(uboInfo.sizeBytes, BufferType::UNIFORM, BufferUsage::DYNAMIC));
     }
 #else
@@ -136,7 +153,16 @@ void ProgramImpl::compileProgram()
         for (auto& uboInfo : _activeUniformBlockInfos)
         {
             const auto blockIndex = glGetUniformBlockIndex(_program, uboInfo.name.data());
+            uboInfo.runtimeIndex  = blockIndex == GL_INVALID_INDEX ? -1 : static_cast<int>(blockIndex);
+            if (blockIndex == GL_INVALID_INDEX)
+            {
+                AXLOGE("OpenGL uniform block '{}' was not found in linked program", uboInfo.name);
+                _uniformBuffers.push_back(
+                    driver->createBuffer(uboInfo.sizeBytes, BufferType::UNIFORM, BufferUsage::DYNAMIC));
+                continue;
+            }
             glUniformBlockBinding(_program, blockIndex, uboInfo.binding);
+            CHECK_GL_ERROR_DEBUG();
 
             GLint blockSize{0};
             glGetActiveUniformBlockiv(_program, blockIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &blockSize);

@@ -3,6 +3,7 @@ Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2012 		cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmol.dev/
 
@@ -40,71 +41,71 @@ THE SOFTWARE.
 namespace ax
 {
 
-extern AX_DLL const std::string_view positionColor_vert;
-extern AX_DLL const std::string_view positionColor_frag;
-extern AX_DLL const std::string_view positionTexture_vert;
-extern AX_DLL const std::string_view positionTexture_frag;
-extern AX_DLL const std::string_view positionTextureColor_vert;
-extern AX_DLL const std::string_view positionTextureColor_frag;
-extern AX_DLL const std::string_view positionTextureColorAlphaTest_frag;
-extern AX_DLL const std::string_view positionTextureGray_frag;
-extern AX_DLL const std::string_view positionTextureGrayAlpha_frag;
-extern AX_DLL const std::string_view label_normal_frag;
-extern AX_DLL const std::string_view label_outline_frag;
-extern AX_DLL const std::string_view label_distanceNormal_frag;
-extern AX_DLL const std::string_view label_distanceOutline_frag;
-extern AX_DLL const std::string_view label_distanceGlow_frag;
-extern AX_DLL const std::string_view positionColorLengthTexture_vert;
-extern AX_DLL const std::string_view positionColorLengthTexture_frag;
-extern AX_DLL const std::string_view positionColorTextureAsPointsize_vert;
-extern AX_DLL const std::string_view position_vert;
-extern AX_DLL const std::string_view layer_radialGradient_frag;
-extern AX_DLL const std::string_view grayScale_frag;
-extern AX_DLL const std::string_view positionUColor_vert;
-extern AX_DLL const std::string_view dualSampler_frag;
-extern AX_DLL const std::string_view dualSampler_gray_frag;
-extern AX_DLL const std::string_view cameraClear_vert;
-extern AX_DLL const std::string_view cameraClear_frag;
+extern AX_DLL const std::string_view positionColor_vs;
+extern AX_DLL const std::string_view positionColor_fs;
+extern AX_DLL const std::string_view positionTexture_vs;
+extern AX_DLL const std::string_view positionTexture_fs;
+extern AX_DLL const std::string_view positionTextureColor_vs;
+extern AX_DLL const std::string_view positionTextureColor_fs;
+extern AX_DLL const std::string_view positionTextureColorAlphaTest_fs;
+extern AX_DLL const std::string_view positionTextureGray_fs;
+extern AX_DLL const std::string_view positionTextureGrayAlpha_fs;
+extern AX_DLL const std::string_view label_normal_fs;
+extern AX_DLL const std::string_view label_outline_fs;
+extern AX_DLL const std::string_view label_distanceNormal_fs;
+extern AX_DLL const std::string_view label_distanceOutline_fs;
+extern AX_DLL const std::string_view label_distanceGlow_fs;
+extern AX_DLL const std::string_view positionColorLengthTexture_vs;
+extern AX_DLL const std::string_view positionColorLengthTexture_fs;
+extern AX_DLL const std::string_view positionColorTextureAsPointsize_vs;
+extern AX_DLL const std::string_view position_vs;
+extern AX_DLL const std::string_view layer_radialGradient_vs;
+extern AX_DLL const std::string_view layer_radialGradient_fs;
+extern AX_DLL const std::string_view grayScale_fs;
+extern AX_DLL const std::string_view positionUColor_vs;
+extern AX_DLL const std::string_view dualSampler_fs;
+extern AX_DLL const std::string_view dualSampler_gray_fs;
+extern AX_DLL const std::string_view cameraClear_vs;
+extern AX_DLL const std::string_view cameraClear_fs;
 
-extern AX_DLL const std::string_view quadTexture_frag;
-extern AX_DLL const std::string_view quadTexture_vert;
-extern AX_DLL const std::string_view quadColor_frag;
-extern AX_DLL const std::string_view quadColor_vert;
+extern AX_DLL const std::string_view quadTexture_fs;
+extern AX_DLL const std::string_view quadTexture_vs;
+extern AX_DLL const std::string_view quadColor_fs;
+extern AX_DLL const std::string_view quadColor_vs;
 
-extern AX_DLL const std::string_view hsv_frag;
-extern AX_DLL const std::string_view dualSampler_hsv_frag;
+extern AX_DLL const std::string_view hsv_fs;
+extern AX_DLL const std::string_view dualSampler_hsv_fs;
 
-extern AX_DLL const std::string_view videoTextureYUY2_frag;
-extern AX_DLL const std::string_view videoTextureNV12_frag;
-extern AX_DLL const std::string_view videoTextureI420_frag;
+extern AX_DLL const std::string_view videoTextureYUY2_fs;
+extern AX_DLL const std::string_view videoTextureNV12_fs;
+extern AX_DLL const std::string_view videoTextureI420_fs;
 
-extern AX_DLL const std::string_view posUVColor2D_vert;
+extern AX_DLL const std::string_view posUVColor2D_vs;
 
 /* below is 3d shaders */
-extern AX_DLL const std::string_view lineColor_frag;
-extern AX_DLL const std::string_view lineColor_vert;
-extern AX_DLL const std::string_view color_frag;
-extern AX_DLL const std::string_view colorNormal_frag;
-extern AX_DLL const std::string_view colorNormalTexture_frag;
-extern AX_DLL const std::string_view colorTexture_frag;
-extern AX_DLL const std::string_view colorTextureInstance_frag;
-extern AX_DLL const std::string_view particleTexture_frag;
-extern AX_DLL const std::string_view particleColor_frag;
-extern AX_DLL const std::string_view particle_vert;
-extern AX_DLL const std::string_view positionNormalTexture_vert;
-extern AX_DLL const std::string_view skinPositionNormalTexture_vert;
-extern AX_DLL const std::string_view unlit_vert;
-extern AX_DLL const std::string_view unlit_instance_vert;
-extern AX_DLL const std::string_view skinPositionTexture_vert;
-extern AX_DLL const std::string_view skybox_frag;
-extern AX_DLL const std::string_view skybox_vert;
-extern AX_DLL const std::string_view terrain_frag;
-extern AX_DLL const std::string_view terrain_vert;
+extern AX_DLL const std::string_view lineColor_fs;
+extern AX_DLL const std::string_view lineColor_vs;
+extern AX_DLL const std::string_view color_fs;
+extern AX_DLL const std::string_view colorNormal_fs;
+extern AX_DLL const std::string_view colorNormalTexture_fs;
+extern AX_DLL const std::string_view colorTexture_fs;
+extern AX_DLL const std::string_view particleTexture_fs;
+extern AX_DLL const std::string_view particleColor_fs;
+extern AX_DLL const std::string_view particle_vs;
+extern AX_DLL const std::string_view positionNormalTexture_vs;
+extern AX_DLL const std::string_view skinPositionNormalTexture_vs;
+extern AX_DLL const std::string_view unlit_vs;
+extern AX_DLL const std::string_view unlit_instance_vs;
+extern AX_DLL const std::string_view skinPositionTexture_vs;
+extern AX_DLL const std::string_view skybox_fs;
+extern AX_DLL const std::string_view skybox_vs;
+extern AX_DLL const std::string_view terrain_fs;
+extern AX_DLL const std::string_view terrain_vs;
 
 /* blow is with normal map */
-extern AX_DLL const std::string_view colorNormalTexture_frag_1;
-extern AX_DLL const std::string_view positionNormalTexture_vert_1;
-extern AX_DLL const std::string_view skinPositionNormalTexture_vert_1;
+extern AX_DLL const std::string_view colorNormalTexture_fs_1;
+extern AX_DLL const std::string_view positionNormalTexture_vs_1;
+extern AX_DLL const std::string_view skinPositionNormalTexture_vs_1;
 
 }  // namespace ax
 /**

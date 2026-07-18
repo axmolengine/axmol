@@ -61,7 +61,9 @@ void ShaderModuleImpl::compileShader()
 
     GLint status = 0;
     glGetShaderiv(_shader, GL_COMPILE_STATUS, &status);
-    if (!status)
+
+    _compiled = !!status;
+    if (!_compiled)
     {
         GLint logLength = 0;
         glGetShaderiv(_shader, GL_INFO_LOG_LENGTH, &logLength);
@@ -79,7 +81,6 @@ void ShaderModuleImpl::compileShader()
         }
 
         deleteShader();
-        AXASSERT(false, "Shader compile failed!");
     }
 }
 
