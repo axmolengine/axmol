@@ -1172,8 +1172,8 @@ void RenderContextImpl::prepareDrawing()
 
             // Preset samplers in set 1, custom samplers in set 2.
             // Both have DXC-shifted bindings from SPIR-V.
-            auto dstSet =
-                samplerInfo.presetIndex >= 0 ? descriptorSets[SET_INDEX_RESOURCE] : descriptorSets[SET_INDEX_RESERVED];
+            auto dstSet = samplerInfo.presetIndex >= 0 ? descriptorSets[SET_INDEX_RESOURCE]
+                                                       : descriptorSets[SET_INDEX_CUSTOM_SAMPLER];
 
             VkWriteDescriptorSet& write = writes.emplace_back();
             write.sType                 = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;

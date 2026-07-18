@@ -698,7 +698,7 @@ void RenderContextImpl::prepareDrawing()
         if (!samplerInfo.samplerId || samplerInfo.count == 0)
             continue;
 
-        if (compactSlot >= 16)
+        if (compactSlot + samplerInfo.count > 16)
         {
             AXLOGE("D3D11 shader exceeds 16 sampler slot limit");
             break;

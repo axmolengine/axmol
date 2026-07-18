@@ -62,6 +62,7 @@ ShaderTests::ShaderTests()
     ADD_TEST_CASE(ShaderGlow);
     ADD_TEST_CASE(ShaderMultiTexture);
     ADD_TEST_CASE(ShaderCustomSampler);
+    ADD_TEST_CASE(ShaderMultiCustomSampler);
 }
 
 ///---------------------------------------
@@ -861,6 +862,81 @@ bool ShaderCustomSampler::init()
         {
             rightLabel->setPosition(Vec2(s.width * 3 / 4, s.height / 2 + 120));
             addChild(rightLabel);
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
+//
+// ShaderMultiCustomSampler
+//
+ShaderMultiCustomSampler::ShaderMultiCustomSampler() {}
+
+std::string ShaderMultiCustomSampler::title() const
+{
+    return "Multi Custom Sampler Test";
+}
+
+std::string ShaderMultiCustomSampler::subtitle() const
+{
+    return "Left: custom Clamp | Right: custom Wrap on separate texture bindings";
+}
+
+bool ShaderMultiCustomSampler::init()
+{
+    if (ShaderTestDemo::init())
+    {
+        auto s = Director::getInstance()->getCanvasSize();
+
+        rhi::SamplerDesc clampDesc;
+        clampDesc.minFilter    = rhi::SamplerFilter::MIN_LINEAR;
+        clampDesc.magFilter    = rhi::SamplerFilter::MAG_LINEAR;
+        clampDesc.mipFilter    = rhi::SamplerFilter::MIP_DEFAULT;
+        clampDesc.sAddressMode = rhi::SamplerAddressMode::CLAMP_TO_EDGE;
+        clampDesc.tAddressMode = rhi::SamplerAddressMode::CLAMP_TO_EDGE;
+
+        rhi::SamplerDesc wrapDesc;
+        wrapDesc.minFilter    = rhi::SamplerFilter::MIN_LINEAR;
+        wrapDesc.magFilter    = rhi::SamplerFilter::MAG_LINEAR;
+        wrapDesc.mipFilter    = rhi::SamplerFilter::MIP_DEFAULT;
+        wrapDesc.sAddressMode = rhi::SamplerAddressMode::REPEAT;
+        wrapDesc.tAddressMode = rhi::SamplerAddressMode::REPEAT;
+
+        auto samplerReg = rhi::SamplerRegistry::getInstance();
+        samplerReg->registerSampler("myClampSampler", clampDesc);
+        samplerReg->registerSampler("myWrapSampler", wrapDesc);
+
+        auto tex0 = Director::getInstance()->getTextureCache()->addImage("Images/grossini.png");
+        auto tex1 = Director::getInstance()->getTextureCache()->addImage("Images/grossinis_sister1.png");
+        if (!tex0 || !tex1)
+            return false;
+
+        auto sprite = Sprite::createWithTexture(tex0);
+        if (sprite)
+        {
+            auto program = ProgramManager::getInstance()->loadProgram(
+                positionTexture_vs, "custom/test_MultiCustomSampler_fs", VertexLayoutKind::Sprite);
+            auto programState = new rhi::ProgramState(program);
+
+            SET_TEXTURE(programState, "u_tex0", 0, tex0->getRHITexture());
+            SET_TEXTURE(programState, "u_tex1", 1, tex1->getRHITexture());
+
+            sprite->setProgramState(programState);
+            AX_SAFE_RELEASE(programState);
+
+            sprite->setScale(3.0f);
+            sprite->setPosition(Vec2(s.width / 2, s.height / 2));
+            addChild(sprite);
+        }
+
+        auto label = Label::createWithTTF("Two custom samplers\n(left clamp, right repeat)", "fonts/arial.ttf", 12.0f);
+        if (label)
+        {
+            label->setPosition(Vec2(s.width / 2, s.height / 2 + 160));
+            addChild(label);
         }
 
         return true;

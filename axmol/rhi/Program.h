@@ -36,6 +36,7 @@
 #include "axmol/tlx/vector.hpp"
 
 #include <functional>
+#include <unordered_map>
 #include <vector>
 
 namespace ax
@@ -175,6 +176,7 @@ public:
     const std::vector<TextureUniformEntry>& getActiveTextureInfos() const { return _activeTextureInfos; };
     const std::vector<SamplerBindingInfo>& getActiveSamplerInfos() const { return _activeSamplerInfos; }
     const std::vector<ProgramSamplerBinding>& getSamplerBindings() const { return _samplerBindings; }
+    [[internal]] SamplerId getTextureSampler(int textureBinding) const;
 
     /**
      * Get engine built-in program type.
@@ -243,6 +245,8 @@ protected:
     std::vector<TextureUniformEntry> _activeTextureInfos;
     std::vector<SamplerBindingInfo> _activeSamplerInfos;
     std::vector<ProgramSamplerBinding> _samplerBindings;
+    // GL/GLES need this reflection mapping to bind sampler objects per combined texture uniform.
+    std::unordered_map<int, SamplerId> _textureSamplerIds;
     bool _samplersResolved{true};
 
     // Populated once from ShaderModule reflection at program creation.

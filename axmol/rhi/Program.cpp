@@ -32,6 +32,7 @@
 #include "axmol/tlx/utility.hpp"
 #include "yasio/ibstream.hpp"
 
+#include <algorithm>
 #include <limits>
 
 namespace ax::rhi
@@ -355,6 +356,7 @@ void Program::reflectSamplers(SLCReflectContext* context)
     if (samplerCount <= 0)
         return;
     auto ibs = context->ibs;
+    std::vector<std::pair<int, uint16_t>> textureSamplerRefs;
     _activeTextureInfos.reserve(samplerCount);
     for (int i = 0; i < samplerCount; ++i)
     {
@@ -368,7 +370,9 @@ void Program::reflectSamplers(SLCReflectContext* context)
         uniform.varType     = SC_TYPE_HALF + imageDim;
         ibs->advance(static_cast<ptrdiff_t>(sizeof(uint8_t)));  // skip bits: multisample, arrayed, reserved
         uniform.count = (std::max)(1, static_cast<int>(ibs->read<uint16_t>()));
-        ibs->advance(static_cast<ptrdiff_t>(sizeof(uint16_t)));  // reserved
+        auto samplerRef = ibs->read<uint16_t>();
+        if (samplerRef != axslc::kInvalidTextureSamplerRef)
+            textureSamplerRefs.emplace_back(uniform.location, samplerRef);
 
         const auto reflectedId = makeTextureNameKey(name);
         auto ret               = _activeUniformInfos.emplace(reflectedId, uniform);
@@ -427,6 +431,35 @@ void Program::reflectSamplers(SLCReflectContext* context)
 
         _activeSamplerInfos.emplace_back(sampler);
     }
+
+    for (auto [textureBinding, samplerRef] : textureSamplerRefs)
+    {
+        const bool customSampler = (samplerRef & axslc::kTextureSamplerRefCustomBit) != 0;
+        const auto samplerBinding = static_cast<int>(samplerRef & axslc::kTextureSamplerRefBindingMask);
+        const uint16_t samplerSpace =
+            customSampler ? axslc::kCustomSamplerDescriptorSet : axslc::kPresetSamplerDescriptorSet;
+
+        auto samplerIt = std::find_if(_activeSamplerInfos.begin(), _activeSamplerInfos.end(),
+                                      [samplerSpace, samplerBinding](const SamplerBindingInfo& sampler) {
+            return sampler.space == samplerSpace && sampler.binding == samplerBinding;
+        });
+
+        if (samplerIt == _activeSamplerInfos.end() || !samplerIt->samplerId)
+        {
+            AXLOGE("Texture binding {} references unresolved sampler space={}, binding={}", textureBinding,
+                   samplerSpace, samplerBinding);
+            _samplersResolved = false;
+            continue;
+        }
+
+        _textureSamplerIds[textureBinding] = samplerIt->samplerId;
+    }
+}
+
+SamplerId Program::getTextureSampler(int textureBinding) const
+{
+    auto it = _textureSamplerIds.find(textureBinding);
+    return it != _textureSamplerIds.end() ? it->second : SamplerId{};
 }
 
 void Program::resolveBuiltinUniforms()

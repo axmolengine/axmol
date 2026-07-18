@@ -231,3 +231,14 @@ public:
     virtual std::string subtitle() const override;
     virtual bool init() override;
 };
+
+class ShaderMultiCustomSampler : public ShaderTestDemo
+{
+public:
+    CREATE_FUNC(ShaderMultiCustomSampler);
+    ShaderMultiCustomSampler();
+
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+    virtual bool init() override;
+};

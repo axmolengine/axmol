@@ -396,18 +396,14 @@ void RenderContextImpl::bindUniforms(ProgramImpl* program) const
             CHECK_GL_ERROR_DEBUG();
         }
 
-        // Bind custom sampler objects for program-local samplers (space2).
+        // Bind sampler objects selected by axslcc for GL/GLES combined texture uniforms.
         // These override the default texture sampler bound by TextureImpl::apply().
-        const auto& samplerInfos = program->getActiveSamplerInfos();
-        if (!samplerInfos.empty())
+        if (!program->getActiveSamplerInfos().empty())
         {
             auto samplerReg = SamplerRegistry::getInstance();
-            for (const auto& samplerInfo : samplerInfos)
+            for (const auto& [bindingIndex, bindingSet] : _programState->getTextureBindingSets())
             {
-                if (samplerInfo.presetIndex >= 0)
-                    continue;
-
-                auto samplerId = samplerInfo.samplerId;
+                auto samplerId = program->getTextureSampler(bindingIndex);
                 if (!samplerId)
                     continue;
 
@@ -416,12 +412,8 @@ void RenderContextImpl::bindUniforms(ProgramImpl* program) const
                     continue;
 
                 auto glSampler = static_cast<GLuint>(samplerHandle);
-
-                for (const auto& [_, bindingSet] : _programState->getTextureBindingSets())
-                {
-                    for (int slot : bindingSet.slots)
-                        __state->bindSampler(slot, glSampler);
-                }
+                for (int slot : bindingSet.slots)
+                    __state->bindSampler(slot, glSampler);
             }
         }
     }

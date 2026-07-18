@@ -357,6 +357,8 @@ RenderPipelineImpl::~RenderPipelineImpl()
             vkDestroyDescriptorSetLayout(_device, descSetLayouts[SET_INDEX_UBO], nullptr);
         if (descSetLayouts[SET_INDEX_RESOURCE])
             vkDestroyDescriptorSetLayout(_device, descSetLayouts[SET_INDEX_RESOURCE], nullptr);
+        if (descSetLayouts[SET_INDEX_CUSTOM_SAMPLER])
+            vkDestroyDescriptorSetLayout(_device, descSetLayouts[SET_INDEX_CUSTOM_SAMPLER], nullptr);
     }
     _pipelineLayoutCache.clear();
 
@@ -552,7 +554,7 @@ void RenderPipelineImpl::updatePipelineLayoutState(ProgramImpl* program)
             dslCustom.bindingCount = static_cast<uint32_t>(customSamplerBindings.size());
             dslCustom.pBindings    = customSamplerBindings.data();
             auto vr                = vkCreateDescriptorSetLayout(_device, &dslCustom, nullptr,
-                                                                 &state.descriptorSetLayouts[SET_INDEX_RESERVED]);
+                                                                 &state.descriptorSetLayouts[SET_INDEX_CUSTOM_SAMPLER]);
             VK_REQUIRE(vr, "vkCreateDescriptorSetLayout for custom samplers (set 2) failed");
         }
     }
@@ -783,6 +785,8 @@ void RenderPipelineImpl::removeCachedObjects(Program* key)
             vkDestroyDescriptorSetLayout(_device, descSetLayouts[SET_INDEX_UBO], nullptr);
         if (descSetLayouts[SET_INDEX_RESOURCE])
             vkDestroyDescriptorSetLayout(_device, descSetLayouts[SET_INDEX_RESOURCE], nullptr);
+        if (descSetLayouts[SET_INDEX_CUSTOM_SAMPLER])
+            vkDestroyDescriptorSetLayout(_device, descSetLayouts[SET_INDEX_CUSTOM_SAMPLER], nullptr);
         _pipelineLayoutCache.erase(layoutIt);
     }
 
