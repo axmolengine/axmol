@@ -55,6 +55,6 @@ target_include_directories(${target_name}
   INTERFACE src/ImGui/implot
 )
 
-ax_add_shader_target_for(${target_name} PATH "${CMAKE_CURRENT_LIST_DIR}/shaders")
+ax_add_shader_target_for(${target_name} PATH "${CMAKE_CURRENT_LIST_DIR}/Shaders")
 
 setup_ax_extension_config(${target_name})

@@ -76,13 +76,20 @@ public:
     // Allocate a single slot; returns a persistent handle
     DescriptorHandle* allocate();
 
+    // Allocate N consecutive slots; returns handle to the first slot
+    // Returns nullptr if no contiguous range of N slots is available.
+    DescriptorHandle* allocateBatch(uint32_t count);
+
+    // Deallocate a batch of count consecutive slots starting at h.
+    void deallocateBatch(DescriptorHandle* h, uint32_t count);
+
     // Deallocate immediately (caller ensures GPU no longer uses it)
     void deallocate(DescriptorHandle* h);
 
     ID3D12DescriptorHeap* getDescriptorHeap(const DescriptorHandle* handle) const;
     ID3D12DescriptorHeap* getDescriptorHeapByIndex(size_t index) const { return _blocks[index].heap.Get(); }
 
-    void setAllowGrow(bool bval) { _allowGrow; }
+    void setAllowGrow(bool bval) { _allowGrow = bval; }
 
     // Recreate a new larger block (auto-called when full)
     void grow();

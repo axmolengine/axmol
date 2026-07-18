@@ -30,7 +30,7 @@
 
 #include "axmol/3d/Bundle3DData.h"
 #include "axmol/math/AABB.h"
-#include "axmol/3d/shaderinfos.h"
+#include "axmol/3d/MeshVertexAttribute.h"
 
 #include "axmol/base/Object.h"
 #include "axmol/math/Math.h"
@@ -98,7 +98,7 @@ public:
      *
      * @lua NA
      */
-    bool hasVertexAttrib(shaderinfos::VertexKey attrib) const;
+    bool hasVertexAttrib(MeshVertexAttribute attrib) const;
     /**get mesh vertex attribute count*/
     ssize_t getMeshVertexAttribCount() const;
     /**get MeshVertexAttribute by index*/

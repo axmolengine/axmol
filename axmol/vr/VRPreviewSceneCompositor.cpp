@@ -359,10 +359,11 @@ void VRPreviewSceneCompositor::setupDistortionProgram()
 
     desc.startLayout(3);
 
-    desc.addAttrib("a_position", program->getVertexInputDesc("a_position"), rhi::VertexElementType::FLOAT2, 0, false);
-    desc.addAttrib("a_texCoord", program->getVertexInputDesc("a_texCoord"), rhi::VertexElementType::FLOAT2,
+    desc.addAttrib(program->getVertexInputDesc(rhi::VertexSemantic::POSITION), rhi::VertexElementType::FLOAT2, 0,
+                   false);
+    desc.addAttrib(program->getVertexInputDesc(rhi::VertexSemantic::TEXCOORD0), rhi::VertexElementType::FLOAT2,
                    sizeof(Vec2), false);
-    desc.addAttrib("a_vignette", program->getVertexInputDesc("a_vignette"), rhi::VertexElementType::FLOAT,
+    desc.addAttrib(program->getVertexInputDesc(rhi::VertexSemantic::TEXCOORD1), rhi::VertexElementType::FLOAT,
                    sizeof(Vec2) + sizeof(Vec2), false);
 
     desc.endLayout();

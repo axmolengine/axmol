@@ -31,13 +31,18 @@ namespace ax::rhi::d3d12
 {
 ShaderModuleImpl::ShaderModuleImpl(DriverImpl* driver, ShaderStage stage, Data& chunk) : ShaderModule(stage, chunk)
 {
-    driver->compileShader(_codeSpan, stage, _nativeHandle);
+    if (_precompiled)
+    {
+        _blob     = _codeSpan;
+        _compiled = true;
+    }
+    else
+    {
+        _nativeBlob = driver->compileShader(_codeSpan, stage, _blob);
+        _compiled   = _nativeBlob != nullptr;
+    }
 }
 
-ShaderModuleImpl::~ShaderModuleImpl()
-{
-    _nativeHandle.blob.Reset();
-    _nativeHandle.view = {};
-}
+ShaderModuleImpl::~ShaderModuleImpl() {}
 
 }  // namespace ax::rhi::d3d12

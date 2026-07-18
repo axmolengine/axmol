@@ -169,7 +169,7 @@ else()
     add_library(${APP_NAME} SHARED ${APP_SOURCES})
 
     # lua-tests just use cpp-tests shaders
-    ax_add_shader_target_for(${APP_NAME} PATH "${_AX_ROOT}/tests/cpp-tests/Source/shaders")
+    ax_add_shader_target_for(${APP_NAME} PATH "${_AX_ROOT}/tests/cpp-tests/Source/Shaders")
 
     # whole archive for jni
     target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)

@@ -550,7 +550,7 @@ IMGUI_IMPL_API bool ImGui_ImplAxmol_CreateDeviceObjects()
 
     auto pm = ProgramManager::getInstance();
 
-    bd->ProgramInfo.program = pm->loadProgram("custom/imgui_sprite_vs"sv, ax::positionTextureColor_frag);
+    bd->ProgramInfo.program = pm->loadProgram("custom/imgui_sprite_vs"sv, ax::positionTextureColor_fs);
 
     IM_ASSERT(bd->ProgramInfo.program);
 
@@ -560,9 +560,9 @@ IMGUI_IMPL_API bool ImGui_ImplAxmol_CreateDeviceObjects()
     auto& info      = bd->ProgramInfo;
     info.texture    = info.program->getUniformLocation(TEXTURE);
     info.projection = info.program->getUniformLocation(MVP_MATRIX);
-    info.position   = info.program->getVertexInputDesc(POSITION);
-    info.uv         = info.program->getVertexInputDesc(TEXCOORD);
-    info.color      = info.program->getVertexInputDesc(COLOR);
+    info.position   = info.program->getVertexInputDesc(VertexSemantic::POSITION);
+    info.uv         = info.program->getVertexInputDesc(VertexSemantic::TEXCOORD0);
+    info.color      = info.program->getVertexInputDesc(VertexSemantic::COLOR0);
     IM_ASSERT(bool(info.texture));
     IM_ASSERT(bool(info.projection));
     IM_ASSERT(!!info.position);
@@ -572,9 +572,9 @@ IMGUI_IMPL_API bool ImGui_ImplAxmol_CreateDeviceObjects()
 
     auto layoutDesc = axvlm->allocateVertexLayoutDesc();
     layoutDesc.startLayout(3);
-    layoutDesc.addAttrib("a_position", info.position, VertexElementType::FLOAT2, 0, false);
-    layoutDesc.addAttrib("a_texCoord", info.uv, VertexElementType::FLOAT2, offsetof(ImDrawVert, uv), false);
-    layoutDesc.addAttrib("a_color", info.color, VertexElementType::UBYTE4, offsetof(ImDrawVert, col), true);
+    layoutDesc.addAttrib(info.position, VertexElementType::FLOAT2, 0, false);
+    layoutDesc.addAttrib(info.uv, VertexElementType::FLOAT2, offsetof(ImDrawVert, uv), false);
+    layoutDesc.addAttrib(info.color, VertexElementType::UBYTE4, offsetof(ImDrawVert, col), true);
     layoutDesc.endLayout();
 
     Object::assign(info.layout, axvlm->getVertexLayout(std::forward<VertexLayoutDesc>(layoutDesc)));

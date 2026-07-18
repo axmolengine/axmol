@@ -31,10 +31,9 @@
 #include "axmol/rhi/d3d12/RenderPipeline12.h"
 #include "axmol/rhi/d3d12/DepthStencilState12.h"
 #include "axmol/rhi/d3d12/VertexLayout12.h"
-#include "axmol/rhi/d3d12/Sampler12.h"
 #include "axmol/base/Logging.h"
 #include "axmol/rhi/RHIUtils.h"
-#include "axmol/rhi/SamplerCache.h"
+#include "axmol/rhi/SamplerRegistry.h"
 #include "yasio/sz.hpp"
 #include "d3dx12.h"
 
@@ -79,7 +78,7 @@ static std::string_view kCSGenerateMipsHLSL = R"(
     RWTexture2D<float4> gDst : register(u0);
 #endif
 
-SamplerState gSampler : register(s0);
+SamplerState gSampler : register(s0, space1);
 
 cbuffer MipConstants : register(b0)
 {
@@ -325,6 +324,19 @@ bool DriverImpl::init()
 
     AXLOGI("D3D12 Feature level: 0x{:04x}", static_cast<int>(_featureLevel));
 
+    D3D12_FEATURE_DATA_D3D12_OPTIONS options{};
+    hr = _device->CheckFeatureSupport(D3D12_FEATURE_D3D12_OPTIONS, &options, sizeof(options));
+    if (SUCCEEDED(hr))
+    {
+        _resourceBindingTier = options.ResourceBindingTier;
+    }
+    else
+    {
+        _resourceBindingTier = D3D12_RESOURCE_BINDING_TIER_1;
+        AXLOGW("D3D12: failed to query resource binding tier, assume tier 1.");
+    }
+    AXLOGI("D3D12 Resource Binding Tier: {}", static_cast<int>(_resourceBindingTier));
+
     // adapter version
     LARGE_INTEGER version;
     hr = _adapter->CheckInterfaceSupport(__uuidof(IDXGIDevice), &version);
@@ -370,6 +382,8 @@ bool DriverImpl::init()
 #endif
 
     _dxcAvailable = detectDXCAvailability();
+
+    GraphicsCore::setCurrentShaderILProfile(_dxcAvailable ? 60 : 51);
 
     return true;
 }
@@ -508,7 +522,7 @@ void DriverImpl::createDescriptorAllocators()
     _srvAllocator =
         std::make_unique<DescriptorHeapAllocator>(_device.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 8192u, false);
     _samplerAllocator = std::make_unique<DescriptorHeapAllocator>(_device.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER,
-                                                                  SamplerCache::MAX_SAMPLER_COUNT, true);
+                                                                  SamplerRegistry::MAX_SAMPLER_COUNT, true);
     _rtvAllocator =
         std::make_unique<DescriptorHeapAllocator>(_device.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 1024u, false);
     _dsvAllocator =
@@ -581,7 +595,7 @@ ShaderModule* DriverImpl::createShaderModule(ShaderStage stage, Data& chunk)
     return new ShaderModuleImpl(this, stage, chunk);
 }
 
-SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
+static D3D12_SAMPLER_DESC toD3DSamplerDesc(const SamplerDesc& desc)
 {
     static constexpr D3D12_FILTER kFilterTable[8] = {D3D12_FILTER_MIN_MAG_MIP_POINT,
                                                      D3D12_FILTER_MIN_MAG_POINT_MIP_LINEAR,
@@ -657,10 +671,20 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
     sd.MipLODBias     = 0.0f;
     sd.BorderColor[0] = sd.BorderColor[1] = sd.BorderColor[2] = sd.BorderColor[3] = 0.0f;
 
-    auto handle = allocateDescriptor(DisposableResource::Type::SamplerView);
-    _device->CreateSampler(&sd, handle->cpu);
+    return sd;
+}
 
+SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
+{
+    auto handle = allocateDescriptor(DisposableResource::Type::SamplerView);
+    writeSamplerDescriptor(desc, handle->cpu);
     return SamplerHandle(handle);
+}
+
+void DriverImpl::writeSamplerDescriptor(const SamplerDesc& desc, D3D12_CPU_DESCRIPTOR_HANDLE destination)
+{
+    const auto sd = toD3DSamplerDesc(desc);
+    _device->CreateSampler(&sd, destination);
 }
 
 void DriverImpl::destroySampler(SamplerHandle& h)
@@ -856,16 +880,10 @@ void DriverImpl::queueDisposalInternal(DisposableResource&& disposal)
     _disposalQueue.emplace_back(std::move(disposal));
 }
 
-bool DriverImpl::compileShader(std::span<uint8_t> shaderCode, ShaderStage stage, D3D12BlobHandle& outHandle)
+ComPtr<IUnknown> DriverImpl::compileShader(std::span<uint8_t> shaderCode,
+                                           ShaderStage stage,
+                                           std::span<uint8_t>& blobView)
 {
-    if (stage == ShaderStage::FRAGMENT)
-    {
-        _shaderCompileBuffer.clear();
-        _shaderCompileBuffer.reserve(shaderCode.size() + BuiltinSamplers.size());
-        _shaderCompileBuffer += BuiltinSamplers;
-        _shaderCompileBuffer += shaderCode;
-        shaderCode = _shaderCompileBuffer;
-    }
     if (_dxcAvailable)
     {
         ComPtr<IDxcBlobEncoding> sourceBlob;
@@ -888,7 +906,7 @@ bool DriverImpl::compileShader(std::span<uint8_t> shaderCode, ShaderStage stage,
         {
             AXLOGE("axmol:ERROR: DXC compile failed, hr:{}", hr);
             AXASSERT(false, "Shader compile failed!");
-            return false;
+            return {};
         }
 
         HRESULT status;
@@ -902,16 +920,13 @@ bool DriverImpl::compileShader(std::span<uint8_t> shaderCode, ShaderStage stage,
                        : "Unknown compile error"sv;
             AXLOGE("axmol:ERROR: Failed to compile shader, hr:{},{}", status, errorDetail);
             AXASSERT(false, "Shader compile failed!");
-            return false;
+            return {};
         }
 
         ComPtr<IDxcBlob> blob;
         result->GetResult(&blob);
-
-        outHandle.blob = blob;
-        outHandle.view = std::span<uint8_t>((uint8_t*)blob->GetBufferPointer(), blob->GetBufferSize());
-
-        return true;
+        blobView = std::span<uint8_t>((uint8_t*)blob->GetBufferPointer(), blob->GetBufferSize());
+        return blob;
     }
     else
     {
@@ -925,9 +940,8 @@ bool DriverImpl::compileShader(std::span<uint8_t> shaderCode, ShaderStage stage,
                                 stageToProfileFXC(stage), flags, 0, &blob, &errorBlob);
         if (SUCCEEDED(hr))
         {
-            outHandle.blob = blob;
-            outHandle.view = std::span<uint8_t>((uint8_t*)blob->GetBufferPointer(), blob->GetBufferSize());
-            return true;
+            blobView = std::span<uint8_t>((uint8_t*)blob->GetBufferPointer(), blob->GetBufferSize());
+            return blob;
         }
 
         std::string_view errorDetail =
@@ -936,7 +950,7 @@ bool DriverImpl::compileShader(std::span<uint8_t> shaderCode, ShaderStage stage,
         AXLOGE("axmol:ERROR: Failed to compile shader, hr:{},{}", hr, errorDetail);
         AXASSERT(false, "Shader compile failed!");
 
-        return false;
+        return {};
     }
 }
 
@@ -1188,7 +1202,7 @@ void DriverImpl::ensureMipmapPipeline(bool isArray)
         CD3DX12_STATIC_SAMPLER_DESC staticSampler(
             0, D3D12_FILTER_MIN_MAG_MIP_LINEAR, D3D12_TEXTURE_ADDRESS_MODE_CLAMP, D3D12_TEXTURE_ADDRESS_MODE_CLAMP,
             D3D12_TEXTURE_ADDRESS_MODE_CLAMP, 0.0f, 16, D3D12_COMPARISON_FUNC_ALWAYS,
-            D3D12_STATIC_BORDER_COLOR_OPAQUE_BLACK, 0.0f, D3D12_FLOAT32_MAX, D3D12_SHADER_VISIBILITY_ALL, 0);
+            D3D12_STATIC_BORDER_COLOR_OPAQUE_BLACK, 0.0f, D3D12_FLOAT32_MAX, D3D12_SHADER_VISIBILITY_ALL, 1);
 
         CD3DX12_ROOT_SIGNATURE_DESC rsDesc;
         rsDesc.Init(_countof(params), params, 1, &staticSampler, D3D12_ROOT_SIGNATURE_FLAG_NONE);
@@ -1236,10 +1250,10 @@ D3D12BlobHandle DriverImpl::compileMipmapCS(bool isArray)
     if (isArray)
         hlslSource += "#define USE_ARRAY 1\n"sv;
     hlslSource += kCSGenerateMipsHLSL;
-    D3D12BlobHandle csBlob;
-    bool ok = compileShader(hlslSource, ShaderStage::COMPUTE, csBlob);
-    AXASSERT(ok, "Compute shader compile failed");
-    return csBlob;
+    D3D12BlobHandle handle;
+    handle.blob = compileShader(hlslSource, ShaderStage::COMPUTE, handle.view);
+    AXASSERT(!!handle.blob, "Compute shader compile failed");
+    return handle;
 }
 
 void DriverImpl::waitForGPU()

@@ -46,12 +46,12 @@ ShaderModuleImpl::ShaderModuleImpl(id<MTLDevice> mtlDevice, ShaderStage stage, D
     }
 
     _mtlFunction = [library newFunctionWithName:@"main0"];
+    _compiled    = _mtlFunction != nil;
 
-    if (!_mtlFunction)
+    if (!_compiled)
     {
         NSLog(@"metal shader is ---------------");
         AXLOGE("{}", std::string_view{(const char*)_codeSpan.data(), _codeSpan.size()});
-        assert(false);
     }
 
     [library release];

@@ -45,7 +45,7 @@ using namespace ax;
 #include "axmol/base/EventType.h"
 #include "axmol/scene/Camera.h"
 #include "axmol/platform/Image.h"
-#include "axmol/3d/shaderinfos.h"
+#include "axmol/3d/MeshVertexAttribute.h"
 #include "axmol/base/Utils.h"
 
 namespace ax

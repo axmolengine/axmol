@@ -32,6 +32,7 @@
 #include "axmol/rhi/metal/BufferManager.h"
 #include "axmol/rhi/metal/DepthStencilStateMTL.h"
 #include "axmol/rhi/metal/RenderTargetMTL.h"
+#include "axmol/rhi/SamplerRegistry.h"
 #include "axmol/platform/Application.h"
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_MAC
@@ -508,7 +509,7 @@ void RenderContextImpl::afterDraw()
 void RenderContextImpl::prepareDrawing() const
 {
     setUniformBuffer();
-    setTextures();
+    setTexturesAndSamplers();
 
     auto mtlDepthStencilState = _depthStencilState->getMTLDepthStencilState();
     if (mtlDepthStencilState)
@@ -519,8 +520,11 @@ void RenderContextImpl::prepareDrawing() const
     }
 }
 
-void RenderContextImpl::setTextures() const
+void RenderContextImpl::setTexturesAndSamplers() const
 {
+    const auto program = _programState->getProgram();
+
+    // Phase 1: bind textures.
     for (const auto& [bindingIndex, bindingSet] : _programState->getTextureBindingSets())
     {
         auto& texs     = bindingSet.texs;
@@ -530,7 +534,28 @@ void RenderContextImpl::setTextures() const
             const auto slot  = bindingIndex + k;
             auto textureImpl = static_cast<TextureImpl*>(texs[k]);
             [_mtlRenderEncoder setFragmentTexture:textureImpl->internalHandle() atIndex:slot];
-            [_mtlRenderEncoder setFragmentSamplerState:textureImpl->internalSampler() atIndex:slot];
+        }
+    }
+
+    // Phase 2: bind samplers resolved by Program creation.
+    auto samplerRegistry = SamplerRegistry::getInstance();
+    for (const auto& samplerInfo : program->getActiveSamplerInfos())
+    {
+        if (!samplerInfo.samplerId || samplerInfo.binding < 0 || samplerInfo.count == 0)
+            continue;
+
+        const auto sampler      = samplerRegistry->getSampler(samplerInfo.samplerId);
+        const auto samplerState = static_cast<id<MTLSamplerState>>(sampler);
+
+        if (samplerState == nil)
+        {
+            AXASSERT(false, "failed to resolve Metal sampler");
+            continue;
+        }
+
+        for (uint16_t index = 0; index < samplerInfo.count; ++index)
+        {
+            [_mtlRenderEncoder setFragmentSamplerState:samplerState atIndex:samplerInfo.binding + index];
         }
     }
 }

@@ -115,6 +115,9 @@ bool NavMeshBaseTestDemo::onPointerDown(ax::PointerEvent* event)
 
 void NavMeshBaseTestDemo::onPointerMove(ax::PointerEvent* event)
 {
+    if (!event->isCaptured())
+        return;
+
     if (_camera)
     {
         auto delta = (event->getWorldPoint() - event->getPrevWorldPoint());
@@ -129,8 +132,6 @@ void NavMeshBaseTestDemo::onPointerMove(ax::PointerEvent* event)
         }
     }
     touchesMoved(event);
-
-    return;
 }
 
 void NavMeshBaseTestDemo::onPointerUp(ax::PointerEvent* event)

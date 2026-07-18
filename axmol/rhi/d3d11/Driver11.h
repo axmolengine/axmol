@@ -142,6 +142,7 @@ public:
     const ComPtr<IDXGIAdapter>& getDXGIAdapter() const { return _dxgiAdapter; }
 
     IUnknown* compileShader(std::span<uint8_t> shaderCode, ShaderStage stage, ID3DBlob*& outBlob);
+    IUnknown* createShaderFromBytecode(std::span<uint8_t> bytecode, ShaderStage stage);
 
 protected:
     /**

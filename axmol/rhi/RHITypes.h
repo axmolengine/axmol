@@ -27,9 +27,13 @@
 
 #include <stdint.h>
 #include <assert.h>
+#include <functional>
 #include <string>
+#include <string_view>
 #include <bit>
 #include "axmol/tlx/bitmask.hpp"
+#include "axmol/rhi/axslc-spec.h"
+#include "axmol/platform/PlatformDefine.h"
 
 #define AX_ARRAYSIZE(A) (sizeof(A) / sizeof((A)[0]))
 
@@ -405,49 +409,7 @@ struct SamplerDesc
 };
 static_assert(sizeof(SamplerDesc) == 4, "incompatible type: SamplerDesc");
 
-// The builtin sampler index
-struct SamplerIndex
-{
-    enum enum_type : uint32_t
-    {
-        // --- Linear sampling ---
-        LinearClamp,   // Linear, clamp to edge
-        LinearWrap,    // Linear, repeat
-        LinearMirror,  // Linear, mirror repeat
-        LinearBorder,  // Linear, border color
-
-        // --- Point sampling ---
-        PointClamp,   // Nearest, clamp to edge
-        PointWrap,    // Nearest, repeat
-        PointMirror,  // Nearest, mirror repeat
-        PointBorder,  // Nearest, border color
-
-        // --- Linear + Mipmap ---
-        LinearMipClamp,   // Linear min/mag, mip linear, clamp
-        LinearMipWrap,    // Linear min/mag, mip linear, wrap
-        LinearMipMirror,  // Linear min/mag, mip linear, mirror
-        LinearMipBorder,  // Linear min/mag, mip linear, border
-
-        // --- Anisotropic filtering ---
-        AnisoClamp,   // Anisotropic, clamp to edge
-        AnisoWrap,    // Anisotropic, repeat
-        AnisoMirror,  // Anisotropic, mirror repeat
-        AnisoBorder,  // Anisotropic, border color
-
-        // --- Depth comparison samplers (shadow maps) ---
-        ShadowCmpClamp,   // Compare sampler, clamp to edge
-        ShadowCmpWrap,    // Compare sampler, repeat
-        ShadowCmpMirror,  // Compare sampler, mirror repeat
-        ShadowCmpBorder,  // Compare sampler, border color
-
-        // --- Special cases ---
-        LinearNoMipClamp,  // Linear min/mag, no mip, clamp (UI, 2D sprites)
-        PointNoMipClamp,   // Point min/mag, no mip, clamp (pixel art)
-
-        //
-        Count
-    };
-};
+using SamplerPreset = axslc::SamplerPreset;
 
 union Handle64
 {
@@ -589,9 +551,6 @@ struct UniformInfo
 
     // Number of array elements (1 for non-array uniforms).
     uint16_t count = 0;
-
-    // axslcc-provided sampler slot index (for combined image samplers).
-    uint16_t samplerSlot = 0;
 };
 
 struct UniformLocation
@@ -625,10 +584,60 @@ struct UniformLocationHash
     size_t operator()(UniformLocation const& u) const noexcept { return size_t(u.location); }
 };
 
+/**
+ * Describes a vertex attribute semantic used to match shader inputs with
+ * vertex layout elements.
+ *
+ * A semantic consists of a base name and an independent numeric index, such
+ * as `POSITION0`, `TEXCOORD1`, or a user-defined semantic like `CUSTOM2`.
+ *
+ * The predefined static members provide commonly used Axmol semantics, but
+ * custom semantic names are also supported through the public constructor.
+ *
+ * Semantic values represent the logical purpose of vertex attributes and are
+ * independent of backend-specific attribute locations. The shader compiler
+ * reflection data maps each semantic to the actual location used by Vulkan,
+ * Metal, and OpenGL, while Direct3D uses the semantic name and index directly.
+ */
+struct AX_API VertexSemantic
+{
+    char name[SC_NAME_LEN] = {};
+    uint16_t index{0};
+    uint16_t nameLen{0};
+
+    /// Builtin semantics for Axmol vertex attributes.
+    /// These are the most commonly used semantics in Axmol shaders.
+    static const VertexSemantic POSITION;
+    static const VertexSemantic NORMAL;
+    static const VertexSemantic TEXCOORD0;
+    static const VertexSemantic TEXCOORD1;
+    static const VertexSemantic TEXCOORD2;
+    static const VertexSemantic TEXCOORD3;
+    static const VertexSemantic TEXCOORD4;
+    static const VertexSemantic TEXCOORD5;
+    static const VertexSemantic TEXCOORD6;
+    static const VertexSemantic TEXCOORD7;
+    static const VertexSemantic COLOR0;
+    static const VertexSemantic COLOR1;
+    static const VertexSemantic TANGENT;
+    static const VertexSemantic BINORMAL;
+    static const VertexSemantic BLENDINDICES;
+    static const VertexSemantic BLENDWEIGHT;
+
+    VertexSemantic() = default;
+    VertexSemantic(std::string_view semanticName, uint16_t semanticIndex = 0);
+
+    std::string_view getName() const { return {name, nameLen}; }
+
+    std::string toString() const;
+
+    bool operator==(const VertexSemantic& o) const noexcept { return index == o.index && getName() == o.getName(); }
+};
+
 // vertex input descriptor in vertex shader
 struct VertexInputDesc
 {
-    std::string semantic;
+    VertexSemantic semantic;
     // gl: location,
     // d3d: semantic_index
     // metal: binding_index
@@ -649,16 +658,6 @@ static constexpr auto UNIFORM_NAME_EFFECT_COLOR    = "u_effectColor"sv;
 static constexpr auto UNIFORM_NAME_EFFECT_WIDTH    = "u_effectWidth"sv;
 static constexpr auto UNIFORM_NAME_LABEL_PASS      = "u_labelPass"sv;
 static constexpr auto UNIFORM_NAME_DISTANCE_SPREAD = "u_distanceSpread"sv;
-
-/// built-in attribute name
-static constexpr auto VERTEX_INPUT_NAME_POSITION  = "a_position"sv;
-static constexpr auto VERTEX_INPUT_NAME_COLOR     = "a_color"sv;
-static constexpr auto VERTEX_INPUT_NAME_TEXCOORD  = "a_texCoord"sv;
-static constexpr auto VERTEX_INPUT_NAME_TEXCOORD1 = "a_texCoord1"sv;
-static constexpr auto VERTEX_INPUT_NAME_TEXCOORD2 = "a_texCoord2"sv;
-static constexpr auto VERTEX_INPUT_NAME_TEXCOORD3 = "a_texCoord3"sv;
-static constexpr auto VERTEX_INPUT_NAME_NORMAL    = "a_normal"sv;
-static constexpr auto VERTEX_INPUT_NAME_INSTANCE  = "a_instance"sv;
 
 // clang-format off
 struct ProgramType
@@ -770,3 +769,13 @@ using Viewport    = RectI;
 using ScissorRect = RectI;
 
 }  // namespace ax::rhi
+
+template <>
+struct std::hash<ax::rhi::VertexSemantic>
+{
+    size_t operator()(const ax::rhi::VertexSemantic& value) const noexcept
+    {
+        auto seed = std::hash<std::string_view>{}(value.getName());
+        return seed ^ (std::hash<uint16_t>{}(value.index) + 0x9e3779b9U + (seed << 6) + (seed >> 2));
+    }
+};

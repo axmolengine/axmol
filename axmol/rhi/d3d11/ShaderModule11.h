@@ -23,22 +23,15 @@
  ****************************************************************************/
 #pragma once
 #include "axmol/rhi/ShaderModule.h"
+#include "axmol/platform/msw/ComPtr.h"
 #include <d3d11.h>
 #include <d3dcompiler.h>
 
 namespace ax::rhi::d3d11
 {
-/**
- * @addtogroup _d3d11
- * @{
- */
 
 class DriverImpl;
 
-/**
- * @brief A D3D11-based ShaderModule implementation
- *
- */
 class ShaderModuleImpl : public ShaderModule
 {
 public:
@@ -46,13 +39,12 @@ public:
     ~ShaderModuleImpl();
 
     IUnknown* internalHandle() const { return _shader; }
-    ID3DBlob* getShaderBlob() const { return _blob; }
+    std::span<uint8_t> getBlob() const { return _blob; }
 
 private:
     IUnknown* _shader = nullptr;
-    ID3DBlob* _blob   = nullptr;
+    std::span<uint8_t> _blob;
+    ComPtr<IUnknown> _nativeBlob;
 };
-
-/** @} */
 
 }  // namespace ax::rhi::d3d11

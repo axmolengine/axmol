@@ -30,6 +30,7 @@
 #include "axmol/rhi/d3d11/VertexLayout11.h"
 #include "axmol/rhi/d3d11/Texture11.h"
 #include "axmol/rhi/GraphicsCore.h"
+#include "axmol/rhi/SamplerRegistry.h"
 #include <dxgi1_2.h>
 #include <dxgi1_3.h>
 #include <dxgi1_5.h>
@@ -672,7 +673,7 @@ void RenderContextImpl::prepareDrawing()
     auto& cpuBuffer = _programState->getUniformBuffer();
     program->bindUniformBuffers(_d3d11Context, cpuBuffer.data(), cpuBuffer.size());
 
-    // bind texture
+    // Phase 1: bind textures.
     _textureBounds = 0;
     for (const auto& [bindingIndex, bindingSet] : _programState->getTextureBindingSets())
     {
@@ -683,10 +684,34 @@ void RenderContextImpl::prepareDrawing()
             const auto slot  = bindingIndex + k;
             auto textureImpl = static_cast<TextureImpl*>(texs[k]);
             context->PSSetShaderResources(slot, 1, &textureImpl->internalHandle().srv);
-            auto samplerState = textureImpl->getSamplerState();
-            context->PSSetSamplers(slot, 1, &samplerState);
             ++_textureBounds;
         }
+    }
+
+    // Phase 2: bind samplers with compact logical→backend slot mapping.
+    // D3D11 has only 16 sampler slots per stage, so we pack active samplers
+    // sequentially rather than using their sparse logical binding indices.
+    auto samplerRegistry = SamplerRegistry::getInstance();
+    uint16_t compactSlot = 0;
+    for (const auto& samplerInfo : program->getActiveSamplerInfos())
+    {
+        if (!samplerInfo.samplerId || samplerInfo.count == 0)
+            continue;
+
+        if (compactSlot + samplerInfo.count > 16)
+        {
+            AXLOGE("D3D11 shader exceeds 16 sampler slot limit");
+            break;
+        }
+
+        auto sampler = static_cast<ID3D11SamplerState*>(samplerRegistry->getSampler(samplerInfo.samplerId));
+        if (!sampler)
+            continue;
+
+        for (uint16_t i = 0; i < samplerInfo.count; ++i)
+            context->PSSetSamplers(compactSlot + i, 1, &sampler);
+
+        compactSlot += samplerInfo.count;
     }
 
     // depth stencil

@@ -28,7 +28,7 @@
 #include "axmol/base/Object.h"
 #include "axmol/rhi/ProgramState.h"
 #include "axmol/renderer/Pass.h"
-#include "axmol/3d/shaderinfos.h"
+#include "axmol/3d/MeshVertexAttribute.h"
 
 namespace ax
 {
@@ -91,7 +91,7 @@ public:
      */
     uint32_t getVertexAttribsFlags() const;
 
-    bool hasAttribute(const shaderinfos::VertexKey& key) const;
+    bool hasAttribute(const MeshVertexAttribute& key) const;
 
 private:
     /**
@@ -111,7 +111,7 @@ private:
 
     bool init(MeshIndexData* meshIndexData, Pass* pass, MeshCommand*, bool instancing);
     void setVertexInputPointer(VertexLayoutDesc& desc,
-                               std::string_view name,
+                               const rhi::VertexSemantic& semantic,
                                rhi::VertexElementType type,
                                bool normalized,
                                int offset,

@@ -1074,10 +1074,6 @@ void CubismShader_Axmol::ReleaseShaderProgram()
 // SetupMask
 static const csmChar* VertShaderSrcSetupMask = "custom/live2d_setup_mask_vs";
 static const csmChar* FragShaderSrcSetupMask = "custom/live2d_setup_mask_fs";
-#if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
-static const csmChar* FragShaderSrcSetupMaskTegra = "custom/live2d_setup_mask_tegra_fs";
-#endif
-
 
 //----- バーテックスシェーダプログラム -----
 // Normal & Add & Mult 共通
@@ -1091,40 +1087,22 @@ static const csmChar* VertShaderSrcMaskedBlend = "custom/live2d_masked_blend_vs"
 //----- フラグメントシェーダプログラム -----
 // Normal & Add & Mult 共通
 static const csmChar* FragShaderSrc = "custom/live2d_fs";
-#if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
-static const csmChar* FragShaderSrcTegra = "custom/live2d_tegra_fs";
-#endif
 
 // Normal & Add & Mult 共通 （PremultipliedAlpha）
 static const csmChar* FragShaderSrcPremultipliedAlpha = "custom/live2d_pma_fs";
-#if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
-static const csmChar* FragShaderSrcPremultipliedAlphaTegra = "custom/live2d_pma_tegra_fs";
-#endif
 
 // Normal & Add & Mult 共通（クリッピングされたものの描画用）
 static const csmChar* FragShaderSrcMask = "custom/live2d_mask_fs";
-#if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
-static const csmChar* FragShaderSrcMaskTegra = "custom/live2d_mask_tegra_fs";
-#endif
 
 // Normal & Add & Mult 共通（クリッピングされて反転使用の描画用）
 static const csmChar* FragShaderSrcMaskInverted = "custom/live2d_mask_inv_fs";
-#if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
-static const csmChar* FragShaderSrcMaskInvertedTegra = "custom/live2d_mask_inv_tegra_fs";
-#endif
 
 // Normal & Add & Mult 共通（クリッピングされたものの描画用、PremultipliedAlphaの場合）
 static const csmChar* FragShaderSrcMaskPremultipliedAlpha = "custom/live2d_mask_pma_fs";
-#if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
-static const csmChar* FragShaderSrcMaskPremultipliedAlphaTegra = "custom/live2d_mask_pma_tegra_fs";
-#endif
 
 // Normal & Add & Mult 共通（クリッピングされて反転使用の描画用、PremultipliedAlphaの場合）
 static const csmChar* FragShaderSrcMaskInvertedPremultipliedAlpha =
     "custom/live2d_mask_inv_pma_fs";
-#if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
-static const csmChar* FragShaderSrcMaskInvertedPremultipliedAlphaTegra = "custom/live2d_mask_inv_pma_tegra_fs";
-#endif
 
 static const csmChar* FragShaderSrcCopy = "custom/live2d_copy_fs";
 static const csmChar* FragShaderSrcBlend = "custom/live2d_blend_fs";
@@ -1206,23 +1184,23 @@ void CubismShader_Axmol::GenerateShaders()
         LoadShaderProgram(VertShaderSrcMaskedBlend, FragShaderSrcMaskInvertedPremultipliedAlphaBlend);
 
     // SetupMask
-    _shaderSets[0]->AttributePositionLocation = _shaderSets[0]->ShaderProgram->getVertexInputDesc("a_position");
-    _shaderSets[0]->AttributeTexCoordLocation = _shaderSets[0]->ShaderProgram->getVertexInputDesc("a_texCoord");
+    _shaderSets[0]->AttributePositionLocation = _shaderSets[0]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::POSITION);
+    _shaderSets[0]->AttributeTexCoordLocation = _shaderSets[0]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::TEXCOORD0);
     _shaderSets[0]->SamplerTexture0Location = _shaderSets[0]->ShaderProgram->getUniformLocation("u_tex0");
     _shaderSets[0]->UniformClipMatrixLocation = _shaderSets[0]->ShaderProgram->getUniformLocation("u_clipMatrix");
     _shaderSets[0]->UnifromChannelFlagLocation = _shaderSets[0]->ShaderProgram->getUniformLocation("u_channelFlag");
     _shaderSets[0]->UniformBaseColorLocation = _shaderSets[0]->ShaderProgram->getUniformLocation("u_baseColor");
 
     // 通常
-    _shaderSets[1]->AttributePositionLocation = _shaderSets[1]->ShaderProgram->getVertexInputDesc("a_position");
-    _shaderSets[1]->AttributeTexCoordLocation = _shaderSets[1]->ShaderProgram->getVertexInputDesc("a_texCoord");
+    _shaderSets[1]->AttributePositionLocation = _shaderSets[1]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::POSITION);
+    _shaderSets[1]->AttributeTexCoordLocation = _shaderSets[1]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::TEXCOORD0);
     _shaderSets[1]->SamplerTexture0Location = _shaderSets[1]->ShaderProgram->getUniformLocation("u_tex0");
     _shaderSets[1]->UniformMatrixLocation = _shaderSets[1]->ShaderProgram->getUniformLocation("u_matrix");
     _shaderSets[1]->UniformBaseColorLocation = _shaderSets[1]->ShaderProgram->getUniformLocation("u_baseColor");
 
     // 通常（クリッピング）
-    _shaderSets[2]->AttributePositionLocation = _shaderSets[2]->ShaderProgram->getVertexInputDesc("a_position");
-    _shaderSets[2]->AttributeTexCoordLocation = _shaderSets[2]->ShaderProgram->getVertexInputDesc("a_texCoord");
+    _shaderSets[2]->AttributePositionLocation = _shaderSets[2]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::POSITION);
+    _shaderSets[2]->AttributeTexCoordLocation = _shaderSets[2]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::TEXCOORD0);
     _shaderSets[2]->SamplerTexture0Location = _shaderSets[2]->ShaderProgram->getUniformLocation("u_tex0");
     _shaderSets[2]->SamplerTexture1Location = _shaderSets[2]->ShaderProgram->getUniformLocation("u_tex1");
     _shaderSets[2]->UniformMatrixLocation = _shaderSets[2]->ShaderProgram->getUniformLocation("u_matrix");
@@ -1231,8 +1209,8 @@ void CubismShader_Axmol::GenerateShaders()
     _shaderSets[2]->UniformBaseColorLocation = _shaderSets[2]->ShaderProgram->getUniformLocation("u_baseColor");
 
     // 通常（クリッピング・反転）
-    _shaderSets[3]->AttributePositionLocation = _shaderSets[3]->ShaderProgram->getVertexInputDesc("a_position");
-    _shaderSets[3]->AttributeTexCoordLocation = _shaderSets[3]->ShaderProgram->getVertexInputDesc("a_texCoord");
+    _shaderSets[3]->AttributePositionLocation = _shaderSets[3]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::POSITION);
+    _shaderSets[3]->AttributeTexCoordLocation = _shaderSets[3]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::TEXCOORD0);
     _shaderSets[3]->SamplerTexture0Location = _shaderSets[3]->ShaderProgram->getUniformLocation("u_tex0");
     _shaderSets[3]->SamplerTexture1Location = _shaderSets[3]->ShaderProgram->getUniformLocation("u_tex1");
     _shaderSets[3]->UniformMatrixLocation = _shaderSets[3]->ShaderProgram->getUniformLocation("u_matrix");
@@ -1241,15 +1219,15 @@ void CubismShader_Axmol::GenerateShaders()
     _shaderSets[3]->UniformBaseColorLocation = _shaderSets[3]->ShaderProgram->getUniformLocation("u_baseColor");
 
     // 通常（PremultipliedAlpha）
-    _shaderSets[4]->AttributePositionLocation = _shaderSets[4]->ShaderProgram->getVertexInputDesc("a_position");
-    _shaderSets[4]->AttributeTexCoordLocation = _shaderSets[4]->ShaderProgram->getVertexInputDesc("a_texCoord");
+    _shaderSets[4]->AttributePositionLocation = _shaderSets[4]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::POSITION);
+    _shaderSets[4]->AttributeTexCoordLocation = _shaderSets[4]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::TEXCOORD0);
     _shaderSets[4]->SamplerTexture0Location = _shaderSets[4]->ShaderProgram->getUniformLocation("u_tex0");
     _shaderSets[4]->UniformMatrixLocation = _shaderSets[4]->ShaderProgram->getUniformLocation("u_matrix");
     _shaderSets[4]->UniformBaseColorLocation = _shaderSets[4]->ShaderProgram->getUniformLocation("u_baseColor");
 
     // 通常（クリッピング、PremultipliedAlpha）
-    _shaderSets[5]->AttributePositionLocation = _shaderSets[5]->ShaderProgram->getVertexInputDesc("a_position");
-    _shaderSets[5]->AttributeTexCoordLocation = _shaderSets[5]->ShaderProgram->getVertexInputDesc("a_texCoord");
+    _shaderSets[5]->AttributePositionLocation = _shaderSets[5]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::POSITION);
+    _shaderSets[5]->AttributeTexCoordLocation = _shaderSets[5]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::TEXCOORD0);
     _shaderSets[5]->SamplerTexture0Location = _shaderSets[5]->ShaderProgram->getUniformLocation("u_tex0");
     _shaderSets[5]->SamplerTexture1Location = _shaderSets[5]->ShaderProgram->getUniformLocation("u_tex1");
     _shaderSets[5]->UniformMatrixLocation = _shaderSets[5]->ShaderProgram->getUniformLocation("u_matrix");
@@ -1258,8 +1236,8 @@ void CubismShader_Axmol::GenerateShaders()
     _shaderSets[5]->UniformBaseColorLocation = _shaderSets[5]->ShaderProgram->getUniformLocation("u_baseColor");
 
     // 通常（クリッピング・反転、PremultipliedAlpha）
-    _shaderSets[6]->AttributePositionLocation = _shaderSets[6]->ShaderProgram->getVertexInputDesc("a_position");
-    _shaderSets[6]->AttributeTexCoordLocation = _shaderSets[6]->ShaderProgram->getVertexInputDesc("a_texCoord");
+    _shaderSets[6]->AttributePositionLocation = _shaderSets[6]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::POSITION);
+    _shaderSets[6]->AttributeTexCoordLocation = _shaderSets[6]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::TEXCOORD0);
     _shaderSets[6]->SamplerTexture0Location = _shaderSets[6]->ShaderProgram->getUniformLocation("u_tex0");
     _shaderSets[6]->SamplerTexture1Location = _shaderSets[6]->ShaderProgram->getUniformLocation("u_tex1");
     _shaderSets[6]->UniformMatrixLocation = _shaderSets[6]->ShaderProgram->getUniformLocation("u_matrix");
@@ -1268,15 +1246,15 @@ void CubismShader_Axmol::GenerateShaders()
     _shaderSets[6]->UniformBaseColorLocation = _shaderSets[6]->ShaderProgram->getUniformLocation("u_baseColor");
 
     // 加算
-    _shaderSets[7]->AttributePositionLocation = _shaderSets[7]->ShaderProgram->getVertexInputDesc("a_position");
-    _shaderSets[7]->AttributeTexCoordLocation = _shaderSets[7]->ShaderProgram->getVertexInputDesc("a_texCoord");
+    _shaderSets[7]->AttributePositionLocation = _shaderSets[7]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::POSITION);
+    _shaderSets[7]->AttributeTexCoordLocation = _shaderSets[7]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::TEXCOORD0);
     _shaderSets[7]->SamplerTexture0Location = _shaderSets[7]->ShaderProgram->getUniformLocation("u_tex0");
     _shaderSets[7]->UniformMatrixLocation = _shaderSets[7]->ShaderProgram->getUniformLocation("u_matrix");
     _shaderSets[7]->UniformBaseColorLocation = _shaderSets[7]->ShaderProgram->getUniformLocation("u_baseColor");
 
     // 加算（クリッピング）
-    _shaderSets[8]->AttributePositionLocation = _shaderSets[8]->ShaderProgram->getVertexInputDesc("a_position");
-    _shaderSets[8]->AttributeTexCoordLocation = _shaderSets[8]->ShaderProgram->getVertexInputDesc("a_texCoord");
+    _shaderSets[8]->AttributePositionLocation = _shaderSets[8]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::POSITION);
+    _shaderSets[8]->AttributeTexCoordLocation = _shaderSets[8]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::TEXCOORD0);
     _shaderSets[8]->SamplerTexture0Location = _shaderSets[8]->ShaderProgram->getUniformLocation("u_tex0");
     _shaderSets[8]->SamplerTexture1Location = _shaderSets[8]->ShaderProgram->getUniformLocation("u_tex1");
     _shaderSets[8]->UniformMatrixLocation = _shaderSets[8]->ShaderProgram->getUniformLocation("u_matrix");
@@ -1285,8 +1263,8 @@ void CubismShader_Axmol::GenerateShaders()
     _shaderSets[8]->UniformBaseColorLocation = _shaderSets[8]->ShaderProgram->getUniformLocation("u_baseColor");
 
     // 加算（クリッピング・反転）
-    _shaderSets[9]->AttributePositionLocation = _shaderSets[9]->ShaderProgram->getVertexInputDesc("a_position");
-    _shaderSets[9]->AttributeTexCoordLocation = _shaderSets[9]->ShaderProgram->getVertexInputDesc("a_texCoord");
+    _shaderSets[9]->AttributePositionLocation = _shaderSets[9]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::POSITION);
+    _shaderSets[9]->AttributeTexCoordLocation = _shaderSets[9]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::TEXCOORD0);
     _shaderSets[9]->SamplerTexture0Location = _shaderSets[9]->ShaderProgram->getUniformLocation("u_tex0");
     _shaderSets[9]->SamplerTexture1Location = _shaderSets[9]->ShaderProgram->getUniformLocation("u_tex1");
     _shaderSets[9]->UniformMatrixLocation = _shaderSets[9]->ShaderProgram->getUniformLocation("u_matrix");
@@ -1295,15 +1273,15 @@ void CubismShader_Axmol::GenerateShaders()
     _shaderSets[9]->UniformBaseColorLocation = _shaderSets[9]->ShaderProgram->getUniformLocation("u_baseColor");
 
     // 加算（PremultipliedAlpha）
-    _shaderSets[10]->AttributePositionLocation = _shaderSets[10]->ShaderProgram->getVertexInputDesc("a_position");
-    _shaderSets[10]->AttributeTexCoordLocation = _shaderSets[10]->ShaderProgram->getVertexInputDesc("a_texCoord");
+    _shaderSets[10]->AttributePositionLocation = _shaderSets[10]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::POSITION);
+    _shaderSets[10]->AttributeTexCoordLocation = _shaderSets[10]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::TEXCOORD0);
     _shaderSets[10]->SamplerTexture0Location = _shaderSets[10]->ShaderProgram->getUniformLocation("u_tex0");
     _shaderSets[10]->UniformMatrixLocation = _shaderSets[10]->ShaderProgram->getUniformLocation("u_matrix");
     _shaderSets[10]->UniformBaseColorLocation = _shaderSets[10]->ShaderProgram->getUniformLocation("u_baseColor");
 
     // 加算（クリッピング、PremultipliedAlpha）
-    _shaderSets[11]->AttributePositionLocation = _shaderSets[11]->ShaderProgram->getVertexInputDesc("a_position");
-    _shaderSets[11]->AttributeTexCoordLocation = _shaderSets[11]->ShaderProgram->getVertexInputDesc("a_texCoord");
+    _shaderSets[11]->AttributePositionLocation = _shaderSets[11]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::POSITION);
+    _shaderSets[11]->AttributeTexCoordLocation = _shaderSets[11]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::TEXCOORD0);
     _shaderSets[11]->SamplerTexture0Location = _shaderSets[11]->ShaderProgram->getUniformLocation("u_tex0");
     _shaderSets[11]->SamplerTexture1Location = _shaderSets[11]->ShaderProgram->getUniformLocation("u_tex1");
     _shaderSets[11]->UniformMatrixLocation = _shaderSets[11]->ShaderProgram->getUniformLocation("u_matrix");
@@ -1312,8 +1290,8 @@ void CubismShader_Axmol::GenerateShaders()
     _shaderSets[11]->UniformBaseColorLocation = _shaderSets[11]->ShaderProgram->getUniformLocation("u_baseColor");
 
     // 加算（クリッピング・反転、PremultipliedAlpha）
-    _shaderSets[12]->AttributePositionLocation = _shaderSets[12]->ShaderProgram->getVertexInputDesc("a_position");
-    _shaderSets[12]->AttributeTexCoordLocation = _shaderSets[12]->ShaderProgram->getVertexInputDesc("a_texCoord");
+    _shaderSets[12]->AttributePositionLocation = _shaderSets[12]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::POSITION);
+    _shaderSets[12]->AttributeTexCoordLocation = _shaderSets[12]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::TEXCOORD0);
     _shaderSets[12]->SamplerTexture0Location = _shaderSets[12]->ShaderProgram->getUniformLocation("u_tex0");
     _shaderSets[12]->SamplerTexture1Location = _shaderSets[12]->ShaderProgram->getUniformLocation("u_tex1");
     _shaderSets[12]->UniformMatrixLocation = _shaderSets[12]->ShaderProgram->getUniformLocation("u_matrix");
@@ -1322,15 +1300,15 @@ void CubismShader_Axmol::GenerateShaders()
     _shaderSets[12]->UniformBaseColorLocation = _shaderSets[12]->ShaderProgram->getUniformLocation("u_baseColor");
 
     // 乗算
-    _shaderSets[13]->AttributePositionLocation = _shaderSets[13]->ShaderProgram->getVertexInputDesc("a_position");
-    _shaderSets[13]->AttributeTexCoordLocation = _shaderSets[13]->ShaderProgram->getVertexInputDesc("a_texCoord");
+    _shaderSets[13]->AttributePositionLocation = _shaderSets[13]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::POSITION);
+    _shaderSets[13]->AttributeTexCoordLocation = _shaderSets[13]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::TEXCOORD0);
     _shaderSets[13]->SamplerTexture0Location = _shaderSets[13]->ShaderProgram->getUniformLocation("u_tex0");
     _shaderSets[13]->UniformMatrixLocation = _shaderSets[13]->ShaderProgram->getUniformLocation("u_matrix");
     _shaderSets[13]->UniformBaseColorLocation = _shaderSets[13]->ShaderProgram->getUniformLocation("u_baseColor");
 
     // 乗算（クリッピング）
-    _shaderSets[14]->AttributePositionLocation = _shaderSets[14]->ShaderProgram->getVertexInputDesc("a_position");
-    _shaderSets[14]->AttributeTexCoordLocation = _shaderSets[14]->ShaderProgram->getVertexInputDesc("a_texCoord");
+    _shaderSets[14]->AttributePositionLocation = _shaderSets[14]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::POSITION);
+    _shaderSets[14]->AttributeTexCoordLocation = _shaderSets[14]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::TEXCOORD0);
     _shaderSets[14]->SamplerTexture0Location = _shaderSets[14]->ShaderProgram->getUniformLocation("u_tex0");
     _shaderSets[14]->SamplerTexture1Location = _shaderSets[14]->ShaderProgram->getUniformLocation("u_tex1");
     _shaderSets[14]->UniformMatrixLocation = _shaderSets[14]->ShaderProgram->getUniformLocation("u_matrix");
@@ -1339,8 +1317,8 @@ void CubismShader_Axmol::GenerateShaders()
     _shaderSets[14]->UniformBaseColorLocation = _shaderSets[14]->ShaderProgram->getUniformLocation("u_baseColor");
 
     // 乗算（クリッピング・反転）
-    _shaderSets[15]->AttributePositionLocation = _shaderSets[15]->ShaderProgram->getVertexInputDesc("a_position");
-    _shaderSets[15]->AttributeTexCoordLocation = _shaderSets[15]->ShaderProgram->getVertexInputDesc("a_texCoord");
+    _shaderSets[15]->AttributePositionLocation = _shaderSets[15]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::POSITION);
+    _shaderSets[15]->AttributeTexCoordLocation = _shaderSets[15]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::TEXCOORD0);
     _shaderSets[15]->SamplerTexture0Location = _shaderSets[15]->ShaderProgram->getUniformLocation("u_tex0");
     _shaderSets[15]->SamplerTexture1Location = _shaderSets[15]->ShaderProgram->getUniformLocation("u_tex1");
     _shaderSets[15]->UniformMatrixLocation = _shaderSets[15]->ShaderProgram->getUniformLocation("u_matrix");
@@ -1349,15 +1327,15 @@ void CubismShader_Axmol::GenerateShaders()
     _shaderSets[15]->UniformBaseColorLocation = _shaderSets[15]->ShaderProgram->getUniformLocation("u_baseColor");
 
     // 乗算（PremultipliedAlpha）
-    _shaderSets[16]->AttributePositionLocation = _shaderSets[16]->ShaderProgram->getVertexInputDesc( "a_position");
-    _shaderSets[16]->AttributeTexCoordLocation = _shaderSets[16]->ShaderProgram->getVertexInputDesc("a_texCoord");
+    _shaderSets[16]->AttributePositionLocation = _shaderSets[16]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::POSITION);
+    _shaderSets[16]->AttributeTexCoordLocation = _shaderSets[16]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::TEXCOORD0);
     _shaderSets[16]->SamplerTexture0Location = _shaderSets[16]->ShaderProgram->getUniformLocation("u_tex0");
     _shaderSets[16]->UniformMatrixLocation = _shaderSets[16]->ShaderProgram->getUniformLocation("u_matrix");
     _shaderSets[16]->UniformBaseColorLocation = _shaderSets[16]->ShaderProgram->getUniformLocation("u_baseColor");
 
     // 乗算（クリッピング、PremultipliedAlpha）
-    _shaderSets[17]->AttributePositionLocation = _shaderSets[17]->ShaderProgram->getVertexInputDesc("a_position");
-    _shaderSets[17]->AttributeTexCoordLocation = _shaderSets[17]->ShaderProgram->getVertexInputDesc("a_texCoord");
+    _shaderSets[17]->AttributePositionLocation = _shaderSets[17]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::POSITION);
+    _shaderSets[17]->AttributeTexCoordLocation = _shaderSets[17]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::TEXCOORD0);
     _shaderSets[17]->SamplerTexture0Location = _shaderSets[17]->ShaderProgram->getUniformLocation("u_tex0");
     _shaderSets[17]->SamplerTexture1Location = _shaderSets[17]->ShaderProgram->getUniformLocation("u_tex1");
     _shaderSets[17]->UniformMatrixLocation = _shaderSets[17]->ShaderProgram->getUniformLocation("u_matrix");
@@ -1366,8 +1344,8 @@ void CubismShader_Axmol::GenerateShaders()
     _shaderSets[17]->UniformBaseColorLocation = _shaderSets[17]->ShaderProgram->getUniformLocation("u_baseColor");
 
     // 乗算（クリッピング・反転、PremultipliedAlpha）
-    _shaderSets[18]->AttributePositionLocation = _shaderSets[18]->ShaderProgram->getVertexInputDesc("a_position");
-    _shaderSets[18]->AttributeTexCoordLocation = _shaderSets[18]->ShaderProgram->getVertexInputDesc("a_texCoord");
+    _shaderSets[18]->AttributePositionLocation = _shaderSets[18]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::POSITION);
+    _shaderSets[18]->AttributeTexCoordLocation = _shaderSets[18]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::TEXCOORD0);
     _shaderSets[18]->SamplerTexture0Location = _shaderSets[18]->ShaderProgram->getUniformLocation("u_tex0");
     _shaderSets[18]->SamplerTexture1Location = _shaderSets[18]->ShaderProgram->getUniformLocation("u_tex1");
     _shaderSets[18]->UniformMatrixLocation = _shaderSets[18]->ShaderProgram->getUniformLocation("u_matrix");
@@ -1377,8 +1355,8 @@ void CubismShader_Axmol::GenerateShaders()
 
     for (csmInt32 i = ShaderNames_Normal; i < ShaderCount; ++i)
     {
-        _shaderSets[i]->AttributePositionLocation = _shaderSets[i]->ShaderProgram->getVertexInputDesc("a_position");
-        _shaderSets[i]->AttributeTexCoordLocation = _shaderSets[i]->ShaderProgram->getVertexInputDesc("a_texCoord");
+        _shaderSets[i]->AttributePositionLocation = _shaderSets[i]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::POSITION);
+        _shaderSets[i]->AttributeTexCoordLocation = _shaderSets[i]->ShaderProgram->getVertexInputDesc(rhi::VertexSemantic::TEXCOORD0);
         _shaderSets[i]->SamplerTexture0Location = _shaderSets[i]->ShaderProgram->getUniformLocation("u_tex0");
         _shaderSets[i]->SamplerTexture1Location = _shaderSets[i]->ShaderProgram->getUniformLocation("u_tex1");
         _shaderSets[i]->SamplerBlendTextureLocation = _shaderSets[i]->ShaderProgram->getUniformLocation("u_blendTexture");
@@ -1434,10 +1412,10 @@ void CubismShader_Axmol::SetupShaderProgram(CubismCommandBuffer_Axmol::DrawComma
         layoutDesc.startLayout(2);
 
         // 頂点配列の設定
-        layoutDesc.addAttrib("a_position", shaderSet->AttributePositionLocation, ax::rhi::VertexElementType::FLOAT2, 0,
+        layoutDesc.addAttrib(shaderSet->AttributePositionLocation, ax::rhi::VertexElementType::FLOAT2, 0,
                             false);
         // テクスチャ頂点の設定
-        layoutDesc.addAttrib("a_texCoord", shaderSet->AttributeTexCoordLocation, ax::rhi::VertexElementType::FLOAT2,
+        layoutDesc.addAttrib(shaderSet->AttributeTexCoordLocation, ax::rhi::VertexElementType::FLOAT2,
                           sizeof(csmFloat32) * 2, false);
         layoutDesc.endLayout();
 
@@ -1527,10 +1505,10 @@ void CubismShader_Axmol::SetupShaderProgram(CubismCommandBuffer_Axmol::DrawComma
         layoutDesc.startLayout(2);
 
         // 頂点配列の設定
-        layoutDesc.addAttrib("a_position", shaderSet->AttributePositionLocation, ax::rhi::VertexElementType::FLOAT2, 0,
+        layoutDesc.addAttrib(shaderSet->AttributePositionLocation, ax::rhi::VertexElementType::FLOAT2, 0,
                           false);
         // テクスチャ頂点の設定
-        layoutDesc.addAttrib("a_texCoord", shaderSet->AttributeTexCoordLocation, ax::rhi::VertexElementType::FLOAT2,
+        layoutDesc.addAttrib(shaderSet->AttributeTexCoordLocation, ax::rhi::VertexElementType::FLOAT2,
                           sizeof(csmFloat32) * 2, false);
 
         layoutDesc.endLayout();
@@ -1612,8 +1590,8 @@ void CubismShader_Axmol::SetupRenderTargetShaderProgram(CubismCommandBuffer_Axmo
 
     auto layoutDesc = axvlm->allocateVertexLayoutDesc();
     layoutDesc.startLayout(2);
-    layoutDesc.addAttrib("a_position", shaderSet->AttributePositionLocation, ax::rhi::VertexElementType::FLOAT2, 0, false);
-    layoutDesc.addAttrib("a_texCoord", shaderSet->AttributeTexCoordLocation, ax::rhi::VertexElementType::FLOAT2, sizeof(csmFloat32) * 2, false);
+    layoutDesc.addAttrib(shaderSet->AttributePositionLocation, ax::rhi::VertexElementType::FLOAT2, 0, false);
+    layoutDesc.addAttrib(shaderSet->AttributeTexCoordLocation, ax::rhi::VertexElementType::FLOAT2, sizeof(csmFloat32) * 2, false);
     layoutDesc.endLayout();
 
     VertexLayout* layout = axvlm->getVertexLayout(std::move(layoutDesc));

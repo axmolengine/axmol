@@ -29,6 +29,7 @@
 #include "axmol/rhi/vulkan/ShaderModuleVK.h"
 #include "axmol/rhi/vulkan/DriverVK.h"
 #include "axmol/rhi/vulkan/UtilsVK.h"
+#include "axmol/rhi/axslc-spec.h"
 #include "axmol/tlx/hlookup.hpp"
 #include "axmol/tlx/hash.hpp"
 #include "axmol/tlx/inlined_vector.hpp"
@@ -173,18 +174,22 @@ void DescriptorPool::init(DescriptorAllocator* allocator, std::span<const VkDesc
     poolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
     poolInfo.pPoolSizes    = poolSizes.data();
     poolInfo.flags         = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
-    poolInfo.maxSets       = DESCRIPTOR_POOL_MAX_SETS;
+    poolInfo.maxSets       = DESCRIPTOR_POOL_MAX_SETS * MAX_DESCRIPTOR_SETS;
 
     auto ret = vkCreateDescriptorPool(_allocator->getDevice(), &poolInfo, nullptr, &_pool);
     VK_REQUIRE(ret, "vkCreateDescriptorPool failed");
 
-    _freeSetCount = _maxSetCount = DESCRIPTOR_POOL_MAX_SETS;
+    _freeSetCount = _maxSetCount = DESCRIPTOR_POOL_MAX_SETS * MAX_DESCRIPTOR_SETS;
     for (auto& poolSize : poolSizes)
     {
         if (poolSize.type == VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER)
             _freeUniformDescriptorCount = _maxUniformDescriptorCount = poolSize.descriptorCount;
-        else if (poolSize.type == VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER)
+        else if (poolSize.type == VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE)
+            _freeImageDescriptorCount = _maxImageDescriptorCount = poolSize.descriptorCount;
+        else if (poolSize.type == VK_DESCRIPTOR_TYPE_SAMPLER)
             _freeSamplerDescriptorCount = _maxSamplerDescriptorCount = poolSize.descriptorCount;
+        else if (poolSize.type == VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER)
+            _freeCombinedDescriptorCount = _maxCombinedDescriptorCount = poolSize.descriptorCount;
     }
 }
 
@@ -197,7 +202,9 @@ void DescriptorPool::dispose()
     }
     _freeSetCount = _maxSetCount = 0;
     _freeUniformDescriptorCount = _maxUniformDescriptorCount = 0;
+    _freeImageDescriptorCount = _maxImageDescriptorCount = 0;
     _freeSamplerDescriptorCount = _maxSamplerDescriptorCount = 0;
+    _freeCombinedDescriptorCount = _maxCombinedDescriptorCount = 0;
 }
 
 void DescriptorPool::allocateDescriptorSets(const PipelineLayoutState* layoutState, DescriptorState* descriptorState)
@@ -211,14 +218,20 @@ void DescriptorPool::allocateDescriptorSets(const PipelineLayoutState* layoutSta
 
     VkResult result = vkAllocateDescriptorSets(_allocator->getDevice(), &ai, descriptorState->sets.data());
     VK_REQUIRE(result, "vkAllocateDescriptorSets failed");
-    descriptorState->pool                   = this;
-    descriptorState->uniformDescriptorCount = static_cast<uint16_t>(layoutState->uniformDescriptorCount);
-    descriptorState->samplerDescriptorCount = static_cast<uint16_t>(layoutState->samplerDescriptorCount);
+    descriptorState->pool                    = this;
+    descriptorState->descriptorSetCount      = static_cast<uint8_t>(layoutState->descriptorSetLayoutCount);
+    descriptorState->uniformDescriptorCount  = static_cast<uint16_t>(layoutState->uniformDescriptorCount);
+    descriptorState->imageDescriptorCount    = static_cast<uint16_t>(layoutState->imageDescriptorCount);
+    descriptorState->samplerDescriptorCount  = static_cast<uint16_t>(layoutState->samplerDescriptorCount);
+    descriptorState->combinedDescriptorCount = static_cast<uint16_t>(layoutState->combinedDescriptorCount);
 
     _freeSetCount -= layoutState->descriptorSetLayoutCount;
     _freeUniformDescriptorCount -= layoutState->uniformDescriptorCount;
+    _freeImageDescriptorCount -= layoutState->imageDescriptorCount;
     if (layoutState->samplerDescriptorCount > 0)
         _freeSamplerDescriptorCount -= layoutState->samplerDescriptorCount;
+    if (layoutState->combinedDescriptorCount > 0)
+        _freeCombinedDescriptorCount -= layoutState->combinedDescriptorCount;
 }
 
 void DescriptorPool::freeDescriptorSets(uint32_t descriptorSetCount, DescriptorState* descriptorState)
@@ -228,12 +241,17 @@ void DescriptorPool::freeDescriptorSets(uint32_t descriptorSetCount, DescriptorS
     VK_REQUIRE(result, "vkFreeDescriptorSets failed");
     _freeSetCount += descriptorSetCount;
     _freeUniformDescriptorCount += descriptorState->uniformDescriptorCount;
+    _freeImageDescriptorCount += descriptorState->imageDescriptorCount;
     _freeSamplerDescriptorCount += descriptorState->samplerDescriptorCount;
+    _freeCombinedDescriptorCount += descriptorState->combinedDescriptorCount;
 
-    descriptorState->uniformDescriptorCount = 0;
-    descriptorState->samplerDescriptorCount = 0;
-    descriptorState->progId                 = 0;
-    descriptorState->pool                   = nullptr;
+    descriptorState->uniformDescriptorCount  = 0;
+    descriptorState->imageDescriptorCount    = 0;
+    descriptorState->samplerDescriptorCount  = 0;
+    descriptorState->combinedDescriptorCount = 0;
+    descriptorState->descriptorSetCount      = 0;
+    descriptorState->progId                  = 0;
+    descriptorState->pool                    = nullptr;
     descriptorState->sets.fill(VK_NULL_HANDLE);
 }
 
@@ -279,7 +297,7 @@ void DescriptorAllocator::freeDescriptorSets(DescriptorState* descriptorState)
         auto it = std::find(_pools.begin(), _pools.end(), descriptorState->pool);
         VK_REQUIRE_EXPR(it != _pools.end(), "DescriptorAllocator::freeDescriptorSets: pool not owned by allocator");
 #endif
-        descriptorState->pool->freeDescriptorSets(static_cast<uint32_t>(_poolSizes.size()), descriptorState);
+        descriptorState->pool->freeDescriptorSets(descriptorState->descriptorSetCount, descriptorState);
     }
 }
 
@@ -313,6 +331,8 @@ RenderPipelineImpl::RenderPipelineImpl(DriverImpl* driver) : _driver(driver), _d
     // For UBO + sampler
     constexpr VkDescriptorPoolSize poolSizes2[] = {
         {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, DESCRIPTOR_POOL_MAX_SETS * DESCRIPTOR_POOL_UNIFORM_MULTIPLIER},
+        {VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, DESCRIPTOR_POOL_MAX_SETS * DESCRIPTOR_POOL_SAMPLER_MULTIPLIER},
+        {VK_DESCRIPTOR_TYPE_SAMPLER, DESCRIPTOR_POOL_MAX_SETS * DESCRIPTOR_POOL_SAMPLER_MULTIPLIER},
         {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, DESCRIPTOR_POOL_MAX_SETS * DESCRIPTOR_POOL_SAMPLER_MULTIPLIER},
     };
     _descriptorAllocator2.init(_device, poolSizes2);
@@ -324,7 +344,7 @@ RenderPipelineImpl::~RenderPipelineImpl()
 
     for (auto& [_, state] : _pipelineLayoutCache)
     {
-        if (state.descriptorSetLayoutCount == 2)
+        if (state.descriptorSetLayoutCount > 1)
             freeDescriptorStates(_descriptorAllocator2, state.descriptorFreeList, false);
         else
             freeDescriptorStates(_descriptorAllocator1, state.descriptorFreeList, false);
@@ -335,8 +355,10 @@ RenderPipelineImpl::~RenderPipelineImpl()
         auto& descSetLayouts = state.descriptorSetLayouts;
         if (descSetLayouts[SET_INDEX_UBO])
             vkDestroyDescriptorSetLayout(_device, descSetLayouts[SET_INDEX_UBO], nullptr);
-        if (descSetLayouts[SET_INDEX_SAMPLER])
-            vkDestroyDescriptorSetLayout(_device, descSetLayouts[SET_INDEX_SAMPLER], nullptr);
+        if (descSetLayouts[SET_INDEX_RESOURCE])
+            vkDestroyDescriptorSetLayout(_device, descSetLayouts[SET_INDEX_RESOURCE], nullptr);
+        if (descSetLayouts[SET_INDEX_CUSTOM_SAMPLER])
+            vkDestroyDescriptorSetLayout(_device, descSetLayouts[SET_INDEX_CUSTOM_SAMPLER], nullptr);
     }
     _pipelineLayoutCache.clear();
 
@@ -449,7 +471,7 @@ void RenderPipelineImpl::updatePipelineLayoutState(ProgramImpl* program)
     }
 
     tlx::pod_vector<VkDescriptorSetLayoutBinding> ubBindings;
-    tlx::pod_vector<VkDescriptorSetLayoutBinding> samplerBindings;
+    tlx::pod_vector<VkDescriptorSetLayoutBinding> resourceBindings;
 
     auto& state = _pipelineLayoutCache.emplace(_activeProgId, PipelineLayoutState{}).first->second;
 
@@ -467,17 +489,74 @@ void RenderPipelineImpl::updatePipelineLayoutState(ProgramImpl* program)
         ++state.uniformDescriptorCount;
     }
 
-    // FS samplers -> set=1
+    const bool separateSamplers = !program->getActiveSamplerInfos().empty();
+    tlx::pod_vector<VkDescriptorSetLayoutBinding> customSamplerBindings;
+
+    // FS sampled images / combined images -> set=1
     for (auto& [_, smp] : program->getActiveTextureInfos())
     {
-        VkDescriptorSetLayoutBinding& b = samplerBindings.emplace_back();
+        VkDescriptorSetLayoutBinding& b = resourceBindings.emplace_back();
         b.binding                       = smp->location;
-        b.descriptorType                = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        b.descriptorCount               = smp->count;
-        b.stageFlags                    = VK_SHADER_STAGE_FRAGMENT_BIT;
-        b.pImmutableSamplers            = nullptr;
+        b.descriptorType =
+            separateSamplers ? VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE : VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+        b.descriptorCount    = smp->count;
+        b.stageFlags         = VK_SHADER_STAGE_FRAGMENT_BIT;
+        b.pImmutableSamplers = nullptr;
 
-        state.samplerDescriptorCount += smp->count;
+        if (separateSamplers)
+            state.imageDescriptorCount += smp->count;
+        else
+            state.combinedDescriptorCount += smp->count;
+    }
+
+    if (separateSamplers)
+    {
+        for (const auto& smp : program->getActiveSamplerInfos())
+        {
+            if (!smp.samplerId)
+                continue;
+
+            if (smp.presetIndex >= 0)
+            {
+                // Built-in preset sampler -> set 1 with binding shift
+                AXASSERT(smp.space == axslc::kPresetSamplerDescriptorSet, "Preset sampler must use descriptor set 1");
+                AXASSERT(smp.binding >= axslc::kVulkanSamplerBindingShift,
+                         "Preset sampler binding must include the sampler binding shift");
+
+                VkDescriptorSetLayoutBinding& b = resourceBindings.emplace_back();
+                b.binding                       = smp.binding;
+                b.descriptorType                = VK_DESCRIPTOR_TYPE_SAMPLER;
+                b.descriptorCount               = smp.count;
+                b.stageFlags                    = VK_SHADER_STAGE_FRAGMENT_BIT;
+                b.pImmutableSamplers            = nullptr;
+                state.samplerDescriptorCount += smp.count;
+            }
+            else
+            {
+                // Custom program-local sampler -> set 2, DXC-shifted binding
+                AXASSERT(smp.binding >= axslc::kVulkanSamplerBindingShift,
+                         "Custom sampler binding must include the sampler binding shift");
+
+                VkDescriptorSetLayoutBinding& b = customSamplerBindings.emplace_back();
+                b.binding                       = smp.binding;
+                b.descriptorType                = VK_DESCRIPTOR_TYPE_SAMPLER;
+                b.descriptorCount               = smp.count;
+                b.stageFlags                    = VK_SHADER_STAGE_FRAGMENT_BIT;
+                b.pImmutableSamplers            = nullptr;
+                state.samplerDescriptorCount += smp.count;
+            }
+        }
+
+        if (!customSamplerBindings.empty())
+        {
+            VkDescriptorSetLayoutCreateInfo dslCustom{};
+            dslCustom.sType        = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+            dslCustom.bindingCount = static_cast<uint32_t>(customSamplerBindings.size());
+            dslCustom.pBindings    = customSamplerBindings.data();
+            auto vr                = vkCreateDescriptorSetLayout(_device, &dslCustom, nullptr,
+                                                                 &state.descriptorSetLayouts[SET_INDEX_CUSTOM_SAMPLER]);
+            VK_REQUIRE(vr, "vkCreateDescriptorSetLayout for custom samplers (set 2) failed");
+        }
     }
 
     // Create DescriptorSetLayout for UBOs (set=0)
@@ -487,21 +566,19 @@ void RenderPipelineImpl::updatePipelineLayoutState(ProgramImpl* program)
     dsl0.pBindings    = ubBindings.data();
     vkCreateDescriptorSetLayout(_device, &dsl0, nullptr, &state.descriptorSetLayouts[SET_INDEX_UBO]);
 
-    if (!samplerBindings.empty())
+    if (!resourceBindings.empty())
     {
-        // Create DescriptorSetLayout for samplers (set=1)
-
-        state.descriptorSetLayoutCount = 2;
-
         VkDescriptorSetLayoutCreateInfo dsl1{};
         dsl1.sType        = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-        dsl1.bindingCount = static_cast<uint32_t>(samplerBindings.size());
-        dsl1.pBindings    = samplerBindings.data();
-        auto vr = vkCreateDescriptorSetLayout(_device, &dsl1, nullptr, &state.descriptorSetLayouts[SET_INDEX_SAMPLER]);
+        dsl1.bindingCount = static_cast<uint32_t>(resourceBindings.size());
+        dsl1.pBindings    = resourceBindings.data();
+        auto vr = vkCreateDescriptorSetLayout(_device, &dsl1, nullptr, &state.descriptorSetLayouts[SET_INDEX_RESOURCE]);
         VK_REQUIRE(vr, "vkCreateDescriptorSetLayout failed");
     }
-    else
-        state.descriptorSetLayoutCount = 1;
+
+    bool hasCustomSet = !customSamplerBindings.empty();
+
+    state.descriptorSetLayoutCount = hasCustomSet ? 3u : !resourceBindings.empty() ? 2u : 1u;
 
     VkPipelineLayoutCreateInfo plc{};
     plc.sType                  = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
@@ -610,13 +687,13 @@ DescriptorState* RenderPipelineImpl::acquireDescriptorState()
     descriptorState         = _descriptorStatePool.construt();
     descriptorState->progId = _activeProgId;
 
-    if (_activeLayoutState->descriptorSetLayoutCount == 2) [[likely]]
+    if (_activeLayoutState->descriptorSetLayoutCount > 1) [[likely]]
     {
         _descriptorAllocator2.allocateDescriptorSets(_activeLayoutState, descriptorState);
     }
     else
     {
-        AXASSERT(_activeLayoutState->descriptorSetLayoutCount == 1, "DescriptorSetLayoutCount must be 1 or 2");
+        AXASSERT(_activeLayoutState->descriptorSetLayoutCount == 1, "DescriptorSetLayoutCount must be 1, 2 or 3");
         _descriptorAllocator1.allocateDescriptorSets(_activeLayoutState, descriptorState);
     }
     return descriptorState;
@@ -695,7 +772,7 @@ void RenderPipelineImpl::removeCachedObjects(Program* key)
         auto& layoutState = layoutIt->second;
 
         // remove descriptor sets cache
-        if (layoutState.descriptorSetLayoutCount == 2) [[likely]]
+        if (layoutState.descriptorSetLayoutCount > 1) [[likely]]
             freeDescriptorStates(_descriptorAllocator2, layoutState.descriptorFreeList, true);
         else
             freeDescriptorStates(_descriptorAllocator1, layoutState.descriptorFreeList, true);
@@ -706,8 +783,10 @@ void RenderPipelineImpl::removeCachedObjects(Program* key)
         auto& descSetLayouts = layoutState.descriptorSetLayouts;
         if (descSetLayouts[SET_INDEX_UBO])
             vkDestroyDescriptorSetLayout(_device, descSetLayouts[SET_INDEX_UBO], nullptr);
-        if (descSetLayouts[SET_INDEX_SAMPLER])
-            vkDestroyDescriptorSetLayout(_device, descSetLayouts[SET_INDEX_SAMPLER], nullptr);
+        if (descSetLayouts[SET_INDEX_RESOURCE])
+            vkDestroyDescriptorSetLayout(_device, descSetLayouts[SET_INDEX_RESOURCE], nullptr);
+        if (descSetLayouts[SET_INDEX_CUSTOM_SAMPLER])
+            vkDestroyDescriptorSetLayout(_device, descSetLayouts[SET_INDEX_CUSTOM_SAMPLER], nullptr);
         _pipelineLayoutCache.erase(layoutIt);
     }
 

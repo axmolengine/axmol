@@ -46,9 +46,9 @@ ProgramImpl ::~ProgramImpl()
     _uniformBuffers.clear();
 }
 
-ID3DBlob* ProgramImpl::getVSBlob() const
+std::span<uint8_t> ProgramImpl::getVSBlob() const
 {
-    return static_cast<ShaderModuleImpl*>(_vsModule)->getShaderBlob();
+    return static_cast<ShaderModuleImpl*>(_vsModule)->getBlob();
 }
 
 void ProgramImpl::bindUniformBuffers(ID3D11DeviceContext* context, const uint8_t* buffer, size_t bufferSize)

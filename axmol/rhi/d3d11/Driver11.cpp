@@ -413,6 +413,24 @@ IUnknown* DriverImpl::compileShader(std::span<uint8_t> shaderCode, ShaderStage s
     return shader;
 }
 
+IUnknown* DriverImpl::createShaderFromBytecode(std::span<uint8_t> bytecode, ShaderStage stage)
+{
+    IUnknown* shader = nullptr;
+    if (stage == ShaderStage::VERTEX)
+    {
+        ComPtr<ID3D11VertexShader> vs;
+        _device->CreateVertexShader(bytecode.data(), bytecode.size(), nullptr, vs.GetAddressOf());
+        shader = vs.Detach();
+    }
+    else
+    {
+        ComPtr<ID3D11PixelShader> ps;
+        _device->CreatePixelShader(bytecode.data(), bytecode.size(), nullptr, ps.GetAddressOf());
+        shader = ps.Detach();
+    }
+    return shader;
+}
+
 SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
 {
     D3D11_SAMPLER_DESC sd = {};

@@ -661,6 +661,10 @@ function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $params =
             $isRange = $verArr.Count -gt 1
             $minimalVer = $verArr[0]
             $preferredVer = $verArr[$isRange]
+            # strip pre-release suffix e.g. 3.99.0-rc1 -> 3.99.0
+            $stripSuffix = [regex]'\-[a-z0-9]+$'
+            $minimalVer = $stripSuffix.Replace($minimalVer, '')
+            $preferredVer = $stripSuffix.Replace($preferredVer, '')
             if ($preferredVer.EndsWith('+')) {
                 $preferredVer = $preferredVer.TrimEnd('+')
                 if ($minimalVer.EndsWith('+')) { $minimalVer = $minimalVer.TrimEnd('+') }
@@ -710,8 +714,8 @@ function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $params =
                 $verStr = "$($verInfo.Major).$($verInfo.Minor).$($verInfo.Build)"
             }
 
-            # can match x.y.z-rc3 or x.y.z-65a239b
-            $matchInfo = [Regex]::Match($verStr, '(\d+\.)+(\*|\d+)(\-[a-z0-9]+)?')
+            # strip x.y.z-rc3 to x.y.z
+            $matchInfo = [Regex]::Match($verStr, '(\d+\.)+(\*|\d+)')
             $foundVer = $matchInfo.Value
         }
         else {
@@ -1004,29 +1008,33 @@ function setup_python3() {
 }
 
 # setup axslcc, not add to path
+# package layout: axslcc-<ver>-<os>-<arch>/axslcc (flat)
+# expected layout: axslcc/bin/axslcc, axslcc/<license files>
 function setup_axslcc() {
     if (!$manifest['axslcc']) { return $null }
-    $axslcc_bin = Join-Path $install_prefix 'axslcc'
+    $axslcc_root = Join-Path $install_prefix 'axslcc'
+    $axslcc_bin = Join-Path $axslcc_root 'bin'
     $axslcc_prog, $axslcc_ver = find_prog -name 'axslcc' -path $axslcc_bin -mode 'BOTH'
     if ($axslcc_prog) {
         return $axslcc_prog
     }
 
+    $requiredVer = $manifest['axslcc']
     $axslcc_prog = (Join-Path $axslcc_bin "axslcc$EXE_SUFFIX")
     if ($1k.isfile($axslcc_prog)) {
         $1k.del($axslcc_prog)
     }
 
-    $pkg_url = devtool_url 'axslcc' $axslcc_ver
+    $pkg_url = devtool_url 'axslcc' $requiredVer
+    fetch_pkg $pkg_url -exrep "axslcc-$requiredVer-*=axslcc"
 
-    fetch_pkg $pkg_url -exrep "axslcc"
-
-    if ($1k.isfile($axslcc_prog)) {
+    $axslcc_prog, $axslcc_ver = find_prog -name 'axslcc' -path $axslcc_bin -mode 'BOTH' -silent $true
+    if ($axslcc_prog) {
         $1k.println("Using axslcc: $axslcc_prog, version: $axslcc_ver")
+        return $axslcc_prog
     }
-    else {
-        throw "Install axslcc fail"
-    }
+
+    throw "Install axslcc fail"
 }
 
 function setup_ninja() {

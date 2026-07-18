@@ -1,5 +1,5 @@
 /****************************************************************************
- Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
 
@@ -66,27 +66,33 @@ void ShaderModule::parseShaderCode(void)
     auto sc_size = ibs.read<uint32_t>();
     struct sc_chunk chunk;
     ibs.read_bytes(&chunk, static_cast<int>(sizeof(chunk)));
-    if (chunk.major < 3 || chunk.minor < 4)
+    if (chunk.major != 3 || chunk.minor < 99)
     {
         AXLOGE(
-            "The axslcc shader chunk version too old: found {}.{}, required >= 3.4, "
+            "Unsupported axslcc shader chunk version: found {}.{}, required 3.99 or newer. "
             "Please update/recompile the shader.",
             chunk.major, chunk.minor);
         assert(false && "axmol: Shader version too old");
     }
 
-    // find target entry
+    // find target entry: prefer precompiled bytecode when available
     const auto driverType        = GraphicsCore::currentDriverType();
     const auto currentShaderLang = GraphicsCore::currentShaderLang();
     const auto currentProfileVer = GraphicsCore::currentShaderProfile();
+    const auto bcProfile         = GraphicsCore::currentShaderILProfile();
 
     for (int i = 0; i < chunk.num_targets; ++i)
     {
         auto lang        = ibs.read<int>();
         auto profile_ver = ibs.read<int>();
-        if (matchLang(currentShaderLang, currentProfileVer, lang, profile_ver))
+        bool precompiled = (profile_ver & SC_BYTECODE_FLAG) != 0;
+        int profile      = profile_ver & ~SC_BYTECODE_FLAG;
+        int expect       = precompiled ? bcProfile : currentProfileVer;
+
+        if (matchLang(currentShaderLang, expect, lang, profile))
         {
             _stageOffset = ibs.read<uint32_t>();
+            _precompiled = precompiled;
             break;
         }
         else
@@ -117,16 +123,15 @@ void ShaderModule::parseShaderCode(void)
     assert(ref_stage == _stage && "Shader stage mismatch in axslc chunk");
 
     fourccId = ibs.read<uint32_t>();
-    if (fourccId == SC_CHUNK_CODE || fourccId == SC_CHUNK_DATA)
-    {
-        // Expecting SPIR-V binary blob from axslc, not text
+    if (fourccId == SC_CHUNK_CODE)
+    {  // shader code
         const int codeLen           = ibs.read<int>();
         std::string_view shaderCode = ibs.read_bytes(codeLen);
         _codeSpan                   = std::span{(uint8_t*)shaderCode.data(), shaderCode.size()};
     }
     else
     {
-        AXLOGE("axmol: No code/data chunk (SC_CHUNK_CODE/SC_CHUNK_DATA) found for shader stage.");
+        AXLOGE("axmol: No code chunk (SC_CHUNK_CODE) found for shader stage.");
         assert(false);
     }
 }

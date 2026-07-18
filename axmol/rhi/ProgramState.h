@@ -149,29 +149,12 @@ public:
 
     void getUniformLocations(std::string_view name, UniformLocationVector& outLocations) const;
 
-    /**
-     * Get an attribute location by the actual attribute name.
-     * @param name Specifies the attribute name.
-     * @return Attribute location.
-     * @see `int getAttributeLocation(std::string_view name) const`
-     */
-    inline const VertexInputDesc* getVertexInputDesc(std::string_view name) const
+    inline const VertexInputDesc* getVertexInputDesc(const VertexSemantic& semantic) const
     {
-        return _program->getVertexInputDesc(name);
+        return _program->getVertexInputDesc(semantic);
     }
 
-    /**
-     * Get an attribute location by the engine built-in attribute name.
-     * @param name Specifies the built-in attribute name.
-     * @return Attribute location.
-     * @see `int getAttributeLocation(std::string_view name) const`
-     */
-    inline const VertexInputDesc* getVertexInputDesc(VertexInputKind name) const
-    {
-        return _program->getVertexInputDesc(name);
-    }
-
-    const tlx::string_map<VertexInputDesc>& getActiveVertexInputs() const { return _program->getActiveVertexInputs(); }
+    const Program::VertexInputMap& getActiveVertexInputs() const { return _program->getActiveVertexInputs(); }
 
     const std::vector<UniformBlockInfo>& getActiveUniformBlockInfos() const
     {

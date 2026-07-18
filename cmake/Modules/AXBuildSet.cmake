@@ -33,7 +33,7 @@ endif()
 
 # import minimal axslcc.cmake for shader compiler support
 # the function: ax_target_compile_shaders avaiable from it
-file(TO_CMAKE_PATH "$ENV{AX_ROOT}/tools/external/axslcc" _AXSLCC_PATH)
+file(TO_CMAKE_PATH "$ENV{AX_ROOT}/tools/external/axslcc/bin" _AXSLCC_PATH)
 set(AXSLCC_FIND_PROG_ROOT "${_AXSLCC_PATH}")
 
 include(AXSLCC)

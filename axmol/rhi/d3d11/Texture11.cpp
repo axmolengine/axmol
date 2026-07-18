@@ -25,7 +25,7 @@
 #include "axmol/rhi/d3d11/Driver11.h"
 #include "axmol/rhi/DXUtils.h"
 #include "axmol/rhi/RHIUtils.h"
-#include "axmol/rhi/SamplerCache.h"
+#include "axmol/rhi/SamplerRegistry.h"
 
 namespace ax::rhi::d3d11
 {
@@ -145,7 +145,7 @@ TextureImpl::~TextureImpl()
 void TextureImpl::updateSamplerDesc(const SamplerDesc& desc)
 {
     _desc.samplerDesc = desc;
-    _samplerState     = static_cast<ID3D11SamplerState*>(SamplerCache::getInstance()->getSampler(desc));
+    _samplerState     = static_cast<ID3D11SamplerState*>(SamplerRegistry::getInstance()->getSampler(desc));
 }
 
 // ------------------------------------------------------------

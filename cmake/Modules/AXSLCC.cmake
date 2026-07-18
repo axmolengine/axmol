@@ -9,10 +9,10 @@ macro(axslcc_option variable value)
   endif()
 endmacro()
 
-axslcc_option(AXSLCC_FRAG_SOURCE_FILE_EXTENSIONS ".frag;.fsh;.fs")
-axslcc_option(AXSLCC_VERT_SOURCE_FILE_EXTENSIONS ".vert;.vsh;.vs")
+axslcc_option(AXSLCC_SOURCE_FILE_EXTENSIONS ".hlsl")
 axslcc_option(AXSLCC_OUT_DIR ${CMAKE_BINARY_DIR}/runtime/axslc)
 axslcc_option(AXSLCC_FIND_PROG_ROOT "")
+axslcc_option(AXSLCC_FLAGS "-S")
 
 find_program(AXSLCC_EXE NAMES axslcc
   PATHS ${AXSLCC_FIND_PROG_ROOT}
@@ -25,25 +25,23 @@ endif()
 
 message(STATUS "AXSLCC_OUT_DIR=${AXSLCC_OUT_DIR}")
 message(STATUS "AXSLCC_FIND_PROG_ROOT=${AXSLCC_FIND_PROG_ROOT}")
-message(STATUS "AXSLCC_FRAG_SOURCE_FILE_EXTENSIONS=${AXSLCC_FRAG_SOURCE_FILE_EXTENSIONS}")
-message(STATUS "AXSLCC_VERT_SOURCE_FILE_EXTENSIONS=${AXSLCC_VERT_SOURCE_FILE_EXTENSIONS}")
 
 # PROPERTY: include direcotries (optional)
 define_property(SOURCE PROPERTY AXSLCC_INCLUDE_DIRS
   BRIEF_DOCS "Compiled shader include directories"
   FULL_DOCS "Compiled shader include directories, seperated with comma")
 
-# PROPERTY: defines (optional) TODO: rename to PREPROCESSOR_LIST
+# PROPERTY: defines (optional)
 define_property(SOURCE PROPERTY AXSLCC_DEFINES
   BRIEF_DOCS "Compiled shader defines"
   FULL_DOCS "Compiled shader defines, seperated with comma")
 
-# PROPERTY: output1 (optional) TODO: rename to PREPROCESSOR_LIST
-define_property(SOURCE PROPERTY AXSLCC_OUTPUT1
-  BRIEF_DOCS "Compiled shader output1 additional defines"
-  FULL_DOCS "Compiled shader output1 additional defines, seperated with comma")
+# PROPERTY: variant defines (optional) multi-compile variants
+define_property(SOURCE PROPERTY AXSLCC_VARIANT_DEFINES
+  BRIEF_DOCS "Compiled shader variant defines"
+  FULL_DOCS "Additional defines per output variant. cmake-list separated by semicolons, each element is comma-separated defines for one variant. Outputs: base, base_1, base_2, ...")
 
-# PROPERTY: glscc output (optional)
+# PROPERTY: axslcc output (optional)
 define_property(SOURCE PROPERTY AXSLCC_OUTPUT
   BRIEF_DOCS "The compiled sources shader output path list"
   FULL_DOCS "The compiled shaders output list, seperated with comma")
@@ -52,22 +50,27 @@ define_property(TARGET PROPERTY SHADER_DEPENDS
   BRIEF_DOCS "The shader depends of normal target"
   FULL_DOCS "The shader depends of normal target, seperated with comma")
 
+# Helper: parse comma-separated preprocessor defines into -D-prefixed cmake list
+function(axslcc_parse_defines define_string out_var)
+  set(result "")
+  if(NOT(define_string STREQUAL "NOTFOUND") AND NOT(define_string STREQUAL ""))
+    string(REPLACE "," ";" def_list "${define_string}")
+    foreach(defv ${def_list})
+      list(APPEND result "-D${defv}")
+    endforeach()
+  endif()
+  set(${out_var} ${result} PARENT_SCOPE)
+endfunction()
+
 # Find shader sources in specified directory
 # syntax: ax_find_shaders(dir shader_sources [RECURSE])
-# examples:
-# - ax_find_shaders("${CMAKE_CURRENT_LIST_DIR}/axmol/renderer/shaders" runtime_shader_sources)
-# - ax_find_shaders("${CMAKE_CURRENT_LIST_DIR}/Source" custom_shader_sources RECURSE)
 function(ax_find_shaders dir varName)
   set(options RECURSE)
   cmake_parse_arguments(opt "${options}" "" "" ${ARGN})
 
   set(SC_FILTERS "")
 
-  foreach(fileext ${AXSLCC_FRAG_SOURCE_FILE_EXTENSIONS})
-    list(APPEND SC_FILTERS "${dir}/*${fileext}")
-  endforeach()
-
-  foreach(fileext ${AXSLCC_VERT_SOURCE_FILE_EXTENSIONS})
+  foreach(fileext ${AXSLCC_SOURCE_FILE_EXTENSIONS})
     list(APPEND SC_FILTERS "${dir}/*${fileext}")
   endforeach()
 
@@ -80,19 +83,12 @@ function(ax_find_shaders dir varName)
   set(${varName} ${out_files} PARENT_SCOPE)
 endfunction()
 
-# This function allow make shader files (.frag, .vert) compiled with axslcc
+# ax_add_shader_target: compile HLSL shader sources to binary SC chunks
 # usage:
-# - ax_add_shader_target(shader_target FILES source_files BUILTIN): output compiled shader to ${CMAKE_BINARY_DIR}/runtime/axslc/xxx_fs
-# - ax_add_shader_target(shader_target FILES source_files):         output compiled shader to ${CMAKE_BINARY_DIR}/runtime/axslc/custom/xxx_fs
-# - ax_add_shader_target(shader_target FILES source_files CVAR): the shader will compiled to c hex header for embed include by C/C++ use
-# Use global variable to control shader file extension:
-# - AXSLCC_FRAG_SOURCE_FILE_EXTENSIONS: default is .frag;.fsh
-# - AXSLCC_VERT_SOURCE_FILE_EXTENSIONS: default is .vert;.vsh
-#
-# CUSTOM operation is deprecated
-#
+# - ax_add_shader_target(shader_target FILES source_files BUILTIN)
+# - ax_add_shader_target(shader_target FILES source_files)
 function(ax_add_shader_target target_name)
-  set(options BUILTIN CVAR CUSTOM)
+  set(options BUILTIN CVAR)
   set(oneValueArgs PATH)
   set(multiValueArgs FILES)
   cmake_parse_arguments(opt "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
@@ -102,13 +98,40 @@ function(ax_add_shader_target target_name)
     add_custom_target(${target_name})
   endif()
 
-  set(_all_shader_files)
-
   if(opt_PATH)
     if(NOT opt_FILES)
       set(opt_FILES "")
     endif()
     ax_find_shaders(${opt_PATH} opt_FILES)
+  endif()
+
+  # Build target list based on enabled RHIs
+  set(TARGET_LIST "")
+  if(AX_ENABLE_GL)
+    if(AX_GLES_PROFILE)
+      if(AX_GLES_PROFILE GREATER_EQUAL 300)
+        list(APPEND TARGET_LIST "gles")
+      else()
+        list(APPEND TARGET_LIST "glsl-100")
+      endif()
+    else()
+      list(APPEND TARGET_LIST "gl")
+    endif()
+  endif()
+  if(AX_ENABLE_D3D11)
+    list(APPEND TARGET_LIST "d3d11")
+  endif()
+  if(AX_ENABLE_D3D12)
+    list(APPEND TARGET_LIST "d3d12")
+  endif()
+  if(AX_ENABLE_MTL)
+    list(APPEND TARGET_LIST "mtl")
+  endif()
+  if(AX_ENABLE_VK)
+    list(APPEND TARGET_LIST "vk")
+  endif()
+  if(NOT TARGET_LIST)
+    message(FATAL_ERROR "No shader targets enabled. Enable at least one RHI backend.")
   endif()
 
   set(compiled_shaders)
@@ -119,73 +142,22 @@ function(ax_add_shader_target target_name)
     string(TOLOWER "${FILE_EXT}" FILE_EXT)
 
     set(SC_DEFINES "")
-    set(SC_FLAGS "--silent" "--err-format=msvc")
-    set(SC_PROFILE "")
-    set(CROSS_ARGS_LIST "")
+    set(SC_FLAGS "-a")
 
-    # GL / GLES
-    if(AX_ENABLE_GL)
-      if(AX_GLES_PROFILE)
-        if(AX_GLES_PROFILE GREATER_EQUAL 300)
-          set(SC_PROFILE "300")
-          set(CROSS_SC_DEFINES "AXSLC_TARGET_GLES")
-        else()
-          set(SC_PROFILE "100")
-          set(CROSS_SC_DEFINES "AXSLC_TARGET_GLES2")
-        endif()
-        set(CROSS_SC_DEFINES "AXSLC_TARGET_GLSL,${CROSS_SC_DEFINES}")
-        list(APPEND CROSS_ARGS_LIST "--lang=gles --profile=${SC_PROFILE} --defines=${CROSS_SC_DEFINES}")
-      else()
-        set(SC_PROFILE "330")
-        set(CROSS_SC_DEFINES "AXSLC_TARGET_GLSL")
-        list(APPEND CROSS_ARGS_LIST "--lang=glsl --profile=${SC_PROFILE} --defines=${CROSS_SC_DEFINES}")
-      endif()
+    separate_arguments(AXSLCC_FLAGS_LIST NATIVE_COMMAND "${AXSLCC_FLAGS}")
+    list(APPEND SC_FLAGS ${AXSLCC_FLAGS_LIST})
+    foreach(TARG ${TARGET_LIST})
+      list(APPEND SC_FLAGS "-t" "${TARG}")
+    endforeach()
+
+    if(IOS AND AX_ENABLE_MTL)
+      list(APPEND SC_FLAGS "--msl-ios")
     endif()
-
-    # D3D11
-    if(AX_ENABLE_D3D11)
-      set(SC_PROFILE "50")
-      set(CROSS_SC_DEFINES "AXSLC_TARGET_HLSL")
-      list(APPEND CROSS_ARGS_LIST "--lang=hlsl --profile=${SC_PROFILE} --defines=${CROSS_SC_DEFINES}")
-    endif()
-
-    # D3D12
-    if(AX_ENABLE_D3D12)
-      set(SC_PROFILE "51")
-      set(CROSS_SC_DEFINES "AXSLC_TARGET_HLSL")
-      list(APPEND CROSS_ARGS_LIST "--lang=hlsl --profile=${SC_PROFILE} --defines=${CROSS_SC_DEFINES}")
-    endif()
-
-    # Metal
-    if(AX_ENABLE_MTL)
-      set(CROSS_SC_DEFINES "AXSLC_TARGET_MSL")
-      list(APPEND CROSS_ARGS_LIST "--lang=msl --defines=${CROSS_SC_DEFINES}")
-    endif()
-
-    # Vulkan / SPIR-V
-    if(AX_ENABLE_VK)
-      set(SC_PROFILE "100")
-      set(CROSS_SC_DEFINES "AXSLC_TARGET_SPIRV")
-      list(APPEND CROSS_ARGS_LIST "--lang=spirv --profile=${SC_PROFILE} --defines=${CROSS_SC_DEFINES}")
-    endif()
-
-    # Join all cross args
-    string(JOIN "&" CROSS_ARGS ${CROSS_ARGS_LIST})
-
-    # no-suffix since 1.18.1 released by axmolengine
-    list(APPEND SC_FLAGS "--no-suffix")
-
-    # auto-map bindings/locations
-    list(APPEND SC_FLAGS "--auto-map-bindings" "--auto-map-locations")
 
     # defines
     get_source_file_property(SOURCE_SC_DEFINES ${SC_FILE} AXSLCC_DEFINES)
-    if(NOT(SOURCE_SC_DEFINES STREQUAL "NOTFOUND"))
-      set(SC_DEFINES "${SC_DEFINES},${SOURCE_SC_DEFINES}")
-    endif()
-    if(SC_DEFINES)
-      list(APPEND SC_FLAGS "--defines=${SC_DEFINES}")
-    endif()
+    axslcc_parse_defines("${SOURCE_SC_DEFINES}" PARSED_DEFINES)
+    list(APPEND SC_FLAGS ${PARSED_DEFINES})
 
     # includes
     get_source_file_property(INC_DIRS ${SC_FILE} AXSLCC_INCLUDE_DIRS)
@@ -193,24 +165,12 @@ function(ax_add_shader_target target_name)
       set(INC_DIRS "")
     endif()
     list(APPEND INC_DIRS "${_AX_ROOT}/axmol/renderer/shaders")
-    list(APPEND SC_FLAGS "--include-dirs=${INC_DIRS}")
+    foreach(incdir ${INC_DIRS})
+      list(APPEND SC_FLAGS "-I${incdir}")
+    endforeach()
 
     if(opt_CVAR)
-      list(APPEND SC_FLAGS "--cvar=shader_rt_${FILE_NAME}")
-    endif()
-
-    # use --sgs --reflect for all render apis
-    list(APPEND SC_FLAGS "--sgs" "--reflect")
-
-    # input
-    if(${FILE_EXT} IN_LIST AXSLCC_FRAG_SOURCE_FILE_EXTENSIONS)
-      list(APPEND SC_FLAGS "--frag=${SC_FILE}")
-      set(SC_TYPE "fs")
-    elseif(${FILE_EXT} IN_LIST AXSLCC_VERT_SOURCE_FILE_EXTENSIONS)
-      set(SC_TYPE "vs")
-      list(APPEND SC_FLAGS "--vert=${SC_FILE}")
-    else()
-      message(FATAL_ERROR "Invalid shader source, the file extension must be one of .frag;.vert")
+      list(APPEND SC_FLAGS "--cvar" "shader_rt_${FILE_NAME}")
     endif()
 
     # output
@@ -222,57 +182,53 @@ function(ax_add_shader_target target_name)
       file(MAKE_DIRECTORY ${OUT_DIR})
     endif()
 
-    set(SC_OUTPUT "${OUT_DIR}/${FILE_NAME}_${SC_TYPE}")
+    set(SC_OUTPUT "${OUT_DIR}/${FILE_NAME}")
     file(TO_CMAKE_PATH "${SC_OUTPUT}" SC_OUTPUT)
     set(SC_COMMENT "[${AX_RENDER_API}] Compiling shader ${SC_FILE} to ${SC_OUTPUT} ...")
 
-    get_source_file_property(SOURCE_SC_OUTPUT1 ${SC_FILE} AXSLCC_OUTPUT1)
+    get_source_file_property(SOURCE_SC_VARIANTS ${SC_FILE} AXSLCC_VARIANT_DEFINES)
 
-    if(SOURCE_SC_OUTPUT1 STREQUAL "NOTFOUND") # single output
-      list(APPEND SC_FLAGS "--output=${SC_OUTPUT}")
+    if(SOURCE_SC_VARIANTS STREQUAL "NOTFOUND")
       set_source_files_properties(${SC_FILE} DIRECTORY ${CMAKE_BINARY_DIR} PROPERTIES AXSLCC_OUTPUT ${SC_OUTPUT})
       add_custom_command(
-        MAIN_DEPENDENCY ${SC_FILE} OUTPUT ${SC_OUTPUT} COMMAND ${AXSLCC_EXE} ${SC_FLAGS} "--cross-args=${CROSS_ARGS}"
+        MAIN_DEPENDENCY ${SC_FILE}
+        OUTPUT ${SC_OUTPUT}
+        COMMAND ${AXSLCC_EXE} ${SC_FLAGS} "-o" "${SC_OUTPUT}" "${SC_FILE}"
         COMMENT "${SC_COMMENT}"
         VERBATIM
       )
       list(APPEND compiled_shaders ${SC_OUTPUT})
-    else() # dual outputs
-      set(SC_DEFINES1 "${SC_DEFINES},${SOURCE_SC_OUTPUT1}")
-      set(SC_FLAGS1 ${SC_FLAGS})
-      list(REMOVE_ITEM SC_FLAGS1 "--defines=${SC_DEFINES}")
-      list(APPEND SC_FLAGS1 "--defines=${SC_DEFINES1}")
-
-      list(APPEND SC_FLAGS "--output=${SC_OUTPUT}")
-      set(SC_OUTPUT1 "${SC_OUTPUT}_1")
-      list(APPEND SC_FLAGS1 "--output=${SC_OUTPUT1}")
-
+    else()
+      set(SC_OUTPUTS "${SC_OUTPUT}")
+      set(SC_CMD_LINES COMMAND ${AXSLCC_EXE} ${SC_FLAGS} "-o" "${SC_OUTPUT}" "${SC_FILE}")
+      set(vidx 0)
+      foreach(variant_defs ${SOURCE_SC_VARIANTS})
+        math(EXPR vidx "${vidx} + 1")
+        set(SC_VOUT "${SC_OUTPUT}_${vidx}")
+        list(APPEND SC_OUTPUTS "${SC_VOUT}")
+        axslcc_parse_defines("${variant_defs}" VARIANT_DEFINES)
+        list(APPEND SC_CMD_LINES COMMAND ${AXSLCC_EXE} ${SC_FLAGS} ${VARIANT_DEFINES} "-o" "${SC_VOUT}" "${SC_FILE}")
+      endforeach()
       add_custom_command(
         MAIN_DEPENDENCY ${SC_FILE}
-        OUTPUT ${SC_OUTPUT} ${SC_OUTPUT1}
-        COMMAND ${AXSLCC_EXE} ${SC_FLAGS} "--cross-args=${CROSS_ARGS}"
-        COMMAND ${AXSLCC_EXE} ${SC_FLAGS1} "--cross-args=${CROSS_ARGS}"
+        OUTPUT ${SC_OUTPUTS}
+        ${SC_CMD_LINES}
         COMMENT "${SC_COMMENT}"
         VERBATIM
       )
-      list(APPEND compiled_shaders ${SC_OUTPUT} ${SC_OUTPUT1})
+      list(APPEND compiled_shaders ${SC_OUTPUTS})
     endif()
   endforeach()
 
   target_sources(${target_name} PRIVATE ${opt_FILES})
 
-  # Set `AX_COMPILED_SHADERS` property on the target to store the list of compiled
-  # shaders for this target. This is later used for setting up app's resource copying.
   get_target_property(target_compiled_shaders ${target_name} AX_COMPILED_SHADERS)
-
   if(NOT target_compiled_shaders)
     set(target_compiled_shaders "")
   endif()
-
   list(APPEND target_compiled_shaders ${compiled_shaders})
   set_property(TARGET ${target_name} PROPERTY AX_COMPILED_SHADERS ${target_compiled_shaders})
 
-  # folder
   set_target_properties(${target_name} PROPERTIES FOLDER "Shaders")
 endfunction()
 
@@ -305,7 +261,6 @@ function(ax_target_embed_compiled_shaders target_name rc_output)
     file(RELATIVE_PATH compiled_shader_rp ${AXSLCC_OUT_DIR} ${compiled_shader})
     file(TO_NATIVE_PATH "Content/axslc/${compiled_shader_rp}" compiled_shader_target_dir)
     file(TO_NATIVE_PATH "${compiled_shader}" compiled_shader_path)
-    set(app_all_shaders_filters "${app_all_shaders_filters}  <ItemGroup Label=\"axslc\">\n")
     string(APPEND _props_xml_content "    <None Include=\"${compiled_shader_path}\">\n")
     string(APPEND _props_xml_content "      <Link>${compiled_shader_target_dir}</Link>\n")
     string(APPEND _props_xml_content "      <DeploymentContent Condition=\"'\$(Configuration)|\$(Platform)'=='Debug|x64'\">true</DeploymentContent>\n")
@@ -313,14 +268,12 @@ function(ax_target_embed_compiled_shaders target_name rc_output)
     string(APPEND _props_xml_content "      <DeploymentContent Condition=\"'\$(Configuration)|\$(Platform)'=='MinSizeRel|x64'\">true</DeploymentContent>\n")
     string(APPEND _props_xml_content "      <DeploymentContent Condition=\"'\$(Configuration)|\$(Platform)'=='RelWithDebInfo|x64'\">true</DeploymentContent>\n")
     string(APPEND _props_xml_content "    </None>\n")
-
     string(APPEND _filters_xml_content "    <None Include=\"${compiled_shader_path}\">\n")
     string(APPEND _filters_xml_content "      <Filter>Content\\axslc</Filter>\n")
     string(APPEND _filters_xml_content "    </None>\n")
   endforeach()
 
   string(APPEND _props_xml_content "  </ItemGroup>\n</Project>")
-
   string(APPEND _filters_xml_content "    <Filter Include=\"Content\\axslc\">\n")
   string(APPEND _filters_xml_content "      <UniqueIdentifier>{558D563C-9BE5-4C83-96E9-9C09A63BAF97}</UniqueIdentifier>\n")
   string(APPEND _filters_xml_content "    </Filter>\n")
@@ -328,10 +281,8 @@ function(ax_target_embed_compiled_shaders target_name rc_output)
 
   set(props_file "${rt_output}/axslc.props")
   write_file("${props_file}" "${_props_xml_content}")
-
   set(filters_file "${rt_output}/axslc.filters.props")
   write_file("${filters_file}" "${_filters_xml_content}")
-
   set_target_properties(${target_name} PROPERTIES VS_USER_PROPS "${props_file}" VS_FILTER_PROPS "${filters_file}")
 endfunction()
 

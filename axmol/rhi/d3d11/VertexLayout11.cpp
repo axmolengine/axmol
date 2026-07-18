@@ -126,9 +126,9 @@ void VertexLayoutImpl::apply(ID3D11DeviceContext* context, Program* program) con
         for (auto& inputDesc : bindings)
             appendElement(inputDesc);
 
-        ID3DBlob* vsBlob = progImpl->getVSBlob();
-        HRESULT hr       = device->CreateInputLayout(inputElements.data(), static_cast<UINT>(inputElements.size()),
-                                                     vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &_d3dVL);
+        auto vsBlob = progImpl->getVSBlob();
+        HRESULT hr  = device->CreateInputLayout(inputElements.data(), static_cast<UINT>(inputElements.size()),
+                                                vsBlob.data(), vsBlob.size(), &_d3dVL);
 
         if (!_d3dVL)
         {
