@@ -433,7 +433,10 @@ else()
 endif()
 
 if(AX_WITH_TRACY)
-  ax_add_3rd(tracy)
+  _1kfetch(tracy)
+  set(TRACY_ENABLE ON CACHE BOOL "" FORCE)
+  set(TRACY_ON_DEMAND ON CACHE BOOL "" FORCE)
+  ax_add_3rd(${tracy_SOURCE_DIR} TARGETS TracyClient)
 endif()
 
 # yasio

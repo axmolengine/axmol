@@ -40,6 +40,9 @@
     },
     "live2d-core": {
       "sources": { "origin": "https://github.com/axmolengine/live2d-axmol/releases/download/prebuilt/live2d-core-${ver}.zip" }
+    },
+	"tracy": {
+      "sources": { "origin": "https://github.com/wolfpld/tracy.git" }
     }
   },
   "devtools": {
