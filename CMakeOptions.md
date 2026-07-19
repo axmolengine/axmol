@@ -40,6 +40,7 @@
 - AX_GLES_PROFILE: specify GLES profile version, only works when selected render api is `gl`, default: `300`, valid value `300`, `310`
 - AX_CORE_PROFILE: whether strip all deprecated features, default `FALSE`, Setting this to `TRUE` before upgrading your game project helps ensure compatibility with future Axmol versions.
 - AX_ISA_LEVEL: specifiy SIMD Instructions Acceleration Level: 0~4, 0: disabled, 1: SSE2, 2: SSE4.1/NEON, 3: SSE4.2, 4: AVX2, default: 2
+- AX_PROFILER_BACKEND: specifiy profiler backend, valid values are: `TRACY`, `NONE`, default: `NONE`
 - AX_WASM_THREADS: specify wasm thread count, valid value: number: `>=0` , string: must be: `auto` or `navigator.hardwareConcurrency`(default), 
    - number: explicit set thread count, `0` means disable wasm thread support
    - string: 
@@ -53,6 +54,7 @@ default is: `navigator.hardwareConcurrency`
 - AX_WASM_TIMING_USE_TIMEOUT: force the wasm emscripten loop timing to use `Timeout` with FPS value of `Application::setAnimationInterval` (app still run on focus lost), default is `FALSE` with timing `requestAnimationFrame` (no run on focus lost). See https://emscripten.org/docs/api_reference/emscripten.h.html#c.emscripten_set_main_loop_timing
 - AX_WASM_ASSETS_PRELOAD_FILE: Whether enable to bundle the assets to a .data file and preload them into an IndexedDB cache at first launch (`--preload-file`), otherwise bundle them into the wasm file itself and don't use the IndexedDB at all (`--embed-file`)", default `TRUE`
 - AX_WASM_GENERATE_SYMBOL_FILE: Generate a symbol file for the built wasm file, default `FALSE`
+
 
 ## The options for axmol apps
 

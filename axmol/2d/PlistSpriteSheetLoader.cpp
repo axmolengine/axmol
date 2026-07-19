@@ -171,6 +171,107 @@ void PlistSpriteSheetLoader::reload(std::string_view filePath, SpriteFrameCache&
     }
 }
 
+SpriteFrame* PlistSpriteSheetLoader::parseFrame(const ValueMap& frameDict,
+                                                std::vector<std::string>& outFrameAlias,
+                                                int format,
+                                                Texture2D* texture,
+                                                const ax::Vec2& textureSize)
+{
+    SpriteFrame* spriteFrame = nullptr;
+
+    outFrameAlias.clear();
+
+    if (format == 0)
+    {
+        auto x  = optValue(frameDict, "x"sv).asFloat();
+        auto y  = optValue(frameDict, "y"sv).asFloat();
+        auto w  = optValue(frameDict, "width"sv).asFloat();
+        auto h  = optValue(frameDict, "height"sv).asFloat();
+        auto ox = optValue(frameDict, "offsetX"sv).asFloat();
+        auto oy = optValue(frameDict, "offsetY"sv).asFloat();
+        auto ow = optValue(frameDict, "originalWidth"sv).asInt();
+        auto oh = optValue(frameDict, "originalHeight"sv).asInt();
+        // check ow/oh
+        if (!ow || !oh)
+        {
+            AXLOGW(
+                "WARNING: originalWidth/Height not found on the SpriteFrame. AnchorPoint won't work as "
+                "expected. Regenerate the .plist");
+        }
+        // abs ow/oh
+        ow = std::abs(ow);
+        oh = std::abs(oh);
+        // create frame
+        spriteFrame =
+            SpriteFrame::createWithTexture(texture, Rect(x, y, w, h), false, Vec2(ox, oy), Vec2((float)ow, (float)oh));
+    }
+    else if (format == 1 || format == 2)
+    {
+        auto frame   = utils::parseRect(optValue(frameDict, "frame"sv).asString());
+        auto rotated = false;
+
+        // rotation
+        if (format == 2)
+        {
+            rotated = optValue(frameDict, "rotated"sv).asBool();
+        }
+
+        auto offset     = utils::parseVec2(optValue(frameDict, "offset"sv).asString());
+        auto sourceSize = utils::parseVec2(optValue(frameDict, "sourceSize"sv).asString());
+
+        // create frame
+        spriteFrame = SpriteFrame::createWithTexture(texture, frame, rotated, offset, sourceSize);
+    }
+    else if (format == 3)
+    {
+        // get values
+        auto spriteSize       = utils::parseVec2(optValue(frameDict, "spriteSize"sv).asString());
+        auto spriteOffset     = utils::parseVec2(optValue(frameDict, "spriteOffset"sv).asString());
+        auto spriteSourceSize = utils::parseVec2(optValue(frameDict, "spriteSourceSize"sv).asString());
+        auto textureRect      = utils::parseRect(optValue(frameDict, "textureRect"sv).asString());
+        auto textureRotated   = optValue(frameDict, "textureRotated"sv).asBool();
+
+        // get aliases
+        auto& aliases = optValue(frameDict, "aliases"sv).asValueVector();
+
+        for (const auto& value : aliases)
+        {
+            auto oneAlias = value.asString();
+            if (std::find(outFrameAlias.begin(), outFrameAlias.end(), oneAlias) == outFrameAlias.end())
+            {
+                outFrameAlias.emplace_back(std::move(oneAlias));
+            }
+            else
+            {
+                AXLOGW("WARNING: an alias with name {} already exists", oneAlias);
+            }
+        }
+
+        // create frame
+        spriteFrame = SpriteFrame::createWithTexture(
+            texture, Rect(textureRect.origin.x, textureRect.origin.y, spriteSize.width, spriteSize.height),
+            textureRotated, spriteOffset, spriteSourceSize);
+
+        if (frameDict.find("vertices") != frameDict.end())
+        {
+            using ax::utils::parseIntegerList;
+            auto vertices   = parseIntegerList(optValue(frameDict, "vertices"sv).asString());
+            auto verticesUV = parseIntegerList(optValue(frameDict, "verticesUV"sv).asString());
+            auto indices    = parseIntegerList(optValue(frameDict, "triangles"sv).asString());
+
+            PolygonInfo info;
+            initializePolygonInfo(textureSize, spriteSourceSize, vertices, verticesUV, indices, info);
+            spriteFrame->setPolygonInfo(info);
+        }
+        if (frameDict.find("anchor") != frameDict.end())
+        {
+            spriteFrame->setAnchorPoint(utils::parseVec2(optValue(frameDict, "anchor"sv).asString()));
+        }
+    }
+
+    return spriteFrame;
+}
+
 void PlistSpriteSheetLoader::addSpriteFramesWithDictionary(ValueMap& dictionary,
                                                            Texture2D* texture,
                                                            std::string_view plist,
@@ -235,93 +336,7 @@ void PlistSpriteSheetLoader::addSpriteFramesWithDictionary(ValueMap& dictionary,
             continue;
         }
 
-        if (format == 0)
-        {
-            auto x  = optValue(frameDict, "x"sv).asFloat();
-            auto y  = optValue(frameDict, "y"sv).asFloat();
-            auto w  = optValue(frameDict, "width"sv).asFloat();
-            auto h  = optValue(frameDict, "height"sv).asFloat();
-            auto ox = optValue(frameDict, "offsetX"sv).asFloat();
-            auto oy = optValue(frameDict, "offsetY"sv).asFloat();
-            auto ow = optValue(frameDict, "originalWidth"sv).asInt();
-            auto oh = optValue(frameDict, "originalHeight"sv).asInt();
-            // check ow/oh
-            if (!ow || !oh)
-            {
-                AXLOGW(
-                    "WARNING: originalWidth/Height not found on the SpriteFrame. AnchorPoint won't work as "
-                    "expected. Regenerate the .plist");
-            }
-            // abs ow/oh
-            ow = std::abs(ow);
-            oh = std::abs(oh);
-            // create frame
-            spriteFrame = SpriteFrame::createWithTexture(texture, Rect(x, y, w, h), false, Vec2(ox, oy),
-                                                         Vec2((float)ow, (float)oh));
-        }
-        else if (format == 1 || format == 2)
-        {
-            auto frame   = utils::parseRect(optValue(frameDict, "frame"sv).asString());
-            auto rotated = false;
-
-            // rotation
-            if (format == 2)
-            {
-                rotated = optValue(frameDict, "rotated"sv).asBool();
-            }
-
-            auto offset     = utils::parseVec2(optValue(frameDict, "offset"sv).asString());
-            auto sourceSize = utils::parseVec2(optValue(frameDict, "sourceSize"sv).asString());
-
-            // create frame
-            spriteFrame = SpriteFrame::createWithTexture(texture, frame, rotated, offset, sourceSize);
-        }
-        else if (format == 3)
-        {
-            // get values
-            auto spriteSize       = utils::parseVec2(optValue(frameDict, "spriteSize"sv).asString());
-            auto spriteOffset     = utils::parseVec2(optValue(frameDict, "spriteOffset"sv).asString());
-            auto spriteSourceSize = utils::parseVec2(optValue(frameDict, "spriteSourceSize"sv).asString());
-            auto textureRect      = utils::parseRect(optValue(frameDict, "textureRect"sv).asString());
-            auto textureRotated   = optValue(frameDict, "textureRotated"sv).asBool();
-
-            // get aliases
-            auto& aliases = optValue(frameDict, "aliases"sv).asValueVector();
-
-            for (const auto& value : aliases)
-            {
-                auto oneAlias = value.asString();
-                if (std::find(frameAliases.begin(), frameAliases.end(), oneAlias) == frameAliases.end())
-                {
-                    frameAliases.emplace_back(std::move(oneAlias));
-                }
-                else
-                {
-                    AXLOGW("WARNING: an alias with name {} already exists", oneAlias);
-                }
-            }
-
-            // create frame
-            spriteFrame = SpriteFrame::createWithTexture(
-                texture, Rect(textureRect.origin.x, textureRect.origin.y, spriteSize.width, spriteSize.height),
-                textureRotated, spriteOffset, spriteSourceSize);
-
-            if (frameDict.find("vertices") != frameDict.end())
-            {
-                using ax::utils::parseIntegerList;
-                auto vertices   = parseIntegerList(optValue(frameDict, "vertices"sv).asString());
-                auto verticesUV = parseIntegerList(optValue(frameDict, "verticesUV"sv).asString());
-                auto indices    = parseIntegerList(optValue(frameDict, "triangles"sv).asString());
-
-                PolygonInfo info;
-                initializePolygonInfo(textureSize, spriteSourceSize, vertices, verticesUV, indices, info);
-                spriteFrame->setPolygonInfo(info);
-            }
-            if (frameDict.find("anchor") != frameDict.end())
-            {
-                spriteFrame->setAnchorPoint(utils::parseVec2(optValue(frameDict, "anchor"sv).asString()));
-            }
-        }
+        spriteFrame = parseFrame(frameDict, frameAliases, format, texture, textureSize);
 
         auto flag = NinePatchImageParser::isNinePatchImage(spriteFrameName);
         if (flag)
@@ -406,10 +421,17 @@ void PlistSpriteSheetLoader::reloadSpriteFramesWithDictionary(ValueMap& dict,
     int format       = 0;
 
     // get the format
-    if (dict.find("metadata") != dict.end())
+    Vec2 textureSize;
+    auto metaItr = dict.find("metadata"sv);
+    if (metaItr != dict.end())
     {
-        auto& metadataDict = dict["metadata"].asValueMap();
-        format             = metadataDict["format"].asInt();
+        auto& metadataDict = metaItr->second.asValueMap();
+        format             = optValue(metadataDict, "format"sv).asInt();
+
+        if (metadataDict.find("size"sv) != metadataDict.end())
+        {
+            textureSize = utils::parseVec2(optValue(metadataDict, "size"sv).asString());
+        }
     }
 
     // check the format
@@ -420,6 +442,7 @@ void PlistSpriteSheetLoader::reloadSpriteFramesWithDictionary(ValueMap& dict,
     spriteSheet->format = getFormat();
     spriteSheet->path   = plist;
 
+    std::vector<std::string> frameAliases;
     for (auto&& iter : framesDict)
     {
         const ValueMap& frameDict        = iter.second.asValueMap();
@@ -427,80 +450,7 @@ void PlistSpriteSheetLoader::reloadSpriteFramesWithDictionary(ValueMap& dict,
 
         cache.eraseFrame(spriteFrameName);
 
-        SpriteFrame* spriteFrame = nullptr;
-        std::vector<std::string> frameAliases;
-
-        if (format == 0)
-        {
-            const auto x  = optValue(frameDict, "x"sv).asFloat();
-            const auto y  = optValue(frameDict, "y"sv).asFloat();
-            const auto w  = optValue(frameDict, "width"sv).asFloat();
-            const auto h  = optValue(frameDict, "height"sv).asFloat();
-            const auto ox = optValue(frameDict, "offsetX"sv).asFloat();
-            const auto oy = optValue(frameDict, "offsetY"sv).asFloat();
-            auto ow       = optValue(frameDict, "originalWidth"sv).asInt();
-            auto oh       = optValue(frameDict, "originalHeight"sv).asInt();
-            // check ow/oh
-            if (!ow || !oh)
-            {
-                AXLOGW(
-                    "WARNING: originalWidth/Height not found on the SpriteFrame. AnchorPoint won't work as "
-                    "expected. Regenerate the .plist");
-            }
-            // abs ow/oh
-            ow = std::abs(ow);
-            oh = std::abs(oh);
-            // create frame
-            spriteFrame = SpriteFrame::createWithTexture(texture, Rect(x, y, w, h), false, Vec2(ox, oy),
-                                                         Vec2((float)ow, (float)oh));
-        }
-        else if (format == 1 || format == 2)
-        {
-            auto frame   = utils::parseRect(optValue(frameDict, "frame"sv).asString());
-            auto rotated = false;
-
-            // rotation
-            if (format == 2)
-            {
-                rotated = optValue(frameDict, "rotated"sv).asBool();
-            }
-
-            auto offset     = utils::parseVec2(optValue(frameDict, "offset"sv).asString());
-            auto sourceSize = utils::parseVec2(optValue(frameDict, "sourceSize"sv).asString());
-
-            // create frame
-            spriteFrame = SpriteFrame::createWithTexture(texture, frame, rotated, offset, sourceSize);
-        }
-        else if (format == 3)
-        {
-            // get values
-            const auto spriteSize     = utils::parseVec2(optValue(frameDict, "spriteSize"sv).asString());
-            auto spriteOffset         = utils::parseVec2(optValue(frameDict, "spriteOffset"sv).asString());
-            auto spriteSourceSize     = utils::parseVec2(optValue(frameDict, "spriteSourceSize"sv).asString());
-            const auto textureRect    = utils::parseRect(optValue(frameDict, "textureRect"sv).asString());
-            const auto textureRotated = optValue(frameDict, "textureRotated"sv).asBool();
-
-            // get aliases
-            const ValueVector& aliases = optValue(frameDict, "aliases"sv).asValueVector();
-
-            for (const auto& value : aliases)
-            {
-                auto oneAlias = value.asString();
-                if (std::find(frameAliases.begin(), frameAliases.end(), oneAlias) == frameAliases.end())
-                {
-                    frameAliases.emplace_back(std::move(oneAlias));
-                }
-                else
-                {
-                    AXLOGW("WARNING: an alias with name {} already exists", oneAlias);
-                }
-            }
-
-            // create frame
-            spriteFrame = SpriteFrame::createWithTexture(
-                texture, Rect(textureRect.origin.x, textureRect.origin.y, spriteSize.width, spriteSize.height),
-                textureRotated, spriteOffset, spriteSourceSize);
-        }
+        auto spriteFrame = parseFrame(frameDict, frameAliases, format, texture, textureSize);
 
         // add sprite frame
         cache.insertFrame(spriteSheet, spriteFrameName, spriteFrame);

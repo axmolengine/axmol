@@ -96,7 +96,7 @@
 
 ## JoltPhysics
 - [![Upstream](https://img.shields.io/github/v/release/jrouwe/JoltPhysics?label=Upstream)](https://github.com/jrouwe/JoltPhysics)
-- Version: v5.5.0
+- Version: v5.6.0 with modified CMake scripts for cross-platform compatibility
 - License: MIT
 
 ## jpeg-turbo
