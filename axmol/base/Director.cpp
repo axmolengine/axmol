@@ -504,7 +504,26 @@ Vec2 Director::getCanvasSizeInPixels() const
 
 Vec2 Director::screenToCanvas(const Vec2& screenPoint) const
 {
-    return Vec2(screenPoint.x, getCanvasSize().height - screenPoint.y);
+    if (!_renderView)
+        return screenPoint;
+
+    const auto& viewport = _renderView->getViewportRect();
+    const auto& scale    = _renderView->getScale();
+
+    if (scale.x == 0.0f || scale.y == 0.0f)
+        return Vec2::zero;
+
+    // Screen coordinates use a top-left origin, while viewport.origin
+    // is expressed with a bottom-left origin.
+    const float viewportTop =
+        _renderView->getRenderSize().height -
+        (viewport.origin.y + viewport.size.height);
+
+    return Vec2{
+        (screenPoint.x - viewport.origin.x) / scale.x,
+        _canvasSizeInPoints.height -
+            (screenPoint.y - viewportTop) / scale.y,
+    };
 }
 
 Vec2 Director::getVisibleSize() const
