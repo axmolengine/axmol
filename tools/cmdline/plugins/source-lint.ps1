@@ -11,7 +11,7 @@
 
 $ErrorActionPreference = 'Stop'
 
-$AX_ROOT = Resolve-Path "$PSScriptRoot/../.."
+$AX_ROOT = Resolve-Path "$PSScriptRoot/../../.."
 
 # ============================================================
 # Check 1: Forbidden C++ wrapper C headers

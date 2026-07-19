@@ -12,7 +12,6 @@ on:
       - '.github/workflows/publish.yml'
       - '.github/workflows/debian.yml'
       - '.github/workflows/source-tidy.yml'
-      - 'tools/cmdline/make-pkg.ps1'
   pull_request:
     types: [opened, synchronize, reopened]
     paths-ignore:

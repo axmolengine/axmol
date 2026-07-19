@@ -13,7 +13,7 @@ else {
 
 &$tool_cmd --version
 
-$AX_ROOT = $(Resolve-Path $PSScriptRoot/../..).Path
+$AX_ROOT = $(Resolve-Path $PSScriptRoot/../../..).Path
 Push-Location $AX_ROOT
 
 $sourceDirs = @('./axmol', './extensions', './tests', './templates')

@@ -146,7 +146,7 @@ jobs:
     - name: Lint Axmol source files (UTF-8 BOM & cstd headers)
       if: ${{ steps.pp.outputs.should_run == 'true' }}
       shell: pwsh
-      run: ./tools/cmdline/source-lint.ps1
+      run: ./tools/cmdline/plugins/source-lint.ps1
 
     - name: Install llvm clang-format
       if: ${{ steps.pp.outputs.should_run == 'true' }}
@@ -159,7 +159,7 @@ jobs:
       if: ${{ steps.pp.outputs.should_run == 'true' }}
       shell: pwsh
       run: |
-        ./tools/cmdline/clang-format.ps1 -ver $env:LLVM_VER
+        ./tools/cmdline/plugins/clang-format.ps1 -ver $env:LLVM_VER
 
     # check_only mode
     - name: Check for uncommitted changes

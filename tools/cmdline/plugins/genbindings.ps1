@@ -2,7 +2,7 @@ param(
     $stage = 3
 )
 
-$AX_ROOT = (Resolve-Path $PSScriptRoot/../..).Path
+$AX_ROOT = (Resolve-Path $PSScriptRoot/../../..).Path
 
 $succeed = $true
 if (($stage -band 1)) {

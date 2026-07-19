@@ -11,7 +11,7 @@ $isWin = $IsWindows -or ("$env:OS" -eq 'Windows_NT')
 
 $pwsh_ver = $PSVersionTable.PSVersion.ToString()
 
-$AX_ROOT = (Resolve-Path $PSScriptRoot/../..)
+$AX_ROOT = (Resolve-Path $PSScriptRoot/../../..)
 
 $git_prog = (Get-Command 'git' -ErrorAction SilentlyContinue).Source
 if (!$git_prog) {
