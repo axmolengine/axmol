@@ -8,7 +8,7 @@ define_property(TARGET
 )
 
 if(WINDOWS)
-  cmake_minimum_required(VERSION 3.27...4.3)
+  cmake_minimum_required(VERSION 3.27...4.4)
   cmake_policy(SET CMP0141 NEW)
   set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<$<CONFIG:Debug,RelWithDebInfo>:Embedded>")
 
@@ -26,13 +26,13 @@ if(WINRT)
   # The minmal deploy target version: Windows 10, version 1809 (Build 10.0.17763) for building msix package
   # refer to: https://learn.microsoft.com/en-us/windows/msix/supported-platforms?source=recommendations
   set(CMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION "10.0.17763" CACHE STRING "")
-  set(AX_CPPWINRT_VERSION "3.0.260520.1" CACHE STRING "")
+  set(AX_CPPWINRT_VERSION "3.0.260715.1" CACHE STRING "")
 
   # For axmol deprecated policy, we need disable /sdl checks explicitly to avoid compiler traits invoking deprecated functions as error
   set(CMAKE_C_FLAGS "/sdl- ${CMAKE_C_FLAGS}")
   set(CMAKE_CXX_FLAGS "/sdl- ${CMAKE_CXX_FLAGS}")
 elseif(WIN32)
-  set(AX_MSEDGE_WEBVIEW2_VERSION "1.0.3912.50" CACHE STRING "")
+  set(AX_MSEDGE_WEBVIEW2_VERSION "1.0.4078.44" CACHE STRING "")
 endif()
 
 if(ANDROID OR LINUX)
