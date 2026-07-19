@@ -45,6 +45,7 @@
 #include "axmol/base/Logging.h"
 #include "axmol/base/InputSystem.h"
 #include "axmol/math/Quat.h"
+#include "axmol/scene/Camera.h"
 #include "axmol/scene/Scene.h"
 #include "axmol/platform/RenderView.h"
 #include "axmol/platform/Application.h"
@@ -262,6 +263,18 @@ Ray OpenXRDriver::xrPoseToRay(const XrPosef& pose)
 Vec2 OpenXRDriver::xrToVec2(const XrVector2f& v)
 {
     return Vec2(v.x, v.y);
+}
+
+void OpenXRDriver::setPointerRayTransform(const Mat4& transform)
+{
+    _pointerRayTransform      = transform;
+    _pointerRayTransformValid = true;
+}
+
+void OpenXRDriver::clearPointerRayTransform()
+{
+    _pointerRayTransform      = Mat4::identity;
+    _pointerRayTransformValid = false;
 }
 
 // ---------------------------------------------------------------------------
@@ -1419,7 +1432,11 @@ void OpenXRDriver::pollXrActions(XrTime predictedDisplayTime)
         return;
     }
 
-    Mat4 controllerToWorld = _headViewTransformValid ? _headViewTransform.getInversed() : Mat4::identity;
+    // Controller poses are located in the same OpenXR local space as the eye poses.
+    // VRSceneCompositor owns the stable pointer-ray camera and pushes its world
+    // transform here before polling actions. Do not use the inverse HMD pose here;
+    // that converts the ray to head-relative space and makes scene hit testing miss.
+    const Mat4& controllerToWorld = _pointerRayTransformValid ? _pointerRayTransform : Mat4::identity;
 
     for (uint32_t hand = 0; hand < 2; ++hand)
     {
@@ -1635,6 +1652,11 @@ void OpenXRDriver::pollXrActions(XrTime predictedDisplayTime)
                     ctrl.lastPointerEventRay      = eventRay;
                     ctrl.lastPointerEventRayValid = true;
                 }
+                else
+                {
+                    hitResult    = InputSystem::getInstance()->hitTestVRPointer(centerPoint, eventRay, inputState);
+                    hasHitResult = true;
+                }
 
                 constexpr float thumbstickScrollDeadzone = 0.0001f;
                 if (std::abs(ctrl.thumbstick.y) > thumbstickScrollDeadzone)
@@ -1659,6 +1681,12 @@ void OpenXRDriver::pollXrActions(XrTime predictedDisplayTime)
                 if (hasHitResult && hitResult.hit)
                 {
                     Vec3 visualHitPoint = hitResult.worldPoint;
+
+                    if (_pointerRayTransformValid && hitResult.camera)
+                    {
+                        hitResult.camera->getWorldToNodeTransform().transformPoint(&visualHitPoint);
+                        _pointerRayTransform.transformPoint(&visualHitPoint);
+                    }
 
                     const float hitDistance =
                         std::max(0.0f, (visualHitPoint - ctrl.currentRay.origin).dot(ctrl.currentRay.direction));

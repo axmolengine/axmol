@@ -607,6 +607,19 @@ PointerHitResult InputSystem::handleVRPointerEvent(InputPhase phase,
     return dispatchVRPointerEvent(phase, point, ray, state);
 }
 
+PointerHitResult InputSystem::hitTestVRPointer(Vec2 point, const Ray& ray, const PointerInputState& state)
+{
+    if (!_interactive)
+        return {};
+
+    // Reticle refresh needs a pure "currently under the ray" hit-test.
+    // PointerMove hit-tests may intentionally return the previous hovered widget
+    // to emit hover-exit events, and that path can report no fresh hit point.
+    _isolatedMoveEvent.setPointerInfo(InputPhase::PointerScroll, nativeToScreen(point), state);
+    _isolatedMoveEvent.setRay(ray);
+    return _eventDispatcher->hitTestPointerEvent(&_isolatedMoveEvent);
+}
+
 PointerHitResult InputSystem::dispatchVRPointerEvent(InputPhase phase,
                                                      Vec2 point,
                                                      const Ray& ray,
