@@ -25,6 +25,7 @@
 
 #include "axmol/base/JobSystem.h"
 #include "axmol/base/Logging.h"
+#include "axmol/base/Profiling.h"
 #include "yasio/thread_name.hpp"
 
 #include <queue>
@@ -149,6 +150,7 @@ public:
             workers.emplace_back([this, thread_data] {
                 thread_data->init();
                 yasio::set_thread_name(thread_data->name());
+                AX_PROFILER_THREAD_NAME(thread_data->name());
                 for (;;)
                 {
                     std::function<void(JobThreadData*)> task;

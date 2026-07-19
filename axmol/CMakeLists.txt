@@ -191,6 +191,9 @@ option(AX_UPDATE_BUILD_VERSION "Update build version" ON)
 option(AX_DISABLE_GLES2 "Whether disable GLES2 support" OFF)
 option(AX_CORE_PROFILE "Whether strip deprecated features" ON)
 
+set(AX_PROFILER_BACKEND "NONE" CACHE STRING "Profiling backend")
+set_property(CACHE AX_PROFILER_BACKEND PROPERTY STRINGS NONE TRACY)
+
 # default value for axmol extensions modules to Build
 # total supported extensions count: 13
 # extensions dependicies: COCOSTUDIO may depend on spine & dragonBones if they are present in buildset
@@ -569,6 +572,10 @@ if(_simdc_defines)
     target_compile_options(${_AX_CORE_LIB} PUBLIC ${_simdc_options})
   endif()
 endif()
+
+# profiling configuration
+ax_apply_profiler_backend(${_AX_CORE_LIB} PUBLIC)
+message(STATUS "AX_PROFILER_BACKEND=${AX_PROFILER_BACKEND}")
 
 # 3rd libs
 add_subdirectory(${_AX_ROOT}/3rdparty ${ENGINE_BINARY_PATH}/3rdparty)

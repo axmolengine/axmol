@@ -49,6 +49,7 @@
 #include "axmol/rhi/axmol-rhi.h"
 #include "axmol/rhi/RenderTarget.h"
 #include "axmol/rhi/GraphicsCore.h"
+#include "axmol/base/Profiling.h"
 
 namespace ax
 {
@@ -406,6 +407,8 @@ void Renderer::doVisitRenderQueue(const std::vector<RenderCommand*>& renderComma
 
 void Renderer::render()
 {
+    AX_PROFILER_ZONE_SCOPED;
+
     // TODO: setup camera or MVP
     _isRendering = true;
 

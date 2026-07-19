@@ -43,6 +43,7 @@
 #    include "axmol/base/EventDispatcher.h"
 #    include "axmol/base/CustomEvent.h"
 #    include "axmol/base/JobSystem.h"
+#    include "axmol/base/Profiling.h"
 #    include "box2d/constants.h"
 
 namespace ax
@@ -502,6 +503,8 @@ void PhysicsWorld2D::setSubsteps(int steps)
 
 void PhysicsWorld2D::stepSimulation(float delta)
 {
+    AX_PROFILER_ZONE_SCOPED;
+
     // Skip simulation if step is too small
     if (delta < FLT_EPSILON)
         return;
