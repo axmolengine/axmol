@@ -94,6 +94,8 @@ VRSceneCompositor::VRSceneCompositor()
 
 VRSceneCompositor::~VRSceneCompositor()
 {
+    if (_xrDriver)
+        _xrDriver->setCompositorAlive(false);
     shutdownControllerRayResources();
 }
 
@@ -114,18 +116,24 @@ XrSession VRSceneCompositor::getXrSession() const
 
 void VRSceneCompositor::setXrDriver(OpenXRDriver* context)
 {
+    if (_xrDriver)
+        _xrDriver->setCompositorAlive(false);
     _xrDriver = context;
+    if (_xrDriver)
+        _xrDriver->setCompositorAlive(true);
 }
 
 void VRSceneCompositor::pollEvents()
 {
+    auto xrDriver = _xrDriver;
     SceneCompositor::pollEvents();
 
-    if (!_xrDriver)
+    if (!xrDriver || !xrDriver->isCompositorAlive())
         return;
 
-    _xrDriver->setXrToSceneScale(_xrToSceneScale);
-    _xrDriver->pollEvents();
+    xrDriver->setXrToSceneScale(_xrToSceneScale);
+    syncPointerRayCamera(_director->getRunningScene());
+    xrDriver->pollEvents();
 }
 
 bool VRSceneCompositor::isVRActive() const
@@ -152,6 +160,58 @@ void VRSceneCompositor::setXrToSceneScale(float scale)
     _xrToSceneScale = scale > 0.0f ? scale : 1.0f;
     if (_xrDriver)
         _xrDriver->setXrToSceneScale(_xrToSceneScale);
+}
+
+Camera* VRSceneCompositor::selectPointerRaySourceCamera(Scene* scene) const
+{
+    if (!scene)
+        return nullptr;
+
+    auto defaultCamera = scene->getDefaultCamera();
+    if (defaultCamera && defaultCamera->isVisible())
+        return defaultCamera;
+
+    for (auto camera : scene->getCameras())
+    {
+        if (camera && camera->isVisible())
+            return camera;
+    }
+
+    return defaultCamera;
+}
+
+Camera* VRSceneCompositor::ensurePointerRayCamera(Scene* scene)
+{
+    auto sourceCamera = selectPointerRaySourceCamera(scene);
+    if (!sourceCamera)
+        return nullptr;
+
+    if (!_pointerRayCamera)
+        _pointerRayCamera = RefPtr<Camera>(Camera::createPerspective(60.0f, 1.0f, _nearZ, _farZ));
+
+    const auto canvasSize = _director->getCanvasSize();
+    const float aspect    = canvasSize.height > 0.0f ? canvasSize.width / canvasSize.height : 1.0f;
+    _pointerRayCamera->initPerspective(60.0f, aspect, _nearZ, _farZ);
+    _pointerRayCamera->setNodeToParentTransform(sourceCamera->getNodeToWorldTransform());
+    _pointerRayCamera->setAdditionalTransform(Mat4::identity);
+    _pointerRayCamera->setCameraFlag(sourceCamera->getCameraFlag());
+
+    return _pointerRayCamera.get();
+}
+
+void VRSceneCompositor::syncPointerRayCamera(Scene* scene)
+{
+    if (!_xrDriver)
+        return;
+
+    auto camera = ensurePointerRayCamera(scene);
+    if (!camera)
+    {
+        _xrDriver->clearPointerRayTransform();
+        return;
+    }
+
+    _xrDriver->setPointerRayTransform(camera->getNodeToWorldTransform());
 }
 
 void VRSceneCompositor::ensureControllerRayResources()
@@ -361,7 +421,7 @@ void VRSceneCompositor::renderScene(Renderer* renderer, Scene* scene)
             camera->setAdditionalTransform(Mat4::identity);
         }
 
-        auto rayCamera = eyeCamera;
+        auto rayCamera = _pointerRayCamera ? _pointerRayCamera.get() : eyeCamera;
         if (rayCamera)
         {
             Camera::setVisitingCamera(rayCamera);

@@ -56,6 +56,7 @@ class CustomEvent;
 class CustomEventListener;
 class PointerEventListener;
 class Camera;
+class InputSystem;
 
 /** @class EventDispatcher
 * @brief This class manages event listener subscriptions
@@ -217,6 +218,7 @@ public:
 
 protected:
     friend class Node;
+    friend class InputSystem;
 
     /** Sets the dirty flag for a node. */
     void setDirtyForNode(Node* node);
@@ -285,6 +287,8 @@ protected:
     void updateListeners(Event* event);
 
     void dispatchPointerEvent(PointerEvent* event);
+
+    PointerHitResult hitTestPointerEvent(PointerEvent* event);
 
     /** Associates node with event listener */
     void associateNodeAndEventListener(Node* node, EventListener* listener);

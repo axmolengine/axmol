@@ -115,6 +115,8 @@ static PointerEvent::CaptureBits makePointerCaptureBits(PointerEvent* event)
 
 static bool pointerHitTest(PointerEvent* event, const Camera* camera, PointerEventListener* listener, Node* target)
 {
+    event->setCamera(camera);
+
     if (camera && event->getPointerType() != PointerType::Controller)
         event->setRay(camera->screenToRay(event->getPoint()));
 
@@ -1875,6 +1877,49 @@ const Camera* EventDispatcher::findHitCameraForListener(PointerEvent* event,
     }
 
     return nullptr;
+}
+
+PointerHitResult EventDispatcher::hitTestPointerEvent(PointerEvent* event)
+{
+    if (!event)
+        return {};
+
+    event->clearHitResult();
+    event->setCamera(nullptr);
+
+    sortEventListeners(PointerEventListener::LISTENER_ID);
+
+    auto listeners = getListeners(PointerEventListener::LISTENER_ID);
+    auto scene     = Director::getInstance()->getRunningScene();
+    if (!listeners || !scene)
+        return {};
+
+    auto sceneGraphPriorityListeners = listeners->getSceneGraphPriorityListeners();
+    if (!sceneGraphPriorityListeners)
+        return {};
+
+    auto cameras = scene->getCameras();
+    for (auto&& listener : *sceneGraphPriorityListeners)
+    {
+        if (!listener || !listener->isEnabled() || listener->isPaused() || !listener->isAttached())
+            continue;
+
+        auto target = listener->getAssociatedNode();
+        if (!target || _nodePriorityMap.find(target) == _nodePriorityMap.end())
+            continue;
+
+        auto pointerListener = static_cast<PointerEventListener*>(listener);
+        if (!findHitCameraForListener(event, pointerListener, cameras))
+            continue;
+
+        auto result = event->getHitResult();
+        event->setCamera(nullptr);
+        return result;
+    }
+
+    event->clearHitResult();
+    event->setCamera(nullptr);
+    return {};
 }
 
 }  // namespace ax
