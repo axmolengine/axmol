@@ -88,6 +88,9 @@ protected:
 private:
     void ensureControllerRayResources();
     void shutdownControllerRayResources();
+    Camera* ensurePointerRayCamera(Scene* scene);
+    Camera* selectPointerRaySourceCamera(Scene* scene) const;
+    void syncPointerRayCamera(Scene* scene);
     void drawControllerRays(Renderer* renderer, uint32_t eyeIdx, const XrView& view);
     void onBeforeControllerRayDraw();
     void onAfterControllerRayDraw();
@@ -111,6 +114,7 @@ private:
     float _xrToSceneScale{1.0f};
 
     RefPtr<RenderTexturePass> _rtPass;
+    RefPtr<Camera> _pointerRayCamera;
 
     ScissorRect _sourceScissorRect;
     LinearStack<VRScissorTransform> _scissorTransformStack;

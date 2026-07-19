@@ -156,6 +156,11 @@ public:
     const ControllerState* getControllers() const { return _controllers; }
     Mat4 getPointerViewTransform() const { return _headViewTransform; }
     bool isPointerViewTransformValid() const { return _headViewTransformValid; }
+    void setPointerRayTransform(const Mat4& transform);
+    void clearPointerRayTransform();
+    void setCompositorAlive(bool alive) { _compositorAlive = alive; }
+    bool isCompositorAlive() const { return _compositorAlive; }
+
     void setXrToSceneScale(float scale) { _xrToSceneScale = scale > 0.0f ? scale : 1.0f; }
     float getXrToSceneScale() const { return _xrToSceneScale; }
 
@@ -241,10 +246,13 @@ private:
     std::unique_ptr<rhi::OpenXRVulkanInterop> _vulkanInterop;
 #endif
 
+    bool _compositorAlive{false};
     float _xrToSceneScale{1.0f};
 
     Mat4 _headViewTransform{Mat4::identity};
     bool _headViewTransformValid{false};
+    Mat4 _pointerRayTransform{Mat4::identity};
+    bool _pointerRayTransformValid{false};
 
     void* _graphicsBindingStorage{nullptr};
 

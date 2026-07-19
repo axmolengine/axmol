@@ -96,6 +96,7 @@ public:
 
     // VR controller input: PointerType::Controller with a 3D ray.
     PointerHitResult handleVRPointerEvent(InputPhase phase, Vec2 point, const Ray& ray, const PointerInputState& state);
+    PointerHitResult hitTestVRPointer(Vec2 point, const Ray& ray, const PointerInputState& state);
     PointerHitResult handleVRPointerScroll(Vec2 point,
                                            Vec2 scrollDelta,
                                            const Ray& ray,

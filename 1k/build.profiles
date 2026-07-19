@@ -100,4 +100,5 @@ lz4=v1.10.0
 sample-assets=v3.0.0-alpha22
 live2d-core=5.5
 openxr=release-1.1.61
+tracy=v0.13.1
 # --- endregion

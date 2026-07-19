@@ -42,6 +42,7 @@ THE SOFTWARE.
 #include "axmol/base/Utils.h"
 #include "axmol/base/NinePatchImageParser.h"
 #include "axmol/rhi/GraphicsCore.h"
+#include "axmol/base/Profiling.h"
 
 using namespace std;
 
@@ -463,6 +464,8 @@ Texture2D* TextureCache::addImage(std::string_view path, bool autoGenMipmaps)
 
 Texture2D* TextureCache::addImage(std::string_view path, PixelFormat renderFormat, bool autoGenMipmaps)
 {
+    AX_PROFILER_ZONE_SCOPED;
+
     Texture2D* texture = nullptr;
     Image* image       = nullptr;
     // Split up directory and filename

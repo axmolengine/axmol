@@ -723,6 +723,8 @@ void Scheduler::resumeTargets(const std::set<void*>& targetsToResume)
 // main loop
 void Scheduler::update(float dt)
 {
+    AX_PROFILER_ZONE_SCOPED;
+
     // active waitlist
     if (!_waitList.empty())
         activeWaitList();

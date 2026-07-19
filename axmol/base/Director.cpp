@@ -55,6 +55,7 @@ THE SOFTWARE.
 #include "axmol/base/FPSImages.h"
 #include "axmol/base/Scheduler.h"
 #include "axmol/base/Macros.h"
+#include "axmol/base/Profiling.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/CustomEvent.h"
 #include "axmol/base/Logging.h"
@@ -504,7 +505,23 @@ Vec2 Director::getCanvasSizeInPixels() const
 
 Vec2 Director::screenToCanvas(const Vec2& screenPoint) const
 {
-    return Vec2(screenPoint.x, getCanvasSize().height - screenPoint.y);
+    if (!_renderView)
+        return screenPoint;
+
+    const auto& viewport = _renderView->getViewportRect();
+    const auto& scale    = _renderView->getScale();
+
+    if (scale.x == 0.0f || scale.y == 0.0f)
+        return Vec2::zero;
+
+    // Screen coordinates use a top-left origin, while viewport.origin
+    // is expressed with a bottom-left origin.
+    const float viewportTop = _renderView->getRenderSize().height - (viewport.origin.y + viewport.size.height);
+
+    return Vec2{
+        (screenPoint.x - viewport.origin.x) / scale.x,
+        _canvasSizeInPoints.height - (screenPoint.y - viewportTop) / scale.y,
+    };
 }
 
 Vec2 Director::getVisibleSize() const
@@ -1356,6 +1373,8 @@ void Director::activate(SetIntervalReason reason)
 
     _axmol_thread_id = std::this_thread::get_id();
 
+    AX_PROFILER_THREAD_NAME("MainThread");
+
     Application::getInstance()->setAnimationInterval(_animationInterval);
 
     // fix issue #3509, skip one fps to avoid incorrect time calculation.
@@ -1426,6 +1445,8 @@ void Director::renderFrame()
 
     if (!_active) [[unlikely]]
         return;
+
+    AX_PROFILER_ZONE_SCOPED;
 
     const auto canRender = _renderer->beginFrame();
 
@@ -1518,6 +1539,8 @@ void Director::renderFrame()
     }
 
     _poolManager->getCurrentPool()->clear();
+
+    AX_PROFILER_FRAME_MARK;
 }
 
 void Director::renderFrame(float dt)

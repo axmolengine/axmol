@@ -183,7 +183,7 @@
 
 ## OpenXR-SDK
 - [![Upstream](https://img.shields.io/github/v/release/KhronosGroup/OpenXR-SDK?label=Upstream)](https://github.com/KhronosGroup/OpenXR-SDK)
-- Version: 1.1.60
+- Version: 1.1.61
 - License: Apache-2.0
 
 ## OpenAL Soft
@@ -248,6 +248,11 @@
 - Upstream: https://github.com/nothings/stb
 - Version: 2.30
 - License: MIT
+
+## tracy
+- [![Upstream](https://img.shields.io/github/v/release/wolfpld/tracy?label=Upstream)](https://github.com/wolfpld/tracy)
+- Version: 0.13.1
+- License: BSD-3-Clause
 
 ## unzip (minizip-1.2)
 - Upstream: https://github.com/simdsoft/mz12
