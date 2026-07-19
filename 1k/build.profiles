@@ -10,7 +10,7 @@ axslcc=3.99.0
 
 # The cmake, @gradle @axmol-cmdline
 # as latest as possible
-cmake=4.2.0~4.3.3+
+cmake=4.2.0~4.4.0+
 
 # The ninja
 ninja=1.10.0~1.13.2+
@@ -93,7 +93,7 @@ emsdk=3.1.73~6.0.1+
 # --- endregion
 
 # --- region dependencies @fetch.cmake
-1kdist=v121
+1kdist=v122
 oboe=1.10.0
 kcp=2.1.1
 lz4=v1.10.0
