@@ -149,8 +149,6 @@ extern bool kProfilerCategoryParticles;
 
 #if defined(AX_PROFILER_BACKEND_TRACY)
 #    include "axmol/base/ProfilingBackendTracy.h"
-#elif defined(AX_PROFILER_BACKEND_NONE)
+#else  // Fallback no-op if no valid profiler backend specified
 #    include "axmol/base/ProfilingBackendNoop.h"
-#else
-#    error "No valid profiling backend selected"
 #endif
