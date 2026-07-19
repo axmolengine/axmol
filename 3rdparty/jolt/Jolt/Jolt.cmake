@@ -120,7 +120,7 @@ set(JOLT_PHYSICS_SRC_FILES
 	${JOLT_PHYSICS_ROOT}/Geometry/RayTriangle.h
 	${JOLT_PHYSICS_ROOT}/Geometry/Sphere.h
 	${JOLT_PHYSICS_ROOT}/Geometry/Triangle.h
-  ${JOLT_PHYSICS_ROOT}/Jolt.cmake
+	${JOLT_PHYSICS_ROOT}/Jolt.cmake
 	${JOLT_PHYSICS_ROOT}/Jolt.h
 	${JOLT_PHYSICS_ROOT}/Math/BVec16.h
 	${JOLT_PHYSICS_ROOT}/Math/BVec16.inl
@@ -320,6 +320,7 @@ set(JOLT_PHYSICS_SRC_FILES
 	${JOLT_PHYSICS_ROOT}/Physics/Constraints/ConstraintManager.cpp
 	${JOLT_PHYSICS_ROOT}/Physics/Constraints/ConstraintManager.h
 	${JOLT_PHYSICS_ROOT}/Physics/Constraints/ConstraintPart/AngleConstraintPart.h
+	${JOLT_PHYSICS_ROOT}/Physics/Constraints/ConstraintPart/AngularFrictionConstraintPart.h
 	${JOLT_PHYSICS_ROOT}/Physics/Constraints/ConstraintPart/AxisConstraintPart.h
 	${JOLT_PHYSICS_ROOT}/Physics/Constraints/ConstraintPart/ContactConstraintPart.h
 	${JOLT_PHYSICS_ROOT}/Physics/Constraints/ConstraintPart/DualAxisConstraintPart.h
@@ -376,6 +377,8 @@ set(JOLT_PHYSICS_SRC_FILES
 	${JOLT_PHYSICS_ROOT}/Physics/Hair/HairSettings.h
 	${JOLT_PHYSICS_ROOT}/Physics/Hair/HairShaders.cpp
 	${JOLT_PHYSICS_ROOT}/Physics/Hair/HairShaders.h
+	${JOLT_PHYSICS_ROOT}/Physics/Hair/RegisterHair.cpp
+	${JOLT_PHYSICS_ROOT}/Physics/Hair/RegisterHair.h
 	${JOLT_PHYSICS_ROOT}/Physics/IslandBuilder.cpp
 	${JOLT_PHYSICS_ROOT}/Physics/IslandBuilder.h
 	${JOLT_PHYSICS_ROOT}/Physics/LargeIslandSplitter.cpp
@@ -780,6 +783,9 @@ source_group(TREE ${JOLT_PHYSICS_ROOT} FILES ${JOLT_PHYSICS_SRC_FILES} ${JOLT_PH
 
 # Create Jolt lib
 if (JPH_BUILD_SHARED_LIBS)
+	# Set default visibility to hidden
+	set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+
 	set(JPH_LIB_TYPE SHARED)
 else()
 	set(JPH_LIB_TYPE STATIC)
@@ -788,8 +794,6 @@ add_library(Jolt ${JPH_LIB_TYPE} ${JOLT_PHYSICS_SRC_FILES} ${JOLT_PHYSICS_SHADER
 add_library(Jolt::Jolt ALIAS Jolt)
 
 if (JPH_BUILD_SHARED_LIBS)
-	# Set default visibility to hidden
-	set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
 	# Public define to instruct user code to import Jolt symbols (rather than use static linking)
 	target_compile_definitions(Jolt PUBLIC JPH_SHARED_LIBRARY)
@@ -798,6 +802,7 @@ if (JPH_BUILD_SHARED_LIBS)
 	target_compile_definitions(Jolt PRIVATE JPH_BUILD_SHARED_LIBRARY)
 endif()
 
+# Axmol spec
 if (MINGW OR APPLE OR UNIX)
   message(AUTHOR_WARNING "Compiling jolt-physics with -ffp-contract=off for non-windows platform")
   target_compile_options(Jolt PRIVATE -ffp-contract=off)
@@ -808,13 +813,22 @@ target_include_directories(Jolt PUBLIC
 	$<BUILD_INTERFACE:${PHYSICS_REPO_ROOT}>
 	$<INSTALL_INTERFACE:include/>)
 
-target_precompile_headers(Jolt PRIVATE "${JOLT_PHYSICS_ROOT}/Jolt.h")
+# Code coverage doesn't work when using precompiled headers
+if (CMAKE_GENERATOR STREQUAL "Ninja Multi-Config" AND MSVC)
+	# The Ninja Multi-Config generator errors out when selectively disabling precompiled headers for certain configurations.
+	# See: https://github.com/jrouwe/JoltPhysics/issues/1211
+	target_precompile_headers(Jolt PRIVATE "${JOLT_PHYSICS_ROOT}/Jolt.h")
+else()
+	target_precompile_headers(Jolt PRIVATE "$<$<NOT:$<CONFIG:ReleaseCoverage>>:${JOLT_PHYSICS_ROOT}/Jolt.h>")
+endif()
 
 # Set the NDEBUG define for release builds
-# target_compile_definitions(Jolt PUBLIC "$<$<CONFIG:Release,MinSizeRel,RelWithDebInfo>:NDEBUG>")
+# Axmol spec: keep cmake standard builds
+# target_compile_definitions(Jolt PUBLIC "$<$<CONFIG:Release,Distribution,ReleaseASAN,ReleaseUBSAN,ReleaseTSAN,ReleaseCoverage>:NDEBUG>")
 
 # Setting floating point exceptions
 if (FLOATING_POINT_EXCEPTIONS_ENABLED AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+        # Axmol spec: doesn't need specify CONFIG:Debug,Release
 	target_compile_definitions(Jolt PUBLIC JPH_FLOATING_POINT_EXCEPTIONS_ENABLED)
 endif()
 
@@ -891,6 +905,7 @@ endif()
 if (DEBUG_RENDERER_IN_DISTRIBUTION)
 	target_compile_definitions(Jolt PUBLIC "JPH_DEBUG_RENDERER")
 elseif (DEBUG_RENDERER_IN_DEBUG_AND_RELEASE)
+        # Axmol spec: 
 	target_compile_definitions(Jolt PUBLIC JPH_DEBUG_RENDERER)
 endif()
 
@@ -901,8 +916,9 @@ else()
 	set(JOLT_PROFILE_DEFINE JPH_PROFILE_ENABLED)
 endif()
 if (PROFILER_IN_DISTRIBUTION)
-	target_compile_definitions(Jolt PUBLIC ${JOLT_PROFILE_DEFINE})
+	target_compile_definitions(Jolt PUBLIC "${JOLT_PROFILE_DEFINE}")
 elseif (PROFILER_IN_DEBUG_AND_RELEASE)
+        # Axmol spec: 
 	target_compile_definitions(Jolt PUBLIC ${JOLT_PROFILE_DEFINE})
 endif()
 
@@ -957,6 +973,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 else()
 	if (XCODE)
 		# XCode builds for multiple architectures, we can't set global flags
+		# Axmol spec: 
 		if (CMAKE_OSX_ARCHITECTURES MATCHES "x86_64")
 			if (USE_AVX512)
 				target_compile_options(Jolt PUBLIC -mavx512f -mavx512vl -mavx512dq -mavx2 -mbmi -mpopcnt -mlzcnt -mf16c)
@@ -986,10 +1003,10 @@ else()
 			target_link_options(Jolt PUBLIC -sMEMORY64)
 		endif()
 	elseif ("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64" OR "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "AMD64" OR "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86" OR "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "i386" OR "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "i686")
+		# Axmol spec: Fix android x64 compile error
 		# x86 and x86_64
 		# On 32-bit builds we need to default to using SSE instructions, the x87 FPU instructions have higher intermediate precision
-		# which will cause problems in the collision detection code (the effect is similar to leaving FMA on, search for
-		# JPH_PRECISE_MATH_ON for the locations where this is a problem).
+		# which will cause problems in the collision detection code (everywhere where DifferenceOfProducts is used).
 
 		if (USE_AVX512)
 			target_compile_options(Jolt PUBLIC -mavx512f -mavx512vl -mavx512dq -mavx2 -mbmi -mpopcnt -mlzcnt -mf16c)
@@ -1026,6 +1043,7 @@ else()
 endif()
 
 # On Unix flavors we need the pthread library
+# Axmol spec: Also match WindowsStore for UWP support
 if (NOT ("${CMAKE_SYSTEM_NAME}" MATCHES "Windows") AND NOT EMSCRIPTEN)
 	target_compile_options(Jolt PUBLIC -pthread)
 	target_link_options(Jolt PUBLIC -pthread)

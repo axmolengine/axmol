@@ -9,7 +9,7 @@
 #include <Jolt/Compute/VK/ComputeSystemVKImpl.h>
 #include <Jolt/Core/QuickSort.h>
 #include <Jolt/Core/IncludeWindows.h>
-#if defined(JPH_PLATFORM_LINUX) || defined(JPH_PLATFORM_MACOS)
+#if defined(JPH_PLATFORM_LINUX) || defined(JPH_PLATFORM_ANDROID) ||defined(JPH_PLATFORM_MACOS)
 #include <dlfcn.h>
 #endif
 
@@ -58,7 +58,7 @@ bool ComputeSystemVKImpl::Initialize(ComputeSystemResult &outResult)
 		return false;
 	}
 	mVkGetInstanceProcAddr = reinterpret_cast<PFN_vkGetInstanceProcAddr>(reinterpret_cast<void *>(GetProcAddress(module, "vkGetInstanceProcAddr")));
-#elif defined(JPH_PLATFORM_LINUX)
+#elif defined(JPH_PLATFORM_LINUX) || defined(JPH_PLATFORM_ANDROID)
 	void *library = dlopen("libvulkan.so.1", RTLD_NOW | RTLD_LOCAL);
 	if (!library)
 		library = dlopen("libvulkan.so", RTLD_NOW | RTLD_LOCAL);
@@ -356,8 +356,6 @@ bool ComputeSystemVKImpl::Initialize(ComputeSystemResult &outResult)
 	device_create_info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
 	device_create_info.queueCreateInfoCount = num_queues;
 	device_create_info.pQueueCreateInfos = queue_create_info;
-	device_create_info.enabledLayerCount = instance_create_info.enabledLayerCount;
-	device_create_info.ppEnabledLayerNames = instance_create_info.ppEnabledLayerNames;
 	device_create_info.enabledExtensionCount = uint32(required_device_extensions.size());
 	device_create_info.ppEnabledExtensionNames = required_device_extensions.data();
 	device_create_info.pNext = &enabled_features2;
