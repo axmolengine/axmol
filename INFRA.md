@@ -27,7 +27,7 @@
 ## emsdk
 
 - [![github](https://img.shields.io/github/v/tag/emscripten-core/emsdk?label=Upstream)](https://github.com/emscripten-core/emsdk)
-- Version: 6.0.3
+- Version: 6.0.1
 - License: Apache-2.0
 - Platform: Android
 - Manged by: `1k/build.profiles`

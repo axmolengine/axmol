@@ -515,14 +515,11 @@ Vec2 Director::screenToCanvas(const Vec2& screenPoint) const
 
     // Screen coordinates use a top-left origin, while viewport.origin
     // is expressed with a bottom-left origin.
-    const float viewportTop =
-        _renderView->getRenderSize().height -
-        (viewport.origin.y + viewport.size.height);
+    const float viewportTop = _renderView->getRenderSize().height - (viewport.origin.y + viewport.size.height);
 
     return Vec2{
         (screenPoint.x - viewport.origin.x) / scale.x,
-        _canvasSizeInPoints.height -
-            (screenPoint.y - viewportTop) / scale.y,
+        _canvasSizeInPoints.height - (screenPoint.y - viewportTop) / scale.y,
     };
 }
 
