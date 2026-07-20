@@ -50,6 +50,11 @@ Available commands:
         build        Compile projects to binary.
         deploy       Compile and deploy a project to a device/simulator.
         run          Compiles, deploy and run project on the target.
+        source-lint  Lint axmol source files (UTF-8 BOM & cstd headers).
+        clang-format Format source files using clang-format.
+        genbindings  Generate Lua bindings for axmol engine.
+        build-docs   Build axmol documentation.
+        publish      Publish axmol release.
 
 Available arguments:
         -h           Show this help information.
@@ -83,7 +88,7 @@ if ($IsMacOS) {
 function axmol_build() {
     $sub_args = $args
     println $sub_args
-    $build_script = Join-Path $PSScriptRoot 'build.ps1'
+    $build_script = Join-Path $PSScriptRoot 'plugins/build.ps1'
     if ("$args".Contains('-d')) {
         # have proj dir
         . $build_script @sub_args
@@ -250,7 +255,7 @@ function axmol_run() {
 
 $builtinPlugins = @{
     new    = @{
-        proc  = (Join-Path $PSScriptRoot 'axmol_new.ps1');
+        proc  = (Join-Path $PSScriptRoot 'plugins/axmol_new.ps1');
         usage = @"
 usage: axmol new -p dev.axmol.hellocpp -d path/to/project -l cpp --portrait <ProjectName>
 Creates a new project.
@@ -352,6 +357,63 @@ options:
   -c: no build, only generate native project files (vs .sln, xcodeproj)
   -d: specify project dir to compile, i.e. -d /path/your/project/
   -f: force generate native project files. Useful if no changes are detected, such as with resource updates.
+"@
+    };
+    'source-lint' = @{
+        proc  = (Join-Path $PSScriptRoot 'plugins/source-lint.ps1');
+        usage = @"
+usage: axmol source-lint
+
+Lint axmol source files (UTF-8 BOM & cstd headers).
+
+options:
+  -h    Show this help message.
+"@
+    };
+    'clang-format' = @{
+        proc  = (Join-Path $PSScriptRoot 'plugins/clang-format.ps1');
+        usage = @"
+usage: axmol clang-format -ver <llvm-version>
+
+Format source files using clang-format.
+
+options:
+  -h          Show this help message.
+  -ver        LLVM/clang-format version to use.
+"@
+    };
+    genbindings = @{
+        proc  = (Join-Path $PSScriptRoot 'plugins/genbindings.ps1');
+        usage = @"
+usage: axmol genbindings
+
+Generate Lua bindings for axmol engine.
+
+options:
+  -h    Show this help message.
+"@
+    };
+    'build-docs' = @{
+        proc  = (Join-Path $PSScriptRoot 'plugins/build-docs.ps1');
+        usage = @"
+usage: axmol build-docs
+
+Build axmol documentation.
+
+options:
+  -h    Show this help message.
+"@
+    };
+    publish = @{
+        proc  = (Join-Path $PSScriptRoot 'plugins/publish.ps1');
+        usage = @"
+usage: axmol publish -version <ver>
+
+Publish axmol release.
+
+options:
+  -h          Show this help message.
+  -version    Release version to publish.
 "@
     }
 }
