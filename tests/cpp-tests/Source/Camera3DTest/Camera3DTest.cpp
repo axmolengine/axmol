@@ -1594,24 +1594,16 @@ void CameraCanvasResizeTest::createGuides()
     // Keep both guides in exactly the same DrawNode so that they cannot
     // receive different parent transforms.
     auto* guides = DrawNode::create();
-    
+
     constexpr float inset = 6.0f;
 
     // Old Canvas: red.
-    guides->drawRect(
-        Vec2(inset, inset),
-        _oldCanvas - Vec2(inset, inset),
-        Color::red,
-        6.0f);
+    guides->drawRect(Vec2(inset, inset), _oldCanvas - Vec2(inset, inset), Color::red, 6.0f);
 
     drawCross(guides, _oldCanvas * 0.5f, 35.0f, Color::red);
 
     // New Canvas: green.
-    guides->drawRect(
-        Vec2::zero,
-        _newCanvas,
-        Color::green,
-        6.0f);
+    guides->drawRect(Vec2::zero, _newCanvas, Color::green, 6.0f);
 
     drawCross(guides, _newCanvas * 0.5f, 35.0f, Color::green);
 
