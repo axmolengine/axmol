@@ -302,3 +302,28 @@ public:
 
     virtual void onEnter() override;
 };
+
+class CameraCanvasResizeTest : public TestCase
+{
+public:
+    CREATE_FUNC(CameraCanvasResizeTest);
+
+    bool init() override;
+    void onExit() override;
+
+private:
+    void createGuides();
+    void createToggleButton();
+    void updateStatusLabel();
+    void toggleCanvas();
+    static void drawCross(ax::DrawNode* node, const ax::Vec2& center, float radius, const ax::Color& color);
+
+    ax::Vec2 _savedDesignSize;
+    ax::ResolutionPolicy _savedPolicy{ax::ResolutionPolicy::UNKNOWN};
+
+    ax::Vec2 _oldCanvas;
+    ax::Vec2 _newCanvas;
+
+    ax::Label* _statusLabel{nullptr};
+    bool _usingNewCanvas{false};
+};

@@ -89,7 +89,7 @@ Camera* NodeGrid::getGridCamera()
     }
     else
     {
-        _gridCamera->initOrthographicView(_director->getCanvasSize(), -1024, 1024);
+        _gridCamera->configureOrthographicView(_director->getCanvasSize(), -1024, 1024);
     }
 
     auto visitingCamera = Camera::getVisitingCamera();

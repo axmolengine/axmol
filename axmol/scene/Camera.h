@@ -119,7 +119,7 @@ public:
      *
      * @return An autoreleased Camera instance.
      *
-     * @see initOrthographicView
+     * @see configureOrthographicView
      * @see createOrthographic
      */
     static Camera* createOrthographicView(const Vec2& size, float nearPlane, float farPlane);
@@ -409,15 +409,42 @@ public:
      * WP8*/
     void setAdditionalProjection(const Mat4& mat);
 
-    /** Init camera with Classic calibrated perspective mode
-    !!!Note: Must invoke this function again when director projection or winsize changed */
+    /** Init camera with Classic calibrated perspective mode */
     void initClassic();
 
     /** Update camera transformations */
     void updateTransform() override;
 
-    bool initPerspective(float fieldOfView, float aspectRatio, float nearPlane, float farPlane);
-    bool initOrthographic(float zoomX, float zoomY, float nearPlane, float farPlane);
+    /**
+     * Configure a perspective projection for this Camera.
+     *
+     * May be called more than once. Replaces the current projection configuration
+     * with the given fieldOfView, aspectRatio, nearPlane, and farPlane.
+     * Does NOT modify the Camera Node transform (position, rotation, scale).
+     *
+     * @param fieldOfView The field of view (normally 40-60 degrees).
+     * @param aspectRatio The aspect ratio (width / height).
+     * @param nearPlane The near plane distance.
+     * @param farPlane The far plane distance.
+     * @return true.
+     */
+    bool configurePerspective(float fieldOfView, float aspectRatio, float nearPlane, float farPlane);
+
+    /**
+     * Configure an orthographic projection for this Camera.
+     *
+     * May be called more than once. Replaces the current projection configuration
+     * with the given zoom factors and clip planes.
+     * Does NOT modify the Camera Node transform (position, rotation, scale).
+     *
+     * @param zoomX The width of the orthographic projection.
+     * @param zoomY The height of the orthographic projection.
+     * @param nearPlane The near plane distance.
+     * @param farPlane The far plane distance.
+     * @return true.
+     */
+    bool configureOrthographic(float zoomX, float zoomY, float nearPlane, float farPlane);
+
     void applyViewport();
 
     /**
@@ -443,7 +470,41 @@ protected:
     static Camera* _visitingCamera;
     static Viewport _defaultViewport;
 
-    bool initOrthographicView(const Vec2& size, float nearPlane, float farPlane);
+    /**
+     * Configure the Classic calibrated perspective view for the given canvas size.
+     *
+     * Recalculates the far plane, rebuilds projection, positions the Camera
+     * at the canvas center, and reapplies zoom if active.
+     *
+     * May be called more than once (e.g. on canvas resize).
+     * Modifies both projection state and Camera Node transform.
+     *
+     * @param canvasSize The logical canvas size in points.
+     */
+    void configureClassicView(const Vec2& canvasSize);
+
+    bool configureOrthographicView(const Vec2& size, float nearPlane, float farPlane);
+
+    /**
+     * Rebuilds the projection matrix from the Camera's current configuration.
+     *
+     * This function does NOT modify the camera's Node transform (position, rotation, scale).
+     * It does NOT read the Director canvas size and does NOT call configureXXX().
+     * It only recalculates `_projection` from the current values of stored configuration fields.
+     */
+    void updateProjection();
+
+    /**
+     * Called when the logical canvas size changes.
+     *
+     * Updates the camera according to its CameraMode:
+     * - Classic: recenters the 2D calibrated perspective view to the new canvas.
+     * - Ortho: realigns the 2D orthographic view to the new canvas.
+     * - Perspective: only updates the aspect ratio, does not modify the Camera transform.
+     *
+     * @param canvasSize The new logical canvas size in points.
+     */
+    void onCanvasSizeChanged(const Vec2& canvasSize);
 
     RenderViewCore* _renderView{nullptr};
 
@@ -456,6 +517,7 @@ protected:
 
     Vec3 _up;
     float _fieldOfView                = 0.f;
+    float _aspectRatio                = 1.0f;
     float _zoom[2]                    = {0.f};
     float _nearPlane                  = 0.f;
     float _farPlane                   = 0.f;
