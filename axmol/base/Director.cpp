@@ -371,6 +371,12 @@ void Director::setCanvasSize(const Vec2& canvasSize)
 
     updateOverlayCamera();
     updateOffscreenCamera();
+
+    if (_runningScene)
+    {
+        if (auto* camera = _runningScene->getDefaultCamera())
+            camera->updateTransform();
+    }
 }
 
 TextureCache* Director::getTextureCache() const

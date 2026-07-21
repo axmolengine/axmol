@@ -263,9 +263,12 @@ void Camera::updateTransform()
     case CameraMode::Classic:
     {
         float zeye = _director->getZEye();
+        _farPlane  = zeye + size.height / 2.0f;
         initPerspective(_fieldOfView, (float)size.width / size.height, _nearPlane, _farPlane);
         Vec3 eye(size.width / 2.0f, size.height / 2.0f, zeye), center(size.width / 2.0f, size.height / 2.0f, 0.0f),
             up(0.0f, 1.0f, 0.0f);
+        setPosition3D(eye);
+        lookAt(center, up);
         _eyeZdistance = eye.z;
         break;
     }
