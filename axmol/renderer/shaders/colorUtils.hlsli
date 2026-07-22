@@ -21,13 +21,16 @@ float3 transformHSV(float3 inColor, float3 hsv)
     return outColor;
 }
 
-float3 trasnformYUV(float3 YUV, float4x4 colorTransform)
+float3 trasnformYUV(inout float3 YUV, float4x4 colorTransform)
 {
-    YUV -= float3(colorTransform[0].w, colorTransform[1].w, colorTransform[2].w);
-    float3x3 m = {
-        colorTransform[0].xyz,
-        colorTransform[1].xyz,
-        colorTransform[2].xyz
-    };
+    // The legacy buffer stores offsets in c0.w, c1.w and c2.w.
+    // With column-major interpretation, these form row 3.
+    YUV -= colorTransform[3u].xyz;
+
+    float3x3 m = float3x3(
+        colorTransform[0u].xyz,
+        colorTransform[1u].xyz,
+        colorTransform[2u].xyz);
+
     return mul(m, YUV);
 }
