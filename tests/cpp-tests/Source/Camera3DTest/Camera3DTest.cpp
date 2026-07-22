@@ -58,6 +58,7 @@ Camera3DTests::Camera3DTests()
     ADD_TEST_CASE(CameraArcBallDemo);
     // ADD_TEST_CASE(CameraFrameBufferTest); //TODO render target
     ADD_TEST_CASE(BackgroundColorBrushTest);
+    ADD_TEST_CASE(CameraCanvasResizeTest);
 }
 
 void CameraBaseTest::onEnter()
@@ -362,7 +363,8 @@ void Camera3DTestDemo::onEnter()
     schedule(AX_SCHEDULE_SELECTOR(Camera3DTestDemo::updateCamera), 0.0f);
     if (_camera == nullptr)
     {
-        _camera = Camera::createPerspective(60, (float)s.width / s.height, 1, 1000);
+        _camera = Camera::create();
+        _camera->configurePerspective(60, (float)s.width / s.height, 1, 1000);
         _camera->setCameraFlag(CameraFlag::USER1);
         _layer3D->addChild(_camera);
     }
@@ -844,7 +846,8 @@ void CameraCullingDemo::switchViewCallback(Object* sender)
 
     if (_cameraFirst == nullptr)
     {
-        _cameraFirst = Camera::createPerspective(30.0f, (float)s.width / s.height, 10.0f, 200.0f);
+        _cameraFirst = Camera::create();
+        _cameraFirst->configurePerspective(30.0f, (float)s.width / s.height, 10.0f, 200.0f);
         _cameraFirst->setCameraFlag(CameraFlag::USER8);
         _cameraFirst->setPosition3D(Vec3(-100.0f, 0.0f, 0.0f));
         _cameraFirst->lookAt(Vec3(1000.0f, 0.0f, 0.0f));
@@ -859,7 +862,8 @@ void CameraCullingDemo::switchViewCallback(Object* sender)
 
     if (_cameraThird == nullptr)
     {
-        _cameraThird = Camera::createPerspective(60, (float)s.width / s.height, 1, 1000);
+        _cameraThird = Camera::create();
+        _cameraThird->configurePerspective(60, (float)s.width / s.height, 1, 1000);
         _cameraThird->setCameraFlag(CameraFlag::USER8);
         _cameraThird->setPosition3D(Vec3(0.0f, 130.0f, 130.0f));
         _cameraThird->lookAt(Vec3(0, 0, 0));
@@ -1041,7 +1045,8 @@ void CameraArcBallDemo::onEnter()
 
     if (_camera == nullptr)
     {
-        _camera = Camera::createPerspective(60, (float)s.width / s.height, 1, 1000);
+        _camera = Camera::create();
+        _camera->configurePerspective(60, (float)s.width / s.height, 1, 1000);
         _camera->setCameraFlag(CameraFlag::USER1);
         _camera->setPosition3D(Vec3(0.0f, 10.0f, 50.0f));
         _camera->lookAt(Vec3(0, 0, 0), Vec3(0.0f, 1.0f, 0.0f));
@@ -1289,7 +1294,8 @@ void FogTestDemo::onEnter()
 
     if (_camera == nullptr)
     {
-        _camera = Camera::createPerspective(60, (float)s.width / s.height, 1, 1000);
+        _camera = Camera::create();
+        _camera->configurePerspective(60, (float)s.width / s.height, 1, 1000);
         _camera->setCameraFlag(CameraFlag::USER1);
         _camera->setPosition3D(Vec3(0.0f, 30.0f, 40.0f));
         _camera->lookAt(Vec3(0, 0, 0), Vec3(0.0f, 1.0f, 0.0f));
@@ -1461,7 +1467,7 @@ void FogTestDemo::onPointerMove(ax::PointerEvent* event)
 //                                              )
 //                        );
 //
-//     auto camera = Camera::create();
+//     auto camera = Camera::create(CameraMode::Classic);
 //     camera->setCameraFlag(CameraFlag::USER1);
 //     camera->setDepth(-1);
 //     camera->setFrameBufferObject(fbo);
@@ -1491,7 +1497,8 @@ void BackgroundColorBrushTest::onEnter()
 
     {
         // 1st Camera
-        auto camera = Camera::createPerspective(60.0f, (float)s.width / s.height, 1.0f, 1000.0f);
+        auto camera = Camera::create();
+        camera->configurePerspective(60.0f, (float)s.width / s.height, 1.0f, 1000.0f);
         camera->setPosition3D(Vec3(0.0f, 0.0f, 200.0f));
         camera->lookAt(Vec3::zero);
         camera->setDepth(-2);
@@ -1515,7 +1522,8 @@ void BackgroundColorBrushTest::onEnter()
         addChild(base);
 
         // 2nd Camera
-        auto camera     = Camera::createPerspective(60, (float)s.width / s.height, 1, 1000);
+        auto camera = Camera::create();
+        camera->configurePerspective(60, (float)s.width / s.height, 1, 1000);
         auto colorBrush = CameraBackgroundBrush::createColorBrush(Color(.1f, .1f, 1.f, .5f), 1.f);
         camera->setBackgroundBrush(colorBrush);
         camera->setPosition3D(Vec3(0.0f, 0.0f, 200.0f));
@@ -1545,4 +1553,133 @@ void BackgroundColorBrushTest::onEnter()
         base->addChild(model);
         model->runAction(RepeatForever::create(RotateBy::create(1.f, Vec3(10.0f, 20.0f, 30.0f))));
     }
+}
+
+bool CameraCanvasResizeTest::init()
+{
+    if (!TestCase::init())
+        return false;
+
+    auto* director = Director::getInstance();
+    auto* view     = director->getRenderView();
+
+    _savedDesignSize = view->getDesignResolutionSize();
+    _savedPolicy     = view->getResolutionPolicy();
+
+    _oldCanvas = director->getCanvasSize();
+    _newCanvas = _oldCanvas * 1.5f;
+
+    AXASSERT(_oldCanvas.width > 0.0f && _oldCanvas.height > 0.0f, "Invalid initial Canvas size");
+
+    AXASSERT(_newCanvas.width > _oldCanvas.width && _newCanvas.height > _oldCanvas.height,
+             "The new Canvas must be larger than the old Canvas");
+
+    AXLOGI("Old Canvas: {} x {}", _oldCanvas.width, _oldCanvas.height);
+    AXLOGI("New Canvas: {} x {}", _newCanvas.width, _newCanvas.height);
+
+    createGuides();
+    createToggleButton();
+    updateStatusLabel();
+
+    return true;
+}
+
+void CameraCanvasResizeTest::onExit()
+{
+    auto* view = Director::getInstance()->getRenderView();
+
+    if (_savedDesignSize.width > 0.0f && _savedDesignSize.height > 0.0f && _savedPolicy != ResolutionPolicy::UNKNOWN)
+    {
+        view->setDesignResolutionSize(_savedDesignSize.width, _savedDesignSize.height, _savedPolicy);
+    }
+
+    TestCase::onExit();
+}
+
+void CameraCanvasResizeTest::createGuides()
+{
+    // Keep both guides in exactly the same DrawNode so that they cannot
+    // receive different parent transforms.
+    auto* guides = DrawNode::create();
+
+    constexpr float inset = 6.0f;
+
+    // Old Canvas: red.
+    guides->drawRect(Vec2(inset, inset), _oldCanvas - Vec2(inset, inset), Color::red, 6.0f);
+
+    drawCross(guides, _oldCanvas * 0.5f, 35.0f, Color::red);
+
+    // New Canvas: green.
+    guides->drawRect(Vec2::zero, _newCanvas, Color::green, 6.0f);
+
+    drawCross(guides, _newCanvas * 0.5f, 35.0f, Color::green);
+
+    addChild(guides, -100);
+}
+
+void CameraCanvasResizeTest::createToggleButton()
+{
+    auto* label = Label::createWithTTF("Toggle Canvas", "fonts/arial.ttf", 24.0f);
+
+    auto* item = MenuItemLabel::create(label, [this](Object*) { toggleCanvas(); });
+
+    auto* menu = Menu::create(item, nullptr);
+
+    // Put the button near the old Canvas center so it is initially visible.
+    menu->setPosition(_oldCanvas.width * 0.5f, _oldCanvas.height * 0.15f);
+
+    addChild(menu, 100);
+}
+
+void CameraCanvasResizeTest::updateStatusLabel()
+{
+    if (!_statusLabel)
+    {
+        _statusLabel = Label::createWithTTF("", "fonts/arial.ttf", 20.0f);
+
+        _statusLabel->setAnchorPoint(Vec2(0.5f, 1.0f));
+        _statusLabel->setPosition(_oldCanvas.width * 0.5f, _oldCanvas.height - 20.0f);
+
+        addChild(_statusLabel, 100);
+    }
+
+    const auto currentCanvas = Director::getInstance()->getCanvasSize();
+
+    _statusLabel->setString(fmt::format(
+        "{}\nCurrent Canvas: {:.0f} x {:.0f}\n"
+        "red = old Canvas, green = new Canvas",
+        _usingNewCanvas ? "NEW CANVAS REQUESTED" : "INITIAL OLD CANVAS", currentCanvas.width, currentCanvas.height));
+}
+
+void CameraCanvasResizeTest::toggleCanvas()
+{
+    auto* view = Director::getInstance()->getRenderView();
+
+    _usingNewCanvas = !_usingNewCanvas;
+
+    const Vec2 target = _usingNewCanvas ? _newCanvas : _oldCanvas;
+
+    AXLOGI("Request Canvas: {} x {}", target.width, target.height);
+
+    view->setDesignResolutionSize(target.width, target.height, ResolutionPolicy::EXACT_FIT);
+
+    const Vec2 actual = Director::getInstance()->getCanvasSize();
+
+    auto* camera = Director::getInstance()->getRunningScene()->getDefaultCamera();
+
+    const Vec3 cameraPosition = camera->getPosition3D();
+
+    AXLOGI("Actual Canvas: {} x {}, Camera: ({}, {}, {})", actual.width, actual.height, cameraPosition.x,
+           cameraPosition.y, cameraPosition.z);
+
+    updateStatusLabel();
+}
+
+void CameraCanvasResizeTest::drawCross(DrawNode* node, const Vec2& center, float radius, const ax::Color& color)
+{
+    node->drawLine(center - Vec2(radius, 0.0f), center + Vec2(radius, 0.0f), color, 6.0f);
+
+    node->drawLine(center - Vec2(0.0f, radius), center + Vec2(0.0f, radius), color, 6.0f);
+
+    node->drawCircle(center, radius * 0.5f, color, 6.0f);
 }

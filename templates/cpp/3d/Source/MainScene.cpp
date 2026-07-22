@@ -99,7 +99,7 @@ bool MainScene::init()
     mainCamera->setBackgroundBrush(CameraBackgroundBrush::createColorBrush(Color(Color32(50, 55, 80)), 1.0f));
 
     // ---- UI camera ----
-    _uiCamera = Camera::createOrthographicView(s, -1024.0f, 1024.0f);
+    _uiCamera = Camera::create(CameraMode::Ortho);
     _uiCamera->setDepth(1);
     _uiCamera->setCameraFlag(CameraFlag::DEFAULT);
     addChild(_uiCamera);

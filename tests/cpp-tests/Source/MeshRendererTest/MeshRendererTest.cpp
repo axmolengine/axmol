@@ -414,7 +414,8 @@ MeshRendererUVAnimationTest::MeshRendererUVAnimationTest()
     Size visibleSize         = Director::getInstance()->getVisibleSize();
 
     // use custom camera
-    auto camera = Camera::createPerspective(60, visibleSize.width / visibleSize.height, 0.1f, 200);
+    auto camera = Camera::create();
+    camera->configurePerspective(60, visibleSize.width / visibleSize.height, 0.1f, 200);
     camera->setCameraFlag(CameraFlag::USER1);
 
     // create cylinder
@@ -506,7 +507,8 @@ MeshRendererFakeShadowTest::MeshRendererFakeShadowTest()
     auto layer = Layer::create();
     addChild(layer, 0);
     // create Camera
-    _camera = Camera::createPerspective(60, visibleSize.width / visibleSize.height, 0.1f, 200);
+    _camera = Camera::create();
+    _camera->configurePerspective(60, visibleSize.width / visibleSize.height, 0.1f, 200);
     _camera->setCameraFlag(CameraFlag::USER1);
     _camera->setPosition3D(Vec3(0.0f, 20.0f, 25.0f));
     _camera->setRotation3D(Vec3(-60.0f, 0.0f, 0.0f));
@@ -727,7 +729,8 @@ void MeshRendererFakeShadowTest::onPointerUp(ax::PointerEvent* event)
 MeshRendererBasicToonShaderTest::MeshRendererBasicToonShaderTest()
 {
     Size visibleSize = Director::getInstance()->getVisibleSize();
-    auto _camera     = Camera::createPerspective(60, visibleSize.width / visibleSize.height, 0.1f, 200);
+    auto _camera     = Camera::create();
+    _camera->configurePerspective(60, visibleSize.width / visibleSize.height, 0.1f, 200);
     _camera->setCameraFlag(CameraFlag::USER1);
     // create a teapot
     auto teapot = MeshRenderer::create("MeshRendererTest/teapot.c3b");
@@ -779,7 +782,8 @@ MeshRendererLightMapTest::MeshRendererLightMapTest()
     // the assets are from the OpenVR demo
     // get the visible size.
     Size visibleSize = Director::getInstance()->getVisibleSize();
-    _camera          = Camera::createPerspective(60, visibleSize.width / visibleSize.height, 0.1f, 200);
+    _camera          = Camera::create();
+    _camera->configurePerspective(60, visibleSize.width / visibleSize.height, 0.1f, 200);
     _camera->setCameraFlag(CameraFlag::USER1);
     _camera->setPosition3D(Vec3(0.0f, 25.0f, 15.0f));
     _camera->setRotation3D(Vec3(-35.0f, 0.0f, 0.0f));
@@ -1943,7 +1947,8 @@ UseCaseMeshRenderer::UseCaseMeshRenderer() : _caseIdx(0)
     addChild(menu);
 
     // setup camera
-    auto camera = Camera::createPerspective(40, s.width / s.height, 0.01f, 1000.f);
+    auto camera = Camera::create();
+    camera->configurePerspective(40, s.width / s.height, 0.01f, 1000.f);
     camera->setCameraFlag(CameraFlag::USER1);
     camera->setPosition3D(Vec3(0.f, 30.f, 100.f));
     camera->lookAt(Vec3(0.f, 0.f, 0.f));
@@ -2211,7 +2216,8 @@ std::string MeshRendererCubeMapTest::subtitle() const
 void MeshRendererCubeMapTest::addNewMeshWithCoords(Vec2 p)
 {
     Size visibleSize = Director::getInstance()->getVisibleSize();
-    _camera          = Camera::createPerspective(60, visibleSize.width / visibleSize.height, 10, 1000);
+    _camera          = Camera::create();
+    _camera->configurePerspective(60, visibleSize.width / visibleSize.height, 10, 1000);
     _camera->setPosition3D(Vec3(0.f, 0.f, 50.f));
     _camera->setCameraFlag(CameraFlag::USER1);
 
@@ -2462,7 +2468,8 @@ MeshRendererVertexColorTest::MeshRendererVertexColorTest()
     this->addChild(mesh);
 
     // setup camera
-    auto camera = Camera::createPerspective(40, s.width / s.height, 0.01f, 1000.f);
+    auto camera = Camera::create();
+    camera->configurePerspective(40, s.width / s.height, 0.01f, 1000.f);
     camera->setCameraFlag(CameraFlag::USER1);
     camera->setPosition3D(Vec3(0.0f, 0.0f, 10.f));
     camera->lookAt(Vec3(0.f, 0.f, 0.f));
@@ -2508,7 +2515,8 @@ CameraBackgroundClearTest::CameraBackgroundClearTest()
 
     // setup camera
     auto s  = Director::getInstance()->getCanvasSize();
-    _camera = Camera::createPerspective(40, s.width / s.height, 0.01f, 1000.f);
+    _camera = Camera::create();
+    _camera->configurePerspective(40, s.width / s.height, 0.01f, 1000.f);
     _camera->setCameraFlag(CameraFlag::USER1);
     _camera->setPosition3D(Vec3(0.f, 30.f, 100.f));
     _camera->lookAt(Vec3(0.f, 0.f, 0.f));
@@ -2577,7 +2585,8 @@ MotionStreak3DTest::MotionStreak3DTest()
 {
     auto s = Director::getInstance()->getCanvasSize();
 
-    auto camera = Camera::createPerspective(40, s.width / s.height, 0.01f, 1000.f);
+    auto camera = Camera::create();
+    camera->configurePerspective(40, s.width / s.height, 0.01f, 1000.f);
     camera->setCameraFlag(CameraFlag::USER1);
     camera->setPosition3D(Vec3(0.f, 50.f, 200.f));
     camera->lookAt(Vec3(0.f, 0.f, 0.f));
@@ -2645,7 +2654,8 @@ MeshRendererNormalMappingTest::MeshRendererNormalMappingTest()
     }
 
     // setup camera
-    auto camera = Camera::createPerspective(60.0, s.width / s.height, 1.0f, 1000.f);
+    auto camera = Camera::create();
+    camera->configurePerspective(60.0, s.width / s.height, 1.0f, 1000.f);
     camera->setCameraFlag(CameraFlag::USER1);
     camera->setPosition3D(Vec3(0.f, 0.f, 100.f));
     camera->lookAt(Vec3(0.f, 0.f, 0.f));
@@ -2696,7 +2706,8 @@ MeshRendererPropertyTest::MeshRendererPropertyTest()
 {
     auto s = Director::getInstance()->getCanvasSize();
 
-    auto camera = Camera::createPerspective(40, s.width / s.height, 0.01f, 1000.f);
+    auto camera = Camera::create();
+    camera->configurePerspective(40, s.width / s.height, 0.01f, 1000.f);
     camera->setCameraFlag(CameraFlag::USER1);
     camera->setPosition3D(Vec3(0.f, 50.f, 200.f));
     camera->lookAt(Vec3(0.f, 0.f, 0.f));
