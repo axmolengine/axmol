@@ -1198,7 +1198,7 @@ bool Properties::parseColor(std::string_view str, Color* out)
 {
     if (!str.empty())
     {
-        if (str.length() == 9 && str[0] == '#') // '#RRGGBBAA'
+        if (str.length() == 9 && str[0] == '#')  // '#RRGGBBAA'
         {
             // Read the string into an int as hex.
             unsigned int color;

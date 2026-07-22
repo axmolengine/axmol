@@ -487,7 +487,7 @@ axmol_onwebpointerevent(int type, int id, float x, float y, float pressure, int 
 // Parameters:
 //   id        - pointer id (if available from the browser), otherwise 0 for mouse
 //   x, y      - canvas-local coordinates (pixels)
-//   deltaX/Y  - normalized scroll delta in pixels (bridge should normalize deltaMode)
+//   deltaX/Y  - normalized logical scroll offsets, approximately one unit per wheel tick
 //   pointerType - 0=mouse,1=touch,2=pen
 //   buttons   - current buttons bitmask (W3C 'buttons' bitmask)
 EMSCRIPTEN_KEEPALIVE void
@@ -604,6 +604,19 @@ static void initWebInputBridge()
             Module._axmol_onwebpointerevent(eventType, pointerId, canvasX, canvasY, rawPressure, ptrType, e.button, e.buttons || 0);
         }
 
+        // Normalize browser wheel units to GLFW-like logical scroll offsets.
+        // Approximately one unit represents one conventional mouse-wheel tick,
+        // while fractional values preserve high-resolution trackpad scrolling.
+        function normalizeWheelDelta(delta, deltaMode) {
+            if (deltaMode === WheelEvent.DOM_DELTA_PIXEL)
+                return delta / 100.0;
+
+            if (deltaMode === WheelEvent.DOM_DELTA_LINE)
+                return delta / 3.0;
+
+            return delta;
+        }
+
         // Bind Down Event: Triggers pointer locking/capturing for boundary-proof dragging
         canvas.addEventListener('pointerdown', function(e) {
             // Lock the pointer context to the canvas. Subsequent 'move' and 'up' events
@@ -671,19 +684,8 @@ static void initWebInputBridge()
             var canvasX = (e.clientX - rect.left);
             var canvasY = (e.clientY - rect.top);
 
-            // Normalize deltaMode to pixels:
-            // 0 = DOM_DELTA_PIXEL, 1 = DOM_DELTA_LINE, 2 = DOM_DELTA_PAGE
-            // Use reasonable fallbacks: line -> 16px, page -> viewport height.
-            var deltaX = e.deltaX;
-            var deltaY = e.deltaY;
-            if (e.deltaMode === 1) { // lines
-                var LINE_HEIGHT = 16; // conservative default line height in pixels
-                deltaX *= LINE_HEIGHT;
-                deltaY *= LINE_HEIGHT;
-            } else if (e.deltaMode === 2) { // pages
-                deltaX *= window.innerHeight;
-                deltaY *= window.innerHeight;
-            }
+            var deltaX = normalizeWheelDelta(e.deltaX, e.deltaMode);
+            var deltaY = normalizeWheelDelta(e.deltaY, e.deltaMode);
 
             // Determine pointerId if available (some browsers include pointerId on wheel events)
             var pid = (typeof e.pointerId !== 'undefined') ? e.pointerId : 0;
