@@ -72,6 +72,29 @@ public:
         return table;
     }
 
+    void onPointerUp(PointerEvent* event) override
+    {
+        if (!this->isVisible())
+        {
+            return;
+        }
+
+        if (_touchedCell)
+        {
+            auto label = (Label*)_touchedCell->getChildByTag(TABEL_LABEL_TAG);
+
+            if (label->onPointerHitTest(event, nullptr) && _tableViewDelegate != nullptr)
+            {
+                _tableViewDelegate->tableCellUnhighlight(this, _touchedCell);
+                _tableViewDelegate->tableCellTouched(this, _touchedCell);
+            }
+
+            _touchedCell = nullptr;
+        }
+
+        ScrollView::onPointerUp(event);
+    }
+
     bool onPointerScroll(PointerEvent* event) override
     {
         float moveY = event->getScrollY() * 20;
