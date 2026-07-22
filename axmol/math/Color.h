@@ -96,7 +96,8 @@ struct AX_DLL Color32
         r = static_cast<uint8_t>(v >> 16) & 0xff;
         g = static_cast<uint8_t>(v >> 8) & 0xff;
         b = static_cast<uint8_t>(v & 0xff);
-        return Color32{r, g, b};
+        a = static_cast<uint8_t>(1);
+        return Color32{ r, g, b, a };
     }
 
     void set(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a)
