@@ -91,7 +91,7 @@ struct AX_DLL Color32
             return Color32{r, g, b, static_cast<uint8_t>(alpha)};
     }
 
-    Color32 fromHex(unsigned int v)
+    static Color32 fromHex(unsigned int v)
     {
         r = static_cast<uint8_t>(v >> 16) & 0xff;
         g = static_cast<uint8_t>(v >> 8) & 0xff;
