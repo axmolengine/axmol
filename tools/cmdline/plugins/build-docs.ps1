@@ -119,7 +119,7 @@ function parse_current_rev() {
     return $axver
 }
 
-$site_src = (Resolve-Path "$PSScriptRoot/../../docs").Path
+$site_src = (Resolve-Path "$PSScriptRoot/../../../docs").Path
 if (!$site_dist) {
     $site_dist = Join-Path $site_src 'dist'
 }
