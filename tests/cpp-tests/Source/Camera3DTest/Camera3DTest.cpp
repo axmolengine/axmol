@@ -1522,7 +1522,7 @@ void BackgroundColorBrushTest::onEnter()
         addChild(base);
 
         // 2nd Camera
-        auto camera     = Camera::create();
+        auto camera = Camera::create();
         camera->configurePerspective(60, (float)s.width / s.height, 1, 1000);
         auto colorBrush = CameraBackgroundBrush::createColorBrush(Color(.1f, .1f, 1.f, .5f), 1.f);
         camera->setBackgroundBrush(colorBrush);
