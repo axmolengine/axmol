@@ -213,15 +213,22 @@ Axmol supports two sampler categories:
 
 | Source | Binding | Shader Authoring |
 | --- | --- | --- |
-| Built-In | `space1:s0..s21`, fixed per preset | sample with `LinearClamp`, `PointClamp`, etc. |
-| Custom | `space2:s0..sN`, Program-local per declaration | declare own `SamplerState` without `#include "base.hlsli"` |
+| Built-In | logical preset `0..21`, backend binding assigned by `axslcc` | sample with `LinearClamp`, `PointClamp`, etc. |
+| Custom | Program-local logical binding, backend binding assigned by `axslcc` | declare own `SamplerState` without `#include "base.hlsli"` |
 
 ### Built-In Samplers
 
-The 22 built-in sampler presets from `base.hlsli` use fixed bindings in
-`space1`. Each name maps to a `SamplerPreset` enum value. The binding is
+The 22 built-in sampler presets from `base.hlsli` use stable logical preset
+IDs. Each name maps to a `SamplerPreset` enum value. This logical preset is
 independent of shader declaration order — `PointClamp` always maps to the same
-slot regardless of where it appears.
+`SamplerPreset` value regardless of where it appears.
+
+Physical sampler registers are backend ABI details emitted by `axslcc` and
+reported through runtime reflection. Do not assume the logical preset index is
+the final hardware register. For example, D3D11 exposes only 16 sampler slots
+per shader stage (`s0..s15`), so `axslcc` compacts the samplers actually used by
+each D3D11 shader into that range and fails compilation if more than 16 active
+samplers are required.
 
 Most Axmol HLSL should use the built-in sampler presets from `base.hlsli`:
 
@@ -283,6 +290,7 @@ Custom sampler ABI:
 | --- | --- |
 | Logical space | `2` |
 | Logical binding | `0, 1, ...` (declaration order, per Program) |
+| Physical binding | backend-specific, reported by reflection |
 | Reflection `preset_index` | `-1` |
 
 ### GL/GLES Combined Samplers
