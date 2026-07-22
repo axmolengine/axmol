@@ -210,6 +210,8 @@ void Camera::updateProjection()
     case CameraMode::Classic:
         Mat4::createPerspective(_fieldOfView, _aspectRatio, _nearPlane, _farPlane, &_projection);
         break;
+    case CameraMode::None:
+        break;
     }
 
     _viewProjectionDirty = true;
@@ -249,6 +251,8 @@ void Camera::onCanvasSizeChanged(const Vec2& canvasSize)
     case CameraMode::Perspective:
         _aspectRatio = canvasSize.width / canvasSize.height;
         updateProjection();
+        break;
+    case CameraMode::None:
         break;
     }
 }

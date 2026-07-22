@@ -518,7 +518,7 @@ protected:
     int8_t _depth = -1;  // camera depth, the depth of camera with CameraFlag::DEFAULT flag is 0 by default, a camera
                          // with larger depth is drawn on top of camera with smaller depth
 
-    CameraMode _cameraMode{CameraMode::Classic};  // set during creation
+    CameraMode _cameraMode{CameraMode::None};  // set during creation
 
     float _eyeZdistance = 1.0f;  // Z eye projection distance for 2D in 3D projection.
     float _zoomFactor = 1.0f; /* The zoom factor of the camera. 3D = (cameraZDistance * _zoomFactor), 2D = (cameraScale
