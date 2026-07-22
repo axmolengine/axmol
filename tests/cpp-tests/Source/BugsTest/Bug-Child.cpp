@@ -92,7 +92,7 @@ bool BugCameraMask::init()
     node->runAction(RepeatForever::create(Sequence::createWithTwoActions(move, move->reverse())));
     addChild(node);
 
-    auto camera = Camera::create();
+    auto camera = Camera::create(CameraMode::Classic);
     camera->setCameraFlag(CameraFlag::USER1);
     addChild(camera);
 

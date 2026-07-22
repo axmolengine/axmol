@@ -38,7 +38,8 @@ LightTest::LightTest() : _directionalLight(nullptr), _pointLight(nullptr), _spot
     scheduleUpdate();
 
     auto s      = Director::getInstance()->getCanvasSize();
-    auto camera = Camera::createPerspective(60, (float)s.width / s.height, 1.0f, 1000.0f);
+    auto camera = Camera::create();
+    camera->configurePerspective(60, (float)s.width / s.height, 1.0f, 1000.0f);
     camera->setCameraFlag(CameraFlag::USER1);
     camera->setPosition3D(Vec3(0.0f, 100.0f, 100.0f));
     camera->lookAt(Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 1.0f, 0.0f));

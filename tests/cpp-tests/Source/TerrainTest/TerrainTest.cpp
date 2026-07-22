@@ -41,7 +41,8 @@ TerrainSimple::TerrainSimple()
     Size visibleSize = Director::getInstance()->getVisibleSize();
 
     // use custom camera
-    _camera = Camera::createPerspective(60, visibleSize.width / visibleSize.height, 0.1f, 800);
+    _camera = Camera::create();
+    _camera->configurePerspective(60, visibleSize.width / visibleSize.height, 0.1f, 800);
     _camera->setCameraFlag(CameraFlag::USER1);
     _camera->setPosition3D(Vec3(-1, 1.6f, 4));
     addChild(_camera);
@@ -119,7 +120,8 @@ TerrainWalkThru::TerrainWalkThru()
     Size visibleSize = Director::getInstance()->getVisibleSize();
 
     // use custom camera
-    _camera = Camera::createPerspective(60, visibleSize.width / visibleSize.height, 0.1f, 200);
+    _camera = Camera::create();
+    _camera->configurePerspective(60, visibleSize.width / visibleSize.height, 0.1f, 200);
     _camera->setCameraFlag(CameraFlag::USER1);
     addChild(_camera);
 
@@ -340,7 +342,8 @@ TerrainWithLightMap::TerrainWithLightMap()
     Size visibleSize = Director::getInstance()->getVisibleSize();
 
     // use custom camera
-    _camera = Camera::createPerspective(60, visibleSize.width / visibleSize.height, 0.1f, 800);
+    _camera = Camera::create();
+    _camera->configurePerspective(60, visibleSize.width / visibleSize.height, 0.1f, 800);
     _camera->setCameraFlag(CameraFlag::USER1);
     _camera->setPosition3D(Vec3(-1, 1.6f, 4));
     addChild(_camera);

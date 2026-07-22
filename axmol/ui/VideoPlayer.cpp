@@ -508,7 +508,8 @@ static void createVideoControlTexture()
     node->addChild(drawNode);
 
     auto rt     = RenderTexture::createForCanvas(Vec2(totalWidth, totalHeight), PixelFormat::RGBA8, PixelFormat::D24S8);
-    auto camera = Camera::createOrthographicView(imageSize, -1024, 1024);
+    auto camera = Camera::create();
+    camera->configureOrthographicView(imageSize, -1024, 1024);
     RefPtr<RenderTexturePass> pass(RenderTexturePass::obtain(rt), tlx::adopt_object);
     pass->begin(camera);
     pass->clear(ClearFlag::COLOR, {.color = Color(0, 0, 0, 0)});

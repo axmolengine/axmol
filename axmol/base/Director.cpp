@@ -410,7 +410,7 @@ Camera* Director::getOverlayCamera()
 {
     if (!_overlayCamera)
     {
-        _overlayCamera = Camera::createOrthographicView(_canvasSizeInPoints, -1024.0f, 1024.0f);
+        _overlayCamera = Camera::create(CameraMode::Ortho);
         _overlayCamera->retain();
         _overlayCamera->setCameraFlag(CameraFlag::DEFAULT);
         _overlayCamera->setDepth(127);
@@ -423,7 +423,7 @@ Camera* Director::getOffscreenCamera()
 {
     if (!_offscreenCamera)
     {
-        _offscreenCamera = Camera::createOrthographicView(_canvasSizeInPoints, -1024.0f, 1024.0f);
+        _offscreenCamera = Camera::create(CameraMode::Ortho);
         _offscreenCamera->retain();
         _offscreenCamera->setCameraFlag(CameraFlag::DEFAULT);
         _offscreenCamera->setDepth(0);

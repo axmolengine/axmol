@@ -84,7 +84,7 @@ Camera* NodeGrid::getGridCamera()
 {
     if (!_gridCamera)
     {
-        _gridCamera = Camera::createOrthographicView(_director->getCanvasSize(), -1024, 1024);
+        _gridCamera = Camera::create(CameraMode::Ortho);
         AX_SAFE_RETAIN(_gridCamera);
     }
     else

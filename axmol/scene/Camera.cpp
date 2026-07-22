@@ -42,60 +42,42 @@ Viewport Camera::_defaultViewport;
 
 // start static methods
 
+Camera* Camera::create()
+{
+    auto ret = new Camera();
+    ret->autorelease();
+    return ret;
+}
+
 Camera* Camera::create(CameraMode mode)
 {
-    auto& size = Director::getInstance()->getCanvasSize();
+    auto& canvasSize = Director::getInstance()->getCanvasSize();
     switch (mode)
     {
     case CameraMode::Ortho:
     {
-        auto cam = Camera::createOrthographicView(size, -1024.0f, 1024.0f);
+        auto cam = Camera::create();
+        cam->configureOrthographicView(canvasSize, -1024.0f, 1024.0f);
         return cam;
     }
     case CameraMode::Perspective:
     {
-        auto cam = Camera::createPerspective(60.0f, size.width / size.height, 0.3f, 1000.0f);
+        auto cam = Camera::create();
+        cam->configurePerspective(60.0f, canvasSize.width / canvasSize.height, 0.3f, 1000.0f);
         cam->setPosition3D(Vec3(0.0f, 1.5f, 5.0f));
         cam->lookAt(Vec3(0, 0, 0));
         return cam;
     }
     case CameraMode::Classic:
     {
-        Camera* camera = new Camera();
-        camera->initClassic();
-        camera->autorelease();
-        return camera;
+        auto cam = Camera::create();
+        cam->configureClassicView(canvasSize);
+        cam->setDepth(0);
+        return cam;
     }
     }
     AXASSERT(false, "Invalid CameraMode");
     return nullptr;
-}
-
-Camera* Camera::createPerspective(float fieldOfView, float aspectRatio, float nearPlane, float farPlane)
-{
-    auto ret         = new Camera();
-    ret->_cameraMode = CameraMode::Perspective;
-    ret->configurePerspective(fieldOfView, aspectRatio, nearPlane, farPlane);
-    ret->autorelease();
-    return ret;
-}
-
-Camera* Camera::createOrthographic(float zoomX, float zoomY, float nearPlane, float farPlane)
-{
-    auto ret         = new Camera();
-    ret->_cameraMode = CameraMode::Ortho;
-    ret->configureOrthographic(zoomX, zoomY, nearPlane, farPlane);
-    ret->autorelease();
-    return ret;
-}
-
-Camera* Camera::createOrthographicView(const Vec2& size, float nearPlane, float farPlane)
-{
-    auto ret         = new Camera();
-    ret->_cameraMode = CameraMode::Ortho;
-    ret->configureOrthographicView(size, nearPlane, farPlane);
-    ret->autorelease();
-    return ret;
 }
 
 Camera* Camera::getDefaultCamera()
@@ -128,15 +110,7 @@ void Camera::setDefaultViewport(const Viewport& vp)
 // end static methods
 
 Camera::Camera()
-    : _eyeZdistance(1)
-    , _zoomFactor(1)
-    , _nearPlane(-1024)
-    , _farPlane(1024)
-    , _zoomFactorNearPlane(10)
-    , _zoomFactorFarPlane(1024)
 {
-    // minggo comment
-    // _frustum.setClipZ(true);
     _renderView = _director->getRenderView();
 }
 
@@ -244,19 +218,13 @@ void Camera::updateProjection()
 
 void Camera::configureClassicView(const Vec2& canvasSize)
 {
-    const float zeye = _director->getZEye();
+    const float zeye     = _director->getZEye();
+    const float farPlane = zeye + canvasSize.height * 0.5f;
 
-    _aspectRatio        = canvasSize.width / canvasSize.height;
-    _farPlane           = zeye + canvasSize.height * 0.5f;
-    _zoomFactorFarPlane = _farPlane;
+    configureClassic(canvasSize.width / canvasSize.height, 0.5f, farPlane);
 
-    updateProjection();
-
-    const Vec3 eye(canvasSize.width * 0.5f, canvasSize.height * 0.5f, zeye);
-    const Vec3 center(canvasSize.width * 0.5f, canvasSize.height * 0.5f, 0.0f);
-
-    setPosition3D(eye);
-    lookAt(center, Vec3::yAxis);
+    setPosition3D(Vec3(canvasSize.width * 0.5f, canvasSize.height * 0.5f, zeye));
+    lookAt(Vec3(canvasSize.width * 0.5f, canvasSize.height * 0.5f, 0.0f), Vec3::yAxis);
     _eyeZdistance = zeye;
 
     if (_zoomFactor != 1.0f)
@@ -285,31 +253,28 @@ void Camera::onCanvasSizeChanged(const Vec2& canvasSize)
     }
 }
 
-void Camera::initClassic()
+void Camera::configureClassic(float aspectRatio, float nearPlane, float farPlane)
 {
-    _cameraMode  = CameraMode::Classic;
-    _fieldOfView = 60.0F;
-    _nearPlane   = 0.5F;
-    configureClassicView(_director->getCanvasSize());
-    setDepth(0);
-}
-
-void Camera::updateTransform()
-{
+    _cameraMode          = CameraMode::Classic;
+    _fieldOfView         = 60.0F;
+    _aspectRatio         = aspectRatio;
+    _nearPlane           = nearPlane;
+    _farPlane            = farPlane;
+    _zoomFactorNearPlane = _nearPlane;
+    _zoomFactorFarPlane  = _farPlane;
     updateProjection();
 }
 
 bool Camera::configurePerspective(float fieldOfView, float aspectRatio, float nearPlane, float farPlane)
 {
+    _cameraMode  = CameraMode::Perspective;
     _fieldOfView = fieldOfView;
     _aspectRatio = aspectRatio;
     _nearPlane   = nearPlane;
     _farPlane    = farPlane;
 
-    if (_zoomFactorFarPlane == 1024)
-        _zoomFactorFarPlane = farPlane;
-    if (_zoomFactorNearPlane == 10)
-        _zoomFactorNearPlane = nearPlane;
+    _zoomFactorNearPlane = nearPlane;
+    _zoomFactorFarPlane  = farPlane;
 
     updateProjection();
     return true;
@@ -317,10 +282,11 @@ bool Camera::configurePerspective(float fieldOfView, float aspectRatio, float ne
 
 bool Camera::configureOrthographic(float zoomX, float zoomY, float nearPlane, float farPlane)
 {
-    _zoom[0]   = zoomX;
-    _zoom[1]   = zoomY;
-    _nearPlane = nearPlane;
-    _farPlane  = farPlane;
+    _cameraMode = CameraMode::Ortho;
+    _zoom[0]    = zoomX;
+    _zoom[1]    = zoomY;
+    _nearPlane  = nearPlane;
+    _farPlane   = farPlane;
 
     updateProjection();
     return true;

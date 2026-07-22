@@ -85,7 +85,8 @@ TEST_CASE("Terrain ray hit keeps local intersection and pointer world hit spaces
     event.setPointerInfo(InputPhase::PointerMove, Vec2::zero, inputState);
     event.setRay(worldRay);
 
-    auto camera = Camera::createPerspective(60.0f, 1.0f, 0.1f, 100.0f);
+    auto camera = Camera::create();
+    camera->configurePerspective(60.0f, 1.0f, 0.1f, 100.0f);
     REQUIRE(camera != nullptr);
 
     Vec3 pointerWorldHit;

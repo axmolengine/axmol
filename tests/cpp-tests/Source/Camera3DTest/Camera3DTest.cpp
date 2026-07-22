@@ -363,7 +363,8 @@ void Camera3DTestDemo::onEnter()
     schedule(AX_SCHEDULE_SELECTOR(Camera3DTestDemo::updateCamera), 0.0f);
     if (_camera == nullptr)
     {
-        _camera = Camera::createPerspective(60, (float)s.width / s.height, 1, 1000);
+        _camera = Camera::create();
+        _camera->configurePerspective(60, (float)s.width / s.height, 1, 1000);
         _camera->setCameraFlag(CameraFlag::USER1);
         _layer3D->addChild(_camera);
     }
@@ -845,7 +846,8 @@ void CameraCullingDemo::switchViewCallback(Object* sender)
 
     if (_cameraFirst == nullptr)
     {
-        _cameraFirst = Camera::createPerspective(30.0f, (float)s.width / s.height, 10.0f, 200.0f);
+        _cameraFirst = Camera::create();
+        _cameraFirst->configurePerspective(30.0f, (float)s.width / s.height, 10.0f, 200.0f);
         _cameraFirst->setCameraFlag(CameraFlag::USER8);
         _cameraFirst->setPosition3D(Vec3(-100.0f, 0.0f, 0.0f));
         _cameraFirst->lookAt(Vec3(1000.0f, 0.0f, 0.0f));
@@ -860,7 +862,8 @@ void CameraCullingDemo::switchViewCallback(Object* sender)
 
     if (_cameraThird == nullptr)
     {
-        _cameraThird = Camera::createPerspective(60, (float)s.width / s.height, 1, 1000);
+        _cameraThird = Camera::create();
+        _cameraThird->configurePerspective(60, (float)s.width / s.height, 1, 1000);
         _cameraThird->setCameraFlag(CameraFlag::USER8);
         _cameraThird->setPosition3D(Vec3(0.0f, 130.0f, 130.0f));
         _cameraThird->lookAt(Vec3(0, 0, 0));
@@ -1042,7 +1045,8 @@ void CameraArcBallDemo::onEnter()
 
     if (_camera == nullptr)
     {
-        _camera = Camera::createPerspective(60, (float)s.width / s.height, 1, 1000);
+        _camera = Camera::create();
+        _camera->configurePerspective(60, (float)s.width / s.height, 1, 1000);
         _camera->setCameraFlag(CameraFlag::USER1);
         _camera->setPosition3D(Vec3(0.0f, 10.0f, 50.0f));
         _camera->lookAt(Vec3(0, 0, 0), Vec3(0.0f, 1.0f, 0.0f));
@@ -1290,7 +1294,8 @@ void FogTestDemo::onEnter()
 
     if (_camera == nullptr)
     {
-        _camera = Camera::createPerspective(60, (float)s.width / s.height, 1, 1000);
+        _camera = Camera::create();
+        _camera->configurePerspective(60, (float)s.width / s.height, 1, 1000);
         _camera->setCameraFlag(CameraFlag::USER1);
         _camera->setPosition3D(Vec3(0.0f, 30.0f, 40.0f));
         _camera->lookAt(Vec3(0, 0, 0), Vec3(0.0f, 1.0f, 0.0f));
@@ -1462,7 +1467,7 @@ void FogTestDemo::onPointerMove(ax::PointerEvent* event)
 //                                              )
 //                        );
 //
-//     auto camera = Camera::create();
+//     auto camera = Camera::create(CameraMode::Classic);
 //     camera->setCameraFlag(CameraFlag::USER1);
 //     camera->setDepth(-1);
 //     camera->setFrameBufferObject(fbo);
@@ -1492,7 +1497,8 @@ void BackgroundColorBrushTest::onEnter()
 
     {
         // 1st Camera
-        auto camera = Camera::createPerspective(60.0f, (float)s.width / s.height, 1.0f, 1000.0f);
+        auto camera = Camera::create();
+        camera->configurePerspective(60.0f, (float)s.width / s.height, 1.0f, 1000.0f);
         camera->setPosition3D(Vec3(0.0f, 0.0f, 200.0f));
         camera->lookAt(Vec3::zero);
         camera->setDepth(-2);
@@ -1516,7 +1522,8 @@ void BackgroundColorBrushTest::onEnter()
         addChild(base);
 
         // 2nd Camera
-        auto camera     = Camera::createPerspective(60, (float)s.width / s.height, 1, 1000);
+        auto camera     = Camera::create();
+        camera->configurePerspective(60, (float)s.width / s.height, 1, 1000);
         auto colorBrush = CameraBackgroundBrush::createColorBrush(Color(.1f, .1f, 1.f, .5f), 1.f);
         camera->setBackgroundBrush(colorBrush);
         camera->setPosition3D(Vec3(0.0f, 0.0f, 200.0f));

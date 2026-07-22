@@ -447,7 +447,8 @@ Node* UserCameraReader::createNodeWithFlatBuffers(const flatbuffers::Table* user
     float farClip  = options->farClip();
 
     auto size      = Director::getInstance()->getCanvasSize();
-    Camera* camera = Camera::createPerspective(fov, size.width / size.height, nearClip, farClip);
+    auto camera = Camera::create();
+    camera->configurePerspective(fov, size.width / size.height, nearClip, farClip);
 
     setPropsWithFlatBuffers(camera, userCameraDOptions);
 
