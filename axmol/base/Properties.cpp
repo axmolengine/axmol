@@ -1198,7 +1198,7 @@ bool Properties::parseColor(std::string_view str, Color* out)
 {
     if (!str.empty())
     {
-        if (str.length() == 9 && str[0] == '#')
+        if (str.length() == 9 && str[0] == '#') // '#RRGGBBAA'
         {
             // Read the string into an int as hex.
             unsigned int color;
@@ -1206,7 +1206,10 @@ bool Properties::parseColor(std::string_view str, Color* out)
             if (ec == std::errc{})
             {
                 if (out)
-                    out->set(Color::fromHex(color));
+                {
+                    const uint32_t argb = (color >> 8) | (color << 24);
+                    out->set(Color::fromHex(argb));
+                }
                 return true;
             }
             else
