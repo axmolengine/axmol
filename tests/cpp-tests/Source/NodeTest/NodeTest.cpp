@@ -1403,7 +1403,8 @@ void Issue16100Test::onEnter()
 
     auto delay = DelayTime::create(0.1f);
     auto f     = CallFunc::create([this, s]() {
-        auto camera = Camera::createOrthographic(s.width * 2, s.height * 2, -1024, 1024);
+        auto camera = Camera::create();
+        camera->configureOrthographic(s.width * 2, s.height * 2, -1024, 1024);
         camera->setCameraFlag(CameraFlag::USER1);
         addChild(camera);
     });

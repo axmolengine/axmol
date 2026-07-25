@@ -5,7 +5,7 @@
 
 $ErrorActionPreference = 'Stop'
 
-$AX_ROOT = Resolve-Path "$PSScriptRoot/../.."
+$AX_ROOT = Resolve-Path "$PSScriptRoot/../../.."
 
 $SearchDirs = @(
     (Join-Path $AX_ROOT "axmol"),

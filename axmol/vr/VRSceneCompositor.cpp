@@ -187,11 +187,12 @@ Camera* VRSceneCompositor::ensurePointerRayCamera(Scene* scene)
         return nullptr;
 
     if (!_pointerRayCamera)
-        _pointerRayCamera = RefPtr<Camera>(Camera::createPerspective(60.0f, 1.0f, _nearZ, _farZ));
+        _pointerRayCamera = RefPtr<Camera>(Camera::create());
+    _pointerRayCamera->configurePerspective(60.0f, 1.0f, _nearZ, _farZ);
 
     const auto canvasSize = _director->getCanvasSize();
     const float aspect    = canvasSize.height > 0.0f ? canvasSize.width / canvasSize.height : 1.0f;
-    _pointerRayCamera->initPerspective(60.0f, aspect, _nearZ, _farZ);
+    _pointerRayCamera->configurePerspective(60.0f, aspect, _nearZ, _farZ);
     _pointerRayCamera->setNodeToParentTransform(sourceCamera->getNodeToWorldTransform());
     _pointerRayCamera->setAdditionalTransform(Mat4::identity);
     _pointerRayCamera->setCameraFlag(sourceCamera->getCameraFlag());

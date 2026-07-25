@@ -79,7 +79,7 @@ if ($options.xc -isnot [array]) {
     [array]$options.xc = (translate_array_opt $options.xc)
 }
 
-$AX_ROOT = (Resolve-Path $PSScriptRoot/../..).Path
+$AX_ROOT = (Resolve-Path $PSScriptRoot/../../..).Path
 $workDir = $(Get-Location).Path
 if (Test-Path (Join-Path $AX_ROOT 'axmol/axmolver.h.in') -PathType Leaf) {
     $env:AX_ROOT = $AX_ROOT
@@ -196,7 +196,7 @@ else {
     # android gradle
     # engine ci
     if ($is_axmol_engine) {
-        $options.xc += "-PKEY_STORE_FILE=$AX_ROOT/tools/cmdline/axmol-ci.jks", '-PKEY_STORE_PASSWORD=axmol-ci', '-PKEY_ALIAS=axmol-ci', '-PKEY_PASSWORD=axmol-ci'
+        $options.xc += "-PKEY_STORE_FILE=$AX_ROOT/tools/cmdline/plugins/axmol-ci.jks", '-PKEY_STORE_PASSWORD=axmol-ci', '-PKEY_ALIAS=axmol-ci', '-PKEY_PASSWORD=axmol-ci'
     }
 }
 

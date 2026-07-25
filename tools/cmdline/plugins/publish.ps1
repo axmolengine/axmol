@@ -3,7 +3,7 @@ param(
     $commitish = $null
 )
 
-$AX_ROOT = (Resolve-Path $PSScriptRoot/../..).Path
+$AX_ROOT = (Resolve-Path $PSScriptRoot/../../..).Path
 if ($commitish) {
     echo "Creating package from revision: $commitish"
     git -C $AX_ROOT checkout $commitish

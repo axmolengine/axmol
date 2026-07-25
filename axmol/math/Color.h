@@ -39,10 +39,30 @@ struct HSV;
  */
 struct AX_DLL Color32
 {
-    constexpr Color32() : value(0) {}
-    constexpr Color32(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a) : r(_r), g(_g), b(_b), a(_a) {}
+    /**
+     * Creates a color from a hexadecimal value.
+     *
+     * Supports 0xRRGGBB and 0xAARRGGBB formats.
+     * Alpha defaults to 255 when omitted.
+     */
+    static constexpr Color32 fromHex(uint32_t v) noexcept
+    {
+        if (v > 0x00FFFFFFu)
+        {
+            return Color32{static_cast<uint8_t>((v >> 16) & 0xFF), static_cast<uint8_t>((v >> 8) & 0xFF),
+                           static_cast<uint8_t>(v & 0xFF), static_cast<uint8_t>((v >> 24) & 0xFF)};
+        }
+        else  // 24-bit
+        {
+            return Color32{static_cast<uint8_t>((v >> 16) & 0xFF), static_cast<uint8_t>((v >> 8) & 0xFF),
+                           static_cast<uint8_t>(v & 0xFF), 255};
+        }
+    }
 
-    constexpr Color32(uint8_t _r, uint8_t _g, uint8_t _b) : r(_r), g(_g), b(_b), a(255) {}
+    constexpr Color32() noexcept : value(0) {}
+    constexpr Color32(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a) noexcept : r(_r), g(_g), b(_b), a(_a) {}
+
+    constexpr Color32(uint8_t _r, uint8_t _g, uint8_t _b) noexcept : r(_r), g(_g), b(_b), a(255) {}
 
     template <class _Other,
               typename = std::enable_if_t<std::is_unsigned_v<decltype(_Other{}.r)> &&
@@ -81,7 +101,7 @@ struct AX_DLL Color32
     operator Color() const;
 
     template <typename T>
-    Color32 withAlpha(T alpha) const
+    Color32 withAlpha(T alpha) const noexcept
     {
         static_assert(std::is_floating_point_v<T> || std::is_unsigned_v<T>,
                       "withAlpha: alpha must be float (0~1) or unsigned integer (0~255)");
@@ -150,21 +170,14 @@ struct AX_DLL Color : public Vec4Adapter<Color>
     constexpr Color() {}
     constexpr Color(float _r, float _g, float _b, float _a) : Vec4Adapter(_r, _g, _b, _a) {}
     constexpr Color(float _r, float _g, float _b) : Vec4Adapter(_r, _g, _b, 1.0f) {}
-    explicit Color(const Color32& color)
+    explicit constexpr Color(const Color32& color)
         : Vec4Adapter(color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f)
     {}
     template <typename _Other>
     explicit Color(const _Other& color) : Vec4Adapter(color.r, color.g, color.b, color.a)
     {}
 
-    static Color fromHex(unsigned int v)
-    {
-        auto r = (v >> 24) & 0xff;
-        auto g = (v >> 16) & 0xff;
-        auto b = (v >> 8) & 0xff;
-        auto a = v & 0xff;
-        return Color{r / 255.f, g / 255.f, b / 255.f, a / 255.f};
-    }
+    static constexpr Color fromHex(uint32_t v) { return Color{Color32::fromHex(v)}; }
 
     inline Color& premultiplyAlpha()
     {

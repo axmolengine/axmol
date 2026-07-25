@@ -86,7 +86,8 @@ bool NavMeshBaseTestDemo::init()
         _angle = 0.0f;
 
         Size size = Director::getInstance()->getCanvasSize();
-        _camera   = Camera::createPerspective(30.0f, size.width / size.height, 1.0f, 1000.0f);
+        _camera   = Camera::create();
+        _camera->configurePerspective(30.0f, size.width / size.height, 1.0f, 1000.0f);
         _camera->setPosition3D(Vec3(0.0f, 50.0f, 100.0f));
         _camera->lookAt(Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 1.0f, 0.0f));
         _camera->setCameraFlag(CameraFlag::USER1);

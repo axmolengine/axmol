@@ -159,7 +159,8 @@ void captureNode(Node* startNode, std::function<void(RefPtr<Image>)> imageCallba
 
         RefPtr<RenderTexturePass> rtxPass(RenderTexturePass::obtain(rtx), tlx::adopt_object);
 
-        Camera* camera = Camera::createOrthographicView(size, -1024.f, 1024.f);
+        auto camera = Camera::create();
+        camera->configureOrthographicView(size, -1024.f, 1024.f);
 
         rtxPass->begin(camera);
         rtxPass->clearAll();

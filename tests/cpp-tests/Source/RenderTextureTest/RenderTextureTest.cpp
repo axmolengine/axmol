@@ -876,7 +876,8 @@ CameraTargetTextureTest::CameraTargetTextureTest()
     _rt = RenderTexture::create(_director->canvasToPixels(s), rhi::PixelFormat::RGBA8);
 
     // Camera with targetTexture: renders only USER1-flagged nodes to RT
-    _captureCamera = Camera::createOrthographic(s.width, s.height, -1024, 1024);
+    _captureCamera = Camera::create(CameraMode::Ortho);
+    // _captureCamera->configureOrthographic(s.width, s.height, -1024, 1024);
     _captureCamera->setCameraFlag(CameraFlag::USER1);
     _captureCamera->setPosition3D(Vec3(s.width / 2, s.height / 2, 0));
     _captureCamera->setTargetTexture(_rt);

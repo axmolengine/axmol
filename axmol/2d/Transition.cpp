@@ -1126,7 +1126,7 @@ void TransitionCrossFade::onEnter()
     Vec2 size         = _director->getCanvasSize();
     LayerColor* layer = LayerColor::create(color);
 
-    auto camera = Camera::createOrthographicView(_director->getCanvasSize(), -1024, 1024);
+    auto camera = Camera::create(CameraMode::Ortho);
 
     // create the first render texture for inScene
     RenderTexture* inTexture =
