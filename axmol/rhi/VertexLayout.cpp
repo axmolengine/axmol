@@ -158,7 +158,8 @@ void VertexLayoutDesc::addAttrib(const VertexInputDesc* desc,
     else
         _strides[1] += static_cast<uint32_t>(sizeInBytes);
 
-    _bindings.emplace_back(desc->semantic.name, desc->location, format, offset, needToBeNormallized, instanceStepRate);
+    _bindings.emplace_back(desc->semantic.name, desc->location, format, static_cast<unsigned int>(offset),
+                           needToBeNormallized, instanceStepRate);
 }
 
 }  // namespace ax::rhi

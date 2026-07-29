@@ -739,7 +739,7 @@ bool Bundle3D::loadMeshDatasJson(MeshDatas& meshdatas)
         auto&& mesh_data_vertex_array = mesh_data[VERTICES].get_array();
         for (auto&& vertex_val : mesh_data_vertex_array)
         {
-            meshData->vertex.emplace_back(static_cast<double>(vertex_val));
+            meshData->vertex.emplace_back(static_cast<float>(vertex_val.get_double().value()));
         }
         meshData->vertexSizeInFloat = meshData->vertex.size();
         // mesh part
