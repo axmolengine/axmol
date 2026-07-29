@@ -144,7 +144,8 @@ public:
             }
 
             // normal effect: order == 0
-            _trianglesCommand.init(_globalZOrder, _texture, _blendFunc, _polyInfo.triangles, transform, flags, state.getView());
+            _trianglesCommand.init(_globalZOrder, _texture, _blendFunc, _polyInfo.triangles, transform, flags,
+                                   state.getView());
 
             updateUniforms(_trianglesCommand.unsafePS());
             state.getRenderer()->addCommand(&_trianglesCommand);

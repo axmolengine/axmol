@@ -357,7 +357,7 @@ void CameraBackgroundSkyBoxBrush::drawBackground(const SceneRenderState& state)
     groupCommand->init(-1.0f);
     _customCommand.init(0.0f);
 
-    Mat4 viewToWorld         = state.getViewMatrix().getInversed();
+    Mat4 viewToWorld          = state.getViewMatrix().getInversed();
     const Mat4& projectionMat = state.getProjectionMatrix();
 
     _customCommand.blendDesc().blendEnabled = false;

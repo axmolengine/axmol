@@ -2123,8 +2123,8 @@ void Label::draw(const SceneRenderState& state, const Mat4& transform, uint32_t 
     auto visitingCamera = state.getCamera();
     if (visitingCamera)
     {
-        _insideBounds = state.requiresVisibilityUpdate(flags) ? state.checkVisibility(transform, _contentSize)
-                                                              : _insideBounds;
+        _insideBounds =
+            state.requiresVisibilityUpdate(flags) ? state.checkVisibility(transform, _contentSize) : _insideBounds;
     }
     else
     {

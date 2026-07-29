@@ -1084,13 +1084,14 @@ void Sprite::draw(const SceneRenderState& state, const Mat4& transform, uint32_t
     if (visitingCamera == nullptr)
         _insideBounds = true;
     else
-        _insideBounds = state.requiresVisibilityUpdate(flags) ? state.checkVisibility(transform, _contentSize)
-                                                              : _insideBounds;
+        _insideBounds =
+            state.requiresVisibilityUpdate(flags) ? state.checkVisibility(transform, _contentSize) : _insideBounds;
 
     if (_insideBounds)
 #endif
     {
-        _trianglesCommand.init(_globalZOrder, _texture, _blendFunc, _polyInfo.triangles, transform, flags, state.getView());
+        _trianglesCommand.init(_globalZOrder, _texture, _blendFunc, _polyInfo.triangles, transform, flags,
+                               state.getView());
         state.getRenderer()->addCommand(&_trianglesCommand);
 
 #if AX_SPRITE_DEBUG_DRAW

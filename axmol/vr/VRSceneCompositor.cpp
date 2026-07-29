@@ -69,8 +69,7 @@ static Vec3 sampleCubicBezier(const Vec3& p0, const Vec3& p1, const Vec3& p2, co
     const float oneMinusT  = 1.0f - t;
     const float oneMinusT2 = oneMinusT * oneMinusT;
     const float t2         = t * t;
-    return p0 * (oneMinusT2 * oneMinusT) + p1 * (3.0f * oneMinusT2 * t) +
-           p2 * (3.0f * oneMinusT * t2) + p3 * (t2 * t);
+    return p0 * (oneMinusT2 * oneMinusT) + p1 * (3.0f * oneMinusT2 * t) + p2 * (3.0f * oneMinusT * t2) + p3 * (t2 * t);
 }
 
 VRSceneCompositor::VRSceneCompositor()
@@ -276,13 +275,11 @@ void VRSceneCompositor::drawControllerRays(Renderer* renderer, const SceneViewDa
         std::array<V3F_C4F, curveVertexCount + reticleVertexCount> vertices;
         size_t vertexCount = 0;
 
-        const bool useSubtleCurve = _controllerRayVisualStyle == ControllerRayVisualStyle::SubtleCurve;
-        const Ray& visualSourceRay =
-            useSubtleCurve && ctrl.rawWorldRayValid ? ctrl.rawWorldRay : ctrl.currentRay;
-        const Vec3 rayOrigin = visualSourceRay.origin;
-        const Vec3 rayEnd    = ctrl.rayHitValid
-                                   ? ctrl.rayHitPoint
-                                   : ctrl.currentRay.origin + ctrl.currentRay.direction * visualMaxDistance;
+        const bool useSubtleCurve  = _controllerRayVisualStyle == ControllerRayVisualStyle::SubtleCurve;
+        const Ray& visualSourceRay = useSubtleCurve && ctrl.rawWorldRayValid ? ctrl.rawWorldRay : ctrl.currentRay;
+        const Vec3 rayOrigin       = visualSourceRay.origin;
+        const Vec3 rayEnd          = ctrl.rayHitValid ? ctrl.rayHitPoint
+                                                      : ctrl.currentRay.origin + ctrl.currentRay.direction * visualMaxDistance;
 
         const Color rayColor = ctrl.triggerPressed ? _controllerRayPressedColor : _controllerRayIdleColor;
 
@@ -291,14 +288,14 @@ void VRSceneCompositor::drawControllerRays(Renderer* renderer, const SceneViewDa
         {
             if (useSubtleCurve)
             {
-                constexpr float hitCurveRatio       = 0.35f;
-                constexpr float freeCurveRatio      = 0.18f;
-                constexpr float curveBlend          = 0.45f;
-                const float curveRatio              = ctrl.rayHitValid ? hitCurveRatio : freeCurveRatio;
-                const float maxControlDistance      = std::max(1.0f, visualMaxDistance * 0.2f);
-                const float controlDistance         = std::min(lineLength * curveRatio, maxControlDistance);
-                const Vec3 quadraticControl         = rayOrigin + visualSourceRay.direction * controlDistance;
-                const Vec3 endpointVector           = rayEnd - rayOrigin;
+                constexpr float hitCurveRatio  = 0.35f;
+                constexpr float freeCurveRatio = 0.18f;
+                constexpr float curveBlend     = 0.45f;
+                const float curveRatio         = ctrl.rayHitValid ? hitCurveRatio : freeCurveRatio;
+                const float maxControlDistance = std::max(1.0f, visualMaxDistance * 0.2f);
+                const float controlDistance    = std::min(lineLength * curveRatio, maxControlDistance);
+                const Vec3 quadraticControl    = rayOrigin + visualSourceRay.direction * controlDistance;
+                const Vec3 endpointVector      = rayEnd - rayOrigin;
 
                 // Keep the Unity-like controller curve subtle; hit-test still uses ctrl.currentRay.
                 const Vec3 control1 = (rayOrigin + quadraticControl * 2.0f) / 3.0f;
@@ -307,14 +304,13 @@ void VRSceneCompositor::drawControllerRays(Renderer* renderer, const SceneViewDa
                 Vec3 previousPoint = rayOrigin;
                 for (size_t pointIndex = 1; pointIndex < curvePointCount; ++pointIndex)
                 {
-                    const float t =
-                        static_cast<float>(pointIndex) / static_cast<float>(curvePointCount - 1);
+                    const float t            = static_cast<float>(pointIndex) / static_cast<float>(curvePointCount - 1);
                     const Vec3 straightPoint = rayOrigin + endpointVector * t;
-                    const Vec3 curvePoint = sampleCubicBezier(rayOrigin, control1, control2, rayEnd, t);
-                    const Vec3 point = straightPoint + (curvePoint - straightPoint) * curveBlend;
-                    vertices[vertexCount++] = {previousPoint, rayColor};
-                    vertices[vertexCount++] = {point, rayColor};
-                    previousPoint           = point;
+                    const Vec3 curvePoint    = sampleCubicBezier(rayOrigin, control1, control2, rayEnd, t);
+                    const Vec3 point         = straightPoint + (curvePoint - straightPoint) * curveBlend;
+                    vertices[vertexCount++]  = {previousPoint, rayColor};
+                    vertices[vertexCount++]  = {point, rayColor};
+                    previousPoint            = point;
                 }
             }
             else
@@ -333,8 +329,7 @@ void VRSceneCompositor::drawControllerRays(Renderer* renderer, const SceneViewDa
                 facing = -ctrl.currentRay.direction;
             facing.normalize();
 
-            const Vec3 upReference =
-                std::abs(facing.dot(Vec3::yAxis)) > 0.95f ? Vec3::xAxis : Vec3::yAxis;
+            const Vec3 upReference = std::abs(facing.dot(Vec3::yAxis)) > 0.95f ? Vec3::xAxis : Vec3::yAxis;
 
             Vec3 reticleRight;
             Vec3::cross(upReference, facing, &reticleRight);
@@ -424,7 +419,7 @@ void VRSceneCompositor::renderScene(Renderer* renderer, Scene* scene)
     const auto sourceScissorSize  = _director->getRenderView()->getViewportRect().size;
     const auto& views             = _xrDriver->getViews();
     const uint32_t eyeRenderCount = std::min<uint32_t>(viewCountOutput, static_cast<uint32_t>(acquired.size()));
-    const Mat4 trackingToWorld = _frameTrackingToWorld;
+    const Mat4 trackingToWorld    = _frameTrackingToWorld;
 
     for (uint32_t eyeIdx = 0; eyeIdx < eyeRenderCount; ++eyeIdx)
     {
@@ -437,9 +432,8 @@ void VRSceneCompositor::renderScene(Renderer* renderer, Scene* scene)
         _rtPass->setTarget(swapchain.renderTarget);
         _rtPass->setViewport(Viewport(0, 0, static_cast<int>(eyeW), static_cast<int>(eyeH)));
 
-        const Mat4 eyeToTracking =
-            OpenXRDriver::xrPoseToMat4(scaleXrPosePosition(view.pose, _xrToSceneScale));
-        const Mat4 projection = OpenXRDriver::xrFovToProjection(view.fov, _nearZ, _farZ);
+        const Mat4 eyeToTracking     = OpenXRDriver::xrPoseToMat4(scaleXrPosePosition(view.pose, _xrToSceneScale));
+        const Mat4 projection        = OpenXRDriver::xrFovToProjection(view.fov, _nearZ, _farZ);
         const Mat4 primaryEyeToWorld = trackingToWorld * eyeToTracking;
         const Mat4 primaryEyeView    = primaryEyeToWorld.getInversed();
 
@@ -459,8 +453,7 @@ void VRSceneCompositor::renderScene(Renderer* renderer, Scene* scene)
 
             Vec3 cameraEyePosition = Vec3::zero;
             cameraEyeToWorld.getTranslation(&cameraEyePosition);
-            const auto cameraEyeViewData =
-                SceneViewData::fromMatrices(cameraEyeView, projection, cameraEyePosition);
+            const auto cameraEyeViewData = SceneViewData::fromMatrices(cameraEyeView, projection, cameraEyePosition);
 
             SceneRenderState renderState(renderer, camera, cameraEyeViewData);
 

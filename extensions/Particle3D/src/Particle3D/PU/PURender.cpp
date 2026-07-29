@@ -72,7 +72,9 @@ PUParticle3DQuadRender* PUParticle3DQuadRender::create(std::string_view texFile)
     return ret;
 }
 
-void PUParticle3DQuadRender::render(const SceneRenderState& state, const Mat4& transform, ParticleSystem3D* particleSystem)
+void PUParticle3DQuadRender::render(const SceneRenderState& state,
+                                    const Mat4& transform,
+                                    ParticleSystem3D* particleSystem)
 {
     // batch and generate draw
     const ParticlePool& particlePool = particleSystem->getParticlePool();
@@ -493,7 +495,9 @@ PUParticle3DModelRender* PUParticle3DModelRender::create(std::string_view modelF
     return ret;
 }
 
-void PUParticle3DModelRender::render(const SceneRenderState& state, const Mat4& transform, ParticleSystem3D* particleSystem)
+void PUParticle3DModelRender::render(const SceneRenderState& state,
+                                     const Mat4& transform,
+                                     ParticleSystem3D* particleSystem)
 {
     if (!_isVisible)
         return;
@@ -681,7 +685,9 @@ PUParticle3DBoxRender* PUParticle3DBoxRender::create(std::string_view texFile)
     return ret;
 }
 
-void PUParticle3DBoxRender::render(const SceneRenderState& state, const Mat4& transform, ParticleSystem3D* particleSystem)
+void PUParticle3DBoxRender::render(const SceneRenderState& state,
+                                   const Mat4& transform,
+                                   ParticleSystem3D* particleSystem)
 {
     // batch and generate draw
     const ParticlePool& particlePool = particleSystem->getParticlePool();

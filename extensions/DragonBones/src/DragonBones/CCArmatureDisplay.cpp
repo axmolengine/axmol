@@ -159,7 +159,8 @@ void DBCCSprite::draw(const ax::SceneRenderState& state, const ax::Mat4& transfo
     if (_insideBounds)
 #endif
     {
-        _trianglesCommand.init(_globalZOrder, _texture, _blendFunc, _polyInfo.triangles, transform, flags, state.getView());
+        _trianglesCommand.init(_globalZOrder, _texture, _blendFunc, _polyInfo.triangles, transform, flags,
+                               state.getView());
         state.getRenderer()->addCommand(&_trianglesCommand);
 
 #if AX_SPRITE_DEBUG_DRAW

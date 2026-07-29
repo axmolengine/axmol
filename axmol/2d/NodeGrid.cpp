@@ -177,9 +177,8 @@ void NodeGrid::visit(const SceneRenderState& state, const Mat4& parentTransform,
         // canvas ortho matrix. Projecting the uploaded grid vertices/UVs keeps
         // tile edges in the same camera space as the captured texture.
         const auto& screenProjection = state.getViewProjectionMatrix();
-        _nodeGrid->setScreenProjectionForBlit(
-            _projectGridBlitToVisitingCamera ? &screenProjection : nullptr,
-            _director->getCanvasSize());
+        _nodeGrid->setScreenProjectionForBlit(_projectGridBlitToVisitingCamera ? &screenProjection : nullptr,
+                                              _director->getCanvasSize());
     }
 
     // Blit with the grid camera's ortho VP matrix instead of the scene camera's

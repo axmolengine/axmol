@@ -564,24 +564,27 @@ void RenderTextureTestDepthStencil::draw(const SceneRenderState& state, const Ma
 
         //    _renderCmds[0].init(_globalZOrder);
         //    _renderCmds[0].func = AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeClear, this);
-        state.getRenderer()->addCallbackCommand(AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeClear, this), _globalZOrder);
+        state.getRenderer()->addCallbackCommand(AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeClear, this),
+                                                _globalZOrder);
 
         //    _renderCmds[1].init(_globalZOrder);
         //    _renderCmds[1].func = AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeStencil, this);
         state.getRenderer()->addCallbackCommand(AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeStencil, this),
-                                     _globalZOrder);
+                                                _globalZOrder);
 
         _spriteDS->visit(state, Mat4::identity, Node::FLAGS_TRANSFORM_DIRTY);
 
         //    _renderCmds[2].init(_globalZOrder);
         //    _renderCmds[2].func = AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeDraw, this);
-        state.getRenderer()->addCallbackCommand(AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeDraw, this), _globalZOrder);
+        state.getRenderer()->addCallbackCommand(AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeDraw, this),
+                                                _globalZOrder);
 
         _spriteDraw->visit(state, Mat4::identity, Node::FLAGS_TRANSFORM_DIRTY);
 
         //    _renderCmds[3].init(_globalZOrder);
         //    _renderCmds[3].func = AX_CALLBACK_0(RenderTextureTestDepthStencil::onAfterDraw, this);
-        state.getRenderer()->addCallbackCommand(AX_CALLBACK_0(RenderTextureTestDepthStencil::onAfterDraw, this), _globalZOrder);
+        state.getRenderer()->addCallbackCommand(AX_CALLBACK_0(RenderTextureTestDepthStencil::onAfterDraw, this),
+                                                _globalZOrder);
 
         /// !!!end will set current render target to default renderTarget
         /// !!!all render target share one depthStencilDesc, TODO: optimize me?

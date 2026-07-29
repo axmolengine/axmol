@@ -70,7 +70,6 @@ Scene::Scene()
     // Set accumulator to fixedDeltaTime so the next tick will immediately run at least one fixedUpdate,
     // avoiding a stall after changing step size.
     _fixedAccumulator = _fixedDeltaTime;
-
 }
 
 Scene::~Scene()

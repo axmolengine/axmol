@@ -79,7 +79,7 @@ bool isAABBOutOfViewProjection(const AABB& aabb, const Plane planes[6])
     Vec3 point;
     for (int i = 0; i < 6; ++i)
     {
-        const auto& plane   = planes[i];
+        const auto& plane  = planes[i];
         const Vec3& normal = plane.getNormal();
         point.x            = normal.x < 0 ? aabb._max.x : aabb._min.x;
         point.y            = normal.y < 0 ? aabb._max.y : aabb._min.y;
@@ -580,11 +580,11 @@ bool Terrain::getIntersectionPoint(const Ray& ray_, Vec3& intersectionPoint) con
     ray.transform(getWorldToNodeTransform());
 
     std::set<Chunk*> closeList;
-    Vec2 start = Vec2(ray.origin.x, ray.origin.z);
-    Vec2 dir   = Vec2(ray.direction.x, ray.direction.z);
+    Vec2 start              = Vec2(ray.origin.x, ray.origin.z);
+    Vec2 dir                = Vec2(ray.direction.x, ray.direction.z);
     const float invMapScale = _terrainData._mapScale != 0.0f ? 1.0f / _terrainData._mapScale : 0.0f;
-    start.x                  = (start.x + _terrainData._mapScale * _imageWidth * 0.5f) * invMapScale;
-    start.y                  = (start.y + _terrainData._mapScale * _imageHeight * 0.5f) * invMapScale;
+    start.x                 = (start.x + _terrainData._mapScale * _imageWidth * 0.5f) * invMapScale;
+    start.y                 = (start.y + _terrainData._mapScale * _imageHeight * 0.5f) * invMapScale;
     start.x /= (_terrainData._chunkSize.width + 1);
     start.y /= (_terrainData._chunkSize.height + 1);
     Vec2 delta             = dir.getNormalized();

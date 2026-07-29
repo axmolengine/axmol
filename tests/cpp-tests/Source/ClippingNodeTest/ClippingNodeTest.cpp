@@ -565,10 +565,10 @@ void RawStencilBufferTest::initCommands()
     //    _disableStencilCallback.func = [=]() { renderer->setStencilTest(false); };
     //    _disableStencilCallback.init(_globalZOrder);
 
-    auto program              = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_UCOLOR);
-    _programState             = new rhi::ProgramState(program);
-    _locColor                 = _programState->getProgram()->getUniformLocation("u_color");
-    _locMVPMatrix             = _programState->getProgram()->getUniformLocation("u_MVPMatrix");
+    auto program  = axpm->getBuiltinProgram(rhi::ProgramType::POSITION_UCOLOR);
+    _programState = new rhi::ProgramState(program);
+    _locColor     = _programState->getProgram()->getUniformLocation("u_color");
+    _locMVPMatrix = _programState->getProgram()->getUniformLocation("u_MVPMatrix");
 
     Object::assign(_vertexLayout, _programState->getVertexLayout());
 

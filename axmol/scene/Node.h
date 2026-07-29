@@ -108,11 +108,11 @@ struct AX_DLL SceneViewData
 
 struct AX_DLL SceneRenderState
 {
-    Renderer* renderer         = nullptr;
-    const Camera* camera       = nullptr;
+    Renderer* renderer   = nullptr;
+    const Camera* camera = nullptr;
     SceneViewData view;
-    unsigned short cameraFlag  = 0;
-    bool viewOverridden        = false;
+    unsigned short cameraFlag = 0;
+    bool viewOverridden       = false;
 
     SceneRenderState() = default;
     SceneRenderState(Renderer* renderer, const Camera* camera);

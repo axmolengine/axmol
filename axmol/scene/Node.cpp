@@ -89,8 +89,8 @@ SceneViewData SceneViewData::fromMatrices(const Mat4& view, const Mat4& projecti
 
 float SceneViewData::getDepthInView(const Mat4& transform) const
 {
-    float camWorldZ = -(view.m[2] * transform.m[12] + view.m[6] * transform.m[13] + view.m[10] * transform.m[14] +
-                        view.m[14]);
+    float camWorldZ =
+        -(view.m[2] * transform.m[12] + view.m[6] * transform.m[13] + view.m[10] * transform.m[14] + view.m[14]);
     return camWorldZ;
 }
 
@@ -111,8 +111,7 @@ SceneRenderState::SceneRenderState(Renderer* renderer, const Camera* camera, con
 
 bool SceneRenderState::requiresVisibilityUpdate(uint32_t flags) const
 {
-    return viewOverridden || (flags & Node::FLAGS_TRANSFORM_DIRTY) ||
-           (camera && camera->isViewProjectionUpdated());
+    return viewOverridden || (flags & Node::FLAGS_TRANSFORM_DIRTY) || (camera && camera->isViewProjectionUpdated());
 }
 
 bool SceneRenderState::checkVisibility(const Mat4& transform, const Vec2& size) const
@@ -1298,8 +1297,8 @@ void Node::sortAllChildren()
 void Node::draw()
 {
     auto renderer = _director->getRenderer();
-    auto scene     = _director->getRunningScene();
-    auto camera    = scene ? scene->getDefaultCamera() : nullptr;
+    auto scene    = _director->getRunningScene();
+    auto camera   = scene ? scene->getDefaultCamera() : nullptr;
     SceneRenderState state(renderer, camera);
     draw(state, _modelViewTransform, FLAGS_TRANSFORM_DIRTY);
 }
@@ -1309,8 +1308,8 @@ void Node::draw(const SceneRenderState& /*state*/, const Mat4& /*transform*/, ui
 void Node::visit()
 {
     auto renderer = _director->getRenderer();
-    auto scene     = _director->getRunningScene();
-    auto camera    = scene ? scene->getDefaultCamera() : nullptr;
+    auto scene    = _director->getRunningScene();
+    auto camera   = scene ? scene->getDefaultCamera() : nullptr;
     SceneRenderState state(renderer, camera);
     visit(state, Mat4::identity, FLAGS_TRANSFORM_DIRTY);
 }

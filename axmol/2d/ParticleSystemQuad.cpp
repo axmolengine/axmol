@@ -665,7 +665,8 @@ void ParticleSystemQuad::draw(const SceneRenderState& state, const Mat4& transfo
         ax::Mat4 projectionMat = state.getViewProjectionMatrix();
         programState->setUniform(_mvpMatrixLocaiton, projectionMat.m, sizeof(projectionMat.m));
 
-        _quadCommand.init(_globalZOrder, _texture, _blendFunc, _quads, _particleCount, transform, flags, state.getView());
+        _quadCommand.init(_globalZOrder, _texture, _blendFunc, _quads, _particleCount, transform, flags,
+                          state.getView());
         state.getRenderer()->addCommand(&_quadCommand);
     }
 }

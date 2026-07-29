@@ -48,10 +48,10 @@ void PointerEvent::setPointerInfo(InputPhase phase, Vec2 point, const PointerInp
     _pointerId      = state.id;
     _pressedButtons = state.pressedButtons;
 
-    _point            = point;
-    _pressure         = state.pressure;
-    _previousRay      = _ray;
-    _ray              = Ray{};
+    _point       = point;
+    _pressure    = state.pressure;
+    _previousRay = _ray;
+    _ray         = Ray{};
     clearRayContext();
     _previousHitPoint = _hitResult.hit ? std::optional<Vec3>(_hitResult.worldPoint) : std::nullopt;
     _hitResult        = {};

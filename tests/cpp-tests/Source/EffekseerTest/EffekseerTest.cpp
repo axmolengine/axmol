@@ -199,7 +199,9 @@ void EffekseerTest::update(float delta)
     count++;
 }
 
-void EffekseerTest::visit(const cocos2d::SceneRenderState& state, const cocos2d::Mat4& parentTransform, uint32_t parentFlags)
+void EffekseerTest::visit(const cocos2d::SceneRenderState& state,
+                          const cocos2d::Mat4& parentTransform,
+                          uint32_t parentFlags)
 {
     /**
             visitを継承して、エフェクトを実際に描画する処理を追加します。

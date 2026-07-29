@@ -214,7 +214,6 @@ void VRPreviewSceneCompositor::renderScene(Renderer* renderer, Scene* scene)
     renderSceneToEye(renderer, scene, LeftEyeIndex, leftEyeTransform);
     renderSceneToEye(renderer, scene, RightEyeIndex, rightEyeTransform);
     renderDistortionPass(renderer);
-
 }
 
 void VRPreviewSceneCompositor::renderSceneToEye(Renderer* renderer,

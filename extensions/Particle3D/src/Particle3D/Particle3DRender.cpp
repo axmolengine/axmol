@@ -70,7 +70,9 @@ Particle3DQuadRender* Particle3DQuadRender::create(std::string_view texFile)
     return ret;
 }
 
-void Particle3DQuadRender::render(const SceneRenderState& state, const Mat4& transform, ParticleSystem3D* particleSystem)
+void Particle3DQuadRender::render(const SceneRenderState& state,
+                                  const Mat4& transform,
+                                  ParticleSystem3D* particleSystem)
 {
     // batch and generate draw
     const ParticlePool& particlePool = particleSystem->getParticlePool();
@@ -106,7 +108,7 @@ void Particle3DQuadRender::render(const SceneRenderState& state, const Mat4& tra
         _indexData.resize(activeParticleList.size() * 6);
     }
 
-    const Mat4& viewMat = state.getViewMatrix();
+    const Mat4& viewMat    = state.getViewMatrix();
     const Mat4 viewToWorld = viewMat.getInversed();
 
     Mat4 pRotMat;
@@ -275,7 +277,9 @@ Particle3DModelRender* Particle3DModelRender::create(std::string_view modelFile,
     return ret;
 }
 
-void Particle3DModelRender::render(const SceneRenderState& state, const Mat4& transform, ParticleSystem3D* particleSystem)
+void Particle3DModelRender::render(const SceneRenderState& state,
+                                   const Mat4& transform,
+                                   ParticleSystem3D* particleSystem)
 {
     if (!_isVisible)
         return;

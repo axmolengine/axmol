@@ -55,7 +55,9 @@ public:
     void addChild(ax::Node* pChild, int zOrder, int tag) override;
     void addChild(ax::Node* pChild, int zOrder, std::string_view name) override;
     void removeChild(ax::Node* child, bool cleanup) override;
-    virtual void visit(const ax::SceneRenderState& state, const ax::Mat4& parentTransform, uint32_t parentFlags) override;
+    virtual void visit(const ax::SceneRenderState& state,
+                       const ax::Mat4& parentTransform,
+                       uint32_t parentFlags) override;
     void draw(const ax::SceneRenderState& state, const ax::Mat4& transform, uint32_t flags) override;
 
 protected:

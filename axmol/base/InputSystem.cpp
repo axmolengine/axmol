@@ -740,8 +740,8 @@ void InputSystem::onPlatformKeyboardWillShow(float rawX, float rawY, float rawWi
         keyboardPos  = nativeToScreen(keyboardPos);
 
         // Transform the relative screen size vector into World Space dimensions
-        auto scene           = director->getRunningScene();
-        auto camera          = scene ? scene->getDefaultCamera() : nullptr;
+        auto scene  = director->getRunningScene();
+        auto camera = scene ? scene->getDefaultCamera() : nullptr;
         if (!camera)
             return ax::Rect();
         Vec3 nearWorldSize   = camera->deprojectScreenToWorld(Vec3(keyboardSize.x, keyboardSize.y, 0.0f));

@@ -125,7 +125,9 @@ public:
     /**
      * @lua NA
      */
-    virtual void visit(const ax::SceneRenderState& state, const ax::Mat4& parentTransform, uint32_t parentFlags) override;
+    virtual void visit(const ax::SceneRenderState& state,
+                       const ax::Mat4& parentTransform,
+                       uint32_t parentFlags) override;
     void draw(const ax::SceneRenderState& state, const ax::Mat4& transform, uint32_t flags) override;
     void update(float dt) override;
 

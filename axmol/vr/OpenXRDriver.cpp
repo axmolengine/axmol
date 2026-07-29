@@ -267,7 +267,7 @@ Vec2 OpenXRDriver::xrToVec2(const XrVector2f& v)
 
 static Vec3 slerpDirection(const Vec3& from, const Vec3& to, float t)
 {
-    float cosTheta = std::clamp(from.dot(to), -1.0f, 1.0f);
+    float cosTheta    = std::clamp(from.dot(to), -1.0f, 1.0f);
     const float theta = std::acos(cosTheta);
     if (theta < 1e-5f)
         return from;
@@ -312,8 +312,7 @@ static float calculateStabilizedLerp(float distance, float deltaTime)
     const float tripleFrameLerp = doubleFrameLerp * doubleFrameLerp;
     const float timeSlice       = deltaTime / frameTime90Hz;
 
-    return distance * std::clamp(timeSlice, 0.0f, 1.0f) +
-           doubleFrameLerp * std::clamp(timeSlice - 1.0f, 0.0f, 1.0f) +
+    return distance * std::clamp(timeSlice, 0.0f, 1.0f) + doubleFrameLerp * std::clamp(timeSlice - 1.0f, 0.0f, 1.0f) +
            tripleFrameLerp * std::clamp(timeSlice - 2.0f, 0.0f, 1.0f);
 }
 
@@ -347,8 +346,7 @@ static Ray stabilizeControllerRay(OpenXRDriver::ControllerState& ctrl, const Ray
         return ctrl.stabilizedTrackingRay;
     }
 
-    const float positionLerp =
-        calculateStabilizedLerp(positionDistance / positionStabilizationMeters, deltaTime);
+    const float positionLerp    = calculateStabilizedLerp(positionDistance / positionStabilizationMeters, deltaTime);
     const Vec3 stabilizedOrigin = previousRay.origin + positionOffset * positionLerp;
 
     const float referenceDistance = std::max(ctrl.stabilizationReferenceDistance, 0.001f);
@@ -371,12 +369,12 @@ static Ray stabilizeControllerRay(OpenXRDriver::ControllerState& ctrl, const Ray
     if (endpointRatio < directRatio)
     {
         const float directionLerp = calculateStabilizedLerp(endpointRatio, deltaTime * distanceScale);
-        stabilizedDirection = slerpDirection(endpointPreservingDirection, rawRay.direction, directionLerp);
+        stabilizedDirection       = slerpDirection(endpointPreservingDirection, rawRay.direction, directionLerp);
     }
     else
     {
         const float directionLerp = calculateStabilizedLerp(directRatio, deltaTime * distanceScale);
-        stabilizedDirection = slerpDirection(previousRay.direction, rawRay.direction, directionLerp);
+        stabilizedDirection       = slerpDirection(previousRay.direction, rawRay.direction, directionLerp);
     }
 
     ctrl.stabilizedTrackingRay = Ray(stabilizedOrigin, stabilizedDirection);
@@ -1670,15 +1668,14 @@ void OpenXRDriver::pollXrActions(XrTime predictedDisplayTime)
         const XrResult poseResult = xrGetActionStatePose(_xrSession, &getInfo, &poseState);
         const bool poseActive     = XR_SUCCEEDED(poseResult) && poseState.isActive == XR_TRUE;
 
-        ctrl.rawAimPoseUpdated   = false;
-        ctrl.aimTracked          = false;
-        ctrl.rawGripPoseValid    = false;
+        ctrl.rawAimPoseUpdated = false;
+        ctrl.aimTracked        = false;
+        ctrl.rawGripPoseValid  = false;
 
         if (poseActive && ctrl.aimSpace != XR_NULL_HANDLE)
         {
             XrSpaceLocation location{XR_TYPE_SPACE_LOCATION};
-            const XrResult locateResult =
-                xrLocateSpace(ctrl.aimSpace, _localSpace, predictedDisplayTime, &location);
+            const XrResult locateResult = xrLocateSpace(ctrl.aimSpace, _localSpace, predictedDisplayTime, &location);
 
             constexpr XrSpaceLocationFlags requiredValidFlags =
                 XR_SPACE_LOCATION_ORIENTATION_VALID_BIT | XR_SPACE_LOCATION_POSITION_VALID_BIT;
@@ -1686,19 +1683,18 @@ void OpenXRDriver::pollXrActions(XrTime predictedDisplayTime)
                 XR_SPACE_LOCATION_ORIENTATION_TRACKED_BIT | XR_SPACE_LOCATION_POSITION_TRACKED_BIT;
 
             const bool locationValid =
-                XR_SUCCEEDED(locateResult) &&
-                (location.locationFlags & requiredValidFlags) == requiredValidFlags;
+                XR_SUCCEEDED(locateResult) && (location.locationFlags & requiredValidFlags) == requiredValidFlags;
             const bool locationTracked =
                 locationValid && (location.locationFlags & requiredTrackedFlags) == requiredTrackedFlags;
 
             if (locationTracked)
             {
-                ctrl.rawAimPose             = location.pose;
-                ctrl.rawAimPoseUpdated      = true;
-                ctrl.aimTracked             = true;
-                ctrl.poseValid              = true;
-                ctrl.rawAimSampleTime       = predictedDisplayTime;
-                ctrl.invalidPoseFrameCount  = 0;
+                ctrl.rawAimPose            = location.pose;
+                ctrl.rawAimPoseUpdated     = true;
+                ctrl.aimTracked            = true;
+                ctrl.poseValid             = true;
+                ctrl.rawAimSampleTime      = predictedDisplayTime;
+                ctrl.invalidPoseFrameCount = 0;
 
                 if (ctrl.gripSpace != XR_NULL_HANDLE)
                 {
@@ -1738,9 +1734,8 @@ void OpenXRDriver::pollXrActions(XrTime predictedDisplayTime)
 
 void OpenXRDriver::resolveControllerPointers(const Mat4& trackingToWorld, float sceneRayMaxDistance)
 {
-    const float xrToSceneScale = _xrToSceneScale;
-    const float fallbackTrackingDistance =
-        std::max(sceneRayMaxDistance / std::max(xrToSceneScale, 0.0001f), 0.25f);
+    const float xrToSceneScale           = _xrToSceneScale;
+    const float fallbackTrackingDistance = std::max(sceneRayMaxDistance / std::max(xrToSceneScale, 0.0001f), 0.25f);
 
     for (uint32_t hand = 0; hand < 2; ++hand)
     {
@@ -1757,16 +1752,15 @@ void OpenXRDriver::resolveControllerPointers(const Mat4& trackingToWorld, float 
                 rawRay.direction.normalize();
 
                 float deltaTime = 1.0f / 90.0f;
-                if (ctrl.lastStabilizedSampleTime > 0 &&
-                    ctrl.rawAimSampleTime > ctrl.lastStabilizedSampleTime)
+                if (ctrl.lastStabilizedSampleTime > 0 && ctrl.rawAimSampleTime > ctrl.lastStabilizedSampleTime)
                 {
                     constexpr double xrTimeToSeconds = 1.0e-9;
-                    deltaTime = static_cast<float>(
+                    deltaTime                        = static_cast<float>(
                         static_cast<double>(ctrl.rawAimSampleTime - ctrl.lastStabilizedSampleTime) * xrTimeToSeconds);
                     deltaTime = std::clamp(deltaTime, 1.0f / 240.0f, 1.0f / 30.0f);
                 }
 
-                ctrl.rawTrackingRay          = rawRay;
+                ctrl.rawTrackingRay = rawRay;
                 stabilizeControllerRay(ctrl, rawRay, deltaTime);
                 ctrl.lastStabilizedSampleTime = ctrl.rawAimSampleTime;
             }
@@ -1877,10 +1871,10 @@ void OpenXRDriver::resolveControllerPointers(const Mat4& trackingToWorld, float 
                 poseState.interactionProfile = ctrl.interactionProfile;
                 InputSystem::getInstance()->handleXRInput(poseState);
             }
-            ctrl.rayHitValid                     = false;
-            ctrl.stabilizedRayValid              = false;
-            ctrl.rawWorldRayValid                = false;
-            ctrl.lastStabilizedSampleTime        = 0;
+            ctrl.rayHitValid                    = false;
+            ctrl.stabilizedRayValid             = false;
+            ctrl.rawWorldRayValid               = false;
+            ctrl.lastStabilizedSampleTime       = 0;
             ctrl.stabilizationReferenceDistance = fallbackTrackingDistance;
         }
 
