@@ -538,9 +538,9 @@ public:
     void setBlendFunc(const BlendFunc& blendFunc) override;
 
     // Overrides
-    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags) override;
 
-    void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+    void visit(const SceneRenderState& state, const Mat4& parentTransform, uint32_t parentFlags) override;
 
     /**
      * When isolated is set, the position of the node is no longer affected by parent nodes.
@@ -564,7 +564,7 @@ protected:
     void freeShaderInternal(CustomCommand& cmd);
 
     void updateBlendState(CustomCommand& cmd);
-    void updateUniforms(const Mat4& transform, CustomCommand& cmd);
+    void updateUniforms(const SceneRenderState& state, const Mat4& transform, CustomCommand& cmd);
 
     bool _trianglesDirty : 1 = false;
     bool _pointsDirty : 1    = false;

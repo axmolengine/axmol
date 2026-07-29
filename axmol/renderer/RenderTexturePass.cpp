@@ -118,24 +118,20 @@ void RenderTexturePass::begin(const Camera* camera)
 
     if (_cameraOverrideEnabled)
     {
-        // Fallback chain: explicit camera -> visiting camera -> default camera -> offscreen camera
+        // Fallback chain: explicit camera -> default camera -> offscreen camera
         if (!camera)
         {
-            camera = Camera::getVisitingCamera();
-            if (!camera)
-                camera = Camera::getDefaultCamera();
+            auto scene = Director::getInstance()->getRunningScene();
+            camera     = scene ? scene->getDefaultCamera() : nullptr;
             if (!camera)
                 camera = Director::getInstance()->getOffscreenCamera();
         }
-
-        // Save visiting camera
-        _savedCamera = Camera::getVisitingCamera();
-        Camera::setVisitingCamera(const_cast<Camera*>(camera));
+        _activeCamera = camera;
 
         // Save and flip visiting camera's projection on OpenGL to keep texture upright
         if (_autoFlipY && rhi::GraphicsCore::isOpenGL())
         {
-            auto cam = const_cast<Camera*>(Camera::getVisitingCamera());
+            auto cam = const_cast<Camera*>(_activeCamera);
             if (cam)
             {
                 _savedProjection = cam->getProjectionMatrix();
@@ -205,15 +201,12 @@ void RenderTexturePass::end()
     // Restore visiting camera's projection immediately
     if (_savedProjection.has_value())
     {
-        auto cam = const_cast<Camera*>(Camera::getVisitingCamera());
+        auto cam = const_cast<Camera*>(_activeCamera);
         if (cam)
             cam->setProjectionMatrix(*_savedProjection);
         _savedProjection.reset();
     }
-
-    // Restore visiting camera immediately
-    if (_savedCamera)
-        Camera::setVisitingCamera(const_cast<Camera*>(_savedCamera));
+    _activeCamera = nullptr;
 
     _active = false;
 }

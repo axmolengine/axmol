@@ -56,7 +56,7 @@ class AX_DLL CallbackCommand : public RenderCommand
 
 public:
     void init(float globalZOrder);
-    void init(float globalZorder, const Mat4& transform, unsigned int);
+    void init(float globalZorder, const Mat4& transform, unsigned int, const SceneViewData& view);
 
     /**
      * @brief Reset the command state for reuse

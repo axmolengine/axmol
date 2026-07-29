@@ -53,6 +53,7 @@ class Material;
 class Renderer;
 class Scene;
 class Pass;
+struct SceneRenderState;
 
 namespace rhi
 {
@@ -220,7 +221,7 @@ public:
     /** Returns the Material being used by the Mesh */
     Material* getMaterial() const;
 
-    void draw(Renderer* renderer,
+    void draw(const SceneRenderState& state,
               float globalZ,
               const Mat4& transform,
               uint32_t flags,

@@ -93,7 +93,7 @@ public:
     void unPrepare() override;
     void updateRender(PUParticle3D* particle, float deltaTime, bool firstParticle) override;
 
-    void render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem) override;
+    void render(const SceneRenderState& state, const Mat4& transform, ParticleSystem3D* particleSystem) override;
     void particleEmitted(PUParticleSystem3D* particleSystem, PUParticle3D* particle) override;
     void particleExpired(PUParticleSystem3D* particleSystem, PUParticle3D* particle) override;
 

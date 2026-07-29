@@ -467,13 +467,13 @@ void NavMesh::setDebugDrawEnabled(bool enable)
     _isDebugDrawEnabled = enable;
 }
 
-void NavMesh::debugDraw(Renderer* renderer)
+void NavMesh::debugDraw(const SceneRenderState& state)
 {
     if (_isDebugDrawEnabled)
     {
         _debugDraw.clear();
         dtDraw();
-        _debugDraw.draw(renderer);
+        _debugDraw.draw(state);
     }
 }
 

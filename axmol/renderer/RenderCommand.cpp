@@ -24,7 +24,6 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "axmol/renderer/RenderCommand.h"
-#include "axmol/scene/Camera.h"
 #include "axmol/scene/Node.h"
 #include "axmol/renderer/VertexLayoutManager.h"
 
@@ -41,14 +40,14 @@ RenderCommand::~RenderCommand()
     }
 }
 
-void RenderCommand::init(float globalZOrder, const ax::Mat4& transform, unsigned int flags)
+void RenderCommand::init(float globalZOrder, const ax::Mat4& transform, unsigned int flags, const SceneViewData& view)
 {
-    _globalOrder = globalZOrder;
+    _globalOrder    = globalZOrder;
+    _mv             = transform;
+    _viewProjection = view.viewProjection;
     if (flags & Node::FLAGS_RENDER_AS_3D)
     {
-        if (Camera::getVisitingCamera())
-            _depth = Camera::getVisitingCamera()->getDepthInView(transform);
-
+        _depth = view.getDepthInView(transform);
         set3D(true);
     }
     else

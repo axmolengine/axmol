@@ -195,7 +195,7 @@ class SpriteInGroupCommand : public Sprite
 public:
     static SpriteInGroupCommand* create(std::string_view filename);
 
-    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    virtual void draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags) override;
 };
 
 SpriteInGroupCommand* SpriteInGroupCommand::create(std::string_view filename)
@@ -206,15 +206,15 @@ SpriteInGroupCommand* SpriteInGroupCommand::create(std::string_view filename)
     return sprite;
 }
 
-void SpriteInGroupCommand::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+void SpriteInGroupCommand::draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags)
 {
-    AXASSERT(renderer, "Render is null");
-    auto* spriteWrapperCommand = renderer->getNextGroupCommand();
+    AXASSERT(state.getRenderer(), "Renderer is null");
+    auto* spriteWrapperCommand = state.getRenderer()->getNextGroupCommand();
     spriteWrapperCommand->init(_globalZOrder);
-    renderer->addCommand(spriteWrapperCommand);
-    renderer->pushGroup(spriteWrapperCommand->getRenderQueueID());
-    Sprite::draw(renderer, transform, flags);
-    renderer->popGroup();
+    state.getRenderer()->addCommand(spriteWrapperCommand);
+    state.getRenderer()->pushGroup(spriteWrapperCommand->getRenderQueueID());
+    Sprite::draw(state, transform, flags);
+    state.getRenderer()->popGroup();
 }
 
 GroupCommandTest::GroupCommandTest()

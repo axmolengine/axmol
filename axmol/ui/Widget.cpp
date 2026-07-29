@@ -240,12 +240,12 @@ void Widget::onExit()
     ProtectedNode::onExit();
 }
 
-void Widget::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags)
+void Widget::visit(const SceneRenderState& state, const Mat4& parentTransform, uint32_t parentFlags)
 {
     if (_visible)
     {
         updateLayout();
-        ProtectedNode::visit(renderer, parentTransform, parentFlags);
+        ProtectedNode::visit(state, parentTransform, parentFlags);
     }
 }
 

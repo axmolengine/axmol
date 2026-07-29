@@ -30,6 +30,7 @@
 #include "axmol/scene/CameraBackgroundBrush.h"
 #include "axmol/platform/RenderView.h"
 #include "axmol/scene/Scene.h"
+#include "axmol/base/Director.h"
 #include "axmol/renderer/Renderer.h"
 #include "axmol/renderer/QuadCommand.h"
 #include "axmol/renderer/RenderTexture.h"
@@ -37,7 +38,6 @@
 namespace ax
 {
 
-Camera* Camera::_visitingCamera = nullptr;
 Viewport Camera::_defaultViewport;
 
 // start static methods
@@ -94,12 +94,6 @@ Camera* Camera::getDefaultCamera()
 const Viewport& Camera::getDefaultViewport()
 {
     return _defaultViewport;
-}
-
-const Mat4& Camera::getVisitingViewProjectionMatrix()
-{
-    AXASSERT(_visitingCamera, "Camera::getVisitingViewProjectionMatrix() requires a visiting camera");
-    return _visitingCamera ? _visitingCamera->getViewProjectionMatrix() : Mat4::identity;
 }
 
 void Camera::setDefaultViewport(const Viewport& vp)
@@ -190,12 +184,6 @@ const Mat4& Camera::getViewProjectionMatrix() const
     }
 
     return _viewProjection;
-}
-
-void Camera::setAdditionalProjection(const Mat4& mat)
-{
-    _projection = mat * _projection;
-    getViewProjectionMatrix();
 }
 
 void Camera::updateProjection()
@@ -511,7 +499,16 @@ void Camera::clearBackground()
 {
     if (_clearBrush)
     {
-        _clearBrush->drawBackground(this);
+        SceneRenderState state(Director::getInstance()->getRenderer(), this);
+        _clearBrush->drawBackground(state);
+    }
+}
+
+void Camera::clearBackground(const SceneRenderState& state)
+{
+    if (_clearBrush)
+    {
+        _clearBrush->drawBackground(state);
     }
 }
 
@@ -553,10 +550,10 @@ void Camera::setNearPlane(float nearPlane)
     updateProjection();
 }
 
-void Camera::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags)
+void Camera::visit(const SceneRenderState& state, const Mat4& parentTransform, uint32_t parentFlags)
 {
     _viewProjectionUpdated = _transformUpdated;
-    return Node::visit(renderer, parentTransform, parentFlags);
+    return Node::visit(state, parentTransform, parentFlags);
 }
 
 void Camera::setBackgroundBrush(CameraBackgroundBrush* clearBrush)

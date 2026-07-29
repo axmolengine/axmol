@@ -117,9 +117,9 @@ void CustomCommand::assign(CustomCommand&& rhs)
 #    pragma GCC diagnostic pop
 #endif
 
-void CustomCommand::init(float depth, const ax::Mat4& modelViewTransform, unsigned int flags)
+void CustomCommand::init(float depth, const ax::Mat4& modelViewTransform, unsigned int flags, const SceneViewData& view)
 {
-    RenderCommand::init(depth, modelViewTransform, flags);
+    RenderCommand::init(depth, modelViewTransform, flags, view);
 }
 
 void CustomCommand::init(float globalZOrder)

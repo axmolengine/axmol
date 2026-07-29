@@ -527,10 +527,12 @@ static void createVideoControlTexture()
         ++i;
     }
 
-    node->visit();
+    auto* renderer = Director::getInstance()->getRenderer();
+    SceneRenderState renderState(renderer, camera);
+    node->visit(renderState, Mat4::identity, Node::FLAGS_TRANSFORM_DIRTY);
     pass->end();
 
-    Director::getInstance()->getRenderer()->render();
+    renderer->render();
 
     g_mediaControlsTexture = rt;
 }
@@ -1201,9 +1203,9 @@ Node* VideoPlayer::getRenderNode()
     return pvd->_vrender;
 }
 
-void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+void VideoPlayer::draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags)
 {
-    ax::ui::Widget::draw(renderer, transform, flags);
+    ax::ui::Widget::draw(state, transform, flags);
 
     auto pvd     = reinterpret_cast<PrivateVideoContext*>(_videoContext);
     auto vrender = pvd->_vrender;

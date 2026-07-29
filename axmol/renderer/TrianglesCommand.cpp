@@ -42,9 +42,10 @@ void TrianglesCommand::init(float globalOrder,
                             const BlendFunc& blendType,
                             const Triangles& triangles,
                             const Mat4& mv,
-                            uint32_t flags)
+                            uint32_t flags,
+                            const SceneViewData& view)
 {
-    RenderCommand::init(globalOrder, mv, flags);
+    RenderCommand::init(globalOrder, mv, flags, view);
 
     _triangles = triangles;
     if (_triangles.indexCount % 3 != 0)

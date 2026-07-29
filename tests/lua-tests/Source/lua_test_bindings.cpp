@@ -78,7 +78,7 @@ public:
     void setBlendFunc(const BlendFunc& blendFunc);
 
     // Overrides
-    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    virtual void draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags) override;
 
     DrawNode3D();
     virtual ~DrawNode3D();
@@ -189,11 +189,11 @@ bool DrawNode3D::init()
     return true;
 }
 
-void DrawNode3D::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+void DrawNode3D::draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags)
 {
     _customCommand.init(_globalZOrder);
     // update mvp matrix
-    const auto& matrixP = Camera::getVisitingViewProjectionMatrix();
+    const auto& matrixP = state.getViewProjectionMatrix();
     auto mvp            = matrixP * transform;
     _programState->setUniform(_locMVPMatrix, mvp.m, sizeof(mvp.m));
 
@@ -214,7 +214,7 @@ void DrawNode3D::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 
     if (!_buffer.empty())
     {
-        renderer->addCommand(&_customCommand);
+        state.getRenderer()->addCommand(&_customCommand);
     }
 }
 

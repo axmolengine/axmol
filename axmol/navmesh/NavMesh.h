@@ -51,6 +51,7 @@ namespace ax
  * @{
  */
 class Renderer;
+struct SceneRenderState;
 /** @brief NavMesh: The NavMesh information container, include mesh, tileCache, and so on. */
 class AX_DLL NavMesh : public Object
 {
@@ -67,7 +68,7 @@ public:
     void update(float dt);
 
     /** Internal method, the updater of debug drawing, need called each frame. */
-    void debugDraw(Renderer* renderer);
+    void debugDraw(const SceneRenderState& state);
 
     /** Enable debug draw or disable. */
     void setDebugDrawEnabled(bool enable);

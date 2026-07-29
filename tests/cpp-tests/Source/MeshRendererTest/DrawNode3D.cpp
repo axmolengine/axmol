@@ -107,11 +107,11 @@ bool DrawNode3D::init()
     return true;
 }
 
-void DrawNode3D::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+void DrawNode3D::draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags)
 {
-    _customCommand.init(_globalZOrder, transform, flags);
+    _customCommand.init(_globalZOrder, transform, flags, state.getView());
 
-    updateCommand(renderer, transform, flags);
+    updateCommand(state, transform, flags);
 
     if (_isDirty && !_bufferLines.empty())
     {
@@ -123,13 +123,13 @@ void DrawNode3D::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 
     if (!_bufferLines.empty())
     {
-        renderer->addCommand(&_customCommand);
+        state.getRenderer()->addCommand(&_customCommand);
     }
 }
 
-void DrawNode3D::updateCommand(ax::Renderer* renderer, const Mat4& transform, uint32_t flags)
+void DrawNode3D::updateCommand(const ax::SceneRenderState& state, const Mat4& transform, uint32_t flags)
 {
-    const auto& matrixP = Camera::getVisitingViewProjectionMatrix();
+    const auto& matrixP = state.getViewProjectionMatrix();
     auto mvp            = matrixP * transform;
 
     _customCommand.unsafePS()->setUniform(_locMVPMatrix, mvp.m, sizeof(mvp.m));

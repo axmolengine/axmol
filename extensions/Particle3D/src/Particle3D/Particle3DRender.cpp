@@ -46,7 +46,7 @@ Particle3DQuadRender::Particle3DQuadRender()
 
 Particle3DQuadRender::~Particle3DQuadRender()
 {
-    // AX_SAFE_RELEASE(_texture);
+    AX_SAFE_RELEASE(_texture);
     AX_SAFE_RELEASE(_programState);
     AX_SAFE_RELEASE(_vertexBuffer);
     AX_SAFE_RELEASE(_indexBuffer);
@@ -70,7 +70,7 @@ Particle3DQuadRender* Particle3DQuadRender::create(std::string_view texFile)
     return ret;
 }
 
-void Particle3DQuadRender::render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem)
+void Particle3DQuadRender::render(const SceneRenderState& state, const Mat4& transform, ParticleSystem3D* particleSystem)
 {
     // batch and generate draw
     const ParticlePool& particlePool = particleSystem->getParticlePool();
@@ -106,14 +106,13 @@ void Particle3DQuadRender::render(Renderer* renderer, const Mat4& transform, Par
         _indexData.resize(activeParticleList.size() * 6);
     }
 
-    auto camera         = Camera::getVisitingCamera();
-    auto cameraMat      = camera->getNodeToWorldTransform();
-    const Mat4& viewMat = cameraMat.getInversed();
+    const Mat4& viewMat = state.getViewMatrix();
+    const Mat4 viewToWorld = viewMat.getInversed();
 
     Mat4 pRotMat;
-    Vec3 right(cameraMat.m[0], cameraMat.m[1], cameraMat.m[2]);
-    Vec3 up(cameraMat.m[4], cameraMat.m[5], cameraMat.m[6]);
-    Vec3 backward(cameraMat.m[8], cameraMat.m[9], cameraMat.m[10]);
+    Vec3 right(viewToWorld.m[0], viewToWorld.m[1], viewToWorld.m[2]);
+    Vec3 up(viewToWorld.m[4], viewToWorld.m[5], viewToWorld.m[6]);
+    Vec3 backward(viewToWorld.m[8], viewToWorld.m[9], viewToWorld.m[10]);
 
     Vec3 position;  // particle position
     int vertexindex = 0;
@@ -158,14 +157,13 @@ void Particle3DQuadRender::render(Renderer* renderer, const Mat4& transform, Par
     _vertexBuffer->updateData(&_posuvcolors[0], vertexindex * sizeof(_posuvcolors[0]));
     _indexBuffer->updateData(&_indexData[0], index * sizeof(_indexData[0]));
 
-    float depthZ = -(viewMat.m[2] * transform.m[12] + viewMat.m[6] * transform.m[13] + viewMat.m[10] * transform.m[14] +
-                     viewMat.m[14]);
+    float depthZ = state.getDepthInView(transform);
 
-    auto beforeCommand = renderer->nextCallbackCommand();
+    auto beforeCommand = state.getRenderer()->nextCallbackCommand();
     beforeCommand->init(depthZ);
     _meshCommand.init(depthZ);
 
-    auto afterCommand = renderer->nextCallbackCommand();
+    auto afterCommand = state.getRenderer()->nextCallbackCommand();
     afterCommand->init(depthZ);
 
     beforeCommand->func = [this] { onBeforeDraw(); };  // AX_CALLBACK_0(Particle3DQuadRender::onBeforeDraw, this);
@@ -174,7 +172,7 @@ void Particle3DQuadRender::render(Renderer* renderer, const Mat4& transform, Par
     _meshCommand.setVertexBuffer(_vertexBuffer);
     _meshCommand.setIndexBuffer(_indexBuffer, MeshCommand::IndexFormat::U_SHORT);
 
-    const auto& projectionMatrix = Camera::getVisitingViewProjectionMatrix();
+    const auto& projectionMatrix = state.getViewProjectionMatrix();
     _programState->setUniform(_locPMatrix, &projectionMatrix.m, sizeof(projectionMatrix.m));
 
     if (_texture)
@@ -187,21 +185,22 @@ void Particle3DQuadRender::render(Renderer* renderer, const Mat4& transform, Par
 
     _meshCommand.setIndexDrawInfo(0, index);
 
-    renderer->addCommand(beforeCommand);
-    renderer->addCommand(&_meshCommand);
-    renderer->addCommand(afterCommand);
+    state.getRenderer()->addCommand(beforeCommand);
+    state.getRenderer()->addCommand(&_meshCommand);
+    state.getRenderer()->addCommand(afterCommand);
 }
 
 bool Particle3DQuadRender::initQuadRender(std::string_view texFile)
 {
     AX_SAFE_RELEASE_NULL(_programState);
+    AX_SAFE_RELEASE_NULL(_texture);
 
     if (!texFile.empty())
     {
         auto tex = Director::getInstance()->getTextureCache()->addImage(texFile);
         if (tex)
         {
-            _texture      = tex;
+            Object::assign(_texture, tex);
             auto* program = axpm->getBuiltinProgram(rhi::ProgramType::PARTICLE_TEXTURE_3D);
             _programState = new rhi::ProgramState(program);
         }
@@ -276,7 +275,7 @@ Particle3DModelRender* Particle3DModelRender::create(std::string_view modelFile,
     return ret;
 }
 
-void Particle3DModelRender::render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem)
+void Particle3DModelRender::render(const SceneRenderState& state, const Mat4& transform, ParticleSystem3D* particleSystem)
 {
     if (!_isVisible)
         return;
@@ -323,7 +322,7 @@ void Particle3DModelRender::render(Renderer* renderer, const Mat4& transform, Pa
         mat.m[12]    = particle->position.x;
         mat.m[13]    = particle->position.y;
         mat.m[14]    = particle->position.z;
-        _meshList[index++]->draw(renderer, mat, 0);
+        _meshList[index++]->draw(state, mat, 0);
     }
 }
 

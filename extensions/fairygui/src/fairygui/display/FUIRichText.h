@@ -42,7 +42,7 @@ public:
     HtmlObject* getControl(const std::string& name) const;
 
     const char* hitTestLink(const ax::Vec2& worldPoint);
-    virtual void visit(ax::Renderer *renderer, const ax::Mat4 &parentTransform, uint32_t parentFlags) override;
+    virtual void visit(const ax::SceneRenderState& state, const ax::Mat4 &parentTransform, uint32_t parentFlags) override;
 
     virtual const ax::Size& getContentSize() const override;
 

@@ -189,10 +189,11 @@ void Pass::draw(MeshCommand* meshCommand,
                 unsigned int indexCount,
                 const Mat4& modelView)
 {
+    AX_UNUSED_PARAM(globalZOrder);
+    AX_UNUSED_PARAM(modelView);
 
     meshCommand->setBeforeCallback(AX_CALLBACK_0(Pass::onBeforeVisitCmd, this, meshCommand));
     meshCommand->setAfterCallback(AX_CALLBACK_0(Pass::onAfterVisitCmd, this, meshCommand));
-    meshCommand->init(globalZOrder, modelView);
     meshCommand->setPrimitiveType(primitive);
     meshCommand->setIndexBuffer(indexBuffer, indexFormat);
     meshCommand->setVertexBuffer(vertexBuffer);
@@ -204,9 +205,9 @@ void Pass::draw(MeshCommand* meshCommand,
     renderer->addCommand(meshCommand);
 }
 
-void Pass::updateMVPUniform(const Mat4& modelView)
+void Pass::updateMVPUniform(MeshCommand* command, const Mat4& modelView)
 {
-    const auto& matrixP = Camera::getVisitingViewProjectionMatrix();
+    const auto& matrixP = command->getViewProjectionMatrix();
     auto mvp            = matrixP * modelView;
     _programState->setUniform(_locMVPMatrix, mvp.m, sizeof(mvp.m));
     if (_locMVMatrix)
@@ -239,7 +240,7 @@ void Pass::onBeforeVisitCmd(MeshCommand* command)
     // apply state blocks
     _renderState.bindPass(this, command);
 
-    updateMVPUniform(command->getMV());
+    updateMVPUniform(command, command->getMV());
 }
 
 void Pass::onAfterVisitCmd(MeshCommand* command)

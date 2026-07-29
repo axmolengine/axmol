@@ -25,18 +25,17 @@
 #include "axmol/vr/VRSceneCompositor.h"
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <vector>
 
 #include "axmol/base/Director.h"
-#include "axmol/base/Logging.h"
-#include "axmol/math/Vec4.h"
 #include "axmol/renderer/ProgramManager.h"
 #include "axmol/renderer/Renderer.h"
 #include "axmol/renderer/RenderTexturePass.h"
 #include "axmol/rhi/ProgramState.h"
-#include "axmol/rhi/RenderTarget.h"
 #include "axmol/scene/Camera.h"
+#include "axmol/scene/Node.h"
 #include "axmol/scene/Scene.h"
 #include "axmol/platform/RenderView.h"
 
@@ -65,25 +64,13 @@ static XrPosef scaleXrPosePosition(const XrPosef& pose, float scale)
     return scaledPose;
 }
 
-struct VRProjectedPoint
+static Vec3 sampleCubicBezier(const Vec3& p0, const Vec3& p1, const Vec3& p2, const Vec3& p3, float t)
 {
-    Vec4 clip;
-    Vec3 ndc;
-};
-
-static VRProjectedPoint projectControllerRayPoint(const Mat4& mvp, const Vec3& point)
-{
-    VRProjectedPoint projected;
-    projected.clip.set(point.x, point.y, point.z, 1.0f);
-    mvp.transformVector(&projected.clip);
-
-    if (std::abs(projected.clip.w) > 0.000001f)
-    {
-        projected.ndc.set(projected.clip.x / projected.clip.w, projected.clip.y / projected.clip.w,
-                          projected.clip.z / projected.clip.w);
-    }
-
-    return projected;
+    const float oneMinusT  = 1.0f - t;
+    const float oneMinusT2 = oneMinusT * oneMinusT;
+    const float t2         = t * t;
+    return p0 * (oneMinusT2 * oneMinusT) + p1 * (3.0f * oneMinusT2 * t) +
+           p2 * (3.0f * oneMinusT * t2) + p3 * (t2 * t);
 }
 
 VRSceneCompositor::VRSceneCompositor()
@@ -132,8 +119,21 @@ void VRSceneCompositor::pollEvents()
         return;
 
     xrDriver->setXrToSceneScale(_xrToSceneScale);
-    syncPointerRayCamera(_director->getRunningScene());
     xrDriver->pollEvents();
+}
+
+void VRSceneCompositor::resolveXrFrameInput(Scene* scene)
+{
+    if (!_xrDriver || !_xrDriver->isCompositorAlive())
+        return;
+
+    Camera* xrViewCamera       = scene ? resolveXrViewCamera(scene) : nullptr;
+    _frameTrackingToWorld      = xrViewCamera ? xrViewCamera->getNodeToWorldTransform() : Mat4::identity;
+    _frameTrackingToWorldValid = xrViewCamera != nullptr;
+
+    _xrDriver->setXrToSceneScale(_xrToSceneScale);
+    const float sceneRayMaxDistance = _controllerRayLength > 0.0f ? _controllerRayLength : _farZ;
+    _xrDriver->resolveControllerPointers(_frameTrackingToWorld, sceneRayMaxDistance);
 }
 
 bool VRSceneCompositor::isVRActive() const
@@ -160,59 +160,6 @@ void VRSceneCompositor::setXrToSceneScale(float scale)
     _xrToSceneScale = scale > 0.0f ? scale : 1.0f;
     if (_xrDriver)
         _xrDriver->setXrToSceneScale(_xrToSceneScale);
-}
-
-Camera* VRSceneCompositor::selectPointerRaySourceCamera(Scene* scene) const
-{
-    if (!scene)
-        return nullptr;
-
-    auto defaultCamera = scene->getDefaultCamera();
-    if (defaultCamera && defaultCamera->isVisible())
-        return defaultCamera;
-
-    for (auto camera : scene->getCameras())
-    {
-        if (camera && camera->isVisible())
-            return camera;
-    }
-
-    return defaultCamera;
-}
-
-Camera* VRSceneCompositor::ensurePointerRayCamera(Scene* scene)
-{
-    auto sourceCamera = selectPointerRaySourceCamera(scene);
-    if (!sourceCamera)
-        return nullptr;
-
-    if (!_pointerRayCamera)
-        _pointerRayCamera = RefPtr<Camera>(Camera::create());
-    _pointerRayCamera->configurePerspective(60.0f, 1.0f, _nearZ, _farZ);
-
-    const auto canvasSize = _director->getCanvasSize();
-    const float aspect    = canvasSize.height > 0.0f ? canvasSize.width / canvasSize.height : 1.0f;
-    _pointerRayCamera->configurePerspective(60.0f, aspect, _nearZ, _farZ);
-    _pointerRayCamera->setNodeToParentTransform(sourceCamera->getNodeToWorldTransform());
-    _pointerRayCamera->setAdditionalTransform(Mat4::identity);
-    _pointerRayCamera->setCameraFlag(sourceCamera->getCameraFlag());
-
-    return _pointerRayCamera.get();
-}
-
-void VRSceneCompositor::syncPointerRayCamera(Scene* scene)
-{
-    if (!_xrDriver)
-        return;
-
-    auto camera = ensurePointerRayCamera(scene);
-    if (!camera)
-    {
-        _xrDriver->clearPointerRayTransform();
-        return;
-    }
-
-    _xrDriver->setPointerRayTransform(camera->getNodeToWorldTransform());
 }
 
 void VRSceneCompositor::ensureControllerRayResources()
@@ -277,21 +224,43 @@ void VRSceneCompositor::onAfterControllerRayDraw()
     renderer->setDepthWrite(_controllerRayOldDepthWrite);
 }
 
-void VRSceneCompositor::drawControllerRays(Renderer* renderer, uint32_t eyeIdx, const XrView& view)
+Camera* VRSceneCompositor::resolveXrViewCamera(Scene* scene) const
 {
-    if (!_controllerRayVisible || !renderer)
+    if (!scene)
+        return nullptr;
+
+    Camera* fallback = nullptr;
+    for (auto* camera : scene->getCameras())
+    {
+        if (!camera || !camera->isVisible())
+            continue;
+
+        if (!fallback)
+            fallback = camera;
+
+        if (camera->getCameraMode() != CameraMode::Classic)
+            return camera;
+    }
+
+    return fallback ? fallback : scene->getDefaultCamera();
+}
+
+void VRSceneCompositor::drawControllerRays(Renderer* renderer, const SceneViewData& view)
+{
+    if (!_controllerRayVisible || !renderer || !_xrDriver)
         return;
 
     ensureControllerRayResources();
     if (!_controllerRayResourcesInitialized)
         return;
 
-    auto camera = Camera::getVisitingCamera();
-    if (!camera)
+    const auto* controllers = _xrDriver->getControllers();
+    if (!controllers)
         return;
 
-    const auto* controllers = _xrDriver->getControllers();
-    const Mat4& mvp         = camera->getViewProjectionMatrix();
+    // _controllerRayLength is a scene-world visual cap. Input rays themselves
+    // are already scene-world rays.
+    const float visualMaxDistance = _controllerRayLength > 0.0f ? _controllerRayLength : _farZ;
 
     for (uint32_t hand = 0; hand < 2; ++hand)
     {
@@ -300,36 +269,123 @@ void VRSceneCompositor::drawControllerRays(Renderer* renderer, uint32_t eyeIdx, 
             continue;
 
         auto& command = _controllerRayCommands[hand];
-        V3F_C4F vertices[6];
+
+        constexpr size_t curvePointCount    = 16;
+        constexpr size_t curveVertexCount   = (curvePointCount - 1) * 2;
+        constexpr size_t reticleVertexCount = 4;
+        std::array<V3F_C4F, curveVertexCount + reticleVertexCount> vertices;
         size_t vertexCount = 0;
 
-        const float sceneScale     = std::max(1.0f, _director->getZEye());
-        const float sceneRayLength = _controllerRayLength * sceneScale;
-        const Vec3 start           = ctrl.visualRayStartValid ? ctrl.visualRayStart : ctrl.currentRay.origin;
-        const Vec3 maxEnd          = start + ctrl.currentRay.direction * sceneRayLength;
-        const Vec3 reticlePoint    = ctrl.rayHitValid ? ctrl.rayHitPoint : maxEnd;
-        const Vec3 end             = reticlePoint;
-        const Color rayColor       = ctrl.triggerPressed ? _controllerRayPressedColor : _controllerRayIdleColor;
+        const bool useSubtleCurve = _controllerRayVisualStyle == ControllerRayVisualStyle::SubtleCurve;
+        const Ray& visualSourceRay =
+            useSubtleCurve && ctrl.rawWorldRayValid ? ctrl.rawWorldRay : ctrl.currentRay;
+        const Vec3 rayOrigin = visualSourceRay.origin;
+        const Vec3 rayEnd    = ctrl.rayHitValid
+                                   ? ctrl.rayHitPoint
+                                   : ctrl.currentRay.origin + ctrl.currentRay.direction * visualMaxDistance;
 
-        vertices[vertexCount++] = {start, rayColor};
-        vertices[vertexCount++] = {end, rayColor};
+        const Color rayColor = ctrl.triggerPressed ? _controllerRayPressedColor : _controllerRayIdleColor;
+
+        const float lineLength = rayOrigin.distance(rayEnd);
+        if (lineLength > 1e-5f)
+        {
+            if (useSubtleCurve)
+            {
+                constexpr float hitCurveRatio       = 0.35f;
+                constexpr float freeCurveRatio      = 0.18f;
+                constexpr float curveBlend          = 0.45f;
+                const float curveRatio              = ctrl.rayHitValid ? hitCurveRatio : freeCurveRatio;
+                const float maxControlDistance      = std::max(1.0f, visualMaxDistance * 0.2f);
+                const float controlDistance         = std::min(lineLength * curveRatio, maxControlDistance);
+                const Vec3 quadraticControl         = rayOrigin + visualSourceRay.direction * controlDistance;
+                const Vec3 endpointVector           = rayEnd - rayOrigin;
+
+                // Keep the Unity-like controller curve subtle; hit-test still uses ctrl.currentRay.
+                const Vec3 control1 = (rayOrigin + quadraticControl * 2.0f) / 3.0f;
+                const Vec3 control2 = (quadraticControl * 2.0f + rayEnd) / 3.0f;
+
+                Vec3 previousPoint = rayOrigin;
+                for (size_t pointIndex = 1; pointIndex < curvePointCount; ++pointIndex)
+                {
+                    const float t =
+                        static_cast<float>(pointIndex) / static_cast<float>(curvePointCount - 1);
+                    const Vec3 straightPoint = rayOrigin + endpointVector * t;
+                    const Vec3 curvePoint = sampleCubicBezier(rayOrigin, control1, control2, rayEnd, t);
+                    const Vec3 point = straightPoint + (curvePoint - straightPoint) * curveBlend;
+                    vertices[vertexCount++] = {previousPoint, rayColor};
+                    vertices[vertexCount++] = {point, rayColor};
+                    previousPoint           = point;
+                }
+            }
+            else
+            {
+                vertices[vertexCount++] = {rayOrigin, rayColor};
+                vertices[vertexCount++] = {rayEnd, rayColor};
+            }
+        }
 
         if (ctrl.rayHitValid)
         {
-            const float reticleRadius = std::max(0.025f * sceneScale, 3.0f);
-            vertices[vertexCount++]   = {reticlePoint + Vec3(-reticleRadius, 0.0f, 0.0f), _controllerRayHitColor};
-            vertices[vertexCount++]   = {reticlePoint + Vec3(reticleRadius, 0.0f, 0.0f), _controllerRayHitColor};
-            vertices[vertexCount++]   = {reticlePoint + Vec3(0.0f, -reticleRadius, 0.0f), _controllerRayHitColor};
-            vertices[vertexCount++]   = {reticlePoint + Vec3(0.0f, reticleRadius, 0.0f), _controllerRayHitColor};
+            const Vec3& center = rayEnd;
+
+            Vec3 facing = view.position - center;
+            if (facing.lengthSquared() < 1e-8f)
+                facing = -ctrl.currentRay.direction;
+            facing.normalize();
+
+            const Vec3 upReference =
+                std::abs(facing.dot(Vec3::yAxis)) > 0.95f ? Vec3::xAxis : Vec3::yAxis;
+
+            Vec3 reticleRight;
+            Vec3::cross(upReference, facing, &reticleRight);
+            if (reticleRight.lengthSquared() < 1e-8f)
+                reticleRight = Vec3::xAxis;
+            reticleRight.normalize();
+
+            Vec3 reticleUp;
+            Vec3::cross(facing, reticleRight, &reticleUp);
+            reticleUp.normalize();
+
+            constexpr float reticleAngularRadius = 0.008f;
+            const float viewDistance             = std::max(view.position.distance(center), 0.001f);
+            const float reticleRadius            = viewDistance * std::tan(reticleAngularRadius);
+
+            const Vec3 rightOffset = reticleRight * reticleRadius;
+            const Vec3 upOffset    = reticleUp * reticleRadius;
+
+            vertices[vertexCount++] = {
+                center - rightOffset,
+                _controllerRayHitColor,
+            };
+            vertices[vertexCount++] = {
+                center + rightOffset,
+                _controllerRayHitColor,
+            };
+            vertices[vertexCount++] = {
+                center - upOffset,
+                _controllerRayHitColor,
+            };
+            vertices[vertexCount++] = {
+                center + upOffset,
+                _controllerRayHitColor,
+            };
         }
 
-        if (command.getVertexCapacity() < vertexCount)
-            command.createVertexBuffer(sizeof(V3F_C4F), vertexCount, CustomCommand::BufferUsage::DYNAMIC);
+        if (vertexCount == 0)
+            continue;
 
-        command.unsafePS()->setUniform(_controllerRayMVPLocation, mvp.m, sizeof(mvp.m));
-        command.updateVertexBuffer(vertices, vertexCount * sizeof(V3F_C4F));
+        if (command.getVertexCapacity() < vertexCount)
+        {
+            command.createVertexBuffer(sizeof(V3F_C4F), vertexCount, CustomCommand::BufferUsage::DYNAMIC);
+        }
+
+        command.unsafePS()->setUniform(_controllerRayMVPLocation, view.viewProjection.m, sizeof(view.viewProjection.m));
+
+        command.updateVertexBuffer(vertices.data(), vertexCount * sizeof(V3F_C4F));
+
         command.setVertexDrawInfo(0, vertexCount);
         command.init(0.0f);
+
         renderer->addCommand(&command);
     }
 }
@@ -341,6 +397,8 @@ void VRSceneCompositor::renderScene(Renderer* renderer, Scene* scene)
         SceneCompositor::renderScene(renderer, scene);
         return;
     }
+
+    resolveXrFrameInput(scene);
 
     // For debugging, don't remove
 #ifndef NDEBUG
@@ -366,6 +424,7 @@ void VRSceneCompositor::renderScene(Renderer* renderer, Scene* scene)
     const auto sourceScissorSize  = _director->getRenderView()->getViewportRect().size;
     const auto& views             = _xrDriver->getViews();
     const uint32_t eyeRenderCount = std::min<uint32_t>(viewCountOutput, static_cast<uint32_t>(acquired.size()));
+    const Mat4 trackingToWorld = _frameTrackingToWorld;
 
     for (uint32_t eyeIdx = 0; eyeIdx < eyeRenderCount; ++eyeIdx)
     {
@@ -378,72 +437,67 @@ void VRSceneCompositor::renderScene(Renderer* renderer, Scene* scene)
         _rtPass->setTarget(swapchain.renderTarget);
         _rtPass->setViewport(Viewport(0, 0, static_cast<int>(eyeW), static_cast<int>(eyeH)));
 
-        Mat4 eyeTransform = OpenXRDriver::xrPoseToMat4(scaleXrPosePosition(view.pose, _xrToSceneScale));
+        const Mat4 eyeToTracking =
+            OpenXRDriver::xrPoseToMat4(scaleXrPosePosition(view.pose, _xrToSceneScale));
+        const Mat4 projection = OpenXRDriver::xrFovToProjection(view.fov, _nearZ, _farZ);
+        const Mat4 primaryEyeToWorld = trackingToWorld * eyeToTracking;
+        const Mat4 primaryEyeView    = primaryEyeToWorld.getInversed();
 
-        int passCount          = 0;
-        bool renderedScenePass = false;
-        Camera* eyeCamera      = nullptr;
+        Vec3 primaryEyePosition = Vec3::zero;
+        primaryEyeToWorld.getTranslation(&primaryEyePosition);
+        const auto primaryEyeViewData = SceneViewData::fromMatrices(primaryEyeView, projection, primaryEyePosition);
+
+        int passCount = 0;
+
         for (const auto& camera : scene->getCameras())
         {
-            if (!camera->isVisible())
+            if (!camera || !camera->isVisible())
                 continue;
 
-            if (!eyeCamera)
-                eyeCamera = camera;
+            const Mat4 cameraEyeToWorld = camera->getNodeToWorldTransform() * eyeToTracking;
+            const Mat4 cameraEyeView    = cameraEyeToWorld.getInversed();
 
-            Camera::setVisitingCamera(camera);
+            Vec3 cameraEyePosition = Vec3::zero;
+            cameraEyeToWorld.getTranslation(&cameraEyePosition);
+            const auto cameraEyeViewData =
+                SceneViewData::fromMatrices(cameraEyeView, projection, cameraEyePosition);
 
-            const Mat4 originalProjection = camera->getProjectionMatrix();
-            camera->setAdditionalTransform(eyeTransform);
-            camera->setProjectionMatrix(OpenXRDriver::xrFovToProjection(view.fov, _nearZ, _farZ));
-            camera->updateViewProjectionState();
+            SceneRenderState renderState(renderer, camera, cameraEyeViewData);
 
             _rtPass->begin();
+
             if (passCount++ == 0)
             {
                 _rtPass->clear(ClearFlag::COLOR | ClearFlag::DEPTH_AND_STENCIL,
                                {.color = clearColor, .depth = 1.0f, .stencil = 0});
-                camera->clearBackground();
+                camera->clearBackground(renderState);
             }
             else
+            {
                 _rtPass->clear(ClearFlag::DEPTH_AND_STENCIL, {.depth = 1.0f, .stencil = 0});
+            }
+
             renderer->addCallbackCommand([this, scissorTransform]() { _scissorTransformStack.push(scissorTransform); });
-            scene->visit(renderer, transform, 0);
+
+            scene->visit(renderState, transform, 0);
+
             renderer->addCallbackCommand([this]() {
                 if (!_scissorTransformStack.empty())
                     _scissorTransformStack.pop();
             });
+
             _rtPass->end();
-
             renderer->render();
-            renderedScenePass = true;
-
-            camera->setProjectionMatrix(originalProjection);
-            camera->setAdditionalTransform(Mat4::identity);
         }
 
-        auto rayCamera = _pointerRayCamera ? _pointerRayCamera.get() : eyeCamera;
-        if (rayCamera)
+        if (_controllerRayVisible)
         {
-            Camera::setVisitingCamera(rayCamera);
-
-            const Mat4 originalProjection = rayCamera->getProjectionMatrix();
-            rayCamera->setAdditionalTransform(eyeTransform);
-            rayCamera->setProjectionMatrix(OpenXRDriver::xrFovToProjection(view.fov, _nearZ, _farZ));
-            rayCamera->updateViewProjectionState();
-
             _rtPass->begin();
-            drawControllerRays(renderer, eyeIdx, view);
+            drawControllerRays(renderer, primaryEyeViewData);
             _rtPass->end();
             renderer->render();
-
-            rayCamera->setProjectionMatrix(originalProjection);
-            rayCamera->setAdditionalTransform(Mat4::identity);
-            Camera::setVisitingCamera(nullptr);
         }
     }
-
-    Camera::setVisitingCamera(nullptr);
 
     renderer->submitCurrentFrameCommands(true);
     _xrDriver->releaseSwapchains(acquired);

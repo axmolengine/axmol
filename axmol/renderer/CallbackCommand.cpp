@@ -40,9 +40,9 @@ void CallbackCommand::init(float globalOrder)
     _globalOrder = globalOrder;
 }
 
-void CallbackCommand::init(float globalOrder, const Mat4& transform, unsigned int flags)
+void CallbackCommand::init(float globalOrder, const Mat4& transform, unsigned int flags, const SceneViewData& view)
 {
-    RenderCommand::init(globalOrder, transform, flags);
+    RenderCommand::init(globalOrder, transform, flags, view);
 }
 
 void CallbackCommand::reset()

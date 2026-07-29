@@ -669,7 +669,7 @@ void EffectEmitter::update(float delta)
 	}
 }
 
-void EffectEmitter::draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& parentTransform, uint32_t parentFlags)
+void EffectEmitter::draw(const cocos2d::SceneRenderState& state, const cocos2d::Mat4& parentTransform, uint32_t parentFlags)
 {
     if (!manager->getInternalManager()->GetShown(handle) ||
         manager->getInternalManager()->GetTotalInstanceCount() < 1)
@@ -681,7 +681,7 @@ void EffectEmitter::draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& paren
         ax::Director::getInstance()->getRenderer()->setFrameBufferOnly(false);
     }
 
-    auto renderCommand = renderer->nextCallbackCommand();
+    auto renderCommand = state.getRenderer()->nextCallbackCommand();
 
 	renderCommand->init(_globalZOrder);
 
@@ -704,8 +704,8 @@ void EffectEmitter::draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& paren
 		renderer2d->EndRendering();
 
 		// Count drawcall and vertex
-		renderer->addDrawnBatches(renderer2d->GetDrawCallCount());
-		renderer->addDrawnVertices(renderer2d->GetDrawVertexCount());
+		state.getRenderer()->addDrawnBatches(renderer2d->GetDrawCallCount());
+		state.getRenderer()->addDrawnVertices(renderer2d->GetDrawVertexCount());
 		renderer2d->ResetDrawCallCount();
 		renderer2d->ResetDrawVertexCount();
 
@@ -714,9 +714,9 @@ void EffectEmitter::draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& paren
         }
 	};
 
-	renderer->addCommand(renderCommand);
+	state.getRenderer()->addCommand(renderCommand);
 
-	cocos2d::Node::draw(renderer, parentTransform, parentFlags);
+	cocos2d::Node::draw(state, parentTransform, parentFlags);
 }
 
 ::Effekseer::Handle EffectManager::play(Effect* effect, float x, float y, float z)

@@ -325,7 +325,7 @@ void EditBoxImplCommon::setGlobalZOrder(float globalZOrder)
     }
 }
 
-void EditBoxImplCommon::draw(Renderer* /*renderer*/, const Mat4& /*transform*/, uint32_t flags)
+void EditBoxImplCommon::draw(const SceneRenderState& /*state*/, const Mat4& /*transform*/, uint32_t flags)
 {
     if (flags)
     {

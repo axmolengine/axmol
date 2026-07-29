@@ -131,7 +131,7 @@ bool ParticleBatchNode::initWithFile(std::string_view fileImage, int capacity)
 
 // override visit.
 // Don't call visit on it's children
-void ParticleBatchNode::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags)
+void ParticleBatchNode::visit(const SceneRenderState& state, const Mat4& parentTransform, uint32_t parentFlags)
 {
     // CAREFUL:
     // This visit is almost identical to Node#visit
@@ -145,11 +145,11 @@ void ParticleBatchNode::visit(Renderer* renderer, const Mat4& parentTransform, u
         return;
     }
 
-    uint32_t flags = processParentFlags(parentTransform, parentFlags);
+    uint32_t flags = processParentFlags(state, parentTransform, parentFlags);
 
-    if (isVisitableByVisitingCamera())
+    if (isVisitableByCamera(state.cameraFlag))
     {
-        draw(renderer, _modelViewTransform, flags);
+        draw(state, _modelViewTransform, flags);
     }
 }
 
@@ -418,7 +418,7 @@ void ParticleBatchNode::removeAllChildrenWithCleanup(bool doCleanup)
     _textureAtlas->removeAllQuads();
 }
 
-void ParticleBatchNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+void ParticleBatchNode::draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags)
 {
     AX_PROFILER_START("CCParticleBatchNode - draw");
 
@@ -428,7 +428,7 @@ void ParticleBatchNode::draw(Renderer* renderer, const Mat4& transform, uint32_t
     _customCommand.init(_globalZOrder, _blendFunc);
 
     // Texture is set in TextureAtlas.
-    const ax::Mat4& projectionMat = Camera::getVisitingViewProjectionMatrix();
+    const ax::Mat4& projectionMat = state.getViewProjectionMatrix();
     Mat4 finalMat                 = projectionMat * transform;
     auto programState             = _customCommand.unsafePS();
     programState->setUniform(_mvpMatrixLocaiton, finalMat.m, sizeof(finalMat.m));
@@ -447,7 +447,7 @@ void ParticleBatchNode::draw(Renderer* renderer, const Mat4& transform, uint32_t
         _customCommand.updateIndexBuffer(indices, sizeof(indices[0]) * capacity * 6);
     }
 
-    renderer->addCommand(&_customCommand);
+    state.getRenderer()->addCommand(&_customCommand);
 
     AX_PROFILER_STOP("CCParticleBatchNode - draw");
 }

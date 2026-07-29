@@ -267,9 +267,9 @@ void LabelAtlas::updateColor()
 
 // CCLabelAtlas - draw
 #if AX_LABELATLAS_DEBUG_DRAW
-void LabelAtlas::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+void LabelAtlas::draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags)
 {
-    AtlasNode::draw(renderer, transform, _transformUpdated);
+    AtlasNode::draw(state, transform, _transformUpdated);
 
     _debugDrawNode->clear();
     auto size        = getContentSize();

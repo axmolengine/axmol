@@ -164,7 +164,8 @@ void captureNode(Node* startNode, std::function<void(RefPtr<Image>)> imageCallba
 
         rtxPass->begin(camera);
         rtxPass->clearAll();
-        startNode->visit();
+        SceneRenderState renderState(director->getRenderer(), camera);
+        startNode->visit(renderState, Mat4::identity, Node::FLAGS_TRANSFORM_DIRTY);
         rtxPass->end();
 
         startNode->setPosition(savedPos);

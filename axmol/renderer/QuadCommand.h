@@ -66,7 +66,8 @@ public:
               V3F_T2F_C4B_Quad* quads,
               ssize_t quadCount,
               const Mat4& mv,
-              uint32_t flags);
+              uint32_t flags,
+              const SceneViewData& view);
 
     static void destroyIsolatedIndices();
 

@@ -426,7 +426,7 @@ Material* Mesh::getMaterial() const
     return _material;
 }
 
-void Mesh::draw(Renderer* renderer,
+void Mesh::draw(const SceneRenderState& state,
                 float globalZOrder,
                 const Mat4& transform,
                 uint32_t flags,
@@ -519,7 +519,7 @@ void Mesh::draw(Renderer* renderer,
 
     for (auto&& command : commands)
     {
-        command.init(globalZ, transform);
+        command.init(globalZ, transform, state.getView());
         command.setSkipBatching(isTransparent);
         command.setTransparent(isTransparent);
         command.set3D(!_material->isForce2DQueue());

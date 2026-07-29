@@ -27,6 +27,7 @@
 #include <stddef.h>  // offsetof
 #include "axmol/base/Types.h"
 #include "axmol/scene/Camera.h"
+#include "axmol/scene/Node.h"
 #include "axmol/base/Macros.h"
 #include "axmol/base/Utils.h"
 #include "axmol/base/Environment.h"
@@ -52,6 +53,15 @@ CameraBackgroundBrush::~CameraBackgroundBrush()
 {
     AX_SAFE_RELEASE_NULL(_programState);
     AX_SAFE_RELEASE_NULL(_vertexLayout);
+}
+
+void CameraBackgroundBrush::drawBackground(Camera* camera)
+{
+    if (!camera)
+        return;
+
+    SceneRenderState state(Director::getInstance()->getRenderer(), camera);
+    drawBackground(state);
 }
 
 CameraBackgroundBrush* CameraBackgroundBrush::createNoneBrush()
@@ -164,9 +174,12 @@ void CameraBackgroundDepthBrush::initBuffer()
     _customCommand.updateIndexBuffer(indices, sizeof(indices));
 }
 
-void CameraBackgroundDepthBrush::drawBackground(Camera* /*camera*/)
+void CameraBackgroundDepthBrush::drawBackground(const SceneRenderState& state)
 {
-    auto* renderer = Director::getInstance()->getRenderer();
+    auto* renderer = state.getRenderer();
+    if (!renderer)
+        return;
+
     // `clear screen` should be executed before other commands
     auto* groupCommand = renderer->getNextGroupCommand();
     groupCommand->init(-1.0f);
@@ -219,7 +232,7 @@ bool CameraBackgroundColorBrush::init()
     return true;
 }
 
-void CameraBackgroundColorBrush::drawBackground(Camera* camera)
+void CameraBackgroundColorBrush::drawBackground(const SceneRenderState& state)
 {
     BlendFunc op = {BlendFunc::ALPHA_NON_PREMULTIPLIED.src, BlendFunc::ALPHA_NON_PREMULTIPLIED.dst};
 
@@ -228,7 +241,7 @@ void CameraBackgroundColorBrush::drawBackground(Camera* camera)
     blend.destinationRGBBlendFactor = blend.destinationAlphaBlendFactor = op.dst;
     blend.blendEnabled                                                  = true;
 
-    CameraBackgroundDepthBrush::drawBackground(camera);
+    CameraBackgroundDepthBrush::drawBackground(state);
 }
 
 void CameraBackgroundColorBrush::setColor(const Color& color)
@@ -333,28 +346,28 @@ CameraBackgroundSkyBoxBrush* CameraBackgroundSkyBoxBrush::create()
     return ret;
 }
 
-void CameraBackgroundSkyBoxBrush::drawBackground(Camera* camera)
+void CameraBackgroundSkyBoxBrush::drawBackground(const SceneRenderState& state)
 {
-    auto* renderer = Director::getInstance()->getRenderer();
+    auto* renderer = state.getRenderer();
+    if (!renderer || !_actived)
+        return;
+
     // `clear screen` should be executed before other commands
     auto* groupCommand = renderer->getNextGroupCommand();
     groupCommand->init(-1.0f);
     _customCommand.init(0.0f);
 
-    if (!_actived)
-        return;
-
-    Mat4 cameraModelMat = camera->getNodeToWorldTransform();
-    Mat4 projectionMat  = camera->getProjectionMatrix();
+    Mat4 viewToWorld         = state.getViewMatrix().getInversed();
+    const Mat4& projectionMat = state.getProjectionMatrix();
 
     _customCommand.blendDesc().blendEnabled = false;
 
     Vec4 color(1.f, 1.f, 1.f, 1.f);
-    cameraModelMat.m[12] = cameraModelMat.m[13] = cameraModelMat.m[14] = 0;
-    cameraModelMat.scale(1 / projectionMat.m[0], 1 / projectionMat.m[5], 1.0);
+    viewToWorld.m[12] = viewToWorld.m[13] = viewToWorld.m[14] = 0;
+    viewToWorld.scale(1 / projectionMat.m[0], 1 / projectionMat.m[5], 1.0);
 
     _programState->setUniform(_uniformColorLoc, &color, sizeof(color));
-    _programState->setUniform(_uniformCameraRotLoc, cameraModelMat.m, sizeof(cameraModelMat.m));
+    _programState->setUniform(_uniformCameraRotLoc, viewToWorld.m, sizeof(viewToWorld.m));
 
     renderer->addCommand(groupCommand);
     renderer->pushGroup(groupCommand->getRenderQueueID());

@@ -132,7 +132,7 @@ bool PhysicsDebugNode::initWithWorld(b2WorldId worldId)
     return ret;
 }
 
-void PhysicsDebugNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+void PhysicsDebugNode::draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags)
 {
     if (!b2World_IsValid(_world))
     {
@@ -146,7 +146,7 @@ void PhysicsDebugNode::draw(Renderer* renderer, const Mat4& transform, uint32_t 
         b2World_Draw(_world, _debugDraw);
     }
 
-    DrawNode::draw(renderer, transform, flags);
+    DrawNode::draw(state, transform, flags);
 }
 
 PhysicsDebugNode::PhysicsDebugNode() : _ownDebugDraw(true)

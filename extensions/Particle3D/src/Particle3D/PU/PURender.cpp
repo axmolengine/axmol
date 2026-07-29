@@ -72,7 +72,7 @@ PUParticle3DQuadRender* PUParticle3DQuadRender::create(std::string_view texFile)
     return ret;
 }
 
-void PUParticle3DQuadRender::render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem)
+void PUParticle3DQuadRender::render(const SceneRenderState& state, const Mat4& transform, ParticleSystem3D* particleSystem)
 {
     // batch and generate draw
     const ParticlePool& particlePool = particleSystem->getParticlePool();
@@ -108,8 +108,7 @@ void PUParticle3DQuadRender::render(Renderer* renderer, const Mat4& transform, P
         _indices.resize(activeParticleList.size() * 6);
     }
 
-    auto camera    = Camera::getVisitingCamera();
-    auto cameraMat = camera->getNodeToWorldTransform();
+    const Mat4 viewToWorld = state.getViewMatrix().getInversed();
 
     // for (auto&& iter : activeParticleList){
     //     iter->depthInView = -(viewMat.m[2] * iter->positionInWorld.x + viewMat.m[6] * iter->positionInWorld.y +
@@ -117,9 +116,9 @@ void PUParticle3DQuadRender::render(Renderer* renderer, const Mat4& transform, P
     // }
 
     // std::sort(activeParticleList.begin(), activeParticleList.end(), compareParticle3D);
-    Vec3 right(cameraMat.m[0], cameraMat.m[1], cameraMat.m[2]);
-    Vec3 up(cameraMat.m[4], cameraMat.m[5], cameraMat.m[6]);
-    Vec3 backward(cameraMat.m[8], cameraMat.m[9], cameraMat.m[10]);
+    Vec3 right(viewToWorld.m[0], viewToWorld.m[1], viewToWorld.m[2]);
+    Vec3 up(viewToWorld.m[4], viewToWorld.m[5], viewToWorld.m[6]);
+    Vec3 backward(viewToWorld.m[8], viewToWorld.m[9], viewToWorld.m[10]);
 
     Mat4 pRotMat;
     Vec3 position;  // particle position
@@ -284,10 +283,10 @@ void PUParticle3DQuadRender::render(Renderer* renderer, const Mat4& transform, P
         auto uColor = Vec4(1, 1, 1, 1);
         _programState->setUniform(_locColor, &uColor, sizeof(uColor));
 
-        const auto& projectionMatrix = Camera::getVisitingViewProjectionMatrix();
+        const auto& projectionMatrix = state.getViewProjectionMatrix();
         _programState->setUniform(_locPMatrix, &projectionMatrix.m, sizeof(projectionMatrix.m));
 
-        renderer->addCommand(&_meshCommand);
+        state.getRenderer()->addCommand(&_meshCommand);
     }
 }
 
@@ -494,7 +493,7 @@ PUParticle3DModelRender* PUParticle3DModelRender::create(std::string_view modelF
     return ret;
 }
 
-void PUParticle3DModelRender::render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem)
+void PUParticle3DModelRender::render(const SceneRenderState& state, const Mat4& transform, ParticleSystem3D* particleSystem)
 {
     if (!_isVisible)
         return;
@@ -551,7 +550,7 @@ void PUParticle3DModelRender::render(Renderer* renderer, const Mat4& transform, 
         if (_meshList[index]->getCameraMask() != particleSystem->getCameraMask())
             _meshList[index]->setCameraMask(particleSystem->getCameraMask());
         _meshList[index]->setColor(Color32(particle->color));
-        _meshList[index]->visit(renderer, mat, Node::FLAGS_DIRTY_MASK);
+        _meshList[index]->visit(state, mat, Node::FLAGS_DIRTY_MASK);
         ++index;
     }
 }
@@ -602,7 +601,7 @@ PUParticle3DEntityRender::PUParticle3DEntityRender()
 
 PUParticle3DEntityRender::~PUParticle3DEntityRender()
 {
-    // AX_SAFE_RELEASE(_texture);
+    AX_SAFE_RELEASE(_texture);
     AX_SAFE_RELEASE(_programState);
     AX_SAFE_RELEASE(_vertexBuffer);
     AX_SAFE_RELEASE(_indexBuffer);
@@ -612,12 +611,13 @@ PUParticle3DEntityRender::~PUParticle3DEntityRender()
 bool PUParticle3DEntityRender::initRender(std::string_view texFile)
 {
     AX_SAFE_RELEASE_NULL(_programState);
+    AX_SAFE_RELEASE_NULL(_texture);
     if (!texFile.empty())
     {
         auto tex = Director::getInstance()->getTextureCache()->addImage(texFile);
         if (tex)
         {
-            _texture      = tex;
+            Object::assign(_texture, tex);
             auto* program = axpm->getBuiltinProgram(rhi::ProgramType::PARTICLE_TEXTURE_3D);
             _programState = new rhi::ProgramState(program);
         }
@@ -681,16 +681,15 @@ PUParticle3DBoxRender* PUParticle3DBoxRender::create(std::string_view texFile)
     return ret;
 }
 
-void PUParticle3DBoxRender::render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem)
+void PUParticle3DBoxRender::render(const SceneRenderState& state, const Mat4& transform, ParticleSystem3D* particleSystem)
 {
     // batch and generate draw
     const ParticlePool& particlePool = particleSystem->getParticlePool();
     if (!_isVisible || particlePool.empty())
         return;
 
-    auto camera    = Camera::getVisitingCamera();
-    auto cameraMat = camera->getNodeToWorldTransform();
-    Vec3 backward(cameraMat.m[8], cameraMat.m[9], cameraMat.m[10]);
+    const Mat4 viewToWorld = state.getViewMatrix().getInversed();
+    Vec3 backward(viewToWorld.m[8], viewToWorld.m[9], viewToWorld.m[10]);
 
     if (_vertexBuffer == nullptr && _indexBuffer == nullptr)
     {
@@ -785,12 +784,12 @@ void PUParticle3DBoxRender::render(Renderer* renderer, const Mat4& transform, Pa
             _programState->setTexture(_locTexture, 0, _texture->getRHITexture());
         }
 
-        const auto& projectionMatrix = Camera::getVisitingViewProjectionMatrix();
+        const auto& projectionMatrix = state.getViewProjectionMatrix();
         _programState->setUniform(_locPMatrix, &projectionMatrix.m, sizeof(projectionMatrix.m));
 
         _meshCommand.setIndexDrawInfo(0, _indices.size());
 
-        renderer->addCommand(&_meshCommand);
+        state.getRenderer()->addCommand(&_meshCommand);
     }
 }
 
@@ -867,16 +866,15 @@ PUSphereRender* PUSphereRender::create(std::string_view texFile)
     return ret;
 }
 
-void PUSphereRender::render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem)
+void PUSphereRender::render(const SceneRenderState& state, const Mat4& transform, ParticleSystem3D* particleSystem)
 {
     // batch and generate draw
     const ParticlePool& particlePool = particleSystem->getParticlePool();
     if (!_isVisible || particlePool.empty())
         return;
 
-    auto camera    = Camera::getVisitingCamera();
-    auto cameraMat = camera->getNodeToWorldTransform();
-    Vec3 backward(cameraMat.m[8], cameraMat.m[9], cameraMat.m[10]);
+    const Mat4 viewToWorld = state.getViewMatrix().getInversed();
+    Vec3 backward(viewToWorld.m[8], viewToWorld.m[9], viewToWorld.m[10]);
 
     unsigned int vertexCount = (_numberOfRings + 1) * (_numberOfSegments + 1);
     unsigned int indexCount  = 6 * _numberOfRings * (_numberOfSegments + 1);
@@ -956,10 +954,10 @@ void PUSphereRender::render(Renderer* renderer, const Mat4& transform, ParticleS
             _programState->setTexture(_locTexture, 0, _texture->getRHITexture());
         }
 
-        const auto& projectionMatrix = Camera::getVisitingViewProjectionMatrix();
+        const auto& projectionMatrix = state.getViewProjectionMatrix();
         _programState->setUniform(_locPMatrix, &projectionMatrix.m, sizeof(projectionMatrix.m));
 
-        renderer->addCommand(&_meshCommand);
+        state.getRenderer()->addCommand(&_meshCommand);
     }
 }
 

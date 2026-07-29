@@ -101,7 +101,7 @@ public:
     virtual ~RenderTextureTestDepthStencil();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
+    virtual void draw(const ax::SceneRenderState& state, const ax::Mat4& transform, uint32_t flags) override;
 
 private:
     //    ax::CallbackCommand _renderCmds[4];
@@ -136,7 +136,7 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
+    void draw(const ax::SceneRenderState& state, const ax::Mat4& transform, uint32_t flags) override;
 
     void touched(ax::Object* sender);
 
@@ -166,7 +166,7 @@ public:
         static SimpleSprite* create(const char* filename, const ax::Rect& rect);
         SimpleSprite();
         ~SimpleSprite();
-        virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags);
+        virtual void draw(const ax::SceneRenderState& state, const ax::Mat4& transform, uint32_t flags);
 
     public:
         ax::RenderTexture* _rt;

@@ -91,7 +91,7 @@ TODO: should remove it.
     @param modelViewTransform When in 3D mode, depth sorting needs modelViewTransform.
     @param flags Use to identify that the render command is 3D mode or not.
     */
-    void init(float globalZOrder, const Mat4& modelViewTransform, unsigned int flags);
+    void init(float globalZOrder, const Mat4& modelViewTransform, unsigned int flags, const SceneViewData& view);
 
     /**
     Init function. The render command will be in 2D mode.

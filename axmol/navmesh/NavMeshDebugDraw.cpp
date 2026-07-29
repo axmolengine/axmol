@@ -47,11 +47,11 @@ NavMeshDebugDraw::NavMeshDebugDraw()
     _locMVP = _programState->getUniformLocation("u_MVPMatrix");
 }
 
-void NavMeshDebugDraw::initCustomCommand(CustomCommand& command)
+void NavMeshDebugDraw::initCustomCommand(CustomCommand& command, const SceneViewData& view)
 {
     command.set3D(true);
     command.setTransparent(true);
-    command.init(0, Mat4::identity, Node::FLAGS_RENDER_AS_3D);
+    command.init(0, Mat4::identity, Node::FLAGS_RENDER_AS_3D, view);
     command.setDrawType(CustomCommand::DrawType::ARRAY);
     command.setWeakPSVL(_programState, _vertexLayout);
 
@@ -150,14 +150,14 @@ rhi::PrimitiveType NavMeshDebugDraw::getPrimitiveType(duDebugDrawPrimitives prim
     }
 }
 
-void NavMeshDebugDraw::draw(Renderer* renderer)
+void NavMeshDebugDraw::draw(const SceneRenderState& state)
 {
-    const auto& transform = Camera::getVisitingViewProjectionMatrix();
-    auto beforeCommand    = renderer->nextCallbackCommand();
-    auto afterCommand     = renderer->nextCallbackCommand();
+    const auto& transform = state.getViewProjectionMatrix();
+    auto beforeCommand    = state.getRenderer()->nextCallbackCommand();
+    auto afterCommand     = state.getRenderer()->nextCallbackCommand();
 
-    beforeCommand->init(0, Mat4::identity, Node::FLAGS_RENDER_AS_3D);
-    afterCommand->init(0, Mat4::identity, Node::FLAGS_RENDER_AS_3D);
+    beforeCommand->init(0, Mat4::identity, Node::FLAGS_RENDER_AS_3D, state.getView());
+    afterCommand->init(0, Mat4::identity, Node::FLAGS_RENDER_AS_3D, state.getView());
 
     beforeCommand->func = AX_CALLBACK_0(NavMeshDebugDraw::onBeforeVisitCmd, this);
     afterCommand->func  = AX_CALLBACK_0(NavMeshDebugDraw::onAfterVisitCmd, this);
@@ -169,7 +169,7 @@ void NavMeshDebugDraw::draw(Renderer* renderer)
 
     _programState->setUniform(_locMVP, transform.m, sizeof(transform.m));
 
-    renderer->addCommand(beforeCommand);
+    state.getRenderer()->addCommand(beforeCommand);
 
     if (!_vertexBuffer || _vertexBuffer->getSize() < _vertices.size() * sizeof(_vertices[0]))
     {
@@ -197,20 +197,20 @@ void NavMeshDebugDraw::draw(Renderer* renderer)
 
         auto& command = _commands[idx];
 
-        initCustomCommand(command);
+        initCustomCommand(command, state.getView());
         command.setBeforeCallback(AX_CALLBACK_0(NavMeshDebugDraw::onBeforeEachCommand, this, iter->depthMask));
 
         command.setVertexBuffer(_vertexBuffer);
         command.setPrimitiveType(iter->type);
         command.setVertexDrawInfo(iter->start, iter->end - iter->start);
 
-        renderer->addCommand(&command);
+        state.getRenderer()->addCommand(&command);
 
         AX_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, iter->end - iter->start);
         idx++;
     }
 
-    renderer->addCommand(afterCommand);
+    state.getRenderer()->addCommand(afterCommand);
 }
 
 void NavMeshDebugDraw::onBeforeVisitCmd()

@@ -42,8 +42,10 @@ TEST_SUITE("2d/Node")
         CHECK_EQ(0.0f, node.getNormalizedPosition().x);
         CHECK_EQ(0.0f, node.getNormalizedPosition().y);
 
+        SceneRenderState renderState;
+
         node.setPositionNormalized({0.5f, 0.5f});
-        node.visit(nullptr, Mat4::identity, Node::FLAGS_CONTENT_SIZE_DIRTY);
+        node.visit(renderState, Mat4::identity, Node::FLAGS_CONTENT_SIZE_DIRTY);
         CHECK_EQ(100.0f, node.getPosition().x);
         CHECK_EQ(50.0f, node.getPosition().y);
         CHECK_EQ(0.5f, node.getNormalizedPosition().x);
@@ -51,13 +53,13 @@ TEST_SUITE("2d/Node")
 
         parent.setContentSize(Vec2(400.0f, 200.0f));
         node.setPosition(100.0f, 50.0f);
-        node.visit(nullptr, Mat4::identity, Node::FLAGS_CONTENT_SIZE_DIRTY);
+        node.visit(renderState, Mat4::identity, Node::FLAGS_CONTENT_SIZE_DIRTY);
         CHECK_EQ(100.0f, node.getPosition().x);
         CHECK_EQ(50.0f, node.getPosition().y);
 
         node.setPosition(0.0f, 0.0f);
         node.setPositionNormalized({0.5f, 0.5f});
-        node.visit(nullptr, Mat4::identity, Node::FLAGS_CONTENT_SIZE_DIRTY);
+        node.visit(renderState, Mat4::identity, Node::FLAGS_CONTENT_SIZE_DIRTY);
         CHECK_EQ(200.0f, node.getPosition().x);
         CHECK_EQ(100.0f, node.getPosition().y);
     }

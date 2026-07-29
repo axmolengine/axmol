@@ -69,8 +69,8 @@ const Mat4& AttachNode::getNodeToParentTransform() const
     return _transformToParent;
 }
 
-void AttachNode::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t /*parentFlags*/)
+void AttachNode::visit(const SceneRenderState& state, const Mat4& parentTransform, uint32_t /*parentFlags*/)
 {
-    Node::visit(renderer, parentTransform, Node::FLAGS_DIRTY_MASK);
+    Node::visit(state, parentTransform, Node::FLAGS_DIRTY_MASK);
 }
 }  // namespace ax

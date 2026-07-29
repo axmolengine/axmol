@@ -57,7 +57,7 @@ PURibbonTrailRender* PURibbonTrailRender::create(std::string_view texFile)
     return br;
 }
 
-void PURibbonTrailRender::render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem)
+void PURibbonTrailRender::render(const SceneRenderState& state, const Mat4& transform, ParticleSystem3D* particleSystem)
 {
     if (!_isVisible || !_trail)
         return;
@@ -93,7 +93,7 @@ void PURibbonTrailRender::render(Renderer* renderer, const Mat4& transform, Part
     }
 
     if (needDraw)
-        _trail->render(renderer, transform, particleSystem);
+        _trail->render(state, transform, particleSystem);
 }
 
 PURibbonTrailRender::PURibbonTrailRender()

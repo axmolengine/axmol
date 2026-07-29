@@ -265,16 +265,123 @@ Vec2 OpenXRDriver::xrToVec2(const XrVector2f& v)
     return Vec2(v.x, v.y);
 }
 
-void OpenXRDriver::setPointerRayTransform(const Mat4& transform)
+static Vec3 slerpDirection(const Vec3& from, const Vec3& to, float t)
 {
-    _pointerRayTransform      = transform;
-    _pointerRayTransformValid = true;
+    float cosTheta = std::clamp(from.dot(to), -1.0f, 1.0f);
+    const float theta = std::acos(cosTheta);
+    if (theta < 1e-5f)
+        return from;
+
+    const float sinTheta = std::sin(theta);
+    if (std::abs(sinTheta) < 1e-5f)
+    {
+        Vec3 direction = from + (to - from) * t;
+        direction.normalize();
+        return direction;
+    }
+
+    Vec3 direction = from * (std::sin((1.0f - t) * theta) / sinTheta) + to * (std::sin(t * theta) / sinTheta);
+    direction.normalize();
+    return direction;
 }
 
-void OpenXRDriver::clearPointerRayTransform()
+static Ray makeRayFromXrPose(const XrPosef& pose)
 {
-    _pointerRayTransform      = Mat4::identity;
-    _pointerRayTransformValid = false;
+    const Mat4 poseTransform = OpenXRDriver::xrPoseToMat4(pose);
+
+    Vec3 origin(Vec3::zero);
+    poseTransform.transformPoint(&origin);
+
+    Vec3 direction(0.0f, 0.0f, -1.0f);
+    poseTransform.transformVector(&direction);
+    direction.normalize();
+
+    return Ray(origin, direction);
+}
+
+static float calculateStabilizedLerp(float distance, float deltaTime)
+{
+    constexpr float frameTime90Hz = 1.0f / 90.0f;
+
+    if (distance >= 1.0f)
+        return 1.0f;
+    if (distance <= 0.0f)
+        return 0.0f;
+
+    const float doubleFrameLerp = distance - distance * distance;
+    const float tripleFrameLerp = doubleFrameLerp * doubleFrameLerp;
+    const float timeSlice       = deltaTime / frameTime90Hz;
+
+    return distance * std::clamp(timeSlice, 0.0f, 1.0f) +
+           doubleFrameLerp * std::clamp(timeSlice - 1.0f, 0.0f, 1.0f) +
+           tripleFrameLerp * std::clamp(timeSlice - 2.0f, 0.0f, 1.0f);
+}
+
+static float directionAngle(const Vec3& from, const Vec3& to)
+{
+    return std::acos(std::clamp(from.dot(to), -1.0f, 1.0f));
+}
+
+static Ray stabilizeControllerRay(OpenXRDriver::ControllerState& ctrl, const Ray& rawRay, float deltaTime)
+{
+    constexpr float pi                          = 3.14159265358979323846f;
+    constexpr float positionStabilizationMeters = 0.25f;
+    constexpr float angleStabilizationRadians   = 20.0f * pi / 180.0f;
+
+    if (!ctrl.stabilizedRayValid)
+    {
+        ctrl.stabilizedTrackingRay = rawRay;
+        ctrl.stabilizedRayValid    = true;
+        return ctrl.stabilizedTrackingRay;
+    }
+
+    const Ray previousRay = ctrl.stabilizedTrackingRay;
+
+    const Vec3 positionOffset             = rawRay.origin - previousRay.origin;
+    const float positionDistance          = positionOffset.length();
+    const float directionDistance         = directionAngle(previousRay.direction, rawRay.direction);
+    constexpr float directionResetRadians = 30.0f * pi / 180.0f;
+    if (positionDistance >= positionStabilizationMeters || directionDistance >= directionResetRadians)
+    {
+        ctrl.stabilizedTrackingRay = rawRay;
+        return ctrl.stabilizedTrackingRay;
+    }
+
+    const float positionLerp =
+        calculateStabilizedLerp(positionDistance / positionStabilizationMeters, deltaTime);
+    const Vec3 stabilizedOrigin = previousRay.origin + positionOffset * positionLerp;
+
+    const float referenceDistance = std::max(ctrl.stabilizationReferenceDistance, 0.001f);
+    const Vec3 previousEndpoint   = previousRay.origin + previousRay.direction * referenceDistance;
+
+    Vec3 endpointPreservingDirection = previousEndpoint - stabilizedOrigin;
+    if (endpointPreservingDirection.lengthSquared() < 1e-8f)
+        endpointPreservingDirection = previousRay.direction;
+    else
+        endpointPreservingDirection.normalize();
+
+    const float distanceScale     = 1.0f + std::log(std::max(referenceDistance, 1.0f));
+    const float endpointAngleSpan = angleStabilizationRadians * std::clamp(distanceScale, 1.0f, 3.0f);
+    const float directError       = directionAngle(previousRay.direction, rawRay.direction);
+    const float endpointError     = directionAngle(endpointPreservingDirection, rawRay.direction);
+    const float directRatio       = directError / angleStabilizationRadians;
+    const float endpointRatio     = endpointError / endpointAngleSpan;
+
+    Vec3 stabilizedDirection;
+    if (endpointRatio < directRatio)
+    {
+        const float directionLerp = calculateStabilizedLerp(endpointRatio, deltaTime * distanceScale);
+        stabilizedDirection = slerpDirection(endpointPreservingDirection, rawRay.direction, directionLerp);
+    }
+    else
+    {
+        const float directionLerp = calculateStabilizedLerp(directRatio, deltaTime * distanceScale);
+        stabilizedDirection = slerpDirection(previousRay.direction, rawRay.direction, directionLerp);
+    }
+
+    ctrl.stabilizedTrackingRay = Ray(stabilizedOrigin, stabilizedDirection);
+
+    return ctrl.stabilizedTrackingRay;
 }
 
 // ---------------------------------------------------------------------------
@@ -409,8 +516,8 @@ void OpenXRDriver::pollEvents()
     _viewsLocated           = false;
     _locatedViewCount       = 0;
     _locatedViewsPoseValid  = false;
-    _headViewTransformValid = false;
-    _headViewTransform      = Mat4::identity;
+    _headPoseTransformValid = false;
+    _headPoseTransform      = Mat4::identity;
 
     if (_initialized && _xrInstance != XR_NULL_HANDLE)
         xrPollEvents();
@@ -446,7 +553,7 @@ void OpenXRDriver::pollEvents()
 
             _viewsLocated = true;
             if (_locatedViewsPoseValid)
-                updatePointerViewTransform(_locatedViewCount);
+                updateHeadPoseTransform(_locatedViewCount);
         }
     }
 
@@ -493,10 +600,10 @@ bool OpenXRDriver::locateViews(uint32_t& viewCountOutput)
     return true;
 }
 
-void OpenXRDriver::updatePointerViewTransform(uint32_t viewCount)
+void OpenXRDriver::updateHeadPoseTransform(uint32_t viewCount)
 {
-    _headViewTransformValid = false;
-    _headViewTransform      = Mat4::identity;
+    _headPoseTransformValid = false;
+    _headPoseTransform      = Mat4::identity;
 
     if (viewCount == 0 || _views.empty())
         return;
@@ -509,8 +616,10 @@ void OpenXRDriver::updatePointerViewTransform(uint32_t viewCount)
         centerPose.position.z = (_views[0].pose.position.z + _views[1].pose.position.z) * 0.5f;
     }
 
-    _headViewTransform      = xrPoseToMat4(centerPose);
-    _headViewTransformValid = true;
+    centerPose = scaleXrPosePosition(centerPose, _xrToSceneScale);
+
+    _headPoseTransform      = xrPoseToMat4(centerPose);
+    _headPoseTransformValid = true;
 }
 
 bool OpenXRDriver::acquireSwapchains(std::vector<AcquiredSwapchain>& acquired)
@@ -1410,9 +1519,23 @@ void OpenXRDriver::pollXrActions(XrTime predictedDisplayTime)
         {
             ctrl.poseValid                = false;
             ctrl.rayHitValid              = false;
-            ctrl.visualRayOriginValid     = false;
-            ctrl.visualRayStartValid      = false;
-            ctrl.lastPointerEventRayValid = false;
+            ctrl.stabilizedRayValid       = false;
+            ctrl.rawWorldRayValid         = false;
+            ctrl.rawAimPoseUpdated        = false;
+            ctrl.aimTracked               = false;
+            ctrl.rawAimSampleTime         = 0;
+            ctrl.lastStabilizedSampleTime = 0;
+            ctrl.rawGripPoseValid         = false;
+            ctrl.triggerPrevious          = false;
+            ctrl.gripPrevious             = false;
+            ctrl.thumbstickClickPrevious  = false;
+            ctrl.menuPrevious             = false;
+            ctrl.aPrevious                = false;
+            ctrl.bPrevious                = false;
+            ctrl.xPrevious                = false;
+            ctrl.yPrevious                = false;
+            ctrl.thumbstickActivePrevious = false;
+            ctrl.posePrevious             = false;
         }
         return;
     }
@@ -1432,17 +1555,11 @@ void OpenXRDriver::pollXrActions(XrTime predictedDisplayTime)
         return;
     }
 
-    // Controller poses are located in the same OpenXR local space as the eye poses.
-    // VRSceneCompositor owns the stable pointer-ray camera and pushes its world
-    // transform here before polling actions. Do not use the inverse HMD pose here;
-    // that converts the ray to head-relative space and makes scene hit testing miss.
-    const Mat4& controllerToWorld = _pointerRayTransformValid ? _pointerRayTransform : Mat4::identity;
-
+    // Poll buttons and raw tracking-space poses only. Scene-world pointer rays
+    // are resolved after the scene update, once the frame view snapshot is known.
     for (uint32_t hand = 0; hand < 2; ++hand)
     {
-        auto& ctrl                = _controllers[hand];
-        ctrl.visualRayOriginValid = false;
-        ctrl.visualRayStartValid  = false;
+        auto& ctrl = _controllers[hand];
 
         // Poll trigger
         XrActionStateGetInfo getInfo{XR_TYPE_ACTION_STATE_GET_INFO};
@@ -1546,184 +1663,227 @@ void OpenXRDriver::pollXrActions(XrTime predictedDisplayTime)
             }
         }
 
-        // Poll aim pose
+        // Poll aim pose. VALID can contain an inferred or last-known pose, so
+        // only TRACKED samples are allowed to advance the pointer ray.
         getInfo.action = _aimPoseAction;
         XrActionStatePose poseState{XR_TYPE_ACTION_STATE_POSE};
-        XrResult poseResult = xrGetActionStatePose(_xrSession, &getInfo, &poseState);
-        ctrl.poseValid      = XR_SUCCEEDED(poseResult) && poseState.isActive == XR_TRUE;
+        const XrResult poseResult = xrGetActionStatePose(_xrSession, &getInfo, &poseState);
+        const bool poseActive     = XR_SUCCEEDED(poseResult) && poseState.isActive == XR_TRUE;
 
-        if (ctrl.poseValid && ctrl.aimSpace != XR_NULL_HANDLE)
+        ctrl.rawAimPoseUpdated   = false;
+        ctrl.aimTracked          = false;
+        ctrl.rawGripPoseValid    = false;
+
+        if (poseActive && ctrl.aimSpace != XR_NULL_HANDLE)
         {
             XrSpaceLocation location{XR_TYPE_SPACE_LOCATION};
-            XrResult locateResult = xrLocateSpace(ctrl.aimSpace, _localSpace, predictedDisplayTime, &location);
+            const XrResult locateResult =
+                xrLocateSpace(ctrl.aimSpace, _localSpace, predictedDisplayTime, &location);
 
-            if (XR_SUCCEEDED(locateResult) && (location.locationFlags & XR_SPACE_LOCATION_ORIENTATION_VALID_BIT) &&
-                (location.locationFlags & XR_SPACE_LOCATION_POSITION_VALID_BIT))
+            constexpr XrSpaceLocationFlags requiredValidFlags =
+                XR_SPACE_LOCATION_ORIENTATION_VALID_BIT | XR_SPACE_LOCATION_POSITION_VALID_BIT;
+            constexpr XrSpaceLocationFlags requiredTrackedFlags =
+                XR_SPACE_LOCATION_ORIENTATION_TRACKED_BIT | XR_SPACE_LOCATION_POSITION_TRACKED_BIT;
+
+            const bool locationValid =
+                XR_SUCCEEDED(locateResult) &&
+                (location.locationFlags & requiredValidFlags) == requiredValidFlags;
+            const bool locationTracked =
+                locationValid && (location.locationFlags & requiredTrackedFlags) == requiredTrackedFlags;
+
+            if (locationTracked)
             {
-                const float xrToSceneScale = _xrToSceneScale;
-                Ray visualRay              = xrPoseToRay(location.pose);
+                ctrl.rawAimPose             = location.pose;
+                ctrl.rawAimPoseUpdated      = true;
+                ctrl.aimTracked             = true;
+                ctrl.poseValid              = true;
+                ctrl.rawAimSampleTime       = predictedDisplayTime;
+                ctrl.invalidPoseFrameCount  = 0;
 
-                visualRay.origin *= xrToSceneScale;
-                visualRay.transform(controllerToWorld);
-                Ray eventRay = visualRay;
-
-                ctrl.currentRay          = visualRay;
-                ctrl.visualRayStart      = visualRay.origin;
-                ctrl.visualRayStartValid = true;
-                bool gripPoseValid       = false;
-                Mat4 gripPose            = Mat4::identity;
                 if (ctrl.gripSpace != XR_NULL_HANDLE)
                 {
                     XrSpaceLocation gripLocation{XR_TYPE_SPACE_LOCATION};
-                    XrResult gripLocateResult =
+                    const XrResult gripLocateResult =
                         xrLocateSpace(ctrl.gripSpace, _localSpace, predictedDisplayTime, &gripLocation);
-                    if (XR_SUCCEEDED(gripLocateResult))
+                    if (XR_SUCCEEDED(gripLocateResult) &&
+                        (gripLocation.locationFlags & requiredValidFlags) == requiredValidFlags &&
+                        (gripLocation.locationFlags & requiredTrackedFlags) == requiredTrackedFlags)
                     {
-                        if ((gripLocation.locationFlags & XR_SPACE_LOCATION_POSITION_VALID_BIT))
-                        {
-                            ctrl.visualRayOrigin.set(gripLocation.pose.position.x * xrToSceneScale,
-                                                     gripLocation.pose.position.y * xrToSceneScale,
-                                                     gripLocation.pose.position.z * xrToSceneScale);
-                            controllerToWorld.transformPoint(&ctrl.visualRayOrigin);
-                            ctrl.visualRayOriginValid = true;
-                            ctrl.visualRayStart       = ctrl.visualRayOrigin;
-                            ctrl.visualRayStartValid  = true;
-                        }
-
-                        if ((gripLocation.locationFlags & XR_SPACE_LOCATION_ORIENTATION_VALID_BIT) &&
-                            (gripLocation.locationFlags & XR_SPACE_LOCATION_POSITION_VALID_BIT))
-                        {
-                            gripPose = controllerToWorld *
-                                       xrPoseToMat4(scaleXrPosePosition(gripLocation.pose, xrToSceneScale));
-                            gripPoseValid = true;
-                        }
+                        ctrl.rawGripPose      = gripLocation.pose;
+                        ctrl.rawGripPoseValid = true;
                     }
                 }
+            }
+        }
 
-                XRInputEvent::State poseState;
-                poseState.eventType          = XRInputEvent::EventType::Pose;
-                poseState.hand               = hand == 0 ? XRInputEvent::Hand::Left : XRInputEvent::Hand::Right;
-                poseState.input              = XRInputEvent::Input::AimPose;
-                poseState.phase              = XRInputEvent::Phase::Active;
-                poseState.poseValid          = true;
-                poseState.aimRay             = eventRay;
-                poseState.gripPoseValid      = gripPoseValid;
-                poseState.gripPose           = gripPose;
-                poseState.interactionProfile = ctrl.interactionProfile;
-                InputSystem::getInstance()->handleXRInput(poseState);
-
-                InputPhase phase = InputPhase::PointerMove;
-                if (ctrl.triggerPressed && !ctrl.triggerPrevious)
-                    phase = InputPhase::PointerDown;
-                else if (!ctrl.triggerPressed && ctrl.triggerPrevious)
-                    phase = InputPhase::PointerUp;
-
-                constexpr float pointerRayOriginEpsilon    = 0.005f;
-                constexpr float pointerRayDirectionEpsilon = 0.015f;
-                const bool pointerRayChanged               = !ctrl.lastPointerEventRayValid ||
-                                               eventRay.origin.distanceSquared(ctrl.lastPointerEventRay.origin) >
-                                                   pointerRayOriginEpsilon * pointerRayOriginEpsilon ||
-                                               eventRay.direction.distanceSquared(ctrl.lastPointerEventRay.direction) >
-                                                   pointerRayDirectionEpsilon * pointerRayDirectionEpsilon;
-                const bool pointerButtonChanged = phase == InputPhase::PointerDown || phase == InputPhase::PointerUp;
-                const bool shouldDispatchPointerEvent = pointerButtonChanged || pointerRayChanged;
-
-                // Build pointer input state. PointerUp must keep the triggering button as Primary so the
-                // dispatcher can find the capture created by PointerDown.
-                PointerInputState inputState;
-                inputState.id             = ctrl.pointerId;
-                inputState.pressure       = ctrl.triggerPressed ? 1.0f : 0.0f;
-                inputState.button         = (phase == InputPhase::PointerDown || phase == InputPhase::PointerUp)
-                                                ? InputButton::Primary
-                                                : InputButton::None;
-                inputState.pressedButtons = ctrl.triggerPressed ? (1u << InputButton::Primary) : 0;
-                inputState.type           = PointerType::Controller;
-
-                // Use screen center as the 2D position placeholder
-                Vec2 centerPoint(_director->getCanvasSize().width * 0.5f, _director->getCanvasSize().height * 0.5f);
-
-                PointerHitResult hitResult;
-                bool hasHitResult = false;
-                if (shouldDispatchPointerEvent)
-                {
-                    hitResult =
-                        InputSystem::getInstance()->handleVRPointerEvent(phase, centerPoint, eventRay, inputState);
-                    hasHitResult                  = true;
-                    ctrl.lastPointerEventRay      = eventRay;
-                    ctrl.lastPointerEventRayValid = true;
-                }
-                else
-                {
-                    hitResult    = InputSystem::getInstance()->hitTestVRPointer(centerPoint, eventRay, inputState);
-                    hasHitResult = true;
-                }
-
-                constexpr float thumbstickScrollDeadzone = 0.0001f;
-                if (std::abs(ctrl.thumbstick.y) > thumbstickScrollDeadzone)
-                {
-                    PointerInputState scrollState;
-                    scrollState.id             = ctrl.pointerId;
-                    scrollState.pressure       = 0.0f;
-                    scrollState.button         = InputButton::None;
-                    scrollState.pressedButtons = inputState.pressedButtons;
-                    scrollState.type           = PointerType::Controller;
-                    auto scrollHitResult       = InputSystem::getInstance()->handleVRPointerScroll(
-                        centerPoint, Vec2{0.0f, -ctrl.thumbstick.y}, eventRay, scrollState);
-                    if (!hasHitResult)
-                    {
-                        hitResult    = scrollHitResult;
-                        hasHitResult = true;
-                    }
-                }
-
-                if (hasHitResult)
-                    ctrl.rayHitValid = hitResult.hit;
-                if (hasHitResult && hitResult.hit)
-                {
-                    Vec3 visualHitPoint = hitResult.worldPoint;
-
-                    if (_pointerRayTransformValid && hitResult.camera)
-                    {
-                        hitResult.camera->getWorldToNodeTransform().transformPoint(&visualHitPoint);
-                        _pointerRayTransform.transformPoint(&visualHitPoint);
-                    }
-
-                    const float hitDistance =
-                        std::max(0.0f, (visualHitPoint - ctrl.currentRay.origin).dot(ctrl.currentRay.direction));
-                    const Vec3 closestPoint = ctrl.currentRay.origin + ctrl.currentRay.direction * hitDistance;
-                    constexpr float maxVisualHitError = 1.0f;
-                    if (visualHitPoint.distanceSquared(closestPoint) > maxVisualHitError * maxVisualHitError)
-                        visualHitPoint = closestPoint;
-
-                    ctrl.rayHitPoint = visualHitPoint;
-                }
+        if (!ctrl.aimTracked)
+        {
+            constexpr uint8_t trackingLossGraceFrames = 6;
+            if (ctrl.stabilizedRayValid && ctrl.invalidPoseFrameCount < trackingLossGraceFrames)
+            {
+                ++ctrl.invalidPoseFrameCount;
+                ctrl.poseValid = true;
             }
             else
             {
                 ctrl.poseValid                = false;
                 ctrl.rayHitValid              = false;
-                ctrl.visualRayOriginValid     = false;
-                ctrl.visualRayStartValid      = false;
-                ctrl.lastPointerEventRayValid = false;
+                ctrl.stabilizedRayValid       = false;
+                ctrl.rawWorldRayValid         = false;
+                ctrl.lastStabilizedSampleTime = 0;
             }
         }
-        else if (ctrl.posePrevious)
+    }
+}
+
+void OpenXRDriver::resolveControllerPointers(const Mat4& trackingToWorld, float sceneRayMaxDistance)
+{
+    const float xrToSceneScale = _xrToSceneScale;
+    const float fallbackTrackingDistance =
+        std::max(sceneRayMaxDistance / std::max(xrToSceneScale, 0.0001f), 0.25f);
+
+    for (uint32_t hand = 0; hand < 2; ++hand)
+    {
+        auto& ctrl = _controllers[hand];
+
+        if (ctrl.poseValid)
         {
+            if (!ctrl.rayHitValid)
+                ctrl.stabilizationReferenceDistance = fallbackTrackingDistance;
+
+            if (ctrl.rawAimPoseUpdated)
+            {
+                Ray rawRay = makeRayFromXrPose(ctrl.rawAimPose);
+                rawRay.direction.normalize();
+
+                float deltaTime = 1.0f / 90.0f;
+                if (ctrl.lastStabilizedSampleTime > 0 &&
+                    ctrl.rawAimSampleTime > ctrl.lastStabilizedSampleTime)
+                {
+                    constexpr double xrTimeToSeconds = 1.0e-9;
+                    deltaTime = static_cast<float>(
+                        static_cast<double>(ctrl.rawAimSampleTime - ctrl.lastStabilizedSampleTime) * xrTimeToSeconds);
+                    deltaTime = std::clamp(deltaTime, 1.0f / 240.0f, 1.0f / 30.0f);
+                }
+
+                ctrl.rawTrackingRay          = rawRay;
+                stabilizeControllerRay(ctrl, rawRay, deltaTime);
+                ctrl.lastStabilizedSampleTime = ctrl.rawAimSampleTime;
+            }
+
+            const Ray& trackingRay = ctrl.stabilizedTrackingRay;
+
+            PointerRayContext rayContext;
+            rayContext.trackingRay            = trackingRay;
+            rayContext.primaryTrackingToWorld = trackingToWorld;
+            rayContext.trackingScale          = xrToSceneScale;
+
+            Ray eventRay = trackingRay;
+            eventRay.origin *= xrToSceneScale;
+            eventRay.transform(trackingToWorld);
+            eventRay.direction.normalize();
+
+            ctrl.currentRay = eventRay;
+
+            Ray rawWorldRay = ctrl.rawTrackingRay;
+            rawWorldRay.origin *= xrToSceneScale;
+            rawWorldRay.transform(trackingToWorld);
+            rawWorldRay.direction.normalize();
+            ctrl.rawWorldRay      = rawWorldRay;
+            ctrl.rawWorldRayValid = true;
+
+            bool gripPoseValid = false;
+            Mat4 gripPose      = Mat4::identity;
+            if (ctrl.rawGripPoseValid)
+            {
+                gripPose      = xrPoseToMat4(scaleXrPosePosition(ctrl.rawGripPose, xrToSceneScale));
+                gripPose      = trackingToWorld * gripPose;
+                gripPoseValid = true;
+            }
+
             XRInputEvent::State poseState;
             poseState.eventType          = XRInputEvent::EventType::Pose;
             poseState.hand               = hand == 0 ? XRInputEvent::Hand::Left : XRInputEvent::Hand::Right;
             poseState.input              = XRInputEvent::Input::AimPose;
-            poseState.phase              = XRInputEvent::Phase::Inactive;
-            poseState.poseValid          = false;
+            poseState.phase              = XRInputEvent::Phase::Active;
+            poseState.poseValid          = true;
+            poseState.aimRay             = eventRay;
+            poseState.gripPoseValid      = gripPoseValid;
+            poseState.gripPose           = gripPose;
             poseState.interactionProfile = ctrl.interactionProfile;
             InputSystem::getInstance()->handleXRInput(poseState);
-            ctrl.rayHitValid              = false;
-            ctrl.visualRayOriginValid     = false;
-            ctrl.visualRayStartValid      = false;
-            ctrl.lastPointerEventRayValid = false;
+
+            InputPhase phase = InputPhase::PointerMove;
+            if (ctrl.triggerPressed && !ctrl.triggerPrevious)
+                phase = InputPhase::PointerDown;
+            else if (!ctrl.triggerPressed && ctrl.triggerPrevious)
+                phase = InputPhase::PointerUp;
+
+            PointerInputState inputState;
+            inputState.id             = ctrl.pointerId;
+            inputState.pressure       = ctrl.triggerPressed ? 1.0f : 0.0f;
+            inputState.button         = (phase == InputPhase::PointerDown || phase == InputPhase::PointerUp)
+                                            ? InputButton::Primary
+                                            : InputButton::None;
+            inputState.pressedButtons = ctrl.triggerPressed ? (1u << InputButton::Primary) : 0;
+            inputState.type           = PointerType::Controller;
+
+            Vec2 centerPoint(_director->getCanvasSize().width * 0.5f, _director->getCanvasSize().height * 0.5f);
+
+            PointerHitResult hitResult;
+            bool hasHitResult = false;
+            InputSystem::getInstance()->handleVRPointerEvent(phase, centerPoint, eventRay, inputState, &rayContext);
+
+            hitResult    = InputSystem::getInstance()->hitTestVRPointer(centerPoint, eventRay, inputState, &rayContext);
+            hasHitResult = true;
+
+            constexpr float thumbstickScrollDeadzone = 0.0001f;
+            if (std::abs(ctrl.thumbstick.y) > thumbstickScrollDeadzone)
+            {
+                PointerInputState scrollState;
+                scrollState.id             = ctrl.pointerId;
+                scrollState.pressure       = 0.0f;
+                scrollState.button         = InputButton::None;
+                scrollState.pressedButtons = inputState.pressedButtons;
+                scrollState.type           = PointerType::Controller;
+                InputSystem::getInstance()->handleVRPointerScroll(centerPoint, Vec2{0.0f, -ctrl.thumbstick.y}, eventRay,
+                                                                  scrollState, &rayContext);
+            }
+
+            ctrl.rayHitValid = hasHitResult && hitResult.hit;
+            if (ctrl.rayHitValid)
+            {
+                ctrl.rayHitPoint = hitResult.visualPointValid ? hitResult.visualPoint : hitResult.worldPoint;
+
+                const float sceneHitDistance = ctrl.rayHitPoint.distance(eventRay.origin);
+                ctrl.stabilizationReferenceDistance =
+                    std::max(sceneHitDistance / std::max(xrToSceneScale, 0.0001f), 0.25f);
+            }
+            else
+            {
+                ctrl.stabilizationReferenceDistance = fallbackTrackingDistance;
+            }
+        }
+        else
+        {
+            if (ctrl.posePrevious)
+            {
+                XRInputEvent::State poseState;
+                poseState.eventType          = XRInputEvent::EventType::Pose;
+                poseState.hand               = hand == 0 ? XRInputEvent::Hand::Left : XRInputEvent::Hand::Right;
+                poseState.input              = XRInputEvent::Input::AimPose;
+                poseState.phase              = XRInputEvent::Phase::Inactive;
+                poseState.poseValid          = false;
+                poseState.interactionProfile = ctrl.interactionProfile;
+                InputSystem::getInstance()->handleXRInput(poseState);
+            }
+            ctrl.rayHitValid                     = false;
+            ctrl.stabilizedRayValid              = false;
+            ctrl.rawWorldRayValid                = false;
+            ctrl.lastStabilizedSampleTime        = 0;
+            ctrl.stabilizationReferenceDistance = fallbackTrackingDistance;
         }
 
-        // Save previous button states for edge detection
         ctrl.triggerPrevious          = ctrl.triggerPressed;
         ctrl.gripPrevious             = ctrl.gripPressed;
         ctrl.thumbstickClickPrevious  = ctrl.thumbstickClickPressed;

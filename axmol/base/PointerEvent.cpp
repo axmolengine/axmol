@@ -27,6 +27,8 @@
 
 #include <utility>
 
+#include "axmol/scene/Camera.h"
+
 namespace ax
 {
 
@@ -50,6 +52,7 @@ void PointerEvent::setPointerInfo(InputPhase phase, Vec2 point, const PointerInp
     _pressure         = state.pressure;
     _previousRay      = _ray;
     _ray              = Ray{};
+    clearRayContext();
     _previousHitPoint = _hitResult.hit ? std::optional<Vec3>(_hitResult.worldPoint) : std::nullopt;
     _hitResult        = {};
     if (!_startPointCaptured)
@@ -123,13 +126,56 @@ bool PointerEvent::isPrimaryPressed() const
 
 void PointerEvent::setHitResult(const Vec3& worldPoint, const Camera* camera, const Node* target)
 {
-    _hitResult.hit        = true;
-    _hitResult.worldPoint = worldPoint;
-    _hitResult.camera     = camera;
-    _hitResult.target     = target;
+    _hitResult.hit              = true;
+    _hitResult.worldPoint       = worldPoint;
+    _hitResult.camera           = camera;
+    _hitResult.target           = target;
+    _hitResult.visualPointValid = false;
+    if (_hasRayContext && camera)
+    {
+        const Mat4 worldToTracking = camera->getNodeToWorldTransform().getInversed();
+        Vec3 trackingPoint         = worldPoint;
+        worldToTracking.transformPoint(&trackingPoint);
+
+        _hitResult.visualPoint = trackingPoint;
+        _rayContext.primaryTrackingToWorld.transformPoint(&_hitResult.visualPoint);
+        _hitResult.visualPointValid = true;
+    }
 
     if (!_startHitPoint.has_value())
         _startHitPoint = worldPoint;
+}
+
+void PointerEvent::setRayContext(const PointerRayContext* context)
+{
+    if (!context)
+    {
+        clearRayContext();
+        return;
+    }
+
+    _rayContext    = *context;
+    _hasRayContext = true;
+    resolveRayForCamera(nullptr);
+}
+
+void PointerEvent::clearRayContext()
+{
+    _rayContext    = {};
+    _hasRayContext = false;
+}
+
+bool PointerEvent::resolveRayForCamera(const Camera* camera)
+{
+    if (!_hasRayContext)
+        return false;
+
+    const Mat4& trackingToWorld = camera ? camera->getNodeToWorldTransform() : _rayContext.primaryTrackingToWorld;
+    _ray                        = _rayContext.trackingRay;
+    _ray.origin *= _rayContext.trackingScale;
+    _ray.transform(trackingToWorld);
+    _ray.direction.normalize();
+    return true;
 }
 
 void PointerEvent::clearHitResult()

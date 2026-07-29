@@ -218,9 +218,9 @@ void PhysicsDebugDraw3D::DrawText3D(JPH::RVec3Arg inPosition,
     //        (float)inPosition.GetZ(), inString);
 }
 
-void PhysicsDebugDraw3D::draw(ax::Renderer* renderer)
+void PhysicsDebugDraw3D::draw(const ax::SceneRenderState& state)
 {
-    const auto& transform = Camera::getVisitingViewProjectionMatrix();
+    const auto& transform = state.getViewProjectionMatrix();
 
     auto& blend                  = _lineCommand.blendDesc();
     blend.blendEnabled           = true;
@@ -231,14 +231,14 @@ void PhysicsDebugDraw3D::draw(ax::Renderer* renderer)
     if (_dirtyLines && !_lineBuffer.empty())
     {
         _lineCommand.unsafePS()->setUniform(_locMVP, transform.m, sizeof(transform.m));
-        _lineCommand.init(0, Mat4::identity, 0);
+        _lineCommand.init(0, Mat4::identity, 0, state.getView());
 
         _lineCommand.setPrimitiveType(CustomCommand::PrimitiveType::LINE);
         _lineCommand.createVertexBuffer(sizeof(_lineBuffer[0]), _lineBuffer.size(),
                                         CustomCommand::BufferUsage::DYNAMIC);
         _lineCommand.updateVertexBuffer(_lineBuffer.data(), _lineBuffer.size() * sizeof(_lineBuffer[0]));
         _lineCommand.setVertexDrawInfo(0, _lineBuffer.size());
-        renderer->addCommand(&_lineCommand);
+        state.getRenderer()->addCommand(&_lineCommand);
         _dirtyLines = false;
     }
 
@@ -246,13 +246,13 @@ void PhysicsDebugDraw3D::draw(ax::Renderer* renderer)
     if (_dirtyTris && !_triBuffer.empty())
     {
         _triCommand.unsafePS()->setUniform(_locMVP, transform.m, sizeof(transform.m));
-        _triCommand.init(0, Mat4::identity, 0);
+        _triCommand.init(0, Mat4::identity, 0, state.getView());
 
         _triCommand.setPrimitiveType(CustomCommand::PrimitiveType::TRIANGLE);
         _triCommand.createVertexBuffer(sizeof(_triBuffer[0]), _triBuffer.size(), CustomCommand::BufferUsage::DYNAMIC);
         _triCommand.updateVertexBuffer(_triBuffer.data(), _triBuffer.size() * sizeof(_triBuffer[0]));
         _triCommand.setVertexDrawInfo(0, _triBuffer.size());
-        renderer->addCommand(&_triCommand);
+        state.getRenderer()->addCommand(&_triCommand);
         _dirtyTris = false;
     }
 

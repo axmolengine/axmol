@@ -298,7 +298,7 @@ public:
 
 	void update(float delta) override;
 
-	void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& parentTransform, uint32_t parentFlags) override;
+	void draw(const cocos2d::SceneRenderState& state, const cocos2d::Mat4& parentTransform, uint32_t parentFlags) override;
 };
 
 class EffectManager : public cocos2d::Object

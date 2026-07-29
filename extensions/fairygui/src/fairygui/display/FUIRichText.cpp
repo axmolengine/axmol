@@ -237,12 +237,12 @@ const char* FUIRichText::hitTestLink(const ax::Vec2 & worldPoint)
     return nullptr;
 }
 
-void FUIRichText::visit(ax::Renderer * renderer, const ax::Mat4 & parentTransform, uint32_t parentFlags)
+void FUIRichText::visit(const ax::SceneRenderState& state, const ax::Mat4 & parentTransform, uint32_t parentFlags)
 {
     if (_visible)
         formatText();
 
-    Node::visit(renderer, parentTransform, parentFlags);
+    Node::visit(state, parentTransform, parentFlags);
 }
 
 void FUIRichText::formatText()

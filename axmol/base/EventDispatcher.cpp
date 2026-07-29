@@ -118,7 +118,7 @@ static bool pointerHitTest(PointerEvent* event, const Camera* camera, PointerEve
 {
     event->setCamera(camera);
 
-    if (camera && event->getPointerType() != PointerType::Controller)
+    if (!event->resolveRayForCamera(camera) && camera && event->getPointerType() != PointerType::Controller)
         event->setRay(camera->screenToRay(event->getPoint()));
 
     Vec3 hitPoint;
@@ -1279,7 +1279,7 @@ void EventDispatcher::dispatchUncapturedPointerEvent(PointerEvent* event, Pointe
             if (!hitCamera)
                 continue;
 
-            // Camera context for input callbacks. Do not use Camera::_visitingCamera.
+            // Camera context for input callbacks.
             event->setCamera(hitCamera);
 
             if (deliverUncapturedEvent(l))

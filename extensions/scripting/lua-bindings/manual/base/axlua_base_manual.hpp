@@ -87,7 +87,7 @@ class LuaNode : public ax::Node
 public:
     virtual ~LuaNode() {}
 
-    void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
+    void draw(const ax::SceneRenderState& renderer, const ax::Mat4& transform, uint32_t flags) override;
 };
 
 TOLUA_API int tolua_luanode_open(lua_State* tolua_S);

@@ -71,7 +71,6 @@ Scene::Scene()
     // avoiding a stall after changing step size.
     _fixedAccumulator = _fixedDeltaTime;
 
-    Camera::_visitingCamera = nullptr;
 }
 
 Scene::~Scene()
@@ -210,10 +209,10 @@ void Scene::setDebugCamera(Camera* camera)
     Object::assign(_debugCamera, camera);
 }
 
-void Scene::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags)
+void Scene::visit(const SceneRenderState& state, const Mat4& parentTransform, uint32_t parentFlags)
 {
     AX_PROFILER_ZONE_SCOPED;
-    Node::visit(renderer, parentTransform, parentFlags);
+    Node::visit(state, parentTransform, parentFlags);
 }
 
 void Scene::removeAllChildren()

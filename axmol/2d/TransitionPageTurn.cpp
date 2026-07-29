@@ -76,19 +76,19 @@ void TransitionPageTurn::sceneOrder()
     _isInSceneOnTop = _back;
 }
 
-void TransitionPageTurn::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+void TransitionPageTurn::draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags)
 {
-    Scene::draw(renderer, transform, flags);
+    Scene::draw(state, transform, flags);
 
     if (_isInSceneOnTop)
     {
-        _outSceneProxy->visit(renderer, transform, flags);
-        _inSceneProxy->visit(renderer, transform, flags);
+        _outSceneProxy->visit(state, transform, flags);
+        _inSceneProxy->visit(state, transform, flags);
     }
     else
     {
-        _inSceneProxy->visit(renderer, transform, flags);
-        _outSceneProxy->visit(renderer, transform, flags);
+        _inSceneProxy->visit(state, transform, flags);
+        _outSceneProxy->visit(state, transform, flags);
     }
 }
 

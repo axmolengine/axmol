@@ -1068,7 +1068,7 @@ void Sprite::updateTransform()
 }
 
 // draw
-void Sprite::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+void Sprite::draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags)
 {
     AX_PROFILER_ZONE_SCOPED;
 
@@ -1076,27 +1076,22 @@ void Sprite::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
         return;
 
     // TODO: arnold: current camera can be a non-default one.
-    setMVPMatrixUniform();
+    setMVPMatrixUniform(state);
 
 #if AX_USE_CULLING
     // Don't calculate the culling if the transform was not updated
-    auto visitingCamera = Camera::getVisitingCamera();
-    auto defaultCamera  = Camera::getDefaultCamera();
+    auto visitingCamera = state.getCamera();
     if (visitingCamera == nullptr)
         _insideBounds = true;
-    else if (visitingCamera == defaultCamera)
-        _insideBounds = ((flags & FLAGS_TRANSFORM_DIRTY) || visitingCamera->isViewProjectionUpdated())
-                            ? renderer->checkVisibility(transform, _contentSize)
-                            : _insideBounds;
     else
-        // XXX: this always return true since
-        _insideBounds = renderer->checkVisibility(transform, _contentSize);
+        _insideBounds = state.requiresVisibilityUpdate(flags) ? state.checkVisibility(transform, _contentSize)
+                                                              : _insideBounds;
 
     if (_insideBounds)
 #endif
     {
-        _trianglesCommand.init(_globalZOrder, _texture, _blendFunc, _polyInfo.triangles, transform, flags);
-        renderer->addCommand(&_trianglesCommand);
+        _trianglesCommand.init(_globalZOrder, _texture, _blendFunc, _polyInfo.triangles, transform, flags, state.getView());
+        state.getRenderer()->addCommand(&_trianglesCommand);
 
 #if AX_SPRITE_DEBUG_DRAW
         _debugDrawNode->clear();
@@ -1719,9 +1714,9 @@ void Sprite::setPolygonInfo(const PolygonInfo& info)
     _renderMode = RenderMode::POLYGON;
 }
 
-void Sprite::setMVPMatrixUniform()
+void Sprite::setMVPMatrixUniform(const SceneRenderState& state)
 {
-    const auto& projectionMat = Camera::getVisitingViewProjectionMatrix();
+    const auto& projectionMat = state.getViewProjectionMatrix();
     auto programState         = _trianglesCommand.unsafePS();
     if (programState && _mvpMatrixLocation)
         programState->setUniform(_mvpMatrixLocation, projectionMat.m, sizeof(projectionMat.m));

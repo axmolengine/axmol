@@ -338,7 +338,7 @@ void BoneNode::setDebugDrawColor(const ax::Color& color)
     updateColor();
 }
 
-void BoneNode::visit(ax::Renderer* renderer, const ax::Mat4& parentTransform, uint32_t parentFlags)
+void BoneNode::visit(const ax::SceneRenderState& state, const ax::Mat4& parentTransform, uint32_t parentFlags)
 {
     // quick return if not visible. children won't be drawn.
     if (!_visible)
@@ -346,9 +346,9 @@ void BoneNode::visit(ax::Renderer* renderer, const ax::Mat4& parentTransform, ui
         return;
     }
 
-    uint32_t flags = processParentFlags(parentTransform, parentFlags);
+    uint32_t flags = processParentFlags(state, parentTransform, parentFlags);
 
-    bool visibleByCamera = isVisitableByVisitingCamera();
+    bool visibleByCamera = isVisitableByCamera(state.cameraFlag);
     bool isdebugdraw     = visibleByCamera && _isRackShow && nullptr == _rootSkeleton;
     int i                = 0;
 
@@ -362,32 +362,32 @@ void BoneNode::visit(ax::Renderer* renderer, const ax::Mat4& parentTransform, ui
             if (_rootSkeleton != nullptr && _boneSkins.contains(node))  // skip skin when bone is in a skeleton
                 continue;
             if (node && node->getLocalZOrder() < 0)
-                node->visit(renderer, _modelViewTransform, flags);
+                node->visit(state, _modelViewTransform, flags);
             else
                 break;
         }
         // self draw
         if (isdebugdraw)
-            this->draw(renderer, _modelViewTransform, flags);
+            this->draw(state, _modelViewTransform, flags);
 
         for (auto it = _children.cbegin() + i; it != _children.cend(); ++it)
         {
             auto node = (*it);
             if (_rootSkeleton != nullptr && _boneSkins.contains(node))  // skip skin when bone is in a skeleton
                 continue;
-            node->visit(renderer, _modelViewTransform, flags);
+            node->visit(state, _modelViewTransform, flags);
         }
     }
     else if (isdebugdraw)
     {
-        this->draw(renderer, _modelViewTransform, flags);
+        this->draw(state, _modelViewTransform, flags);
     }
 }
 
-void BoneNode::draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags)
+void BoneNode::draw(const ax::SceneRenderState& state, const ax::Mat4& transform, uint32_t flags)
 {
     _customCommand.init(_globalZOrder, _blendFunc);
-    renderer->addCommand(&_customCommand);
+    state.getRenderer()->addCommand(&_customCommand);
 
 #ifdef AX_STUDIO_ENABLED_VIEW
 // TODO
@@ -555,9 +555,9 @@ bool BoneNode::isPointOnRack(const ax::Vec2& bonePoint)
 }
 #endif  // AX_STUDIO_ENABLED_VIEW
 
-void BoneNode::batchBoneDrawToSkeleton(BoneNode* bone) const
+void BoneNode::batchBoneDrawToSkeleton(const ax::SceneRenderState& state, BoneNode* bone) const
 {
-    bool visibleByCamera = bone->isVisitableByVisitingCamera();
+    bool visibleByCamera = bone->isVisitableByCamera(state.cameraFlag);
     if (!visibleByCamera)
     {
         return;
@@ -589,7 +589,7 @@ void BoneNode::batchBoneDrawToSkeleton(BoneNode* bone) const
 }
 
 // call after self visit
-void BoneNode::visitSkins(ax::Renderer* renderer, BoneNode* bone) const
+void BoneNode::visitSkins(const ax::SceneRenderState& state, BoneNode* bone) const
 {
     // quick return if not visible. children won't be drawn.
     if (!bone->_visible)
@@ -601,7 +601,7 @@ void BoneNode::visitSkins(ax::Renderer* renderer, BoneNode* bone) const
     {
         bone->sortAllChildren();
         for (auto it = bone->_boneSkins.cbegin(); it != bone->_boneSkins.cend(); ++it)
-            (*it)->visit(renderer, bone->_modelViewTransform, true);
+            (*it)->visit(state, bone->_modelViewTransform, true);
     }
 
     // FIX ME: Why need to set _orderOfArrival to 0??

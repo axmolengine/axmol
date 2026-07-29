@@ -271,7 +271,7 @@ void ProtectedNode::reorderProtectedChild(ax::Node* child, int localZOrder)
     child->setLocalZOrder(localZOrder);
 }
 
-void ProtectedNode::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags)
+void ProtectedNode::visit(const SceneRenderState& state, const Mat4& parentTransform, uint32_t parentFlags)
 {
     // quick return if not visible. children won't be drawn.
     if (!_visible)
@@ -279,7 +279,7 @@ void ProtectedNode::visit(Renderer* renderer, const Mat4& parentTransform, uint3
         return;
     }
 
-    uint32_t flags = processParentFlags(parentTransform, parentFlags);
+    uint32_t flags = processParentFlags(state, parentTransform, parentFlags);
 
     int i = 0;  // used by _children
     int j = 0;  // used by _protectedChildren
@@ -295,7 +295,7 @@ void ProtectedNode::visit(Renderer* renderer, const Mat4& parentTransform, uint3
         auto node = _children.at(i);
 
         if (node && node->getLocalZOrder() < 0)
-            node->visit(renderer, _modelViewTransform, flags);
+            node->visit(state, _modelViewTransform, flags);
         else
             break;
     }
@@ -305,7 +305,7 @@ void ProtectedNode::visit(Renderer* renderer, const Mat4& parentTransform, uint3
         auto node = _protectedChildren.at(j);
 
         if (node && node->getLocalZOrder() < 0)
-            node->visit(renderer, _modelViewTransform, flags);
+            node->visit(state, _modelViewTransform, flags);
         else
             break;
     }
@@ -313,17 +313,17 @@ void ProtectedNode::visit(Renderer* renderer, const Mat4& parentTransform, uint3
     //
     // draw self
     //
-    if (isVisitableByVisitingCamera())
-        this->draw(renderer, _modelViewTransform, flags);
+    if (isVisitableByCamera(state.cameraFlag))
+        this->draw(state, _modelViewTransform, flags);
 
     //
     // draw children and protectedChildren zOrder >= 0
     //
     for (auto it = _protectedChildren.cbegin() + j, itCend = _protectedChildren.cend(); it != itCend; ++it)
-        (*it)->visit(renderer, _modelViewTransform, flags);
+        (*it)->visit(state, _modelViewTransform, flags);
 
     for (auto it = _children.cbegin() + i, itCend = _children.cend(); it != itCend; ++it)
-        (*it)->visit(renderer, _modelViewTransform, flags);
+        (*it)->visit(state, _modelViewTransform, flags);
 
     // FIX ME: Why need to set _orderOfArrival to 0??
     // Please refer to https://github.com/cocos2d/cocos2d-x/pull/6920

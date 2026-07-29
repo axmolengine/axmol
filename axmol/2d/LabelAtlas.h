@@ -107,7 +107,7 @@ public:
     std::string getDescription() const override;
 
 #if AX_LABELATLAS_DEBUG_DRAW
-    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags) override;
 #endif
 
     LabelAtlas()

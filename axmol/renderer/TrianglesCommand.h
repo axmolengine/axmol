@@ -87,7 +87,8 @@ public:
               const BlendFunc& blendType,
               const Triangles& triangles,
               const Mat4& mv,
-              uint32_t flags);
+              uint32_t flags,
+              const SceneViewData& view);
     /**Get the material id of command.*/
     uint32_t getMaterialID() const { return _materialID; }
     /**Get a const reference of triangles.*/

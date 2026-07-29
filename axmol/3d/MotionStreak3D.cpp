@@ -398,18 +398,18 @@ void MotionStreak3D::reset()
     _nuPoints = 0;
 }
 
-void MotionStreak3D::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+void MotionStreak3D::draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags)
 {
     if (_nuPoints <= 1)
         return;
-    auto beforeCommand = renderer->nextCallbackCommand();
-    auto afterCommand  = renderer->nextCallbackCommand();
+    auto beforeCommand = state.getRenderer()->nextCallbackCommand();
+    auto afterCommand  = state.getRenderer()->nextCallbackCommand();
 
     beforeCommand->init(_globalZOrder);
     afterCommand->init(_globalZOrder);
-    _customCommand.init(_globalZOrder, transform, flags);
+    _customCommand.init(_globalZOrder, transform, flags, state.getView());
 
-    auto pmatrix   = Camera::getVisitingViewProjectionMatrix();
+    auto pmatrix   = state.getViewProjectionMatrix();
     auto mvpMatrix = pmatrix * transform;
 
     _programState->setUniform(_locMVP, mvpMatrix.m, sizeof(mvpMatrix.m));
@@ -421,9 +421,9 @@ void MotionStreak3D::draw(Renderer* renderer, const Mat4& transform, uint32_t fl
 
     _customCommand.setVertexDrawInfo(0, _nuPoints * 2);
 
-    renderer->addCommand(beforeCommand);
-    renderer->addCommand(&_customCommand);
-    renderer->addCommand(afterCommand);
+    state.getRenderer()->addCommand(beforeCommand);
+    state.getRenderer()->addCommand(&_customCommand);
+    state.getRenderer()->addCommand(afterCommand);
     AX_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, _nuPoints * 2);
 }
 

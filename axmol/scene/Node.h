@@ -87,6 +87,48 @@ typedef std::map<uint64_t, Node*> NodeIndexerMap_t;
 
 AX_DLL uint64_t hashNodeName(std::string_view);
 
+/**
+ * Scene graph render traversal state for a single camera/view pass.
+ *
+ * This is intentionally separate from ax::rhi::RenderContext. It carries
+ * scene-level view information needed by Node::visit()/draw(), while RHI
+ * RenderContext owns GPU command encoding.
+ */
+struct AX_DLL SceneViewData
+{
+    Mat4 view{Mat4::identity};
+    Mat4 projection{Mat4::identity};
+    Mat4 viewProjection{Mat4::identity};
+    Vec3 position{Vec3::zero};
+
+    static SceneViewData fromCamera(const Camera& camera);
+    static SceneViewData fromMatrices(const Mat4& view, const Mat4& projection, const Vec3& position);
+    float getDepthInView(const Mat4& transform) const;
+};
+
+struct AX_DLL SceneRenderState
+{
+    Renderer* renderer         = nullptr;
+    const Camera* camera       = nullptr;
+    SceneViewData view;
+    unsigned short cameraFlag  = 0;
+    bool viewOverridden        = false;
+
+    SceneRenderState() = default;
+    SceneRenderState(Renderer* renderer, const Camera* camera);
+    SceneRenderState(Renderer* renderer, const Camera* camera, const SceneViewData& view);
+
+    Renderer* getRenderer() const { return renderer; }
+    const Camera* getCamera() const { return camera; }
+    const SceneViewData& getView() const { return view; }
+    const Mat4& getViewMatrix() const { return view.view; }
+    const Mat4& getProjectionMatrix() const { return view.projection; }
+    const Mat4& getViewProjectionMatrix() const { return view.viewProjection; }
+    float getDepthInView(const Mat4& transform) const { return view.getDepthInView(transform); }
+    bool requiresVisibilityUpdate(uint32_t flags) const;
+    bool checkVisibility(const Mat4& transform, const Vec2& size) const;
+};
+
 /** @class Node
 * @brief Node is the base element of the Scene Graph. Elements of the Scene Graph must be Node objects or subclasses of
 it. The most common Node objects are: Scene, Layer, Sprite, Menu, Label.
@@ -1109,21 +1151,21 @@ public:
      * AND YOU SHOULD NOT DISABLE THEM AFTER DRAWING YOUR NODE
      * But if you enable any other GL state, you should disable it after drawing your node.
      *
-     * @param renderer A given renderer.
+     * @param state A scene render traversal state.
      * @param transform A transform matrix.
      * @param flags Renderer flag.
      */
-    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags);
+    virtual void draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags);
     virtual void draw() final;
 
     /**
      * Visits this node's children and draw them recursively.
      *
-     * @param renderer A given renderer.
+     * @param state A scene render traversal state.
      * @param parentTransform A transform matrix.
      * @param parentFlags Renderer flag.
      */
-    virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags);
+    virtual void visit(const SceneRenderState& state, const Mat4& parentTransform, uint32_t parentFlags);
     virtual void visit() final;
 
     /** Returns the Scene that contains the Node.
@@ -1818,6 +1860,7 @@ public:
      * get & set camera mask, the node is visible by the camera whose camera flag & node's camera mask is true
      */
     unsigned short getCameraMask() const { return _cameraMask; }
+    bool isVisitableByCamera(unsigned short cameraFlag) const;
 
     /**
      * Modify the camera mask for current node.
@@ -1914,6 +1957,7 @@ protected:
 
     /// Convert axmol coordinates to UI windows coordinate.
     Vec2 convertToScreenSpace(const Vec2& nodePoint) const;
+    Vec2 convertToScreenSpace(const Vec2& nodePoint, const Camera* camera) const;
 
     AX_DEPRECATED("3.0") Vec2 convertToWindowSpace(const Vec2& nodePoint) const
     {
@@ -1921,7 +1965,7 @@ protected:
     }
 
     Mat4 transform(const Mat4& parentTransform);
-    uint32_t processParentFlags(const Mat4& parentTransform, uint32_t parentFlags);
+    uint32_t processParentFlags(const SceneRenderState& state, const Mat4& parentTransform, uint32_t parentFlags);
 
     virtual void updateCascadeOpacity();
     virtual void disableCascadeOpacity();
@@ -1931,9 +1975,6 @@ protected:
 
     bool doEnumerate(std::string name, std::function<bool(Node*)> callback) const;
     bool doEnumerateRecursive(const Node* node, std::string_view name, std::function<bool(Node*)> callback) const;
-
-    // check whether this camera mask is visible by the current visiting camera
-    bool isVisitableByVisitingCamera() const;
 
     // update quaternion from Rotation3D
     void updateRotationQuat();
