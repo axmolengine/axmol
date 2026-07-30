@@ -4,7 +4,7 @@ _1k_deprecated_32bit(axmol 3.0.0)
 if(NOT CMAKE_GENERATOR MATCHES "Ninja")
   set(BUILD_CONFIG_DIR "\$\(Configuration\)/")
 else()
-  set(BUILD_CONFIG_DIR "")
+  set(BUILD_CONFIG_DIR "$<CONFIG>/")
 endif()
 
 macro(ax_link_ext EXTENSION_ENABLED LINKLIB)
@@ -20,10 +20,19 @@ macro(ax_link_ext EXTENSION_ENABLED LINKLIB)
 endmacro()
 
 function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
+  message(STATUS "Using Prebuilt feature from path:${_AX_ROOT}/${AX_PREBUILT_DIR}")
+  message(STATUS "  AX_PREBUILT_DIR=${AX_PREBUILT_DIR}")
   # stupid: exclude CMAKE_CXX_FLAGS_DEBUG CMAKE_C_FLAGS_DEBUG to avoid cmake generate
   # .vcxproj with incorrect debug msvc runtime, should be /MDd but got /MD
   set(AXSLCC_OUT_DIR_PROJ "${AXSLCC_OUT_DIR}")
-  load_cache("${AX_ROOT_DIR}/${AX_PREBUILT_DIR}" INCLUDE_INTERNALS _NUGET_PACKAGE_DIR EXCLUDE thirdparty_LIB_DEPENDS CMAKE_CXX_FLAGS_DEBUG CMAKE_C_FLAGS_DEBUG)
+  load_cache(
+    "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}" 
+    INCLUDE_INTERNALS _NUGET_PACKAGE_DIR 
+    EXCLUDE thirdparty_LIB_DEPENDS 
+      CMAKE_CXX_FLAGS_DEBUG 
+      CMAKE_C_FLAGS_DEBUG
+      CMAKE_BUILD_TYPE
+  )
   set(AXSLCC_OUT_DIR_ENGINE ${AXSLCC_OUT_DIR})
   set(AXSLCC_OUT_DIR "${AXSLCC_OUT_DIR_PROJ}" CACHE STRING "" FORCE)
   unset(AXSLCC_OUT_DIR_PROJ)
@@ -122,7 +131,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     PRIVATE ${AX_ROOT_DIR}/3rdparty/jpeg-turbo/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}
     PRIVATE ${AX_ROOT_DIR}/3rdparty/curl/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}
     PRIVATE ${AX_ROOT_DIR}/3rdparty/opus/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}
-    PRIVATE ${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/lib # cmake will auto add suffix '/$(Configuration)', refer to https://github.com/Kitware/CMake/blob/master/Source/cmVisualStudio10TargetGenerator.cxx#L4145
+    PRIVATE ${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/lib/${CMAKE_BUILD_TYPE}
   )
 
   # Linking platform libs
@@ -161,28 +170,37 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     list(APPEND LIBS opus)
   endif()
 
-  ax_link_ext(AX_ENABLE_EXT_DRAGONBONES "DragonBones" "${AX_ROOT_DIR}/extensions/DragonBones/src")
-  ax_link_ext(AX_ENABLE_EXT_COCOSTUDIO "cocostudio" "${AX_ROOT_DIR}/extensions/cocostudio/src")
+  ax_link_ext(AX_ENABLE_3D_PHYSICS "bullet" "${AX_ROOT_DIR}/3rdparty/bullet")
   ax_link_ext(AX_ENABLE_EXT_ASSETMANAGER "assets-manager" "${AX_ROOT_DIR}/extensions/assets-manager/src")
-  ax_link_ext(AX_ENABLE_EXT_PARTICLE3D "particle3d" "${AX_ROOT_DIR}/extensions/Particle3D/src")
-  ax_link_ext(AX_ENABLE_EXT_INSPECTOR "Inspector" "${AX_ROOT_DIR}/extensions/Inspector/src")
-  ax_link_ext(AX_ENABLE_EXT_SDFGEN "SDFGen" "${AX_ROOT_DIR}/extensions/SDFGen/src")
-  ax_link_ext(AX_ENABLE_EXT_DRAWNODEEX "DrawNodeEx" "${AX_ROOT_DIR}/extensions/DrawNodeEx/src")
-  ax_link_ext(AX_ENABLE_EXT_GUI "GUI" "${AX_ROOT_DIR}/extensions/GUI/src")
-  ax_link_ext(AX_ENABLE_EXT_FAIRYGUI "fairygui" "${AX_ROOT_DIR}/extensions/fairygui/src")
-  ax_link_ext(AX_ENABLE_EXT_LIVE2D "Live2D" "${AX_ROOT_DIR}/extensions/Live2D/Framework/src")
+  ax_link_ext(AX_ENABLE_EXT_COCOSTUDIO "cocostudio" "${AX_ROOT_DIR}/extensions/cocostudio/src")
+  ax_link_ext(AX_ENABLE_EXT_DRAGONBONES "DragonBones" "${AX_ROOT_DIR}/extensions/DragonBones/src")
+  # TODO: Modify Effekseer's include dirs
   ax_link_ext(AX_ENABLE_EXT_EFFEKSEER "EffekseerForCocos2d-x" "${AX_ROOT_DIR}/extensions/Effekseer")
+  ax_link_ext(AX_ENABLE_EXT_FAIRYGUI "fairygui" 
+    "${AX_ROOT_DIR}/extensions/fairygui/src"
+    "${AX_ROOT_DIR}/extensions/fairygui/src/fairygui"
+  )
+  ax_link_ext(AX_ENABLE_EXT_GUI "GUI" 
+    "${AX_ROOT_DIR}/extensions/GUI/src"
+    "${AX_ROOT_DIR}/extensions/GUI/src/GUI"
+  )
+  ax_link_ext(AX_ENABLE_EXT_IMGUI "ImGui"
+  "${AX_ROOT_DIR}/extensions/ImGui/src" "${AX_ROOT_DIR}/extensions/ImGui/src/ImGui/imgui"
+  )
+  ax_link_ext(AX_ENABLE_EXT_INSPECTOR "Inspector" "${AX_ROOT_DIR}/extensions/Inspector/src")
+  ax_link_ext(AX_ENABLE_EXT_LIVE2D "Live2D" 
+    "${AX_ROOT_DIR}/extensions/Live2D/Framework/src"
+    "${AX_ROOT_DIR}/extensions/Live2D/Core/include"
+  )
+  ax_link_ext(AX_ENABLE_EXT_PARTICLE3D "particle3d" "${AX_ROOT_DIR}/extensions/Particle3D/src")
   ax_link_ext(AX_ENABLE_EXT_PHYSICS_NODE "physics-nodes" "${AX_ROOT_DIR}/extensions/physics-nodes/src")
   ax_link_ext(AX_ENABLE_NAVMESH "recast" "${AX_ROOT_DIR}/3rdparty/recast")
-  ax_link_ext(AX_ENABLE_3D_PHYSICS "bullet" "${AX_ROOT_DIR}/3rdparty/bullet")
-
-  ax_link_ext(AX_ENABLE_EXT_IMGUI "ImGui"
-    "${AX_ROOT_DIR}/extensions/ImGui/src" "${AX_ROOT_DIR}/extensions/ImGui/src/ImGui/imgui"
-  )
-
+  ax_link_ext(AX_ENABLE_EXT_SDFGEN "SDFGen" "${AX_ROOT_DIR}/extensions/SDFGen/src")
   ax_link_ext(AX_ENABLE_EXT_SPINE "spine"
     "${AX_ROOT_DIR}/extensions/spine/runtime/include" "${AX_ROOT_DIR}/extensions/spine/src"
   )
+  
+  
 
   if(WINDOWS)
     target_link_libraries(${APP_NAME}
