@@ -8859,8 +8859,9 @@ int lua_ax_base_Node_draw(lua_State* tolua_S)
     ok  = true;
     do {
         if (argc == 3) {
-            ax::Renderer* arg0;
-            ok &= luaval_to_object<ax::Renderer>(tolua_S, 2, "ax.Renderer",&arg0, "ax.Node:draw");
+            ax::SceneRenderState arg0;
+            #pragma warning NO CONVERSION TO NATIVE FOR SceneRenderState
+        ok = false;
 
             if (!ok) { break; }
             ax::Mat4 arg1;
@@ -8918,8 +8919,9 @@ int lua_ax_base_Node_visit(lua_State* tolua_S)
     ok  = true;
     do {
         if (argc == 3) {
-            ax::Renderer* arg0;
-            ok &= luaval_to_object<ax::Renderer>(tolua_S, 2, "ax.Renderer",&arg0, "ax.Node:visit");
+            ax::SceneRenderState arg0;
+            #pragma warning NO CONVERSION TO NATIVE FOR SceneRenderState
+        ok = false;
 
             if (!ok) { break; }
             ax::Mat4 arg1;
@@ -12132,6 +12134,56 @@ int lua_ax_base_Node_getCameraMask(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_Node_isVisitableByCamera(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Node* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Node",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::Node*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Node_isVisitableByCamera'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        unsigned short arg0;
+
+        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.Node:isVisitableByCamera");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Node_isVisitableByCamera'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->isVisitableByCamera(arg0);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Node:isVisitableByCamera",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Node_isVisitableByCamera'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_Node_setCameraMask(lua_State* tolua_S)
 {
     int argc = 0;
@@ -13020,6 +13072,7 @@ int lua_register_ax_base_Node(lua_State* tolua_S)
         tolua_function(tolua_S,"setOnExitTransitionDidStartCallback",lua_ax_base_Node_setOnExitTransitionDidStartCallback);
         tolua_function(tolua_S,"getOnExitTransitionDidStartCallback",lua_ax_base_Node_getOnExitTransitionDidStartCallback);
         tolua_function(tolua_S,"getCameraMask",lua_ax_base_Node_getCameraMask);
+        tolua_function(tolua_S,"isVisitableByCamera",lua_ax_base_Node_isVisitableByCamera);
         tolua_function(tolua_S,"setCameraMask",lua_ax_base_Node_setCameraMask);
         tolua_function(tolua_S,"applyMaskOnEnter",lua_ax_base_Node_applyMaskOnEnter);
         tolua_function(tolua_S,"setProgramState",lua_ax_base_Node_setProgramState);
@@ -89515,6 +89568,53 @@ int lua_ax_base_Camera_setCameraFlag(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_Camera_getCameraMode(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Camera* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Camera",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Camera_getCameraMode'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Camera_getCameraMode'", nullptr);
+            return 0;
+        }
+        int ret = (int)obj->getCameraMode();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Camera:getCameraMode",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Camera_getCameraMode'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_Camera_setTargetTexture(lua_State* tolua_S)
 {
     int argc = 0;
@@ -90801,18 +90901,14 @@ int lua_ax_base_Camera_clearBackground(lua_State* tolua_S)
     int argc = 0;
     ax::Camera* obj = nullptr;
     bool ok  = true;
-
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Camera",0,&tolua_err)) goto tolua_lerror;
 #endif
-
     obj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
-
 #if _AX_DEBUG >= 1
     if (!obj)
     {
@@ -90820,20 +90916,29 @@ int lua_ax_base_Camera_clearBackground(lua_State* tolua_S)
         return 0;
     }
 #endif
-
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Camera_clearBackground'", nullptr);
-            return 0;
+    do {
+        if (argc == 1) {
+            ax::SceneRenderState arg0;
+            #pragma warning NO CONVERSION TO NATIVE FOR SceneRenderState
+        ok = false;
+
+            if (!ok) { break; }
+            obj->clearBackground(arg0);
+            lua_settop(tolua_S, 1);
+            return 1;
         }
-        obj->clearBackground();
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Camera:clearBackground",argc, 0);
+    }while(0);
+    ok  = true;
+    do {
+        if (argc == 0) {
+            obj->clearBackground();
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.Camera:clearBackground",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -91614,6 +91719,7 @@ int lua_register_ax_base_Camera(lua_State* tolua_S)
         tolua_function(tolua_S,"updateViewProjectionState",lua_ax_base_Camera_updateViewProjectionState);
         tolua_function(tolua_S,"getCameraFlag",lua_ax_base_Camera_getCameraFlag);
         tolua_function(tolua_S,"setCameraFlag",lua_ax_base_Camera_setCameraFlag);
+        tolua_function(tolua_S,"getCameraMode",lua_ax_base_Camera_getCameraMode);
         tolua_function(tolua_S,"setTargetTexture",lua_ax_base_Camera_setTargetTexture);
         tolua_function(tolua_S,"getTargetTexture",lua_ax_base_Camera_getTargetTexture);
         tolua_function(tolua_S,"lookAt",lua_ax_base_Camera_lookAt);
@@ -91715,18 +91821,14 @@ int lua_ax_base_CameraBackgroundBrush_drawBackground(lua_State* tolua_S)
     int argc = 0;
     ax::CameraBackgroundBrush* obj = nullptr;
     bool ok  = true;
-
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.CameraBackgroundBrush",0,&tolua_err)) goto tolua_lerror;
 #endif
-
     obj = (ax::CameraBackgroundBrush*)tolua_tousertype(tolua_S,1,0);
-
 #if _AX_DEBUG >= 1
     if (!obj)
     {
@@ -91734,23 +91836,33 @@ int lua_ax_base_CameraBackgroundBrush_drawBackground(lua_State* tolua_S)
         return 0;
     }
 #endif
-
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
-    {
-        ax::Camera* arg0;
+    do {
+        if (argc == 1) {
+            ax::SceneRenderState arg0;
+            #pragma warning NO CONVERSION TO NATIVE FOR SceneRenderState
+        ok = false;
 
-        ok &= luaval_to_object<ax::Camera>(tolua_S, 2, "ax.Camera",&arg0, "ax.CameraBackgroundBrush:drawBackground");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_CameraBackgroundBrush_drawBackground'", nullptr);
-            return 0;
+            if (!ok) { break; }
+            obj->drawBackground(arg0);
+            lua_settop(tolua_S, 1);
+            return 1;
         }
-        obj->drawBackground(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.CameraBackgroundBrush:drawBackground",argc, 1);
+    }while(0);
+    ok  = true;
+    do {
+        if (argc == 1) {
+            ax::Camera* arg0;
+            ok &= luaval_to_object<ax::Camera>(tolua_S, 2, "ax.Camera",&arg0, "ax.CameraBackgroundBrush:drawBackground");
+
+            if (!ok) { break; }
+            obj->drawBackground(arg0);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.CameraBackgroundBrush:drawBackground",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -92861,18 +92973,22 @@ int lua_ax_base_GridBase_blit(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0)
+    if (argc == 1)
     {
+        ax::SceneRenderState arg0;
+
+        #pragma warning NO CONVERSION TO NATIVE FOR SceneRenderState
+        ok = false;
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GridBase_blit'", nullptr);
             return 0;
         }
-        obj->blit();
+        obj->blit(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GridBase:blit",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GridBase:blit",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -93637,21 +93753,25 @@ int lua_ax_base_GridBase_afterDraw(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1)
+    if (argc == 2)
     {
         ax::Node* arg0;
+        ax::SceneRenderState arg1;
 
         ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.GridBase:afterDraw");
+
+        #pragma warning NO CONVERSION TO NATIVE FOR SceneRenderState
+        ok = false;
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GridBase_afterDraw'", nullptr);
             return 0;
         }
-        obj->afterDraw(arg0);
+        obj->afterDraw(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GridBase:afterDraw",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.GridBase:afterDraw",argc, 2);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -97752,6 +97872,59 @@ int lua_ax_base_Pass_setTechnique(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_Pass_updateMVPUniform(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Pass* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Pass",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::Pass*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_Pass_updateMVPUniform'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 2)
+    {
+        ax::MeshCommand* arg0;
+        ax::Mat4 arg1;
+
+        ok &= luaval_to_object<ax::MeshCommand>(tolua_S, 2, "ax.MeshCommand",&arg0, "ax.Pass:updateMVPUniform");
+
+        ok &= luaval_to_mat4(tolua_S, 3, &arg1, "ax.Pass:updateMVPUniform");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Pass_updateMVPUniform'", nullptr);
+            return 0;
+        }
+        obj->updateMVPUniform(arg0, arg1);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Pass:updateMVPUniform",argc, 2);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Pass_updateMVPUniform'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_Pass_setUniformTexture(lua_State* tolua_S)
 {
     int argc = 0;
@@ -98708,6 +98881,7 @@ int lua_register_ax_base_Pass(lua_State* tolua_S)
         tolua_function(tolua_S,"getName",lua_ax_base_Pass_getName);
         tolua_function(tolua_S,"clone",lua_ax_base_Pass_clone);
         tolua_function(tolua_S,"setTechnique",lua_ax_base_Pass_setTechnique);
+        tolua_function(tolua_S,"updateMVPUniform",lua_ax_base_Pass_updateMVPUniform);
         tolua_function(tolua_S,"setUniformTexture",lua_ax_base_Pass_setUniformTexture);
         tolua_function(tolua_S,"setUniformNormTexture",lua_ax_base_Pass_setUniformNormTexture);
         tolua_function(tolua_S,"setUniformColor",lua_ax_base_Pass_setUniformColor);
@@ -115230,3 +115404,4 @@ TOLUA_API int register_all_ax_base(lua_State* tolua_S)
     tolua_endmodule(tolua_S);
     return 1;
 }
+
