@@ -9,7 +9,7 @@ macro(axslcc_option variable value)
   endif()
 endmacro()
 
-axslcc_option(AXSLCC_SOURCE_FILE_EXTENSIONS ".hlsl")
+axslcc_option(AXSLCC_SOURCE_FILE_EXTENSIONS ".hlsl;.fx")
 axslcc_option(AXSLCC_OUT_DIR ${CMAKE_BINARY_DIR}/runtime/axslc)
 axslcc_option(AXSLCC_FIND_PROG_ROOT "")
 axslcc_option(AXSLCC_FLAGS "-S")
