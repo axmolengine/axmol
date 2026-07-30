@@ -688,7 +688,9 @@ void EffectEmitter::draw(const cocos2d::SceneRenderState& state, const cocos2d::
 	auto renderer2d = manager->getInternalRenderer();
 	Effekseer::Matrix44 mCamera = renderer2d->GetCameraMatrix();
 	Effekseer::Matrix44 mProj = renderer2d->GetProjectionMatrix();
+    Effekseer::Manager::LayerParameter layerParameter = manager->getInternalManager()->GetLayerParameter(0);
 	renderCommand->func = [=]() -> void {
+        manager->getInternalManager()->SetLayerParameter(0, layerParameter);
 		renderer2d->SetCameraMatrix(mCamera);
 		renderer2d->SetProjectionMatrix(mProj);
 
@@ -841,8 +843,11 @@ void EffectManager::setIsDistortionEnabled(bool value)
     }
 }
 
-void EffectManager::begin(cocos2d::Renderer* renderer, float globalZOrder)
+void EffectManager::begin(const cocos2d::SceneRenderState& state, float globalZOrder)
 {
+    setCameraMatrix(state.getViewMatrix());
+    setProjectionMatrix(state.getProjectionMatrix());
+
 	if (isDistortionEnabled)
 	{
 		isDistorted = false;
@@ -854,6 +859,8 @@ void EffectManager::begin(cocos2d::Renderer* renderer, float globalZOrder)
 	}
 
     newFrame();
+
+    AX_UNUSED_PARAM(globalZOrder);
 
 	// TODO Batch render
 	/*
@@ -869,12 +876,15 @@ void EffectManager::begin(cocos2d::Renderer* renderer, float globalZOrder)
 
 
 
-	renderer->addCommand(&beginCommand);
+	state.getRenderer()->addCommand(&beginCommand);
 	*/
 }
 
-void EffectManager::end(cocos2d::Renderer* renderer, float globalZOrder)
+void EffectManager::end(const cocos2d::SceneRenderState& state, float globalZOrder)
 {
+    AX_UNUSED_PARAM(state);
+    AX_UNUSED_PARAM(globalZOrder);
+
 	// TODO Batch render
 	/*
 	endCommand.init(globalZOrder);
@@ -884,7 +894,7 @@ void EffectManager::end(cocos2d::Renderer* renderer, float globalZOrder)
 		renderer2d->EndRendering();
 	};
 
-	renderer->addCommand(&endCommand);
+	state.getRenderer()->addCommand(&endCommand);
 	*/
 }
 

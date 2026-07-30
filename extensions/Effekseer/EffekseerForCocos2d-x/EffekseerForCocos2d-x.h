@@ -377,14 +377,14 @@ public:
 		\~English	Inherit visit and add a process before drawing the layer.
 		\~Japanese	visitを継承してレイヤーの描画を行う前に実行する。
 	*/
-	void begin(cocos2d::Renderer* renderer, float globalZOrder);
+	void begin(const cocos2d::SceneRenderState& state, float globalZOrder);
 
 	/**
 		@brief
 		\~English	Inherit visit and add a process after drawing the layer.
 		\~Japanese	visitを継承してレイヤーの描画を行った後に実行する。
 	*/
-	void end(cocos2d::Renderer* renderer, float globalZOrder);
+	void end(const cocos2d::SceneRenderState& state, float globalZOrder);
 
     /**
         @brief
