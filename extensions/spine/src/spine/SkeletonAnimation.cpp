@@ -190,14 +190,14 @@ namespace spine {
 		}
 
 
-		static bool cullRectangle(Renderer *renderer, const Mat4 &transform, const axmol::Rect &rect) {
-			if (Camera::getVisitingCamera() == nullptr)
+		static bool cullRectangle(const axmol::SceneRenderState &state, const Mat4 &transform, const axmol::Rect &rect) {
+			if (state.getCamera() == nullptr)
 				return false;
 
 			auto director = Director::getInstance();
 			auto scene = director->getRunningScene();
 
-			if (!scene || (scene && Camera::getDefaultCamera() != Camera::getVisitingCamera()))
+			if (!scene || !state.getCamera() || state.getCamera()->getCameraMode() != CameraMode::Classic)
 				return false;
 
 			Rect visibleRect(director->getVisibleOrigin(), director->getVisibleSize());
@@ -207,7 +207,14 @@ namespace spine {
 			float hSizeY = rect.size.height / 2;
 			Vec3 v3p(rect.origin.x + hSizeX, rect.origin.y + hSizeY, 0);
 			transform.transformPoint(&v3p);
-			Vec2 v2p = Camera::getVisitingCamera()->projectWorldToCanvas(v3p);
+			const auto &viewProjection = state.getViewProjectionMatrix();
+			Vec4 clipPos;
+			viewProjection.transformVector(Vec4(v3p.x, v3p.y, v3p.z, 1.0f), &clipPos);
+			if (clipPos.w == 0.0f)
+				return false;
+			auto canvasSize = director->getCanvasSize();
+			Vec2 v2p((clipPos.x / clipPos.w + 1.0f) * 0.5f * canvasSize.width,
+			         (clipPos.y / clipPos.w + 1.0f) * 0.5f * canvasSize.height);
 
 			// convert content size to world coordinates
 			float wshw = std::max(fabsf(hSizeX * transform.m[0] + hSizeY * transform.m[4]), fabsf(hSizeX * transform.m[0] - hSizeY * transform.m[4]));
@@ -377,7 +384,7 @@ namespace spine {
 		if (_postUpdateListener) _postUpdateListener(this);
 	}
 
-	void SkeletonAnimation::draw(Renderer *renderer, const Mat4 &transform, uint32_t transformFlags) {
+	void SkeletonAnimation::draw(const axmol::SceneRenderState &state, const Mat4 &transform, uint32_t transformFlags) {
 		if (_firstDraw && _state) {
 			_firstDraw = false;
 			update(0);
@@ -400,7 +407,7 @@ namespace spine {
 #if AX_USE_CULLING
 		const axmol::Rect bb = computeBoundingRect(worldCoords, coordCount / 2);
 
-		if (cullRectangle(renderer, transform, bb)) {
+		if (cullRectangle(state, transform, bb)) {
 			VLA_FREE(worldCoords);
 			return;
 		}
@@ -588,7 +595,7 @@ namespace spine {
 						vertex->texCoord.v = uvs[vv + 1];
 						vertex->color = color_r;
 					}
-					batch->addCommand(renderer, _globalZOrder, texture, _programState, blendFunc, triangles, transform, transformFlags);
+					batch->addCommand(state, _globalZOrder, texture, _programState, blendFunc, triangles, transform, transformFlags);
 				} else {
 					// Not clipping.
 					auto vertex = triangles.verts;
@@ -596,7 +603,7 @@ namespace spine {
 						 ++v, ++vertex) {
 						vertex->color = color_r;
 					}
-					batch->addCommand(renderer, _globalZOrder, texture, _programState, blendFunc, triangles, transform, transformFlags);
+					batch->addCommand(state, _globalZOrder, texture, _programState, blendFunc, triangles, transform, transformFlags);
 				}
 			} else {
 				// Two color tinting.
@@ -629,14 +636,14 @@ namespace spine {
 						vertex->color = color_r;
 						vertex->color2 = darkColor_r;
 					}
-					lastTwoColorTrianglesCommand = twoColorBatch->addCommand(renderer, _globalZOrder, texture, _programState, blendFunc, trianglesTwoColor, transform, transformFlags);
+					lastTwoColorTrianglesCommand = twoColorBatch->addCommand(state, _globalZOrder, texture, _programState, blendFunc, trianglesTwoColor, transform, transformFlags);
 				} else {
 					V3F_C4B_C4B_T2F *vertex = trianglesTwoColor.verts;
 					for (int v = 0, vn = trianglesTwoColor.vertCount; v < vn; ++v, ++vertex) {
 						vertex->color = color_r;
 						vertex->color2 = darkColor_r;
 					}
-					lastTwoColorTrianglesCommand = twoColorBatch->addCommand(renderer, _globalZOrder, texture, _programState, blendFunc, trianglesTwoColor, transform, transformFlags);
+					lastTwoColorTrianglesCommand = twoColorBatch->addCommand(state, _globalZOrder, texture, _programState, blendFunc, trianglesTwoColor, transform, transformFlags);
 				}
 			}
 			_clipper->clipEnd(slot);
@@ -678,14 +685,14 @@ namespace spine {
 		}
 
 		if (_debugBoundingRect || _debugSlots || _debugBones || _debugMeshes) {
-			drawDebug(renderer, transform, transformFlags);
+			drawDebug(state, transform, transformFlags);
 		}
 
 		VLA_FREE(worldCoords);
 	}
 
 
-	void SkeletonAnimation::drawDebug(Renderer *renderer, const Mat4 &transform, uint32_t transformFlags) {
+	void SkeletonAnimation::drawDebug(const axmol::SceneRenderState &state, const Mat4 &transform, uint32_t transformFlags) {
 		DrawNode *drawNode = DrawNode::create();
 		drawNode->setGlobalZOrder(getGlobalZOrder());
 
@@ -773,7 +780,7 @@ namespace spine {
 			}
 		}
 
-		drawNode->draw(renderer, transform, transformFlags);
+		drawNode->draw(state, transform, transformFlags);
 	}
 
 	axmol::Rect SkeletonAnimation::getBoundingBox() const {

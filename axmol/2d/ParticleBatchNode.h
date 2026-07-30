@@ -124,14 +124,14 @@ public:
     void setTextureAtlas(TextureAtlas* atlas) { _textureAtlas = atlas; }
 
     // Overrides
-    void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+    void visit(const SceneRenderState& state, const Mat4& parentTransform, uint32_t parentFlags) override;
 
     using Node::addChild;
     void addChild(Node* child, int zOrder, int tag) override;
     void addChild(Node* child, int zOrder, std::string_view name) override;
     void removeChild(Node* child, bool cleanup) override;
     void reorderChild(Node* child, int zOrder) override;
-    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags) override;
     Texture2D* getTexture() const override;
     void setTexture(Texture2D* texture) override;
     /**

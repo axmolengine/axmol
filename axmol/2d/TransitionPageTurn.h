@@ -70,7 +70,7 @@ public:
     //
     // Overrides
     //
-    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags) override;
 
     /**
      * Creates a base transition with duration and incoming scene.

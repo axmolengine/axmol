@@ -71,7 +71,7 @@ public:
     */
     void init(float globalZOrder);
 
-    void init(float globalZOrder, const Mat4& transform);
+    void init(float globalZOrder, const Mat4& transform, const SceneViewData& view);
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     void listenRendererRecreated(CustomEvent* event);

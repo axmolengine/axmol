@@ -55,7 +55,7 @@ public:
     void onEnterTransitionDidFinish() override;
     void onExitTransitionDidStart() override;
     void onExit() override;
-    void visit(ax::Renderer *renderer, const ax::Mat4 &parentTransform, uint32_t parentFlags) override;
+    void visit(const ax::SceneRenderState& state, const ax::Mat4 &parentTransform, uint32_t parentFlags) override;
     void setCameraMask(unsigned short mask, bool applyChildren = true) override;
     void setGlobalZOrder(float globalZOrder) override;
 

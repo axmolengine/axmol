@@ -26,9 +26,9 @@
 
 using namespace ax;
 
-void CustomTableViewCell::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+void CustomTableViewCell::draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags)
 {
-    TableViewCell::draw(renderer, transform, flags);
+    TableViewCell::draw(state, transform, flags);
     // draw bounding box
     // 	auto pos = getPosition();
     // 	auto size = Size(178, 200);

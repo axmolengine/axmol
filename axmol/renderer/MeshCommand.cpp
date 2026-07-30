@@ -32,7 +32,7 @@
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/EventType.h"
 #include "axmol/2d/Light.h"
-#include "axmol/scene/Camera.h"
+#include "axmol/scene/Node.h"
 #include "axmol/renderer/Renderer.h"
 #include "axmol/renderer/TextureAtlas.h"
 #include "axmol/renderer/Texture2D.h"
@@ -64,14 +64,9 @@ void MeshCommand::init(float globalZOrder)
     CustomCommand::init(globalZOrder);
 }
 
-void MeshCommand::init(float globalZOrder, const Mat4& transform)
+void MeshCommand::init(float globalZOrder, const Mat4& transform, const SceneViewData& view)
 {
-    CustomCommand::init(globalZOrder);
-    if (Camera::getVisitingCamera())
-    {
-        _depth = Camera::getVisitingCamera()->getDepthInView(transform);
-    }
-    _mv = transform;
+    RenderCommand::init(globalZOrder, transform, Node::FLAGS_RENDER_AS_3D, view);
 }
 
 MeshCommand::~MeshCommand()

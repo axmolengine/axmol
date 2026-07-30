@@ -43,6 +43,7 @@ class VertexBuffer;
 class Texture2D;
 class ParticleSystem3D;
 class Renderer;
+struct SceneRenderState;
 
 class PUBillboardChain
 {
@@ -224,7 +225,7 @@ public:
     void setDepthWrite(bool isDepthWrite);
     void setBlendFunc(const BlendFunc& blendFunc);
 
-    void render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem);
+    void render(const SceneRenderState& state, const Mat4& transform, ParticleSystem3D* particleSystem);
 
     // Overridden members follow
     // void _updateRenderQueue(RenderQueue*);
@@ -241,7 +242,7 @@ protected:
     // Setup buffers
     virtual void setupBuffers();
     /// Update the contents of the vertex buffer
-    virtual void updateVertexBuffer(const Mat4& camMat);
+    virtual void updateVertexBuffer(const Vec3& eyePos);
     /// Update the contents of the index buffer
     virtual void updateIndexBuffer();
 

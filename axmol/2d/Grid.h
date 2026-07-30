@@ -42,6 +42,7 @@ class Texture2D;
 class Node;
 class NodeGrid;
 class RenderTexturePass;
+struct SceneRenderState;
 
 namespace rhi
 {
@@ -72,7 +73,7 @@ public:
     /**@}*/
 
     /**Interface used to blit the texture with grid to screen.*/
-    virtual void blit() = 0;
+    virtual void blit(const SceneRenderState& state) = 0;
     /**Interface, Reuse the grid vertices.*/
     virtual void reuse() = 0;
     /**Interface, Calculate the vertices used for the blit.*/
@@ -122,7 +123,7 @@ public:
      Init and reset the status when render effects by using the grid.
      */
     void beforeDraw();
-    void afterDraw(Node* target);
+    void afterDraw(Node* target, const SceneRenderState& state);
     /**@}*/
 
     /**
@@ -220,7 +221,7 @@ public:
      */
     void beforeBlit() override;
     void afterBlit() override;
-    void blit() override;
+    void blit(const SceneRenderState& state) override;
     void reuse() override;
     void calculateVertexPoints() override;
     /**@}*/
@@ -264,7 +265,7 @@ public:
     /**@{
      Implementations for interfaces in base class.
      */
-    void blit() override;
+    void blit(const SceneRenderState& state) override;
     void reuse() override;
     void calculateVertexPoints() override;
     /**@}*/

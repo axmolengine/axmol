@@ -222,7 +222,7 @@ void GridBase::beforeDraw()
     _renderTexturePass->clear(ClearFlag::COLOR, {.color = _clearColor, .depth = 1.0f, .stencil = 0});
 }
 
-void GridBase::afterDraw(ax::Node* /*target*/)
+void GridBase::afterDraw(ax::Node* /*target*/, const SceneRenderState& state)
 {
     auto renderer = Director::getInstance()->getRenderer();
 
@@ -231,7 +231,7 @@ void GridBase::afterDraw(ax::Node* /*target*/)
 
     renderer->addCallbackCommand([this]() -> void { beforeBlit(); });
 
-    blit();
+    blit(state);
 
     renderer->addCallbackCommand([this]() -> void { afterBlit(); });
 }
@@ -349,13 +349,12 @@ void Grid3D::afterBlit()
     }
 }
 
-void Grid3D::blit()
+void Grid3D::blit(const SceneRenderState& state)
 {
     updateVertexBuffer();
     _drawCommand.init(GRID_BLIT_ORDER, _blendFunc);
     Director::getInstance()->getRenderer()->addCommand(&_drawCommand);
-    auto camera            = Camera::getVisitingCamera();
-    ax::Mat4 projectionMat = camera ? camera->getVisitingViewProjectionMatrix() : Mat4::identity;
+    ax::Mat4 projectionMat = state.getViewProjectionMatrix();
     auto programState      = _drawCommand.unsafePS();
     programState->setUniform(_mvpMatrixLocation, projectionMat.m, sizeof(projectionMat.m));
     programState->setTexture(_textureLocation, 0, _texture->getRHITexture());
@@ -622,13 +621,12 @@ TiledGrid3D* TiledGrid3D::create(const Vec2& gridSize, Texture2D* texture, bool 
     return ret;
 }
 
-void TiledGrid3D::blit()
+void TiledGrid3D::blit(const SceneRenderState& state)
 {
     updateVertexBuffer();
     _drawCommand.init(GRID_BLIT_ORDER, _blendFunc);
     Director::getInstance()->getRenderer()->addCommand(&_drawCommand);
-    auto camera            = Camera::getVisitingCamera();
-    ax::Mat4 projectionMat = camera ? camera->getVisitingViewProjectionMatrix() : Mat4::identity;
+    ax::Mat4 projectionMat = state.getViewProjectionMatrix();
     auto programState      = _drawCommand.unsafePS();
     programState->setUniform(_mvpMatrixLocation, projectionMat.m, sizeof(projectionMat.m));
     programState->setTexture(_textureLocation, 0, _texture->getRHITexture());

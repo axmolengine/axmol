@@ -2494,7 +2494,7 @@ int lua_ax_3d_Mesh_draw(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 8)
     {
-        ax::Renderer* arg0;
+        ax::SceneRenderState arg0;
         double arg1;
         ax::Mat4 arg2;
         unsigned int arg3;
@@ -2503,7 +2503,8 @@ int lua_ax_3d_Mesh_draw(lua_State* tolua_S)
         bool arg6;
         bool arg7;
 
-        ok &= luaval_to_object<ax::Renderer>(tolua_S, 2, "ax.Renderer",&arg0, "ax.Mesh:draw");
+        #pragma warning NO CONVERSION TO NATIVE FOR SceneRenderState
+        ok = false;
 
         ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Mesh:draw");
 

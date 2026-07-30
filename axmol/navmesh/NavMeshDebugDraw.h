@@ -48,6 +48,8 @@ namespace ax
  * @{
  */
 class Renderer;
+struct SceneViewData;
+struct SceneRenderState;
 class NavMeshDebugDraw : public duDebugDraw
 {
 public:
@@ -67,12 +69,12 @@ public:
 
     void end() override;
 
-    void draw(Renderer* renderer);
+    void draw(const SceneRenderState& state);
 
     void clear();
 
 private:
-    void initCustomCommand(CustomCommand& command);
+    void initCustomCommand(CustomCommand& command, const SceneViewData& view);
     rhi::PrimitiveType getPrimitiveType(duDebugDrawPrimitives prim);
     static Vec4 getColor(unsigned int col);
 

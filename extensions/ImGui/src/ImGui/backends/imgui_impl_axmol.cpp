@@ -450,8 +450,12 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderDrawData(ImDrawData* draw_data)
                         const auto tr = node->getNodeToParentTransform();
                         node->setVisible(true);
                         node->setNodeToParentTransform(tr);
-                        const auto& proj = Camera::getDefaultCamera()->getViewProjectionMatrix();
-                        node->visit(Director::getInstance()->getRenderer(), proj.getInversed() * bd->Projection, 0);
+                        auto director = Director::getInstance();
+                        auto scene    = director->getRunningScene();
+                        auto camera   = scene ? scene->getDefaultCamera() : nullptr;
+                        const auto& proj = camera ? camera->getViewProjectionMatrix() : Mat4::identity;
+                        SceneRenderState renderState(director->getRenderer(), camera);
+                        node->visit(renderState, proj.getInversed() * bd->Projection, 0);
                         node->setVisible(false);
                     }
                 }

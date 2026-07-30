@@ -192,7 +192,7 @@ public:
 
     /**
      */
-    void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+    void visit(const SceneRenderState& state, const Mat4& parentTransform, uint32_t parentFlags) override;
 
     using Node::addChild;
     void addChild(Node* child, int zOrder, int tag) override;
@@ -206,7 +206,7 @@ public:
     void sortAllChildren() override;
     /**
      */
-    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags) override;
     /**
      */
     std::string getDescription() const override;

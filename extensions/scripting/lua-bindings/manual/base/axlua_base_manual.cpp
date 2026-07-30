@@ -89,7 +89,7 @@ public:
 
 #endif
 
-void LuaNode::draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags)
+void LuaNode::draw(const ax::SceneRenderState& state, const ax::Mat4& transform, uint32_t flags)
 {
     int handler =
         ScriptHandlerMgr::getInstance()->getObjectHandler((void*)this, ScriptHandlerMgr::HandlerType::LUANODE_DRAW);

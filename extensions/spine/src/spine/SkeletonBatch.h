@@ -41,6 +41,10 @@
 
 #include <vector>
 
+namespace ax {
+	struct SceneRenderState;
+}
+
 namespace spine {
 	struct SkeletonCommand : public ax::TrianglesCommand {
 		ax::rhi::UniformLocation _locMVP;
@@ -58,7 +62,7 @@ namespace spine {
 		void deallocateVertices(uint32_t numVertices);
 		unsigned short *allocateIndices(uint32_t numIndices);
 		void deallocateIndices(uint32_t numVertices);
-		ax::TrianglesCommand *addCommand(ax::Renderer *renderer, float globalOrder, ax::Texture2D *texture, ax::rhi::ProgramState *programState, ax::BlendFunc blendType, const ax::TrianglesCommand::Triangles &triangles, const ax::Mat4 &mv, uint32_t flags);
+		ax::TrianglesCommand *addCommand(const ax::SceneRenderState &state, float globalOrder, ax::Texture2D *texture, ax::rhi::ProgramState *programState, ax::BlendFunc blendType, const ax::TrianglesCommand::Triangles &triangles, const ax::Mat4 &mv, uint32_t flags);
 
 		ax::rhi::ProgramState* updateCommandPipelinePS(SkeletonCommand* command, ax::rhi::ProgramState* programState);
 

@@ -88,7 +88,7 @@ public:
     const Rect& getGridRect() const { return _gridRect; }
 
     // overrides
-    void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+    void visit(const SceneRenderState& state, const Mat4& parentTransform, uint32_t parentFlags) override;
 
     NodeGrid();
     virtual ~NodeGrid();
@@ -102,8 +102,8 @@ protected:
     void setProjectGridBlitToVisitingCamera(bool enabled) { _projectGridBlitToVisitingCamera = enabled; }
 
     void onGridBeginDraw();
-    void onGridEndDraw();
-    Camera* getGridCamera();
+    void onGridEndDraw(const SceneRenderState& state);
+    Camera* getGridCamera(const Camera* currentCamera);
 
     Node* _gridTarget   = nullptr;
     GridBase* _nodeGrid = nullptr;

@@ -86,7 +86,7 @@ void BatchNode::removeChild(Node* child, bool cleanup)
     Node::removeChild(child, cleanup);
 }
 
-void BatchNode::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags)
+void BatchNode::visit(const SceneRenderState& state, const Mat4& parentTransform, uint32_t parentFlags)
 {
     // quick return if not visible. children won't be drawn.
     if (!_visible)
@@ -94,16 +94,16 @@ void BatchNode::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t 
         return;
     }
 
-    uint32_t flags = processParentFlags(parentTransform, parentFlags);
+    uint32_t flags = processParentFlags(state, parentTransform, parentFlags);
 
-    if (isVisitableByVisitingCamera())
+    if (isVisitableByCamera(state.cameraFlag))
     {
         sortAllChildren();
-        draw(renderer, _modelViewTransform, flags);
+        draw(state, _modelViewTransform, flags);
     }
 }
 
-void BatchNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+void BatchNode::draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags)
 {
     if (_children.empty())
     {
@@ -124,14 +124,14 @@ void BatchNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
                 pushed = true;
             }
 
-            armature->visit(renderer, transform, flags);
+            armature->visit(state, transform, flags);
         }
         else
         {
-            renderer->popGroup();
+            state.getRenderer()->popGroup();
             pushed = false;
 
-            ((Node*)object)->visit(renderer, transform, flags);
+            ((Node*)object)->visit(state, transform, flags);
         }
     }
 }

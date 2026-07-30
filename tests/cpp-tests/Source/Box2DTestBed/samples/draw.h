@@ -90,9 +90,9 @@ public:
     void AddCircle(const SolidCircleData& circle);
     void AddCapsule(const CapsuleData& capsule);
 
-    void submitDrawCommand(Renderer* renderer, CustomCommand& cmd, const Mat4& transform);
+    void submitDrawCommand(const SceneRenderState& state, CustomCommand& cmd, const Mat4& transform);
 
-    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags) override;
     void clear() override;
 
     CustomCommand _customCommandCircle;

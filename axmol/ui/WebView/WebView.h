@@ -205,7 +205,7 @@ public:
      */
     void setBounces(bool bounce);
 
-    void draw(ax::Renderer* renderer, ax::Mat4 const& transform, uint32_t flags) override;
+    void draw(const ax::SceneRenderState& state, ax::Mat4 const& transform, uint32_t flags) override;
 
     /**
      * Toggle visibility of WebView.

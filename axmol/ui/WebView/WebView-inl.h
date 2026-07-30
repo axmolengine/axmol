@@ -132,10 +132,10 @@ void WebView::setScalesPageToFit(bool const scalesPageToFit)
     _impl->setScalesPageToFit(scalesPageToFit);
 }
 
-void WebView::draw(ax::Renderer* renderer, ax::Mat4 const& transform, uint32_t flags)
+void WebView::draw(const ax::SceneRenderState& state, ax::Mat4 const& transform, uint32_t flags)
 {
-    ax::ui::Widget::draw(renderer, transform, flags);
-    _impl->draw(renderer, transform, flags);
+    ax::ui::Widget::draw(state, transform, flags);
+    _impl->draw(state.getRenderer(), transform, flags);
 }
 
 void WebView::setVisible(bool visible)

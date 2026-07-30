@@ -133,16 +133,14 @@ void Skybox::initBuffers()
     _customCommand.updateIndexBuffer(&idxBuf[0], sizeof(idxBuf));
 }
 
-void Skybox::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+void Skybox::draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags)
 {
     _customCommand.init(_globalZOrder);
 
-    renderer->addCommand(&_customCommand);
+    state.getRenderer()->addCommand(&_customCommand);
 
-    auto camera = Camera::getVisitingCamera();
-
-    Mat4 cameraModelMat = camera->getNodeToWorldTransform();
-    Mat4 projectionMat  = camera->getProjectionMatrix();
+    Mat4 cameraModelMat       = state.getViewMatrix().getInversed();
+    const Mat4& projectionMat = state.getProjectionMatrix();
     // Ignore the translation
     cameraModelMat.m[12] = cameraModelMat.m[13] = cameraModelMat.m[14] = 0;
     // prescale the matrix to account for the camera fov

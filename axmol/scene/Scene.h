@@ -97,7 +97,7 @@ public:
      */
     const std::vector<BaseLight*>& getLights() const { return _lights; }
 
-    void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+    void visit(const SceneRenderState& state, const Mat4& parentTransform, uint32_t parentFlags) override;
 
     /** override function */
     void removeAllChildren() override;

@@ -80,8 +80,8 @@ protected:
     void updateVertices() override;
     void updateColor() override;
 
-    void visit(ax::Renderer* renderer, const ax::Mat4& parentTransform, uint32_t parentFlags) override;
-    void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
+    void visit(const ax::SceneRenderState& state, const ax::Mat4& parentTransform, uint32_t parentFlags) override;
+    void draw(const ax::SceneRenderState& state, const ax::Mat4& transform, uint32_t flags) override;
 
 protected:
     ax::StringMap<BoneNode*> _subBonesMap;
@@ -112,7 +112,7 @@ private:
     int _batchedVeticesCount;
     ax::CustomCommand _batchBoneCommand;
 
-    void batchDrawAllSubBones();
+    void batchDrawAllSubBones(const ax::SceneRenderState& state);
 };
 
 NS_TIMELINE_END

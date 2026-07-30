@@ -46,6 +46,7 @@ namespace ax
  */
 
 class Renderer;
+struct SceneRenderState;
 
 /** @brief PhysicsDebugDraw3D: debug draw the physics object, used by PhysicsWorld3D */
 class PhysicsDebugDraw3D : public JPH::DebugRenderer
@@ -80,7 +81,7 @@ public:
                     float inHeight        = 0.5f) override;
 
     // Render entry point
-    void draw(ax::Renderer* renderer);
+    void draw(const ax::SceneRenderState& state);
     void clear();
 
 protected:

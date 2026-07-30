@@ -467,30 +467,24 @@ Vec2 FUISprite::boundaryTexCoord(char index)
     return Vec2::zero;
 }
 
-void FUISprite::draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags)
+void FUISprite::draw(const ax::SceneRenderState& state, const ax::Mat4& transform, uint32_t flags)
 {
     if (_texture == _empty)
         return;
 
     if (_fillMethod == FillMethod::None)
-        Sprite::draw(renderer, transform, flags);
+        Sprite::draw(state, transform, flags);
     else
     {
-        setMVPMatrixUniform();
+        setMVPMatrixUniform(state);
 #if AX_USE_CULLING
         // Don't calculate the culling if the transform was not updated
-        auto visitingCamera = Camera::getVisitingCamera();
-        auto defaultCamera = Camera::getDefaultCamera();
+        auto visitingCamera = state.getCamera();
         if (visitingCamera == nullptr) {
             _insideBounds = true;
         }
-        else if (visitingCamera == defaultCamera) {
-            _insideBounds = ((flags & FLAGS_TRANSFORM_DIRTY) || visitingCamera->isViewProjectionUpdated()) ? renderer->checkVisibility(transform, _contentSize) : _insideBounds;
-        }
-        else
-        {
-            // XXX: this always return true since
-            _insideBounds = renderer->checkVisibility(transform, _contentSize);
+        else {
+            _insideBounds = state.requiresVisibilityUpdate(flags) ? state.checkVisibility(transform, _contentSize) : _insideBounds;
         }
 
         if(_insideBounds)
@@ -501,9 +495,10 @@ void FUISprite::draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t
                                    _blendFunc,
                                    _fillTriangles,
                                    transform,
-                                   flags);
+                                   flags,
+                                   state.getView());
 
-            renderer->addCommand(&_trianglesCommand);
+            state.getRenderer()->addCommand(&_trianglesCommand);
         }
     }
 }

@@ -95,12 +95,20 @@ public:
     void handlePointerScroll(Vec2 point, Vec2 scrollDelat, const PointerInputState& state);
 
     // VR controller input: PointerType::Controller with a 3D ray.
-    PointerHitResult handleVRPointerEvent(InputPhase phase, Vec2 point, const Ray& ray, const PointerInputState& state);
-    PointerHitResult hitTestVRPointer(Vec2 point, const Ray& ray, const PointerInputState& state);
+    PointerHitResult handleVRPointerEvent(InputPhase phase,
+                                          Vec2 point,
+                                          const Ray& ray,
+                                          const PointerInputState& state,
+                                          const PointerRayContext* rayContext = nullptr);
+    PointerHitResult hitTestVRPointer(Vec2 point,
+                                      const Ray& ray,
+                                      const PointerInputState& state,
+                                      const PointerRayContext* rayContext = nullptr);
     PointerHitResult handleVRPointerScroll(Vec2 point,
                                            Vec2 scrollDelta,
                                            const Ray& ray,
-                                           const PointerInputState& state);
+                                           const PointerInputState& state,
+                                           const PointerRayContext* rayContext = nullptr);
 
     void handleXRInput(const XRInputEvent::State& state);
 
@@ -246,11 +254,13 @@ protected:
     PointerHitResult dispatchVRPointerEvent(InputPhase phase,
                                             Vec2 point,
                                             const Ray& ray,
-                                            const PointerInputState& state);
+                                            const PointerInputState& state,
+                                            const PointerRayContext* rayContext);
     PointerHitResult dispatchVRPointerScroll(Vec2 point,
                                              Vec2 scrollDelta,
                                              const Ray& ray,
-                                             const PointerInputState& state);
+                                             const PointerInputState& state,
+                                             const PointerRayContext* rayContext);
 
     // cached mouse position with inputScale applied
     Vec2 _lastPointerPosition;  // the original pointer position

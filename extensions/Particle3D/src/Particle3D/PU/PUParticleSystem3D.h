@@ -221,7 +221,7 @@ public:
     static PUParticleSystem3D* create(std::string_view filePath);
     static PUParticleSystem3D* create(std::string_view filePath, std::string_view materialPath);
 
-    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags) override;
 
     void update(float delta) override;
     void forceUpdate(float delta);

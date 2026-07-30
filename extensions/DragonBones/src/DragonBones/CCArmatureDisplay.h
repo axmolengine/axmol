@@ -126,13 +126,16 @@ protected:
     /**
      * Modify for polyInfo rect
      */
-    bool _checkVisibility(const ax::Mat4& transform, const ax::Size& size, const ax::Rect& rect);
+    bool _checkVisibility(const ax::SceneRenderState& state,
+                          const ax::Mat4& transform,
+                          const ax::Size& size,
+                          const ax::Rect& rect);
 
 public:
     /**
      * Modify for polyInfo rect
      */
-    virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
+    virtual void draw(const ax::SceneRenderState& state, const ax::Mat4& transform, uint32_t flags) override;
     /**
      * Modify for cocos2dx 3.7, 3.8, 3.9
      */

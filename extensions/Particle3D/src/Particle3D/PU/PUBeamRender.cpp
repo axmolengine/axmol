@@ -58,7 +58,7 @@ PUBeamRender* PUBeamRender::create(std::string_view texFile)
     return br;
 }
 
-void PUBeamRender::render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem)
+void PUBeamRender::render(const SceneRenderState& state, const Mat4& transform, ParticleSystem3D* particleSystem)
 {
     const ParticlePool& particlePool = particleSystem->getParticlePool();
     if (!_isVisible || particlePool.empty() || !_billboardChain)
@@ -106,7 +106,7 @@ void PUBeamRender::render(Renderer* renderer, const Mat4& transform, ParticleSys
         }
     }
 
-    _billboardChain->render(renderer, transform, particleSystem);
+    _billboardChain->render(state, transform, particleSystem);
 }
 
 PUBeamRender::PUBeamRender()

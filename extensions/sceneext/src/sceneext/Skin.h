@@ -56,7 +56,7 @@ public:
     ax::Mat4 getNodeToWorldTransform() const override;
     ax::Mat4 getNodeToWorldTransformAR() const;
 
-    void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
+    void draw(const ax::SceneRenderState& state, const ax::Mat4& transform, uint32_t flags) override;
 
     /**
      *  @lua NA

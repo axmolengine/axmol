@@ -2114,9 +2114,10 @@ int lua_ax_navmesh_NavMesh_debugDraw(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1)
     {
-        ax::Renderer* arg0;
+        ax::SceneRenderState arg0;
 
-        ok &= luaval_to_object<ax::Renderer>(tolua_S, 2, "ax.Renderer",&arg0, "ax.NavMesh:debugDraw");
+        #pragma warning NO CONVERSION TO NATIVE FOR SceneRenderState
+        ok = false;
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMesh_debugDraw'", nullptr);

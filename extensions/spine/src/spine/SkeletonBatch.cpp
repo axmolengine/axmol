@@ -153,9 +153,9 @@ namespace spine {
 	}
 
 
-	axmol::TrianglesCommand *SkeletonBatch::addCommand(axmol::Renderer *renderer, float globalOrder, axmol::Texture2D *texture, rhi::ProgramState *programState, axmol::BlendFunc blendType, const axmol::TrianglesCommand::Triangles &triangles, const axmol::Mat4 &mv, uint32_t flags) {
+	axmol::TrianglesCommand *SkeletonBatch::addCommand(const axmol::SceneRenderState &state, float globalOrder, axmol::Texture2D *texture, rhi::ProgramState *programState, axmol::BlendFunc blendType, const axmol::TrianglesCommand::Triangles &triangles, const axmol::Mat4 &mv, uint32_t flags) {
 		SkeletonCommand *command = nextFreeCommand();
-		const axmol::Mat4 &projectionMat = axmol::Camera::getVisitingViewProjectionMatrix();
+		const axmol::Mat4 &projectionMat = state.getViewProjectionMatrix();
 
 		if (programState == nullptr)
 			programState = _programState;
@@ -167,8 +167,8 @@ namespace spine {
 		pipelinePS->setUniform(command->_locMVP, projectionMat.m, sizeof(projectionMat.m));
 		pipelinePS->setTexture(command->_locTexture, 0, texture->getRHITexture());
 
-		command->init(globalOrder, texture, blendType, triangles, mv, flags);
-		renderer->addCommand(command);
+		command->init(globalOrder, texture, blendType, triangles, mv, flags, state.getView());
+		state.getRenderer()->addCommand(command);
 		return command;
 	}
 

@@ -95,7 +95,8 @@ void QuadCommand::init(float globalOrder,
                        V3F_T2F_C4B_Quad* quads,
                        ssize_t quadCount,
                        const Mat4& mv,
-                       uint32_t flags)
+                       uint32_t flags,
+                       const SceneViewData& view)
 {
     if (quadCount * 6 > _indexSize)
         reIndex((int)quadCount * 6);
@@ -105,7 +106,7 @@ void QuadCommand::init(float globalOrder,
     triangles.vertCount  = (int)quadCount * 4;
     triangles.indices    = __indices;
     triangles.indexCount = (int)quadCount * 6;
-    TrianglesCommand::init(globalOrder, texture, blendType, triangles, mv, flags);
+    TrianglesCommand::init(globalOrder, texture, blendType, triangles, mv, flags, view);
 }
 
 }  // namespace ax

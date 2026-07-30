@@ -95,9 +95,9 @@ void LAppView::onExit()
     delete viewMatrix;
 }
 
-void LAppView::draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags)
+void LAppView::draw(const ax::SceneRenderState& state, const ax::Mat4& transform, uint32_t flags)
 {
-    DrawNode::draw(renderer, transform, flags);
+    DrawNode::draw(state, transform, flags);
     onDraw(transform, flags);
 }
 

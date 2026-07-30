@@ -195,10 +195,10 @@ void DrawNode::updateBlendState(CustomCommand& cmd)
     }
 }
 
-void DrawNode::updateUniforms(const Mat4& transform, CustomCommand& cmd)
+void DrawNode::updateUniforms(const SceneRenderState& state, const Mat4& transform, CustomCommand& cmd)
 {
     auto pipelinePS     = cmd.unsafePS();
-    const auto& matrixP = Camera::getVisitingViewProjectionMatrix();
+    const auto& matrixP = state.getViewProjectionMatrix();
     Mat4 matrixMVP      = matrixP * transform;
     auto mvpLocation    = pipelinePS->getUniformLocation("u_MVPMatrix");
     pipelinePS->setUniform(mvpLocation, matrixMVP.m, sizeof(matrixMVP.m));
@@ -209,7 +209,7 @@ void DrawNode::updateUniforms(const Mat4& transform, CustomCommand& cmd)
     pipelinePS->setUniform(alphaUniformLocation, &alpha, sizeof(alpha));
 }
 
-void DrawNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+void DrawNode::draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags)
 {
     if (_trianglesDirty || _pointsDirty || _linesDirty)
         updateBuffers();
@@ -217,25 +217,25 @@ void DrawNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
     if (_customCommandTriangle.getVertexDrawCount() > 0)
     {
         updateBlendState(_customCommandTriangle);
-        updateUniforms(transform, _customCommandTriangle);
+        updateUniforms(state, transform, _customCommandTriangle);
         _customCommandTriangle.init(_globalZOrder);
-        renderer->addCommand(&_customCommandTriangle);
+        state.getRenderer()->addCommand(&_customCommandTriangle);
     }
 
     if (_customCommandPoint.getVertexDrawCount() > 0)
     {
         updateBlendState(_customCommandPoint);
-        updateUniforms(transform, _customCommandPoint);
+        updateUniforms(state, transform, _customCommandPoint);
         _customCommandPoint.init(_globalZOrder);
-        renderer->addCommand(&_customCommandPoint);
+        state.getRenderer()->addCommand(&_customCommandPoint);
     }
 
     if (_customCommandLine.getVertexDrawCount() > 0)
     {
         updateBlendState(_customCommandLine);
-        updateUniforms(transform, _customCommandLine);
+        updateUniforms(state, transform, _customCommandLine);
         _customCommandLine.init(_globalZOrder);
-        renderer->addCommand(&_customCommandLine);
+        state.getRenderer()->addCommand(&_customCommandLine);
     }
 }
 
@@ -688,16 +688,16 @@ void DrawNode::setBlendFunc(const BlendFunc& blendFunc)
     _blendFunc = blendFunc;
 }
 
-void DrawNode::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags)
+void DrawNode::visit(const SceneRenderState& state, const Mat4& parentTransform, uint32_t parentFlags)
 {
     if (_isolated)
     {
         // ignore `parentTransform` from parent
-        Node::visit(renderer, Mat4::identity, parentFlags);
+        Node::visit(state, Mat4::identity, parentFlags);
     }
     else
     {
-        Node::visit(renderer, parentTransform, parentFlags);
+        Node::visit(state, parentTransform, parentFlags);
     }
 }
 

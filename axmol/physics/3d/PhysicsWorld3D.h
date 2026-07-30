@@ -81,6 +81,7 @@ class Collider3D;
 class Joint3D;
 class Component;
 class Renderer;
+struct SceneRenderState;
 class Scene;
 
 /**
@@ -226,7 +227,7 @@ public:
      * @param renderer Renderer used by the owning scene.
      * @note This is called automatically by Scene.
      */
-    [[internal]] void debugDraw(ax::Renderer* renderer);
+    [[internal]] void debugDraw(const ax::SceneRenderState& state);
 
     /**
      * @brief Casts a ray through the physics world.

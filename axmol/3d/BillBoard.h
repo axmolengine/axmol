@@ -94,14 +94,14 @@ public:
     // override
 
     /** update billboard's transform and turn it towards camera */
-    void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+    void visit(const SceneRenderState& state, const Mat4& parentTransform, uint32_t parentFlags) override;
 
     /**
      * draw BillBoard object.
      *
      * @lua NA
      */
-    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags) override;
 
     BillBoard();
     virtual ~BillBoard();
@@ -110,7 +110,7 @@ protected:
     /**
      * calculate a model matrix which keep original translate & scaling but always face to the camera
      */
-    bool calculateBillboardTransform();
+    bool calculateBillboardTransform(const SceneRenderState& state);
 
     Mat4 _camWorldMat;
     Mat4 _mvTransform;

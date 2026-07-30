@@ -602,7 +602,7 @@ public:
     /**
      * @lua NA
      */
-    void draw(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+    void draw(const SceneRenderState& state, const Mat4& parentTransform, uint32_t parentFlags) override;
     /**
      * @lua NA
      */

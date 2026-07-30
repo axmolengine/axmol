@@ -78,10 +78,10 @@ public:
      */
     void setBlendFunc(const BlendFunc& blendFunc);
 
-    void updateCommand(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags);
+    void updateCommand(const ax::SceneRenderState& state, const ax::Mat4& transform, uint32_t flags);
 
     // Overrides
-    virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
+    virtual void draw(const ax::SceneRenderState& state, const ax::Mat4& transform, uint32_t flags) override;
 
     DrawNode3D();
     virtual ~DrawNode3D();

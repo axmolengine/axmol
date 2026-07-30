@@ -52,7 +52,7 @@ public:
     virtual std::string title() const override;
 
     void update(float delta) override;
-    void visit(ax::Renderer* renderer, const ax::Mat4& parentTransform, uint32_t parentFlags) override;
+    void visit(const ax::SceneRenderState& state, const ax::Mat4& parentTransform, uint32_t parentFlags) override;
 
 protected:
     std::string _title;

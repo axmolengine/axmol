@@ -199,7 +199,9 @@ void EffekseerTest::update(float delta)
     count++;
 }
 
-void EffekseerTest::visit(cocos2d::Renderer* renderer, const cocos2d::Mat4& parentTransform, uint32_t parentFlags)
+void EffekseerTest::visit(const cocos2d::SceneRenderState& state,
+                          const cocos2d::Mat4& parentTransform,
+                          uint32_t parentFlags)
 {
     /**
             visitを継承して、エフェクトを実際に描画する処理を追加します。
@@ -210,7 +212,7 @@ void EffekseerTest::visit(cocos2d::Renderer* renderer, const cocos2d::Mat4& pare
 
             你继承的visit，然后添加的实际绘制效果的过程。
     */
-    manager->begin(renderer, _globalZOrder);
-    cocos2d::Scene::visit(renderer, parentTransform, parentFlags);
-    manager->end(renderer, _globalZOrder);
+    manager->begin(state, _globalZOrder);
+    cocos2d::Scene::visit(state, parentTransform, parentFlags);
+    manager->end(state, _globalZOrder);
 }

@@ -490,7 +490,6 @@ static void getViewProjMatrix(Mat4* transformOut)
     auto scene  = director->getRunningScene();
     auto camera = scene ? scene->getDefaultCamera() : nullptr;
 
-    AXASSERT(camera, "Director screen/world conversion requires a running scene default camera");
     *transformOut = camera ? camera->getViewProjectionMatrix() : Mat4::identity;
 }
 
@@ -1062,11 +1061,9 @@ void Director::showStats()
             _frames  = 0;
         }
 
-        auto previousCamera = Camera::_visitingCamera;
         auto* overlayCamera = getOverlayCamera();
         if (overlayCamera)
         {
-            Camera::_visitingCamera = overlayCamera;
             overlayCamera->apply();
         }
 
@@ -1089,12 +1086,11 @@ void Director::showStats()
         const Mat4& identity = Mat4::identity;
         if (overlayCamera)
         {
-            _drawnVerticesLabel->visit(_renderer, identity, 0);
-            _drawnBatchesLabel->visit(_renderer, identity, 0);
-            _FPSLabel->visit(_renderer, identity, 0);
+            SceneRenderState overlayState(_renderer, overlayCamera);
+            _drawnVerticesLabel->visit(overlayState, identity, 0);
+            _drawnBatchesLabel->visit(overlayState, identity, 0);
+            _FPSLabel->visit(overlayState, identity, 0);
         }
-
-        Camera::_visitingCamera = previousCamera;
     }
 }
 
@@ -1116,15 +1112,13 @@ void Director::showVRModeIndicator()
         _VRModeLabel->enableOutline(Color32::black, 2);
     }
 
-    auto previousCamera = Camera::_visitingCamera;
     auto* overlayCamera = getOverlayCamera();
     if (overlayCamera)
     {
-        Camera::_visitingCamera = overlayCamera;
         overlayCamera->apply();
-        _VRModeLabel->visit(_renderer, Mat4::identity, 0);
+        SceneRenderState overlayState(_renderer, overlayCamera);
+        _VRModeLabel->visit(overlayState, Mat4::identity, 0);
     }
-    Camera::_visitingCamera = previousCamera;
 }
 
 void Director::calculateMPF()
@@ -1498,15 +1492,13 @@ void Director::renderFrame()
         // draw the notifications node
         if (_notificationNode)
         {
-            auto previousCamera = Camera::_visitingCamera;
             auto* overlayCamera = getOverlayCamera();
             if (overlayCamera)
             {
-                Camera::_visitingCamera = overlayCamera;
                 overlayCamera->apply();
-                _notificationNode->visit(_renderer, Mat4::identity, 0);
+                SceneRenderState overlayState(_renderer, overlayCamera);
+                _notificationNode->visit(overlayState, Mat4::identity, 0);
             }
-            Camera::_visitingCamera = previousCamera;
         }
 
         updateFrameRate();

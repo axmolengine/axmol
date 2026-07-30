@@ -669,7 +669,7 @@ void EffectEmitter::update(float delta)
 	}
 }
 
-void EffectEmitter::draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& parentTransform, uint32_t parentFlags)
+void EffectEmitter::draw(const cocos2d::SceneRenderState& state, const cocos2d::Mat4& parentTransform, uint32_t parentFlags)
 {
     if (!manager->getInternalManager()->GetShown(handle) ||
         manager->getInternalManager()->GetTotalInstanceCount() < 1)
@@ -681,14 +681,16 @@ void EffectEmitter::draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& paren
         ax::Director::getInstance()->getRenderer()->setFrameBufferOnly(false);
     }
 
-    auto renderCommand = renderer->nextCallbackCommand();
+    auto renderCommand = state.getRenderer()->nextCallbackCommand();
 
 	renderCommand->init(_globalZOrder);
 
 	auto renderer2d = manager->getInternalRenderer();
 	Effekseer::Matrix44 mCamera = renderer2d->GetCameraMatrix();
 	Effekseer::Matrix44 mProj = renderer2d->GetProjectionMatrix();
+    Effekseer::Manager::LayerParameter layerParameter = manager->getInternalManager()->GetLayerParameter(0);
 	renderCommand->func = [=]() -> void {
+        manager->getInternalManager()->SetLayerParameter(0, layerParameter);
 		renderer2d->SetCameraMatrix(mCamera);
 		renderer2d->SetProjectionMatrix(mProj);
 
@@ -704,8 +706,8 @@ void EffectEmitter::draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& paren
 		renderer2d->EndRendering();
 
 		// Count drawcall and vertex
-		renderer->addDrawnBatches(renderer2d->GetDrawCallCount());
-		renderer->addDrawnVertices(renderer2d->GetDrawVertexCount());
+		state.getRenderer()->addDrawnBatches(renderer2d->GetDrawCallCount());
+		state.getRenderer()->addDrawnVertices(renderer2d->GetDrawVertexCount());
 		renderer2d->ResetDrawCallCount();
 		renderer2d->ResetDrawVertexCount();
 
@@ -714,9 +716,9 @@ void EffectEmitter::draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& paren
         }
 	};
 
-	renderer->addCommand(renderCommand);
+	state.getRenderer()->addCommand(renderCommand);
 
-	cocos2d::Node::draw(renderer, parentTransform, parentFlags);
+	cocos2d::Node::draw(state, parentTransform, parentFlags);
 }
 
 ::Effekseer::Handle EffectManager::play(Effect* effect, float x, float y, float z)
@@ -841,8 +843,11 @@ void EffectManager::setIsDistortionEnabled(bool value)
     }
 }
 
-void EffectManager::begin(cocos2d::Renderer* renderer, float globalZOrder)
+void EffectManager::begin(const cocos2d::SceneRenderState& state, float globalZOrder)
 {
+    setCameraMatrix(state.getViewMatrix());
+    setProjectionMatrix(state.getProjectionMatrix());
+
 	if (isDistortionEnabled)
 	{
 		isDistorted = false;
@@ -854,6 +859,8 @@ void EffectManager::begin(cocos2d::Renderer* renderer, float globalZOrder)
 	}
 
     newFrame();
+
+    AX_UNUSED_PARAM(globalZOrder);
 
 	// TODO Batch render
 	/*
@@ -869,12 +876,15 @@ void EffectManager::begin(cocos2d::Renderer* renderer, float globalZOrder)
 
 
 
-	renderer->addCommand(&beginCommand);
+	state.getRenderer()->addCommand(&beginCommand);
 	*/
 }
 
-void EffectManager::end(cocos2d::Renderer* renderer, float globalZOrder)
+void EffectManager::end(const cocos2d::SceneRenderState& state, float globalZOrder)
 {
+    AX_UNUSED_PARAM(state);
+    AX_UNUSED_PARAM(globalZOrder);
+
 	// TODO Batch render
 	/*
 	endCommand.init(globalZOrder);
@@ -884,7 +894,7 @@ void EffectManager::end(cocos2d::Renderer* renderer, float globalZOrder)
 		renderer2d->EndRendering();
 	};
 
-	renderer->addCommand(&endCommand);
+	state.getRenderer()->addCommand(&endCommand);
 	*/
 }
 

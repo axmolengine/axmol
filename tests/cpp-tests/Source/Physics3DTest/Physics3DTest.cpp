@@ -164,8 +164,15 @@ void Physics3DTestDemo::onPointerUp(ax::PointerEvent* event)
     if (!_needShootBox)
         return;
 
-    auto ray = _camera->screenToRay(event->getPoint());
-    shootBox(_camera->getPosition3D() + ray.direction * 10.0f);
+    if (event->resolveRayForCamera(_camera))
+    {
+        shootBox(event->getRay());
+    }
+    else
+    {
+        auto ray = _camera->screenToRay(event->getPoint());
+        shootBox(Ray(_camera->getPosition3D(), ray.direction));
+    }
     event->stopPropagation();
 }
 
@@ -177,14 +184,19 @@ Physics3DTestDemo::~Physics3DTestDemo() {}
 
 void Physics3DTestDemo::shootBox(const ax::Vec3& des)
 {
-    Vec3 linearVel = des - _camera->getPosition3D();
+    shootBox(Ray(_camera->getPosition3D(), des - _camera->getPosition3D()));
+}
+
+void Physics3DTestDemo::shootBox(const ax::Ray& ray)
+{
+    Vec3 linearVel = ray.direction;
     linearVel.normalize();
     linearVel *= 100.0f;
     auto mesh = MeshRenderer::create("MeshRendererTest/box.c3t");
     mesh->setTexture("Images/Icon.png");
 
     this->addChild(mesh);
-    mesh->setPosition3D(_camera->getPosition3D());
+    mesh->setPosition3D(ray.origin);
     mesh->setScale(0.5f);
 
     // In Bullet, shootBox used a BoxCollider3D with CCD swept sphere radius.

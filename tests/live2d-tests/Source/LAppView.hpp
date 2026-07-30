@@ -25,7 +25,7 @@ public:
     virtual void onEnter();
     virtual void onExit();
 
-    virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags);
+    virtual void draw(const ax::SceneRenderState& renderer, const ax::Mat4& transform, uint32_t flags);
     void onDraw(const ax::Mat4& transform, uint32_t flags);
 
     bool onPointerDown(ax::PointerEvent* event);
