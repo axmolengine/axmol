@@ -1,9 +1,10 @@
-
+﻿
 #ifndef __EFFEKSEER_SIMD_INT4_H__
 #define __EFFEKSEER_SIMD_INT4_H__
 
-#include <cstdint>
 #include "Base.h"
+#include <array>
+#include <cstdint>
 
 #if defined(EFK_SIMD_NEON)
 #include "Int4_NEON.h"

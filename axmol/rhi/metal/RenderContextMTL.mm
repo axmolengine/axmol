@@ -35,6 +35,8 @@
 #include "axmol/rhi/SamplerRegistry.h"
 #include "axmol/platform/Application.h"
 
+#include <algorithm>
+
 #if AX_TARGET_PLATFORM == AX_PLATFORM_MAC
 #    import <AppKit/AppKit.h>
 #else
@@ -146,6 +148,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface)
     auto mtlDevice          = driver->getMTLDevice();
     _mtlCmdQueue            = driver->getMTLCmdQueue();
     auto& contextAttrs      = Application::getContextAttrs();
+    auto screenPF           = UtilsMTL::toMTLPixelFormat(UtilsMTL::getDefaultColorAttachmentPixelFormat());
 #if AX_TARGET_PLATFORM == AX_PLATFORM_MAC
     CGSize fbSize;
     NSView* contentView = static_cast<NSView*>(surface);
@@ -160,7 +163,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface)
     [contentView setWantsLayer:YES];
     _mtlLayer = [CAMetalLayer layer];
     [_mtlLayer setDevice:mtlDevice];
-    [_mtlLayer setPixelFormat:MTLPixelFormatBGRA8Unorm];
+    [_mtlLayer setPixelFormat:screenPF];
     [_mtlLayer setFramebufferOnly:YES];
     [_mtlLayer setDrawableSize:fbSize];
     _mtlLayer.displaySyncEnabled = contextAttrs.vsync;
@@ -169,7 +172,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface)
     UIView* view              = static_cast<UIView*>(surface);
     _mtlLayer                 = (CAMetalLayer*)[view layer];
     _mtlLayer.device          = mtlDevice;
-    _mtlLayer.pixelFormat     = MTLPixelFormatBGRA8Unorm;
+    _mtlLayer.pixelFormat     = screenPF;
     _mtlLayer.framebufferOnly = YES;
 
     const auto backingScaleFactor = [view contentScaleFactor];
@@ -225,6 +228,7 @@ id<CAMetalDrawable> RenderContextImpl::acquireDrawable()
 void RenderContextImpl::releaseDrawable()
 {
     _currentDrawable = nil;
+    restoreFrameBufferOnly();
 }
 
 bool RenderContextImpl::beginFrame()
@@ -474,8 +478,6 @@ void RenderContextImpl::flushCaptureCommands()
                 {
                     readPixels(drawableTexture, 0, 0, [drawableTexture width], [drawableTexture height],
                                screenPixelData);
-                    // screen framebuffer copied, restore screen framebuffer only to true
-                    setFrameBufferOnly(true);
                 }
                 cb.second(screenPixelData);
             }
@@ -680,6 +682,100 @@ void RenderContextImpl::readPixels(id<MTLTexture> texture,
 void RenderContextImpl::setFrameBufferOnly(bool frameBufferOnly)
 {
     [_mtlLayer setFramebufferOnly:frameBufferOnly];
+    if (!frameBufferOnly)
+        _restoreFrameBufferOnlyAfterDrawable = true;
+}
+
+void RenderContextImpl::restoreFrameBufferOnly()
+{
+    if (_restoreFrameBufferOnlyAfterDrawable)
+    {
+        [_mtlLayer setFramebufferOnly:YES];
+        _restoreFrameBufferOnlyAfterDrawable = false;
+    }
+}
+
+bool RenderContextImpl::copyTexture(id<MTLTexture> src, Texture* dst)
+{
+    if (src == nil || !dst || _currentCmdBuffer == nil || _currentCmdBuffer.status == MTLCommandBufferStatusCommitted)
+        return false;
+
+    auto* dstImpl = static_cast<TextureImpl*>(dst);
+    if (dstImpl->internalHandle() == nil)
+        dstImpl->updateData(nullptr, dst->getWidth(), dst->getHeight(), 0, 0);
+
+    auto dstTexture = dstImpl->internalHandle();
+    if (dstTexture == nil || src == dstTexture || src.textureType != MTLTextureType2D ||
+        dstTexture.textureType != MTLTextureType2D || src.width != dstTexture.width ||
+        src.height != dstTexture.height || src.pixelFormat != dstTexture.pixelFormat || src.sampleCount != 1 ||
+        dstTexture.sampleCount != 1 || src.mipmapLevelCount != 1 || dstTexture.mipmapLevelCount != 1)
+    {
+        AXLOGW("copyTexture mismatch: dstTexture==nil={}, src==dstTexture={}, "
+               "src.textureType={}, dstTexture.textureType={}, "
+               "src.width={}, dstTexture.width={}, "
+               "src.height={}, dstTexture.height={}, "
+               "src.pixelFormat={}, dstTexture.pixelFormat={}, "
+               "src.sampleCount={}, dstTexture.sampleCount={}, "
+               "src.mipmapLevelCount={}, dstTexture.mipmapLevelCount={}",
+               dstTexture == nil, src == dstTexture, static_cast<int>(src.textureType),
+               static_cast<int>(dstTexture.textureType), src.width, dstTexture.width, src.height, dstTexture.height,
+               static_cast<int>(src.pixelFormat), static_cast<int>(dstTexture.pixelFormat), src.sampleCount,
+               dstTexture.sampleCount, src.mipmapLevelCount, dstTexture.mipmapLevelCount);
+        return false;
+    }
+    // Metal permits only one active command encoder per command buffer.
+    endEncoding();
+
+    id<MTLBlitCommandEncoder> blitEncoder = [_currentCmdBuffer blitCommandEncoder];
+    if (blitEncoder == nil)
+        return false;
+
+    const MTLSize size = MTLSizeMake(src.width, src.height, 1);
+    [blitEncoder copyFromTexture:src
+                     sourceSlice:0
+                     sourceLevel:0
+                    sourceOrigin:MTLOriginMake(0, 0, 0)
+                      sourceSize:size
+                       toTexture:dstTexture
+                destinationSlice:0
+                destinationLevel:0
+               destinationOrigin:MTLOriginMake(0, 0, 0)];
+    [blitEncoder endEncoding];
+    return true;
+}
+
+bool RenderContextImpl::copyTexture(Texture* src, Texture* dst)
+{
+    if (!validateTextureCopy(src, dst))
+        return false;
+
+    auto* srcImpl = static_cast<TextureImpl*>(src);
+    return copyTexture(srcImpl->internalHandle(), dst);
+}
+
+bool RenderContextImpl::copyTexture(RenderTarget* src, Texture* dst)
+{
+    if (!src || !dst)
+        return false;
+
+    auto attachment = static_cast<RenderTargetImpl*>(src)->getColorAttachment(0);
+    if (!attachment || attachment.level != 0)
+        return false;
+
+    if (!src->isDefaultRenderTarget())
+    {
+        return copyTexture(attachment.texture, dst);
+    }
+
+    // A drawable created while framebufferOnly is YES cannot be a blit source.
+    // The caller must disable framebufferOnly before the drawable is acquired.
+    if (_mtlLayer.framebufferOnly)
+    {
+        // AXLOGE("Metal: copyTexture from the screen render target requires setFrameBufferOnly(false) before "
+        //        "acquiring the drawable");
+        return false;
+    }
+    return copyTexture(attachment.texture, dst);
 }
 
 }  // namespace ax::rhi::mtl

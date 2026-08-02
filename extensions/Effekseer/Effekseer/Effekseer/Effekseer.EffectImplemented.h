@@ -1,4 +1,4 @@
-
+﻿
 #ifndef __EFFEKSEER_EFFECT_IMPLEMENTED_H__
 #define __EFFEKSEER_EFFECT_IMPLEMENTED_H__
 
@@ -9,8 +9,8 @@
 #include "Effekseer.Effect.h"
 #include "Effekseer.InternalScript.h"
 #include "Effekseer.Vector3D.h"
-#include "Model/ProceduralModelParameter.h"
-#include "Utils/BinaryVersion.h"
+#include "Model/Effekseer.ProceduralModelParameter.h"
+#include "Utils/Effekseer.BinaryVersion.h"
 #include "Utils/Effekseer.CustomAllocator.h"
 #include <assert.h>
 #include <memory>
@@ -104,7 +104,7 @@ class EffectImplemented : public Effect, public ReferenceObject
 	friend class EffectFactory;
 	friend class Instance;
 
-	static const int32_t SupportBinaryVersion = Version17;
+	static const int32_t SupportBinaryVersion = Version18;
 
 protected:
 	SettingRef m_setting;
@@ -352,6 +352,11 @@ public:
 	const EffectImplemented* GetImplemented() const override
 	{
 		return this;
+	}
+
+	std::array<float, 4> GetDefaultDynamicInputs() const override
+	{
+		return defaultDynamicInputs;
 	}
 };
 //----------------------------------------------------------------------------------

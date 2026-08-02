@@ -88,6 +88,54 @@ void RenderTargetImpl::setColorTexture(Texture* texture, int level, int index)
     _GLbufs.resize(_color.size());
 }
 
+PixelFormat RenderTargetImpl::getColorAttachmentPixelFormat(int index) const
+{
+    if (!_defaultRenderTarget)
+        return RenderTarget::getColorAttachmentPixelFormat(index);
+
+    if (index != 0)
+        return PixelFormat::NONE;
+
+    if (_defaultColorAttachmentPixelFormat != PixelFormat::NONE)
+        return _defaultColorAttachmentPixelFormat;
+
+    GLint previousFramebuffer = 0;
+    glGetIntegerv(GL_FRAMEBUFFER_BINDING, &previousFramebuffer);
+    __state->bindFrameBuffer(_FBO);
+
+    GLint redBits   = 0;
+    GLint greenBits = 0;
+    GLint blueBits  = 0;
+    GLint alphaBits = 0;
+#if AX_GLES_PROFILE
+    constexpr GLenum colorAttachment = GL_BACK;
+#else
+    constexpr GLenum colorAttachment = GL_BACK_LEFT;
+#endif
+    glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, colorAttachment, GL_FRAMEBUFFER_ATTACHMENT_RED_SIZE,
+                                          &redBits);
+    glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, colorAttachment, GL_FRAMEBUFFER_ATTACHMENT_GREEN_SIZE,
+                                          &greenBits);
+    glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, colorAttachment, GL_FRAMEBUFFER_ATTACHMENT_BLUE_SIZE,
+                                          &blueBits);
+    glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, colorAttachment, GL_FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE,
+                                          &alphaBits);
+
+    __state->bindFrameBuffer(static_cast<GLuint>(previousFramebuffer));
+
+    if (redBits == 8 && greenBits == 8 && blueBits == 8 && alphaBits == 8)
+        _defaultColorAttachmentPixelFormat = PixelFormat::RGBA8;
+    else if (redBits == 5 && greenBits == 6 && blueBits == 5 && alphaBits == 0)
+        _defaultColorAttachmentPixelFormat = PixelFormat::RGB565;
+
+    return _defaultColorAttachmentPixelFormat;
+}
+
+PixelFormat RenderTargetImpl::getDepthStencilAttachmentPixelFormat() const
+{
+    return RenderTarget::getDepthStencilAttachmentPixelFormat();
+}
+
 void RenderTargetImpl::update()
 {
     if (!_dirtyFlags)

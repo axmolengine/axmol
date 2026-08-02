@@ -129,9 +129,9 @@ void UtilsMTL::initGPUTextureFormats()
     info.fmt   = getSupportedDepthStencilFormat();
 }
 
-MTLPixelFormat UtilsMTL::getDefaultColorAttachmentPixelFormat()
+PixelFormat UtilsMTL::getDefaultColorAttachmentPixelFormat()
 {
-    return MTLPixelFormatBGRA8Unorm;
+    return PixelFormat::BGRA8;
 }
 
 MTLPixelFormat UtilsMTL::getDefaultDepthStencilAttachmentPixelFormat()

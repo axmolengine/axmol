@@ -132,6 +132,9 @@ public:
 
     void readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback) override;
 
+    bool copyTexture(RenderTarget* src, Texture* dst) override;
+    bool copyTexture(Texture* src, Texture* dst) override;
+
 protected:
     void readPixels(RenderTarget* rt, UINT x, UINT y, UINT width, UINT height, PixelBufferDesc& pbd);
 

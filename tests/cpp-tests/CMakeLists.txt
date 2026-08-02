@@ -452,6 +452,12 @@ target_include_directories(${APP_NAME} PRIVATE ${GAME_INC_DIRS})
 
 if(AX_ENABLE_EXT_EFFEKSEER)
   target_compile_definitions(${APP_NAME} PRIVATE AX_ENABLE_EXT_EFFEKSEER=1)
+  target_link_libraries(${APP_NAME} EffekseerAxmol)
+  target_include_directories(${APP_NAME} PRIVATE
+    ${_AX_ROOT}/extensions/Effekseer
+    ${_AX_ROOT}/extensions/Effekseer/EffekseerAxmol
+    ${_AX_ROOT}/extensions/Effekseer/EffekseerRendererAxmol
+  )
 endif()
 
 # mark app resources

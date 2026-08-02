@@ -29,8 +29,8 @@ public:
     Attachment getColorAttachment(int index) const;
     Attachment getDepthStencilAttachment() const;
 
-    PixelFormat getColorAttachmentPixelFormat(int index) const;
-    PixelFormat getDepthStencilAttachmentPixelFormat() const;
+    PixelFormat getColorAttachmentPixelFormat(int index = 0) const override;
+    PixelFormat getDepthStencilAttachmentPixelFormat() const override;
 
     void rebuildSwapchainAttachments();
 

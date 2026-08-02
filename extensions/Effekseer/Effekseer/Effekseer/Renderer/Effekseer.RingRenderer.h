@@ -1,13 +1,14 @@
-
+﻿
 #ifndef __EFFEKSEER_RING_RENDERER_H__
 #define __EFFEKSEER_RING_RENDERER_H__
 
 //----------------------------------------------------------------------------------
 // Include
 //----------------------------------------------------------------------------------
-#include "../Effekseer.Base.h"
+#include "../Effekseer.Base.Pre.h"
 #include "../Effekseer.Color.h"
 #include "../Effekseer.Matrix43.h"
+#include "../Effekseer.RectF.h"
 #include "../Effekseer.Vector2D.h"
 #include "../Effekseer.Vector3D.h"
 #include "../SIMD/Mat43f.h"
@@ -79,6 +80,10 @@ public:
 		float AlphaThreshold;
 
 		float ViewOffsetDistance;
+
+		SIMD::Vec3f Direction;
+
+		float ParticleTimes[2];
 
 		std::array<float, 4> CustomData1;
 		std::array<float, 4> CustomData2;

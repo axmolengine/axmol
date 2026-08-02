@@ -1,4 +1,4 @@
-
+﻿
 #ifndef __EFFEKSEER_INTRUSIVE_LIST_H__
 #define __EFFEKSEER_INTRUSIVE_LIST_H__
 

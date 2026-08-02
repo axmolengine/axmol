@@ -189,7 +189,11 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
   ax_link_pred(AX_ENABLE_EXT_GUI "GUI" "${AX_ROOT_DIR}/extensions/GUI/src")
   ax_link_pred(AX_ENABLE_EXT_FAIRYGUI "fairygui" "${AX_ROOT_DIR}/extensions/fairygui/src")
   ax_link_pred(AX_ENABLE_EXT_LIVE2D "Live2D" "${AX_ROOT_DIR}/extensions/Live2D/Framework/src")
-  ax_link_pred(AX_ENABLE_EXT_EFFEKSEER "EffekseerForCocos2d-x" "${AX_ROOT_DIR}/extensions/Effekseer")
+  ax_link_pred(AX_ENABLE_EXT_EFFEKSEER "EffekseerAxmol"
+    "${AX_ROOT_DIR}/extensions/Effekseer"
+    "${AX_ROOT_DIR}/extensions/Effekseer/EffekseerAxmol"
+    "${AX_ROOT_DIR}/extensions/Effekseer/EffekseerRendererAxmol"
+  )
   ax_link_pred(AX_ENABLE_EXT_PHYSICS_NODE "physics-nodes" "${AX_ROOT_DIR}/extensions/physics-nodes/src")
   ax_link_pred(AX_ENABLE_NAVMESH "recast" "${AX_ROOT_DIR}/3rdparty/recast")
   ax_link_pred(AX_ENABLE_PHYSICS_3D "Jolt" "${AX_ROOT_DIR}/3rdparty/jolt")

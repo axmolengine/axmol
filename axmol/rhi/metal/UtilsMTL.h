@@ -55,7 +55,7 @@ struct UtilsMTL
      */
     static void initGPUTextureFormats();
 
-    static MTLPixelFormat getDefaultColorAttachmentPixelFormat();
+    static PixelFormat getDefaultColorAttachmentPixelFormat();
 
     static MTLPixelFormat getDefaultDepthStencilAttachmentPixelFormat();
 

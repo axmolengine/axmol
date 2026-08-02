@@ -1,4 +1,4 @@
-
+﻿
 #ifndef __EFFEKSEER_INTERNAL_STRUCT_H__
 #define __EFFEKSEER_INTERNAL_STRUCT_H__
 

@@ -1,9 +1,9 @@
-
+﻿
 //----------------------------------------------------------------------------------
 //
 //----------------------------------------------------------------------------------
 #include "Effekseer.Effect.h"
-#include "Backend/GraphicsDevice.h"
+#include "Backend/Effekseer.GraphicsDevice.h"
 #include "Effekseer.CurveLoader.h"
 #include "Effekseer.DefaultEffectLoader.h"
 #include "Effekseer.EffectImplemented.h"
@@ -17,11 +17,12 @@
 #include "Effekseer.Setting.h"
 #include "Effekseer.SoundLoader.h"
 #include "Effekseer.TextureLoader.h"
-#include "Model/Model.h"
-#include "Model/ModelLoader.h"
-#include "Model/ProceduralModelGenerator.h"
-#include "Model/ProceduralModelParameter.h"
+#include "Model/Effekseer.Model.h"
+#include "Model/Effekseer.ModelLoader.h"
+#include "Model/Effekseer.ProceduralModelGenerator.h"
+#include "Model/Effekseer.ProceduralModelParameter.h"
 #include "Utils/Effekseer.BinaryReader.h"
+#include "VectorField/Effekseer.VectorFieldLoader.h"
 
 #include <array>
 #include <functional>
@@ -31,90 +32,6 @@
 //----------------------------------------------------------------------------------
 namespace Effekseer
 {
-
-static void PathCombine(char16_t* dst, const char16_t* src1, const char16_t* src2)
-{
-	int len1 = 0, len2 = 0;
-	if (src1 != nullptr)
-	{
-		for (len1 = 0; src1[len1] != L'\0'; len1++)
-		{
-		}
-		memcpy(dst, src1, len1 * sizeof(char16_t));
-		if (len1 > 0 && src1[len1 - 1] != L'/' && src1[len1 - 1] != L'\\')
-		{
-			dst[len1++] = L'/';
-		}
-	}
-	if (src2 != nullptr)
-	{
-		for (len2 = 0; src2[len2] != L'\0'; len2++)
-		{
-		}
-		memcpy(&dst[len1], src2, len2 * sizeof(char16_t));
-	}
-
-	for (int i = 0; i < len1 + len2; i++)
-	{
-		if (dst[i] == u'\\')
-		{
-			dst[i] = u'/';
-		}
-	}
-
-	dst[len1 + len2] = L'\0';
-}
-
-static void GetParentDir(char16_t* dst, const char16_t* src)
-{
-	int i, last = -1;
-	for (i = 0; src[i] != L'\0'; i++)
-	{
-		if (src[i] == L'/' || src[i] == L'\\')
-			last = i;
-	}
-	if (last >= 0)
-	{
-		memcpy(dst, src, last * sizeof(char16_t));
-		dst[last] = L'\0';
-	}
-	else
-	{
-		dst[0] = L'\0';
-	}
-}
-
-static std::u16string getFilenameWithoutExt(const char16_t* path)
-{
-	int start = 0;
-	int end = 0;
-
-	for (int i = 0; path[i] != 0; i++)
-	{
-		if (path[i] == u'/' || path[i] == u'\\')
-		{
-			start = i;
-		}
-	}
-
-	for (int i = start; path[i] != 0; i++)
-	{
-		if (path[i] == u'.')
-		{
-			end = i;
-		}
-	}
-
-	std::vector<char16_t> ret;
-
-	for (int i = start; i < end; i++)
-	{
-		ret.push_back(path[i]);
-	}
-	ret.push_back(0);
-
-	return std::u16string(ret.data());
-}
 
 bool EffectFactory::LoadBody(Effect* effect, const void* data, int32_t size, float magnification, const char16_t* materialPath)
 {
@@ -213,64 +130,50 @@ void EffectFactory::OnLoadingResource(Effect* effect, const void* data, int32_t 
 
 	for (auto i = 0; i < effect->GetColorImageCount(); i++)
 	{
-		char16_t fullPath[512];
-		PathCombine(fullPath, materialPath, effect->GetColorImagePath(i));
-
-		auto resource = resourceMgr->LoadTexture(fullPath, TextureType::Color);
+		const auto fullPath = PathHelper::Combine(FixedSizeString<char16_t, 512>(materialPath), FixedSizeString<char16_t, 512>(effect->GetColorImagePath(i)));
+		auto resource = resourceMgr->LoadTexture(fullPath.data(), TextureType::Color);
 		SetTexture(effect, i, TextureType::Color, resource);
 	}
 
 	for (auto i = 0; i < effect->GetNormalImageCount(); i++)
 	{
-		char16_t fullPath[512];
-		PathCombine(fullPath, materialPath, effect->GetNormalImagePath(i));
-
-		auto resource = resourceMgr->LoadTexture(fullPath, TextureType::Normal);
+		const auto fullPath = PathHelper::Combine(FixedSizeString<char16_t, 512>(materialPath), FixedSizeString<char16_t, 512>(effect->GetNormalImagePath(i)));
+		auto resource = resourceMgr->LoadTexture(fullPath.data(), TextureType::Normal);
 		SetTexture(effect, i, TextureType::Normal, resource);
 	}
 
 	for (auto i = 0; i < effect->GetDistortionImageCount(); i++)
 	{
-		char16_t fullPath[512];
-		PathCombine(fullPath, materialPath, effect->GetDistortionImagePath(i));
-
-		auto resource = resourceMgr->LoadTexture(fullPath, TextureType::Distortion);
+		const auto fullPath = PathHelper::Combine(FixedSizeString<char16_t, 512>(materialPath), FixedSizeString<char16_t, 512>(effect->GetDistortionImagePath(i)));
+		auto resource = resourceMgr->LoadTexture(fullPath.data(), TextureType::Distortion);
 		SetTexture(effect, i, TextureType::Distortion, resource);
 	}
 
 	for (auto i = 0; i < effect->GetWaveCount(); i++)
 	{
-		char16_t fullPath[512];
-		PathCombine(fullPath, materialPath, effect->GetWavePath(i));
-
-		auto resource = resourceMgr->LoadSoundData(fullPath);
+		const auto fullPath = PathHelper::Combine(FixedSizeString<char16_t, 512>(materialPath), FixedSizeString<char16_t, 512>(effect->GetWavePath(i)));
+		auto resource = resourceMgr->LoadSoundData(fullPath.data());
 		SetSound(effect, i, resource);
 	}
 
 	for (auto i = 0; i < effect->GetModelCount(); i++)
 	{
-		char16_t fullPath[512];
-		PathCombine(fullPath, materialPath, effect->GetModelPath(i));
-
-		auto resource = resourceMgr->LoadModel(fullPath);
+		const auto fullPath = PathHelper::Combine(FixedSizeString<char16_t, 512>(materialPath), FixedSizeString<char16_t, 512>(effect->GetModelPath(i)));
+		auto resource = resourceMgr->LoadModel(fullPath.data());
 		SetModel(effect, i, resource);
 	}
 
 	for (auto i = 0; i < effect->GetMaterialCount(); i++)
 	{
-		char16_t fullPath[512];
-		PathCombine(fullPath, materialPath, effect->GetMaterialPath(i));
-
-		auto resource = resourceMgr->LoadMaterial(fullPath);
+		const auto fullPath = PathHelper::Combine(FixedSizeString<char16_t, 512>(materialPath), FixedSizeString<char16_t, 512>(effect->GetMaterialPath(i)));
+		auto resource = resourceMgr->LoadMaterial(fullPath.data());
 		SetMaterial(effect, i, resource);
 	}
 
 	for (auto i = 0; i < effect->GetCurveCount(); i++)
 	{
-		char16_t fullPath[512];
-		PathCombine(fullPath, materialPath, effect->GetCurvePath(i));
-
-		auto resource = resourceMgr->LoadCurve(fullPath);
+		const auto fullPath = PathHelper::Combine(FixedSizeString<char16_t, 512>(materialPath), FixedSizeString<char16_t, 512>(effect->GetCurvePath(i)));
+		auto resource = resourceMgr->LoadCurve(fullPath.data());
 		SetCurve(effect, i, resource);
 	}
 
@@ -377,11 +280,11 @@ EffectRef Effect::Create(const ManagerRef& manager, const char16_t* path, float 
 	if (!eLoader->Load(path, data, size))
 		return nullptr;
 
-	char16_t parentDir[512];
+	FixedSizeString<char16_t, 512> parentDir;
 	if (materialPath == nullptr)
 	{
-		GetParentDir(parentDir, path);
-		materialPath = parentDir;
+		parentDir = PathHelper::GetDirectoryName(FixedSizeString<char16_t, 512>(path));
+		materialPath = parentDir.data();
 	}
 
 	auto effect = EffectImplemented::Create(manager, data, size, magnification, materialPath);
@@ -393,7 +296,7 @@ EffectRef Effect::Create(const ManagerRef& manager, const char16_t* path, float 
 		return nullptr;
 	}
 
-	effect->SetName(getFilenameWithoutExt(path).c_str());
+	effect->SetName(PathHelper::GetFilenameWithoutExt(FixedSizeString<char16_t, 512>(path)).data());
 
 	return effect;
 }
@@ -550,7 +453,8 @@ bool EffectImplemented::LoadBody(const uint8_t* data, int32_t size, float mag)
 		}
 	}
 
-	const auto loadCurves = [&]() -> void {
+	const auto loadCurves = [&]() -> void
+	{
 		// curve
 		int32_t curveCount = 0;
 		binaryReader.Read(curveCount, 0, elementCountMax);
@@ -571,7 +475,8 @@ bool EffectImplemented::LoadBody(const uint8_t* data, int32_t size, float mag)
 		}
 	};
 
-	const auto loadProceduralModels = [&]() -> void {
+	const auto loadProceduralModels = [&]() -> void
+	{
 		// curve
 		int32_t pmCount = 0;
 
@@ -782,18 +687,18 @@ EffectRef Effect::Create(const SettingRef& setting, const char16_t* path, float 
 	if (!eLoader->Load(path, data, size))
 		return nullptr;
 
-	char16_t parentDir[512];
+	FixedSizeString<char16_t, 512> parentDir;
 	if (materialPath == nullptr)
 	{
-		GetParentDir(parentDir, path);
-		materialPath = parentDir;
+		parentDir = PathHelper::GetDirectoryName(FixedSizeString<char16_t, 512>(path));
+		materialPath = parentDir.data();
 	}
 
 	auto effect = EffectImplemented::Create(setting, data, size, magnification, materialPath);
 
 	eLoader->Unload(data, size);
 
-	effect->SetName(getFilenameWithoutExt(path).c_str());
+	effect->SetName(PathHelper::GetFilenameWithoutExt(FixedSizeString<char16_t, 512>(path)).data());
 
 	return effect;
 }
@@ -1364,11 +1269,11 @@ bool EffectImplemented::Reload(
 	if (!eLoader->Load(path, data, size))
 		return false;
 
-	char16_t parentDir[512];
+	FixedSizeString<char16_t, 512> parentDir;
 	if (materialPath == nullptr)
 	{
-		GetParentDir(parentDir, path);
-		materialPath = parentDir;
+		parentDir = PathHelper::GetDirectoryName(FixedSizeString<char16_t, 512>(path));
+		materialPath = parentDir.data();
 	}
 
 	int lockCount = 0;
@@ -1415,11 +1320,9 @@ void EffectImplemented::ReloadResources(const void* data, int32_t size, const ch
 
 		for (uint32_t ind = 0; ind < m_pImages.size(); ind++)
 		{
-			char16_t fullPath[512];
-			PathCombine(fullPath, matPath, m_ImagePaths[ind].get());
-
+			const auto fullPath = PathHelper::Combine(FixedSizeString<char16_t, 512>(matPath), FixedSizeString<char16_t, 512>(m_ImagePaths[ind].get()));
 			TextureRef value = nullptr;
-			if (reloadingBackup->images.Pop(fullPath, value))
+			if (reloadingBackup->images.Pop(fullPath.data(), value))
 			{
 				m_pImages[ind] = value;
 			}
@@ -1427,11 +1330,9 @@ void EffectImplemented::ReloadResources(const void* data, int32_t size, const ch
 
 		for (uint32_t ind = 0; ind < m_normalImages.size(); ind++)
 		{
-			char16_t fullPath[512];
-			PathCombine(fullPath, matPath, m_normalImagePaths[ind].get());
-
+			const auto fullPath = PathHelper::Combine(FixedSizeString<char16_t, 512>(matPath), FixedSizeString<char16_t, 512>(m_normalImagePaths[ind].get()));
 			TextureRef value = nullptr;
-			if (reloadingBackup->normalImages.Pop(fullPath, value))
+			if (reloadingBackup->normalImages.Pop(fullPath.data(), value))
 			{
 				m_normalImages[ind] = value;
 			}
@@ -1439,11 +1340,9 @@ void EffectImplemented::ReloadResources(const void* data, int32_t size, const ch
 
 		for (uint32_t ind = 0; ind < m_distortionImages.size(); ind++)
 		{
-			char16_t fullPath[512];
-			PathCombine(fullPath, matPath, m_distortionImagePaths[ind].get());
-
+			const auto fullPath = PathHelper::Combine(FixedSizeString<char16_t, 512>(matPath), FixedSizeString<char16_t, 512>(m_distortionImagePaths[ind].get()));
 			TextureRef value = nullptr;
-			if (reloadingBackup->distortionImages.Pop(fullPath, value))
+			if (reloadingBackup->distortionImages.Pop(fullPath.data(), value))
 			{
 				m_distortionImages[ind] = value;
 			}
@@ -1451,11 +1350,9 @@ void EffectImplemented::ReloadResources(const void* data, int32_t size, const ch
 
 		for (uint32_t ind = 0; ind < m_pWaves.size(); ind++)
 		{
-			char16_t fullPath[512];
-			PathCombine(fullPath, matPath, m_WavePaths[ind].get());
-
+			const auto fullPath = PathHelper::Combine(FixedSizeString<char16_t, 512>(matPath), FixedSizeString<char16_t, 512>(m_WavePaths[ind].get()));
 			SoundDataRef value;
-			if (reloadingBackup->sounds.Pop(fullPath, value))
+			if (reloadingBackup->sounds.Pop(fullPath.data(), value))
 			{
 				m_pWaves[ind] = value;
 			}
@@ -1463,11 +1360,9 @@ void EffectImplemented::ReloadResources(const void* data, int32_t size, const ch
 
 		for (size_t ind = 0; ind < models_.size(); ind++)
 		{
-			char16_t fullPath[512];
-			PathCombine(fullPath, matPath, modelPaths_[ind].get());
-
+			const auto fullPath = PathHelper::Combine(FixedSizeString<char16_t, 512>(matPath), FixedSizeString<char16_t, 512>(modelPaths_[ind].get()));
 			ModelRef value = nullptr;
-			if (reloadingBackup->models.Pop(fullPath, value))
+			if (reloadingBackup->models.Pop(fullPath.data(), value))
 			{
 				models_[ind] = value;
 			}
@@ -1475,11 +1370,9 @@ void EffectImplemented::ReloadResources(const void* data, int32_t size, const ch
 
 		for (uint32_t ind = 0; ind < materials_.size(); ind++)
 		{
-			char16_t fullPath[512];
-			PathCombine(fullPath, matPath, materialPaths_[ind].get());
-
+			const auto fullPath = PathHelper::Combine(FixedSizeString<char16_t, 512>(matPath), FixedSizeString<char16_t, 512>(materialPaths_[ind].get()));
 			MaterialRef value = nullptr;
-			if (reloadingBackup->materials.Pop(fullPath, value))
+			if (reloadingBackup->materials.Pop(fullPath.data(), value))
 			{
 				materials_[ind] = value;
 			}
@@ -1487,11 +1380,9 @@ void EffectImplemented::ReloadResources(const void* data, int32_t size, const ch
 
 		for (uint32_t ind = 0; ind < curves_.size(); ind++)
 		{
-			char16_t fullPath[512];
-			PathCombine(fullPath, matPath, curvePaths_[ind].get());
-
+			const auto fullPath = PathHelper::Combine(FixedSizeString<char16_t, 512>(matPath), FixedSizeString<char16_t, 512>(curvePaths_[ind].get()));
 			CurveRef value = nullptr;
-			if (reloadingBackup->curves.Pop(fullPath, value))
+			if (reloadingBackup->curves.Pop(fullPath.data(), value))
 			{
 				curves_[ind] = value;
 			}
@@ -1522,9 +1413,8 @@ void EffectImplemented::UnloadResources(const char16_t* materialPath)
 			if (m_pImages[ind] == nullptr)
 				continue;
 
-			char16_t fullPath[512];
-			PathCombine(fullPath, matPath, m_ImagePaths[ind].get());
-			reloadingBackup->images.Push(fullPath, m_pImages[ind]);
+			const auto fullPath = PathHelper::Combine(FixedSizeString<char16_t, 512>(matPath), FixedSizeString<char16_t, 512>(m_ImagePaths[ind].get()));
+			reloadingBackup->images.Push(fullPath.data(), m_pImages[ind]);
 		}
 
 		for (uint32_t ind = 0; ind < m_normalImages.size(); ind++)
@@ -1532,59 +1422,48 @@ void EffectImplemented::UnloadResources(const char16_t* materialPath)
 			if (m_normalImages[ind] == nullptr)
 				continue;
 
-			char16_t fullPath[512];
-			PathCombine(fullPath, matPath, m_normalImagePaths[ind].get());
-			reloadingBackup->normalImages.Push(fullPath, m_normalImages[ind]);
+			const auto fullPath = PathHelper::Combine(FixedSizeString<char16_t, 512>(matPath), FixedSizeString<char16_t, 512>(m_normalImagePaths[ind].get()));
+			reloadingBackup->normalImages.Push(fullPath.data(), m_normalImages[ind]);
 		}
 
 		for (uint32_t ind = 0; ind < m_distortionImages.size(); ind++)
 		{
 			if (m_distortionImagePaths[ind] == nullptr)
 				continue;
-
-			char16_t fullPath[512];
-			PathCombine(fullPath, matPath, m_distortionImagePaths[ind].get());
-			reloadingBackup->distortionImages.Push(fullPath, m_distortionImages[ind]);
+			const auto fullPath = PathHelper::Combine(FixedSizeString<char16_t, 512>(matPath), FixedSizeString<char16_t, 512>(m_distortionImagePaths[ind].get()));
+			reloadingBackup->distortionImages.Push(fullPath.data(), m_distortionImages[ind]);
 		}
 
 		for (uint32_t ind = 0; ind < m_pWaves.size(); ind++)
 		{
 			if (m_pWaves[ind] == nullptr)
 				continue;
-
-			char16_t fullPath[512];
-			PathCombine(fullPath, matPath, m_WavePaths[ind].get());
-			reloadingBackup->sounds.Push(fullPath, m_pWaves[ind]);
+			const auto fullPath = PathHelper::Combine(FixedSizeString<char16_t, 512>(matPath), FixedSizeString<char16_t, 512>(m_WavePaths[ind].get()));
+			reloadingBackup->sounds.Push(fullPath.data(), m_pWaves[ind]);
 		}
 
 		for (size_t ind = 0; ind < models_.size(); ind++)
 		{
 			if (models_[ind] == nullptr)
 				continue;
-
-			char16_t fullPath[512];
-			PathCombine(fullPath, matPath, modelPaths_[ind].get());
-			reloadingBackup->models.Push(fullPath, models_[ind]);
+			const auto fullPath = PathHelper::Combine(FixedSizeString<char16_t, 512>(matPath), FixedSizeString<char16_t, 512>(modelPaths_[ind].get()));
+			reloadingBackup->models.Push(fullPath.data(), models_[ind]);
 		}
 
 		for (uint32_t ind = 0; ind < materials_.size(); ind++)
 		{
 			if (materials_[ind] == nullptr)
 				continue;
-
-			char16_t fullPath[512];
-			PathCombine(fullPath, matPath, materialPaths_[ind].get());
-			reloadingBackup->materials.Push(fullPath, materials_[ind]);
+			const auto fullPath = PathHelper::Combine(FixedSizeString<char16_t, 512>(matPath), FixedSizeString<char16_t, 512>(materialPaths_[ind].get()));
+			reloadingBackup->materials.Push(fullPath.data(), materials_[ind]);
 		}
 
 		for (uint32_t ind = 0; ind < curves_.size(); ind++)
 		{
 			if (curves_[ind] == nullptr)
 				continue;
-
-			char16_t fullPath[512];
-			PathCombine(fullPath, matPath, curvePaths_[ind].get());
-			reloadingBackup->curves.Push(fullPath, curves_[ind]);
+			const auto fullPath = PathHelper::Combine(FixedSizeString<char16_t, 512>(matPath), FixedSizeString<char16_t, 512>(curvePaths_[ind].get()));
+			reloadingBackup->curves.Push(fullPath.data(), curves_[ind]);
 		}
 
 		return;
@@ -1616,7 +1495,8 @@ EffectTerm EffectImplemented::CalculateTerm() const
 	EffectInstanceTerm rootTerm;
 
 	std::function<void(EffectNode*, EffectInstanceTerm&)> recurse;
-	recurse = [&effectTerm, &recurse](EffectNode* node, EffectInstanceTerm& term) -> void {
+	recurse = [&effectTerm, &recurse](EffectNode* node, EffectInstanceTerm& term) -> void
+	{
 		for (int i = 0; i < node->GetChildrenCount(); i++)
 		{
 			auto cterm = node->GetChild(i)->CalculateInstanceTerm(term);

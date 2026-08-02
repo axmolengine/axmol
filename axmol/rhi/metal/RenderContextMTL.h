@@ -186,6 +186,17 @@ public:
 
     void readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback) override;
 
+    bool copyTexture(RenderTarget* src, Texture* dst) override;
+    bool copyTexture(Texture* src, Texture* dst) override;
+
+    /**
+     * Copies the contents of one MTLTexture into another via a synchronous blit command.
+     * @param src Source texture.
+     * @param dst Destination texture.
+     * @return true if the copy was issued, otherwise false.
+     */
+    bool copyTexture(id<MTLTexture> src, Texture* dst);
+
     id<MTLRenderCommandEncoder> getRenderCommandEncoder() const { return _mtlRenderEncoder; }
 
     CAMetalLayer* getMetalLayer() { return _mtlLayer; }
@@ -233,10 +244,12 @@ private:
     void afterDraw();
     void flush();
     void flushCaptureCommands();
+    void restoreFrameBufferOnly();
 
     CAMetalLayer* _mtlLayer{nil};
     RenderTargetImpl* _screenRT{nullptr};
     id<CAMetalDrawable> _currentDrawable{nil};
+    bool _restoreFrameBufferOnlyAfterDrawable{false};
 
     // weak ref, like context, managed by DriverImpl
     id<MTLCommandQueue> _mtlCmdQueue              = nil;

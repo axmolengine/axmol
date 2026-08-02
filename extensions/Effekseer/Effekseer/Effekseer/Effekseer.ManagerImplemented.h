@@ -1,4 +1,4 @@
-
+﻿
 #ifndef __EFFEKSEER_MANAGER_IMPLEMENTED_H__
 #define __EFFEKSEER_MANAGER_IMPLEMENTED_H__
 
@@ -9,8 +9,9 @@
 #include "Effekseer.Matrix43.h"
 #include "Effekseer.Matrix44.h"
 #include "Effekseer.WorkerThread.h"
-#include "Geometry/GeometryUtility.h"
+#include "Geometry/Effekseer.GeometryUtility.h"
 #include "Utils/Effekseer.CustomAllocator.h"
+#include "Utils/Effekseer.InstancePool.h"
 
 namespace Effekseer
 {
@@ -22,7 +23,7 @@ class ManagerImplemented : public Manager, public ReferenceObject
 	friend class InstanceContainer;
 	friend class InstanceGroup;
 
-private:
+public:
 	class alignas(32) DrawSet
 	{
 	public:
@@ -115,28 +116,27 @@ private:
 	};
 
 private:
-	CustomVector<WorkerThread> m_WorkerThreads;
+	CustomVector<WorkerThread> workerThreads_;
 
 	//! whether does rendering and update handle flipped automatically
-	bool m_autoFlip = true;
+	bool autoFlip_ = true;
 
 	//! next handle
-	Handle m_NextHandle = 0;
+	Handle nextHandle_ = 0;
 
 	// 確保済みインスタンス数
-	int m_instance_max;
+	int instanceMax_;
 
-	// buffers which is allocated while initializing
-	// 初期化中に確保されたバッファ
-	CustomAlignedVector<InstanceChunk> reservedChunksBuffer_;
-	CustomAlignedVector<uint8_t> reservedGroupBuffer_;
-	CustomAlignedVector<uint8_t> reservedContainerBuffer_;
+	int nextComputeCount_;
 
-	// pooled instances. Thease are not used and waiting to be used.
-	// プールされたインスタンス。使用されておらず、使用されてるのを待っている。
-	std::queue<InstanceChunk*> pooledChunks_;
-	std::queue<InstanceGroup*> pooledGroups_;
-	std::queue<InstanceContainer*> pooledContainers_;
+	/**
+		@note
+		An user can specify only the maximum number of instance.
+		But the number of instance container is larger than one of instance.
+	*/
+	InstancePool<InstanceChunk> pooledInstanceChunks_;
+	InstancePool<InstanceGroup> pooledInstanceGroup_;
+	InstancePool<InstanceContainer> pooledInstanceContainers_;
 
 	// instance chunks by generations
 	// 世代ごとのインスタンスチャンク
@@ -145,49 +145,56 @@ private:
 	std::array<int32_t, GenerationsMax> creatableChunkOffsets_;
 
 	// playing objects
-	CustomAlignedMap<Handle, DrawSet> m_DrawSets;
+	CustomAlignedMap<Handle, DrawSet> drawSets_;
 
 	//! objects which are waiting to be disposed
-	std::array<CustomAlignedMap<Handle, DrawSet>, 2> m_RemovingDrawSets;
+	std::array<CustomAlignedMap<Handle, DrawSet>, 2> removingDrawSets_;
 
 	//! objects on rendering
-	CustomAlignedVector<DrawSet> m_renderingDrawSets;
+	CustomAlignedVector<DrawSet> renderingDrawSets_;
 
 	//! objects on rendering temporaly (sorted)
 	CustomAlignedVector<DrawSet> sortedRenderingDrawSets_;
 
 	//! objects on rendering
-	CustomAlignedMap<Handle, DrawSet> m_renderingDrawSetMaps;
+	CustomAlignedMap<Handle, DrawSet> renderingDrawSetMaps_;
 
 	// mutex for rendering
-	std::recursive_mutex m_renderingMutex;
-	bool m_isLockedWithRenderingMutex = false;
+	std::recursive_mutex renderingMutex_;
+	bool isLockedWithRenderingMutex_ = false;
 
-	SettingRef m_setting;
+	SettingRef setting_;
 
-	int m_updateTime;
-	int m_drawTime;
+	int updateTime_;
+	int computeTime_;
+	int drawTime_;
+	Manager::DrawTime drawTimeBreakdown_;
 
-	uint32_t m_sequenceNumber;
+	uint32_t sequenceNumber_;
 
-	SpriteRendererRef m_spriteRenderer;
+	SpriteRendererRef spriteRenderer_;
 
-	RibbonRendererRef m_ribbonRenderer;
+	RibbonRendererRef ribbonRenderer_;
 
-	RingRendererRef m_ringRenderer;
+	RingRendererRef ringRenderer_;
 
-	ModelRendererRef m_modelRenderer;
+	ModelRendererRef modelRenderer_;
 
-	TrackRendererRef m_trackRenderer;
+	TrackRendererRef trackRenderer_;
 
-	SoundPlayerRef m_soundPlayer;
+	GpuParticleSystemRef gpuParticleSystem_;
 
-	RandFunc m_randFunc;
+	GpuTimerRef gpuTimer_;
 
-	std::array<LayerParameter, LayerCount> m_layerParameters;
+	SoundPlayerRef soundPlayer_;
 
-	std::queue<std::pair<SoundTag, SoundPlayer::InstanceParameter>> m_requestedSounds;
-	std::mutex m_soundMutex;
+	RandFunc randFunc_;
+	CollisionCallback collisionCallback_;
+
+	std::array<LayerParameter, LayerCount> layerParameters_;
+
+	std::queue<std::pair<SoundTag, SoundPlayer::InstanceParameter>> requestedSounds_;
+	std::mutex soundMutex_;
 
 	Handle AddDrawSet(const EffectRef& effect, InstanceContainer* pInstanceContainer, InstanceGlobal* pGlobalPointer);
 
@@ -234,6 +241,10 @@ public:
 
 	void SetCoordinateSystem(CoordinateSystem coordinateSystem) override;
 
+	void SetCollisionCallback(CollisionCallback callback) override;
+
+	CollisionCallback GetCollisionCallback() const override;
+
 	SpriteRendererRef GetSpriteRenderer() override;
 
 	void SetSpriteRenderer(SpriteRendererRef renderer) override;
@@ -253,6 +264,18 @@ public:
 	TrackRendererRef GetTrackRenderer() override;
 
 	void SetTrackRenderer(TrackRendererRef renderer) override;
+
+	GpuTimerRef GetGpuTimer() override;
+
+	void SetGpuTimer(GpuTimerRef gpuTimer) override;
+
+	GpuParticleSystemRef GetGpuParticleSystem() override;
+
+	void SetGpuParticleSystem(GpuParticleSystemRef system) override;
+
+	GpuParticleFactoryRef GetGpuParticleFactory() override;
+
+	void SetGpuParticleFactory(GpuParticleFactoryRef factory) override;
 
 	const SettingRef& GetSetting() const override;
 
@@ -295,6 +318,8 @@ public:
 	void StopRoot(const EffectRef& effect) override;
 
 	bool Exists(Handle handle) override;
+
+	EffectRef GetEffect(Handle handle) override;
 
 	int32_t GetInstanceCount(Handle handle) override;
 
@@ -380,7 +405,7 @@ public:
 
 	void Update(const UpdateParameter& parameter) override;
 
-	void DoUpdate(const UpdateParameter& parameter);
+	void DoUpdate(const UpdateParameter& parameter, int times);
 
 	void BeginUpdate() override;
 
@@ -408,6 +433,8 @@ private:
 	void ResetAndPlayWithDataSet(DrawSet& drawSet, float frame);
 
 public:
+	void Compute() override;
+
 	void Draw(const Manager::DrawParameter& drawParameter) override;
 
 	void DrawBack(const Manager::DrawParameter& drawParameter) override;
@@ -426,17 +453,30 @@ public:
 
 	Handle Play(const EffectRef& effect, const Vector3D& position, int32_t startFrame) override;
 
+	Handle Play(const PlayParameter& parameter) override;
+
 	int GetCameraCullingMaskToShowAllEffects() override;
 
 	int GetUpdateTime() const override;
 
 	int GetDrawTime() const override;
 
+	Manager::DrawTime GetDrawTimeBreakdown() const override;
+
+	int32_t GetGpuTime() const override;
+
+	int32_t GetGpuTime(Handle handle) const override;
+
 	int32_t GetRestInstancesCount() const override;
 
 	void BeginReloadEffect(const EffectRef& effect, bool doLockThread);
 
 	void EndReloadEffect(const EffectRef& effect, bool doLockThread);
+
+	const CustomAlignedMap<Handle, DrawSet>& GetPlayingDrawSets() const
+	{
+		return drawSets_;
+	}
 
 	virtual int GetRef() override
 	{

@@ -8,10 +8,9 @@
 
 ## Effekseer (OFF default)
 
-- [![Upstream](https://img.shields.io/github/v/release/effekseer/Effekseer?label=Upstream)](https://github.com/effekseer/EffekseerForCocos2d-x)
-- https://github.com/effekseer/EffekseerForCocos2d-x
+- [![Upstream](https://img.shields.io/github/v/release/effekseer/Effekseer?label=Upstream)](https://github.com/effekseer/Effekseer)
 - https://github.com/effekseer/Effekseer
-- Version: 1.70
+- Version: 1.80.6
 - License: MIT
 
 ## GUI - Deprecrated, should only used for the axmol tests (e.g. cpp-tests)

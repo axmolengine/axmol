@@ -87,4 +87,21 @@ void RenderTarget::setDepthStencilTexture(Texture* texture, int level)
     }
 }
 
+PixelFormat RenderTarget::getColorAttachmentPixelFormat(int index) const
+{
+    if (_defaultRenderTarget && index != 0)
+        return PixelFormat::NONE;
+
+    if (index < 0 || index >= static_cast<int>(_color.size()))
+        return PixelFormat::NONE;
+
+    const auto& color = _color[index];
+    return color.texture ? color.texture->getPixelFormat() : PixelFormat::NONE;
+}
+
+PixelFormat RenderTarget::getDepthStencilAttachmentPixelFormat() const
+{
+    return _depthStencil.texture ? _depthStencil.texture->getPixelFormat() : PixelFormat::NONE;
+}
+
 }  // namespace ax::rhi

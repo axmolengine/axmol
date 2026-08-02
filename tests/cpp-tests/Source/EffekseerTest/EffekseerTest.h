@@ -27,7 +27,16 @@
 
 #include "axmol/axmol.h"
 #include "../BaseTest.h"
-#include "EffekseerForCocos2d-x.h"
+#include "EffekseerAxmol.h"
+
+struct TestEffect
+{
+    const char* filename;
+    const char* displayName;
+    float magnification;
+    bool hasTargetPosition = false;
+    ax::Vec3 targetPosition;
+};
 
 class EffekseerTests : public TestSuite
 {
@@ -48,27 +57,29 @@ public:
     EffekseerTest();
     virtual ~EffekseerTest();
 
-    virtual bool init();
+    virtual bool init() override;
     virtual std::string title() const override;
 
     void update(float delta) override;
     void visit(const ax::SceneRenderState& state, const ax::Mat4& parentTransform, uint32_t parentFlags) override;
 
-protected:
-    std::string _title;
+private:
+    void switchEffect(int direction);
+    void playCurrentEffect();
+    void updateLabel();
 
-    /**
-    efk::EffectManager*をレイヤーのメンバ変数に追加します。このクラスはエフェクトを管理します。
+    bool onPointerDown(ax::PointerEvent* ev);
+    void onPointerMove(ax::PointerEvent* ev);
+    void onPointerUp(ax::PointerEvent* ev);
 
-    You add efk :: EffectManager * to the layer member variable. This class manages effects.
+    efk::EffectManager* _manager = nullptr;
+    efk::EffectEmitter* _emitter = nullptr;
 
-    您將efk :: EffectManager *添加到圖層成員變量。 這個類管理效果。
+    ax::Label* _label     = nullptr;
+    ax::Camera* _3dCamera = nullptr;
 
-    您将efk :: EffectManager *添加到图层成员变量。 这个类管理效果。
-        */
-    efk::EffectManager* manager = nullptr;
-
-    int count = 0;
+    float _angle      = 0.0f;
+    int _currentIndex = 0;
 };
 
 #endif  // _EFFEKSEERTEST_H_

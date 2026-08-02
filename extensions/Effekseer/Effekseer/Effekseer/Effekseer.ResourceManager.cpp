@@ -1,4 +1,4 @@
-
+﻿
 
 //----------------------------------------------------------------------------------
 //
@@ -8,8 +8,9 @@
 #include "Effekseer.MaterialLoader.h"
 #include "Effekseer.SoundLoader.h"
 #include "Effekseer.TextureLoader.h"
-#include "Model/ModelLoader.h"
-#include "Model/ProceduralModelGenerator.h"
+#include "Model/Effekseer.ModelLoader.h"
+#include "Model/Effekseer.ProceduralModelGenerator.h"
+#include "VectorField/Effekseer.VectorFieldLoader.h"
 
 //----------------------------------------------------------------------------------
 //
@@ -22,7 +23,7 @@ namespace Effekseer
 //----------------------------------------------------------------------------------
 TextureRef ResourceManager::LoadTexture(const char16_t* path, TextureType textureType)
 {
-	return cachedTextures_.Load(path, textureType);
+	return CachedTextures.Load(path, textureType);
 }
 
 //----------------------------------------------------------------------------------
@@ -30,7 +31,7 @@ TextureRef ResourceManager::LoadTexture(const char16_t* path, TextureType textur
 //----------------------------------------------------------------------------------
 void ResourceManager::UnloadTexture(TextureRef resource)
 {
-	cachedTextures_.Unload(resource);
+	CachedTextures.Unload(resource);
 }
 
 //----------------------------------------------------------------------------------
@@ -38,7 +39,7 @@ void ResourceManager::UnloadTexture(TextureRef resource)
 //----------------------------------------------------------------------------------
 ModelRef ResourceManager::LoadModel(const char16_t* path)
 {
-	return cachedModels_.Load(path);
+	return CachedModels.Load(path);
 }
 
 //----------------------------------------------------------------------------------
@@ -46,7 +47,7 @@ ModelRef ResourceManager::LoadModel(const char16_t* path)
 //----------------------------------------------------------------------------------
 void ResourceManager::UnloadModel(ModelRef resource)
 {
-	cachedModels_.Unload(resource);
+	CachedModels.Unload(resource);
 }
 
 //----------------------------------------------------------------------------------
@@ -54,7 +55,7 @@ void ResourceManager::UnloadModel(ModelRef resource)
 //----------------------------------------------------------------------------------
 SoundDataRef ResourceManager::LoadSoundData(const char16_t* path)
 {
-	return cachedSounds_.Load(path);
+	return CachedSounds.Load(path);
 }
 
 //----------------------------------------------------------------------------------
@@ -62,7 +63,7 @@ SoundDataRef ResourceManager::LoadSoundData(const char16_t* path)
 //----------------------------------------------------------------------------------
 void ResourceManager::UnloadSoundData(SoundDataRef resource)
 {
-	cachedSounds_.Unload(resource);
+	CachedSounds.Unload(resource);
 }
 
 //----------------------------------------------------------------------------------
@@ -70,7 +71,7 @@ void ResourceManager::UnloadSoundData(SoundDataRef resource)
 //----------------------------------------------------------------------------------
 MaterialRef ResourceManager::LoadMaterial(const char16_t* path)
 {
-	return cachedMaterials_.Load(path);
+	return CachedMaterials.Load(path);
 }
 
 //----------------------------------------------------------------------------------
@@ -78,7 +79,7 @@ MaterialRef ResourceManager::LoadMaterial(const char16_t* path)
 //----------------------------------------------------------------------------------
 void ResourceManager::UnloadMaterial(MaterialRef resource)
 {
-	cachedMaterials_.Unload(resource);
+	CachedMaterials.Unload(resource);
 }
 
 //----------------------------------------------------------------------------------
@@ -86,7 +87,7 @@ void ResourceManager::UnloadMaterial(MaterialRef resource)
 //----------------------------------------------------------------------------------
 CurveRef ResourceManager::LoadCurve(const char16_t* path)
 {
-	return cachedCurves_.Load(path);
+	return CachedCurves.Load(path);
 }
 
 //----------------------------------------------------------------------------------
@@ -94,17 +95,17 @@ CurveRef ResourceManager::LoadCurve(const char16_t* path)
 //----------------------------------------------------------------------------------
 void ResourceManager::UnloadCurve(CurveRef resource)
 {
-	cachedCurves_.Unload(resource);
+	CachedCurves.Unload(resource);
 }
 
 ModelRef ResourceManager::GenerateProceduralModel(const ProceduralModelParameter& param)
 {
-	return proceduralMeshGenerator_.Load(param);
+	return CachedProceduralModels.Load(param);
 }
 
 void ResourceManager::UngenerateProceduralModel(ModelRef resource)
 {
-	proceduralMeshGenerator_.Unload(resource);
+	CachedProceduralModels.Unload(resource);
 }
 
 //----------------------------------------------------------------------------------
