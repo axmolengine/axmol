@@ -47,7 +47,7 @@ public:
     {
 #if defined(AX_ENABLE_EXT_EFFEKSEER)
 #    pragma message("The optional extension Effekseer is enabled.")
-        addTest("Effekseer", []() { return new EffekseerTests(); });
+        addTest("Particles(Effekseer)", []() { return new EffekseerTests(); });
 #endif
         addTest("Scene3D", []() { return new Scene3DTests(); });
 #if AX_ENABLE_EXT_IMGUI
@@ -100,7 +100,7 @@ public:
         addTest("Node", []() { return new NodeTests(); });
         addTest("Parallax", []() { return new ParallaxTests(); });
         addTest("Particles2D", []() { return new ParticleTests(); });
-        addTest("Particle3D", []() { return new Particle3DTests(); });
+        addTest("Particles(PU)", []() { return new Particle3DTests(); });
 #if defined(AX_ENABLE_PHYSICS_2D)
         addTest("Physics2D", []() { return new PhysicsTests(); });
 #endif
