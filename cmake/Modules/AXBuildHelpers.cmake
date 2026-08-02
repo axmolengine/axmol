@@ -1009,7 +1009,7 @@ function(ax_collect_sdk_targets dir out_list)
   set(${out_list} ${temp_list} PARENT_SCOPE)
 endfunction()
 
-function(ax_configure_lib_output tgt tgt_type folder_name)
+function(ax_configure_target_output tgt tgt_type folder_name)
   if(NOT(tgt_type STREQUAL "INTERFACE_LIBRARY"))
     set_target_properties(${tgt} PROPERTIES
       ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib" # Windows/Linux/macOS, .a, .lib

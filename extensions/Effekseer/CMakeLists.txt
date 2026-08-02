@@ -88,8 +88,8 @@ add_subdirectory(EffekseerAxmol)
 
 target_compile_definitions(EffekseerRendererCommon PUBLIC __DISABLED_DEFAULT_TEXTURE_LOADER__)
 
-ax_configure_lib_output(Effekseer STATIC_LIBRARY Extensions/Effekseer)
-ax_configure_lib_output(EffekseerRendererCommon STATIC_LIBRARY Extensions/Effekseer)
+ax_configure_target_output(Effekseer STATIC_LIBRARY Extensions/Effekseer)
+ax_configure_target_output(EffekseerRendererCommon STATIC_LIBRARY Extensions/Effekseer)
 
 if(ANDROID)
   ax_setup_ext_config(EffekseerAxmol FOLDER "Extensions/Effekseer" LINK_SCOPE PRIVATE)
