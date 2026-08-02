@@ -1,12 +1,21 @@
-
+﻿
 #ifndef __EFFEKSEER_SIMD_BASE_H__
 #define __EFFEKSEER_SIMD_BASE_H__
 
-#include <cstdint>
-#include <cmath>
 #include "../Effekseer.Math.h"
+#include <cmath>
+#include <cstdint>
 
-#if defined(__ARM_NEON__) || defined(__ARM_NEON)
+#ifndef EFK_SIMD_LEVEL
+#define EFK_SIMD_LEVEL 4
+#endif
+
+#if EFK_SIMD_LEVEL == 0
+// C++ Generic Implementation (Pseudo SIMD)
+
+#define EFK_SIMD_GEN
+
+#elif defined(__ARM_NEON__) || defined(__ARM_NEON)
 // ARMv7/ARM64 NEON
 
 #define EFK_SIMD_NEON
@@ -17,27 +26,28 @@
 
 #include <arm_neon.h>
 
-#elif (defined(_M_AMD64) || defined(_M_X64)) || (defined(_M_IX86_FP) && _M_IX86_FP >= 2) || defined(__SSE2__)
+#elif EFK_SIMD_LEVEL >= 1 && \
+    ((defined(_M_AMD64) || defined(_M_X64)) || (defined(_M_IX86_FP) && _M_IX86_FP >= 2) || defined(__SSE2__))
 // x86/x86-64 SSE2/AVX2
 
 #define EFK_SIMD_SSE2
 
-#if defined(__AVX2__)
+#if EFK_SIMD_LEVEL >= 4 && defined(__AVX2__)
 #define EFK_SIMD_AVX2
 #endif
-#if defined(__AVX__) || defined(EFK_SIMD_AVX2)
+#if EFK_SIMD_LEVEL >= 4 && (defined(__AVX__) || defined(EFK_SIMD_AVX2))
 #define EFK_SIMD_AVX
 #endif
-#if defined(__SSE4_2__) || defined(EFK_SIMD_AVX)
+#if EFK_SIMD_LEVEL >= 3 && (defined(__SSE4_2__) || defined(EFK_SIMD_AVX))
 #define EFK_SIMD_SSE4_2
 #endif
-#if defined(__SSE4_1__) || defined(EFK_SIMD_SSE4_2)
+#if EFK_SIMD_LEVEL >= 2 && (defined(__SSE4_1__) || defined(EFK_SIMD_SSE4_2))
 #define EFK_SIMD_SSE4_1
 #endif
-#if defined(__SSSE3__) || defined(EFK_SIMD_SSE4_1)
+#if EFK_SIMD_LEVEL >= 2 && (defined(__SSSE3__) || defined(EFK_SIMD_SSE4_1))
 #define EFK_SIMD_SSSE3
 #endif
-#if defined(__SSE3__) || defined(EFK_SIMD_SSSE3)
+#if EFK_SIMD_LEVEL >= 2 && (defined(__SSE3__) || defined(EFK_SIMD_SSSE3))
 #define EFK_SIMD_SSE3
 #endif
 

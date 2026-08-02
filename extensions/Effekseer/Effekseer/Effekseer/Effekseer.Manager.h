@@ -1,11 +1,12 @@
-
+﻿
 #ifndef __EFFEKSEER_MANAGER_H__
 #define __EFFEKSEER_MANAGER_H__
 
 //----------------------------------------------------------------------------------
 // Include
 //----------------------------------------------------------------------------------
-#include "Effekseer.Base.h"
+#include "Effekseer.Base.Pre.h"
+#include "Effekseer.ExternalModel.h"
 #include "Effekseer.Matrix44.h"
 #include "Effekseer.Vector3D.h"
 
@@ -14,6 +15,9 @@
 //----------------------------------------------------------------------------------
 namespace Effekseer
 {
+
+struct Color;
+
 //----------------------------------------------------------------------------------
 //
 //----------------------------------------------------------------------------------
@@ -38,6 +42,14 @@ using RandFunc = std::function<int()>;
 	isRemovingManager マネージャーを破棄したときにエフェクトのインスタンスを破棄しているか
 */
 using EffectInstanceRemovingCallback = std::function<void(Manager*, Handle, bool)>;
+
+/**
+	@brief
+	\~English Callback to query external collision. It returns true when a collision occurs and sets collisionPosition as the hit point and collisionNormal as the surface normal.
+	\~Japanese 外部との衝突を問い合わせるためのコールバック。衝突した場合はtrueを返し、collisionPositionに衝突点、collisionNormalに衝突面の法線を設定する。
+*/
+using CollisionCallback =
+	std::function<bool(const Vector3D& startPosition, const Vector3D& endPosition, Vector3D& collisionPosition, Vector3D& collisionNormal)>;
 
 /**
 	@brief エフェクト管理クラス
@@ -77,8 +89,8 @@ public:
 			\~English Perform synchronous update
 			\~Japanese 同期更新を行う
 			@note
-			\~English If true, update processing is performed synchronously. If false, update processing is performed asynchronously (after this, do not call anything other than Draw)
-			\~Japanese trueなら同期的に更新処理を行う。falseなら非同期的に更新処理を行う（次はDraw以外呼び出してはいけない）
+			\~English If true, update processing is performed synchronously. If false, update processing is performed asynchronously (after this, do not call anything other than Draw or Compute)
+			\~Japanese trueなら同期的に更新処理を行う。falseなら非同期的に更新処理を行う（次はDraw/Compute以外呼び出してはいけない）
 		*/
 		bool SyncUpdate = true;
 	};
@@ -126,6 +138,17 @@ public:
 		DrawParameter();
 	};
 
+	struct DrawTime
+	{
+		int32_t WorkerThreadWait = 0;
+		int32_t MutexLock = 0;
+		int32_t Culling = 0;
+		int32_t Sorting = 0;
+		int32_t DrawSets = 0;
+		int32_t GpuParticles = 0;
+		int32_t Total = 0;
+	};
+
 	/**
 		@brief
 		\~English Parameters of Manager::SetLayerParameter to be set for each layer index.
@@ -154,6 +177,16 @@ public:
 			LODのデバッグに役に立ちます。
 		*/
 		float DistanceBias = 0.0f;
+	};
+
+	struct PlayParameter
+	{
+		EffectRef Effect;
+		Vector3D Position = {0.0f, 0.0f, 0.0f};
+		Vector3D Rotation = {0.0f, 0.0f, 0.0f};
+		Vector3D Scale = {1.0f, 1.0f, 1.0f};
+		int32_t StartFrame = 0;
+		std::vector<ExternalModel> ExternalModels;
 	};
 
 protected:
@@ -196,6 +229,20 @@ public:
 		@brief	ランダム関数を設定する。
 	*/
 	virtual void SetRandFunc(RandFunc func) = 0;
+
+	/**
+		@brief
+		\~English Set a callback to determine collision points against external objects.
+		\~Japanese 外部オブジェクトへの衝突判定に使用するコールバックを設定する。
+	*/
+	virtual void SetCollisionCallback(CollisionCallback callback) = 0;
+
+	/**
+		@brief
+		\~English Get a callback to determine collision points against external objects.
+		\~Japanese 外部オブジェクトへの衝突判定に使用するコールバックを取得する。
+	*/
+	virtual CollisionCallback GetCollisionCallback() const = 0;
 
 	/**
 		@brief	座標系を取得する。
@@ -261,6 +308,48 @@ public:
 		@brief	軌跡描画機能を設定する。
 	*/
 	virtual void SetTrackRenderer(TrackRendererRef renderer) = 0;
+
+	/**
+		@brief
+		\~English get an GPU performance timer
+		\~Japanese GPUパフォーマンスタイマー取得する。
+	*/
+	virtual GpuTimerRef GetGpuTimer() = 0;
+
+	/**
+		@brief
+		\~English get an GPU performance timer
+		\~Japanese GPUパフォーマンスタイマーを設定する。
+	*/
+	virtual void SetGpuTimer(GpuTimerRef gpuTimer) = 0;
+
+	/**
+		@brief
+		\~English get an GPU particle system
+		\~Japanese GPUパーティクルシステム取得する。
+	*/
+	virtual GpuParticleSystemRef GetGpuParticleSystem() = 0;
+
+	/**
+		@brief
+		\~English get an GPU particle system
+		\~Japanese GPUパーティクルシステムを設定する。
+	*/
+	virtual void SetGpuParticleSystem(GpuParticleSystemRef system) = 0;
+
+	/**
+	@brief
+	\~English get an GPU particle factory
+	\~Japanese GPUパーティクルファクトリ取得する。
+	*/
+	virtual GpuParticleFactoryRef GetGpuParticleFactory() = 0;
+
+	/**
+	@brief
+	\~English get an GPU particle factory
+	\~Japanese GPUパーティクルファクトリを設定する。
+	*/
+	virtual void SetGpuParticleFactory(GpuParticleFactoryRef factory) = 0;
 
 	/**
 		@brief	設定クラスを取得する。
@@ -392,6 +481,13 @@ public:
 		@return	存在してるか?
 	*/
 	virtual bool Exists(Handle handle) = 0;
+
+	/**
+		@brief
+		\~English Get the effect that is being played.
+		\~Japanese 再生されているエフェクトを取得する。
+	*/
+	virtual EffectRef GetEffect(Handle handle) = 0;
 
 	/**
 		@brief	エフェクトに使用されているインスタンス数を取得する。
@@ -802,6 +898,13 @@ public:
 
 	/**
 	@brief
+	\~English	Compute GPU particles.
+	\~Japanese	GPUパーティクルの計算処理を行う。
+	*/
+	virtual void Compute() = 0;
+
+	/**
+	@brief
 	\~English	Draw particles.
 	\~Japanese	描画処理を行う。
 	*/
@@ -877,20 +980,52 @@ public:
 
 	/**
 		@brief
+		\~English	Play an effect with detailed parameters.
+		\~Japanese	再生用の詳細なパラメーターを指定して再生する。
+	*/
+	virtual Handle Play(const PlayParameter& parameter) = 0;
+
+	/**
+		@brief
 		\~English	Get a camera's culling mask to show all effects
 		\~Japanese	全てのエフェクトを表示するためのカメラのカリングマスクを取得する。
 	*/
 	virtual int GetCameraCullingMaskToShowAllEffects() = 0;
 
 	/**
-		@brief	Update処理時間を取得。
+		@brief
+		\~English	Gets the CPU time required for the Update process.
+		\~Japanese	Update処理にかかるCPU時間を取得する。
 	*/
 	virtual int GetUpdateTime() const = 0;
 
 	/**
-		@brief	Draw処理時間を取得。
+		@brief
+		\~English	Gets the CPU time required for the Draw process.
+		\~Japanese	Draw処理にかかるCPU時間を取得する。
 	*/
 	virtual int GetDrawTime() const = 0;
+
+	/**
+		@brief
+		\~English	Gets the detailed CPU time required for the Draw process.
+		\~Japanese	Draw処理にかかるCPU時間の内訳を取得する。
+	*/
+	virtual DrawTime GetDrawTimeBreakdown() const = 0;
+
+	/**
+		@brief
+		\~English	Gets the GPU time (microseconds) taken to render the all effects.
+		\~Japanese	エフェクト全ての描画処理にかかるGPU時間(マイクロ秒)を取得する。
+	*/
+	virtual int32_t GetGpuTime() const = 0;
+
+	/**
+		@brief
+		\~English	Gets the GPU time (microseconds) taken to render the effect.
+		\~Japanese	エフェクトの描画処理にかかるGPU時間(マイクロ秒)を取得する。
+	*/
+	virtual int32_t GetGpuTime(Handle handle) const = 0;
 
 	/**
 		@brief

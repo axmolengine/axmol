@@ -1,10 +1,11 @@
-#include "Effekseer.InstanceGroup.h"
+﻿#include "Effekseer.InstanceGroup.h"
 
 #include "Effekseer.ManagerImplemented.h"
 
 #include "Effekseer.Instance.h"
 #include "Effekseer.InstanceContainer.h"
 #include "Effekseer.InstanceGlobal.h"
+#include "Parameter/Effekseer.Trigger.h"
 #include "Utils/Effekseer.CustomAllocator.h"
 #include <assert.h>
 
@@ -18,10 +19,10 @@ namespace Effekseer
 //
 //----------------------------------------------------------------------------------
 InstanceGroup::InstanceGroup(ManagerImplemented* manager, EffectNodeImplemented* effectNode, InstanceContainer* container, InstanceGlobal* global)
-	: m_manager(manager)
-	, m_effectNode(effectNode)
-	, m_container(container)
-	, m_global(global)
+	: manager_(manager)
+	, effectNode_(effectNode)
+	, container_(container)
+	, global_(global)
 {
 	parentMatrix_ = SIMD::Mat43f::Identity;
 }
@@ -36,7 +37,7 @@ InstanceGroup::~InstanceGroup()
 
 void InstanceGroup::NotfyEraseInstance()
 {
-	m_global->DecInstanceCount();
+	global_->DecInstanceCount();
 }
 
 //----------------------------------------------------------------------------------
@@ -44,37 +45,37 @@ void InstanceGroup::NotfyEraseInstance()
 //----------------------------------------------------------------------------------
 void InstanceGroup::Initialize(RandObject& rand, Instance* parent)
 {
-	m_generatedCount = 0;
+	generatedCount_ = 0;
 
-	auto gt = ApplyEq(m_effectNode->GetEffect(), m_global, parent, &rand, m_effectNode->CommonValues.RefEqGenerationTimeOffset, m_effectNode->CommonValues.GenerationTimeOffset);
+	auto gt = ApplyEq(effectNode_->GetEffect(), global_, parent, &rand, effectNode_->CommonValues.Generation.RefEqOffset, effectNode_->CommonValues.Generation.Offset);
 
-	m_generationOffsetTime = gt.getValue(rand);
-	m_nextGenerationTime = m_generationOffsetTime;
+	generationOffsetTime_ = gt.getValue(rand);
+	nextGenerationTime_ = generationOffsetTime_;
 
-	if (m_effectNode->CommonValues.RefEqMaxGeneration >= 0)
+	if (effectNode_->CommonValues.RefEqMaxGeneration >= 0)
 	{
-		auto maxGene = static_cast<float>(m_effectNode->CommonValues.MaxGeneration);
-		ApplyEq(maxGene, m_effectNode->GetEffect(), m_global, parent, &rand, m_effectNode->CommonValues.RefEqMaxGeneration, maxGene);
-		m_maxGenerationCount = static_cast<int32_t>(maxGene);
+		auto maxGene = static_cast<float>(effectNode_->CommonValues.MaxGeneration);
+		ApplyEq(maxGene, effectNode_->GetEffect(), global_, parent, &rand, effectNode_->CommonValues.RefEqMaxGeneration, maxGene);
+		maxGenerationCount_ = static_cast<int32_t>(maxGene);
 	}
 	else
 	{
-		m_maxGenerationCount = m_effectNode->CommonValues.MaxGeneration;
+		maxGenerationCount_ = effectNode_->CommonValues.MaxGeneration;
 	}
 
-	if (m_effectNode->TriggerParam.ToStartGeneration.type == TriggerType::None)
+	if (effectNode_->CommonValues.Generation.Type == GenerationTiming::Trigger || effectNode_->CommonValues.Generation.TriggerToStart.type == TriggerType::None)
 	{
-		m_generationState = GenerationState::Generating;
+		generationState_ = GenerationState::Generating;
 	}
 }
 
 Instance* InstanceGroup::CreateRootInstance()
 {
-	auto instance = m_manager->CreateInstance(m_effectNode, m_container, this);
+	auto instance = manager_->CreateInstance(effectNode_, container_, this);
 	if (instance != nullptr)
 	{
-		m_instances.push_back(instance);
-		m_global->IncInstanceCount();
+		instances_.push_back(instance);
+		global_->IncInstanceCount();
 		return instance;
 	}
 	return nullptr;
@@ -82,51 +83,97 @@ Instance* InstanceGroup::CreateRootInstance()
 
 void InstanceGroup::GenerateInstancesIfRequired(float localTime, RandObject& rand, Instance* parent)
 {
-	if (m_generationState == GenerationState::BeforeStart &&
-		m_effectNode->TriggerParam.ToStartGeneration.type != TriggerType::None)
+	const auto generationType = effectNode_->CommonValues.Generation.Type;
+
+	if (generationState_ == GenerationState::Ended)
 	{
-		if (m_global->GetInputTriggerCount(m_effectNode->TriggerParam.ToStartGeneration.index) > 0)
+		return;
+	}
+
+	if (generationState_ == GenerationState::BeforeStart)
+	{
+		if (IsTriggerActivated(effectNode_->CommonValues.Generation.TriggerToStart, global_, parent))
 		{
-			m_generationState = GenerationState::Generating;
-			m_nextGenerationTime = m_generationOffsetTime + localTime;
+			generationState_ = GenerationState::Generating;
+			nextGenerationTime_ = generationOffsetTime_ + localTime;
 		}
 	}
-	if (m_generationState == GenerationState::Generating &&
-		m_effectNode->TriggerParam.ToStopGeneration.type != TriggerType::None)
+	if (generationState_ == GenerationState::Generating && generationType == GenerationTiming::Continuous)
 	{
-		if (m_global->GetInputTriggerCount(m_effectNode->TriggerParam.ToStopGeneration.index) > 0)
+		if (IsTriggerActivated(effectNode_->CommonValues.Generation.TriggerToStop, global_, parent))
 		{
-			m_generationState = GenerationState::Ended;
+			generationState_ = GenerationState::Ended;
 		}
 	}
 
-	const bool isSpawnRestrictedByLOD = (m_global->CurrentLevelOfDetails & m_effectNode->LODsParam.MatchingLODs) == 0 && !m_effectNode->CanSpawnWithNonMatchingLOD();
-	const bool canSpawn = !m_global->IsSpawnDisabled && !isSpawnRestrictedByLOD;
+	const bool isSpawnRestrictedByLOD = (global_->CurrentLevelOfDetails & effectNode_->LODsParam.MatchingLODs) == 0 && !effectNode_->CanSpawnWithNonMatchingLOD();
+	const bool canSpawn = !global_->IsSpawnDisabled && !isSpawnRestrictedByLOD;
+
+	if (generationType == GenerationTiming::Trigger)
+	{
+		const bool canGenerateNow = generationState_ == GenerationState::Generating && localTime >= generationOffsetTime_;
+		if (canGenerateNow)
+		{
+			uint32_t triggerCount = GetTriggerCount(effectNode_->CommonValues.Generation.TriggerToGenerate, global_, parent);
+			for (uint32_t triggerIndex = 0; triggerIndex < triggerCount && generatedCount_ < maxGenerationCount_; triggerIndex++)
+			{
+				auto triggerSpawnCount = ApplyEq(effectNode_->GetEffect(), global_, parent, &rand, effectNode_->CommonValues.Generation.RefEqBurst, effectNode_->CommonValues.Generation.Burst);
+				int32_t requestCount = static_cast<int32_t>(triggerSpawnCount.getValue(rand));
+				requestCount = Max(requestCount, 0);
+
+				while (requestCount > 0 && maxGenerationCount_ > generatedCount_)
+				{
+					if (canSpawn)
+					{
+						auto instance = manager_->CreateInstance(effectNode_, container_, this);
+						if (instance != nullptr)
+						{
+							instances_.push_back(instance);
+							global_->IncInstanceCount();
+
+							instance->Initialize(parent, localTime, generatedCount_);
+						}
+					}
+
+					generatedCount_++;
+					requestCount--;
+				}
+
+				if (generatedCount_ >= maxGenerationCount_)
+				{
+					generationState_ = GenerationState::Ended;
+					break;
+				}
+			}
+		}
+
+		return;
+	}
 
 	// GenerationTimeOffset can be minus value.
 	// Minus frame particles is generated simultaniously at frame 0.
-	while (m_generationState == GenerationState::Generating &&
-		   m_maxGenerationCount > m_generatedCount &&
-		   localTime >= m_nextGenerationTime)
+	while (generationState_ == GenerationState::Generating &&
+		   maxGenerationCount_ > generatedCount_ &&
+		   localTime >= nextGenerationTime_)
 	{
 		// Disabled spawn only prevents instance generation but spawn rate should not be affected once spawn is enabled again
 		if (canSpawn)
 		{
 			// Create a particle
-			auto instance = m_manager->CreateInstance(m_effectNode, m_container, this);
+			auto instance = manager_->CreateInstance(effectNode_, container_, this);
 			if (instance != nullptr)
 			{
-				m_instances.push_back(instance);
-				m_global->IncInstanceCount();
+				instances_.push_back(instance);
+				global_->IncInstanceCount();
 
-				instance->Initialize(parent, m_nextGenerationTime, m_generatedCount);
+				instance->Initialize(parent, nextGenerationTime_, generatedCount_);
 			}
 
-			m_generatedCount++;
+			generatedCount_++;
 		}
 
-		auto gt = ApplyEq(m_effectNode->GetEffect(), m_global, parent, &rand, m_effectNode->CommonValues.RefEqGenerationTime, m_effectNode->CommonValues.GenerationTime);
-		m_nextGenerationTime += Max(0.0f, gt.getValue(rand));
+		auto gt = ApplyEq(effectNode_->GetEffect(), global_, parent, &rand, effectNode_->CommonValues.Generation.RefEqInterval, effectNode_->CommonValues.Generation.Interval);
+		nextGenerationTime_ += Max(0.0f, gt.getValue(rand));
 	}
 }
 
@@ -135,9 +182,9 @@ void InstanceGroup::GenerateInstancesIfRequired(float localTime, RandObject& ran
 //----------------------------------------------------------------------------------
 Instance* InstanceGroup::GetFirst()
 {
-	if (m_instances.size() > 0)
+	if (instances_.size() > 0)
 	{
-		return m_instances.front();
+		return instances_.front();
 	}
 	return nullptr;
 }
@@ -147,7 +194,7 @@ Instance* InstanceGroup::GetFirst()
 //----------------------------------------------------------------------------------
 int InstanceGroup::GetInstanceCount() const
 {
-	return (int32_t)m_instances.size();
+	return (int32_t)instances_.size();
 }
 
 //----------------------------------------------------------------------------------
@@ -155,13 +202,13 @@ int InstanceGroup::GetInstanceCount() const
 //----------------------------------------------------------------------------------
 void InstanceGroup::Update(bool shown)
 {
-	for (auto it = m_instances.begin(); it != m_instances.end();)
+	for (auto it = instances_.begin(); it != instances_.end();)
 	{
 		auto instance = *it;
 
 		if (!instance->IsActive())
 		{
-			it = m_instances.erase(it);
+			it = instances_.erase(it);
 			NotfyEraseInstance();
 		}
 		else
@@ -170,7 +217,7 @@ void InstanceGroup::Update(bool shown)
 		}
 	}
 
-	time_ += m_global->GetNextDeltaFrame();
+	time_ += global_->GetNextDeltaFrame();
 }
 
 //----------------------------------------------------------------------------------
@@ -178,7 +225,7 @@ void InstanceGroup::Update(bool shown)
 //----------------------------------------------------------------------------------
 void InstanceGroup::ApplyBaseMatrix(const SIMD::Mat43f& mat)
 {
-	for (auto instance : m_instances)
+	for (auto instance : instances_)
 	{
 		if (instance->IsActive())
 		{
@@ -189,11 +236,11 @@ void InstanceGroup::ApplyBaseMatrix(const SIMD::Mat43f& mat)
 
 void InstanceGroup::SetParentMatrix(const SIMD::Mat43f& mat)
 {
-	TranslationParentBindType tType = m_effectNode->CommonValues.TranslationBindType;
-	BindType rType = m_effectNode->CommonValues.RotationBindType;
-	BindType sType = m_effectNode->CommonValues.ScalingBindType;
+	TranslationParentBindType tType = effectNode_->CommonValues.TranslationBindType;
+	BindType rType = effectNode_->CommonValues.RotationBindType;
+	BindType sType = effectNode_->CommonValues.ScalingBindType;
 
-	auto rootGroup = m_global->GetRootContainer()->GetFirstGroup();
+	auto rootGroup = global_->GetRootContainer()->GetFirstGroup();
 
 	if (tType == BindType::Always && rType == BindType::Always && sType == BindType::Always)
 	{
@@ -271,10 +318,10 @@ void InstanceGroup::RemoveForcibly()
 //----------------------------------------------------------------------------------
 void InstanceGroup::KillAllInstances()
 {
-	while (!m_instances.empty())
+	while (!instances_.empty())
 	{
-		auto instance = m_instances.front();
-		m_instances.pop_front();
+		auto instance = instances_.front();
+		instances_.pop_front();
 		NotfyEraseInstance();
 
 		if (instance->IsActive())
@@ -287,8 +334,8 @@ void InstanceGroup::KillAllInstances()
 bool InstanceGroup::IsActive() const
 {
 	return GetInstanceCount() > 0 ||
-		   (m_generationState != GenerationState::Ended &&
-			m_generatedCount < m_maxGenerationCount);
+		   (generationState_ != GenerationState::Ended &&
+			generatedCount_ < maxGenerationCount_);
 }
 
 //----------------------------------------------------------------------------------

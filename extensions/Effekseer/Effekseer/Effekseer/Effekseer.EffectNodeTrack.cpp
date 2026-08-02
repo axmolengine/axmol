@@ -1,4 +1,4 @@
-#include "Effekseer.EffectNodeTrack.h"
+﻿#include "Effekseer.EffectNodeTrack.h"
 #include "Effekseer.Effect.h"
 #include "Effekseer.EffectNode.h"
 #include "Effekseer.Manager.h"
@@ -18,7 +18,7 @@ namespace Effekseer
 
 void EffectNodeTrack::LoadRendererParameter(unsigned char*& pos, const SettingRef& setting)
 {
-	eEffectNodeType type = eEffectNodeType::NoneType;
+	EffectNodeType type = EffectNodeType::NoneType;
 	memcpy(&type, pos, sizeof(int));
 	pos += sizeof(int);
 	assert(type == GetType());
@@ -94,6 +94,9 @@ void EffectNodeTrack::BeginRendering(int32_t count, Manager* manager, const Inst
 		m_nodeParameter.BasicParameterPtr = &RendererCommon.BasicParameter;
 		m_nodeParameter.TextureUVTypeParameterPtr = &TextureUVType;
 		m_nodeParameter.IsRightHand = manager->GetCoordinateSystem() == CoordinateSystem::RH;
+
+		auto scale = global->EffectGlobalMatrix.GetScale();
+		m_nodeParameter.GlobalScale = (scale.GetX() + scale.GetY() + scale.GetZ()) / 3.0f;
 		m_nodeParameter.Maginification = GetEffect()->GetMaginification();
 
 		m_nodeParameter.EnableViewOffset = (TranslationParam.TranslationType == ParameterTranslationType_ViewOffset);
@@ -108,7 +111,8 @@ void EffectNodeTrack::BeginRenderingGroup(InstanceGroup* group, Manager* manager
 	TrackRendererRef renderer = manager->GetTrackRenderer();
 	if (renderer != nullptr)
 	{
-		m_currentGroupValues = group->rendererValues.track;
+		auto& groupValues = group->rendererValues.track;
+		m_currentGroupValues = groupValues;
 
 		m_instanceParameter.InstanceCount = group->GetInstanceCount();
 		m_instanceParameter.InstanceIndex = 0;
@@ -122,8 +126,8 @@ void EffectNodeTrack::BeginRenderingGroup(InstanceGroup* group, Manager* manager
 
 			if (TimeType == TrailTimeType::FirstParticle)
 			{
-				livingTime = groupFirst->m_LivingTime;
-				livedTime = groupFirst->m_LivedTime;
+				livingTime = groupFirst->livingTime_;
+				livedTime = groupFirst->livedTime_;
 			}
 			else if (TimeType == TrailTimeType::ParticleGroup)
 			{
@@ -134,21 +138,23 @@ void EffectNodeTrack::BeginRenderingGroup(InstanceGroup* group, Manager* manager
 			{
 				assert(false);
 			}
+			bool isParentAlived = true;
 
-			m_instanceParameter.UV = groupFirst->GetUV(0, livingTime, livedTime);
-			m_instanceParameter.AlphaUV = groupFirst->GetUV(1, livingTime, livedTime);
-			m_instanceParameter.UVDistortionUV = groupFirst->GetUV(2, livingTime, livedTime);
-			m_instanceParameter.BlendUV = groupFirst->GetUV(3, livingTime, livedTime);
-			m_instanceParameter.BlendAlphaUV = groupFirst->GetUV(4, livingTime, livedTime);
-			m_instanceParameter.BlendUVDistortionUV = groupFirst->GetUV(5, livingTime, livedTime);
+			auto& uvAnimationCache = groupValues.UVAnimationCache;
+			m_instanceParameter.UV = GetTrailUV(uvAnimationCache, groupFirst, RendererCommon, 0, livingTime, livedTime);
+			m_instanceParameter.AlphaUV = GetTrailUV(uvAnimationCache, groupFirst, RendererCommon, 1, livingTime, livedTime);
+			m_instanceParameter.UVDistortionUV = GetTrailUV(uvAnimationCache, groupFirst, RendererCommon, 2, livingTime, livedTime);
+			m_instanceParameter.BlendUV = GetTrailUV(uvAnimationCache, groupFirst, RendererCommon, 3, livingTime, livedTime);
+			m_instanceParameter.BlendAlphaUV = GetTrailUV(uvAnimationCache, groupFirst, RendererCommon, 4, livingTime, livedTime);
+			m_instanceParameter.BlendUVDistortionUV = GetTrailUV(uvAnimationCache, groupFirst, RendererCommon, 5, livingTime, livedTime);
 
-			m_instanceParameter.FlipbookIndexAndNextRate = groupFirst->GetFlipbookIndexAndNextRate();
+			m_instanceParameter.FlipbookIndexAndNextRate = GetTrailFlipbookIndexAndNextRate(uvAnimationCache, groupFirst, RendererCommon);
 
-			m_instanceParameter.AlphaThreshold = groupFirst->m_AlphaThreshold;
+			m_instanceParameter.AlphaThreshold = groupFirst->alphaThreshold_;
 
 			if (m_nodeParameter.EnableViewOffset)
 			{
-				m_instanceParameter.ViewOffsetDistance = groupFirst->translation_values.view_offset.distance;
+				m_instanceParameter.ViewOffsetDistance = groupFirst->translation_state_.view_offset.distance;
 			}
 
 			CalcCustomData(group->GetFirst(), m_instanceParameter.CustomData1, m_instanceParameter.CustomData2);
@@ -173,8 +179,8 @@ void EffectNodeTrack::Rendering(const Instance& instance, const Instance* next_i
 	if (renderer != nullptr)
 	{
 		float t = instance.GetNormalizedLivetime();
-		int32_t time = (int32_t)instance.m_LivingTime;
-		int32_t livedTime = (int32_t)instance.m_LivedTime;
+		int32_t time = (int32_t)instance.livingTime_;
+		int32_t livedTime = (int32_t)instance.livedTime_;
 
 		SetValues(m_instanceParameter.ColorLeft, instance, m_currentGroupValues.ColorLeft, TrackColorLeft, time, livedTime);
 		SetValues(m_instanceParameter.ColorCenter, instance, m_currentGroupValues.ColorCenter, TrackColorCenter, time, livedTime);
@@ -198,6 +204,8 @@ void EffectNodeTrack::Rendering(const Instance& instance, const Instance* next_i
 		m_instanceParameter.SRTMatrix43 = instance.GetRenderedGlobalMatrix();
 
 		m_instanceParameter.InstanceIndex = index;
+		m_instanceParameter.ParticleTimes[0] = t;
+		m_instanceParameter.ParticleTimes[1] = instance.livingTime_ / 60.0f;
 		renderer->Rendering(m_nodeParameter, m_instanceParameter, userData);
 	}
 }
@@ -228,15 +236,20 @@ void EffectNodeTrack::InitializeRenderedInstanceGroup(InstanceGroup& instanceGro
 	InitializeValues(instValues.SizeFor, TrackSizeFor, manager);
 	InitializeValues(instValues.SizeBack, TrackSizeBack, manager);
 	InitializeValues(instValues.SizeMiddle, TrackSizeMiddle, manager);
+
+	InitializeTrailUVAnimationCache(instValues.UVAnimationCache);
 }
 
 void EffectNodeTrack::InitializeRenderedInstance(Instance& instance, InstanceGroup& instanceGroup, Manager* manager)
 {
 	auto& instValues = instanceGroup.rendererValues.track;
 
+	IRandObject& rand = instance.GetRandObject();
+	ApplyRendererCommonUVHorizontalFlip(instance, rand);
+
 	// Calculate only center
-	int32_t time = (int32_t)instance.m_LivingTime;
-	int32_t livedTime = (int32_t)instance.m_LivedTime;
+	int32_t time = (int32_t)instance.livingTime_;
+	int32_t livedTime = (int32_t)instance.livedTime_;
 
 	Color c;
 	SetValues(c, instance, instValues.ColorCenterMiddle, TrackColorCenterMiddle, time, livedTime);
@@ -253,8 +266,8 @@ void EffectNodeTrack::UpdateRenderedInstance(Instance& instance, InstanceGroup& 
 {
 	auto& instValues = instanceGroup.rendererValues.track;
 	// Calculate only center
-	int32_t time = (int32_t)instance.m_LivingTime;
-	int32_t livedTime = (int32_t)instance.m_LivedTime;
+	int32_t time = (int32_t)instance.livingTime_;
+	int32_t livedTime = (int32_t)instance.livedTime_;
 
 	Color c;
 	SetValues(c, instance, instValues.ColorCenterMiddle, TrackColorCenterMiddle, time, livedTime);

@@ -118,6 +118,14 @@ static void transitionImageLayout(VkCommandBuffer cmd,
         barrier.srcAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
         srcStage              = VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
         break;
+    case VK_IMAGE_LAYOUT_PRESENT_SRC_KHR:
+        barrier.srcAccessMask = VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT;
+        srcStage              = VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
+        break;
+    case VK_IMAGE_LAYOUT_GENERAL:
+        barrier.srcAccessMask = VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT;
+        srcStage              = VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
+        break;
     default:
         barrier.srcAccessMask = 0;
         srcStage              = VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
@@ -145,6 +153,14 @@ static void transitionImageLayout(VkCommandBuffer cmd,
     case VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL:
         barrier.dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
         dstStage              = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
+        break;
+    case VK_IMAGE_LAYOUT_PRESENT_SRC_KHR:
+        barrier.dstAccessMask = VK_ACCESS_MEMORY_READ_BIT;
+        dstStage              = VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
+        break;
+    case VK_IMAGE_LAYOUT_GENERAL:
+        barrier.dstAccessMask = VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT;
+        dstStage              = VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
         break;
     default:
         barrier.dstAccessMask = 0;

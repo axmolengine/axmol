@@ -67,6 +67,9 @@ public:
     virtual void setColorTexture(Texture* texture, int level = 0, int index = 0);
     virtual void setDepthStencilTexture(Texture* texture, int level = 0);
 
+    virtual PixelFormat getColorAttachmentPixelFormat(int index = 0) const;
+    virtual PixelFormat getDepthStencilAttachmentPixelFormat() const;
+
     bool isDirty() const { return !!_dirtyFlags; }
 
     ColorAttachment _color{};

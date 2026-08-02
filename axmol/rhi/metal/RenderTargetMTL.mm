@@ -162,9 +162,9 @@ RenderTargetImpl::Attachment RenderTargetImpl::getDepthStencilAttachment() const
 PixelFormat RenderTargetImpl::getColorAttachmentPixelFormat(int index) const
 {
     // !!!important
-    // the default framebuffer pixel format is: MTLPixelFormatBGRA8Unorm
+    // the default framebuffer pixel format controlled by UtilsMTL::getDefaultColorAttachmentPixelFormat()
     if (isDefaultRenderTarget())
-        return index == 0 ? PixelFormat::BGRA8 : PixelFormat::NONE;
+        return index == 0 ? UtilsMTL::getDefaultColorAttachmentPixelFormat() : PixelFormat::NONE;
     auto& rb = this->_color[index];
     return rb ? rb.texture->getPixelFormat() : PixelFormat::NONE;
 }

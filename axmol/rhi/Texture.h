@@ -82,6 +82,8 @@ public:
 
     int getWidth() const { return static_cast<int>(_desc.width); }
     int getHeight() const { return static_cast<int>(_desc.height); }
+    int getArraySize() const { return static_cast<int>(_desc.arraySize); }
+    int getMipLevels() const { return static_cast<int>(_desc.mipLevels); }
 
     /**
      * Update a two-dimensional texture image

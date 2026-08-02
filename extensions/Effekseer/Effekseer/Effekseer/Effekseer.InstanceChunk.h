@@ -1,4 +1,4 @@
-
+﻿
 #ifndef __EFFEKSEER_INSTANCECHUNK_H__
 #define __EFFEKSEER_INSTANCECHUNK_H__
 

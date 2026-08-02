@@ -1,4 +1,4 @@
-
+﻿
 #ifndef __EFFEKSEER_ParameterNODE_SPRITE_H__
 #define __EFFEKSEER_ParameterNODE_SPRITE_H__
 
@@ -113,9 +113,9 @@ public:
 
 	void UpdateRenderedInstance(Instance& instance, InstanceGroup& instanceGroup, Manager* manager) override;
 
-	eEffectNodeType GetType() const override
+	EffectNodeType GetType() const override
 	{
-		return eEffectNodeType::Sprite;
+		return EffectNodeType::Sprite;
 	}
 
 private:

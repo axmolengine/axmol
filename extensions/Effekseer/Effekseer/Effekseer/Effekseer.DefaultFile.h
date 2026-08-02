@@ -1,22 +1,22 @@
-
+﻿
 #ifndef __EFFEKSEER_DEFAULT_FILE_H__
 #define __EFFEKSEER_DEFAULT_FILE_H__
 
-#include "Effekseer.Base.h"
+#include "Effekseer.Base.Pre.h"
 #include "Effekseer.File.h"
 
 namespace Effekseer
 {
 
 /**
-	@brief	
+	@brief
 	\~English	Default file loader
 	\~Japanese	標準のファイル読み込みクラス
 */
 class DefaultFileReader : public FileReader
 {
 private:
-	FILE* m_filePtr;
+	FILE* filePtr_;
 
 public:
 	DefaultFileReader(FILE* filePtr);
@@ -35,7 +35,7 @@ public:
 class DefaultFileWriter : public FileWriter
 {
 private:
-	FILE* m_filePtr;
+	FILE* filePtr_;
 
 public:
 	DefaultFileWriter(FILE* filePtr);

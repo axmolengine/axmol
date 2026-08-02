@@ -851,4 +851,69 @@ void RenderContextImpl::readPixels(RenderTarget* rt, UINT x, UINT y, UINT width,
     SafeRelease(stagingTex);
 }
 
+bool RenderContextImpl::copyTexture(Texture* src, Texture* dst)
+{
+    if (!validateTextureCopy(src, dst))
+        return false;
+
+    auto* srcImpl = static_cast<TextureImpl*>(src);
+    auto* dstImpl = static_cast<TextureImpl*>(dst);
+
+    auto* srcResource = srcImpl->internalHandle().resource;
+    if (!srcResource)
+        return false;
+
+    if (!dstImpl->internalHandle().resource)
+        dstImpl->updateData(nullptr, dst->getWidth(), dst->getHeight(), 0, 0);
+
+    auto* dstResource = dstImpl->internalHandle().resource;
+    if (!dstResource || srcResource == dstResource)
+        return false;
+
+    D3D11_TEXTURE2D_DESC srcDesc{};
+    D3D11_TEXTURE2D_DESC dstDesc{};
+    srcResource->GetDesc(&srcDesc);
+    dstResource->GetDesc(&dstDesc);
+
+    if (srcDesc.Width != dstDesc.Width || srcDesc.Height != dstDesc.Height || srcDesc.Format != dstDesc.Format ||
+        srcDesc.SampleDesc.Count != 1 || dstDesc.SampleDesc.Count != 1 || srcDesc.ArraySize != 1 ||
+        dstDesc.ArraySize != 1 || srcDesc.MipLevels != 1 || dstDesc.MipLevels != 1 ||
+        dstDesc.Usage != D3D11_USAGE_DEFAULT)
+        return false;
+
+    // D3D11 keeps the last render targets bound after endRenderPass(). Temporarily
+    // unbind them so a just-rendered color attachment can be used as a copy source.
+    ID3D11RenderTargetView* oldRTVs[D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT]{};
+    ID3D11DepthStencilView* oldDSV = nullptr;
+    _d3d11Context->OMGetRenderTargets(D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT, oldRTVs, &oldDSV);
+    _d3d11Context->OMSetRenderTargets(0, nullptr, nullptr);
+
+    _d3d11Context->CopySubresourceRegion(dstResource, 0, 0, 0, 0, srcResource, 0, nullptr);
+
+    UINT oldRTVCount = 0;
+    for (UINT i = 0; i < D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT; ++i)
+    {
+        if (oldRTVs[i])
+            oldRTVCount = i + 1;
+    }
+    _d3d11Context->OMSetRenderTargets(oldRTVCount, oldRTVs, oldDSV);
+    for (auto* rtv : oldRTVs)
+        SafeRelease(rtv);
+    SafeRelease(oldDSV);
+
+    return true;
+}
+
+bool RenderContextImpl::copyTexture(RenderTarget* src, Texture* dst)
+{
+    if (!src || !dst || src->_color.empty())
+        return false;
+
+    const auto& color = src->_color[0];
+    if (color.level != 0 || !color.texture)
+        return false;
+
+    return copyTexture(color.texture, dst);
+}
+
 }  // namespace ax::rhi::d3d11

@@ -229,6 +229,35 @@ public:
     virtual void readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback) = 0;
 
     /**
+     * @brief Copies the contents of one texture resource into another texture resource.
+     *
+     * This operation performs a GPU-side texture copy without involving the CPU.
+     * The source and destination textures must be compatible for copying according
+     * to the underlying graphics backend requirements.
+     *
+     * @param src Source texture to copy from.
+     * @param dst Destination texture to copy into.
+     *
+     * @return true if the copy command was successfully issued; otherwise false.
+     */
+    virtual bool copyTexture(Texture* src, Texture* dst) = 0;
+
+    /**
+     * @brief Copies the rendered contents of a render target into a texture resource.
+     *
+     * Unlike texture-to-texture copies, this operation copies from the current
+     * render target output. The underlying implementation may use a framebuffer
+     * copy, resolve, or other backend-specific operation depending on the graphics
+     * API.
+     *
+     * @param src Source render target.
+     * @param dst Destination texture to receive the rendered contents.
+     *
+     * @return true if the copy command was successfully issued; otherwise false.
+     */
+    virtual bool copyTexture(RenderTarget* src, Texture* dst) = 0;
+
+    /**
      * This property controls whether or not the drawables'
      * metal textures may only be used for framebuffer attachments (YES) or
      * whether they may also be used for texture sampling and pixel
@@ -253,6 +282,8 @@ public:
      * so the default implementation returns UINT64_MAX as a sentinel.
      */
     virtual uint64_t getCompletedFenceValue() const;
+
+    static bool validateTextureCopy(const Texture* src, const Texture* dst);
 
 protected:
     virtual ~RenderContext();

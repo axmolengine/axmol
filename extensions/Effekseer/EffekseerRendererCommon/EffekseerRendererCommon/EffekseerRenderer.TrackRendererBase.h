@@ -1,0 +1,699 @@
+﻿
+#ifndef __EFFEKSEERRENDERER_TRACK_RENDERER_BASE_H__
+#define __EFFEKSEERRENDERER_TRACK_RENDERER_BASE_H__
+
+//----------------------------------------------------------------------------------
+// Include
+//----------------------------------------------------------------------------------
+#include <Effekseer.h>
+#include <assert.h>
+#include <string.h>
+
+#include "EffekseerRenderer.CommonUtils.h"
+#include "EffekseerRenderer.RenderStateBase.h"
+#include "EffekseerRenderer.StandardRenderer.h"
+#include "TrailRenderer.h"
+
+//-----------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------
+
+namespace EffekseerRenderer
+{
+//----------------------------------------------------------------------------------
+//
+//----------------------------------------------------------------------------------
+typedef ::Effekseer::TrackRenderer::NodeParameter efkTrackNodeParam;
+typedef ::Effekseer::TrackRenderer::InstanceParameter efkTrackInstanceParam;
+typedef ::Effekseer::SIMD::Vec3f efkVector3D;
+
+template <typename RENDERER, bool FLIP_RGB_FLAG>
+class TrackRendererBase : public ::Effekseer::TrackRenderer, public ::Effekseer::SIMD::AlignedAllocationPolicy<16>
+{
+protected:
+	RENDERER* renderer_;
+	int32_t ribbonCount_;
+
+	int32_t ringBufferOffset_;
+	uint8_t* ringBufferData_;
+
+	Effekseer::CustomAlignedVector<efkTrackInstanceParam> instances;
+	Effekseer::CustomAlignedVector<Effekseer::SIMD::Quaternionf> rotations_temp_;
+	Effekseer::CustomAlignedVector<Effekseer::SIMD::Quaternionf> rotations_;
+	Effekseer::SplineGenerator spline;
+
+	int32_t vertexCount_ = 0;
+	int32_t stride_ = 0;
+
+	int32_t customData1Count_ = 0;
+	int32_t customData2Count_ = 0;
+
+	template <typename VERTEX, bool FLIP_RGB>
+	void RenderSplines(const efkTrackNodeParam& parameter, const ::Effekseer::SIMD::Mat44f& camera)
+	{
+		if (instances.size() == 0)
+		{
+			return;
+		}
+
+		if (parameter.SmoothingType == Effekseer::TrailSmoothingType::On)
+		{
+			// Calculate rotations
+			for (size_t i = 0; i < instances.size(); i++)
+			{
+				Effekseer::SIMD::Vec3f axis;
+				if (i == 0)
+				{
+					axis = (instances[i + 1].SRTMatrix43.GetTranslation() - instances[i].SRTMatrix43.GetTranslation());
+				}
+				else if (i == instances.size() - 1)
+				{
+					axis = (instances[i].SRTMatrix43.GetTranslation() - instances[i - 1].SRTMatrix43.GetTranslation());
+				}
+				else
+				{
+					axis = (instances[i + 1].SRTMatrix43.GetTranslation() - instances[i - 1].SRTMatrix43.GetTranslation());
+				}
+
+				auto U = SafeNormalize(axis);
+				auto F = ::Effekseer::SIMD::Vec3f(renderer_->GetCameraFrontDirection());
+				auto R = SafeNormalize(::Effekseer::SIMD::Vec3f::Cross(U, F));
+				U = ::Effekseer::SIMD::Vec3f::Cross(F, R);
+
+				Effekseer::SIMD::Mat44f mat;
+				mat.X = R.s;
+				mat.Y = U.s;
+				mat.Z = F.s;
+				mat = mat.Transpose();
+
+				auto q = Effekseer::SIMD::Quaternionf::FromMatrix(mat);
+
+				auto qq = (q.s * q.s);
+				auto len = sqrtf(qq.GetX() + qq.GetY() + qq.GetZ() + qq.GetW()) + 0.00001f;
+
+				q.s /= len;
+
+				rotations_temp_[i] = q;
+			}
+
+			// Make smooth
+			rotations_[0] = rotations_temp_[0];
+			rotations_.back() = rotations_temp_.back();
+
+			for (size_t i = 1; i < instances.size() - 1; i++)
+			{
+				const auto q1 = Effekseer::SIMD::Quaternionf::Slerp(rotations_temp_[i - 1], rotations_temp_[i + 1], 0.5f);
+				rotations_[i] = Effekseer::SIMD::Quaternionf::Slerp(q1, rotations_temp_[i], 2.0f / 3.0f);
+			}
+		}
+
+		// Calculate spline
+		if (parameter.SplineDivision > 1)
+		{
+			spline.Reset();
+
+			for (size_t loop = 0; loop < instances.size(); loop++)
+			{
+				auto p = efkVector3D();
+				auto& param = instances[loop];
+
+				auto mat = param.SRTMatrix43;
+
+				if (parameter.EnableViewOffset == true)
+				{
+					ApplyViewOffset(mat, camera, param.ViewOffsetDistance);
+				}
+
+				ApplyDepthParameters(mat,
+									 renderer_->GetCameraFrontDirection(),
+									 renderer_->GetCameraPosition(),
+									 // s,
+									 parameter.DepthParameterPtr,
+									 parameter.IsRightHand);
+
+				p = mat.GetTranslation();
+				spline.AddVertex(p);
+			}
+
+			spline.Calculate();
+		}
+
+		StrideView<VERTEX> verteies(ringBufferData_, stride_, vertexCount_);
+
+		for (size_t loop = 0; loop < instances.size(); loop++)
+		{
+			auto& param = instances[loop];
+
+			for (int32_t sploop = 0; sploop < parameter.SplineDivision; sploop++)
+			{
+				auto mat = param.SRTMatrix43;
+
+				if (parameter.EnableViewOffset == true)
+				{
+					ApplyViewOffset(mat, camera, param.ViewOffsetDistance);
+				}
+
+				::Effekseer::SIMD::Vec3f s;
+				::Effekseer::SIMD::Mat43f r;
+				::Effekseer::SIMD::Vec3f t;
+				mat.GetSRT(s, r, t);
+
+				ApplyDepthParameters(r,
+									 t,
+									 s,
+									 renderer_->GetCameraFrontDirection(),
+									 renderer_->GetCameraPosition(),
+									 parameter.DepthParameterPtr,
+									 parameter.IsRightHand);
+
+				bool isFirst = param.InstanceIndex == 0 && sploop == 0;
+				bool isLast = param.InstanceIndex == (param.InstanceCount - 1);
+
+				float size = 0.0f;
+				::Effekseer::Color leftColor;
+				::Effekseer::Color centerColor;
+				::Effekseer::Color rightColor;
+
+				float percent = (float)(param.InstanceIndex * parameter.SplineDivision + sploop) /
+								(float)((param.InstanceCount - 1) * parameter.SplineDivision);
+
+				if (param.InstanceIndex < param.InstanceCount / 2)
+				{
+					float l = percent;
+					l = l * 2.0f;
+					size = param.SizeFor + (param.SizeMiddle - param.SizeFor) * l;
+
+					leftColor.R = (uint8_t)Effekseer::Clamp(param.ColorLeft.R + (param.ColorLeftMiddle.R - param.ColorLeft.R) * l, 255, 0);
+					leftColor.G = (uint8_t)Effekseer::Clamp(param.ColorLeft.G + (param.ColorLeftMiddle.G - param.ColorLeft.G) * l, 255, 0);
+					leftColor.B = (uint8_t)Effekseer::Clamp(param.ColorLeft.B + (param.ColorLeftMiddle.B - param.ColorLeft.B) * l, 255, 0);
+					leftColor.A = (uint8_t)Effekseer::Clamp(param.ColorLeft.A + (param.ColorLeftMiddle.A - param.ColorLeft.A) * l, 255, 0);
+
+					centerColor.R =
+						(uint8_t)Effekseer::Clamp(param.ColorCenter.R + (param.ColorCenterMiddle.R - param.ColorCenter.R) * l, 255, 0);
+					centerColor.G =
+						(uint8_t)Effekseer::Clamp(param.ColorCenter.G + (param.ColorCenterMiddle.G - param.ColorCenter.G) * l, 255, 0);
+					centerColor.B =
+						(uint8_t)Effekseer::Clamp(param.ColorCenter.B + (param.ColorCenterMiddle.B - param.ColorCenter.B) * l, 255, 0);
+					centerColor.A =
+						(uint8_t)Effekseer::Clamp(param.ColorCenter.A + (param.ColorCenterMiddle.A - param.ColorCenter.A) * l, 255, 0);
+
+					rightColor.R =
+						(uint8_t)Effekseer::Clamp(param.ColorRight.R + (param.ColorRightMiddle.R - param.ColorRight.R) * l, 255, 0);
+					rightColor.G =
+						(uint8_t)Effekseer::Clamp(param.ColorRight.G + (param.ColorRightMiddle.G - param.ColorRight.G) * l, 255, 0);
+					rightColor.B =
+						(uint8_t)Effekseer::Clamp(param.ColorRight.B + (param.ColorRightMiddle.B - param.ColorRight.B) * l, 255, 0);
+					rightColor.A =
+						(uint8_t)Effekseer::Clamp(param.ColorRight.A + (param.ColorRightMiddle.A - param.ColorRight.A) * l, 255, 0);
+				}
+				else
+				{
+					float l = percent;
+					l = 1.0f - (l * 2.0f - 1.0f);
+					size = param.SizeBack + (param.SizeMiddle - param.SizeBack) * l;
+
+					leftColor.R = (uint8_t)Effekseer::Clamp(param.ColorLeft.R + (param.ColorLeftMiddle.R - param.ColorLeft.R) * l, 255, 0);
+					leftColor.G = (uint8_t)Effekseer::Clamp(param.ColorLeft.G + (param.ColorLeftMiddle.G - param.ColorLeft.G) * l, 255, 0);
+					leftColor.B = (uint8_t)Effekseer::Clamp(param.ColorLeft.B + (param.ColorLeftMiddle.B - param.ColorLeft.B) * l, 255, 0);
+					leftColor.A = (uint8_t)Effekseer::Clamp(param.ColorLeft.A + (param.ColorLeftMiddle.A - param.ColorLeft.A) * l, 255, 0);
+
+					centerColor.R =
+						(uint8_t)Effekseer::Clamp(param.ColorCenter.R + (param.ColorCenterMiddle.R - param.ColorCenter.R) * l, 255, 0);
+					centerColor.G =
+						(uint8_t)Effekseer::Clamp(param.ColorCenter.G + (param.ColorCenterMiddle.G - param.ColorCenter.G) * l, 255, 0);
+					centerColor.B =
+						(uint8_t)Effekseer::Clamp(param.ColorCenter.B + (param.ColorCenterMiddle.B - param.ColorCenter.B) * l, 255, 0);
+					centerColor.A =
+						(uint8_t)Effekseer::Clamp(param.ColorCenter.A + (param.ColorCenterMiddle.A - param.ColorCenter.A) * l, 255, 0);
+
+					rightColor.R =
+						(uint8_t)Effekseer::Clamp(param.ColorRight.R + (param.ColorRightMiddle.R - param.ColorRight.R) * l, 255, 0);
+					rightColor.G =
+						(uint8_t)Effekseer::Clamp(param.ColorRight.G + (param.ColorRightMiddle.G - param.ColorRight.G) * l, 255, 0);
+					rightColor.B =
+						(uint8_t)Effekseer::Clamp(param.ColorRight.B + (param.ColorRightMiddle.B - param.ColorRight.B) * l, 255, 0);
+					rightColor.A =
+						(uint8_t)Effekseer::Clamp(param.ColorRight.A + (param.ColorRightMiddle.A - param.ColorRight.A) * l, 255, 0);
+				}
+
+				VERTEX v[3];
+
+				v[0].Pos.X = (-size / 2.0f) * s.GetX();
+				v[0].Pos.Y = 0.0f;
+				v[0].Pos.Z = 0.0f;
+				v[0].SetColor(leftColor, FLIP_RGB);
+
+				v[1].Pos.X = 0.0f;
+				v[1].Pos.Y = 0.0f;
+				v[1].Pos.Z = 0.0f;
+				v[1].SetColor(centerColor, FLIP_RGB);
+
+				v[2].Pos.X = (size / 2.0f) * s.GetX();
+				v[2].Pos.Y = 0.0f;
+				v[2].Pos.Z = 0.0f;
+				v[2].SetColor(rightColor, FLIP_RGB);
+
+				v[0].SetFlipbookIndexAndNextRate(param.FlipbookIndexAndNextRate);
+				v[1].SetFlipbookIndexAndNextRate(param.FlipbookIndexAndNextRate);
+				v[2].SetFlipbookIndexAndNextRate(param.FlipbookIndexAndNextRate);
+
+				v[0].SetAlphaThreshold(param.AlphaThreshold);
+				v[1].SetAlphaThreshold(param.AlphaThreshold);
+				v[2].SetAlphaThreshold(param.AlphaThreshold);
+				v[0].SetParticleTime(param.ParticleTimes[0], param.ParticleTimes[1]);
+				v[1].SetParticleTime(param.ParticleTimes[0], param.ParticleTimes[1]);
+				v[2].SetParticleTime(param.ParticleTimes[0], param.ParticleTimes[1]);
+
+				if (parameter.SplineDivision > 1)
+				{
+					v[1].Pos = ToStruct(spline.GetValue(param.InstanceIndex + sploop / (float)parameter.SplineDivision));
+				}
+				else
+				{
+					v[1].Pos = ToStruct(t);
+				}
+
+				if (isFirst)
+				{
+					verteies[0] = v[0];
+					verteies[1] = v[1];
+					verteies[4] = v[1];
+					verteies[5] = v[2];
+					verteies += 2;
+				}
+				else if (isLast)
+				{
+					verteies[0] = v[0];
+					verteies[1] = v[1];
+					verteies[4] = v[1];
+					verteies[5] = v[2];
+					verteies += 6;
+					ribbonCount_ += 2;
+				}
+				else
+				{
+					verteies[0] = v[0];
+					verteies[1] = v[1];
+					verteies[4] = v[1];
+					verteies[5] = v[2];
+
+					verteies[6] = v[0];
+					verteies[7] = v[1];
+					verteies[10] = v[1];
+					verteies[11] = v[2];
+
+					verteies += 8;
+					ribbonCount_ += 2;
+				}
+
+				if (isLast)
+				{
+					break;
+				}
+			}
+		}
+
+		// transform all vertecies
+		{
+			StrideView<VERTEX> vs_(ringBufferData_, stride_, vertexCount_);
+			Effekseer::SIMD::Vec3f axisBefore{};
+
+			for (size_t i = 0; i < (instances.size() - 1) * parameter.SplineDivision + 1; i++)
+			{
+				bool isFirst_ = (i == 0);
+				bool isLast_ = (i == ((instances.size() - 1) * parameter.SplineDivision));
+				Effekseer::SIMD::Vec3f axis;
+				Effekseer::SIMD::Vec3f pos;
+
+				if (isFirst_)
+				{
+					axis = (vs_[3].Pos - vs_[1].Pos);
+					axis = SafeNormalize(axis);
+					axisBefore = axis;
+				}
+				else if (isLast_)
+				{
+					axis = axisBefore;
+				}
+				else
+				{
+					Effekseer::SIMD::Vec3f axisOld = axisBefore;
+					axis = vs_[9].Pos - vs_[7].Pos;
+					axis = SafeNormalize(axis);
+					axisBefore = axis;
+
+					axis = (axisBefore + axisOld) / 2.0f;
+				}
+
+				pos = vs_[1].Pos;
+
+				VERTEX vl = vs_[0];
+				VERTEX vm = vs_[1];
+				VERTEX vr = vs_[5];
+
+				vm.Pos.X = 0.0f;
+				vm.Pos.Y = 0.0f;
+				vm.Pos.Z = 0.0f;
+
+				assert(vl.Pos.Y == 0.0f);
+				assert(vr.Pos.Y == 0.0f);
+				assert(vl.Pos.Z == 0.0f);
+				assert(vr.Pos.Z == 0.0f);
+				assert(vm.Pos.X == 0.0f);
+				assert(vm.Pos.Y == 0.0f);
+				assert(vm.Pos.Z == 0.0f);
+
+				if (parameter.SmoothingType == Effekseer::TrailSmoothingType::On)
+				{
+					Effekseer::SIMD::Quaternionf rotq;
+
+					if (isLast_)
+					{
+						rotq = rotations_.back();
+					}
+					else
+					{
+						int instInd = (int)i / parameter.SplineDivision;
+						int splInd = i % parameter.SplineDivision;
+
+						auto q0 = rotations_[instInd];
+						auto q1 = rotations_[instInd + 1];
+						rotq = Effekseer::SIMD::Quaternionf::Slerp(q0, q1, splInd / static_cast<float>(parameter.SplineDivision));
+					}
+
+					const auto rdir = Effekseer::SIMD::Quaternionf::Transform({-1, 0, 0}, rotq);
+
+					vl.Pos = ToStruct(rdir * vl.Pos.X + pos);
+					vm.Pos = ToStruct(pos);
+					vr.Pos = ToStruct(rdir * vr.Pos.X + pos);
+				}
+				else
+				{
+
+					::Effekseer::SIMD::Vec3f F;
+					::Effekseer::SIMD::Vec3f R;
+					::Effekseer::SIMD::Vec3f U;
+
+					// It can be optimized because X is only not zero.
+					/*
+					U = axis;
+
+					F = ::Effekseer::SIMD::Vec3f(renderer_->GetCameraFrontDirection()).Normalize();
+					R = ::Effekseer::SIMD::Vec3f::Cross(U, F).Normalize();
+					F = ::Effekseer::SIMD::Vec3f::Cross(R, U).Normalize();
+
+					::Effekseer::SIMD::Mat43f mat_rot(
+						-R.GetX(), -R.GetY(), -R.GetZ(),
+						 U.GetX(),  U.GetY(),  U.GetZ(),
+						 F.GetX(),  F.GetY(),  F.GetZ(),
+						pos.GetX(), pos.GetY(), pos.GetZ());
+
+					vl.Pos = ToStruct(::Effekseer::SIMD::Vec3f::Transform(vl.Pos, mat_rot));
+					vm.Pos = ToStruct(::Effekseer::SIMD::Vec3f::Transform(vm.Pos, mat_rot));
+					vr.Pos = ToStruct(::Effekseer::SIMD::Vec3f::Transform(vr.Pos,mat_rot));
+					*/
+
+					U = axis;
+					F = renderer_->GetCameraFrontDirection();
+					R = SafeNormalize(::Effekseer::SIMD::Vec3f::Cross(U, F));
+
+					vl.Pos = ToStruct(-R * vl.Pos.X + pos);
+					vm.Pos = ToStruct(pos);
+					vr.Pos = ToStruct(-R * vr.Pos.X + pos);
+				}
+
+				if (VertexNormalRequired<VERTEX>())
+				{
+					::Effekseer::SIMD::Vec3f tangent = SafeNormalize(Effekseer::SIMD::Vec3f(vl.Pos - vr.Pos));
+					Effekseer::SIMD::Vec3f normal = SafeNormalize(Effekseer::SIMD::Vec3f::Cross(tangent, axis));
+
+					if (!parameter.IsRightHand)
+					{
+						normal = -normal;
+					}
+
+					Effekseer::Color normal_ = PackVector3DF(normal);
+					Effekseer::Color tangent_ = PackVector3DF(tangent);
+
+					vl.SetPackedNormal(normal_, FLIP_RGB);
+					vm.SetPackedNormal(normal_, FLIP_RGB);
+					vr.SetPackedNormal(normal_, FLIP_RGB);
+
+					vl.SetPackedTangent(tangent_, FLIP_RGB);
+					vm.SetPackedTangent(tangent_, FLIP_RGB);
+					vr.SetPackedTangent(tangent_, FLIP_RGB);
+				}
+
+				if (isFirst_)
+				{
+					vs_[0] = vl;
+					vs_[1] = vm;
+					vs_[4] = vm;
+					vs_[5] = vr;
+					vs_ += 2;
+				}
+				else if (isLast_)
+				{
+					vs_[0] = vl;
+					vs_[1] = vm;
+					vs_[4] = vm;
+					vs_[5] = vr;
+					vs_ += 6;
+				}
+				else
+				{
+					vs_[0] = vl;
+					vs_[1] = vm;
+					vs_[4] = vm;
+					vs_[5] = vr;
+
+					vs_[6] = vl;
+					vs_[7] = vm;
+					vs_[10] = vm;
+					vs_[11] = vr;
+
+					vs_ += 8;
+				}
+			}
+		}
+
+		// calculate UV
+		const auto global_scale = parameter.GlobalScale * parameter.Maginification;
+
+		TrailRendererUtils::AssignUVs<VERTEX, efkTrackInstanceParam, 0>(*parameter.TextureUVTypeParameterPtr, instances, verteies, parameter.SplineDivision, global_scale);
+
+		if (VertexUV2Required<VERTEX>())
+		{
+			TrailRendererUtils::AssignUVs<VERTEX, efkTrackInstanceParam, 1>(*parameter.TextureUVTypeParameterPtr, instances, verteies, parameter.SplineDivision, global_scale);
+		}
+
+		TrailRendererUtils::AssignUVs<VERTEX, efkTrackInstanceParam, 2>(*parameter.TextureUVTypeParameterPtr, instances, verteies, parameter.SplineDivision, global_scale);
+		TrailRendererUtils::AssignUVs<VERTEX, efkTrackInstanceParam, 3>(*parameter.TextureUVTypeParameterPtr, instances, verteies, parameter.SplineDivision, global_scale);
+		TrailRendererUtils::AssignUVs<VERTEX, efkTrackInstanceParam, 4>(*parameter.TextureUVTypeParameterPtr, instances, verteies, parameter.SplineDivision, global_scale);
+		TrailRendererUtils::AssignUVs<VERTEX, efkTrackInstanceParam, 5>(*parameter.TextureUVTypeParameterPtr, instances, verteies, parameter.SplineDivision, global_scale);
+		TrailRendererUtils::AssignUVs<VERTEX, efkTrackInstanceParam, 6>(*parameter.TextureUVTypeParameterPtr, instances, verteies, parameter.SplineDivision, global_scale);
+
+		// custom parameter
+		if (customData1Count_ > 0)
+		{
+			StrideView<float> custom(ringBufferData_ + sizeof(DynamicVertex), stride_, vertexCount_);
+			for (size_t loop = 0; loop < instances.size() - 1; loop++)
+			{
+				auto& param = instances[loop];
+
+				for (int32_t sploop = 0; sploop < parameter.SplineDivision; sploop++)
+				{
+					for (size_t i = 0; i < 8; i++)
+					{
+						auto c = (float*)(&custom[0]);
+						memcpy(c, param.CustomData1.data(), sizeof(float) * customData1Count_);
+						custom += 1;
+					}
+				}
+			}
+		}
+
+		if (customData2Count_ > 0)
+		{
+			StrideView<float> custom(ringBufferData_ + sizeof(DynamicVertex) + sizeof(float) * customData1Count_, stride_, vertexCount_);
+			for (size_t loop = 0; loop < instances.size() - 1; loop++)
+			{
+				auto& param = instances[loop];
+
+				for (int32_t sploop = 0; sploop < parameter.SplineDivision; sploop++)
+				{
+					for (size_t i = 0; i < 8; i++)
+					{
+						auto c = (float*)(&custom[0]);
+						memcpy(c, param.CustomData2.data(), sizeof(float) * customData2Count_);
+						custom += 1;
+					}
+				}
+			}
+		}
+	}
+
+public:
+	TrackRendererBase(RENDERER* renderer)
+		: renderer_(renderer)
+		, ribbonCount_(0)
+		, ringBufferOffset_(0)
+		, ringBufferData_(nullptr)
+	{
+	}
+
+	virtual ~TrackRendererBase()
+	{
+	}
+
+protected:
+	void Rendering_(const efkTrackNodeParam& parameter,
+					const efkTrackInstanceParam& instanceParameter,
+					const ::Effekseer::SIMD::Mat44f& camera)
+	{
+		if (ringBufferData_ == nullptr)
+			return;
+		if (instanceParameter.InstanceCount <= 1)
+			return;
+
+		const auto& state = renderer_->GetStandardRenderer()->GetState();
+		const ShaderParameterCollector& collector = state.Collector;
+
+		if (collector.ShaderType == RendererShaderType::Material)
+		{
+			Rendering_Internal<DynamicVertex, FLIP_RGB_FLAG>(parameter, instanceParameter, camera);
+		}
+		else if (collector.ShaderType == RendererShaderType::AdvancedLit)
+		{
+			Rendering_Internal<AdvancedLightingVertex, FLIP_RGB_FLAG>(parameter, instanceParameter, camera);
+		}
+		else if (collector.ShaderType == RendererShaderType::AdvancedBackDistortion)
+		{
+			Rendering_Internal<AdvancedLightingVertex, FLIP_RGB_FLAG>(parameter, instanceParameter, camera);
+		}
+		else if (collector.ShaderType == RendererShaderType::AdvancedUnlit)
+		{
+			Rendering_Internal<AdvancedSimpleVertex, FLIP_RGB_FLAG>(parameter, instanceParameter, camera);
+		}
+		else if (collector.ShaderType == RendererShaderType::Lit)
+		{
+			Rendering_Internal<LightingVertex, FLIP_RGB_FLAG>(parameter, instanceParameter, camera);
+		}
+		else if (collector.ShaderType == RendererShaderType::BackDistortion)
+		{
+			Rendering_Internal<LightingVertex, FLIP_RGB_FLAG>(parameter, instanceParameter, camera);
+		}
+		else
+		{
+			Rendering_Internal<SimpleVertex, FLIP_RGB_FLAG>(parameter, instanceParameter, camera);
+		}
+	}
+
+	template <typename VERTEX, bool FLIP_RGB>
+	void Rendering_Internal(const efkTrackNodeParam& parameter,
+							const efkTrackInstanceParam& instanceParameter,
+							const ::Effekseer::SIMD::Mat44f& camera)
+	{
+		if (ringBufferData_ == nullptr)
+			return;
+		if (instanceParameter.InstanceCount < 2)
+			return;
+
+		const efkTrackInstanceParam& param = instanceParameter;
+
+		bool isFirst = param.InstanceIndex == 0;
+		bool isLast = param.InstanceIndex == (param.InstanceCount - 1);
+
+		if (isFirst)
+		{
+			if (parameter.SmoothingType == Effekseer::TrailSmoothingType::On)
+			{
+				rotations_.resize(param.InstanceCount);
+				rotations_temp_.resize(param.InstanceCount);
+			}
+
+			instances.reserve(param.InstanceCount);
+			instances.resize(0);
+		}
+
+		instances.push_back(param);
+
+		if (isLast)
+		{
+			RenderSplines<VERTEX, FLIP_RGB>(parameter, camera);
+		}
+	}
+
+public:
+	void Rendering(const efkTrackNodeParam& parameter, const efkTrackInstanceParam& instanceParameter, void* userData) override
+	{
+		Rendering_(parameter, instanceParameter, renderer_->GetCameraMatrix());
+	}
+
+	void BeginRenderingGroup(const efkTrackNodeParam& param, int32_t count, void* userData) override
+	{
+		ribbonCount_ = 0;
+		int32_t vertexCount = ((count - 1) * param.SplineDivision) * 8;
+		if (vertexCount <= 0)
+			return;
+
+		EffekseerRenderer::StandardRendererState state;
+		state.AlphaBlend = param.BasicParameterPtr->AlphaBlend;
+		state.CullingType = ::Effekseer::CullingType::Double;
+		state.DepthTest = param.ZTest;
+		state.DepthWrite = param.ZWrite;
+
+		state.Flipbook = ToState(param.BasicParameterPtr->Flipbook);
+
+		state.UVDistortionIntensity = param.BasicParameterPtr->UVDistortionIntensity;
+
+		state.TextureBlendType = param.BasicParameterPtr->TextureBlendType;
+
+		state.BlendUVDistortionIntensity = param.BasicParameterPtr->BlendUVDistortionIntensity;
+
+		state.EmissiveScaling = param.BasicParameterPtr->EmissiveScaling;
+
+		state.EdgeThreshold = param.BasicParameterPtr->EdgeThreshold;
+		state.EdgeColor[0] = param.BasicParameterPtr->EdgeColor[0];
+		state.EdgeColor[1] = param.BasicParameterPtr->EdgeColor[1];
+		state.EdgeColor[2] = param.BasicParameterPtr->EdgeColor[2];
+		state.EdgeColor[3] = param.BasicParameterPtr->EdgeColor[3];
+		state.EdgeColorScaling = param.BasicParameterPtr->EdgeColorScaling;
+		state.IsAlphaCuttoffEnabled = param.BasicParameterPtr->IsAlphaCutoffEnabled;
+		state.Maginification = param.Maginification;
+
+		state.Distortion = param.BasicParameterPtr->MaterialType == Effekseer::RendererMaterialType::BackDistortion;
+		state.DistortionIntensity = param.BasicParameterPtr->DistortionIntensity;
+		state.MaterialType = param.BasicParameterPtr->MaterialType;
+
+		state.RenderingUserData = param.UserData;
+		state.HandleUserData = userData;
+
+		state.LocalTime = param.LocalTime;
+
+		state.CopyMaterialFromParameterToState(
+			renderer_,
+			param.EffectPointer,
+			param.BasicParameterPtr);
+
+		customData1Count_ = state.CustomData1Count;
+		customData2Count_ = state.CustomData2Count;
+
+		renderer_->GetStandardRenderer()->BeginRenderingAndRenderingIfRequired(state, vertexCount, stride_, (void*&)ringBufferData_);
+		vertexCount_ = vertexCount;
+	}
+
+	void EndRendering(const efkTrackNodeParam& parameter, void* userData) override
+	{
+		renderer_->GetStandardRenderer()->EndRenderingAndRenderingIfRequired();
+	}
+};
+
+//----------------------------------------------------------------------------------
+//
+//----------------------------------------------------------------------------------
+} // namespace EffekseerRenderer
+//----------------------------------------------------------------------------------
+//
+//----------------------------------------------------------------------------------
+#endif // __EFFEKSEERRENDERER_RIBBON_RENDERER_H__

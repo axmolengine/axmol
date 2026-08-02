@@ -1,4 +1,4 @@
-
+﻿
 #ifndef __EFFEKSEER_EFFECTNODE_H__
 #define __EFFEKSEER_EFFECTNODE_H__
 
@@ -11,230 +11,37 @@
 #include "Sound/Effekseer.SoundPlayer.h"
 
 #include "Effekseer.Effect.h"
-#include "ForceField/ForceFields.h"
-#include "Noise/CurlNoise.h"
-#include "Parameter/AllTypeColor.h"
-#include "Parameter/AlphaCutoff.h"
-#include "Parameter/CustomData.h"
-#include "Parameter/DynamicParameter.h"
-#include "Parameter/Easing.h"
+#include "ForceField/Effekseer.ForceFields.h"
+#include "Noise/Effekseer.CurlNoise.h"
+#include "Parameter/Effekseer.AllTypeColor.h"
+#include "Parameter/Effekseer.AlphaCutoff.h"
+#include "Parameter/Effekseer.BasicSettings.h"
+#include "Parameter/Effekseer.Collisions.h"
+#include "Parameter/Effekseer.CustomData.h"
+#include "Parameter/Effekseer.DepthParameter.h"
+#include "Parameter/Effekseer.DynamicParameter.h"
+#include "Parameter/Effekseer.Easing.h"
+#include "Parameter/Effekseer.KillRules.h"
+#include "Parameter/Effekseer.LOD.h"
 #include "Parameter/Effekseer.Parameters.h"
-#include "Parameter/Rotation.h"
-#include "Parameter/Scaling.h"
-#include "Parameter/SpawnMethod.h"
-#include "Parameter/Translation.h"
-#include "Parameter/UV.h"
+#include "Parameter/Effekseer.Rotation.h"
+#include "Parameter/Effekseer.Scaling.h"
+#include "Parameter/Effekseer.Sound.h"
+#include "Parameter/Effekseer.SpawnMethod.h"
+#include "Parameter/Effekseer.Translation.h"
+#include "Parameter/Effekseer.Trigger.h"
+#include "Parameter/Effekseer.UV.h"
+#include "Renderer/Effekseer.GpuParticles.h"
 #include "SIMD/Utils.h"
-#include "Utils/BinaryVersion.h"
+#include "Utils/Effekseer.BinaryVersion.h"
 
 namespace Effekseer
 {
-
-enum class BindType : int32_t
-{
-	NotBind = 0,
-	NotBind_Root = 3,
-	WhenCreating = 1,
-	Always = 2,
-};
-
-enum class NonMatchingLODBehaviour : int32_t
-{
-	Hide = 0,
-	DontSpawn = 1,
-	DontSpawnAndHide = 2
-};
-
-enum class TranslationParentBindType : int32_t
-{
-	NotBind = 0,
-	NotBind_Root = 3,
-	WhenCreating = 1,
-	Always = 2,
-	NotBind_FollowParent = 4,
-	WhenCreating_FollowParent = 5,
-};
-
-bool operator==(const TranslationParentBindType& lhs, const BindType& rhs);
-
-enum class TriggerType : uint8_t
-{
-	None = 0,
-	ExternalTrigger = 1,
-};
-
-struct alignas(2) TriggerValues
-{
-	TriggerType type = TriggerType::None;
-	uint8_t index = 0;
-};
-
-struct ParameterCommonValues_8
-{
-	int MaxGeneration;
-	BindType TranslationBindType;
-	BindType RotationBindType;
-	BindType ScalingBindType;
-	int RemoveWhenLifeIsExtinct;
-	int RemoveWhenParentIsRemoved;
-	int RemoveWhenChildrenIsExtinct;
-	random_int life;
-	float GenerationTime;
-	float GenerationTimeOffset;
-};
-
-struct ParameterCommonValues
-{
-	int32_t RefEqMaxGeneration = -1;
-	RefMinMax RefEqLife;
-	RefMinMax RefEqGenerationTime;
-	RefMinMax RefEqGenerationTimeOffset;
-
-	int MaxGeneration = 1;
-	TranslationParentBindType TranslationBindType = TranslationParentBindType::Always;
-	BindType RotationBindType = BindType::Always;
-	BindType ScalingBindType = BindType::Always;
-	int RemoveWhenLifeIsExtinct = 1;
-	int RemoveWhenParentIsRemoved = 0;
-	int RemoveWhenChildrenIsExtinct = 0;
-	random_int life;
-	random_float GenerationTime;
-	random_float GenerationTimeOffset;
-
-	ParameterCommonValues()
-	{
-		life.max = 1;
-		life.min = 1;
-		GenerationTime.max = 1;
-		GenerationTime.min = 1;
-		GenerationTimeOffset.max = 0;
-		GenerationTimeOffset.min = 0;
-	}
-};
-
-struct ParameterLODs
-{
-	int MatchingLODs = 0b1111;
-	NonMatchingLODBehaviour LODBehaviour = NonMatchingLODBehaviour::Hide;
-};
-
-enum class KillType : int32_t
-{
-	None = 0,
-	Box = 1,
-	Plane = 2,
-	Sphere = 3
-};
-
-struct KillRulesParameter
-{
-
-	KillType Type = KillType::None;
-	int IsScaleAndRotationApplied = 1;
-
-	union
-	{
-		struct
-		{
-			vector3d Center; // In local space
-			vector3d Size;	 // In local space
-			int IsKillInside;
-		} Box;
-
-		struct
-		{
-			vector3d PlaneAxis; // in local space
-			float PlaneOffset;	// in the direction of plane axis
-		} Plane;
-
-		struct
-		{
-			vector3d Center; // in local space
-			float Radius;
-			int IsKillInside;
-		} Sphere;
-	};
-
-	void MakeCoordinateSystemLH()
-	{
-		if (Type == KillType::Box)
-		{
-			Box.Center.z *= -1.0F;
-		}
-		else if (Type == KillType::Plane)
-		{
-			Plane.PlaneAxis.z *= -1.0F;
-		}
-		else if (Type == KillType::Sphere)
-		{
-			Sphere.Center.z *= -1.0F;
-		}
-	}
-};
-
-struct ParameterDepthValues
-{
-	float DepthOffset;
-	bool IsDepthOffsetScaledWithCamera;
-	bool IsDepthOffsetScaledWithParticleScale;
-	ZSortType ZSort;
-	int32_t DrawingPriority;
-	float SoftParticle;
-
-	NodeRendererDepthParameter DepthParameter;
-
-	ParameterDepthValues()
-	{
-		DepthOffset = 0;
-		IsDepthOffsetScaledWithCamera = false;
-		IsDepthOffsetScaledWithParticleScale = false;
-		ZSort = ZSortType::None;
-		DrawingPriority = 0;
-		SoftParticle = 0.0f;
-	}
-};
 
 struct SteeringBehaviorParameter
 {
 	random_float MaxFollowSpeed;
 	random_float SteeringSpeed;
-};
-
-struct TriggerParameter
-{
-	TriggerValues ToStartGeneration;
-	TriggerValues ToStopGeneration;
-	TriggerValues ToRemove;
-};
-
-enum class LocationAbsType : int32_t
-{
-	None = 0,
-	Gravity = 1,
-	AttractiveForce = 2,
-};
-
-struct LocationAbsParameter
-{
-	LocationAbsType type = LocationAbsType::None;
-
-	union
-	{
-		struct
-		{
-
-		} none;
-
-		SIMD::Vec3f gravity;
-
-		struct
-		{
-			float force;
-			float control;
-			float minRange;
-			float maxRange;
-		} attractiveForce;
-	};
 };
 
 struct ParameterRendererCommon
@@ -243,40 +50,23 @@ struct ParameterRendererCommon
 
 	RendererMaterialType MaterialType = RendererMaterialType::Default;
 
-	//! texture index except a file
-	int32_t ColorTextureIndex = -1;
-
-	//! texture index except a file
-	int32_t Texture2Index = -1;
-
-	//! texture index except a file
-	int32_t AlphaTextureIndex = -1;
-
-	//! texture index except a file
-	int32_t UVDistortionTextureIndex = -1;
-
-	//! texture index except a file
-	int32_t BlendTextureIndex = -1;
-
-	//! texture index except a file
-	int32_t BlendAlphaTextureIndex = -1;
-
-	//! texture index except a file
-	int32_t BlendUVDistortionTextureIndex = -1;
+	//! texture index except a MaterialType::File
+	std::array<int32_t, TextureSlotMax> TextureIndexes{-1, -1, -1, -1, -1, -1, -1, -1};
+	std::array<TextureFilterType, TextureSlotMax> TextureFilters{};
+	std::array<TextureWrapType, TextureSlotMax> TextureWraps{};
 
 	//! material index in MaterialType::File
 	MaterialRenderData MaterialData;
 
 	AlphaBlendType AlphaBlend = AlphaBlendType::Opacity;
 
-	std::array<TextureFilterType, TextureSlotMax> FilterTypes;
-	std::array<TextureWrapType, TextureSlotMax> WrapTypes;
-
 	float UVDistortionIntensity = 1.0f;
 
 	int32_t TextureBlendType = -1;
 
 	float BlendUVDistortionIntensity = 1.0f;
+
+	int32_t UVHorizontalFlipProbability = 0;
 
 	float EmissiveScaling = 1.0f;
 
@@ -332,8 +122,6 @@ struct ParameterRendererCommon
 	{
 		FadeInType = FADEIN_OFF;
 		FadeOutType = FADEOUT_NONE;
-		FilterTypes.fill(TextureFilterType::Nearest);
-		WrapTypes.fill(TextureWrapType::Repeat);
 	}
 
 	void reset()
@@ -369,27 +157,27 @@ struct ParameterRendererCommon
 			if (MaterialType == RendererMaterialType::Default || MaterialType == RendererMaterialType::BackDistortion ||
 				MaterialType == RendererMaterialType::Lighting)
 			{
-				memcpy(&ColorTextureIndex, pos, sizeof(int));
+				memcpy(&TextureIndexes[static_cast<size_t>(RendererTextureType::Color)], pos, sizeof(int));
 				pos += sizeof(int);
 
-				memcpy(&Texture2Index, pos, sizeof(int));
+				memcpy(&TextureIndexes[static_cast<size_t>(RendererTextureType::Normal)], pos, sizeof(int));
 				pos += sizeof(int);
 
 				if (version >= 1600)
 				{
-					memcpy(&AlphaTextureIndex, pos, sizeof(int));
+					memcpy(&TextureIndexes[static_cast<size_t>(RendererTextureType::Alpha)], pos, sizeof(int));
 					pos += sizeof(int);
 
-					memcpy(&UVDistortionTextureIndex, pos, sizeof(int));
+					memcpy(&TextureIndexes[static_cast<size_t>(RendererTextureType::UVDistortion)], pos, sizeof(int));
 					pos += sizeof(int);
 
-					memcpy(&BlendTextureIndex, pos, sizeof(int));
+					memcpy(&TextureIndexes[static_cast<size_t>(RendererTextureType::Blend)], pos, sizeof(int));
 					pos += sizeof(int);
 
-					memcpy(&BlendAlphaTextureIndex, pos, sizeof(int));
+					memcpy(&TextureIndexes[static_cast<size_t>(RendererTextureType::BlendAlpha)], pos, sizeof(int));
 					pos += sizeof(int);
 
-					memcpy(&BlendUVDistortionTextureIndex, pos, sizeof(int));
+					memcpy(&TextureIndexes[static_cast<size_t>(RendererTextureType::BlendUVDistortion)], pos, sizeof(int));
 					pos += sizeof(int);
 				}
 			}
@@ -438,41 +226,41 @@ struct ParameterRendererCommon
 		}
 		else
 		{
-			memcpy(&ColorTextureIndex, pos, sizeof(int));
+			memcpy(&TextureIndexes[static_cast<size_t>(RendererTextureType::Color)], pos, sizeof(int));
 			pos += sizeof(int);
 		}
 
 		memcpy(&AlphaBlend, pos, sizeof(int));
 		pos += sizeof(int);
 
-		memcpy(&FilterTypes[0], pos, sizeof(int));
+		memcpy(&TextureFilters[0], pos, sizeof(int));
 		pos += sizeof(int);
 
-		memcpy(&WrapTypes[0], pos, sizeof(int));
+		memcpy(&TextureWraps[0], pos, sizeof(int));
 		pos += sizeof(int);
 
 		if (version >= 15)
 		{
-			memcpy(&FilterTypes[1], pos, sizeof(int));
+			memcpy(&TextureFilters[1], pos, sizeof(int));
 			pos += sizeof(int);
 
-			memcpy(&WrapTypes[1], pos, sizeof(int));
+			memcpy(&TextureWraps[1], pos, sizeof(int));
 			pos += sizeof(int);
 		}
 		else
 		{
-			FilterTypes[1] = FilterTypes[0];
-			WrapTypes[1] = WrapTypes[0];
+			TextureFilters[1] = TextureFilters[0];
+			TextureWraps[1] = TextureWraps[0];
 		}
 
 		if (version >= 1600)
 		{
 			for (size_t i = 2; i < 7; i++)
 			{
-				memcpy(&FilterTypes[i], pos, sizeof(int));
+				memcpy(&TextureFilters[i], pos, sizeof(int));
 				pos += sizeof(int);
 
-				memcpy(&WrapTypes[i], pos, sizeof(int));
+				memcpy(&TextureWraps[i], pos, sizeof(int));
 				pos += sizeof(int);
 			}
 		}
@@ -480,8 +268,8 @@ struct ParameterRendererCommon
 		{
 			for (size_t i = 2; i < 7; i++)
 			{
-				FilterTypes[i] = FilterTypes[0];
-				WrapTypes[i] = WrapTypes[0];
+				TextureFilters[i] = TextureFilters[0];
+				TextureWraps[i] = TextureWraps[0];
 			}
 		}
 
@@ -533,6 +321,10 @@ struct ParameterRendererCommon
 
 			memcpy(&UVDistortionIntensity, pos, sizeof(float));
 			pos += sizeof(float);
+			if (TextureIndexes[static_cast<size_t>(RendererTextureType::UVDistortion)] < 0)
+			{
+				UVDistortionIntensity = 0.0f;
+			}
 
 			UVs[3].Load(pos, version, 3);
 
@@ -547,6 +339,20 @@ struct ParameterRendererCommon
 			// blend uv distortion intensity
 			memcpy(&BlendUVDistortionIntensity, pos, sizeof(float));
 			pos += sizeof(float);
+			if (TextureIndexes[static_cast<size_t>(RendererTextureType::BlendUVDistortion)] < 0)
+			{
+				BlendUVDistortionIntensity = 0.0f;
+			}
+		}
+
+		if (version >= Version18Alpha2)
+		{
+			memcpy(&UVHorizontalFlipProbability, pos, sizeof(int32_t));
+			pos += sizeof(int32_t);
+		}
+		else
+		{
+			UVHorizontalFlipProbability = 0;
 		}
 
 		if (version >= 10)
@@ -588,18 +394,12 @@ struct ParameterRendererCommon
 
 		// copy to basic parameter
 		BasicParameter.AlphaBlend = AlphaBlend;
-		BasicParameter.TextureFilters = FilterTypes;
-		BasicParameter.TextureWraps = WrapTypes;
+		BasicParameter.TextureFilters = TextureFilters;
+		BasicParameter.TextureWraps = TextureWraps;
 
 		BasicParameter.DistortionIntensity = DistortionIntensity;
 		BasicParameter.MaterialType = MaterialType;
-		BasicParameter.TextureIndexes[0] = ColorTextureIndex;
-		BasicParameter.TextureIndexes[1] = Texture2Index;
-		BasicParameter.TextureIndexes[2] = AlphaTextureIndex;
-		BasicParameter.TextureIndexes[3] = UVDistortionTextureIndex;
-		BasicParameter.TextureIndexes[4] = BlendTextureIndex;
-		BasicParameter.TextureIndexes[5] = BlendAlphaTextureIndex;
-		BasicParameter.TextureIndexes[6] = BlendUVDistortionTextureIndex;
+		BasicParameter.TextureIndexes = TextureIndexes;
 
 		BasicParameter.UVDistortionIntensity = UVDistortionIntensity;
 
@@ -631,40 +431,12 @@ struct ParameterRendererCommon
 	}
 };
 
-//----------------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------------
-enum ParameterSoundType
+struct TrailUVAnimationCache
 {
-	ParameterSoundType_None = 0,
-	ParameterSoundType_Use = 1,
-
-	ParameterSoundType_DWORD = 0x7fffffff,
-};
-
-//----------------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------------
-enum ParameterSoundPanType
-{
-	ParameterSoundPanType_2D = 0,
-	ParameterSoundPanType_3D = 1,
-
-	ParameterSoundPanType_DWORD = 0x7fffffff,
-};
-
-//----------------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------------
-struct ParameterSound
-{
-	int32_t WaveId;
-	random_float Volume;
-	random_float Pitch;
-	ParameterSoundPanType PanType;
-	random_float Pan;
-	float Distance;
-	random_int Delay;
+	float InfiniteUVs[ParameterRendererCommon::UVParameterNum][4];
+	bool IsInfiniteUVInitialized[ParameterRendererCommon::UVParameterNum];
+	float InfiniteFlipbookIndexAndNextRate;
+	bool IsInfiniteFlipbookIndexAndNextRateInitialized;
 };
 
 //----------------------------------------------------------------------------------
@@ -705,10 +477,27 @@ protected:
 
 	virtual ~EffectNodeImplemented();
 
+	void AdjustSettings(const SettingRef& setting);
+
 	void LoadParameter(unsigned char*& pos, EffectNode* parent, const SettingRef& setting);
 
 	//! calculate custom data
 	void CalcCustomData(const Instance* instance, std::array<float, 4>& customData1, std::array<float, 4>& customData2);
+
+	void ApplyRendererCommonUVHorizontalFlip(Instance& instance, IRandObject& rand) const;
+
+	static void InitializeTrailUVAnimationCache(TrailUVAnimationCache& cache);
+
+	static RectF GetTrailUV(TrailUVAnimationCache& cache,
+							Instance* groupFirst,
+							const ParameterRendererCommon& rendererCommon,
+							int32_t index,
+							float livingTime,
+							float livedTime);
+
+	static float GetTrailFlipbookIndexAndNextRate(TrailUVAnimationCache& cache,
+												  Instance* groupFirst,
+												  const ParameterRendererCommon& rendererCommon);
 
 public:
 	/**
@@ -748,14 +537,17 @@ public:
 	bool EnableFalloff = false;
 	FalloffParameter FalloffParam{};
 
-	ParameterSoundType SoundType = ParameterSoundType_None;
 	ParameterSound Sound;
+
+	GpuParticles::ResourceRef GpuParticlesResource;
 
 	eRenderingOrder RenderingOrder = RenderingOrder_FirstCreatedInstanceIsFirst;
 
 	int32_t RenderingPriority = -1;
 
 	DynamicFactorParameter DynamicFactor;
+
+	CollisionsParameter Collisions;
 
 	bool Traverse(const std::function<bool(EffectNodeImplemented*)>& visitor);
 
@@ -818,9 +610,9 @@ public:
 	/**
 	@brief	ノードの種類取得
 	*/
-	virtual eEffectNodeType GetType() const
+	virtual EffectNodeType GetType() const override
 	{
-		return eEffectNodeType::NoneType;
+		return EffectNodeType::NoneType;
 	}
 
 	RefPtr<RenderingUserData> GetRenderingUserData() override
