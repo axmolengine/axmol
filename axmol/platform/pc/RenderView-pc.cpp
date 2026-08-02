@@ -449,6 +449,12 @@ axmol_onwebpointerevent(int type, int id, float x, float y, float pressure, int 
     else if (button == 2)
         button = 1;  // Axmol Right
 
+    // Touch contacts carry no mouse-style button index. Match Android's touch stream:
+    // down/up use InputButton::None (-1) so the captured touch-move lookup in
+    // EventDispatcher (keyed on InputButton::None) finds the listener.
+    if (mappedType == ax::PointerType::Touch)
+        button = ax::InputButton::None;
+
     // Assemble the modernized cohesive PointerInputState
     // W3C Pointer Events button values are aligned with both GLFW mouse button indices and Axmol’s InputButton
     // enumeration.

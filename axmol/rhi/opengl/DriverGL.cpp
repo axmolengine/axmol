@@ -393,13 +393,13 @@ void DriverImpl::resetState()
 
 /// below is driver info APIs
 
-static GLuint compileShader(GLenum shaderType, const GLchar* source)
+static GLuint compileShader(GLenum shaderType, const char* code, GLint codeSize)
 {
     auto shader = glCreateShader(shaderType);
     if (!shader)
         return 0;
 
-    glShaderSource(shader, 1, &source, nullptr);
+    glShaderSource(shader, 1, &code, &codeSize);
     glCompileShader(shader);
 
     GLint status = 0;
@@ -414,7 +414,7 @@ static GLuint compileShader(GLenum shaderType, const GLchar* source)
     {
         auto errorLog = tlx::make_unique_for_overwrite<char[]>(static_cast<size_t>(logLength));
         glGetShaderInfoLog(shader, logLength, nullptr, static_cast<GLchar*>(errorLog.get()));
-        AXLOGE("axmol:ERROR: Failed to compile shader, detail: {}\n{}", errorLog.get(), source);
+        AXLOGE("axmol:ERROR: Failed to compile shader, detail: {}", errorLog.get());
     }
     else
     {
@@ -484,7 +484,7 @@ static bool checkASTCRenderability()
 
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
         {  // does back framebuffer ready for rendering
-            const char* vertexShader = R"(#version 100
+            std::string_view vsSource = R"(#version 100
 precision highp float;
 attribute vec3 aPos;
 attribute vec2 aTexCoord;
@@ -493,9 +493,9 @@ void main()
 {
 	gl_Position = vec4(aPos, 1.0);
 	TexCoord = vec2(aTexCoord.x, aTexCoord.y);
-})";
+})"sv;
 
-            const char* fragShader = R"(#version 100
+            std::string_view fsSource = R"(#version 100
 precision highp float;
 varying vec2 TexCoord;
 uniform sampler2D u_tex0;
@@ -503,7 +503,7 @@ void main()
 {
 	gl_FragColor = texture2D(u_tex0, TexCoord);
 }
-)";
+)"sv;
 
             // set up vertex data (and buffer(s)) and configure vertex attributes
             // ------------------------------------------------------------------
@@ -543,8 +543,8 @@ void main()
             glEnableVertexAttribArray(1);
 
             // create shader program
-            auto vShader = compileShader(GL_VERTEX_SHADER, vertexShader);
-            auto fShader = compileShader(GL_FRAGMENT_SHADER, fragShader);
+            auto vShader = compileShader(GL_VERTEX_SHADER, vsSource.data(), static_cast<GLint>(vsSource.size()));
+            auto fShader = compileShader(GL_FRAGMENT_SHADER, fsSource.data(), static_cast<GLint>(fsSource.size()));
             auto program = glCreateProgram();
             glAttachShader(program, vShader);
             glAttachShader(program, fShader);
