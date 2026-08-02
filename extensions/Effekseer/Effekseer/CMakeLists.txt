@@ -175,6 +175,10 @@ set(files ${effekseer_public_h} ${effekseer_h} ${effekseer_src})
 target_include_directories(Effekseer PRIVATE ${EFK_THIRDPARTY_INCLUDES})
 target_link_libraries(Effekseer PUBLIC ${CMAKE_THREAD_LIBS_INIT})
 
+if(TARGET EffekseerAxmolSIMDOptions)
+  target_link_libraries(Effekseer PUBLIC $<BUILD_INTERFACE:EffekseerAxmolSIMDOptions>)
+endif()
+
 filterfolder("${files}")
 if(CLANG_FORMAT_ENABLED)
   clang_format(Effekseer)

@@ -9,8 +9,10 @@
 ## Effekseer (OFF default)
 
 - [![Upstream](https://img.shields.io/github/v/release/effekseer/Effekseer?label=Upstream)](https://github.com/effekseer/Effekseer)
-- https://github.com/effekseer/Effekseer
 - Version: 1.80.6
+- Modifications:
+  - `Effekseer/SIMD/Base.h`: Added `EFK_SIMD_LEVEL` to cap or disable Effekseer SIMD selection from CMake.
+  - `Effekseer/Effekseer.Color.cpp`, `Effekseer/Effekseer.Matrix43.cpp`: Reuse the unified `EFK_SIMD_*` selection from `SIMD/Base.h`.
 - License: MIT
 
 ## GUI - Deprecrated, should only used for the axmol tests (e.g. cpp-tests)

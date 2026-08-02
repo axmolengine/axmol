@@ -60,6 +60,28 @@ set_source_files_properties(
 
 ax_add_shader_target(Effekseer_shaders FILES ${_shader_src})
 
+add_library(EffekseerAxmolSIMDOptions INTERFACE)
+target_compile_definitions(EffekseerAxmolSIMDOptions INTERFACE EFK_SIMD_LEVEL=${AX_ISA_LEVEL})
+
+if(WASM)
+  if(AX_WASM_ISA_SIMD MATCHES "sse")
+    target_compile_definitions(EffekseerAxmolSIMDOptions INTERFACE __SSE__=1 __SSE2__=1 __SSE3__=1 __SSSE3__=1)
+
+    if(AX_ISA_LEVEL GREATER_EQUAL 2)
+      target_compile_definitions(EffekseerAxmolSIMDOptions INTERFACE __SSE4_1__=1)
+    endif()
+
+    target_compile_options(EffekseerAxmolSIMDOptions INTERFACE -msimd128)
+    target_link_options(EffekseerAxmolSIMDOptions INTERFACE -msimd128)
+  elseif(AX_WASM_ISA_SIMD MATCHES "neon")
+    target_compile_definitions(EffekseerAxmolSIMDOptions INTERFACE __ARM_NEON__=1)
+    target_compile_options(EffekseerAxmolSIMDOptions INTERFACE -mfpu=neon -msimd128)
+    target_link_options(EffekseerAxmolSIMDOptions INTERFACE -msimd128)
+  endif()
+elseif(LINUX AND AX_ISA_SIMD MATCHES "sse4")
+  target_compile_options(EffekseerAxmolSIMDOptions INTERFACE -msse4.1)
+endif()
+
 add_subdirectory(Effekseer)
 add_subdirectory(EffekseerRendererCommon)
 add_subdirectory(EffekseerRendererAxmol)
