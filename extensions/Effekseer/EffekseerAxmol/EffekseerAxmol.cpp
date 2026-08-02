@@ -1,5 +1,5 @@
 #include "EffekseerAxmol.h"
-#include "EffekseerRendererAxmol/EffekseerRendererAxmol.h"
+#include "EffekseerRendererAxmol.h"
 
 #include <algorithm>
 #include <vector>

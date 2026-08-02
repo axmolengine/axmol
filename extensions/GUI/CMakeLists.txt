@@ -15,4 +15,4 @@ target_include_directories(${target_name}
   INTERFACE ${CMAKE_CURRENT_LIST_DIR}/src/GUI
 )
 
-setup_ax_extension_config(${target_name})
+ax_setup_ext_config(${target_name})

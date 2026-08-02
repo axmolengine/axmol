@@ -7,11 +7,12 @@ else()
   set(BUILD_CONFIG_DIR "")
 endif()
 
-macro(ax_link_pred EXTENSION_ENABLED LINKLIB)
+macro(ax_link_pred EXTENSION_ENABLED)
+  cmake_parse_arguments(opt "" "" "LIBS;INCLUDES" ${ARGN})
   if(${EXTENSION_ENABLED})
-    list(APPEND LIBS ${LINKLIB})
+    list(APPEND LIBS ${opt_LIBS})
 
-    foreach(INCLUDEDIR ${ARGN})
+    foreach(INCLUDEDIR IN LISTS opt_INCLUDES)
       target_include_directories(${APP_NAME}
         PRIVATE ${INCLUDEDIR}
       )
@@ -20,10 +21,19 @@ macro(ax_link_pred EXTENSION_ENABLED LINKLIB)
 endmacro()
 
 function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
+  message(STATUS "Using Prebuilt feature from path:${_AX_ROOT}/${AX_PREBUILT_DIR}")
+  message(STATUS "  AX_PREBUILT_DIR=${AX_PREBUILT_DIR}")
   # stupid: exclude CMAKE_CXX_FLAGS_DEBUG CMAKE_C_FLAGS_DEBUG to avoid cmake generate
   # .vcxproj with incorrect debug msvc runtime, should be /MDd but got /MD
   set(AXSLCC_OUT_DIR_PROJ "${AXSLCC_OUT_DIR}")
-  load_cache("${AX_ROOT_DIR}/${AX_PREBUILT_DIR}" INCLUDE_INTERNALS _NUGET_PACKAGE_DIR EXCLUDE thirdparty_LIB_DEPENDS CMAKE_CXX_FLAGS_DEBUG CMAKE_C_FLAGS_DEBUG)
+  load_cache(
+    "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}"
+    INCLUDE_INTERNALS _NUGET_PACKAGE_DIR
+    EXCLUDE thirdparty_LIB_DEPENDS
+      CMAKE_CXX_FLAGS_DEBUG
+      CMAKE_C_FLAGS_DEBUG
+      CMAKE_BUILD_TYPE
+  )
   set(AXSLCC_OUT_DIR_ENGINE ${AXSLCC_OUT_DIR})
   set(AXSLCC_OUT_DIR "${AXSLCC_OUT_DIR_PROJ}" CACHE STRING "" FORCE)
   unset(AXSLCC_OUT_DIR_PROJ)
@@ -138,7 +148,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     PRIVATE ${AX_ROOT_DIR}/3rdparty/jpeg-turbo/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}
     PRIVATE ${AX_ROOT_DIR}/3rdparty/curl/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}
     PRIVATE ${AX_ROOT_DIR}/3rdparty/opus/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}
-    PRIVATE ${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/lib # cmake will auto add suffix '/$(Configuration)', refer to https://github.com/Kitware/CMake/blob/master/Source/cmVisualStudio10TargetGenerator.cxx#L4145
+    PRIVATE ${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/lib/${CMAKE_BUILD_TYPE}
   )
 
   # Linking platform libs
@@ -179,31 +189,34 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     list(APPEND LIBS opus)
   endif()
 
-  ax_link_pred(AX_ENABLE_EXT_DRAGONBONES "DragonBones" "${AX_ROOT_DIR}/extensions/DragonBones/src")
-  ax_link_pred(AX_ENABLE_EXT_SCENEEXT "sceneext" "${AX_ROOT_DIR}/extensions/sceneext/src")
-  ax_link_pred(AX_ENABLE_EXT_SCENEIO "sceneio" "${AX_ROOT_DIR}/extensions/sceneio/src")
-  ax_link_pred(AX_ENABLE_EXT_ASSETMANAGER "assets-manager" "${AX_ROOT_DIR}/extensions/assets-manager/src")
-  ax_link_pred(AX_ENABLE_EXT_PARTICLE3D "particle3d" "${AX_ROOT_DIR}/extensions/Particle3D/src")
-  ax_link_pred(AX_ENABLE_EXT_INSPECTOR "Inspector" "${AX_ROOT_DIR}/extensions/Inspector/src")
-  ax_link_pred(AX_ENABLE_EXT_SDFGEN "SDFGen" "${AX_ROOT_DIR}/extensions/SDFGen/src")
-  ax_link_pred(AX_ENABLE_EXT_GUI "GUI" "${AX_ROOT_DIR}/extensions/GUI/src")
-  ax_link_pred(AX_ENABLE_EXT_FAIRYGUI "fairygui" "${AX_ROOT_DIR}/extensions/fairygui/src")
-  ax_link_pred(AX_ENABLE_EXT_LIVE2D "Live2D" "${AX_ROOT_DIR}/extensions/Live2D/Framework/src")
-  ax_link_pred(AX_ENABLE_EXT_EFFEKSEER "EffekseerAxmol"
+  if(AX_ENABLE_EXT_LIVE2D)
+    include(${AX_ROOT_DIR}/extensions/Live2D/live2d-core.cmake)
+  endif()
+
+  ax_link_pred(AX_ENABLE_EXT_DRAGONBONES LIBS DragonBones INCLUDES "${AX_ROOT_DIR}/extensions/DragonBones/src")
+  ax_link_pred(AX_ENABLE_EXT_SCENEEXT LIBS sceneext INCLUDES "${AX_ROOT_DIR}/extensions/sceneext/src")
+  ax_link_pred(AX_ENABLE_EXT_SCENEIO LIBS sceneio INCLUDES "${AX_ROOT_DIR}/extensions/sceneio/src")
+  ax_link_pred(AX_ENABLE_EXT_ASSETMANAGER LIBS assets-manager INCLUDES "${AX_ROOT_DIR}/extensions/assets-manager/src")
+  ax_link_pred(AX_ENABLE_EXT_PARTICLE3D LIBS particle3d INCLUDES "${AX_ROOT_DIR}/extensions/Particle3D/src")
+  ax_link_pred(AX_ENABLE_EXT_INSPECTOR LIBS Inspector INCLUDES "${AX_ROOT_DIR}/extensions/Inspector/src")
+  ax_link_pred(AX_ENABLE_EXT_SDFGEN LIBS SDFGen INCLUDES "${AX_ROOT_DIR}/extensions/SDFGen/src")
+  ax_link_pred(AX_ENABLE_EXT_GUI LIBS GUI INCLUDES "${AX_ROOT_DIR}/extensions/GUI/src" "${AX_ROOT_DIR}/extensions/GUI/src/GUI")
+  ax_link_pred(AX_ENABLE_EXT_FAIRYGUI LIBS fairygui INCLUDES "${AX_ROOT_DIR}/extensions/fairygui/src" "${AX_ROOT_DIR}/extensions/fairygui/src/fairygui")
+  ax_link_pred(AX_ENABLE_EXT_LIVE2D LIBS Live2D Live2DCubismCore INCLUDES "${AX_ROOT_DIR}/extensions/Live2D/Framework/src" "${AX_ROOT_DIR}/extensions/Live2D/Core/include")
+  ax_link_pred(AX_ENABLE_EXT_EFFEKSEER LIBS EffekseerAxmol Effekseer EffekseerRendererCommon INCLUDES
     "${AX_ROOT_DIR}/extensions/Effekseer"
     "${AX_ROOT_DIR}/extensions/Effekseer/EffekseerAxmol"
-    "${AX_ROOT_DIR}/extensions/Effekseer/EffekseerRendererAxmol"
   )
-  ax_link_pred(AX_ENABLE_EXT_PHYSICS_NODE "physics-nodes" "${AX_ROOT_DIR}/extensions/physics-nodes/src")
-  ax_link_pred(AX_ENABLE_NAVMESH "recast" "${AX_ROOT_DIR}/3rdparty/recast")
-  ax_link_pred(AX_ENABLE_PHYSICS_3D "Jolt" "${AX_ROOT_DIR}/3rdparty/jolt")
-  ax_link_pred(AX_ENABLE_OPENXR "openxr_loader" "${OPENXR_SOURCE_DIR}/include")
+  ax_link_pred(AX_ENABLE_EXT_PHYSICS_NODE LIBS physics-nodes INCLUDES "${AX_ROOT_DIR}/extensions/physics-nodes/src")
+  ax_link_pred(AX_ENABLE_NAVMESH LIBS recast INCLUDES "${AX_ROOT_DIR}/3rdparty/recast")
+  ax_link_pred(AX_ENABLE_PHYSICS_3D LIBS Jolt INCLUDES "${AX_ROOT_DIR}/3rdparty/jolt")
+  ax_link_pred(AX_ENABLE_OPENXR LIBS openxr_loader INCLUDES "${OPENXR_SOURCE_DIR}/include")
 
-  ax_link_pred(AX_ENABLE_EXT_IMGUI "ImGui"
+  ax_link_pred(AX_ENABLE_EXT_IMGUI LIBS ImGui INCLUDES
     "${AX_ROOT_DIR}/extensions/ImGui/src" "${AX_ROOT_DIR}/extensions/ImGui/src/ImGui/imgui"
   )
 
-  ax_link_pred(AX_ENABLE_EXT_SPINE "spine"
+  ax_link_pred(AX_ENABLE_EXT_SPINE LIBS spine INCLUDES
     "${AX_ROOT_DIR}/extensions/spine/runtime/include" "${AX_ROOT_DIR}/extensions/spine/src"
   )
 

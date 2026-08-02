@@ -1,6 +1,9 @@
 add_library(Live2DCubismCore STATIC IMPORTED GLOBAL)
 
-_1kfetch(live2d-core PREFIX ${CMAKE_CURRENT_LIST_DIR} FOLDER "Core")
+# fetch Core only when building from source; prebuilt flow already has it and lacks _1kfetch
+if(COMMAND _1kfetch)
+  _1kfetch(live2d-core PREFIX ${CMAKE_CURRENT_LIST_DIR} FOLDER "Core")
+endif()
 
 set(live2d_core_dir ${CMAKE_CURRENT_LIST_DIR}/Core)
 
@@ -26,7 +29,7 @@ elseif(LINUX)
   )
 elseif(WINDOWS)
   set(CRT MD)
-  # The Live2D prebuilt libraries for MSVC are available only up to version 143, 
+  # The Live2D prebuilt libraries for MSVC are available only up to version 143,
   # while Axmol requires 14.39. Compatibility should be ensured.
   set(live2d_msvc 143)
 

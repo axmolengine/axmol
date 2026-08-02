@@ -84,12 +84,15 @@ endif()
 
 add_subdirectory(Effekseer)
 add_subdirectory(EffekseerRendererCommon)
-add_subdirectory(EffekseerRendererAxmol)
 add_subdirectory(EffekseerAxmol)
 
 target_compile_definitions(EffekseerRendererCommon PUBLIC __DISABLED_DEFAULT_TEXTURE_LOADER__)
 
-set_target_properties(Effekseer PROPERTIES FOLDER Extensions/Effekseer)
-set_target_properties(EffekseerRendererCommon PROPERTIES FOLDER Extensions/Effekseer)
-set_target_properties(EffekseerRendererAxmol PROPERTIES FOLDER Extensions/Effekseer)
-set_target_properties(EffekseerAxmol PROPERTIES FOLDER Extensions/Effekseer)
+ax_configure_lib_output(Effekseer STATIC_LIBRARY Extensions/Effekseer)
+ax_configure_lib_output(EffekseerRendererCommon STATIC_LIBRARY Extensions/Effekseer)
+
+if(ANDROID)
+  ax_setup_ext_config(EffekseerAxmol FOLDER "Extensions/Effekseer" LINK_SCOPE PRIVATE)
+else()
+  ax_setup_ext_config(EffekseerAxmol FOLDER "Extensions/Effekseer")
+endif()
