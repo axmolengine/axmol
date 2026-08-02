@@ -252,6 +252,8 @@ function(ax_sync_target_dlls ax_target)
   if(opt_LUA AND NOT AX_USE_LUAJIT)
     if(NOT CMAKE_GENERATOR MATCHES "Ninja")
       set(BUILD_CONFIG_DIR "\$\(Configuration\)/")
+    else()
+      set(BUILD_CONFIG_DIR "$<CONFIG>/")
     endif()
 
     if(MSVC)
@@ -1005,4 +1007,22 @@ function(ax_collect_sdk_targets dir out_list)
 
   # Pass the filtered list back to the parent scope
   set(${out_list} ${temp_list} PARENT_SCOPE)
+endfunction()
+
+function(ax_configure_target_output tgt tgt_type folder_name)
+  if(NOT(tgt_type STREQUAL "INTERFACE_LIBRARY"))
+    set_target_properties(${tgt} PROPERTIES
+      ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib" # Windows/Linux/macOS, .a, .lib
+      RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin" # Windows .dll, .exe
+      FOLDER "${folder_name}"
+    )
+
+    get_target_property(_apple_framework ${tgt} MACOSX_FRAMEWORK_NAME)
+
+    if(NOT _apple_framework)
+      set_target_properties(${tgt} PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib" # .so, .dylib, windows imported .lib
+      )
+    endif()
+  endif()
 endfunction()

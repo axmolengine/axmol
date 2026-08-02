@@ -9,10 +9,14 @@ if(BUILD_SHARED_LIBS)
   endif()
 endif()
 
-function(setup_ax_extension_config target_name)
+function(ax_setup_ext_config target_name)
   set(options DNTLINK)
-  set(oneValueArgs LINK_SCOPE)
+  set(oneValueArgs LINK_SCOPE FOLDER)
   cmake_parse_arguments(opt "${options}" "${oneValueArgs}" "" ${ARGN})
+
+  if(NOT opt_FOLDER)
+    set(opt_FOLDER "Extensions")
+  endif()
 
   target_link_libraries(${target_name} ${opt_LINK_SCOPE} ${_AX_CORE_LIB})
 
@@ -25,7 +29,7 @@ function(setup_ax_extension_config target_name)
     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-    FOLDER "Extensions"
+    FOLDER "${opt_FOLDER}"
   )
 
   if(WINRT)
