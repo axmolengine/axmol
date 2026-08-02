@@ -28,4 +28,4 @@ target_include_directories(
 
 ax_add_shader_target_for(${target_name} PATH "${CMAKE_CURRENT_LIST_DIR}/Shaders")
 
-setup_ax_extension_config(${target_name})
+ax_setup_ext_config(${target_name})

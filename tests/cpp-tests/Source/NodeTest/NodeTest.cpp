@@ -933,7 +933,7 @@ public:
         return sprite;
     }
     bool setProgramState(rhi::ProgramState* programState, bool ownPS = false) override;
-    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    virtual void draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags) override;
 
 protected:
     CustomCommand _customCommand;
@@ -954,13 +954,13 @@ bool MySprite::setProgramState(rhi::ProgramState* programState, bool ownPS /* = 
     return false;
 }
 
-void MySprite::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+void MySprite::draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags)
 {
-    const auto& projectionMat = Camera::getVisitingViewProjectionMatrix();
+    const auto& projectionMat = state.getViewProjectionMatrix();
     auto mvpMatrix            = projectionMat * transform;
     _customCommand.unsafePS()->setUniform(_mvpMatrixLocation, mvpMatrix.m, sizeof(mvpMatrix.m));
-    _customCommand.init(_globalZOrder, transform, flags);
-    renderer->addCommand(&_customCommand);
+    _customCommand.init(_globalZOrder, transform, flags, state.getView());
+    state.getRenderer()->addCommand(&_customCommand);
 }
 
 //------------------------------------------------------------------

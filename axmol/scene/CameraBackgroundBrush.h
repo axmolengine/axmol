@@ -42,6 +42,7 @@ class CameraBackgroundColorBrush;
 class CameraBackgroundDepthBrush;
 class CameraBackgroundSkyBoxBrush;
 class Camera;
+struct SceneRenderState;
 
 namespace rhi
 {
@@ -115,7 +116,8 @@ public:
     /**
      * draw the background
      */
-    virtual void drawBackground(Camera* /*camera*/) {}
+    void drawBackground(Camera* camera);
+    virtual void drawBackground(const SceneRenderState& /*state*/) {}
 
     virtual bool isValid() { return true; }
 
@@ -151,7 +153,7 @@ public:
     /**
      * Draw background
      */
-    void drawBackground(Camera* camera) override;
+    void drawBackground(const SceneRenderState& state) override;
 
     /**
      * Set depth
@@ -212,7 +214,7 @@ public:
     /**
      * Draw background
      */
-    void drawBackground(Camera* camera) override;
+    void drawBackground(const SceneRenderState& state) override;
 
     /**
      * Set clear color
@@ -274,7 +276,7 @@ public:
     /**
      * Draw background
      */
-    void drawBackground(Camera* camera) override;
+    void drawBackground(const SceneRenderState& state) override;
 
     bool isActived() const;
     void setActived(bool actived);

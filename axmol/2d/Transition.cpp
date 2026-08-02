@@ -117,19 +117,19 @@ void TransitionScene::sceneOrder()
     _isInSceneOnTop = true;
 }
 
-void TransitionScene::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+void TransitionScene::draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags)
 {
-    Scene::draw(renderer, transform, flags);
+    Scene::draw(state, transform, flags);
 
     if (_isInSceneOnTop)
     {
-        _outScene->visit(renderer, transform, flags);
-        _inScene->visit(renderer, transform, flags);
+        _outScene->visit(state, transform, flags);
+        _inScene->visit(state, transform, flags);
     }
     else
     {
-        _inScene->visit(renderer, transform, flags);
-        _outScene->visit(renderer, transform, flags);
+        _inScene->visit(state, transform, flags);
+        _outScene->visit(state, transform, flags);
     }
 }
 
@@ -1111,7 +1111,7 @@ TransitionCrossFade* TransitionCrossFade::create(float t, Scene* scene)
     return nullptr;
 }
 
-void TransitionCrossFade::draw(Renderer* /*renderer*/, const Mat4& /*transform*/, uint32_t /*flags*/)
+void TransitionCrossFade::draw(const SceneRenderState& /*state*/, const Mat4& /*transform*/, uint32_t /*flags*/)
 {
     // override draw since both scenes (textures) are rendered in 1 scene
 }
@@ -1136,7 +1136,8 @@ void TransitionCrossFade::onEnter()
 
     // render inScene to its texturebuffer
     pass->begin(camera);
-    _inScene->visit(_director->getRenderer(), _inScene->getNodeToParentTransform(), 0);
+    SceneRenderState renderState(_director->getRenderer(), camera);
+    _inScene->visit(renderState, _inScene->getNodeToParentTransform(), 0);
     pass->end();
 
     _director->getRenderer()->render();
@@ -1153,7 +1154,8 @@ void TransitionCrossFade::onEnter()
     pass->setTarget(outTexture);
 
     pass->begin(camera);
-    _outScene->visit(_director->getRenderer(), _outScene->getNodeToParentTransform(), 0);
+    renderState = SceneRenderState(_director->getRenderer(), camera);
+    _outScene->visit(renderState, _outScene->getNodeToParentTransform(), 0);
     pass->end();
 
     _director->getRenderer()->render();
@@ -1250,19 +1252,19 @@ void TransitionTurnOffTiles::onExit()
     TransitionScene::onExit();
 }
 
-void TransitionTurnOffTiles::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+void TransitionTurnOffTiles::draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags)
 {
-    Scene::draw(renderer, transform, flags);
+    Scene::draw(state, transform, flags);
 
     if (_isInSceneOnTop)
     {
-        _outSceneProxy->visit(renderer, transform, flags);
-        _inScene->visit(renderer, transform, flags);
+        _outSceneProxy->visit(state, transform, flags);
+        _inScene->visit(state, transform, flags);
     }
     else
     {
-        _inScene->visit(renderer, transform, flags);
-        _outSceneProxy->visit(renderer, transform, flags);
+        _inScene->visit(state, transform, flags);
+        _outSceneProxy->visit(state, transform, flags);
     }
 }
 
@@ -1318,10 +1320,10 @@ void TransitionSplitCols::switchTargetToInscene()
     _gridProxy->setTarget(_inScene);
 }
 
-void TransitionSplitCols::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+void TransitionSplitCols::draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags)
 {
-    Scene::draw(renderer, transform, flags);
-    _gridProxy->visit(renderer, transform, flags);
+    Scene::draw(state, transform, flags);
+    _gridProxy->visit(state, transform, flags);
 }
 
 void TransitionSplitCols::onExit()
@@ -1422,19 +1424,19 @@ void TransitionFadeTR::onExit()
     TransitionScene::onExit();
 }
 
-void TransitionFadeTR::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+void TransitionFadeTR::draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags)
 {
-    Scene::draw(renderer, transform, flags);
+    Scene::draw(state, transform, flags);
 
     if (_isInSceneOnTop)
     {
-        _outSceneProxy->visit(renderer, transform, flags);
-        _inScene->visit(renderer, transform, flags);
+        _outSceneProxy->visit(state, transform, flags);
+        _inScene->visit(state, transform, flags);
     }
     else
     {
-        _inScene->visit(renderer, transform, flags);
-        _outSceneProxy->visit(renderer, transform, flags);
+        _inScene->visit(state, transform, flags);
+        _outSceneProxy->visit(state, transform, flags);
     }
 }
 

@@ -62,9 +62,10 @@ namespace spine {
 										BlendFunc blendType,
 										const TwoColorTriangles &triangles,
 										const Mat4 &mv,
-										uint32_t flags) {
+										uint32_t flags,
+										const axmol::SceneViewData &view) {
 
-		ax::RenderCommand::init(globalOrder, mv, flags);
+		ax::RenderCommand::init(globalOrder, mv, flags, view);
 
 		_triangles = triangles;
 		if (_triangles.indexCount % 3 != 0) {
@@ -260,7 +261,7 @@ namespace spine {
 		_indices.setSize(_indices.size() - numIndices, 0);
 	}
 
-	TwoColorTrianglesCommand *SkeletonTwoColorBatch::addCommand(axmol::Renderer *renderer, float globalOrder, axmol::Texture2D *texture, rhi::ProgramState *programState, axmol::BlendFunc blendType, const TwoColorTriangles &triangles, const axmol::Mat4 &mv, uint32_t flags) {
+	TwoColorTrianglesCommand *SkeletonTwoColorBatch::addCommand(const axmol::SceneRenderState &state, float globalOrder, axmol::Texture2D *texture, rhi::ProgramState *programState, axmol::BlendFunc blendType, const TwoColorTriangles &triangles, const axmol::Mat4 &mv, uint32_t flags) {
 		TwoColorTrianglesCommand *command = nextFreeCommand();
 
 		auto pipelinePS = command->unsafePS();
@@ -274,20 +275,19 @@ namespace spine {
 
 		AXASSERT(pipelinePS, "programState should not be null");
 
-		const axmol::Mat4 &projectionMat =
-				axmol::Camera::getVisitingViewProjectionMatrix();
+		const axmol::Mat4 &projectionMat = state.getViewProjectionMatrix();
 
 		auto finalMatrix = projectionMat * mv;
 
 		pipelinePS->setUniform(_locPMatrix, finalMatrix.m, sizeof(finalMatrix.m));
 		pipelinePS->setTexture(_locTexture, 0, texture->getRHITexture());
 
-		command->init(globalOrder, texture, pipelinePS, blendType, triangles, mv, flags);
+		command->init(globalOrder, texture, pipelinePS, blendType, triangles, mv, flags, state.getView());
 
 		command->setOwnPSVL(pipelinePS, _twoColorVertexLayout, ax::RenderCommand::ADOPT_FLAG_PS);
 
-		command->updateVertexAndIndexBuffer(renderer, triangles.verts, triangles.vertCount, triangles.indices, triangles.indexCount);
-		renderer->addCommand(command);
+		command->updateVertexAndIndexBuffer(state.getRenderer(), triangles.verts, triangles.vertCount, triangles.indices, triangles.indexCount);
+		state.getRenderer()->addCommand(command);
 		return command;
 	}
 

@@ -306,7 +306,7 @@ public:
     // Override
     //
     std::string getDescription() const override;
-    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags) override;
     void removeChild(Node* child, bool cleanup = true) override;
 
     /** Map from gid of animated tile to its instance.

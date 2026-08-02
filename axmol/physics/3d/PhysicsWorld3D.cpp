@@ -339,7 +339,7 @@ bool PhysicsWorld3D::isDebugDrawEnabled() const
     return !!_debugDrawer;
 }
 
-void PhysicsWorld3D::debugDraw(Renderer* renderer)
+void PhysicsWorld3D::debugDraw(const SceneRenderState& state)
 {
     if (_debugDrawer)
     {
@@ -349,7 +349,7 @@ void PhysicsWorld3D::debugDraw(Renderer* renderer)
         _physicsSystem.DrawBodies(drawSettings, JPH::DebugRenderer::sInstance);
         _physicsSystem.DrawConstraints(JPH::DebugRenderer::sInstance);
         _physicsSystem.DrawConstraintLimits(JPH::DebugRenderer::sInstance);
-        _debugDrawer->draw(renderer);
+        _debugDrawer->draw(state);
     }
 }
 

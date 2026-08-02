@@ -82,7 +82,7 @@ static constexpr float RT_PASS_END_ORDER   = 100000;
  *
  * On OpenGL, offscreen FBO textures have a bottom-left origin, while D3D, Metal,
  * and Vulkan use a top-left origin. When automatic Y flipping is enabled, this
- * pass can flip the visiting camera's projection matrix on OpenGL so that the
+ * pass can flip the selected camera's projection matrix on OpenGL so that the
  * rendered texture has a consistent orientation across backends.
  *
  * @note This guarantee applies only to rendering managed by RenderTexturePass.
@@ -158,14 +158,14 @@ public:
     /** @{ */
     /**
      * @brief Begin offscreen rendering.
-     * @param camera Optional visiting camera override.
+     * @param camera Optional camera used for backend-specific projection adjustment.
      * Saves current render target/viewport, pushes render group.
      */
     void begin(const Camera* camera = nullptr);
 
     /**
      * @brief End offscreen rendering.
-     * Restores previous render target/viewport and visiting camera.
+     * Restores previous render target/viewport and camera projection.
      */
     void end();
 
@@ -199,18 +199,17 @@ public:
 
     /** @} */
     /**
-     * @brief Enables or disables automatic visiting camera override for this pass.
+     * @brief Enables or disables automatic camera adjustment for this pass.
      *
-     * When enabled, begin() temporarily sets the selected camera as the visiting
-     * camera and applies backend-specific projection adjustments when needed.
-     * end() restores the previous visiting camera and projection state.
+     * When enabled, begin() applies backend-specific projection adjustments to
+     * the selected camera when needed. end() restores the projection state.
      *
      * Advanced renderers that manage their own camera loop, such as VR or custom
      * multi-view renderers, can disable this behavior and handle camera state
      * explicitly.
      *
-     * @param enabled True to let RenderTexturePass override the visiting camera;
-     *                false to leave camera state untouched.
+     * @param enabled True to let RenderTexturePass adjust the selected camera;
+     *                false to leave camera projection untouched.
      */
     void setCameraOverrideEnabled(bool enabled) { _cameraOverrideEnabled = enabled; }
 
@@ -237,15 +236,13 @@ private:
     bool _active{false};
     bool _autoFlipY{true};
 
-    // When enabled, begin() temporarily overrides the visiting camera and applies
-    // backend-specific projection adjustments when needed. end() restores the
-    // previous camera state. Advanced renderers can disable this and manage camera
-    // state explicitly.
+    // When enabled, begin() applies backend-specific projection adjustments when
+    // needed. Advanced renderers can disable this and manage camera state explicitly.
     bool _cameraOverrideEnabled{true};
 
     std::optional<Viewport> _viewport;
 
-    const Camera* _savedCamera{nullptr};
+    const Camera* _activeCamera{nullptr};
     std::optional<Mat4> _savedProjection;
     std::vector<SavedState> _savedStates;
 

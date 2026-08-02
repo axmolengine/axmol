@@ -154,7 +154,7 @@ public:
     void setTextureCoordsColumns(unsigned short textureCoordsColumns);
     unsigned int getNumTextureCoords();
 
-    void render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem) override;
+    void render(const SceneRenderState& state, const Mat4& transform, ParticleSystem3D* particleSystem) override;
 
     PUParticle3DQuadRender* clone() override;
     void copyAttributesTo(PUParticle3DQuadRender* render);
@@ -187,7 +187,7 @@ class AX_EXT_API PUParticle3DModelRender : public PURender
 public:
     static PUParticle3DModelRender* create(std::string_view modelFile, std::string_view texFile = "");
 
-    void render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem) override;
+    void render(const SceneRenderState& state, const Mat4& transform, ParticleSystem3D* particleSystem) override;
 
     PUParticle3DModelRender* clone() override;
     void copyAttributesTo(PUParticle3DModelRender* render);
@@ -208,7 +208,7 @@ class AX_EXT_API PUParticle3DBoxRender : public PUParticle3DEntityRender
 public:
     static PUParticle3DBoxRender* create(std::string_view texFile = "");
 
-    void render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem) override;
+    void render(const SceneRenderState& state, const Mat4& transform, ParticleSystem3D* particleSystem) override;
 
     PUParticle3DBoxRender* clone() override;
 
@@ -224,7 +224,7 @@ class AX_EXT_API PUSphereRender : public PUParticle3DEntityRender
 public:
     static PUSphereRender* create(std::string_view texFile = "");
 
-    void render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem) override;
+    void render(const SceneRenderState& state, const Mat4& transform, ParticleSystem3D* particleSystem) override;
 
     PUSphereRender* clone() override;
     void copyAttributesTo(PUSphereRender* render);

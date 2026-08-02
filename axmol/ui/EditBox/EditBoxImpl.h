@@ -96,7 +96,7 @@ public:
     /**
      * @lua NA
      */
-    virtual void draw(ax::Renderer* renderer, ax::Mat4 const& transform, uint32_t flags) = 0;
+    virtual void draw(const ax::SceneRenderState& state, ax::Mat4 const& transform, uint32_t flags) = 0;
     /**
      * @lua NA
      */

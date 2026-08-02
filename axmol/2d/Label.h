@@ -731,8 +731,8 @@ public:
     const Vec2& getContentSize() const override;
     Rect getBoundingBox() const override;
 
-    void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
-    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void visit(const SceneRenderState& state, const Mat4& parentTransform, uint32_t parentFlags) override;
+    void draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags) override;
 
     void setCameraMask(unsigned short mask, bool applyChildren = true) override;
 
@@ -802,7 +802,7 @@ protected:
 
     void computeStringNumLines();
 
-    void drawSelf(bool visibleByCamera, Renderer* renderer, uint32_t flags);
+    void drawSelf(bool visibleByCamera, const SceneRenderState& state, uint32_t flags);
 
     bool multilineTextWrapByChar(bool ignoreOverflow = false);
     bool multilineTextWrapByWord(bool ignoreOverflow = false);
@@ -855,7 +855,7 @@ protected:
     void updateBlendState();
     void updateEffectUniforms(BatchCommand& batch,
                               TextureAtlas* textureAtlas,
-                              Renderer* renderer,
+                              const SceneRenderState& state,
                               const Mat4& transform);
     void updateBuffer(TextureAtlas* textureAtlas, CustomCommand& customCommand);
 

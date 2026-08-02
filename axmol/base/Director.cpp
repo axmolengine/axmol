@@ -312,21 +312,18 @@ void Director::calculateDeltaTime()
             _deltaTime  = std::chrono::duration_cast<std::chrono::microseconds>(now - _lastUpdate).count() / 1000000.0f;
             _lastUpdate = now;
         }
-        _deltaTime = MAX(1e-6f, _deltaTime);
+        _deltaTime = std::clamp(_deltaTime, 1e-6f, _maxDeltaTime);
     }
-
-#if defined(_AX_DEBUG) && _AX_DEBUG
-    // If we are debugging our code, prevent big delta time
-    if (_deltaTime > 0.2f)
-    {
-        _deltaTime = 1 / 60.0f;
-    }
-#endif
 }
 
 float Director::getDeltaTime() const
 {
     return _deltaTime;
+}
+
+void Director::setMaxDeltaTime(float maxDeltaTime)
+{
+    _maxDeltaTime = MAX(maxDeltaTime, 1.0f / 60);
 }
 
 void Director::setRenderView(RenderViewCore* renderView)
@@ -490,7 +487,6 @@ static void getViewProjMatrix(Mat4* transformOut)
     auto scene  = director->getRunningScene();
     auto camera = scene ? scene->getDefaultCamera() : nullptr;
 
-    AXASSERT(camera, "Director screen/world conversion requires a running scene default camera");
     *transformOut = camera ? camera->getViewProjectionMatrix() : Mat4::identity;
 }
 
@@ -1062,11 +1058,9 @@ void Director::showStats()
             _frames  = 0;
         }
 
-        auto previousCamera = Camera::_visitingCamera;
         auto* overlayCamera = getOverlayCamera();
         if (overlayCamera)
         {
-            Camera::_visitingCamera = overlayCamera;
             overlayCamera->apply();
         }
 
@@ -1089,12 +1083,11 @@ void Director::showStats()
         const Mat4& identity = Mat4::identity;
         if (overlayCamera)
         {
-            _drawnVerticesLabel->visit(_renderer, identity, 0);
-            _drawnBatchesLabel->visit(_renderer, identity, 0);
-            _FPSLabel->visit(_renderer, identity, 0);
+            SceneRenderState overlayState(_renderer, overlayCamera);
+            _drawnVerticesLabel->visit(overlayState, identity, 0);
+            _drawnBatchesLabel->visit(overlayState, identity, 0);
+            _FPSLabel->visit(overlayState, identity, 0);
         }
-
-        Camera::_visitingCamera = previousCamera;
     }
 }
 
@@ -1116,15 +1109,13 @@ void Director::showVRModeIndicator()
         _VRModeLabel->enableOutline(Color32::black, 2);
     }
 
-    auto previousCamera = Camera::_visitingCamera;
     auto* overlayCamera = getOverlayCamera();
     if (overlayCamera)
     {
-        Camera::_visitingCamera = overlayCamera;
         overlayCamera->apply();
-        _VRModeLabel->visit(_renderer, Mat4::identity, 0);
+        SceneRenderState overlayState(_renderer, overlayCamera);
+        _VRModeLabel->visit(overlayState, Mat4::identity, 0);
     }
-    Camera::_visitingCamera = previousCamera;
 }
 
 void Director::calculateMPF()
@@ -1498,15 +1489,13 @@ void Director::renderFrame()
         // draw the notifications node
         if (_notificationNode)
         {
-            auto previousCamera = Camera::_visitingCamera;
             auto* overlayCamera = getOverlayCamera();
             if (overlayCamera)
             {
-                Camera::_visitingCamera = overlayCamera;
                 overlayCamera->apply();
-                _notificationNode->visit(_renderer, Mat4::identity, 0);
+                SceneRenderState overlayState(_renderer, overlayCamera);
+                _notificationNode->visit(overlayState, Mat4::identity, 0);
             }
-            Camera::_visitingCamera = previousCamera;
         }
 
         updateFrameRate();

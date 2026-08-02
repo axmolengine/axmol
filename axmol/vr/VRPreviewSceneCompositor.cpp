@@ -214,8 +214,6 @@ void VRPreviewSceneCompositor::renderScene(Renderer* renderer, Scene* scene)
     renderSceneToEye(renderer, scene, LeftEyeIndex, leftEyeTransform);
     renderSceneToEye(renderer, scene, RightEyeIndex, rightEyeTransform);
     renderDistortionPass(renderer);
-
-    Camera::setVisitingCamera(nullptr);
 }
 
 void VRPreviewSceneCompositor::renderSceneToEye(Renderer* renderer,
@@ -246,8 +244,6 @@ void VRPreviewSceneCompositor::renderSceneToEye(Renderer* renderer,
         else
             _rtPass->clear(ClearFlag::DEPTH_AND_STENCIL, {});
 
-        Camera::setVisitingCamera(camera);
-
         // VR rendering reuses the original scene cameras for both eyes.
         // Each eye applies a temporary view override through Camera::setAdditionalTransform(),
         // avoiding duplicated camera objects and keeping camera ownership in the scene.
@@ -262,9 +258,10 @@ void VRPreviewSceneCompositor::renderSceneToEye(Renderer* renderer,
         // Scissor changes are executed by renderer commands, not immediately
         // during scene traversal. Queue push/pop callbacks around the scene
         // commands so clipped UI is transformed at execution time.
+        SceneRenderState renderState(renderer, camera);
         renderer->addCallbackCommand(
             [this, eyeIndex]() { _scissorTransformStack.push(_eyes[eyeIndex].scissorTransform); });
-        scene->visit(renderer, transform, 0);
+        scene->visit(renderState, transform, 0);
         renderer->addCallbackCommand([this]() { _scissorTransformStack.pop(); });
 
         _rtPass->end();

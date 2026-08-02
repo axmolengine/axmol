@@ -23,11 +23,15 @@ public:
     void bindFrameBuffer() const;
     void unbindFrameBuffer() const;
 
+    PixelFormat getColorAttachmentPixelFormat(int index = 0) const override;
+    PixelFormat getDepthStencilAttachmentPixelFormat() const override;
+
     void update();
 
 public:
     GLuint _FBO = 0;
     tlx::pod_vector<GLenum> _GLbufs;
+    mutable PixelFormat _defaultColorAttachmentPixelFormat{PixelFormat::NONE};
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
     CustomEventListener* _rendererRecreatedListener{nullptr};
 #endif

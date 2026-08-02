@@ -41,6 +41,10 @@
 #include <spine/spine.h>
 #include <vector>
 
+namespace ax {
+	struct SceneRenderState;
+}
+
 namespace spine {
 	struct V3F_C4B_C4B_T2F {
 		axmol::Vec3 position;
@@ -62,7 +66,7 @@ namespace spine {
 
 		~TwoColorTrianglesCommand();
 
-		void init(float globalOrder, axmol::Texture2D *texture, axmol::rhi::ProgramState *programState, axmol::BlendFunc blendType, const TwoColorTriangles &triangles, const axmol::Mat4 &mv, uint32_t flags);
+		void init(float globalOrder, axmol::Texture2D *texture, axmol::rhi::ProgramState *programState, axmol::BlendFunc blendType, const TwoColorTriangles &triangles, const axmol::Mat4 &mv, uint32_t flags, const axmol::SceneViewData &view);
 
 		void updateCommandPipelineDescriptor(axmol::rhi::ProgramState *programState);
 
@@ -118,7 +122,7 @@ namespace spine {
 		unsigned short *allocateIndices(uint32_t numIndices);
 		void deallocateIndices(uint32_t numIndices);
 
-		TwoColorTrianglesCommand *addCommand(axmol::Renderer *renderer, float globalOrder, axmol::Texture2D *texture, axmol::rhi::ProgramState *programState, axmol::BlendFunc blendType, const TwoColorTriangles &triangles, const axmol::Mat4 &mv, uint32_t flags);
+		TwoColorTrianglesCommand *addCommand(const axmol::SceneRenderState &state, float globalOrder, axmol::Texture2D *texture, axmol::rhi::ProgramState *programState, axmol::BlendFunc blendType, const TwoColorTriangles &triangles, const axmol::Mat4 &mv, uint32_t flags);
 
 		void batch(axmol::Renderer *renderer, TwoColorTrianglesCommand *command);
 

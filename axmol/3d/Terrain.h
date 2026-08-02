@@ -36,6 +36,7 @@ THE SOFTWARE.
 #include "axmol/renderer/RenderState.h"
 #include "axmol/rhi/ProgramState.h"
 #include "axmol/math/AABB.h"
+#include "axmol/math/Plane.h"
 #include "axmol/math/Ray.h"
 #include "axmol/base/CustomEventListener.h"
 #include "axmol/base/EventDispatcher.h"
@@ -322,7 +323,7 @@ private:
         /**recursively set itself and its children is need to draw*/
         void resetNeedDraw(bool value);
         /**recursively potential visible culling*/
-        void cullByCamera(const Camera* camera, const Mat4& worldTransform);
+        void cullByCamera(const Plane viewProjectionPlanes[6], const Mat4& worldTransform);
         /**precalculate the AABB(In world space) of each quad*/
         void preCalculateAABB(const Mat4& worldTransform);
         QuadTree* _tl;
@@ -414,7 +415,7 @@ public:
     void setDetailMap(unsigned int index, DetailMap detailMap);
 
     // Overrides, internal use only
-    void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
+    void draw(const ax::SceneRenderState& state, const ax::Mat4& transform, uint32_t flags) override;
     bool onPointerHitTest(PointerEvent* event, Vec3* outHitPoint) override;
 
     /**

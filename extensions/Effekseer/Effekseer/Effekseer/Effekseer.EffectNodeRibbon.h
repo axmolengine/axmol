@@ -1,4 +1,4 @@
-
+﻿
 #ifndef __EFFEKSEER_ParameterNODE_RIBBON_H__
 #define __EFFEKSEER_ParameterNODE_RIBBON_H__
 
@@ -61,6 +61,11 @@ struct RibbonPositionParameter
 class EffectNodeRibbon : public EffectNodeImplemented
 {
 public:
+	struct InstanceGroupValues
+	{
+		TrailUVAnimationCache UVAnimationCache;
+	};
+
 	struct InstanceValues
 	{
 		Color _color;
@@ -115,13 +120,15 @@ public:
 
 	void EndRendering(Manager* manager, void* userData) override;
 
+	void InitializeRenderedInstanceGroup(InstanceGroup& instanceGroup, Manager* manager) override;
+
 	void InitializeRenderedInstance(Instance& instance, InstanceGroup& instanceGroup, Manager* manager) override;
 
 	void UpdateRenderedInstance(Instance& instance, InstanceGroup& instanceGroup, Manager* manager) override;
 
-	eEffectNodeType GetType() const override
+	EffectNodeType GetType() const override
 	{
-		return eEffectNodeType::Ribbon;
+		return EffectNodeType::Ribbon;
 	}
 };
 

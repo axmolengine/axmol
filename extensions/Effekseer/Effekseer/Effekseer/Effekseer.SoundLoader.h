@@ -1,11 +1,11 @@
-
+﻿
 #ifndef __EFFEKSEER_SOUNDLOADER_H__
 #define __EFFEKSEER_SOUNDLOADER_H__
 
 //----------------------------------------------------------------------------------
 // Include
 //----------------------------------------------------------------------------------
-#include "Effekseer.Base.h"
+#include "Effekseer.Base.Pre.h"
 #include "Effekseer.Resource.h"
 
 //----------------------------------------------------------------------------------

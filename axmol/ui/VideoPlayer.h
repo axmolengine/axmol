@@ -362,7 +362,7 @@ public:
     virtual void addEventListener(const VideoPlayerCallback& callback);
 
     void setVisible(bool visible) override;
-    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags) override;
     void onEnter() override;
     void onExit() override;
 

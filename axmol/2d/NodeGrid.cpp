@@ -80,7 +80,7 @@ NodeGrid::~NodeGrid()
     AX_SAFE_RELEASE(_gridTarget);
 }
 
-Camera* NodeGrid::getGridCamera()
+Camera* NodeGrid::getGridCamera(const Camera* currentCamera)
 {
     if (!_gridCamera)
     {
@@ -92,8 +92,7 @@ Camera* NodeGrid::getGridCamera()
         _gridCamera->configureOrthographicView(_director->getCanvasSize(), -1024, 1024);
     }
 
-    auto visitingCamera = Camera::getVisitingCamera();
-    _gridCamera->setCameraFlag(visitingCamera ? visitingCamera->getCameraFlag() : CameraFlag::DEFAULT);
+    _gridCamera->setCameraFlag(currentCamera ? currentCamera->getCameraFlag() : CameraFlag::DEFAULT);
 
     return _gridCamera;
 }
@@ -106,15 +105,15 @@ void NodeGrid::onGridBeginDraw()
     }
 }
 
-void NodeGrid::onGridEndDraw()
+void NodeGrid::onGridEndDraw(const SceneRenderState& state)
 {
     if (_nodeGrid && _nodeGrid->isActive())
     {
-        _nodeGrid->afterDraw(this);
+        _nodeGrid->afterDraw(this, state);
     }
 }
 
-void NodeGrid::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags)
+void NodeGrid::visit(const SceneRenderState& state, const Mat4& parentTransform, uint32_t parentFlags)
 {
     // quick return if not visible. children won't be drawn.
     if (!_visible)
@@ -127,21 +126,19 @@ void NodeGrid::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t p
         _modelViewTransform = this->transform(parentTransform);
     _transformUpdated = false;
 
-    auto activeGrid     = _nodeGrid && _nodeGrid->isActive();
-    auto previousCamera = const_cast<Camera*>(Camera::getVisitingCamera());
-
-    auto gridCam        = activeGrid ? getGridCamera() : nullptr;
-    auto switchedCamera = gridCam != nullptr;
+    auto activeGrid    = _nodeGrid && _nodeGrid->isActive();
+    auto currentCamera = state.getCamera();
+    auto gridCam       = activeGrid ? getGridCamera(currentCamera) : nullptr;
 
     onGridBeginDraw();
 
     if (_gridTarget)
     {
-        _gridTarget->visit(renderer, _modelViewTransform, dirty);
+        _gridTarget->visit(state, _modelViewTransform, dirty);
     }
 
     int i                = 0;
-    bool visibleByCamera = isVisitableByVisitingCamera();
+    bool visibleByCamera = isVisitableByCamera(state.cameraFlag);
 
     if (!_children.empty())
     {
@@ -152,22 +149,22 @@ void NodeGrid::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t p
             auto node = _children.at(i);
 
             if (node && node->getLocalZOrder() < 0)
-                node->visit(renderer, _modelViewTransform, dirty);
+                node->visit(state, _modelViewTransform, dirty);
             else
                 break;
         }
         // self draw,currently we have nothing to draw on NodeGrid, so there is no need to add render command
         if (visibleByCamera)
-            this->draw(renderer, _modelViewTransform, dirty);
+            this->draw(state, _modelViewTransform, dirty);
 
         for (auto it = _children.cbegin() + i, itCend = _children.cend(); it != itCend; ++it)
         {
-            (*it)->visit(renderer, _modelViewTransform, dirty);
+            (*it)->visit(state, _modelViewTransform, dirty);
         }
     }
     else if (visibleByCamera)
     {
-        this->draw(renderer, _modelViewTransform, dirty);
+        this->draw(state, _modelViewTransform, dirty);
     }
 
     // FIX ME: Why need to set _orderOfArrival to 0??
@@ -179,26 +176,18 @@ void NodeGrid::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t p
         // Capture may use the scene/XR camera, while blit still uses gridCam's
         // canvas ortho matrix. Projecting the uploaded grid vertices/UVs keeps
         // tile edges in the same camera space as the captured texture.
-        const auto& screenProjection = previousCamera ? previousCamera->getViewProjectionMatrix() : Mat4::identity;
-        _nodeGrid->setScreenProjectionForBlit(
-            _projectGridBlitToVisitingCamera && previousCamera ? &screenProjection : nullptr,
-            _director->getCanvasSize());
+        const auto& screenProjection = state.getViewProjectionMatrix();
+        _nodeGrid->setScreenProjectionForBlit(_projectGridBlitToVisitingCamera ? &screenProjection : nullptr,
+                                              _director->getCanvasSize());
     }
 
-    // Switch to grid camera before blit so that Grid3D::blit() /
-    // TiledGrid3D::blit() pick up the grid camera's ortho VP matrix
-    // via Camera::getVisitingViewProjectionMatrix(), instead of the
-    // scene camera's VR perspective VP which would warp the grid mesh.
-    if (gridCam)
-        Camera::setVisitingCamera(gridCam);
-
-    onGridEndDraw();
+    // Blit with the grid camera's ortho VP matrix instead of the scene camera's
+    // VR perspective VP, which would warp the grid mesh.
+    SceneRenderState gridRenderState = gridCam ? SceneRenderState(state.getRenderer(), gridCam) : state;
+    onGridEndDraw(gridRenderState);
 
     if (_nodeGrid)
         _nodeGrid->setScreenProjectionForBlit(nullptr, Vec2::zero);
-
-    if (gridCam || switchedCamera)
-        Camera::setVisitingCamera(previousCamera);
 }
 
 void NodeGrid::setGrid(GridBase* grid)

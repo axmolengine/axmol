@@ -655,7 +655,7 @@ void ScrollView::onAfterDraw()
     }
 }
 
-void ScrollView::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags)
+void ScrollView::visit(const SceneRenderState& state, const Mat4& parentTransform, uint32_t parentFlags)
 {
     // quick return if not visible
     if (!isVisible())
@@ -663,10 +663,10 @@ void ScrollView::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t
         return;
     }
 
-    uint32_t flags = processParentFlags(parentTransform, parentFlags);
+    uint32_t flags = processParentFlags(state, parentTransform, parentFlags);
 
     this->beforeDraw();
-    bool visibleByCamera = isVisitableByVisitingCamera();
+    bool visibleByCamera = isVisitableByCamera(state.cameraFlag);
 
     if (!_children.empty())
     {
@@ -678,7 +678,7 @@ void ScrollView::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t
             Node* child = _children.at(i);
             if (child->getLocalZOrder() < 0)
             {
-                child->visit(renderer, _modelViewTransform, flags);
+                child->visit(state, _modelViewTransform, flags);
             }
             else
             {
@@ -688,18 +688,18 @@ void ScrollView::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t
 
         // this draw
         if (visibleByCamera)
-            this->draw(renderer, _modelViewTransform, flags);
+            this->draw(state, _modelViewTransform, flags);
 
         // draw children zOrder >= 0
         for (; i < _children.size(); i++)
         {
             Node* child = _children.at(i);
-            child->visit(renderer, _modelViewTransform, flags);
+            child->visit(state, _modelViewTransform, flags);
         }
     }
     else if (visibleByCamera)
     {
-        this->draw(renderer, _modelViewTransform, flags);
+        this->draw(state, _modelViewTransform, flags);
     }
 
     this->afterDraw();

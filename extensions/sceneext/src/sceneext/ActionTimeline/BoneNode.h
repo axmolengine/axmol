@@ -139,7 +139,7 @@ public:
     virtual ax::Rect getVisibleSkinsRect() const;
 
     // transform & draw
-    void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
+    void draw(const ax::SceneRenderState& state, const ax::Mat4& transform, uint32_t flags) override;
 
     // set local zorder, and dirty the debugdraw to make debugdraw's render layer right
     void setLocalZOrder(int localZOrder) override;
@@ -194,15 +194,15 @@ protected:
     void disableCascadeColor() override;
 
     // override Node::visit, just visit bones in children
-    void visit(ax::Renderer* renderer, const ax::Mat4& parentTransform, uint32_t parentFlags) override;
+    void visit(const ax::SceneRenderState& state, const ax::Mat4& parentTransform, uint32_t parentFlags) override;
 
     // a help function for SkeletonNode
     // for batch bone's draw to _rootSkeleton
-    virtual void batchBoneDrawToSkeleton(BoneNode* bone) const;
+    virtual void batchBoneDrawToSkeleton(const ax::SceneRenderState& state, BoneNode* bone) const;
 
     // a help function for SkeletonNode
     // @param bone, visit bone's skins
-    virtual void visitSkins(ax::Renderer* renderer, BoneNode* bone) const;
+    virtual void visitSkins(const ax::SceneRenderState& state, BoneNode* bone) const;
 
     // a help function for SkeletonNode
     // set bone's rootSkeleton = skeleton

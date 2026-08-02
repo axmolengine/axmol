@@ -1,4 +1,4 @@
-
+﻿
 #ifndef __EFFEKSEER_ParameterNODE_ROOT_H__
 #define __EFFEKSEER_ParameterNODE_ROOT_H__
 
@@ -22,9 +22,9 @@ public:
 
 	~EffectNodeRoot() = default;
 
-	eEffectNodeType GetType() const
+	EffectNodeType GetType() const override
 	{
-		return eEffectNodeType::Root;
+		return EffectNodeType::Root;
 	}
 };
 

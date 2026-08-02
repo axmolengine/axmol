@@ -806,9 +806,9 @@ bool Renderer::checkVisibility(const Mat4& transform, const Vec2& size)
     auto director = Director::getInstance();
     auto scene    = director->getRunningScene();
 
-    // If draw to Rendertexture, return true directly.
-    //  only cull the default camera. The culling algorithm is valid for default camera.
-    if (!scene || (scene->_defaultCamera != Camera::getVisitingCamera()))
+    // Legacy Renderer API can only cull against the running scene default camera.
+    auto camera = scene ? scene->_defaultCamera : nullptr;
+    if (!camera)
         return true;
 
     Rect visibleRect(director->getVisibleOrigin(), director->getVisibleSize());
@@ -818,7 +818,7 @@ bool Renderer::checkVisibility(const Mat4& transform, const Vec2& size)
     float hSizeY = size.height / 2;
     Vec3 v3p(hSizeX, hSizeY, 0);
     transform.transformPoint(&v3p);
-    Vec2 v2p = Camera::getVisitingCamera()->projectWorldToCanvas(v3p);
+    Vec2 v2p = camera->projectWorldToCanvas(v3p);
 
     // convert content size to world coordinates
     float wshw = std::max(fabsf(hSizeX * transform.m[0] + hSizeY * transform.m[4]),

@@ -111,21 +111,7 @@ function(ax_add_3rd source_dir)
       add_dependencies(3rdparty ${tgt})
     endif()
 
-    if(NOT (tgt_type STREQUAL "INTERFACE_LIBRARY"))
-      set_target_properties(${tgt} PROPERTIES
-        ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib" # Windows/Linux/macOS, .a, .lib
-        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin" # Windows .dll, .exe
-        FOLDER "3rdparty"
-      )
-
-      get_target_property(_apple_framework ${tgt} MACOSX_FRAMEWORK_NAME)
-      if(NOT _apple_framework)
-        set_target_properties(${tgt} PROPERTIES
-          LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib" # .so, .dylib, windows imported .lib
-        )
-      endif()
-    endif()
-
+    ax_configure_target_output(${tgt} ${tgt_type} "3rdparty")
   endforeach()
 endfunction()
 

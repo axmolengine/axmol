@@ -228,9 +228,10 @@ void TextureImpl::updateCompressedSubData(int xoffset,
     box.bottom = static_cast<UINT>(yoffset + height);
     box.back   = 1;
 
-    auto context     = static_cast<DriverImpl*>(axdrv)->getContext();
-    UINT subresource = D3D11CalcSubresource(level, layerIndex, _desc.mipLevels);
-    context->UpdateSubresource(_nativeTexture, subresource, &box, data, 0, 0);
+    auto context        = static_cast<DriverImpl*>(axdrv)->getContext();
+    UINT subresource    = D3D11CalcSubresource(level, layerIndex, _desc.mipLevels);
+    const auto rowPitch = RHIUtils::computeRowPitch(_desc.pixelFormat, width);
+    context->UpdateSubresource(_nativeTexture, subresource, &box, data, rowPitch, 0);
 
     if (shouldGenMipmaps(level))
         generateMipmaps(context);

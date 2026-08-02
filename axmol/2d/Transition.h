@@ -108,7 +108,7 @@ public:
     //
     // Overrides
     //
-    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags) override;
     void onEnter() override;
     void onExit() override;
     void cleanup() override;
@@ -803,7 +803,7 @@ public:
     /**
      * @lua NA
      */
-    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags) override;
     /**
      * @lua NA
      */
@@ -848,7 +848,7 @@ public:
     ActionInterval* easeActionWithAction(ActionInterval* action) override;
     /**
      */
-    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags) override;
 
     TransitionTurnOffTiles();
     virtual ~TransitionTurnOffTiles();
@@ -891,7 +891,7 @@ public:
     void onEnter() override;
     ActionInterval* easeActionWithAction(ActionInterval* action) override;
     void onExit() override;
-    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags) override;
 
     TransitionSplitCols();
     virtual ~TransitionSplitCols();
@@ -962,7 +962,7 @@ public:
     void onEnter() override;
     ActionInterval* easeActionWithAction(ActionInterval* action) override;
     void onExit() override;
-    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags) override;
 
     TransitionFadeTR();
     virtual ~TransitionFadeTR();

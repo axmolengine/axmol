@@ -7,4 +7,4 @@ target_include_directories(
   ${target_name} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-setup_ax_extension_config(${target_name})
+ax_setup_ext_config(${target_name})

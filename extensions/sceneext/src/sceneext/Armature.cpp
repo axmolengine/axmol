@@ -360,7 +360,7 @@ void Armature::update(float dt)
     _armatureTransformDirty = false;
 }
 
-void Armature::draw(ax::Renderer* renderer, const Mat4& transform, uint32_t flags)
+void Armature::draw(const ax::SceneRenderState& state, const Mat4& transform, uint32_t flags)
 {
     if (_parentBone == nullptr && _batchNode == nullptr)
     {
@@ -400,17 +400,17 @@ void Armature::draw(ax::Renderer* renderer, const Mat4& transform, uint32_t flag
                         skin->setBlendFunc(_blendFunc);
                     }
                 }
-                skin->draw(renderer, transform, flags);
+                skin->draw(state, transform, flags);
             }
             break;
             case CS_DISPLAY_ARMATURE:
             {
-                node->draw(renderer, transform, flags);
+                node->draw(state, transform, flags);
             }
             break;
             default:
             {
-                node->visit(renderer, transform, flags);
+                node->visit(state, transform, flags);
                 //                AX_NODE_DRAW_SETUP();
             }
             break;
@@ -418,7 +418,7 @@ void Armature::draw(ax::Renderer* renderer, const Mat4& transform, uint32_t flag
         }
         else if (Node* node = dynamic_cast<Node*>(object))
         {
-            node->visit(renderer, transform, flags);
+            node->visit(state, transform, flags);
             //            AX_NODE_DRAW_SETUP();
         }
     }
@@ -436,7 +436,7 @@ void Armature::onExit()
     unscheduleUpdate();
 }
 
-void Armature::visit(ax::Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags)
+void Armature::visit(const ax::SceneRenderState& state, const Mat4& parentTransform, uint32_t parentFlags)
 {
     // quick return if not visible. children won't be drawn.
     if (!_visible)
@@ -444,12 +444,12 @@ void Armature::visit(ax::Renderer* renderer, const Mat4& parentTransform, uint32
         return;
     }
 
-    uint32_t flags = processParentFlags(parentTransform, parentFlags);
+    uint32_t flags = processParentFlags(state, parentTransform, parentFlags);
 
-    if (isVisitableByVisitingCamera())
+    if (isVisitableByCamera(state.cameraFlag))
     {
         sortAllChildren();
-        draw(renderer, _modelViewTransform, flags);
+        draw(state, _modelViewTransform, flags);
     }
 }
 

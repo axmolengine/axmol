@@ -211,23 +211,24 @@ int FastTMXLayer::batchIndexForGID(uint32_t gid) const
     return -1;
 }
 
-void FastTMXLayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+void FastTMXLayer::draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags)
 {
     updateTotalQuads();
 
     const float refTileX = _batches.empty() ? 1.0f : _batches[0].tilesetInfo->_tileSize.x;
-    auto cam             = Camera::getVisitingCamera();
+    auto cam             = state.getCamera();
     if (!cam)
         return;
-    if (flags != 0 || _dirty || _quadsDirty || !_cameraPositionDirty.fuzzyEquals(cam->getPosition(), refTileX) ||
+    const Vec2 cameraPosition(state.getView().position.x, state.getView().position.y);
+    if (flags != 0 || _dirty || _quadsDirty || !_cameraPositionDirty.fuzzyEquals(cameraPosition, refTileX) ||
         _cameraZoomDirty != cam->getZoom())
     {
-        _cameraPositionDirty = cam->getPosition();
+        _cameraPositionDirty = cameraPosition;
         auto zoom = _cameraZoomDirty = cam->getZoom();
         Vec2 s                       = _director->getVisibleSize();
         const Vec2& anchor           = getAnchorPoint();
-        auto rect                    = Rect(cam->getPositionX() - s.width * zoom * (anchor.x == 0.0f ? 0.5f : anchor.x),
-                                            cam->getPositionY() - s.height * zoom * (anchor.y == 0.0f ? 0.5f : anchor.y), s.width * zoom,
+        auto rect                    = Rect(cameraPosition.x - s.width * zoom * (anchor.x == 0.0f ? 0.5f : anchor.x),
+                                            cameraPosition.y - s.height * zoom * (anchor.y == 0.0f ? 0.5f : anchor.y), s.width * zoom,
                                             s.height * zoom);
 
         Mat4 inv = transform;
@@ -240,7 +241,7 @@ void FastTMXLayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flag
         _dirty = false;
     }
 
-    const auto& projectionMat = Camera::getVisitingViewProjectionMatrix();
+    const auto& projectionMat = state.getViewProjectionMatrix();
     Mat4 finalMat             = projectionMat * _modelViewTransform;
     // Submit batches lowest-firstGid first so base/terrain tiles (low GIDs) draw behind
     // overlay/object tiles (high GIDs) that share the same vertexZ.
@@ -252,7 +253,7 @@ void FastTMXLayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flag
             {
                 // All commands in a batch share the same program, so the cached location is valid.
                 cmd->unsafePS()->setUniform(it->mvpMatrixLocation, finalMat.m, sizeof(finalMat.m));
-                renderer->addCommand(cmd);
+                state.getRenderer()->addCommand(cmd);
             }
         }
     }

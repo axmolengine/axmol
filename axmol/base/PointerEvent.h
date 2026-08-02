@@ -49,8 +49,17 @@ struct AX_DLL PointerHitResult
 {
     bool hit{false};
     Vec3 worldPoint{Vec3::zero};
+    Vec3 visualPoint{Vec3::zero};
     const Camera* camera{nullptr};
     const Node* target{nullptr};
+    bool visualPointValid{false};
+};
+
+struct AX_DLL PointerRayContext
+{
+    Ray trackingRay;
+    Mat4 primaryTrackingToWorld{Mat4::identity};
+    float trackingScale{1.0f};
 };
 
 /** @class PointerEvent
@@ -257,6 +266,9 @@ public:
     [[internal]] void setRay(const Ray& ray) { _ray = ray; }
     const Ray& getRay() const { return _ray; }
     const Ray& getPreviousRay() const { return _previousRay; }
+    [[internal]] void setRayContext(const PointerRayContext* context);
+    [[internal]] void clearRayContext();
+    [[internal]] bool resolveRayForCamera(const Camera* camera);
 
     [[internal]] void setHitResult(const Vec3& worldPoint, const Camera* camera, const Node* target);
     [[internal]] void clearHitResult();
@@ -270,6 +282,8 @@ protected:
     const Camera* _camera{nullptr};
     Ray _ray;
     Ray _previousRay;
+    PointerRayContext _rayContext;
+    bool _hasRayContext{false};
     PointerHitResult _hitResult;
     std::optional<Vec3> _previousHitPoint;
     std::optional<Vec3> _startHitPoint;

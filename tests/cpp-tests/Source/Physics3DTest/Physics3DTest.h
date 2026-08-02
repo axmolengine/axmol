@@ -34,6 +34,7 @@ namespace ax
 {
 
 class Joint3D;
+class Ray;
 class Rigidbody3D;
 
 }  // namespace ax
@@ -59,6 +60,7 @@ public:
 
 protected:
     void shootBox(const ax::Vec3& des);
+    void shootBox(const ax::Ray& ray);
 
 protected:
     std::string _title;

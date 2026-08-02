@@ -1,11 +1,11 @@
-
+﻿
 #ifndef __EFFEKSEER_EFFECT_H__
 #define __EFFEKSEER_EFFECT_H__
 
 //----------------------------------------------------------------------------------
 // Include
 //----------------------------------------------------------------------------------
-#include "Effekseer.Base.h"
+#include "Effekseer.Base.Pre.h"
 #include "Effekseer.File.h"
 
 //----------------------------------------------------------------------------------
@@ -66,14 +66,14 @@ struct EffectInstanceTerm
 	\~English	Minimum end time that the first instance may exist
 	\~Japanese	最初のインスタンスが存在する可能性のある最小の終了時間
 	*/
-	int32_t FirstInstanceEndMin = INT_MAX;
+	int32_t FirstInstanceEndMin = std::numeric_limits<int32_t>::max();
 
 	/**
 	@brief
 	\~English	Maximum end time that the first instance may exist
 	\~Japanese	最初のインスタンスが存在する可能性のある最大の終了時間
 	*/
-	int32_t FirstInstanceEndMax = INT_MAX;
+	int32_t FirstInstanceEndMax = std::numeric_limits<int32_t>::max();
 
 	/**
 	@brief
@@ -94,14 +94,14 @@ struct EffectInstanceTerm
 	\~English	Minimum end time that the last instance may exist
 	\~Japanese	最後のインスタンスが存在する可能性のある最小の終了時間
 	*/
-	int32_t LastInstanceEndMin = INT_MAX;
+	int32_t LastInstanceEndMin = std::numeric_limits<int32_t>::max();
 
 	/**
 	@brief
 	\~English	Maximum end time that the last instance may exist
 	\~Japanese	最後のインスタンスが存在する可能性のある最大の終了時間
 	*/
-	int32_t LastInstanceEndMax = INT_MAX;
+	int32_t LastInstanceEndMax = std::numeric_limits<int32_t>::max();
 };
 
 /**
@@ -603,35 +603,34 @@ public:
 	*/
 	virtual EffectTerm CalculateTerm() const = 0;
 
+	/**
+	@brief
+	\~English	Get values of default dynamic inputs.
+	\~Japanese	動的パラメーターのデフォルトの値を取得する。
+	*/
+	virtual std::array<float, 4> GetDefaultDynamicInputs() const = 0;
+
 	virtual EffectImplemented* GetImplemented() = 0;
 	virtual const EffectImplemented* GetImplemented() const = 0;
 };
 
 /**
-@brief	共通描画パラメーター
-@note
-大きく変更される可能性があります。
+	@brief
+	\~English	Node rendering parameters
+	\~Japanese	ノードの描画パラメーター
+	@note
+	\~English
+	The members of this struct are subject to significant change.
+	\~Japanese
+	この構造体は内容が大きく変更される可能性があります。
 */
 struct EffectBasicRenderParameter
 {
 	int32_t MaterialIndex = -1;
 
-	int32_t ColorTextureIndex;
-
-	int32_t AlphaTextureIndex;
-	TextureWrapType AlphaTexWrapType;
-
-	int32_t UVDistortionIndex;
-	TextureWrapType UVDistortionTexWrapType;
-
-	int32_t BlendTextureIndex;
-	TextureWrapType BlendTexWrapType;
-
-	int32_t BlendAlphaTextureIndex;
-	TextureWrapType BlendAlphaTexWrapType;
-
-	int32_t BlendUVDistortionTextureIndex;
-	TextureWrapType BlendUVDistortionTexWrapType;
+	std::array<int32_t, TextureSlotMax> TextureIndexes;
+	std::array<TextureFilterType, TextureSlotMax> TextureFilters;
+	std::array<TextureWrapType, TextureSlotMax> TextureWraps;
 
 	NodeRendererFlipbookParameter FlipbookParams;
 
@@ -662,8 +661,6 @@ struct EffectBasicRenderParameter
 	} EdgeParam;
 
 	AlphaBlendType AlphaBlend;
-	TextureFilterType FilterType;
-	TextureWrapType WrapType;
 	bool ZWrite;
 	bool ZTest;
 	bool Distortion;
@@ -685,7 +682,8 @@ struct EffectBasicRenderParameter
 */
 struct EffectModelParameter
 {
-	bool Lighting;
+	int32_t ModelIndex;
+	CullingType Culling;
 };
 
 /**
@@ -709,9 +707,14 @@ public:
 	virtual Effect* GetEffect() const = 0;
 
 	/**
-	@brief
-	\~English	Get a generation in the node tree. The generation increases by 1 as it moves a child node.
-	\~Japanese	ノードツリーの世代を取得する。世代は子のノードになるにしたがって1増える。
+		@brief	Get the type of this node
+	*/
+	virtual EffectNodeType GetType() const = 0;
+
+	/**
+		@brief
+		\~English	Get a generation in the node tree. The generation increases by 1 as it moves a child node.
+		\~Japanese	ノードツリーの世代を取得する。世代は子のノードになるにしたがって1増える。
 	*/
 	virtual int GetGeneration() const = 0;
 

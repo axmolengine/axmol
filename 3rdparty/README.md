@@ -86,7 +86,7 @@
 
 ## ghc (iOS < 13 ONLY)
 - [![Upstream](https://img.shields.io/github/v/release/gulrak/filesystem?label=Upstream)](https://github.com/gulrak/filesystem)
-- Version: 1.5.14
+- Version: 1.5.16
 - License: MIT
 
 ## jni.hpps
@@ -111,7 +111,7 @@
 
 ## llhttp
 - [![Upstream](https://img.shields.io/github/v/release/nodejs/llhttp?label=Upstream)](https://github.com/nodejs/llhttp)
-- Version: 9.4.2
+- Version: 9.4.3
 - License: MIT
 
 ## lua
@@ -241,7 +241,7 @@
 
 ## simdjson
 - [![Upstream](https://img.shields.io/github/v/tag/simdjson/simdjson?label=Upstream)](https://github.com/simdjson/simdjson)
-- Version: 4.6.4
+- Version: 4.6.5
 - License: Apache-2.0
 
 ## stb (stb_image)

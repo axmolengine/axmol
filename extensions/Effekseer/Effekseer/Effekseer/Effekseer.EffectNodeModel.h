@@ -1,4 +1,4 @@
-
+﻿
 #ifndef __EFFEKSEER_ParameterNODE_MODEL_H__
 #define __EFFEKSEER_ParameterNODE_MODEL_H__
 
@@ -28,7 +28,7 @@ public:
 
 public:
 	AlphaBlendType AlphaBlend;
-	int32_t ModelIndex;
+	int32_t ModelIndex = -1;
 	BillboardType Billboard;
 	CullingType Culling;
 
@@ -55,10 +55,12 @@ public:
 
 	void UpdateRenderedInstance(Instance& instance, InstanceGroup& instanceGroup, Manager* manager) override;
 
-	eEffectNodeType GetType() const override
+	EffectNodeType GetType() const override
 	{
-		return eEffectNodeType::Model;
+		return EffectNodeType::Model;
 	}
+
+	EffectModelParameter GetEffectModelParameter() override;
 
 private:
 	ModelRenderer::NodeParameter GetNodeParameter(const Manager* manager, const InstanceGlobal* global);

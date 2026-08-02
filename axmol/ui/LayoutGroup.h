@@ -371,7 +371,7 @@ public:
     void addChild(Node* child, int localZOrder, int tag) override;
     void addChild(Node* child, int localZOrder, std::string_view name) override;
 
-    void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+    void visit(const SceneRenderState& state, const Mat4& parentTransform, uint32_t parentFlags) override;
 
     void removeChild(Node* child, bool cleanup = true) override;
 
@@ -476,8 +476,8 @@ protected:
     void copySpecialProperties(Widget* model) override;
     void copyClonedWidgetChildren(Widget* model) override;
 
-    void stencilClippingVisit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags);
-    void scissorClippingVisit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags);
+    void stencilClippingVisit(const SceneRenderState& state, const Mat4& parentTransform, uint32_t parentFlags);
+    void scissorClippingVisit(const SceneRenderState& state, const Mat4& parentTransform, uint32_t parentFlags);
 
     void setStencilClippingSize(const Vec2& size);
     const Rect& getClippingRect();

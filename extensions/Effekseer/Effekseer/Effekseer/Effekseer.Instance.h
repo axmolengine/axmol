@@ -1,4 +1,4 @@
-
+﻿
 #ifndef __EFFEKSEER_INSTANCE_H__
 #define __EFFEKSEER_INSTANCE_H__
 
@@ -22,13 +22,14 @@
 #include "Effekseer.EffectNodeRing.h"
 #include "Effekseer.EffectNodeSprite.h"
 #include "Effekseer.EffectNodeTrack.h"
-#include "ForceField/ForceFields.h"
+#include "ForceField/Effekseer.ForceFields.h"
 
-#include "Parameter/AlphaCutoff.h"
-#include "Parameter/CustomData.h"
-#include "Parameter/Rotation.h"
-#include "Parameter/Scaling.h"
-#include "Parameter/UV.h"
+#include "Parameter/Effekseer.AlphaCutoff.h"
+#include "Parameter/Effekseer.Collisions.h"
+#include "Parameter/Effekseer.CustomData.h"
+#include "Parameter/Effekseer.Rotation.h"
+#include "Parameter/Effekseer.Scaling.h"
+#include "Parameter/Effekseer.UV.h"
 
 namespace Effekseer
 {
@@ -71,8 +72,16 @@ protected:
 	SIMD::Vec3f prevPosition_;
 	SIMD::Vec3f prevGlobalPosition_;
 
+	SIMD::Vec3f prevLocalVelocity_;
+
 	SIMD::Vec3f parentPosition_;
-	SIMD::Vec3f steeringVec_;
+
+	SIMD::Vec3f steering_vec_;
+
+	SIMD::Vec3f location_modify_global_;
+	SIMD::Vec3f velocity_modify_global_;
+
+	SIMD::Vec3f globalDirection_;
 
 public:
 	static const int32_t ChildrenMax = 16;
@@ -110,7 +119,7 @@ public:
 		float steeringSpeed;
 	} followParentParam;
 
-	InstanceTranslationState translation_values;
+	InstanceTranslationState translation_state_;
 
 	RotationState rotation_values;
 
@@ -131,18 +140,18 @@ public:
 	eInstanceState m_State = eInstanceState::INSTANCE_STATE_ACTIVE;
 
 	// 生存時間
-	float m_LivedTime = 0;
+	float livedTime_ = 0;
 
 	// 生成されてからの時間
-	float m_LivingTime = 0;
+	float livingTime_ = 0;
 
 	// 削除されてからの時間
-	float m_RemovingTime = 0;
+	float removingTime_ = 0;
 
 	std::array<InstanceUVState, ParameterRendererCommon::UVParameterNum> uvAnimationData_;
 
 	// Spawning Method matrix
-	SIMD::Mat43f m_GenerationLocation;
+	SIMD::Mat43f generationLocation_;
 
 	// a transform matrix in the world coordinate
 	TimeSeriesMatrix globalMatrix_;
@@ -150,10 +159,10 @@ public:
 	SIMD::Mat43f globalMatrix_rendered;
 
 	// parent's transform matrix
-	SIMD::Mat43f m_ParentMatrix;
+	SIMD::Mat43f parentMatrix_;
 
 	// FirstUpdate実行前
-	bool m_IsFirstTime;
+	bool isFirstTime_;
 
 	// 変換用行列が計算済かどうか
 	bool m_GlobalMatrix43Calculated = false;
@@ -166,17 +175,23 @@ public:
 
 	int32_t m_InstanceNumber = 0;
 
-	uint32_t m_sequenceNumber = 0;
+	uint32_t sequenceNumber_ = 0;
 
-	AlphaCuttoffState alpha_cutoff_values;
+	AlphaCuttoffState alphaCutoffValues_;
 
-	float m_AlphaThreshold = 0.0f;
+	float alphaThreshold_ = 0.0f;
+
+	CollisionsState collisionState_;
+
+	bool isUVFlippedH_ = false;
+
+	int32_t gpuEmitterID_ = -1;
 
 	Instance(ManagerImplemented* pManager, EffectNodeImplemented* pEffectNode, InstanceContainer* pContainer, InstanceGroup* pGroup);
 
 	virtual ~Instance();
 
-	void GenerateChildrenInRequired();
+	void GenerateChildrenIfRequired();
 
 	void UpdateChildrenGroupMatrix();
 
@@ -185,12 +200,12 @@ public:
 public:
 	float GetNormalizedLivetime() const
 	{
-		return Clamp(m_LivingTime / m_LivedTime, 1.0f, 0.0f);
+		return Clamp(livingTime_ / livedTime_, 1.0f, 0.0f);
 	}
 
 	bool IsFirstTime() const
 	{
-		return m_IsFirstTime;
+		return isFirstTime_;
 	}
 
 	eInstanceState GetState() const;
@@ -233,11 +248,36 @@ public:
 		return m_randObject;
 	}
 
+	void SetUVFlippedH(bool isFlipped)
+	{
+		isUVFlippedH_ = isFlipped;
+	}
+
+	bool IsUVFlippedH() const
+	{
+		return isUVFlippedH_;
+	}
+
 	bool AreChildrenActive() const;
+
+	bool HasCollidedThisFrame() const;
 
 	float GetFlipbookIndexAndNextRate() const;
 
+	SIMD::Vec3f GetGlobalDirection() const;
+
 private:
+	SIMD::Vec3f CalculateLocalAcceleration(const SIMD::Vec3f& localPosition,
+										   SIMD::Vec3f& steeringVec,
+										   InstanceTranslationState& translationState,
+										   RandObject& randObj,
+										   float livingTime,
+										   float livedTime,
+										   float deltaFrame,
+										   CoordinateSystem coordinateSystem);
+
+	void InitializeGlobalDirection();
+
 	void UpdateTransform(float deltaFrame);
 
 	void UpdateParentMatrix(float deltaFrame);
@@ -245,6 +285,8 @@ private:
 	float GetFlipbookIndexAndNextRate(const UVAnimationType& UVType, const UVParameter& UV, const InstanceUVState& data) const;
 
 	float GetUVTime() const;
+
+	RectF ApplyUVHorizontalFlip(RectF uv) const;
 
 	EffectNode* GetEffectNode() const
 	{

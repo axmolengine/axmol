@@ -1,8 +1,8 @@
-
+﻿
 #ifndef __EFFEKSEER_FILE_H__
 #define __EFFEKSEER_FILE_H__
 
-#include "Effekseer.Base.h"
+#include "Effekseer.Base.Pre.h"
 
 namespace Effekseer
 {

@@ -613,6 +613,12 @@ void RenderContextImpl::endRenderPass()
 {
     auto rtImpl = static_cast<RenderTargetImpl*>(_currentRT);
     rtImpl->endRenderPass(_currentCmdBuffer);
+    if (rtImpl->isDefaultRenderTarget())
+    {
+        auto colorAttachment = rtImpl->getColorAttachment(_imageIndex);
+        if (colorAttachment)
+            colorAttachment->setKnownLayout(VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
+    }
 
     // Reset state cache
     _programState  = nullptr;
@@ -1287,6 +1293,14 @@ void RenderContextImpl::doReadPixels(RenderTarget* rt, std::function<void(const 
     const uint32_t height = colorDesc.height;
     const VkFormat format = UtilsVK::toVkFormat(colorDesc.pixelFormat, colorDesc.colorSpace == ColorSpace::Srgb);
 
+    // Read the true current layout from tracker.
+    VkImageLayout currentLayout = colorAttachment->getCurrentLayout();
+    if (rtImpl->isDefaultRenderTarget() && currentLayout == VK_IMAGE_LAYOUT_UNDEFINED)
+    {
+        callback(pbd);
+        return;
+    }
+
     // Basic stride for RGBA8
     const uint32_t pixelStride    = 4;
     const VkDeviceSize bufferSize = static_cast<VkDeviceSize>(width) * static_cast<VkDeviceSize>(height) * pixelStride;
@@ -1313,11 +1327,6 @@ void RenderContextImpl::doReadPixels(RenderTarget* rt, std::function<void(const 
     };
 
     const VkImage srcImage = colorAttachment->internalHandle().image;
-
-    // Read the true current layout from tracker
-    VkImageLayout currentLayout = colorAttachment->getCurrentLayout();
-    if (rtImpl->isDefaultRenderTarget() && currentLayout == VK_IMAGE_LAYOUT_UNDEFINED)
-        currentLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 
     // Transition to TRANSFER_SRC_OPTIMAL using TextureImpl
     colorAttachment->transitionLayout(submission, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
@@ -1357,6 +1366,79 @@ void RenderContextImpl::doReadPixels(RenderTarget* rt, std::function<void(const 
     vmaDestroyBuffer(_driver->getVmaAllocator(), stagingBuf, stagingAlloc);
 
     callback(pbd);
+}
+
+bool RenderContextImpl::copyTexture(Texture* src, Texture* dst)
+{
+    if (!validateTextureCopy(src, dst) || !_inFrame || _currentCmdBuffer == VK_NULL_HANDLE)
+        return false;
+
+    auto* srcImpl = static_cast<TextureImpl*>(src);
+    auto* dstImpl = static_cast<TextureImpl*>(dst);
+
+    if (!srcImpl->internalHandle().image)
+        return false;
+
+    if (!dstImpl->internalHandle().image)
+        dstImpl->updateData(nullptr, dst->getWidth(), dst->getHeight(), 0, 0);
+
+    if (!dstImpl->internalHandle().image || srcImpl->internalHandle().image == dstImpl->internalHandle().image ||
+        !(srcImpl->getUsageFlags() & VK_IMAGE_USAGE_TRANSFER_SRC_BIT) ||
+        !(dstImpl->getUsageFlags() & VK_IMAGE_USAGE_TRANSFER_DST_BIT))
+        return false;
+
+    const auto& srcDesc  = srcImpl->getDesc();
+    const auto& dstDesc  = dstImpl->getDesc();
+    const auto srcFormat = UtilsVK::toVkFormat(srcDesc.pixelFormat, srcDesc.colorSpace == ColorSpace::Srgb);
+    const auto dstFormat = UtilsVK::toVkFormat(dstDesc.pixelFormat, dstDesc.colorSpace == ColorSpace::Srgb);
+    if (srcFormat == VK_FORMAT_UNDEFINED || srcFormat != dstFormat)
+        return false;
+
+    const auto srcLayout    = srcImpl->getCurrentLayout();
+    const auto oldDstLayout = dstImpl->getCurrentLayout();
+    if (srcLayout == VK_IMAGE_LAYOUT_UNDEFINED)
+        return false;
+
+    const auto finalDstLayout = oldDstLayout != VK_IMAGE_LAYOUT_UNDEFINED
+                                    ? oldDstLayout
+                                    : (dstImpl->canUseShaderReadOnlyLayout() ? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+                                                                             : VK_IMAGE_LAYOUT_GENERAL);
+
+    srcImpl->transitionLayout(_currentCmdBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+    dstImpl->transitionLayout(_currentCmdBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+
+    VkImageCopy region{};
+    region.srcSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+    region.srcSubresource.mipLevel       = 0;
+    region.srcSubresource.baseArrayLayer = 0;
+    region.srcSubresource.layerCount     = 1;
+    region.dstSubresource                = region.srcSubresource;
+    region.extent = {static_cast<uint32_t>(src->getWidth()), static_cast<uint32_t>(src->getHeight()), 1};
+
+    vkCmdCopyImage(_currentCmdBuffer, srcImpl->internalHandle().image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                   dstImpl->internalHandle().image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
+
+    srcImpl->transitionLayout(_currentCmdBuffer, srcLayout);
+    dstImpl->transitionLayout(_currentCmdBuffer, finalDstLayout);
+    srcImpl->setLastFenceValue(_frameFenceValue);
+    dstImpl->setLastFenceValue(_frameFenceValue);
+    return true;
+}
+
+bool RenderContextImpl::copyTexture(RenderTarget* src, Texture* dst)
+{
+    if (!src || !dst)
+        return false;
+
+    const size_t colorIndex = src->isDefaultRenderTarget() ? _imageIndex : 0;
+    if (colorIndex >= src->_color.size() || src->_color[colorIndex].level != 0 || !src->_color[colorIndex].texture)
+        return false;
+
+    auto* color = static_cast<TextureImpl*>(src->_color[colorIndex].texture);
+    if (src->isDefaultRenderTarget() && color->getCurrentLayout() == VK_IMAGE_LAYOUT_UNDEFINED)
+        return false;
+
+    return copyTexture(color, dst);
 }
 
 }  // namespace ax::rhi::vk

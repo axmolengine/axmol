@@ -182,7 +182,7 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     virtual void setup() override;
-    virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
+    virtual void draw(const ax::SceneRenderState& state, const ax::Mat4& transform, uint32_t flags) override;
 
     virtual void setupStencilForClippingOnPlane(int plane);
     virtual void setupStencilForDrawingOnPlane(int plane);

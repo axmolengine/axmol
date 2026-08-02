@@ -23,15 +23,26 @@
  ****************************************************************************/
 
 #include "EffekseerTest.h"
-#include <iostream>
-#include <fstream>
-#include <string.h>
+#include "../MeshRendererTest/DrawNode3D.h"
+#include "axmol/ui/Button.h"
 
 using namespace ax;
 
+// clang-format off
+static const TestEffect _effects[] = {
+    {"Homing_Laser01.efk",        "Homing Laser01",         1.0f, true, Vec3(0.0f, 30.0f, 0.0f)},
+    {"Laser01.efkefc",            "Laser01",                1.0f},
+    {"Laser02.efkefc",            "Laser02",                1.0f},
+    {"Laser03.efkefc",            "Laser03",                1.0f},
+    {"Laser04.efkefc",            "Laser04",                1.0f},
+    {"TriggerLaser.efkefc",       "Trigger Laser",          1.0f},
+    {"Simple_Distortion.efkefc",  "Simple Distortion",      1.0f},
+};
+// clang-format on
+
 //------------------------------------------------------------------
 //
-// SpineTestScene
+// EffekseerTests
 //
 //------------------------------------------------------------------
 
@@ -49,25 +60,34 @@ EffekseerTests::~EffekseerTests()
     FileUtils::getInstance()->setSearchPaths(_searchPaths);
 }
 
-EffekseerTest::EffekseerTest() : _title("EffekseerTest") {}
+//------------------------------------------------------------------
+//
+// EffekseerTest
+//
+//------------------------------------------------------------------
+
+EffekseerTest::EffekseerTest() {}
 
 EffekseerTest::~EffekseerTest()
 {
-    /**
-    終了時にマネージャーを破棄します。
+    if (_emitter)
+    {
+        _emitter->stop();
+        _emitter->removeFromParent();
+        _emitter->release();
+        _emitter = nullptr;
+    }
 
-    You will destroy the manager on exit.
-
-    你會在最後摧毀經理。
-
-    你会在最后摧毁经理。
-        */
-    manager->release();
+    if (_manager)
+    {
+        _manager->release();
+        _manager = nullptr;
+    }
 }
 
 std::string EffekseerTest::title() const
 {
-    return _title;
+    return "EffekseerTest";
 }
 
 bool EffekseerTest::init()
@@ -75,142 +95,164 @@ bool EffekseerTest::init()
     if (!TestCase::init())
         return false;
 
-    auto rsize = _director->getRenderView()->getDesignResolutionSize();
+    constexpr float hPadding = 300;
 
-    // auto sprite = Sprite::create("HelloWorld.png");
-    // sprite->setPosition(Vec2(320, 200));
-    // this->addChild(sprite, 0);
+    auto visibleSize = _director->getVisibleSize();
 
-    // for update
-    this->scheduleUpdate();
+    // 3D camera (perspective) for Effekseer effects
+    _3dCamera = Camera::create(CameraMode::Perspective);
+    _3dCamera->setCameraFlag(CameraFlag::USER1);
+    _3dCamera->setPosition3D(Vec3(0, 10, 24));
+    _3dCamera->lookAt(Vec3(0, 0, 0), Vec3(0, 1, 0));
+    _3dCamera->setBackgroundBrush(CameraBackgroundBrush::createColorBrush(Color(Color32(0, 0, 0)), 1.0f));
+    addChild(_3dCamera);
 
-    /**
-            efk::EffectManagerのインスタンスを生成します。
+    // 3D grid
+    auto grid                   = DrawNode3D::create();
+    constexpr int gridLineCount = 20;
+    constexpr float gridStep    = 2.0f;
+    constexpr float gridExtent  = gridLineCount * gridStep;
+    const Color gridColor(0.25f, 0.25f, 0.25f, 0.55f);
+    const Color axisXColor(0.75f, 0.20f, 0.20f, 0.85f);
+    const Color axisZColor(0.20f, 0.35f, 0.85f, 0.85f);
 
-            You create an instance of efk::EffectManager.
+    for (int i = -gridLineCount; i <= gridLineCount; ++i)
+    {
+        const float p = i * gridStep;
+        grid->drawLine(Vec3(-gridExtent, 0, p), Vec3(gridExtent, 0, p), i == 0 ? axisXColor : gridColor);
+        grid->drawLine(Vec3(p, 0, -gridExtent), Vec3(p, 0, gridExtent), i == 0 ? axisZColor : gridColor);
+    }
+    grid->setCameraMask(static_cast<unsigned short>(CameraFlag::USER1));
+    addChild(grid, -10);
 
-            您創建一個efk::EffectManager的實例。
+    // Create effect manager
+    _manager = efk::EffectManager::create(visibleSize);
+    _manager->setIsDistortionEnabled(true);
 
-            您创建一个efk::EffectManager的实例。
-    */
-    manager = efk::EffectManager::create(rsize);
+    // Label
+    _label = Label::createWithTTF("", "fonts/Marker Felt.ttf", 18);
+    _label->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - 60));
+    addChild(_label, 10);
+
+    // Prev button
+    auto prevBtn = ui::Button::create();
+    prevBtn->setTitleText("<< Prev");
+    prevBtn->setTitleFontSize(20);
+    prevBtn->setPosition(Vec2(visibleSize.width - hPadding, 30));
+    prevBtn->addClickEventListener([this](auto*) { switchEffect(-1); });
+    addChild(prevBtn, 10);
+
+    // Next button
+    auto nextBtn = ui::Button::create();
+    nextBtn->setTitleText("Next >>");
+    nextBtn->setTitleFontSize(20);
+    nextBtn->setPosition(Vec2(hPadding, 30));
+    nextBtn->addClickEventListener([this](auto*) { switchEffect(1); });
+    addChild(nextBtn, 10);
+
+    // Keyboard: left/right arrow
+    auto kb          = KeyboardEventListener::create();
+    kb->onKeyPressed = [this](KeyboardEvent* event) {
+        auto code = event->getKeyCode();
+        if (code == KeyboardEvent::KeyCode::KEY_LEFT_ARROW)
+            switchEffect(-1);
+        if (code == KeyboardEvent::KeyCode::KEY_RIGHT_ARROW)
+            switchEffect(1);
+    };
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(kb, this);
+
+    // Pointer: drag to orbit camera
+    auto pointerListener           = PointerEventListener::create();
+    pointerListener->onPointerDown = AX_CALLBACK_1(EffekseerTest::onPointerDown, this);
+    pointerListener->onPointerMove = AX_CALLBACK_1(EffekseerTest::onPointerMove, this);
+    pointerListener->onPointerUp   = AX_CALLBACK_1(EffekseerTest::onPointerUp, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(pointerListener, this);
+
+    scheduleUpdate();
+
+    // Play first effect
+    _currentIndex = 0;
+    playCurrentEffect();
 
     return true;
 }
 
-void EffekseerTest::update(float delta)
+void EffekseerTest::switchEffect(int direction)
 {
-    // Effect1
-    if (count % 300 == 0)
-    {
-        /**
-                拡大率を指定してエフェクトファイルを読み込みます。
-
-                You read an effect file with specifying scale.
-
-                您通過指定比例讀取效果文件。
-
-                您通过指定比例读取效果文件。
-        */
-        auto effect = efk::Effect::create("Laser01.efk", 13.0f);
-        if (effect != nullptr)
-        {
-            /**
-                    エミッターを生成し、パラメーターを設定してレイヤーに追加します。
-
-                    You generate an emitter, set parameters and add it to the layer.
-
-                    您會生成一個發射極，並通過將參數添加到該層。
-
-                    您会生成一个发射极，并通过将参数添加到该层。
-            */
-
-            auto emitter = efk::EffectEmitter::create(manager);
-            emitter->setEffect(effect);
-            emitter->setPlayOnEnter(true);
-
-            emitter->setRotation3D(cocos2d::Vec3(0, 90, 0));
-            emitter->setPosition(Vec2(320, 150));
-
-            // emitter->setScale(13);
-            this->addChild(emitter, 0);
-
-            // No need (because it uses autorelease after 1.41)
-            // effect->release();
-        }
-    }
-
-    // Effect2
-    if (count % 300 == 120)
-    {
-        /**
-        エフェクトファイルを読み込みます。
-
-        You read an effect file.
-
-        您讀取效果文件。
-
-        您读取效果文件。
-        */
-        auto effect = efk::Effect::create("Homing_Laser01.efk");
-        if (effect != nullptr)
-        {
-            /**
-            エミッターを生成し、パラメーターを設定してレイヤーに追加します。
-
-            You generate an emitter, set parameters and add it to the layer.
-
-            您會生成一個發射極，並通過將參數添加到該層。
-
-            您会生成一个发射极，并通过将参数添加到该层。
-            */
-
-            auto emitter = efk::EffectEmitter::create(manager);
-            emitter->setEffect(effect);
-            emitter->setPlayOnEnter(true);
-
-            emitter->setPosition(Vec2(320, 150));
-            emitter->setScale(4);
-            this->addChild(emitter, 0);
-
-            /**
-            Some parameters are required to set after addChild
-
-            一部のパラメーターはAddChildした後に設定する必要があります。
-            */
-            emitter->setTargetPosition(cocos2d::Vec3(320, 480, 0));
-
-            // No need (because it uses autorelease after 1.41)
-            // effect->release();
-        }
-    }
-
-    /**
-            毎フレーム、マネージャーを更新します。
-
-            You update the manager every frame.
-
-            您將更新每一幀，經理。
-
-            您将更新每一帧，经理。
-    */
-    manager->update();
-
-    count++;
+    constexpr auto EFFECT_COUNT = std::size(_effects);
+    _currentIndex               = (_currentIndex + direction + EFFECT_COUNT) % EFFECT_COUNT;
+    playCurrentEffect();
 }
 
-void EffekseerTest::visit(cocos2d::Renderer* renderer, const cocos2d::Mat4& parentTransform, uint32_t parentFlags)
+bool EffekseerTest::onPointerDown(ax::PointerEvent* event)
 {
-    /**
-            visitを継承して、エフェクトを実際に描画する処理を追加します。
+    return true;
+}
 
-            You inherit visit and add a process to actually draw the effect.
+void EffekseerTest::onPointerMove(ax::PointerEvent* event)
+{
+    if (!event->isCaptured())
+        return;
 
-            你繼承的visit，然後添加的實際繪製效果的過程。
+    auto delta = event->getWorldPoint() - event->getPrevWorldPoint();
+    _angle -= MathUtil::radians(delta.x);
+    _3dCamera->setPosition3D(Vec3(24.0f * sinf(_angle), 10.0f, 24.0f * cosf(_angle)));
+    _3dCamera->lookAt(Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 1.0f, 0.0f));
+}
 
-            你继承的visit，然后添加的实际绘制效果的过程。
-    */
-    manager->begin(renderer, _globalZOrder);
-    cocos2d::Scene::visit(renderer, parentTransform, parentFlags);
-    manager->end(renderer, _globalZOrder);
+void EffekseerTest::onPointerUp(ax::PointerEvent* event) {}
+
+void EffekseerTest::playCurrentEffect()
+{
+    // Stop old emitter
+    if (_emitter)
+    {
+        _emitter->stop();
+        _emitter->removeFromParent();
+        _emitter->release();
+        _emitter = nullptr;
+    }
+
+    const auto& entry = _effects[_currentIndex];
+
+    auto effect = efk::Effect::create(entry.filename, entry.magnification);
+    if (effect)
+    {
+        _emitter = efk::EffectEmitter::create(_manager);
+        _emitter->setEffect(effect);
+        _emitter->setPlayOnEnter(true);
+        _emitter->setCameraMask((int)CameraFlag::USER1);
+        _emitter->setIsLooping(true);
+        _emitter->retain();
+        addChild(_emitter, 0);
+
+        if (entry.hasTargetPosition)
+            _emitter->setTargetPosition(entry.targetPosition);
+    }
+
+    updateLabel();
+}
+
+void EffekseerTest::updateLabel()
+{
+    if (_label)
+    {
+        _label->setString(
+            fmt::format("[{}/{}] {}", _currentIndex + 1, std::size(_effects), _effects[_currentIndex].displayName));
+    }
+}
+
+void EffekseerTest::update(float delta)
+{
+    if (_manager)
+        _manager->update(delta);
+}
+
+void EffekseerTest::visit(const ax::SceneRenderState& state, const ax::Mat4& parentTransform, uint32_t parentFlags)
+{
+    if (_manager)
+        _manager->begin(state, _globalZOrder);
+    Scene::visit(state, parentTransform, parentFlags);
+    if (_manager)
+        _manager->end(state, _globalZOrder);
 }

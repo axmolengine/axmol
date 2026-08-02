@@ -151,6 +151,7 @@ public:
     const TextureHandle& internalHandle() const { return _nativeTexture; }
     VkSampler getSampler() const { return _sampler; }
     const TextureDesc& getDesc() const { return _desc; }
+    VkImageUsageFlags getUsageFlags() const { return _vkUsageFlags; }
 
     void setLastFenceValue(uint64_t fenceValue) { _lastFenceValue = fenceValue; }
 

@@ -34,7 +34,7 @@
 class CustomTableViewCell : public ax::extension::TableViewCell
 {
 public:
-    virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
+    virtual void draw(const ax::SceneRenderState& state, const ax::Mat4& transform, uint32_t flags) override;
 };
 
 #endif /* __CUSTOMTABELVIEWCELL_H__ */

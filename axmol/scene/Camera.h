@@ -42,6 +42,7 @@ class Scene;
 class RenderView;
 class RenderTexture;
 class CameraBackgroundBrush;
+struct SceneRenderState;
 
 /**
  * Note:
@@ -96,22 +97,6 @@ public:
      */
     static Camera* create(CameraMode mode);
 
-    /**
-     * Get the visiting camera , the visiting camera shall be set on Scene::render
-     */
-    static const Camera* getVisitingCamera() { return _visitingCamera; }
-
-    /**
-     * Set the visiting camera for draw context. Used by engine internals
-     * for offscreen capture (Transition, Utils, etc.)
-     */
-    static void setVisitingCamera(Camera* camera) { _visitingCamera = camera; }
-
-    /**
-     * Get the view-projection matrix of the current draw context.
-     */
-    static const Mat4& getVisitingViewProjectionMatrix();
-
     static const Viewport& getDefaultViewport();
     static void setDefaultViewport(const Viewport& vp);
 
@@ -135,6 +120,7 @@ public:
     /**get & set Camera flag*/
     CameraFlag getCameraFlag() const { return _cameraFlag; }
     void setCameraFlag(CameraFlag flag) { _cameraFlag = flag; }
+    CameraMode getCameraMode() const { return _cameraMode; }
 
     /**
      * Set a render texture as the camera's offscreen render target.
@@ -342,6 +328,7 @@ public:
      Use setBackgroundBrush to modify this default behavior.
      */
     void clearBackground();
+    void clearBackground(const SceneRenderState& state);
     /**
      Apply the FBO, RenderTargets and viewport.
      */
@@ -364,7 +351,7 @@ public:
      */
     CameraBackgroundBrush* getBackgroundBrush() const { return _clearBrush; }
 
-    void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+    void visit(const SceneRenderState& state, const Mat4& parentTransform, uint32_t parentFlags) override;
 
     bool isBrushValid();
 
@@ -372,10 +359,6 @@ public:
      * Set the owner scene of the camera, this method shall not be invoked manually
      */
     void setScene(Scene* scene);
-
-    /**set additional matrix for the projection matrix, it multiplies mat to projection matrix when called, used by
-     * WP8*/
-    void setAdditionalProjection(const Mat4& mat);
 
     /**
      * Configure a perspective projection for this Camera.
@@ -446,7 +429,6 @@ public:
     }
 
 protected:
-    static Camera* _visitingCamera;
     static Viewport _defaultViewport;
 
     /**

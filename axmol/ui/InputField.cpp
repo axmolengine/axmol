@@ -446,7 +446,8 @@ bool InputField::detachWithIME()
 
 bool InputField::hitTestWithIME(const Vec2& location)
 {
-    const Camera* camera = _hittedByCamera ? _hittedByCamera : Camera::getDefaultCamera();
+    auto scene           = _director->getRunningScene();
+    const Camera* camera = _hittedByCamera ? _hittedByCamera : (scene ? scene->getDefaultCamera() : nullptr);
     return hitTestSelf(location, camera, nullptr);
 }
 

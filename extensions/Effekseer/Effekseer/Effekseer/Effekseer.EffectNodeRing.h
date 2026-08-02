@@ -1,4 +1,4 @@
-
+﻿
 #ifndef __EFFEKSEER_ParameterNODE_RING_H__
 #define __EFFEKSEER_ParameterNODE_RING_H__
 
@@ -180,13 +180,13 @@ public:
 
 	void UpdateRenderedInstance(Instance& instance, InstanceGroup& instanceGroup, Manager* manager) override;
 
-	eEffectNodeType GetType() const override
+	EffectNodeType GetType() const override
 	{
-		return eEffectNodeType::Ring;
+		return EffectNodeType::Ring;
 	}
 
 private:
-	RingRenderer::NodeParameter nodeParameter;
+	RingRenderer::NodeParameter nodeParameter_;
 
 	void LoadSingleParameter(unsigned char*& pos, RingSingleParameter& param, int version);
 

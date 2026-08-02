@@ -196,12 +196,12 @@ namespace spine {
 		virtual void onTrackEntryEvent(spine::TrackEntry *entry, spine::EventType type, spine::Event *event);
 
 		void update(float deltaTime) override;
-		void draw(ax::Renderer *renderer, const ax::Mat4 &transform, uint32_t transformFlags) override;
+		void draw(const ax::SceneRenderState &state, const ax::Mat4 &transform, uint32_t transformFlags) override;
 		void onEnter() override;
 		void onExit() override;
 
 		void setAnimationStateEnabled(bool enabled);
-		virtual void drawDebug(ax::Renderer *renderer, const ax::Mat4 &transform, uint32_t transformFlags);
+		virtual void drawDebug(const ax::SceneRenderState &state, const ax::Mat4 &transform, uint32_t transformFlags);
 
 		spine::StartListener _startListener;
 		spine::InterruptListener _interruptListener;

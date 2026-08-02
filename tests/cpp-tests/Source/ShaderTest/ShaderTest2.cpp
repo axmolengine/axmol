@@ -114,13 +114,13 @@ public:
         std::sort(std::begin(_effects), std::end(_effects), tuple_sort);
     }
 
-    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override
+    void draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags) override
     {
-        setMVPMatrixUniform();
+        setMVPMatrixUniform(state);
 #if AX_USE_CULLING
         // Don't do calculate the culling if the transform was not updated
         _insideBounds =
-            (flags & FLAGS_TRANSFORM_DIRTY) ? renderer->checkVisibility(transform, _contentSize) : _insideBounds;
+            (flags & FLAGS_TRANSFORM_DIRTY) ? state.checkVisibility(transform, _contentSize) : _insideBounds;
 
         if (_insideBounds)
 #endif
@@ -136,18 +136,19 @@ public:
                 if (programState)
                 {
                     QuadCommand& q = std::get<2>(effect);
-                    q.init(_globalZOrder, _texture, _blendFunc, &_quad, 1, transform, flags);
+                    q.init(_globalZOrder, _texture, _blendFunc, &_quad, 1, transform, flags, state.getView());
                     updateUniforms(programState);
-                    renderer->addCommand(&q);
+                    state.getRenderer()->addCommand(&q);
                 }
                 idx++;
             }
 
             // normal effect: order == 0
-            _trianglesCommand.init(_globalZOrder, _texture, _blendFunc, _polyInfo.triangles, transform, flags);
+            _trianglesCommand.init(_globalZOrder, _texture, _blendFunc, _polyInfo.triangles, transform, flags,
+                                   state.getView());
 
             updateUniforms(_trianglesCommand.unsafePS());
-            renderer->addCommand(&_trianglesCommand);
+            state.getRenderer()->addCommand(&_trianglesCommand);
 
             // positive effects: order >= 0
             for (auto&& it = std::begin(_effects) + idx; it != std::end(_effects); ++it)
@@ -155,9 +156,9 @@ public:
                 QuadCommand& q     = std::get<2>(*it);
                 auto* programState = std::get<1>(*it)->getProgramState();
                 updateUniforms(programState);
-                q.init(_globalZOrder, _texture, _blendFunc, &_quad, 1, transform, flags);
+                q.init(_globalZOrder, _texture, _blendFunc, &_quad, 1, transform, flags, state.getView());
                 q.setWeakPSVL(programState, std::get<1>(*it)->getVertexLayout());
-                renderer->addCommand(&q);
+                state.getRenderer()->addCommand(&q);
                 idx++;
             }
         }

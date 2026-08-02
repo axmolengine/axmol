@@ -35,6 +35,7 @@
 #include "axmol/rhi/opengl/DriverGL.h"
 #include "axmol/rhi/opengl/VertexLayoutGL.h"
 #include "axmol/rhi/SamplerRegistry.h"
+#include "axmol/rhi/RHIUtils.h"
 
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/EventType.h"
@@ -525,6 +526,117 @@ void RenderContextImpl::readPixels(RenderTarget* rt,
 
     if (!rtGL->isDefaultRenderTarget())
         rtGL->unbindFrameBuffer();
+}
+
+bool RenderContextImpl::copyTexture(Texture* src, Texture* dst)
+{
+    if (!validateTextureCopy(src, dst))
+        return false;
+
+    auto* srcGL           = static_cast<TextureImpl*>(src);
+    auto* dstGL           = static_cast<TextureImpl*>(dst);
+    const auto srcTexture = srcGL->internalHandle();
+    if (!srcTexture)
+        return false;
+
+    GLint previousFramebuffer   = 0;
+    GLint previousActiveTexture = GL_TEXTURE0;
+    GLint previousTexture       = 0;
+    glGetIntegerv(GL_FRAMEBUFFER_BINDING, &previousFramebuffer);
+    glGetIntegerv(GL_ACTIVE_TEXTURE, &previousActiveTexture);
+
+    __state->activeTexture(GL_TEXTURE0);
+    glGetIntegerv(GL_TEXTURE_BINDING_2D, &previousTexture);
+
+    if (!dstGL->internalHandle())
+        dstGL->updateData(nullptr, dst->getWidth(), dst->getHeight(), 0, 0);
+
+    const auto dstTexture = dstGL->internalHandle();
+    if (!dstTexture || srcTexture == dstTexture)
+    {
+        __state->bindTexture(GL_TEXTURE_2D, static_cast<GLuint>(previousTexture));
+        __state->activeTexture(static_cast<GLenum>(previousActiveTexture));
+        return false;
+    }
+
+    GLuint copyFramebuffer = 0;
+    glGenFramebuffers(1, &copyFramebuffer);
+    __state->bindFrameBuffer(copyFramebuffer);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, srcTexture, 0);
+
+    const bool framebufferComplete = glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE;
+    if (framebufferComplete)
+    {
+        __state->bindTexture(GL_TEXTURE_2D, dstTexture);
+        glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, dst->getWidth(), dst->getHeight());
+    }
+
+    __state->bindTexture(GL_TEXTURE_2D, static_cast<GLuint>(previousTexture));
+    __state->activeTexture(static_cast<GLenum>(previousActiveTexture));
+    __state->bindFrameBuffer(static_cast<GLuint>(previousFramebuffer));
+    glDeleteFramebuffers(1, &copyFramebuffer);
+    CHECK_GL_ERROR_DEBUG();
+
+    return framebufferComplete;
+}
+
+bool RenderContextImpl::copyTexture(RenderTarget* src, Texture* dst)
+{
+    if (!src || !dst || dst->getTextureType() != TextureType::TEXTURE_2D || dst->getArraySize() != 1 ||
+        dst->getMipLevels() != 1 || dst->getWidth() <= 0 || dst->getHeight() <= 0 ||
+        dst->getPixelFormat() == PixelFormat::NONE || dst->getPixelFormat() == PixelFormat::D24S8)
+        return false;
+
+    const auto& formatDesc = RHIUtils::getFormatDesc(dst->getPixelFormat());
+    if (formatDesc.blockWidth != 1 || formatDesc.blockHeight != 1)
+        return false;
+
+    if (!src->isDefaultRenderTarget())
+    {
+        if (src->_color.empty() || src->_color[0].level != 0 || !src->_color[0].texture)
+            return false;
+        return copyTexture(src->_color[0].texture, dst);
+    }
+
+    auto* srcGL = static_cast<RenderTargetImpl*>(src);
+    auto* dstGL = static_cast<TextureImpl*>(dst);
+
+    GLint previousFramebuffer   = 0;
+    GLint previousActiveTexture = GL_TEXTURE0;
+    GLint previousTexture       = 0;
+    glGetIntegerv(GL_FRAMEBUFFER_BINDING, &previousFramebuffer);
+    glGetIntegerv(GL_ACTIVE_TEXTURE, &previousActiveTexture);
+
+    __state->activeTexture(GL_TEXTURE0);
+    glGetIntegerv(GL_TEXTURE_BINDING_2D, &previousTexture);
+
+    if (!dstGL->internalHandle())
+        dstGL->updateData(nullptr, dst->getWidth(), dst->getHeight(), 0, 0);
+
+    const auto dstTexture = dstGL->internalHandle();
+    if (!dstTexture)
+    {
+        __state->bindTexture(GL_TEXTURE_2D, static_cast<GLuint>(previousTexture));
+        __state->activeTexture(static_cast<GLenum>(previousActiveTexture));
+        return false;
+    }
+
+    srcGL->bindFrameBuffer();
+    srcGL->update();
+
+    const bool framebufferComplete = glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE;
+    if (framebufferComplete)
+    {
+        __state->bindTexture(GL_TEXTURE_2D, dstTexture);
+        glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, dst->getWidth(), dst->getHeight());
+    }
+
+    __state->bindTexture(GL_TEXTURE_2D, static_cast<GLuint>(previousTexture));
+    __state->activeTexture(static_cast<GLenum>(previousActiveTexture));
+    __state->bindFrameBuffer(static_cast<GLuint>(previousFramebuffer));
+    CHECK_GL_ERROR_DEBUG();
+
+    return framebufferComplete;
 }
 
 }  // namespace ax::rhi::gl

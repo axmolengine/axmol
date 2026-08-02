@@ -40,6 +40,7 @@ namespace ax
 
 class ParticleSystem3D;
 class Renderer;
+struct SceneRenderState;
 class MeshCommand;
 class MeshRenderer;
 class IndexBuffer;
@@ -54,7 +55,7 @@ class AX_EXT_API Particle3DRender : public Object
     friend class ParticleSystem3D;
 
 public:
-    virtual void render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem) = 0;
+    virtual void render(const SceneRenderState& state, const Mat4& transform, ParticleSystem3D* particleSystem) = 0;
 
     /** Perform activities when a Renderer is started.
      */
@@ -96,7 +97,7 @@ class AX_EXT_API Particle3DQuadRender : public Particle3DRender
 public:
     static Particle3DQuadRender* create(std::string_view texFile = "");
 
-    void render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem) override;
+    void render(const SceneRenderState& state, const Mat4& transform, ParticleSystem3D* particleSystem) override;
 
     void reset() override;
     Particle3DQuadRender();
@@ -140,7 +141,7 @@ class AX_EXT_API Particle3DModelRender : public Particle3DRender
 public:
     static Particle3DModelRender* create(std::string_view modelFile, std::string_view texFile = "");
 
-    void render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem) override;
+    void render(const SceneRenderState& state, const Mat4& transform, ParticleSystem3D* particleSystem) override;
 
     void reset() override;
     Particle3DModelRender();

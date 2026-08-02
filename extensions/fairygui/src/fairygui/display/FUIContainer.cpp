@@ -292,20 +292,20 @@ const Rect& FUIContainer::getClippingRect()
     return _rectClippingSupport->_clippingRect;
 }
 
-void FUIContainer::visit(ax::Renderer * renderer, const ax::Mat4 & parentTransform, uint32_t parentFlags)
+void FUIContainer::visit(const ax::SceneRenderState& state, const ax::Mat4 & parentTransform, uint32_t parentFlags)
 {
     if (_stencilClippingSupport != nullptr)
     {
         if (!_visible || _children.empty())
             return;
 
-        uint32_t flags = processParentFlags(parentTransform, parentFlags);
+        uint32_t flags = processParentFlags(state, parentTransform, parentFlags);
 
         //Add group command
-        auto* stencilGroupCommand = renderer->getNextGroupCommand();
+        auto* stencilGroupCommand = state.getRenderer()->getNextGroupCommand();
         stencilGroupCommand->init(_globalZOrder);
-        renderer->addCommand(stencilGroupCommand);
-        renderer->pushGroup(stencilGroupCommand->getRenderQueueID());
+        state.getRenderer()->addCommand(stencilGroupCommand);
+        state.getRenderer()->pushGroup(stencilGroupCommand->getRenderQueueID());
 
         _stencilClippingSupport->_stencilStateManager->onBeforeVisit(_globalZOrder);
 
@@ -320,15 +320,15 @@ void FUIContainer::visit(ax::Renderer * renderer, const ax::Mat4 & parentTransfo
             AX_SAFE_RELEASE_NULL(programState);
 
         }
-        _stencilClippingSupport->_stencil->visit(renderer, _modelViewTransform, flags);
+        _stencilClippingSupport->_stencil->visit(state, _modelViewTransform, flags);
 
-        auto afterDrawStencilCmd = renderer->nextCallbackCommand();
+        auto afterDrawStencilCmd = state.getRenderer()->nextCallbackCommand();
         afterDrawStencilCmd->init(_globalZOrder);
         afterDrawStencilCmd->func = AX_CALLBACK_0(StencilStateManager::onAfterDrawStencil, _stencilClippingSupport->_stencilStateManager);
-        renderer->addCommand(afterDrawStencilCmd);
+        state.getRenderer()->addCommand(afterDrawStencilCmd);
 
         int i = 0;
-        bool visibleByCamera = isVisitableByVisitingCamera();
+        bool visibleByCamera = isVisitableByCamera(state.cameraFlag);
 
         if (!_children.empty())
         {
@@ -339,28 +339,28 @@ void FUIContainer::visit(ax::Renderer * renderer, const ax::Mat4 & parentTransfo
                 auto node = _children.at(i);
 
                 if (node && node->getLocalZOrder() < 0)
-                    node->visit(renderer, _modelViewTransform, flags);
+                    node->visit(state, _modelViewTransform, flags);
                 else
                     break;
             }
             // self draw
             if (visibleByCamera)
-                this->draw(renderer, _modelViewTransform, flags);
+                this->draw(state, _modelViewTransform, flags);
 
             for (auto it = _children.cbegin() + i, itCend = _children.cend(); it != itCend; ++it)
-                (*it)->visit(renderer, _modelViewTransform, flags);
+                (*it)->visit(state, _modelViewTransform, flags);
         }
         else if (visibleByCamera)
         {
-            this->draw(renderer, _modelViewTransform, flags);
+            this->draw(state, _modelViewTransform, flags);
         }
 
-        auto afterVisitCmd = renderer->nextCallbackCommand();
+        auto afterVisitCmd = state.getRenderer()->nextCallbackCommand();
         afterVisitCmd->init(_globalZOrder);
         afterVisitCmd->func = AX_CALLBACK_0(StencilStateManager::onAfterVisit, _stencilClippingSupport->_stencilStateManager);
-        renderer->addCommand(afterVisitCmd);
+        state.getRenderer()->addCommand(afterVisitCmd);
 
-        renderer->popGroup();
+        state.getRenderer()->popGroup();
     }
     else if (_rectClippingSupport != nullptr && _rectClippingSupport->_clippingEnabled)
     {
@@ -368,26 +368,26 @@ void FUIContainer::visit(ax::Renderer * renderer, const ax::Mat4 & parentTransfo
         {
             _rectClippingSupport->_clippingRectDirty = true;
         }
-        auto* rectClippingGroupCommand = renderer->getNextGroupCommand();
+        auto* rectClippingGroupCommand = state.getRenderer()->getNextGroupCommand();
         rectClippingGroupCommand->init(_globalZOrder);
-        renderer->addCommand(rectClippingGroupCommand);
-        renderer->pushGroup(rectClippingGroupCommand->getRenderQueueID());
+        state.getRenderer()->addCommand(rectClippingGroupCommand);
+        state.getRenderer()->pushGroup(rectClippingGroupCommand->getRenderQueueID());
 
-        auto beforeVisitCmdScissor = renderer->nextCallbackCommand();
+        auto beforeVisitCmdScissor = state.getRenderer()->nextCallbackCommand();
         beforeVisitCmdScissor->init(_globalZOrder);
         beforeVisitCmdScissor->func = AX_CALLBACK_0(FUIContainer::onBeforeVisitScissor, this);
-        renderer->addCommand(beforeVisitCmdScissor);
+        state.getRenderer()->addCommand(beforeVisitCmdScissor);
 
-        Node::visit(renderer, parentTransform, parentFlags);
+        Node::visit(state, parentTransform, parentFlags);
 
-        auto afterVisitCmdScissor = renderer->nextCallbackCommand();
+        auto afterVisitCmdScissor = state.getRenderer()->nextCallbackCommand();
         afterVisitCmdScissor->init(_globalZOrder);
         afterVisitCmdScissor->func = AX_CALLBACK_0(FUIContainer::onAfterVisitScissor, this);
-        renderer->addCommand(afterVisitCmdScissor);
-        renderer->popGroup();
+        state.getRenderer()->addCommand(afterVisitCmdScissor);
+        state.getRenderer()->popGroup();
     }
     else
-        Node::visit(renderer, parentTransform, parentFlags);
+        Node::visit(state, parentTransform, parentFlags);
 }
 
 void FUIContainer::setGlobalZOrder(float globalZOrder)

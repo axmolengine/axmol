@@ -421,12 +421,12 @@ bool LayerRadialGradient::initWithColor(const ax::Color32& startColor,
     return false;
 }
 
-void LayerRadialGradient::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+void LayerRadialGradient::draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags)
 {
     _customCommand.init(_globalZOrder, _blendFunc);
-    renderer->addCommand(&_customCommand);
+    state.getRenderer()->addCommand(&_customCommand);
 
-    const auto& projectionMat = Camera::getVisitingViewProjectionMatrix();
+    const auto& projectionMat = state.getViewProjectionMatrix();
     auto ps                   = _customCommand.unsafePS();
     Mat4 finalMat             = projectionMat * transform;
     ps->setUniform(_mvpMatrixLocation, finalMat.m, sizeof(finalMat.m));

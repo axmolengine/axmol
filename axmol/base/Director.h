@@ -203,6 +203,12 @@ public:
      */
     void setNextDeltaTimeZero(bool nextDeltaTimeZero);
 
+    /** Gets the maximum delta time allowed per frame. */
+    float getMaxDeltaTime() const { return _maxDeltaTime; }
+
+    /** Sets the maximum delta time allowed per frame. Default is 1/3 second, minimum is 1/60 second. */
+    void setMaxDeltaTime(float maxDeltaTime);
+
     /** Whether or not the Director is paused. */
     bool isPaused() { return _paused; }
 
@@ -627,6 +633,8 @@ protected:
     CustomEvent* _eventBeforeGfxDrop     = nullptr;
     CustomEvent* _eventAfterGfxDrop      = nullptr;
 
+    /* maximum delta time allowed per frame, default is 1/3 second */
+    float _maxDeltaTime = 1.0f / 3;
     /* delta time since last tick to main loop */
     float _deltaTime              = 1e-6f;
     bool _deltaTimePassedByCaller = false;

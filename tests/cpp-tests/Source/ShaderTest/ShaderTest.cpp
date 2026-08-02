@@ -151,14 +151,14 @@ void ShaderNode::setPosition(const Vec2& newPosition)
                             position.y * frameSize.height / visibleSize.height * renderScale);
 }
 
-void ShaderNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+void ShaderNode::draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags)
 {
-    _customCommand.init(_globalZOrder, transform, flags);
+    _customCommand.init(_globalZOrder, transform, flags, state.getView());
 
     _programState->setUniform(_locResolution, &_resolution, sizeof(_resolution));
     _programState->setUniform(_locCenter, &_center, sizeof(_center));
 
-    auto projectionMatrix = Camera::getVisitingViewProjectionMatrix();
+    auto projectionMatrix = state.getViewProjectionMatrix();
     auto finalMatrix      = projectionMatrix * transform;
 
     _programState->setUniform(_locMVP, finalMatrix.m, sizeof(finalMatrix.m));
@@ -172,7 +172,7 @@ void ShaderNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
     _programState->setUniform(_locSinTime, &sinTime, sizeof(sinTime));
     _programState->setUniform(_locCosTime, &cosTime, sizeof(cosTime));
 
-    renderer->addCommand(&_customCommand);
+    state.getRenderer()->addCommand(&_customCommand);
     AX_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, 6);
 }
 
@@ -384,7 +384,7 @@ public:
     void initProgram();
 
     static SpriteBlur* create(const char* pszFileName);
-    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags) override;
     void setBlurRadius(float radius);
     void setBlurSampleNum(float num);
 
@@ -448,10 +448,10 @@ void SpriteBlur::initProgram()
     SET_UNIFORM(_programState, "sampleNum", 7.0f);
 }
 
-void SpriteBlur::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+void SpriteBlur::draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags)
 {
-    SET_UNIFORM(_programState, "u_PMatrix", Camera::getVisitingViewProjectionMatrix());
-    Sprite::draw(renderer, transform, flags);
+    SET_UNIFORM(_programState, "u_PMatrix", state.getViewProjectionMatrix());
+    Sprite::draw(state, transform, flags);
 }
 
 void SpriteBlur::setBlurRadius(float radius)

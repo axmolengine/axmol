@@ -390,7 +390,7 @@ public:
     void setIgnoreAnchorPointForPosition(bool value) override;
 
     void setVisible(bool bVisible) override;
-    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags) override;
     void setOpacityModifyRGB(bool modify) override;
     bool isOpacityModifyRGB() const override;
     /// @}
@@ -666,7 +666,7 @@ protected:
     void updatePoly();
     void updateStretchFactor();
     void populateTriangle(int quadIndex, const V3F_T2F_C4B_Quad& quad);
-    void setMVPMatrixUniform();
+    void setMVPMatrixUniform(const SceneRenderState& state);
     //
     // Data used when the sprite is rendered using a SpriteSheet
     //

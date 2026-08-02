@@ -26,11 +26,32 @@
 #include "axmol/rhi/RenderContext.h"
 #include "axmol/rhi/PipelineDesc.h"
 #include "axmol/rhi/RenderTarget.h"
+#include "axmol/rhi/RHIUtils.h"
+#include "axmol/rhi/Texture.h"
 
 #include <limits>
 
 namespace ax::rhi
 {
+
+bool RenderContext::validateTextureCopy(const Texture* src, const Texture* dst)
+{
+    if (!src || !dst || src == dst)
+        return false;
+
+    if (src->getTextureType() != TextureType::TEXTURE_2D || dst->getTextureType() != TextureType::TEXTURE_2D ||
+        src->getArraySize() != 1 || dst->getArraySize() != 1 || src->getMipLevels() != 1 || dst->getMipLevels() != 1 ||
+        src->getWidth() <= 0 || src->getHeight() <= 0 || src->getWidth() != dst->getWidth() ||
+        src->getHeight() != dst->getHeight() || src->getPixelFormat() != dst->getPixelFormat())
+        return false;
+
+    const auto format = src->getPixelFormat();
+    if (format == PixelFormat::NONE || format == PixelFormat::D24S8)
+        return false;
+
+    const auto& formatDesc = RHIUtils::getFormatDesc(format);
+    return formatDesc.blockWidth == 1 && formatDesc.blockHeight == 1;
+}
 
 RenderContext::~RenderContext() {}
 

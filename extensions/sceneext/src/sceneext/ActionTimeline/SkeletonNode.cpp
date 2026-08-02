@@ -161,7 +161,7 @@ void SkeletonNode::updateColor()
     _transformUpdated = _transformDirty = _inverseDirty = _contentSizeDirty = true;
 }
 
-void SkeletonNode::visit(ax::Renderer* renderer, const ax::Mat4& parentTransform, uint32_t parentFlags)
+void SkeletonNode::visit(const ax::SceneRenderState& state, const ax::Mat4& parentTransform, uint32_t parentFlags)
 {
     // quick return if not visible. children won't be drawn.
     if (!_visible)
@@ -169,7 +169,7 @@ void SkeletonNode::visit(ax::Renderer* renderer, const ax::Mat4& parentTransform
         return;
     }
 
-    uint32_t flags = processParentFlags(parentTransform, parentFlags);
+    uint32_t flags = processParentFlags(state, parentTransform, parentFlags);
 
     int i = 0;
     if (!_children.empty())
@@ -181,35 +181,35 @@ void SkeletonNode::visit(ax::Renderer* renderer, const ax::Mat4& parentTransform
             auto node = _children.at(i);
 
             if (node && node->getLocalZOrder() < 0)
-                node->visit(renderer, _modelViewTransform, flags);
+                node->visit(state, _modelViewTransform, flags);
             else
                 break;
         }
 
         for (auto it = _children.cbegin() + i; it != _children.cend(); ++it)
-            (*it)->visit(renderer, _modelViewTransform, flags);
+            (*it)->visit(state, _modelViewTransform, flags);
     }
 
     checkSubBonesDirty();
     for (const auto& bone : _subOrderedAllBones)
     {
-        visitSkins(renderer, bone);
+        visitSkins(state, bone);
     }
 
     if (_isRackShow)
     {
-        this->draw(renderer, _modelViewTransform, flags);
+        this->draw(state, _modelViewTransform, flags);
         // batch draw all sub bones
         _batchBoneCommand.init(_globalZOrder, _blendFunc);
-        renderer->addCommand(&_batchBoneCommand);
-        batchDrawAllSubBones();
+        state.getRenderer()->addCommand(&_batchBoneCommand);
+        batchDrawAllSubBones(state);
     }
 }
 
-void SkeletonNode::draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags)
+void SkeletonNode::draw(const ax::SceneRenderState& state, const ax::Mat4& transform, uint32_t flags)
 {
     _customCommand.init(_globalZOrder, _blendFunc);
-    renderer->addCommand(&_customCommand);
+    state.getRenderer()->addCommand(&_customCommand);
     for (int i = 0; i < 8; ++i)
     {
         ax::Vec4 pos;
@@ -226,14 +226,14 @@ void SkeletonNode::draw(ax::Renderer* renderer, const ax::Mat4& transform, uint3
     _programState->setUniform(_mvpLocation, transform.m, sizeof(transform.m));
 }
 
-void SkeletonNode::batchDrawAllSubBones()
+void SkeletonNode::batchDrawAllSubBones(const ax::SceneRenderState& state)
 {
     checkSubBonesDirty();
 
     _batchedVeticesCount = 0;
     for (const auto& bone : _subOrderedAllBones)
     {
-        batchBoneDrawToSkeleton(bone);
+        batchBoneDrawToSkeleton(state, bone);
     }
 
     _batchBoneCommand.createVertexBuffer(sizeof(VertexData), _batchedVeticesCount,

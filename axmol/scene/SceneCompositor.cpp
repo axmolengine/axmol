@@ -69,8 +69,6 @@ void SceneCompositor::renderScene(Renderer* renderer, Scene* scene)
         if (!camera->isVisible())
             continue;
 
-        Camera::setVisitingCamera(camera);
-
         camera->setAdditionalTransform(Mat4::identity);
 
         auto targetTexture = camera->getTargetTexture();
@@ -83,15 +81,16 @@ void SceneCompositor::renderScene(Renderer* renderer, Scene* scene)
             _renderTexturePass->begin(camera);
 
             camera->apply();
+            SceneRenderState renderState(renderer, camera);
 
             // Override viewport to render texture dimensions (camera->apply sets it to screen)
             // renderer->setViewport(vp.x, vp.y, vp.width, vp.height);
 
-            camera->clearBackground();
-            scene->visit(renderer, transform, 0);
+            camera->clearBackground(renderState);
+            scene->visit(renderState, transform, 0);
 #if defined(AX_ENABLE_NAVMESH)
             if (scene->_navMesh)
-                scene->_navMesh->debugDraw(renderer);
+                scene->_navMesh->debugDraw(renderState);
 #endif
 
             _renderTexturePass->end();
@@ -101,11 +100,12 @@ void SceneCompositor::renderScene(Renderer* renderer, Scene* scene)
         else
         {
             camera->apply();
-            camera->clearBackground();
-            scene->visit(renderer, transform, 0);
+            SceneRenderState renderState(renderer, camera);
+            camera->clearBackground(renderState);
+            scene->visit(renderState, transform, 0);
 #if defined(AX_ENABLE_NAVMESH)
             if (scene->_navMesh)
-                scene->_navMesh->debugDraw(renderer);
+                scene->_navMesh->debugDraw(renderState);
 #endif
 
             renderer->render();
@@ -115,28 +115,25 @@ void SceneCompositor::renderScene(Renderer* renderer, Scene* scene)
 #if defined(AX_ENABLE_PHYSICS_3D) || defined(AX_ENABLE_NAVMESH)
     if (scene->_debugCamera) [[unlikely]]
     {
-        Camera::setVisitingCamera(scene->_debugCamera);
-
         scene->_debugCamera->setAdditionalTransform(Mat4::identity);
+        SceneRenderState debugRenderState(renderer, scene->_debugCamera);
 
         scene->_debugCamera->apply();
-        scene->_debugCamera->clearBackground();
+        scene->_debugCamera->clearBackground(debugRenderState);
 
 #    if defined(AX_ENABLE_NAVMESH)
         if (scene->_navMesh)
-            scene->_navMesh->debugDraw(renderer);
+            scene->_navMesh->debugDraw(debugRenderState);
 #    endif
 
 #    if defined(AX_ENABLE_PHYSICS_3D)
         if (scene->_physicsWorld3D)
-            scene->_physicsWorld3D->debugDraw(renderer);
+            scene->_physicsWorld3D->debugDraw(debugRenderState);
 #    endif
 
         renderer->render();
     }
 #endif
-
-    Camera::setVisitingCamera(nullptr);
 }
 
 void SceneCompositor::setScissorRect(float x, float y, float w, float h)

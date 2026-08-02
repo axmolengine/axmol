@@ -130,19 +130,19 @@ void AtlasNode::updateAtlasValues()
 }
 
 // AtlasNode - draw
-void AtlasNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+void AtlasNode::draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags)
 {
     if (_textureAtlas->getTotalQuads() == 0)
         return;
 
     auto programState = _quadCommand.unsafePS();
 
-    const auto& projectionMat = Camera::getVisitingViewProjectionMatrix();
+    const auto& projectionMat = state.getViewProjectionMatrix();
     programState->setUniform(_mvpMatrixLocation, projectionMat.m, sizeof(projectionMat.m));
 
     _quadCommand.init(_globalZOrder, _textureAtlas->getTexture(), _blendFunc, _textureAtlas->getQuads(), _quadsToDraw,
-                      transform, flags);
-    renderer->addCommand(&_quadCommand);
+                      transform, flags, state.getView());
+    state.getRenderer()->addCommand(&_quadCommand);
 }
 
 // AtlasNode - RGBA protocol

@@ -1869,6 +1869,100 @@ int lua_ax_rhi_Texture_getHeight(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_rhi_Texture_getArraySize(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::rhi::Texture* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axr.Texture",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Texture_getArraySize'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Texture_getArraySize'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getArraySize();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axr.Texture:getArraySize",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_Texture_getArraySize'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_rhi_Texture_getMipLevels(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::rhi::Texture* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axr.Texture",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::rhi::Texture*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_rhi_Texture_getMipLevels'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_rhi_Texture_getMipLevels'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getMipLevels();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axr.Texture:getMipLevels",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_rhi_Texture_getMipLevels'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_rhi_Texture_updateData(lua_State* tolua_S)
 {
     int argc = 0;
@@ -2273,6 +2367,8 @@ int lua_register_ax_rhi_Texture(lua_State* tolua_S)
         tolua_function(tolua_S,"hasMipmaps",lua_ax_rhi_Texture_hasMipmaps);
         tolua_function(tolua_S,"getWidth",lua_ax_rhi_Texture_getWidth);
         tolua_function(tolua_S,"getHeight",lua_ax_rhi_Texture_getHeight);
+        tolua_function(tolua_S,"getArraySize",lua_ax_rhi_Texture_getArraySize);
+        tolua_function(tolua_S,"getMipLevels",lua_ax_rhi_Texture_getMipLevels);
         tolua_function(tolua_S,"updateData",lua_ax_rhi_Texture_updateData);
         tolua_function(tolua_S,"updateCompressedData",lua_ax_rhi_Texture_updateCompressedData);
         tolua_function(tolua_S,"updateSubData",lua_ax_rhi_Texture_updateSubData);

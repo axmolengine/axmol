@@ -33,6 +33,8 @@
 #include "axmol/base/Logging.h"
 #include "axmol/math/MathUtil.h"
 
+#include <algorithm>
+
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
 #    include "axmol/platform/winrt/SwapChainPanelUtil.h"
 #endif
@@ -1069,6 +1071,70 @@ void RenderContextImpl::removeCachedPipelineObjects(Program* key)
 {
     if (_renderPipeline)
         _renderPipeline->removeCachedObjects(key);
+}
+
+bool RenderContextImpl::copyTexture(Texture* src, Texture* dst)
+{
+    if (!validateTextureCopy(src, dst) || !_inFrame || !_currentCmdList)
+        return false;
+
+    auto* srcImpl = static_cast<TextureImpl*>(src);
+    auto* dstImpl = static_cast<TextureImpl*>(dst);
+
+    auto srcResource = srcImpl->internalHandle().resource.Get();
+    if (!srcResource)
+        return false;
+
+    if (!dstImpl->internalHandle().resource)
+        dstImpl->updateData(nullptr, dst->getWidth(), dst->getHeight(), 0, 0);
+
+    auto dstResource = dstImpl->internalHandle().resource.Get();
+    if (!dstResource || srcResource == dstResource)
+        return false;
+
+    const auto srcDesc = srcResource->GetDesc();
+    const auto dstDesc = dstResource->GetDesc();
+    if (srcDesc.Dimension != D3D12_RESOURCE_DIMENSION_TEXTURE2D ||
+        dstDesc.Dimension != D3D12_RESOURCE_DIMENSION_TEXTURE2D || srcDesc.Width != dstDesc.Width ||
+        srcDesc.Height != dstDesc.Height || srcDesc.Format != dstDesc.Format || srcDesc.SampleDesc.Count != 1 ||
+        dstDesc.SampleDesc.Count != 1 || srcDesc.DepthOrArraySize != 1 || dstDesc.DepthOrArraySize != 1 ||
+        srcDesc.MipLevels != 1 || dstDesc.MipLevels != 1)
+        return false;
+
+    const auto srcState = srcImpl->getCurrentState();
+    const auto dstState = dstImpl->getCurrentState();
+    srcImpl->transitionState(_currentCmdList, D3D12_RESOURCE_STATE_COPY_SOURCE);
+    dstImpl->transitionState(_currentCmdList, D3D12_RESOURCE_STATE_COPY_DEST);
+
+    D3D12_TEXTURE_COPY_LOCATION srcLocation{};
+    srcLocation.pResource        = srcResource;
+    srcLocation.Type             = D3D12_TEXTURE_COPY_TYPE_SUBRESOURCE_INDEX;
+    srcLocation.SubresourceIndex = 0;
+
+    D3D12_TEXTURE_COPY_LOCATION dstLocation{};
+    dstLocation.pResource        = dstResource;
+    dstLocation.Type             = D3D12_TEXTURE_COPY_TYPE_SUBRESOURCE_INDEX;
+    dstLocation.SubresourceIndex = 0;
+
+    _currentCmdList->CopyTextureRegion(&dstLocation, 0, 0, 0, &srcLocation, nullptr);
+
+    srcImpl->transitionState(_currentCmdList, srcState);
+    dstImpl->transitionState(_currentCmdList, dstState);
+    srcImpl->setLastFenceValue(_frameFenceValue);
+    dstImpl->setLastFenceValue(_frameFenceValue);
+    return true;
+}
+
+bool RenderContextImpl::copyTexture(RenderTarget* src, Texture* dst)
+{
+    if (!src || !dst)
+        return false;
+
+    const size_t colorIndex = src->isDefaultRenderTarget() ? _imageIndex : 0;
+    if (colorIndex >= src->_color.size() || src->_color[colorIndex].level != 0 || !src->_color[colorIndex].texture)
+        return false;
+
+    return copyTexture(src->_color[colorIndex].texture, dst);
 }
 
 }  // namespace ax::rhi::d3d12

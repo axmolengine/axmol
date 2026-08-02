@@ -159,7 +159,7 @@ public:
 
     /**
      */
-    void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+    void visit(const SceneRenderState& state, const Mat4& parentTransform, uint32_t parentFlags) override;
 
     void cleanup() override;
 

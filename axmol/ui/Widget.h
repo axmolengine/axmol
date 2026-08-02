@@ -277,7 +277,7 @@ public:
 
     /**
      */
-    void visit(ax::Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+    void visit(const ax::SceneRenderState& state, const Mat4& parentTransform, uint32_t parentFlags) override;
 
     /**
      * Set a callback to pointer event listener.

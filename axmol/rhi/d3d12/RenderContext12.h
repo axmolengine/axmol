@@ -126,6 +126,9 @@ public:
 
     void readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback) override;
 
+    bool copyTexture(RenderTarget* src, Texture* dst) override;
+    bool copyTexture(Texture* src, Texture* dst) override;
+
     void setStencilReferenceValue(uint32_t value) override;
 
     uint64_t getCompletedFenceValue() const override;

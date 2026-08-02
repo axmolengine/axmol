@@ -106,7 +106,7 @@ public:
 
     void setTechnique(Technique* technique);
 
-    void updateMVPUniform(const Mat4& modelView);
+    void updateMVPUniform(MeshCommand* command, const Mat4& modelView);
 
     void setUniformTexture(uint32_t slot, rhi::Texture*);      // u_tex0
     void setUniformNormTexture(uint32_t slot, rhi::Texture*);  // u_normalTex

@@ -636,12 +636,12 @@ Vec2 ProgressTimer::boundaryTexCoord(char index)
     return Vec2::zero;
 }
 
-void ProgressTimer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+void ProgressTimer::draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags)
 {
     if (_vertexData.empty() || !_sprite)
         return;
 
-    const ax::Mat4& projectionMat = Camera::getVisitingViewProjectionMatrix();
+    const ax::Mat4& projectionMat = state.getViewProjectionMatrix();
     Mat4 finalMat                 = projectionMat * transform;
     _programState->setUniform(_locMVP1, finalMat.m, sizeof(finalMat.m));
     _programState->setTexture(_locTex1, 0, _sprite->getTexture()->getRHITexture());
@@ -651,23 +651,23 @@ void ProgressTimer::draw(Renderer* renderer, const Mat4& transform, uint32_t fla
         if (!_reverseDirection)
         {
             _customCommand.init(_globalZOrder, _sprite->getBlendFunc());
-            renderer->addCommand(&_customCommand);
+            state.getRenderer()->addCommand(&_customCommand);
         }
         else
         {
             _customCommand.init(_globalZOrder, _sprite->getBlendFunc());
-            renderer->addCommand(&_customCommand);
+            state.getRenderer()->addCommand(&_customCommand);
 
             _customCommand2.init(_globalZOrder, _sprite->getBlendFunc());
             _programState2->setUniform(_locMVP2, finalMat.m, sizeof(finalMat.m));
             _programState2->setTexture(_locTex2, 0, _sprite->getTexture()->getRHITexture());
-            renderer->addCommand(&_customCommand2);
+            state.getRenderer()->addCommand(&_customCommand2);
         }
     }
     else
     {
         _customCommand.init(_globalZOrder, _sprite->getBlendFunc());
-        renderer->addCommand(&_customCommand);
+        state.getRenderer()->addCommand(&_customCommand);
     }
 }
 

@@ -1,12 +1,11 @@
-
+﻿
 #ifndef __EFFEKSEER_CURVELOADER_H__
 #define __EFFEKSEER_CURVELOADER_H__
 
 //----------------------------------------------------------------------------------
 // Include
 //----------------------------------------------------------------------------------
-#include "Effekseer.Base.h"
-
+#include "Effekseer.Base.Pre.h"
 #include "Effekseer.Curve.h"
 #include "Effekseer.DefaultFile.h"
 #include "Effekseer.File.h"

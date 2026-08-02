@@ -1,10 +1,10 @@
-
+﻿
 #ifndef __EFFEKSEER_MATERIAL_H__
 #define __EFFEKSEER_MATERIAL_H__
 
 #include "../Effekseer.Base.Pre.h"
 #include "../Parameter/Effekseer.Parameters.h"
-#include "../Utils/BinaryVersion.h"
+#include "../Utils/Effekseer.BinaryVersion.h"
 #include <array>
 #include <assert.h>
 #include <map>
@@ -24,6 +24,8 @@ public:
 		Noise = 1,
 		Light = 2,
 		LocalTime = 3,
+		Hsv = 4,
+		ParticleTime = 5,
 	};
 
 	struct GradientParameter
@@ -66,7 +68,7 @@ private:
 
 	std::vector<Uniform> uniforms_;
 
-	static const int32_t LatestSupportVersion = MaterialVersion17;
+	static const int32_t LatestSupportVersion = MaterialVersion18;
 	static const int32_t OldestSupportVersion = 0;
 
 public:

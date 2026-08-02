@@ -273,7 +273,7 @@ public:
     //
     // overrides
     //
-    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags) override;
     void setContentSize(const Vec2& size) override;
 
     void setStartOpacity(uint8_t opacity);

@@ -553,6 +553,7 @@ static void initWebInputBridge()
         canvas.style.outline = "none";
         canvas.style.boxShadow = "none"; // Guards against some specific WebKit/Safari shadows
         canvas.style.webkitTapHighlightColor = "rgba(0,0,0,0)"; // Disables flash on mobile touch
+        canvas.style.touchAction = "none";
 
         // Centralized event translator and forwarder
         // Centralized event translator and forwarder
@@ -570,10 +571,10 @@ static void initWebInputBridge()
                 }
             }
 
-            // Keep preventDefault() active for general canvas clicks to guard the game
-            // against webpage zooming, scrolling, and blue highlight selections.
+            // Suppress cancelable default behaviors such as text selection and
+            // compatibility mouse actions. Touch panning and zooming are controlled
+            // by the canvas CSS touch-action property.
             if (e.cancelable) {
-                // Suppress browser default behaviors (such as pinch-to-zoom, rubber-banding, or scrolling)
                 e.preventDefault();
             }
 

@@ -1,4 +1,4 @@
-
+﻿
 #ifndef __EFFEKSEER_CUSTOM_ALLOCATOR_H__
 #define __EFFEKSEER_CUSTOM_ALLOCATOR_H__
 
@@ -101,32 +101,6 @@ AlignedFreeFunc GetAlignedFreeFunc();
 */
 void SetAlignedFreeFunc(AlignedFreeFunc func);
 
-/**
-	@brief
-	\~English get an allocator
-	\~Japanese メモリ確保関数を取得する。
-*/
-MallocFunc GetMallocFunc();
-
-/**
-	\~English specify an allocator
-	\~Japanese メモリ確保関数を設定する。
-*/
-void SetMallocFunc(MallocFunc func);
-
-/**
-	@brief
-	\~English get a deallocator
-	\~Japanese メモリ破棄関数を取得する。
-*/
-FreeFunc GetFreeFunc();
-
-/**
-	\~English specify a deallocator
-	\~Japanese メモリ破棄関数を設定する。
-*/
-void SetFreeFunc(FreeFunc func);
-
 template <class T>
 struct CustomAllocator
 {
@@ -167,7 +141,7 @@ struct CustomAlignedAllocator
 
 	T* allocate(std::size_t n)
 	{
-		return reinterpret_cast<T*>(GetAlignedMallocFunc()(sizeof(T) * static_cast<uint32_t>(n), 16));
+		return reinterpret_cast<T*>(GetAlignedMallocFunc()(sizeof(T) * static_cast<uint32_t>(n), 32));
 	}
 	void deallocate(T* p, std::size_t n)
 	{
@@ -215,90 +189,6 @@ template <class T, class U, class Hasher = std::hash<T>, class KeyEq = std::equa
 using CustomUnorderedMap = std::unordered_map<T, U, Hasher, KeyEq, CustomAllocator<std::pair<const T, U>>>;
 template <class T, class U, class Hasher = std::hash<T>, class KeyEq = std::equal_to<T>>
 using CustomAlignedUnorderedMap = std::unordered_map<T, U, Hasher, KeyEq, CustomAlignedAllocator<std::pair<const T, U>>>;
-
-//----------------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------------
-template <typename T>
-class StringView
-{
-	using Traits = std::char_traits<T>;
-
-public:
-	StringView()
-		: ptr_(nullptr)
-		, size_(0)
-	{
-	}
-
-	StringView(const T* ptr)
-		: ptr_(ptr)
-		, size_(Traits::length(ptr))
-	{
-	}
-
-	StringView(const T* ptr, size_t size)
-		: ptr_(ptr)
-		, size_(size)
-	{
-	}
-
-	template <size_t N>
-	StringView(const T ptr[N])
-		: ptr_(ptr)
-		, size_(N)
-	{
-	}
-
-	StringView(const CustomString<T>& str)
-		: ptr_(str.data())
-		, size_(str.size())
-	{
-	}
-
-	const T* data() const
-	{
-		return ptr_;
-	}
-
-	size_t size() const
-	{
-		return size_;
-	}
-
-	bool operator==(const StringView<T>& rhs) const
-	{
-		return size() == rhs.size() && Traits::compare(data(), rhs.data(), size()) == 0;
-	}
-
-	bool operator!=(const StringView<T>& rhs) const
-	{
-		return size() != rhs.size() || Traits::compare(data(), rhs.data(), size()) != 0;
-	}
-
-	struct Hash
-	{
-		size_t operator()(const StringView<T>& key) const
-		{
-			constexpr size_t basis = (sizeof(size_t) == 8) ? 14695981039346656037ULL : 2166136261U;
-			constexpr size_t prime = (sizeof(size_t) == 8) ? 1099511628211ULL : 16777619U;
-
-			const uint8_t* data = reinterpret_cast<const uint8_t*>(key.data());
-			size_t count = key.size() * sizeof(T);
-			size_t val = basis;
-			for (size_t i = 0; i < count; i++)
-			{
-				val ^= static_cast<size_t>(data[i]);
-				val *= prime;
-			}
-			return val;
-		}
-	};
-
-private:
-	const T* ptr_;
-	size_t size_;
-};
 
 } // namespace Effekseer
 

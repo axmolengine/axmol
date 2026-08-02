@@ -209,9 +209,6 @@ temp/
 # ignore downloaded tools
 tools/external
 
-# ignore lua-tests res folder which is copy from cpp-tests
-tests/lua-tests/res/
-
 extensions/sceneio21
 extensions/sceneio20
 extensions/sceneio19
@@ -219,7 +216,6 @@ extensions/fonteng
 
 tools/bindings-generator/clang/prebuilt/*
 
-templates/lua-template-default/Content/src/axmol
 tests/lua-tests/Content/src/axmol
 tests/lua-tests/Content/res
 tests/cpp-tests/Content

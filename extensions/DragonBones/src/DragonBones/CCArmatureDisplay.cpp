@@ -131,66 +131,37 @@ DBCCSprite* DBCCSprite::create()
     return sprite;
 }
 
-bool DBCCSprite::_checkVisibility(const ax::Mat4& transform, const ax::Size& size, const ax::Rect& rect)
+bool DBCCSprite::_checkVisibility(const ax::SceneRenderState& state,
+                                  const ax::Mat4& transform,
+                                  const ax::Size& size,
+                                  const ax::Rect& rect)
 {
-    auto scene = ax::Director::getInstance()->getRunningScene();
-
-    // If draw to Rendertexture, return true directly.
-    //  only cull the default camera. The culling algorithm is valid for default camera.
-    if (!scene || (scene && scene->getDefaultCamera() != ax::Camera::getVisitingCamera()))
-        return true;
-
-    auto director = ax::Director::getInstance();
-    ax::Rect visiableRect(director->getVisibleOrigin(), director->getVisibleSize());
-
-    // transform center point to screen space
-    float hSizeX = size.width / 2;
-    float hSizeY = size.height / 2;
-
-    ax::Vec3 v3p(hSizeX, hSizeY, 0);
-
-    transform.transformPoint(&v3p);
-    ax::Vec2 v2p = ax::Camera::getVisitingCamera()->projectWorldToCanvas(v3p);
-
-    // convert content size to world coordinates
-    float wshw = std::max(fabsf(hSizeX * transform.m[0] + hSizeY * transform.m[4]),
-                          fabsf(hSizeX * transform.m[0] - hSizeY * transform.m[4]));
-    float wshh = std::max(fabsf(hSizeX * transform.m[1] + hSizeY * transform.m[5]),
-                          fabsf(hSizeX * transform.m[1] - hSizeY * transform.m[5]));
-
-    // enlarge visible rect half size in screen coord
-    visiableRect.origin.x -= wshw;
-    visiableRect.origin.y -= wshh;
-    visiableRect.size.width += wshw * 2;
-    visiableRect.size.height += wshh * 2;
-    bool ret = visiableRect.containsPoint(v2p);
-    return ret;
+    return state.checkVisibility(transform, size);
 }
 
-void DBCCSprite::draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags)
+void DBCCSprite::draw(const ax::SceneRenderState& state, const ax::Mat4& transform, uint32_t flags)
 {
 #if AX_USE_CULLING
     const auto& rect = _polyInfo.getRect();
 
     // Don't do calculate the culling if the transform was not updated
-    auto visitingCamera = ax::Camera::getVisitingCamera();
-    auto defaultCamera  = ax::Camera::getDefaultCamera();
-    if (visitingCamera == defaultCamera)
+    auto visitingCamera = state.getCamera();
+    if (visitingCamera)
     {
-        _insideBounds = ((flags & FLAGS_TRANSFORM_DIRTY) || visitingCamera->isViewProjectionUpdated())
-                            ? _checkVisibility(transform, _contentSize, rect)
-                            : _insideBounds;
+        _insideBounds = state.requiresVisibilityUpdate(flags) ? _checkVisibility(state, transform, _contentSize, rect)
+                                                              : _insideBounds;
     }
     else
     {
-        _insideBounds = _checkVisibility(transform, _contentSize, rect);
+        _insideBounds = _checkVisibility(state, transform, _contentSize, rect);
     }
 
     if (_insideBounds)
 #endif
     {
-        _trianglesCommand.init(_globalZOrder, _texture, _blendFunc, _polyInfo.triangles, transform, flags);
-        renderer->addCommand(&_trianglesCommand);
+        _trianglesCommand.init(_globalZOrder, _texture, _blendFunc, _polyInfo.triangles, transform, flags,
+                               state.getView());
+        state.getRenderer()->addCommand(&_trianglesCommand);
 
 #if AX_SPRITE_DEBUG_DRAW
         _debugDrawNode->clear();

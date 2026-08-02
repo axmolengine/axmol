@@ -51,7 +51,7 @@ public:
     float getPTMRatio() const { return _ratio; }
 
     // Overrides
-    void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    void draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags) override;
 
     b2DebugDraw& getB2DebugDraw() { return *_debugDraw; }
 

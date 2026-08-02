@@ -368,7 +368,7 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderDrawData(ImDrawData* draw_data)
     ImVec2 clip_scale = draw_data->FramebufferScale;  // (1,1) unless using retina display which are often (2,2)
 
     // Render command lists
-    for (int n = 0; n < draw_data->CmdListsCount; n++)
+    for (int n = 0; n < draw_data->CmdLists.size(); n++)
     {
         const ImDrawList* cmd_list = draw_data->CmdLists[n];
 
@@ -450,8 +450,12 @@ IMGUI_IMPL_API void ImGui_ImplAxmol_RenderDrawData(ImDrawData* draw_data)
                         const auto tr = node->getNodeToParentTransform();
                         node->setVisible(true);
                         node->setNodeToParentTransform(tr);
-                        const auto& proj = Camera::getDefaultCamera()->getViewProjectionMatrix();
-                        node->visit(Director::getInstance()->getRenderer(), proj.getInversed() * bd->Projection, 0);
+                        auto director = Director::getInstance();
+                        auto scene    = director->getRunningScene();
+                        auto camera   = scene ? scene->getDefaultCamera() : nullptr;
+                        const auto& proj = camera ? camera->getViewProjectionMatrix() : Mat4::identity;
+                        SceneRenderState renderState(director->getRenderer(), camera);
+                        node->visit(renderState, proj.getInversed() * bd->Projection, 0);
                         node->setVisible(false);
                     }
                 }

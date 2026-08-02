@@ -378,7 +378,7 @@ void MotionStreak::reset()
     _nuPoints = 0;
 }
 
-void MotionStreak::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+void MotionStreak::draw(const SceneRenderState& state, const Mat4& transform, uint32_t flags)
 {
     if (_nuPoints <= 1)
         return;
@@ -387,11 +387,11 @@ void MotionStreak::draw(Renderer* renderer, const Mat4& transform, uint32_t flag
 
     _customCommand.init(_globalZOrder, _blendFunc);
     _customCommand.setVertexDrawInfo(0, drawCount);
-    renderer->addCommand(&_customCommand);
+    state.getRenderer()->addCommand(&_customCommand);
 
     auto programState = _customCommand.unsafePS();
 
-    const auto& projectionMat = Camera::getVisitingViewProjectionMatrix();
+    const auto& projectionMat = state.getViewProjectionMatrix();
     Mat4 finalMat             = projectionMat * transform;
     programState->setUniform(_mvpMatrixLocaiton, finalMat.m, sizeof(Mat4));
 

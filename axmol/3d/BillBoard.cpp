@@ -93,27 +93,27 @@ BillBoard* BillBoard::create(Mode mode)
     return nullptr;
 }
 
-void BillBoard::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags)
+void BillBoard::visit(const SceneRenderState& state, const Mat4& parentTransform, uint32_t parentFlags)
 {
     // quick return if not visible. children won't be drawn.
     if (!_visible)
     {
         return;
     }
-    bool visibleByCamera = isVisitableByVisitingCamera();
+    bool visibleByCamera = isVisitableByCamera(state.cameraFlag);
     // quick return if not visible by camera and has no children.
     if (!visibleByCamera && _children.empty())
     {
         return;
     }
 
-    uint32_t flags = processParentFlags(parentTransform, parentFlags);
+    uint32_t flags = processParentFlags(state, parentTransform, parentFlags);
 
     // Add 3D flag so all the children will be rendered as 3D object
     flags |= FLAGS_RENDER_AS_3D;
 
     // Update Billboard transform
-    bool dirty = calculateBillboardTransform();
+    bool dirty = calculateBillboardTransform(state);
     if (dirty)
     {
         flags |= FLAGS_TRANSFORM_DIRTY;
@@ -130,28 +130,28 @@ void BillBoard::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t 
             auto node = _children.at(i);
 
             if (node && node->getLocalZOrder() < 0)
-                node->visit(renderer, _modelViewTransform, flags);
+                node->visit(state, _modelViewTransform, flags);
             else
                 break;
         }
         // self draw
         if (visibleByCamera)
-            this->draw(renderer, _modelViewTransform, flags);
+            this->draw(state, _modelViewTransform, flags);
 
         for (auto it = _children.cbegin() + i, itCend = _children.cend(); it != itCend; ++it)
-            (*it)->visit(renderer, _modelViewTransform, flags);
+            (*it)->visit(state, _modelViewTransform, flags);
     }
     else if (visibleByCamera)
     {
-        this->draw(renderer, _modelViewTransform, flags);
+        this->draw(state, _modelViewTransform, flags);
     }
 }
 
-bool BillBoard::calculateBillboardTransform()
+bool BillBoard::calculateBillboardTransform(const SceneRenderState& state)
 {
-    // Get camera world position
-    auto camera             = Camera::getVisitingCamera();
-    const Mat4& camWorldMat = camera->getNodeToWorldTransform();
+    // Get current view world transform. In XR this includes the eye/head pose
+    // from the SceneRenderState snapshot, not just the persistent Camera node.
+    const Mat4 camWorldMat = state.getViewMatrix().getInversed();
 
     // TODO: use math lib to calculate math lib Make it easier to read and maintain
     if (memcmp(_camWorldMat.m, camWorldMat.m, sizeof(float) * 16) != 0 ||
@@ -229,13 +229,13 @@ bool BillBoard::calculateBillboardTransform()
     return false;
 }
 
-void BillBoard::draw(Renderer* renderer, const Mat4& /*transform*/, uint32_t flags)
+void BillBoard::draw(const SceneRenderState& state, const Mat4& /*transform*/, uint32_t flags)
 {
     // FIXME: frustum culling here
     flags |= Node::FLAGS_RENDER_AS_3D;
-    _trianglesCommand.init(0, _texture, _blendFunc, _polyInfo.triangles, _modelViewTransform, flags);
-    setMVPMatrixUniform();  // update uniform
-    renderer->addCommand(&_trianglesCommand);
+    _trianglesCommand.init(0, _texture, _blendFunc, _polyInfo.triangles, _modelViewTransform, flags, state.getView());
+    setMVPMatrixUniform(state);  // update uniform
+    state.getRenderer()->addCommand(&_trianglesCommand);
 }
 
 void BillBoard::setMode(Mode mode)
