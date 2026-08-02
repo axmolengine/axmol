@@ -312,21 +312,18 @@ void Director::calculateDeltaTime()
             _deltaTime  = std::chrono::duration_cast<std::chrono::microseconds>(now - _lastUpdate).count() / 1000000.0f;
             _lastUpdate = now;
         }
-        _deltaTime = MAX(1e-6f, _deltaTime);
+        _deltaTime = std::clamp(_deltaTime, 1e-6f, _maxDeltaTime);
     }
-
-#if defined(_AX_DEBUG) && _AX_DEBUG
-    // If we are debugging our code, prevent big delta time
-    if (_deltaTime > 0.2f)
-    {
-        _deltaTime = 1 / 60.0f;
-    }
-#endif
 }
 
 float Director::getDeltaTime() const
 {
     return _deltaTime;
+}
+
+void Director::setMaxDeltaTime(float maxDeltaTime)
+{
+    _maxDeltaTime = MAX(maxDeltaTime, 1.0f / 60);
 }
 
 void Director::setRenderView(RenderViewCore* renderView)
