@@ -311,6 +311,7 @@ typedef void (* PFN_libdecor_frame_unset_maximized)(struct libdecor_frame*);
 typedef void (* PFN_libdecor_frame_set_capabilities)(struct libdecor_frame*,enum libdecor_capabilities);
 typedef void (* PFN_libdecor_frame_unset_capabilities)(struct libdecor_frame*,enum libdecor_capabilities);
 typedef void (* PFN_libdecor_frame_set_visibility)(struct libdecor_frame*,bool visible);
+typedef bool (* PFN_libdecor_frame_is_visible)(struct libdecor_frame*);
 typedef struct xdg_toplevel* (* PFN_libdecor_frame_get_xdg_toplevel)(struct libdecor_frame*);
 typedef bool (* PFN_libdecor_configuration_get_content_size)(struct libdecor_configuration*,struct libdecor_frame*,int*,int*);
 typedef bool (* PFN_libdecor_configuration_get_window_state)(struct libdecor_configuration*,enum libdecor_window_state*);
@@ -336,6 +337,7 @@ typedef void (* PFN_libdecor_state_free)(struct libdecor_state*);
 #define libdecor_frame_set_capabilities _glfw.wl.libdecor.libdecor_frame_set_capabilities_
 #define libdecor_frame_unset_capabilities _glfw.wl.libdecor.libdecor_frame_unset_capabilities_
 #define libdecor_frame_set_visibility _glfw.wl.libdecor.libdecor_frame_set_visibility_
+#define libdecor_frame_is_visible _glfw.wl.libdecor.libdecor_frame_is_visible_
 #define libdecor_frame_get_xdg_toplevel _glfw.wl.libdecor.libdecor_frame_get_xdg_toplevel_
 #define libdecor_configuration_get_content_size _glfw.wl.libdecor.libdecor_configuration_get_content_size_
 #define libdecor_configuration_get_window_state _glfw.wl.libdecor.libdecor_configuration_get_window_state_
@@ -375,7 +377,6 @@ typedef struct _GLFWwindowWayland
     GLFWbool                    transparent;
     GLFWbool                    scaleFramebuffer;
     struct wl_surface*          surface;
-    struct wl_callback*         callback;
 
     struct {
         struct wl_event_queue*  queue;
@@ -625,6 +626,7 @@ typedef struct _GLFWlibraryWayland
         PFN_libdecor_frame_set_capabilities libdecor_frame_set_capabilities_;
         PFN_libdecor_frame_unset_capabilities libdecor_frame_unset_capabilities_;
         PFN_libdecor_frame_set_visibility libdecor_frame_set_visibility_;
+        PFN_libdecor_frame_is_visible libdecor_frame_is_visible_;
         PFN_libdecor_frame_get_xdg_toplevel libdecor_frame_get_xdg_toplevel_;
         PFN_libdecor_configuration_get_content_size libdecor_configuration_get_content_size_;
         PFN_libdecor_configuration_get_window_state libdecor_configuration_get_window_state_;
