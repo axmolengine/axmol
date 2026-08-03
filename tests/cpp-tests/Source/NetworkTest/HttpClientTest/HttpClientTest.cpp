@@ -357,7 +357,7 @@ void HttpClientTest::onHttpRequestCompleted(HttpClient* sender, HttpResponse* re
     // dump data
     auto buffer = response->getResponseData();
     buffer->push_back('\0');  // to c_str
-    AXLOGI("Http Test, dump data: {}", buffer->data());
+    AXLOGI("Http Test, dump data: {}", reinterpret_cast<const char*>(buffer->data()));
     AXLOGI("\n");
     if (response->getHttpRequest()->getReferenceCount() != 2)
     {

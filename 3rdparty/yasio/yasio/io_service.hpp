@@ -642,7 +642,7 @@ private:
   ip::endpoint multiaddr_, multiif_;
 
   // Current it's only for UDP
-  tlx::sbyte_buffer buffer_;
+  tlx::byte_buffer buffer_;
 
   // The bytes transferred from socket low layer, currently, only works for client channel
   long long bytes_transferred_ = 0;
@@ -655,13 +655,13 @@ private:
 
 class io_send_buffer {
 public:
-  explicit io_send_buffer(tlx::sbyte_buffer&& mutable_buffer)
+  explicit io_send_buffer(tlx::byte_buffer&& mutable_buffer)
   {
     mutable_buffer_ = std::move(mutable_buffer);
     data_           = mutable_buffer_.data();
     size_           = mutable_buffer_.size();
   }
-  io_send_buffer(const char* const_buffer, size_t const_buffer_size)
+  io_send_buffer(const uint8_t* const_buffer, size_t const_buffer_size)
   {
     data_ = const_buffer;
     size_ = const_buffer_size;
@@ -676,13 +676,13 @@ public:
 
   bool empty() const { return size_ == 0; }
 
-  const char* data() const { return data_; }
+  const uint8_t* data() const { return data_; }
   size_t size() const { return size_; }
 
 private:
-  tlx::sbyte_buffer mutable_buffer_;
+  tlx::byte_buffer mutable_buffer_;
 
-  const char* data_;
+  const uint8_t* data_;
   size_t size_;
 };
 
@@ -742,7 +742,7 @@ public:
 protected:
   io_service& get_service() const { return ctx_->get_service(); }
   bool is_open() const { return state_ == state::OPENED && socket_ && socket_->is_open(); }
-  tlx::sbyte_buffer fetch_packet()
+  tlx::byte_buffer fetch_packet()
   {
     expected_size_ = -1;
     return std::move(expected_packet_);
@@ -778,11 +778,11 @@ protected:
 
   bool is_valid() const { return ctx_ != nullptr; }
 
-  tlx::sbyte_buffer buffer_;
+  tlx::byte_buffer buffer_;
   int offset_ = 0; // recv buffer offset
 
   int expected_size_ = -1;
-  tlx::sbyte_buffer expected_packet_;
+  tlx::byte_buffer expected_packet_;
 
   io_channel* ctx_;
 
@@ -838,7 +838,7 @@ protected:
   YASIO__DECL void confgure_remote(const ip::endpoint& peer);
 
   // process received data from low level
-  YASIO__DECL virtual int handle_input(char* data, int bytes_transferred, int& error, tlx::highp_time_t& wait_duration);
+  YASIO__DECL virtual int handle_input(uint8_t* data, int bytes_transferred, int& error, tlx::highp_time_t& wait_duration);
 
   ip::endpoint peer_;                // for recv only, unstable
   mutable ip::endpoint destination_; // for sendto only, stable
@@ -860,11 +860,11 @@ protected:
 
   YASIO__DECL bool do_write(tlx::highp_time_t& wait_duration) override;
 
-  YASIO__DECL int handle_input(char* buf, int len, int& error, tlx::highp_time_t& wait_duration) override;
+  YASIO__DECL int handle_input(uint8_t* buf, int len, int& error, tlx::highp_time_t& wait_duration) override;
 
   int interval() const { return kcp_->interval * std::milli::den; }
 
-  tlx::sbyte_buffer rawbuf_; // the low level raw buffer
+  tlx::byte_buffer rawbuf_; // the low level raw buffer
   ikcpcb* kcp_{nullptr};
   IUINT32 expire_time_{0}; // the next expire time(ms) to call ikcp_update
   std::function<int(const void*, int, const ip::endpoint*, int&)> underlaying_write_cb_;
@@ -873,7 +873,7 @@ protected:
 class io_transport_kcp {};
 #endif
 
-using io_packet = tlx::sbyte_buffer;
+using io_packet = tlx::byte_buffer;
 #if !defined(YASIO_USE_SHARED_PACKET)
 using packet_t = io_packet;
 inline packet_t wrap_packet(io_packet& raw_packet) { return std::move(raw_packet); }
@@ -895,14 +895,14 @@ inline io_packet::size_type packet_len(packet_t& pkt) { return pkt->size(); }
 class io_packet_view {
 public:
   io_packet_view() = default;
-  io_packet_view(char* d, int n) : data_(d), size_(n) {}
-  char* data() { return this->data_; }
-  const char* data() const { return this->data_; }
+  io_packet_view(uint8_t* d, int n) : data_(d), size_(n) {}
+  uint8_t* data() { return this->data_; }
+  const uint8_t* data() const { return this->data_; }
   size_t size() const { return this->size_; }
 
 private:
-  char* data_  = nullptr;
-  size_t size_ = 0;
+  uint8_t* data_ = nullptr;
+  size_t size_   = 0;
 };
 
 /*
@@ -1097,9 +1097,9 @@ public:
   */
   int write(transport_handle_t thandle, const void* buf, size_t len, completion_cb_t completion_handler = nullptr)
   {
-    return write(thandle, tlx::sbyte_buffer{(const char*)buf, (const char*)buf + len}, std::move(completion_handler));
+    return write(thandle, tlx::byte_buffer{(const unsigned char*)buf, (const unsigned char*)buf + len}, std::move(completion_handler));
   }
-  YASIO__DECL int write(transport_handle_t thandle, tlx::sbyte_buffer buffer, completion_cb_t completion_handler = nullptr);
+  YASIO__DECL int write(transport_handle_t thandle, tlx::byte_buffer buffer, completion_cb_t completion_handler = nullptr);
   YASIO__DECL int forward(transport_handle_t thandle, const void* buf, size_t len, completion_cb_t completion_handler);
 
   /*
@@ -1111,9 +1111,9 @@ public:
    */
   int write_to(transport_handle_t thandle, const void* buf, size_t len, const ip::endpoint& to, completion_cb_t completion_handler = nullptr)
   {
-    return write_to(thandle, tlx::sbyte_buffer{(const char*)buf, (const char*)buf + len}, to, std::move(completion_handler));
+    return write_to(thandle, tlx::byte_buffer{(const unsigned char*)buf, (const unsigned char*)buf + len}, to, std::move(completion_handler));
   }
-  YASIO__DECL int write_to(transport_handle_t thandle, tlx::sbyte_buffer buffer, const ip::endpoint& to, completion_cb_t completion_handler = nullptr);
+  YASIO__DECL int write_to(transport_handle_t thandle, tlx::byte_buffer buffer, const ip::endpoint& to, completion_cb_t completion_handler = nullptr);
   YASIO__DECL int forward_to(transport_handle_t thandle, const void* buf, size_t len, const ip::endpoint& to, completion_cb_t completion_handler);
 
   // The highp_timer support, !important, the callback is called on the thread of io_service

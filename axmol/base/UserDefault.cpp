@@ -90,7 +90,7 @@ static void ud_write_v_s(UserDefault* ud, yasio::obstream& obs, const std::strin
     obs.write_v(value);
     value_offset += (obs.length() - value_offset - value.length());
     if (!value.empty())
-        ud->encrypt(obs.data() + value_offset, value.length(), AES_ENCRYPT);
+        ud->encrypt(obs.buffer().as_chars().data() + value_offset, value.length(), AES_ENCRYPT);
 }
 
 void UserDefault::setEncryptEnabled(bool enabled, std::string_view key, std::string_view iv)
