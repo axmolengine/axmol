@@ -183,7 +183,7 @@
 
 ## OpenXR-SDK
 - [![Upstream](https://img.shields.io/github/v/release/KhronosGroup/OpenXR-SDK?label=Upstream)](https://github.com/KhronosGroup/OpenXR-SDK)
-- Version: 1.1.61
+- Version: 1.1.62
 - License: Apache-2.0
 
 ## OpenAL Soft
