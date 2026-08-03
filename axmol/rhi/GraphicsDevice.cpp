@@ -30,7 +30,7 @@
 namespace ax::rhi
 {
 
-VertexLayout* DriverBase::createVertexLayout(VertexLayoutDesc&& desc)
+VertexLayout* GraphicsDevice::createVertexLayout(VertexLayoutDesc&& desc)
 {
     return new VertexLayout(std::forward<VertexLayoutDesc>(desc));
 }

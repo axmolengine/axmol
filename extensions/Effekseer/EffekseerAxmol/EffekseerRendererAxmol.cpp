@@ -1,6 +1,6 @@
 #include "EffekseerRendererAxmol.h"
 
-#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/GraphicsDevice.h"
 #include "axmol/rhi/GraphicsCore.h"
 #include "axmol/rhi/RenderTarget.h"
 #include "axmol/rhi/VertexLayout.h"
@@ -186,7 +186,7 @@ class GraphicsDevice : public Effekseer::Backend::GraphicsDevice
 public:
     Effekseer::Backend::VertexBufferRef CreateVertexBuffer(int32_t size, const void* initialData, bool isDynamic) override
     {
-        auto buffer = ax::rhi::GraphicsCore::currentDriver()->createBuffer(
+        auto buffer = ax::rhi::GraphicsCore::device()->createBuffer(
             static_cast<size_t>(size), ax::rhi::BufferType::VERTEX,
             isDynamic ? ax::rhi::BufferUsage::DYNAMIC : ax::rhi::BufferUsage::STATIC, initialData);
         auto ret = Effekseer::MakeRefPtr<AxVertexBuffer>(buffer, size, initialData);
@@ -197,7 +197,7 @@ public:
     Effekseer::Backend::IndexBufferRef CreateIndexBuffer(int32_t elementCount, const void* initialData, Effekseer::Backend::IndexBufferStrideType stride) override
     {
         const auto strideSize = stride == Effekseer::Backend::IndexBufferStrideType::Stride2 ? 2 : 4;
-        auto buffer = ax::rhi::GraphicsCore::currentDriver()->createBuffer(
+        auto buffer = ax::rhi::GraphicsCore::device()->createBuffer(
             static_cast<size_t>(elementCount * strideSize), ax::rhi::BufferType::INDEX, ax::rhi::BufferUsage::STATIC, initialData);
         auto ret = Effekseer::MakeRefPtr<AxIndexBuffer>(buffer, elementCount, stride, initialData);
         AX_SAFE_RELEASE(buffer);
@@ -255,7 +255,7 @@ public:
         desc.width = static_cast<uint16_t>(param.Size[0]);
         desc.height = static_cast<uint16_t>(param.Size[1]);
         desc.pixelFormat = ax::rhi::PixelFormat::RGBA8;
-        auto texture = ax::rhi::GraphicsCore::currentDriver()->createTexture(desc);
+        auto texture = ax::rhi::GraphicsCore::device()->createTexture(desc);
         if (texture && !initialData.empty())
             texture->updateData(initialData.data(), desc.width, desc.height, 0, 0);
         auto ret = Effekseer::MakeRefPtr<AxTexture>(texture);
@@ -521,7 +521,7 @@ public:
             desc.addAttrib(_program->getVertexInputDesc(ax::rhi::VertexSemantic::TEXCOORD0), ax::rhi::VertexElementType::FLOAT2, uvOffset, false);
         }
         desc.endLayout(stride);
-        auto layout = ax::rhi::GraphicsCore::currentDriver()->createVertexLayout(std::move(desc));
+        auto layout = ax::rhi::GraphicsCore::device()->createVertexLayout(std::move(desc));
         _vertexLayouts.emplace(stride, layout);
         return layout;
     }

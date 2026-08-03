@@ -25,8 +25,8 @@
 
 #pragma once
 
-#include "axmol/rhi/RenderContext.h"
-#include "axmol/rhi/metal/DriverMTL.h"
+#include "axmol/rhi/GraphicsContext.h"
+#include "axmol/rhi/metal/GraphicsDeviceMTL.h"
 #include <unordered_map>
 
 namespace ax::rhi::mtl
@@ -45,15 +45,15 @@ class RenderTargetImpl;
  * @brief Store encoded commands for the GPU to execute.
  * A command buffer stores encoded commands until the buffer is committed for execution by the GPU
  */
-class RenderContextImpl : public RenderContext
+class GraphicsContextImpl : public GraphicsContext
 {
 public:
     /// @name Constructor, Destructor and Initializers
     /**
      * @param driver The device for which MTLCommandQueue object was created.
      */
-    RenderContextImpl(DriverImpl* driver, SurfaceHandle surface);
-    ~RenderContextImpl();
+    GraphicsContextImpl(GraphicsDeviceImpl* driver, SurfaceHandle surface);
+    ~GraphicsContextImpl();
 
     RenderTarget* getScreenRenderTarget() const override { return (RenderTarget*)_screenRT; }
 
@@ -251,7 +251,7 @@ private:
     id<CAMetalDrawable> _currentDrawable{nil};
     bool _restoreFrameBufferOnlyAfterDrawable{false};
 
-    // weak ref, like context, managed by DriverImpl
+    // weak ref, like context, managed by GraphicsDeviceImpl
     id<MTLCommandQueue> _mtlCmdQueue              = nil;
     id<MTLCommandBuffer> _currentCmdBuffer        = nil;
     id<MTLRenderCommandEncoder> _mtlRenderEncoder = nil;

@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "axmol/rhi/vulkan/RenderContextVK.h"
+#include "axmol/rhi/vulkan/GraphicsContextVK.h"
 #include "axmol/rhi/vulkan/RenderTargetVK.h"
 #include "axmol/rhi/vulkan/RenderPipelineVK.h"
 #include "axmol/rhi/vulkan/DepthStencilStateVK.h"
@@ -30,7 +30,7 @@
 #include "axmol/rhi/vulkan/BufferVK.h"
 #include "axmol/rhi/vulkan/TextureVK.h"
 #include "axmol/rhi/vulkan/UtilsVK.h"
-#include "axmol/rhi/vulkan/DriverVK.h"
+#include "axmol/rhi/vulkan/GraphicsDeviceVK.h"
 #include "axmol/rhi/vulkan/SemaphorePoolVK.h"
 #include "axmol/rhi/GraphicsCore.h"
 #include "axmol/rhi/SamplerRegistry.h"
@@ -117,7 +117,7 @@ static void destroySemphores(tlx::pod_vector<VkSemaphore>& semaphores, VkDevice 
 // NOTE: This implementation assumes the existence of a Vulkan driver context that owns device, queues,
 // swapchain, render pass, and descriptor management. Adapt integration points to your driver as needed.
 
-RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface)
+GraphicsContextImpl::GraphicsContextImpl(GraphicsDeviceImpl* driver, SurfaceHandle surface)
 {
     _driver        = driver;
     _surface       = static_cast<VkSurfaceKHR>(surface);
@@ -162,7 +162,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface)
     createUniformRingBuffers(2 * 1024 * 1024);  // 2 MB per frame
 }
 
-RenderContextImpl::~RenderContextImpl()
+GraphicsContextImpl::~GraphicsContextImpl()
 {
     vkDeviceWaitIdle(_device);
     vkQueueWaitIdle(_presentQueue);
@@ -201,7 +201,7 @@ RenderContextImpl::~RenderContextImpl()
 }
 
 // Create per-frame uniform ring buffers with persistent mapping
-void RenderContextImpl::createUniformRingBuffers(size_t capacityBytes)
+void GraphicsContextImpl::createUniformRingBuffers(size_t capacityBytes)
 {
     // Query minUniformBufferOffsetAlignment from physical device limits
 
@@ -260,7 +260,7 @@ void RenderContextImpl::createUniformRingBuffers(size_t capacityBytes)
 }
 
 // Destroy per-frame uniform ring buffers
-void RenderContextImpl::destroyUniformRingBuffers()
+void GraphicsContextImpl::destroyUniformRingBuffers()
 {
     auto device = _device;
     for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
@@ -285,14 +285,14 @@ void RenderContextImpl::destroyUniformRingBuffers()
 }
 
 // Reset current frame ring buffer write head after its fence is signaled
-void RenderContextImpl::resetUniformRingForCurrentFrame()
+void GraphicsContextImpl::resetUniformRingForCurrentFrame()
 {
     UniformRingBuffer& ring = _uniformRings[_frameIndex];
     ring.writeHead          = 0;
 }
 
 // Allocate aligned slice from current frame's ring buffer
-RenderContextImpl::UniformSlice RenderContextImpl::allocateUniformSlice(size_t size)
+GraphicsContextImpl::UniformSlice GraphicsContextImpl::allocateUniformSlice(size_t size)
 {
     UniformRingBuffer& ring = _uniformRings[_frameIndex];
 
@@ -311,7 +311,7 @@ RenderContextImpl::UniformSlice RenderContextImpl::allocateUniformSlice(size_t s
     return s;
 }
 
-void RenderContextImpl::createCommandBuffers()
+void GraphicsContextImpl::createCommandBuffers()
 {
     VkCommandBufferAllocateInfo allocInfo{};
     allocInfo.sType              = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -323,7 +323,7 @@ void RenderContextImpl::createCommandBuffers()
     AXASSERT(result == VK_SUCCESS, "vkAllocateCommandBuffers failed");
 }
 
-bool RenderContextImpl::updateSurface(SurfaceHandle surface, uint32_t width, uint32_t height)
+bool GraphicsContextImpl::updateSurface(SurfaceHandle surface, uint32_t width, uint32_t height)
 {
     if (width == _screenWidth && height == _screenHeight && surface == _surface)
         return true;
@@ -335,7 +335,7 @@ bool RenderContextImpl::updateSurface(SurfaceHandle surface, uint32_t width, uin
     return true;
 }
 
-void RenderContextImpl::recreateSwapchain()
+void GraphicsContextImpl::recreateSwapchain()
 {
     auto physical = _driver->getPhysical();
 
@@ -525,22 +525,22 @@ void RenderContextImpl::recreateSwapchain()
     _swapchainDirty = false;
 }
 
-void RenderContextImpl::setDepthStencilState(DepthStencilState* depthStencilState)
+void GraphicsContextImpl::setDepthStencilState(DepthStencilState* depthStencilState)
 {
     _depthStencilState = static_cast<DepthStencilStateImpl*>(depthStencilState);
 }
 
-void RenderContextImpl::setRenderPipeline(RenderPipeline* renderPipeline)
+void GraphicsContextImpl::setRenderPipeline(RenderPipeline* renderPipeline)
 {
     Object::assign(_renderPipeline, static_cast<RenderPipelineImpl*>(renderPipeline));
 }
 
-uint64_t RenderContextImpl::getCompletedFenceValue() const
+uint64_t GraphicsContextImpl::getCompletedFenceValue() const
 {
     return _completedFenceValue;
 }
 
-bool RenderContextImpl::beginFrame()
+bool GraphicsContextImpl::beginFrame()
 {
     if (_swapchainDirty) [[unlikely]]
     {
@@ -593,7 +593,7 @@ bool RenderContextImpl::beginFrame()
     return true;
 }
 
-void RenderContextImpl::beginRenderPass(RenderTarget* renderTarget, const RenderPassDesc& renderPassDesc)
+void GraphicsContextImpl::beginRenderPass(RenderTarget* renderTarget, const RenderPassDesc& renderPassDesc)
 {
     assert(_inFrame);
     auto rtImpl = static_cast<RenderTargetImpl*>(renderTarget);
@@ -609,7 +609,7 @@ void RenderContextImpl::beginRenderPass(RenderTarget* renderTarget, const Render
     rtImpl->beginRenderPass(_currentCmdBuffer, renderPassDesc, _renderTargetWidth, _renderTargetHeight, _imageIndex);
 }
 
-void RenderContextImpl::endRenderPass()
+void GraphicsContextImpl::endRenderPass()
 {
     auto rtImpl = static_cast<RenderTargetImpl*>(_currentRT);
     rtImpl->endRenderPass(_currentCmdBuffer);
@@ -630,7 +630,7 @@ void RenderContextImpl::endRenderPass()
     AX_SAFE_RELEASE_NULL(_instanceBuffer);
 }
 
-void RenderContextImpl::endFrame()
+void GraphicsContextImpl::endFrame()
 {
     VkResult vr = vkEndCommandBuffer(_currentCmdBuffer);
     AXASSERT(vr == VK_SUCCESS, "vkEndCommandBuffer failed");
@@ -694,7 +694,7 @@ void RenderContextImpl::endFrame()
     _inFrame = false;
 }
 
-void RenderContextImpl::submitCurrentFrameCommands(bool /*waitForCompletion*/)
+void GraphicsContextImpl::submitCurrentFrameCommands(bool /*waitForCompletion*/)
 {
     if (!_inFrame || _currentCmdBuffer == VK_NULL_HANDLE)
         return;
@@ -751,7 +751,7 @@ void RenderContextImpl::submitCurrentFrameCommands(bool /*waitForCompletion*/)
     _boundPipeline = VK_NULL_HANDLE;
 }
 
-bool RenderContextImpl::handleSwapchainResult(VkResult result, SwapchainOp op, uint32_t frameIndex)
+bool GraphicsContextImpl::handleSwapchainResult(VkResult result, SwapchainOp op, uint32_t frameIndex)
 {
     if (result == VK_SUCCESS)
         return true;
@@ -811,13 +811,13 @@ bool RenderContextImpl::handleSwapchainResult(VkResult result, SwapchainOp op, u
     return false;
 }
 
-void RenderContextImpl::updateDepthStencilState(const DepthStencilDesc& desc)
+void GraphicsContextImpl::updateDepthStencilState(const DepthStencilDesc& desc)
 {
     AXASSERT(_depthStencilState, "DepthStencilStateImpl not set");
     _depthStencilState->update(desc);
 }
 
-void RenderContextImpl::setViewport(int x, int y, unsigned int w, unsigned int h)
+void GraphicsContextImpl::setViewport(int x, int y, unsigned int w, unsigned int h)
 {
     if (w == 0 || h == 0)
         return;
@@ -836,7 +836,7 @@ void RenderContextImpl::setViewport(int x, int y, unsigned int w, unsigned int h
     }
 }
 
-void RenderContextImpl::setScissorRect(bool enabled, float x, float y, float width, float height)
+void GraphicsContextImpl::setScissorRect(bool enabled, float x, float y, float width, float height)
 {
     VkRect2D rect{};
     if (enabled)
@@ -868,16 +868,16 @@ void RenderContextImpl::setScissorRect(bool enabled, float x, float y, float wid
     }
 }
 
-void RenderContextImpl::setStencilReferenceValue(uint32_t value)
+void GraphicsContextImpl::setStencilReferenceValue(uint32_t value)
 {
     if (value != _stencilReferenceValue)
     {
-        RenderContext::setStencilReferenceValue(value);
+        GraphicsContext::setStencilReferenceValue(value);
         markDynamicStateDirty(DynamicStateBits::StencilRef);
     }
 }
 
-void RenderContextImpl::setCullMode(CullMode mode)
+void GraphicsContextImpl::setCullMode(CullMode mode)
 {
     VkCullModeFlags nativeMode{0};
     switch (mode)
@@ -900,7 +900,7 @@ void RenderContextImpl::setCullMode(CullMode mode)
     }
 }
 
-void RenderContextImpl::setWinding(Winding winding)
+void GraphicsContextImpl::setWinding(Winding winding)
 {
     VkFrontFace frontFace = VkFrontFace::VK_FRONT_FACE_MAX_ENUM;
     switch (winding)
@@ -920,7 +920,7 @@ void RenderContextImpl::setWinding(Winding winding)
     }
 }
 
-void RenderContextImpl::markExtendedDynamicStateDirty(ExtendedDynamicStateBits bits) noexcept
+void GraphicsContextImpl::markExtendedDynamicStateDirty(ExtendedDynamicStateBits bits) noexcept
 {
     if (_driver->isExtendedDynamicStateSupported())
     {
@@ -931,7 +931,7 @@ void RenderContextImpl::markExtendedDynamicStateDirty(ExtendedDynamicStateBits b
     }
 }
 
-void RenderContextImpl::setVertexBuffer(Buffer* buffer)
+void GraphicsContextImpl::setVertexBuffer(Buffer* buffer)
 {
     if (!buffer || _vertexBuffer == buffer)
         return;
@@ -940,7 +940,7 @@ void RenderContextImpl::setVertexBuffer(Buffer* buffer)
     _vertexBuffer = static_cast<BufferImpl*>(buffer);
 }
 
-void RenderContextImpl::setIndexBuffer(Buffer* buffer)
+void GraphicsContextImpl::setIndexBuffer(Buffer* buffer)
 {
     if (!buffer || _indexBuffer == buffer)
         return;
@@ -949,7 +949,7 @@ void RenderContextImpl::setIndexBuffer(Buffer* buffer)
     _indexBuffer = static_cast<BufferImpl*>(buffer);
 }
 
-void RenderContextImpl::setInstanceBuffer(Buffer* buffer)
+void GraphicsContextImpl::setInstanceBuffer(Buffer* buffer)
 {
     if (!buffer || _instanceBuffer == buffer)
         return;
@@ -958,9 +958,9 @@ void RenderContextImpl::setInstanceBuffer(Buffer* buffer)
     _instanceBuffer = static_cast<BufferImpl*>(buffer);
 }
 
-void RenderContextImpl::updatePipelineState(const RenderTarget* rt,
-                                            const PipelineDesc& desc,
-                                            PrimitiveType primitiveType)
+void GraphicsContextImpl::updatePipelineState(const RenderTarget* rt,
+                                              const PipelineDesc& desc,
+                                              PrimitiveType primitiveType)
 {
     auto primitiveTopology = toVkPrimitiveTopology(primitiveType);
     if (_extendedDynamicState.primitiveTopology != primitiveTopology)
@@ -969,7 +969,7 @@ void RenderContextImpl::updatePipelineState(const RenderTarget* rt,
         markExtendedDynamicStateDirty(ExtendedDynamicStateBits::PrimitiveTopology);
     }
 
-    RenderContext::updatePipelineState(rt, desc, primitiveType);
+    GraphicsContext::updatePipelineState(rt, desc, primitiveType);
     AXASSERT(_renderPipeline, "RenderPipelineImpl not set");
     _renderPipeline->prepareUpdate(_depthStencilState);
     _renderPipeline->update(rt, desc, _extendedDynamicState);
@@ -987,7 +987,7 @@ void RenderContextImpl::updatePipelineState(const RenderTarget* rt,
     }
 }
 
-void RenderContextImpl::applyPendingDynamicStates()
+void GraphicsContextImpl::applyPendingDynamicStates()
 {
     // Viewport
     if (bitmask::any(_inFlightDynamicDirtyBits[_frameIndex], DynamicStateBits::Viewport))
@@ -1032,19 +1032,19 @@ void RenderContextImpl::applyPendingDynamicStates()
     }
 }
 
-void RenderContextImpl::removeCachedPipelineObjects(VkRenderPass key)
+void GraphicsContextImpl::removeCachedPipelineObjects(VkRenderPass key)
 {
     if (_renderPipeline)
         _renderPipeline->removeCachedObjects(key);
 }
 
-void RenderContextImpl::removeCachedPipelineObjects(Program* key)
+void GraphicsContextImpl::removeCachedPipelineObjects(Program* key)
 {
     if (_renderPipeline)
         _renderPipeline->removeCachedObjects(key);
 }
 
-void RenderContextImpl::prepareDrawing()
+void GraphicsContextImpl::prepareDrawing()
 {
     AXASSERT(_programState, "ProgramState must be set before drawing");
     AXASSERT(_renderPipeline, "RenderPipelineImpl must be set before drawing");
@@ -1217,20 +1217,20 @@ void RenderContextImpl::prepareDrawing()
     }
 }
 
-void RenderContextImpl::drawArrays(size_t start, size_t count, bool /*wireframe*/)
+void GraphicsContextImpl::drawArrays(size_t start, size_t count, bool /*wireframe*/)
 {
     prepareDrawing();
     vkCmdDraw(_currentCmdBuffer, static_cast<uint32_t>(count), 1, static_cast<uint32_t>(start), 0);
 }
 
-void RenderContextImpl::drawArraysInstanced(size_t start, size_t count, int instanceCount, bool /*wireframe*/)
+void GraphicsContextImpl::drawArraysInstanced(size_t start, size_t count, int instanceCount, bool /*wireframe*/)
 {
     prepareDrawing();
     vkCmdDraw(_currentCmdBuffer, static_cast<uint32_t>(count), static_cast<uint32_t>(instanceCount),
               static_cast<uint32_t>(start), 0);
 }
 
-void RenderContextImpl::drawElements(IndexFormat indexType, size_t count, size_t offset, bool /*wireframe*/)
+void GraphicsContextImpl::drawElements(IndexFormat indexType, size_t count, size_t offset, bool /*wireframe*/)
 {
     prepareDrawing();
 
@@ -1242,11 +1242,11 @@ void RenderContextImpl::drawElements(IndexFormat indexType, size_t count, size_t
                      static_cast<uint32_t>(offset / (indexType == IndexFormat::U_SHORT ? 2u : 4u)), 0, 0);
 }
 
-void RenderContextImpl::drawElementsInstanced(IndexFormat indexType,
-                                              size_t count,
-                                              size_t offset,
-                                              int instanceCount,
-                                              bool /*wireframe*/)
+void GraphicsContextImpl::drawElementsInstanced(IndexFormat indexType,
+                                                size_t count,
+                                                size_t offset,
+                                                int instanceCount,
+                                                bool /*wireframe*/)
 {
     prepareDrawing();
 
@@ -1258,7 +1258,7 @@ void RenderContextImpl::drawElementsInstanced(IndexFormat indexType,
                      static_cast<uint32_t>(offset / (indexType == IndexFormat::U_SHORT ? 2u : 4u)), 0, 0);
 }
 
-void RenderContextImpl::readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback)
+void GraphicsContextImpl::readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback)
 {
     if (!rt)
     {
@@ -1273,7 +1273,7 @@ void RenderContextImpl::readPixels(RenderTarget* rt, std::function<void(const Pi
     });
 }
 
-void RenderContextImpl::doReadPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)>& callback)
+void GraphicsContextImpl::doReadPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)>& callback)
 {
     PixelBufferDesc pbd{};
     auto* rtImpl = static_cast<RenderTargetImpl*>(rt);
@@ -1368,7 +1368,7 @@ void RenderContextImpl::doReadPixels(RenderTarget* rt, std::function<void(const 
     callback(pbd);
 }
 
-bool RenderContextImpl::copyTexture(Texture* src, Texture* dst)
+bool GraphicsContextImpl::copyTexture(Texture* src, Texture* dst)
 {
     if (!validateTextureCopy(src, dst) || !_inFrame || _currentCmdBuffer == VK_NULL_HANDLE)
         return false;
@@ -1425,7 +1425,7 @@ bool RenderContextImpl::copyTexture(Texture* src, Texture* dst)
     return true;
 }
 
-bool RenderContextImpl::copyTexture(RenderTarget* src, Texture* dst)
+bool GraphicsContextImpl::copyTexture(RenderTarget* src, Texture* dst)
 {
     if (!src || !dst)
         return false;

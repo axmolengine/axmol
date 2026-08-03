@@ -26,7 +26,7 @@
 #pragma once
 
 #include "axmol/rhi/Texture.h"
-#include "axmol/rhi/metal/DriverMTL.h"
+#include "axmol/rhi/metal/GraphicsDeviceMTL.h"
 #import <Metal/Metal.h>
 
 namespace ax::rhi::mtl

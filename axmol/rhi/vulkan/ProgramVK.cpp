@@ -22,7 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "axmol/rhi/vulkan/ProgramVK.h"
-#include "axmol/rhi/vulkan/DriverVK.h"
+#include "axmol/rhi/vulkan/GraphicsDeviceVK.h"
 #include "axmol/rhi/ShaderCache.h"
 #include "axmol/base/Logging.h"
 
@@ -33,7 +33,7 @@ ProgramImpl::ProgramImpl(Data& vsData, Data& fsData) : Program(vsData, fsData) {
 
 ProgramImpl::~ProgramImpl()
 {
-    static_cast<DriverImpl*>(axdrv)->removeCachedPipelineObjects(this);
+    static_cast<GraphicsDeviceImpl*>(axdrv)->removeCachedPipelineObjects(this);
 }
 
 }  // namespace ax::rhi::vk

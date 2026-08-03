@@ -23,12 +23,12 @@
  ****************************************************************************/
 #include "axmol/rhi/d3d11/RenderTarget11.h"
 #include "axmol/rhi/d3d11/Texture11.h"
-#include "axmol/rhi/d3d11/Driver11.h"
+#include "axmol/rhi/d3d11/GraphicsDevice11.h"
 #include "axmol/rhi/DXUtils.h"
 
 namespace ax::rhi::d3d11
 {
-RenderTargetImpl::RenderTargetImpl(DriverImpl* driver, bool defaultRenderTarget)
+RenderTargetImpl::RenderTargetImpl(GraphicsDeviceImpl* driver, bool defaultRenderTarget)
     : _driver(driver), _device(driver->getDevice()), RenderTarget(defaultRenderTarget)
 {}
 

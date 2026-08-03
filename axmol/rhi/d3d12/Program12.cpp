@@ -22,7 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "axmol/rhi/d3d12/Program12.h"
-#include "axmol/rhi/d3d12/Driver12.h"
+#include "axmol/rhi/d3d12/GraphicsDevice12.h"
 #include "axmol/rhi/ShaderCache.h"
 #include "axmol/base/Logging.h"
 
@@ -33,6 +33,6 @@ ProgramImpl::ProgramImpl(Data& vsData, Data& fsData) : Program(vsData, fsData) {
 
 ProgramImpl::~ProgramImpl()
 {
-    static_cast<DriverImpl*>(axdrv)->removeCachedPipelineObjects(this);
+    static_cast<GraphicsDeviceImpl*>(axdrv)->removeCachedPipelineObjects(this);
 }
 }  // namespace ax::rhi::d3d12

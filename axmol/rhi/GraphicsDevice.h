@@ -39,7 +39,7 @@
 namespace ax::rhi
 {
 
-class RenderContext;
+class GraphicsContext;
 class Buffer;
 class ShaderModule;
 class RenderPipeline;
@@ -84,30 +84,30 @@ struct DriverCaps
 };
 
 /**
- * New or create resources from DriverBase.
+ * New or create resources from GraphicsDevice.
  */
-class AX_DLL DriverBase
+class AX_DLL GraphicsDevice
 {
     friend class ShaderCache;
     friend class SamplerRegistry;
     friend class GraphicsCore;
 
 protected:
-    virtual bool init()       = 0;
-    virtual DriverType type() = 0;
+    virtual bool init()            = 0;
+    virtual GraphicsBackend type() = 0;
 
 public:
-    virtual ~DriverBase() = default;
+    virtual ~GraphicsDevice() = default;
 
     /**
-     * Create a RenderContext (not auto‑released).
+     * Create a GraphicsContext (not auto‑released).
      * @param surfaceHandle Platform-specific surface:
      *        - Win32: HWND
      *        - UWP: IUnknown* (SwapChainPanel)
      *        - Vulkan: VkSurfaceKHR
-     * @return RenderContext instance
+     * @return GraphicsContext instance
      */
-    virtual RenderContext* createRenderContext(SurfaceHandle surface) = 0;
+    virtual GraphicsContext* createGraphicsContext(SurfaceHandle surface) = 0;
 
     /**
      * New a Buffer object, not auto released.

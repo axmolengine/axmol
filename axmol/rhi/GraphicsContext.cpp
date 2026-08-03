@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "axmol/rhi/RenderContext.h"
+#include "axmol/rhi/GraphicsContext.h"
 #include "axmol/rhi/PipelineDesc.h"
 #include "axmol/rhi/RenderTarget.h"
 #include "axmol/rhi/RHIUtils.h"
@@ -34,7 +34,7 @@
 namespace ax::rhi
 {
 
-bool RenderContext::validateTextureCopy(const Texture* src, const Texture* dst)
+bool GraphicsContext::validateTextureCopy(const Texture* src, const Texture* dst)
 {
     if (!src || !dst || src == dst)
         return false;
@@ -53,11 +53,11 @@ bool RenderContext::validateTextureCopy(const Texture* src, const Texture* dst)
     return formatDesc.blockWidth == 1 && formatDesc.blockHeight == 1;
 }
 
-RenderContext::~RenderContext() {}
+GraphicsContext::~GraphicsContext() {}
 
-void RenderContext::updatePipelineState(const RenderTarget* rt,
-                                        const PipelineDesc& desc,
-                                        PrimitiveType /*primitiveType*/)
+void GraphicsContext::updatePipelineState(const RenderTarget* rt,
+                                          const PipelineDesc& desc,
+                                          PrimitiveType /*primitiveType*/)
 {
     _programState = desc.programState;
     _vertexLayout = desc.vertexLayout;
@@ -66,21 +66,21 @@ void RenderContext::updatePipelineState(const RenderTarget* rt,
     assert(_vertexLayout);
 }
 
-void RenderContext::setStencilReferenceValue(uint32_t value)
+void GraphicsContext::setStencilReferenceValue(uint32_t value)
 {
     _stencilReferenceValue = value;
 }
 
-bool RenderContext::updateSurface(SurfaceHandle /*surface*/, uint32_t /*width*/, uint32_t /*height*/)
+bool GraphicsContext::updateSurface(SurfaceHandle /*surface*/, uint32_t /*width*/, uint32_t /*height*/)
 {
     return true;
 }
 
-void RenderContext::setFrameBufferOnly(bool /*frameBufferOnly*/) {}
+void GraphicsContext::setFrameBufferOnly(bool /*frameBufferOnly*/) {}
 
-void RenderContext::submitCurrentFrameCommands(bool /*waitForCompletion*/) {}
+void GraphicsContext::submitCurrentFrameCommands(bool /*waitForCompletion*/) {}
 
-uint64_t RenderContext::getCompletedFenceValue() const
+uint64_t GraphicsContext::getCompletedFenceValue() const
 {
     return (std::numeric_limits<uint64_t>::max)();
 }

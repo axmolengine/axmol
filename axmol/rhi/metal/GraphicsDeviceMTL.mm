@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "axmol/rhi/metal/DriverMTL.h"
-#include "axmol/rhi/metal/RenderContextMTL.h"
+#include "axmol/rhi/metal/GraphicsDeviceMTL.h"
+#include "axmol/rhi/metal/GraphicsContextMTL.h"
 #include "axmol/rhi/metal/BufferMTL.h"
 #include "axmol/rhi/metal/RenderPipelineMTL.h"
 #include "axmol/rhi/metal/ShaderModuleMTL.h"
@@ -33,14 +33,14 @@
 #include "axmol/rhi/metal/ProgramMTL.h"
 #include "axmol/rhi/metal/RenderTargetMTL.h"
 #include "axmol/rhi/metal/UtilsMTL.h"
-#include "axmol/rhi/DriverFactory.h"
+#include "axmol/rhi/GraphicsDeviceFactory.h"
 #include "axmol/base/Macros.h"
 
 namespace ax::rhi
 {
-std::unique_ptr<DriverBase> MetalDriverFactory::create()
+std::unique_ptr<GraphicsDevice> MetalGraphicsDeviceFactory::create()
 {
-    return std::make_unique<mtl::DriverImpl>();
+    return std::make_unique<mtl::GraphicsDeviceImpl>();
 }
 }  // namespace ax::rhi
 
@@ -392,13 +392,13 @@ bool supportS3TC(FeatureSet featureSet)
 }
 }  // namespace
 
-bool DriverImpl::_isDepth24Stencil8PixelFormatSupported = false;
+bool GraphicsDeviceImpl::_isDepth24Stencil8PixelFormatSupported = false;
 
-DriverImpl::DriverImpl() {}
+GraphicsDeviceImpl::GraphicsDeviceImpl() {}
 
-DriverImpl::~DriverImpl() {}
+GraphicsDeviceImpl::~GraphicsDeviceImpl() {}
 
-bool DriverImpl::init()
+bool GraphicsDeviceImpl::init()
 {
     _mtlDevice   = MTLCreateSystemDefaultDevice();
     _mtlCmdQueue = [_mtlDevice newCommandQueue];
@@ -433,22 +433,22 @@ bool DriverImpl::init()
     return true;
 }
 
-RenderContext* DriverImpl::createRenderContext(SurfaceHandle surface)
+GraphicsContext* GraphicsDeviceImpl::createGraphicsContext(SurfaceHandle surface)
 {
-    return new RenderContextImpl(this, surface);
+    return new GraphicsContextImpl(this, surface);
 }
 
-Buffer* DriverImpl::createBuffer(size_t size, BufferType type, BufferUsage usage, const void* initial)
+Buffer* GraphicsDeviceImpl::createBuffer(size_t size, BufferType type, BufferUsage usage, const void* initial)
 {
     return new BufferImpl(_mtlDevice, size, type, usage, initial);
 }
 
-Texture* DriverImpl::createTexture(const TextureDesc& descriptor, std::optional<Color>)
+Texture* GraphicsDeviceImpl::createTexture(const TextureDesc& descriptor, std::optional<Color>)
 {
     return new TextureImpl(_mtlDevice, descriptor);
 }
 
-Texture* DriverImpl::createTextureFromNativeHandle(const ExternalTextureDesc& descriptor)
+Texture* GraphicsDeviceImpl::createTextureFromNativeHandle(const ExternalTextureDesc& descriptor)
 {
     id<MTLTexture> nativeTexture = (id<MTLTexture>)descriptor.nativeTexture.ptr;
     if (!nativeTexture)
@@ -459,7 +459,7 @@ Texture* DriverImpl::createTextureFromNativeHandle(const ExternalTextureDesc& de
     return texture;
 }
 
-RenderTarget* DriverImpl::createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment)
+RenderTarget* GraphicsDeviceImpl::createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment)
 {
     auto rtMTL = new RenderTargetImpl();
     rtMTL->setColorTexture(colorAttachment);
@@ -467,27 +467,27 @@ RenderTarget* DriverImpl::createRenderTarget(Texture* colorAttachment, Texture* 
     return rtMTL;
 }
 
-DepthStencilState* DriverImpl::createDepthStencilState()
+DepthStencilState* GraphicsDeviceImpl::createDepthStencilState()
 {
     return new DepthStencilStateImpl(_mtlDevice);
 }
 
-RenderPipeline* DriverImpl::createRenderPipeline()
+RenderPipeline* GraphicsDeviceImpl::createRenderPipeline()
 {
     return new RenderPipelineImpl(_mtlDevice);
 }
 
-Program* DriverImpl::createProgram(Data vsData, Data fsData)
+Program* GraphicsDeviceImpl::createProgram(Data vsData, Data fsData)
 {
     return new ProgramImpl(vsData, fsData);
 }
 
-ShaderModule* DriverImpl::createShaderModule(ShaderStage stage, Data& chunk)
+ShaderModule* GraphicsDeviceImpl::createShaderModule(ShaderStage stage, Data& chunk)
 {
     return new ShaderModuleImpl(_mtlDevice, stage, chunk);
 }
 
-SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
+SamplerHandle GraphicsDeviceImpl::createSampler(const SamplerDesc& desc)
 {
     MTLSamplerDescriptor* samplerDesc = [[MTLSamplerDescriptor alloc] init];
 
@@ -593,7 +593,7 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
     return SamplerHandle{(__bridge void*)sampler};
 }
 
-void DriverImpl::destroySampler(SamplerHandle& sampler)
+void GraphicsDeviceImpl::destroySampler(SamplerHandle& sampler)
 {
     if (sampler)
     {
@@ -602,27 +602,27 @@ void DriverImpl::destroySampler(SamplerHandle& sampler)
     }
 }
 
-std::string DriverImpl::getVendor() const
+std::string GraphicsDeviceImpl::getVendor() const
 {
     return "Apple Inc.";
 }
 
-std::string DriverImpl::getRenderer() const
+std::string GraphicsDeviceImpl::getRenderer() const
 {
     return _deviceName;
 }
 
-std::string DriverImpl::getVersion() const
+std::string GraphicsDeviceImpl::getVersion() const
 {
     return std::string{featureSetToString(_featureSet)};
 }
 
-std::string DriverImpl::getShaderVersion() const
+std::string GraphicsDeviceImpl::getShaderVersion() const
 {
     return "MSL 2.0"s;
 }
 
-bool DriverImpl::checkForFeatureSupported(FeatureType feature)
+bool GraphicsDeviceImpl::checkForFeatureSupported(FeatureType feature)
 {
     bool featureSupported = false;
     switch (feature)

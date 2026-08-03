@@ -34,7 +34,7 @@ namespace ax::rhi::d3d12
 class DepthStencilStateImpl;
 class VertexLayoutImpl;
 class ProgramImpl;
-class DriverImpl;
+class GraphicsDeviceImpl;
 struct DescriptorHandle;
 
 struct RootSignatureEntry
@@ -69,7 +69,7 @@ public:
     static constexpr int SET_INDEX_SRV            = 1;
     static constexpr int SAMPLER_ROOT_INDEX       = 0;
 
-    explicit RenderPipelineImpl(DriverImpl* driver);
+    explicit RenderPipelineImpl(GraphicsDeviceImpl* driver);
     ~RenderPipelineImpl();
 
     void prepareUpdate(DepthStencilStateImpl* ds,
@@ -98,7 +98,7 @@ private:
     void updateGraphicsPipeline(const PipelineDesc& desc, ProgramImpl* program);
 
 private:
-    DriverImpl* _driver{nullptr};
+    GraphicsDeviceImpl* _driver{nullptr};
 
     const DepthStencilStateImpl* _dsState{nullptr};
 

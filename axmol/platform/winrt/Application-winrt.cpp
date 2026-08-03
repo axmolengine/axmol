@@ -275,7 +275,7 @@ void Application::boot(SwapChainPanel const& panel)
     // If any of the high-performance APIs (D3D11/D3D12/Vulkan/Metal) are enabled,
     // the runtime will attempt initialization in the default priority order.
     // If all attempts fail, OpenGL will then be explicitly selected as the fallback.
-    ax::rhi::GraphicsCore::makeCurrentDriver();
+    ax::rhi::GraphicsCore::initialize();
 
     if (_renderLoopWorker != nullptr && _renderLoopWorker.Status() == AsyncStatus::Started)
         return;
@@ -323,7 +323,7 @@ void Application::boot(SwapChainPanel const& panel)
             surfaceFuture.get();
 
             _renderView->makeSurfaceCurrent();
-            rhi::GraphicsCore::activateCurrentDriver();
+            rhi::GraphicsCore::activate();
         }
 
         // must after egl surface created when not use d3d RHI

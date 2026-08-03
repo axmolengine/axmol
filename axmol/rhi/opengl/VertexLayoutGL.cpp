@@ -23,7 +23,7 @@
  ****************************************************************************/
 #include "axmol/rhi/opengl/VertexLayoutGL.h"
 #include "axmol/rhi/opengl/ProgramGL.h"
-#include "axmol/rhi/opengl/DriverGL.h"
+#include "axmol/rhi/opengl/GraphicsDeviceGL.h"
 #include "axmol/rhi/opengl/UtilsGL.h"
 #include "axmol/rhi/opengl/MacrosGL.h"
 #include "axmol/rhi/opengl/BufferGL.h"
@@ -112,10 +112,10 @@ void VertexLayoutImpl::apply(BufferImpl* vertexBuffer, BufferImpl* instanceBuffe
     glBindVertexArray(_vao);
 
     const auto& desc = getDesc();
-    glBindVertexBuffer(DriverImpl::VBO_BINDING_INDEX, vertexBuffer->internalHandle(), 0, desc.getStride());
+    glBindVertexBuffer(GraphicsDeviceImpl::VBO_BINDING_INDEX, vertexBuffer->internalHandle(), 0, desc.getStride());
 
     if (instanceBuffer)
-        glBindVertexBuffer(DriverImpl::VBO_INSTANCING_BINDING_INDEX, instanceBuffer->internalHandle(), 0,
+        glBindVertexBuffer(GraphicsDeviceImpl::VBO_INSTANCING_BINDING_INDEX, instanceBuffer->internalHandle(), 0,
                            desc.getInstanceStride());
 
     // usedBits = _usedBits;
@@ -137,8 +137,8 @@ void VertexLayoutImpl::setupVAO()
 
     for (const auto& inputDesc : bindings)
     {
-        GLuint bindingIndex =
-            inputDesc.instanceStepRate ? DriverImpl::VBO_INSTANCING_BINDING_INDEX : DriverImpl::VBO_BINDING_INDEX;
+        GLuint bindingIndex = inputDesc.instanceStepRate ? GraphicsDeviceImpl::VBO_INSTANCING_BINDING_INDEX
+                                                         : GraphicsDeviceImpl::VBO_BINDING_INDEX;
 
         GLuint attribIndex = inputDesc.index;
         if (!inputDesc.instanceStepRate)

@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "axmol/rhi/opengl/RenderContextGL.h"
+#include "axmol/rhi/opengl/GraphicsContextGL.h"
 #include "axmol/rhi/opengl/BufferGL.h"
 #include "axmol/rhi/opengl/RenderPipelineGL.h"
 #include "axmol/rhi/opengl/TextureGL.h"
@@ -32,7 +32,7 @@
 #include "axmol/rhi/opengl/MacrosGL.h"
 #include "axmol/rhi/opengl/UtilsGL.h"
 #include "axmol/rhi/opengl/RenderTargetGL.h"
-#include "axmol/rhi/opengl/DriverGL.h"
+#include "axmol/rhi/opengl/GraphicsDeviceGL.h"
 #include "axmol/rhi/opengl/VertexLayoutGL.h"
 #include "axmol/rhi/SamplerRegistry.h"
 #include "axmol/rhi/RHIUtils.h"
@@ -53,12 +53,12 @@ namespace ax::rhi::gl
 #    define AX_HAVE_MAP_BUFFER_RANGE 0
 #endif
 
-RenderContextImpl::RenderContextImpl(DriverImpl* driver)
+GraphicsContextImpl::GraphicsContextImpl(GraphicsDeviceImpl* driver)
 {
     _screenRT = new RenderTargetImpl(driver, true);
 }
 
-RenderContextImpl::~RenderContextImpl()
+GraphicsContextImpl::~GraphicsContextImpl()
 {
     cleanResources();
 
@@ -66,12 +66,12 @@ RenderContextImpl::~RenderContextImpl()
     AX_SAFE_RELEASE_NULL(_renderPipeline);
 }
 
-bool RenderContextImpl::beginFrame()
+bool GraphicsContextImpl::beginFrame()
 {
     return true;
 }
 
-void RenderContextImpl::beginRenderPass(RenderTarget* rt, const RenderPassDesc& descriptor)
+void GraphicsContextImpl::beginRenderPass(RenderTarget* rt, const RenderPassDesc& descriptor)
 {
     auto rtGL = static_cast<RenderTargetImpl*>(rt);
 
@@ -146,12 +146,12 @@ void RenderContextImpl::beginRenderPass(RenderTarget* rt, const RenderPassDesc& 
     CHECK_GL_ERROR_DEBUG();
 }
 
-void RenderContextImpl::setDepthStencilState(DepthStencilState* depthStencilState)
+void GraphicsContextImpl::setDepthStencilState(DepthStencilState* depthStencilState)
 {
     _depthStencilStateImpl = static_cast<DepthStencilStateImpl*>(depthStencilState);
 }
 
-void RenderContextImpl::setRenderPipeline(RenderPipeline* renderPipeline)
+void GraphicsContextImpl::setRenderPipeline(RenderPipeline* renderPipeline)
 {
     Object::assign(_renderPipeline, static_cast<RenderPipelineImpl*>(renderPipeline));
 }
@@ -160,7 +160,7 @@ void RenderContextImpl::setRenderPipeline(RenderPipeline* renderPipeline)
  * Update depthStencil status, improvment: for metal backend cache it
  * @param depthStencilState Specifies the depth and stencil status
  */
-void RenderContextImpl::updateDepthStencilState(const DepthStencilDesc& desc)
+void GraphicsContextImpl::updateDepthStencilState(const DepthStencilDesc& desc)
 {
     _depthStencilStateImpl->update(desc);
 }
@@ -169,33 +169,33 @@ void RenderContextImpl::updateDepthStencilState(const DepthStencilDesc& desc)
  * Update render pipeline status
  * @param depthStencilState Specifies the depth and stencil status
  */
-void RenderContextImpl::updatePipelineState(const RenderTarget* rt,
-                                            const PipelineDesc& desc,
-                                            PrimitiveType primitiveType)
+void GraphicsContextImpl::updatePipelineState(const RenderTarget* rt,
+                                              const PipelineDesc& desc,
+                                              PrimitiveType primitiveType)
 {
-    RenderContext::updatePipelineState(rt, desc, primitiveType);
+    GraphicsContext::updatePipelineState(rt, desc, primitiveType);
 
     _renderPipeline->update(rt, desc);
 
     _primitiveType = UtilsGL::toGLPrimitiveType(primitiveType);
 }
 
-void RenderContextImpl::setViewport(int x, int y, unsigned int w, unsigned int h)
+void GraphicsContextImpl::setViewport(int x, int y, unsigned int w, unsigned int h)
 {
     __state->viewport(_viewport.set(x, y, w, h));
 }
 
-void RenderContextImpl::setCullMode(CullMode mode)
+void GraphicsContextImpl::setCullMode(CullMode mode)
 {
     _cullMode = mode;
 }
 
-void RenderContextImpl::setWinding(Winding winding)
+void GraphicsContextImpl::setWinding(Winding winding)
 {
     __state->winding(UtilsGL::toGLFrontFace(winding));
 }
 
-void RenderContextImpl::setVertexBuffer(Buffer* buffer)
+void GraphicsContextImpl::setVertexBuffer(Buffer* buffer)
 {
     assert(buffer != nullptr);
     if (buffer == nullptr || _vertexBuffer == buffer)
@@ -206,7 +206,7 @@ void RenderContextImpl::setVertexBuffer(Buffer* buffer)
     _vertexBuffer = static_cast<BufferImpl*>(buffer);
 }
 
-void RenderContextImpl::setIndexBuffer(Buffer* buffer)
+void GraphicsContextImpl::setIndexBuffer(Buffer* buffer)
 {
     assert(buffer != nullptr);
     if (buffer == nullptr || _indexBuffer == buffer)
@@ -217,7 +217,7 @@ void RenderContextImpl::setIndexBuffer(Buffer* buffer)
     _indexBuffer = static_cast<BufferImpl*>(buffer);
 }
 
-void RenderContextImpl::setInstanceBuffer(Buffer* buffer)
+void GraphicsContextImpl::setInstanceBuffer(Buffer* buffer)
 {
     assert(buffer != nullptr);
     if (buffer == nullptr || _instanceBuffer == buffer)
@@ -228,7 +228,7 @@ void RenderContextImpl::setInstanceBuffer(Buffer* buffer)
     _instanceBuffer = static_cast<BufferImpl*>(buffer);
 }
 
-void RenderContextImpl::drawArrays(size_t start, size_t count, bool wireframe)
+void GraphicsContextImpl::drawArrays(size_t start, size_t count, bool wireframe)
 {
     prepareDrawing();
 #if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
@@ -246,7 +246,7 @@ void RenderContextImpl::drawArrays(size_t start, size_t count, bool wireframe)
     cleanResources();
 }
 
-void RenderContextImpl::drawArraysInstanced(size_t start, size_t count, int instanceCount, bool wireframe)
+void GraphicsContextImpl::drawArraysInstanced(size_t start, size_t count, int instanceCount, bool wireframe)
 {
     prepareDrawing();
 #if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
@@ -264,7 +264,7 @@ void RenderContextImpl::drawArraysInstanced(size_t start, size_t count, int inst
     cleanResources();
 }
 
-void RenderContextImpl::drawElements(IndexFormat indexType, size_t count, size_t offset, bool wireframe)
+void GraphicsContextImpl::drawElements(IndexFormat indexType, size_t count, size_t offset, bool wireframe)
 {
     prepareDrawing();
 #if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
@@ -284,11 +284,11 @@ void RenderContextImpl::drawElements(IndexFormat indexType, size_t count, size_t
     cleanResources();
 }
 
-void RenderContextImpl::drawElementsInstanced(IndexFormat indexType,
-                                              size_t count,
-                                              size_t offset,
-                                              int instanceCount,
-                                              bool wireframe)
+void GraphicsContextImpl::drawElementsInstanced(IndexFormat indexType,
+                                                size_t count,
+                                                size_t offset,
+                                                int instanceCount,
+                                                bool wireframe)
 {
     prepareDrawing();
 #if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
@@ -308,16 +308,16 @@ void RenderContextImpl::drawElementsInstanced(IndexFormat indexType,
     cleanResources();
 }
 
-void RenderContextImpl::endRenderPass()
+void GraphicsContextImpl::endRenderPass()
 {
     AX_SAFE_RELEASE_NULL(_indexBuffer);
     AX_SAFE_RELEASE_NULL(_vertexBuffer);
     AX_SAFE_RELEASE_NULL(_instanceBuffer);
 }
 
-void RenderContextImpl::endFrame() {}
+void GraphicsContextImpl::endFrame() {}
 
-void RenderContextImpl::submitCurrentFrameCommands(bool waitForCompletion)
+void GraphicsContextImpl::submitCurrentFrameCommands(bool waitForCompletion)
 {
     if (waitForCompletion)
         glFinish();
@@ -325,7 +325,7 @@ void RenderContextImpl::submitCurrentFrameCommands(bool waitForCompletion)
         glFlush();
 }
 
-void RenderContextImpl::prepareDrawing() const
+void GraphicsContextImpl::prepareDrawing() const
 {
     const auto& program = _renderPipeline->getProgram();
     __state->useProgram(program->internalHandle());
@@ -350,7 +350,7 @@ void RenderContextImpl::prepareDrawing() const
         __state->disableCullFace();
 }
 
-void RenderContextImpl::bindVertexBuffer(uint32_t& usedBits) const
+void GraphicsContextImpl::bindVertexBuffer(uint32_t& usedBits) const
 {
     assert(_vertexLayout);
 
@@ -358,7 +358,7 @@ void RenderContextImpl::bindVertexBuffer(uint32_t& usedBits) const
     vl->apply(_vertexBuffer, _instanceBuffer, usedBits);
 }
 
-void RenderContextImpl::bindUniforms(ProgramImpl* program) const
+void GraphicsContextImpl::bindUniforms(ProgramImpl* program) const
 {
     if (_programState)
     {
@@ -420,13 +420,13 @@ void RenderContextImpl::bindUniforms(ProgramImpl* program) const
     }
 }
 
-void RenderContextImpl::cleanResources()
+void GraphicsContextImpl::cleanResources()
 {
     _programState = nullptr;
     _vertexLayout = nullptr;
 }
 
-void RenderContextImpl::setScissorRect(bool enabled, float x, float y, float width, float height)
+void GraphicsContextImpl::setScissorRect(bool enabled, float x, float y, float width, float height)
 {
     if (enabled)
     {
@@ -439,7 +439,7 @@ void RenderContextImpl::setScissorRect(bool enabled, float x, float y, float wid
     }
 }
 
-void RenderContextImpl::readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback)
+void GraphicsContextImpl::readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback)
 {
     PixelBufferDesc pbd;
     if (rt->isDefaultRenderTarget())
@@ -459,13 +459,13 @@ void RenderContextImpl::readPixels(RenderTarget* rt, std::function<void(const Pi
     callback(pbd);
 }
 
-void RenderContextImpl::readPixels(RenderTarget* rt,
-                                   int x,
-                                   int y,
-                                   uint32_t width,
-                                   uint32_t height,
-                                   uint32_t bytesPerRow,
-                                   PixelBufferDesc& pbd)
+void GraphicsContextImpl::readPixels(RenderTarget* rt,
+                                     int x,
+                                     int y,
+                                     uint32_t width,
+                                     uint32_t height,
+                                     uint32_t bytesPerRow,
+                                     PixelBufferDesc& pbd)
 {
     auto rtGL = static_cast<RenderTargetImpl*>(rt);
     rtGL->bindFrameBuffer();
@@ -528,7 +528,7 @@ void RenderContextImpl::readPixels(RenderTarget* rt,
         rtGL->unbindFrameBuffer();
 }
 
-bool RenderContextImpl::copyTexture(Texture* src, Texture* dst)
+bool GraphicsContextImpl::copyTexture(Texture* src, Texture* dst)
 {
     if (!validateTextureCopy(src, dst))
         return false;
@@ -580,7 +580,7 @@ bool RenderContextImpl::copyTexture(Texture* src, Texture* dst)
     return framebufferComplete;
 }
 
-bool RenderContextImpl::copyTexture(RenderTarget* src, Texture* dst)
+bool GraphicsContextImpl::copyTexture(RenderTarget* src, Texture* dst)
 {
     if (!src || !dst || dst->getTextureType() != TextureType::TEXTURE_2D || dst->getArraySize() != 1 ||
         dst->getMipLevels() != 1 || dst->getWidth() <= 0 || dst->getHeight() <= 0 ||

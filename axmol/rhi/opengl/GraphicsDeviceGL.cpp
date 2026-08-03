@@ -23,12 +23,12 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "axmol/rhi/opengl/DriverGL.h"
+#include "axmol/rhi/opengl/GraphicsDeviceGL.h"
 #include "axmol/platform/Common.h"
 #include "axmol/rhi/opengl/RenderPipelineGL.h"
 #include "axmol/rhi/opengl/BufferGL.h"
 #include "axmol/rhi/opengl/ShaderModuleGL.h"
-#include "axmol/rhi/opengl/RenderContextGL.h"
+#include "axmol/rhi/opengl/GraphicsContextGL.h"
 #include "axmol/rhi/opengl/TextureGL.h"
 #include "axmol/rhi/opengl/DepthStencilStateGL.h"
 #include "axmol/rhi/opengl/ProgramGL.h"
@@ -81,15 +81,15 @@ static bool loadGL()
 }
 #endif
 
-DriverImpl::DriverImpl() {}
+GraphicsDeviceImpl::GraphicsDeviceImpl() {}
 
-DriverImpl::~DriverImpl()
+GraphicsDeviceImpl::~GraphicsDeviceImpl()
 {
     if (_sharedVAO)
         glDeleteVertexArrays(1, &_sharedVAO);
 }
 
-bool DriverImpl::init()
+bool GraphicsDeviceImpl::init()
 {
 #if _AX_USE_GLAD
     if (!loadGL())
@@ -187,27 +187,27 @@ bool DriverImpl::init()
     return true;
 }
 
-GLint DriverImpl::getDefaultFBO() const
+GLint GraphicsDeviceImpl::getDefaultFBO() const
 {
     return _defaultFBO;
 }
 
-RenderContext* DriverImpl::createRenderContext(SurfaceHandle)
+GraphicsContext* GraphicsDeviceImpl::createGraphicsContext(SurfaceHandle)
 {
-    return new RenderContextImpl(this);
+    return new GraphicsContextImpl(this);
 }
 
-Buffer* DriverImpl::createBuffer(size_t size, BufferType type, BufferUsage usage, const void* initial)
+Buffer* GraphicsDeviceImpl::createBuffer(size_t size, BufferType type, BufferUsage usage, const void* initial)
 {
     return new BufferImpl(size, type, usage, initial);
 }
 
-Texture* DriverImpl::createTexture(const TextureDesc& desc, std::optional<Color>)
+Texture* GraphicsDeviceImpl::createTexture(const TextureDesc& desc, std::optional<Color>)
 {
     return new TextureImpl(desc);
 }
 
-Texture* DriverImpl::createTextureFromNativeHandle(const ExternalTextureDesc& descriptor)
+Texture* GraphicsDeviceImpl::createTextureFromNativeHandle(const ExternalTextureDesc& descriptor)
 {
     auto nativeTexture = static_cast<GLuint>(descriptor.nativeTexture.u64);
     if (!nativeTexture)
@@ -218,7 +218,7 @@ Texture* DriverImpl::createTextureFromNativeHandle(const ExternalTextureDesc& de
     return texture;
 }
 
-RenderTarget* DriverImpl::createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment)
+RenderTarget* GraphicsDeviceImpl::createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment)
 {
     auto rtGL = new RenderTargetImpl(this, false);
     rtGL->bindFrameBuffer();
@@ -227,12 +227,12 @@ RenderTarget* DriverImpl::createRenderTarget(Texture* colorAttachment, Texture* 
     return rtGL;
 }
 
-ShaderModule* DriverImpl::createShaderModule(ShaderStage stage, Data& data)
+ShaderModule* GraphicsDeviceImpl::createShaderModule(ShaderStage stage, Data& data)
 {
     return new ShaderModuleImpl(stage, data);
 }
 
-SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
+SamplerHandle GraphicsDeviceImpl::createSampler(const SamplerDesc& desc)
 {
     GLuint sampler = 0;
     glGenSamplers(1, &sampler);
@@ -356,7 +356,7 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
     return static_cast<uint64_t>(sampler);
 }
 
-void DriverImpl::destroySampler(SamplerHandle& h)
+void GraphicsDeviceImpl::destroySampler(SamplerHandle& h)
 {
     if (h)
     {
@@ -366,27 +366,27 @@ void DriverImpl::destroySampler(SamplerHandle& h)
     }
 }
 
-DepthStencilState* DriverImpl::createDepthStencilState()
+DepthStencilState* GraphicsDeviceImpl::createDepthStencilState()
 {
     return new DepthStencilStateImpl();
 }
 
-RenderPipeline* DriverImpl::createRenderPipeline()
+RenderPipeline* GraphicsDeviceImpl::createRenderPipeline()
 {
     return new RenderPipelineImpl();
 }
 
-Program* DriverImpl::createProgram(Data vsData, Data fsData)
+Program* GraphicsDeviceImpl::createProgram(Data vsData, Data fsData)
 {
     return new ProgramImpl(vsData, fsData);
 }
 
-VertexLayout* DriverImpl::createVertexLayout(VertexLayoutDesc&& desc)
+VertexLayout* GraphicsDeviceImpl::createVertexLayout(VertexLayoutDesc&& desc)
 {
     return new VertexLayoutImpl(std::move(desc));
 }
 
-void DriverImpl::resetState()
+void GraphicsDeviceImpl::resetState()
 {
     OpenGLState::reset();
 }
@@ -602,31 +602,31 @@ void main()
     return supported;
 }
 
-bool DriverImpl::isGLES2Only() const
+bool GraphicsDeviceImpl::isGLES2Only() const
 {
     return _verInfo.es && _verInfo.major == 2;
 }
 
-std::string DriverImpl::getVendor() const
+std::string GraphicsDeviceImpl::getVendor() const
 {
     return (char const*)glGetString(GL_VENDOR);
 }
-std::string DriverImpl::getRenderer() const
+std::string GraphicsDeviceImpl::getRenderer() const
 {
     return (char const*)glGetString(GL_RENDERER);
 }
 
-std::string DriverImpl::getVersion() const
+std::string GraphicsDeviceImpl::getVersion() const
 {
     return _version;
 }
 
-std::string DriverImpl::getShaderVersion() const
+std::string GraphicsDeviceImpl::getShaderVersion() const
 {
     return (char const*)glGetString(GL_SHADING_LANGUAGE_VERSION);
 }
 
-bool DriverImpl::checkForFeatureSupported(FeatureType feature)
+bool GraphicsDeviceImpl::checkForFeatureSupported(FeatureType feature)
 {
     bool featureSupported = false;
     switch (feature)
@@ -691,13 +691,13 @@ bool DriverImpl::checkForFeatureSupported(FeatureType feature)
     return featureSupported;
 }
 
-bool DriverImpl::hasExtension(std::string_view searchName) const
+bool GraphicsDeviceImpl::hasExtension(std::string_view searchName) const
 {
     const auto key = tlx::hash32_str(searchName);
     return _glExtensions.find(key) != _glExtensions.end();
 }
 
-std::string DriverImpl::dumpExtensions() const
+std::string GraphicsDeviceImpl::dumpExtensions() const
 {
     std::string strExts;
 

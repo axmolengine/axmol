@@ -22,7 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "axmol/rhi/vulkan/VertexLayoutVK.h"
-#include "axmol/rhi/vulkan/RenderContextVK.h"
+#include "axmol/rhi/vulkan/GraphicsContextVK.h"
 #include "axmol/base/Logging.h"
 
 namespace ax::rhi::vk
@@ -76,8 +76,8 @@ VertexLayoutImpl::VertexLayoutImpl(VertexLayoutDesc&& desc) : VertexLayout(std::
     for (auto& inputDesc : bindingsDesc)
     {
         VkVertexInputBindingDescription binding{};
-        binding.binding   = inputDesc.instanceStepRate ? RenderContextImpl::VI_INSTANCING_BINDING_INDEX
-                                                       : RenderContextImpl::VI_BINDING_INDEX;
+        binding.binding   = inputDesc.instanceStepRate ? GraphicsContextImpl::VI_INSTANCING_BINDING_INDEX
+                                                       : GraphicsContextImpl::VI_BINDING_INDEX;
         binding.stride    = inputDesc.instanceStepRate ? static_cast<uint32_t>(getInstanceStride())
                                                        : static_cast<uint32_t>(getStride());
         binding.inputRate = inputDesc.instanceStepRate ? VK_VERTEX_INPUT_RATE_INSTANCE : VK_VERTEX_INPUT_RATE_VERTEX;

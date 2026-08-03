@@ -892,7 +892,7 @@ void Director::cleanupDirector()
     ProgramManager::destroyInstance();
     VertexLayoutManager::destroyInstance();
 
-    rhi::GraphicsCore::destroyCurrentDriver();
+    rhi::GraphicsCore::shutdown();
 
     if (_renderView)
     {

@@ -21,8 +21,8 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "axmol/rhi/d3d11/Driver11.h"
-#include "axmol/rhi/d3d11/RenderContext11.h"
+#include "axmol/rhi/d3d11/GraphicsDevice11.h"
+#include "axmol/rhi/d3d11/GraphicsContext11.h"
 #include "axmol/rhi/d3d11/Buffer11.h"
 #include "axmol/rhi/d3d11/Texture11.h"
 #include "axmol/rhi/d3d11/Program11.h"
@@ -41,9 +41,9 @@
 
 namespace ax::rhi
 {
-std::unique_ptr<DriverBase> D3D11DriverFactory::create()
+std::unique_ptr<GraphicsDevice> D3D11GraphicsDeviceFactory::create()
 {
-    return std::make_unique<d3d11::DriverImpl>();
+    return std::make_unique<d3d11::GraphicsDeviceImpl>();
 }
 }  // namespace ax::rhi
 
@@ -87,9 +87,9 @@ static uint32_t FindMaxMsaaSamples(ID3D11Device* device, DXGI_FORMAT format)
 }
 }  // namespace
 
-DriverImpl::DriverImpl() {}
+GraphicsDeviceImpl::GraphicsDeviceImpl() {}
 
-bool DriverImpl::init()
+bool GraphicsDeviceImpl::init()
 {
     _AXASSERT_HR(CreateDXGIFactory1(__uuidof(IDXGIFactory1), (void**)&_dxgiFactory));
 
@@ -103,7 +103,7 @@ bool DriverImpl::init()
     return true;
 }
 
-DriverImpl::~DriverImpl()
+GraphicsDeviceImpl::~GraphicsDeviceImpl()
 {
     SafeRelease(_context);
 
@@ -120,7 +120,7 @@ DriverImpl::~DriverImpl()
         debug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
 }
 
-void DriverImpl::initializeDevice(bool requestDebugLayer)
+void GraphicsDeviceImpl::initializeDevice(bool requestDebugLayer)
 {
     constexpr UINT releaseFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
     constexpr UINT debugFlags   = releaseFlags | D3D11_CREATE_DEVICE_DEBUG;
@@ -218,7 +218,7 @@ L_DeviceCreated:
     _caps.maxSamplesAllowed = static_cast<int32_t>(FindMaxMsaaSamples(_device, DXGI_FORMAT_R8G8B8A8_UNORM));
 }
 
-void DriverImpl::selectAdapter(PowerPreference powerPreference)
+void GraphicsDeviceImpl::selectAdapter(PowerPreference powerPreference)
 {
     ComPtr<IDXGIAdapter> bestAdapter;
     int bestScore = std::numeric_limits<int>::min();
@@ -271,14 +271,14 @@ void DriverImpl::selectAdapter(PowerPreference powerPreference)
     _dxgiAdapter = std::move(bestAdapter);
 }
 
-HRESULT DriverImpl::createD3DDevice(int requestDriverType,
-                                    int createFlags,
-                                    std::span<const D3D_FEATURE_LEVEL> featureLevels)
+HRESULT GraphicsDeviceImpl::createD3DDevice(int requestedD3DType,
+                                            int createFlags,
+                                            std::span<const D3D_FEATURE_LEVEL> featureLevels)
 {
     if (_dxgiAdapter)
-        requestDriverType = D3D_DRIVER_TYPE_UNKNOWN;
+        requestedD3DType = D3D_DRIVER_TYPE_UNKNOWN;
     return ::D3D11CreateDevice(_dxgiAdapter.Get(),                       // Adapter
-                               (D3D_DRIVER_TYPE)requestDriverType,       // Driver Type
+                               (D3D_DRIVER_TYPE)requestedD3DType,        // Driver Type
                                nullptr,                                  // Software
                                createFlags,                              // Flags
                                featureLevels.data(),                     // Feature Levels
@@ -289,12 +289,12 @@ HRESULT DriverImpl::createD3DDevice(int requestDriverType,
                                &_context);
 }
 
-RenderContext* DriverImpl::createRenderContext(SurfaceHandle surface)
+GraphicsContext* GraphicsDeviceImpl::createGraphicsContext(SurfaceHandle surface)
 {
-    return new RenderContextImpl(this, surface);
+    return new GraphicsContextImpl(this, surface);
 }
 
-Buffer* DriverImpl::createBuffer(size_t size, BufferType type, BufferUsage usage, const void* initial)
+Buffer* GraphicsDeviceImpl::createBuffer(size_t size, BufferType type, BufferUsage usage, const void* initial)
 {
     return new BufferImpl(_device, _context, size, type, usage, initial);
 }
@@ -304,12 +304,12 @@ Buffer* DriverImpl::createBuffer(size_t size, BufferType type, BufferUsage usage
  * @param descriptor Specifies texture description.
  * @return A Texture object.
  */
-Texture* DriverImpl::createTexture(const TextureDesc& descriptor, std::optional<Color>)
+Texture* GraphicsDeviceImpl::createTexture(const TextureDesc& descriptor, std::optional<Color>)
 {
     return new TextureImpl(_device, descriptor);
 }
 
-Texture* DriverImpl::createTextureFromNativeHandle(const ExternalTextureDesc& descriptor)
+Texture* GraphicsDeviceImpl::createTextureFromNativeHandle(const ExternalTextureDesc& descriptor)
 {
     auto nativeTexture = static_cast<ID3D11Texture2D*>(descriptor.nativeTexture.ptr);
     if (!nativeTexture)
@@ -320,7 +320,7 @@ Texture* DriverImpl::createTextureFromNativeHandle(const ExternalTextureDesc& de
     return texture;
 }
 
-RenderTarget* DriverImpl::createRenderTarget(Texture* colorAttachment, Texture* depthAttachment)
+RenderTarget* GraphicsDeviceImpl::createRenderTarget(Texture* colorAttachment, Texture* depthAttachment)
 {
     auto renderTarget = new RenderTargetImpl(this, false);
     renderTarget->setColorTexture(colorAttachment);
@@ -331,7 +331,7 @@ RenderTarget* DriverImpl::createRenderTarget(Texture* colorAttachment, Texture* 
 /**
  * New a DepthStencilState object.
  */
-DepthStencilState* DriverImpl::createDepthStencilState()
+DepthStencilState* GraphicsDeviceImpl::createDepthStencilState()
 {
     return new DepthStencilStateImpl(_device);
 }
@@ -341,22 +341,22 @@ DepthStencilState* DriverImpl::createDepthStencilState()
  * @param descriptor Specifies render pipeline description.
  * @return A RenderPipeline object.
  */
-RenderPipeline* DriverImpl::createRenderPipeline()
+RenderPipeline* GraphicsDeviceImpl::createRenderPipeline()
 {
     return new RenderPipelineImpl(_device, _context);
 }
 
-Program* DriverImpl::createProgram(Data vsData, Data fsData)
+Program* GraphicsDeviceImpl::createProgram(Data vsData, Data fsData)
 {
     return new ProgramImpl(vsData, fsData);
 }
 
-ShaderModule* DriverImpl::createShaderModule(ShaderStage stage, Data& chunk)
+ShaderModule* GraphicsDeviceImpl::createShaderModule(ShaderStage stage, Data& chunk)
 {
     return new ShaderModuleImpl(this, stage, chunk);
 }
 
-IUnknown* DriverImpl::compileShader(std::span<uint8_t> shaderCode, ShaderStage stage, ID3DBlob*& outBlob)
+IUnknown* GraphicsDeviceImpl::compileShader(std::span<uint8_t> shaderCode, ShaderStage stage, ID3DBlob*& outBlob)
 {
     ComPtr<ID3DBlob> errorBlob;
     UINT flags = D3DCOMPILE_OPTIMIZATION_LEVEL2 | D3DCOMPILE_ENABLE_STRICTNESS;
@@ -413,7 +413,7 @@ IUnknown* DriverImpl::compileShader(std::span<uint8_t> shaderCode, ShaderStage s
     return shader;
 }
 
-IUnknown* DriverImpl::createShaderFromBytecode(std::span<uint8_t> bytecode, ShaderStage stage)
+IUnknown* GraphicsDeviceImpl::createShaderFromBytecode(std::span<uint8_t> bytecode, ShaderStage stage)
 {
     IUnknown* shader = nullptr;
     if (stage == ShaderStage::VERTEX)
@@ -431,7 +431,7 @@ IUnknown* DriverImpl::createShaderFromBytecode(std::span<uint8_t> bytecode, Shad
     return shader;
 }
 
-SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
+SamplerHandle GraphicsDeviceImpl::createSampler(const SamplerDesc& desc)
 {
     D3D11_SAMPLER_DESC sd = {};
 
@@ -487,14 +487,14 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
     return SamplerHandle(sampler);
 }
 
-void DriverImpl::destroySampler(SamplerHandle& h)
+void GraphicsDeviceImpl::destroySampler(SamplerHandle& h)
 {
     auto samplerState = static_cast<ID3D11SamplerState*>(h);
     SafeRelease(samplerState);
     h = nullptr;
 }
 
-VertexLayout* DriverImpl::createVertexLayout(VertexLayoutDesc&& desc)
+VertexLayout* GraphicsDeviceImpl::createVertexLayout(VertexLayoutDesc&& desc)
 {
     return new VertexLayoutImpl(std::move(desc));
 }
@@ -506,7 +506,7 @@ VertexLayout* DriverImpl::createVertexLayout(VertexLayoutDesc&& desc)
  * Get vendor device name.
  * @return Vendor device name.
  */
-std::string DriverImpl::getVendor() const
+std::string GraphicsDeviceImpl::getVendor() const
 {
     return std::string{RHIUtils::vendorToString(_adapterDesc.VendorId)};
 }
@@ -515,7 +515,7 @@ std::string DriverImpl::getVendor() const
  * Get the full name of the vendor device.
  * @return The full name of the vendor device.
  */
-std::string DriverImpl::getRenderer() const
+std::string GraphicsDeviceImpl::getRenderer() const
 {
     auto desc = ntcvt::from_chars(_adapterDesc.Description);
     return _featureLevel >= D3D_FEATURE_LEVEL_11_0 ? fmt::format("{} D3D11 vs_5_0 ps_5_0", desc)
@@ -526,7 +526,7 @@ std::string DriverImpl::getRenderer() const
  * Get featureSet name.
  * @return FeatureSet name.
  */
-std::string DriverImpl::getVersion() const
+std::string GraphicsDeviceImpl::getVersion() const
 {
     if (_driverVersion.has_value())
     {
@@ -542,7 +542,7 @@ std::string DriverImpl::getVersion() const
     }
 }
 
-std::string DriverImpl::getShaderVersion() const
+std::string GraphicsDeviceImpl::getShaderVersion() const
 {
     return _featureLevel >= D3D_FEATURE_LEVEL_11_0 ? "D3D11 HLSL vs_5_0 ps_5_0"s : "D3D10 HLSL vs_4_1 ps_4_1"s;
 }
@@ -552,7 +552,7 @@ std::string DriverImpl::getShaderVersion() const
  * @param feature Specify feature to be query.
  * @return true if the feature is supported, false otherwise.
  */
-bool DriverImpl::checkForFeatureSupported(FeatureType feature)
+bool GraphicsDeviceImpl::checkForFeatureSupported(FeatureType feature)
 {
     // enum class FeatureType : uint32_t
     // {
@@ -590,7 +590,7 @@ bool DriverImpl::checkForFeatureSupported(FeatureType feature)
     return false;
 }
 
-bool DriverImpl::checkFormatSupport(DXGI_FORMAT format)
+bool GraphicsDeviceImpl::checkFormatSupport(DXGI_FORMAT format)
 {
     UINT formatSupport = 0;
     HRESULT hr         = _device->CheckFormatSupport(format, &formatSupport);

@@ -28,44 +28,44 @@
 
 namespace ax::rhi
 {
-class DriverFactory
+class GraphicsDeviceFactory
 {
 public:
-    DriverFactory(DriverType driverType, int prio) : _driverType(driverType), _priority(prio) {}
-    virtual ~DriverFactory()                     = default;
-    virtual std::unique_ptr<DriverBase> create() = 0;
+    GraphicsDeviceFactory(GraphicsBackend driverType, int prio) : _driverType(driverType), _priority(prio) {}
+    virtual ~GraphicsDeviceFactory()                 = default;
+    virtual std::unique_ptr<GraphicsDevice> create() = 0;
 
-    DriverType type() const { return _driverType; };
+    GraphicsBackend type() const { return _driverType; };
 
     int priority() const { return _priority; }
     void priority(int pri) { _priority = pri; }
 
 protected:
-    DriverType _driverType;
+    GraphicsBackend _driverType;
     int _priority;
 };
 
-struct D3D12DriverFactory : DriverFactory
+struct D3D12GraphicsDeviceFactory : GraphicsDeviceFactory
 {
-    D3D12DriverFactory(int prio) : DriverFactory(DriverType::D3D12, prio) {}
-    std::unique_ptr<DriverBase> create() override;
+    D3D12GraphicsDeviceFactory(int prio) : GraphicsDeviceFactory(GraphicsBackend::D3D12, prio) {}
+    std::unique_ptr<GraphicsDevice> create() override;
 };
 
-struct D3D11DriverFactory : DriverFactory
+struct D3D11GraphicsDeviceFactory : GraphicsDeviceFactory
 {
-    D3D11DriverFactory(int prio) : DriverFactory(DriverType::D3D11, prio) {}
-    std::unique_ptr<DriverBase> create() override;
+    D3D11GraphicsDeviceFactory(int prio) : GraphicsDeviceFactory(GraphicsBackend::D3D11, prio) {}
+    std::unique_ptr<GraphicsDevice> create() override;
 };
 
-struct VulkanDriverFactory : DriverFactory
+struct VulkanGraphicsDeviceFactory : GraphicsDeviceFactory
 {
-    VulkanDriverFactory(int prio) : DriverFactory(DriverType::Vulkan, prio) {}
-    std::unique_ptr<DriverBase> create() override;
+    VulkanGraphicsDeviceFactory(int prio) : GraphicsDeviceFactory(GraphicsBackend::Vulkan, prio) {}
+    std::unique_ptr<GraphicsDevice> create() override;
 };
 
-struct MetalDriverFactory : DriverFactory
+struct MetalGraphicsDeviceFactory : GraphicsDeviceFactory
 {
-    MetalDriverFactory(int prio) : DriverFactory(DriverType::Metal, prio) {}
-    std::unique_ptr<DriverBase> create() override;
+    MetalGraphicsDeviceFactory(int prio) : GraphicsDeviceFactory(GraphicsBackend::Metal, prio) {}
+    std::unique_ptr<GraphicsDevice> create() override;
 };
 }  // namespace ax::rhi

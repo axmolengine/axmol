@@ -22,7 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 #pragma once
-#include "axmol/rhi/RenderContext.h"
+#include "axmol/rhi/GraphicsContext.h"
 #include "axmol/rhi/vulkan/RenderPipelineVK.h"
 #include <glad/vulkan.h>
 
@@ -32,7 +32,7 @@ class BufferImpl;
 class DepthStencilStateImpl;
 class RenderPipelineImpl;
 class RenderTargetImpl;
-class DriverImpl;
+class GraphicsDeviceImpl;
 class SemaphorePool;
 
 enum class DynamicStateBits : uint32_t
@@ -62,7 +62,7 @@ struct GPUFence
     uint64_t fenceValue{0};
 };
 
-class RenderContextImpl : public RenderContext
+class GraphicsContextImpl : public GraphicsContext
 {
     static constexpr DynamicStateBits PIPELINE_ALL_DYNAMIC_BITS =
         DynamicStateBits::Viewport | DynamicStateBits::Scissor | DynamicStateBits::StencilRef;
@@ -89,8 +89,8 @@ public:
     static constexpr int VS_UBO_BINDING_INDEX = 0;
     static constexpr int FS_UBO_BINDING_INDEX = 1;
 
-    RenderContextImpl(DriverImpl* driver, SurfaceHandle surface);
-    ~RenderContextImpl() override;
+    GraphicsContextImpl(GraphicsDeviceImpl* driver, SurfaceHandle surface);
+    ~GraphicsContextImpl() override;
 
     RenderTarget* getScreenRenderTarget() const override { return (RenderTarget*)_screenRT; }
 
@@ -165,7 +165,7 @@ private:
 
     void applyPendingDynamicStates();
 
-    DriverImpl* _driver{nullptr};
+    GraphicsDeviceImpl* _driver{nullptr};
     VkSurfaceKHR _surface{VK_NULL_HANDLE};
     VkDevice _device{VK_NULL_HANDLE};
 

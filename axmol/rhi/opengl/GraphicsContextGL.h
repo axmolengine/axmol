@@ -26,7 +26,7 @@
 #pragma once
 
 #include "axmol/rhi/RHITypes.h"
-#include "axmol/rhi/RenderContext.h"
+#include "axmol/rhi/GraphicsContext.h"
 #include "axmol/base/CustomEventListener.h"
 #include "axmol/platform/GL.h"
 
@@ -42,7 +42,7 @@ class RenderPipelineImpl;
 class ProgramImpl;
 class DepthStencilStateImpl;
 class RenderTargetImpl;
-class DriverImpl;
+class GraphicsDeviceImpl;
 
 /**
  * @addtogroup _opengl
@@ -53,11 +53,11 @@ class DriverImpl;
  * @brief Store encoded commands for the GPU to execute.
  * A command buffer stores encoded commands until the buffer is committed for execution by the GPU
  */
-class RenderContextImpl : public RenderContext
+class GraphicsContextImpl : public GraphicsContext
 {
 public:
-    RenderContextImpl(DriverImpl* driver);
-    ~RenderContextImpl();
+    GraphicsContextImpl(GraphicsDeviceImpl* driver);
+    ~GraphicsContextImpl();
 
     RenderTarget* getScreenRenderTarget() const override { return (RenderTarget*)_screenRT; }
 

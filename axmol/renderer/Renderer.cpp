@@ -205,7 +205,7 @@ void Renderer::init()
 
     auto driver        = axdrv;
     auto nativeDisplay = Director::getInstance()->getRenderView()->getNativeDisplay();
-    _context           = driver->createRenderContext(nativeDisplay);
+    _context           = driver->createGraphicsContext(nativeDisplay);
     _dsDesc.flags      = DepthStencilFlags::ALL;
     _currentRT = _defaultRT = _context->getScreenRenderTarget();
 

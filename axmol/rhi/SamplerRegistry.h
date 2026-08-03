@@ -38,7 +38,7 @@ namespace rhi
  * @{
  */
 
-class DriverBase;
+class GraphicsDevice;
 
 struct SamplerId
 {
@@ -140,7 +140,7 @@ private:
 
     tlx::hash_map<uint32_t, uint32_t> _samplersRegistry;  // legacy desc => sampler index registry
 
-    DriverBase* _driver{nullptr};
+    GraphicsDevice* _driver{nullptr};
 
     uint32_t _nextSamplerIndex{0};
 };

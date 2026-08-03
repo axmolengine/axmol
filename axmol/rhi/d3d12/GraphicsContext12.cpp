@@ -21,8 +21,8 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "axmol/rhi/d3d12/RenderContext12.h"
-#include "axmol/rhi/d3d12/Driver12.h"
+#include "axmol/rhi/d3d12/GraphicsContext12.h"
+#include "axmol/rhi/d3d12/GraphicsDevice12.h"
 #include "axmol/rhi/d3d12/RenderTarget12.h"
 #include "axmol/rhi/d3d12/RenderPipeline12.h"
 #include "axmol/rhi/d3d12/DepthStencilState12.h"
@@ -98,7 +98,7 @@ uint64_t GPUFence::wait() const
     return completeFenceValue;
 }
 
-RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface) : _driver(driver)
+GraphicsContextImpl::GraphicsContextImpl(GraphicsDeviceImpl* driver, SurfaceHandle surface) : _driver(driver)
 {
     _device        = driver->getDevice();
     _graphicsQueue = driver->getGraphicsQueue();
@@ -249,7 +249,7 @@ RenderContextImpl::RenderContextImpl(DriverImpl* driver, SurfaceHandle surface) 
         bitmask::set(stateBits, PIPELINE_REQUIRED_DYNAMIC_BITS);
 }
 
-RenderContextImpl::~RenderContextImpl()
+GraphicsContextImpl::~GraphicsContextImpl()
 {
     _driver->waitForGPU();
 
@@ -279,7 +279,7 @@ RenderContextImpl::~RenderContextImpl()
     AX_SAFE_RELEASE_NULL(_instanceBuffer);
 }
 
-void RenderContextImpl::createCommandObjects()
+void GraphicsContextImpl::createCommandObjects()
 {
     for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
     {
@@ -301,7 +301,7 @@ void RenderContextImpl::createCommandObjects()
     }
 }
 
-void RenderContextImpl::createDescriptorHeaps()
+void GraphicsContextImpl::createDescriptorHeaps()
 {
     const auto maxTextureUnits = static_cast<UINT>(_driver->getMaxTextureUnits());
     const auto maxDescriptors  = maxTextureUnits * MAX_ALLOW_DRAW_CALLS;
@@ -315,7 +315,7 @@ void RenderContextImpl::createDescriptorHeaps()
     }
 }
 
-bool RenderContextImpl::updateSurface(SurfaceHandle /*surface*/, uint32_t width, uint32_t height)
+bool GraphicsContextImpl::updateSurface(SurfaceHandle /*surface*/, uint32_t width, uint32_t height)
 {
     // For D3D12, surface is HWND; if resized, mark for swapchain resize
     if (_screenWidth == width && _screenHeight == height)
@@ -329,22 +329,22 @@ bool RenderContextImpl::updateSurface(SurfaceHandle /*surface*/, uint32_t width,
     return true;
 }
 
-void RenderContextImpl::setDepthStencilState(DepthStencilState* depthStencilState)
+void GraphicsContextImpl::setDepthStencilState(DepthStencilState* depthStencilState)
 {
     _depthStencilState = static_cast<DepthStencilStateImpl*>(depthStencilState);
 }
 
-void RenderContextImpl::setRenderPipeline(RenderPipeline* renderPipeline)
+void GraphicsContextImpl::setRenderPipeline(RenderPipeline* renderPipeline)
 {
     Object::assign(_renderPipeline, static_cast<RenderPipelineImpl*>(renderPipeline));
 }
 
-uint64_t RenderContextImpl::getCompletedFenceValue() const
+uint64_t GraphicsContextImpl::getCompletedFenceValue() const
 {
     return _completedFenceValue;
 }
 
-bool RenderContextImpl::beginFrame()
+bool GraphicsContextImpl::beginFrame()
 {
     // Wait fence of current frame
     auto& currentFence   = _inflightFences[_frameIndex];
@@ -398,7 +398,7 @@ bool RenderContextImpl::beginFrame()
     return true;
 }
 
-void RenderContextImpl::beginRenderPass(RenderTarget* renderTarget, const RenderPassDesc& descriptor)
+void GraphicsContextImpl::beginRenderPass(RenderTarget* renderTarget, const RenderPassDesc& descriptor)
 {
     AXASSERT(_inFrame, "beginRenderPass must be called within a frame");
     auto rtImpl = static_cast<RenderTargetImpl*>(renderTarget);
@@ -421,7 +421,7 @@ void RenderContextImpl::beginRenderPass(RenderTarget* renderTarget, const Render
     rtImpl->setLastFenceValue(_frameFenceValue);
 }
 
-void RenderContextImpl::endRenderPass()
+void GraphicsContextImpl::endRenderPass()
 {
     // Reset cached state objects
     static_cast<RenderTargetImpl*>(_currentRT)->endRenderPass(_currentCmdList, _imageIndex);
@@ -434,7 +434,7 @@ void RenderContextImpl::endRenderPass()
     AX_SAFE_RELEASE_NULL(_instanceBuffer);
 }
 
-void RenderContextImpl::submitCurrentFrameCommands(bool /*waitForCompletion*/)
+void GraphicsContextImpl::submitCurrentFrameCommands(bool /*waitForCompletion*/)
 {
     if (!_inFrame || !_currentCmdList)
         return;
@@ -467,7 +467,7 @@ void RenderContextImpl::submitCurrentFrameCommands(bool /*waitForCompletion*/)
     _currentCmdList->SetDescriptorHeaps(2, heaps);
 }
 
-void RenderContextImpl::endFrame()
+void GraphicsContextImpl::endFrame()
 {
     // Close and execute command list
     HRESULT hr = _currentCmdList->Close();
@@ -503,7 +503,7 @@ void RenderContextImpl::endFrame()
     _inFrame = false;
 }
 
-void RenderContextImpl::setViewport(int x, int y, unsigned int w, unsigned int h)
+void GraphicsContextImpl::setViewport(int x, int y, unsigned int w, unsigned int h)
 {
     if (w == 0 || h == 0)
         return;
@@ -522,7 +522,7 @@ void RenderContextImpl::setViewport(int x, int y, unsigned int w, unsigned int h
     }
 }
 
-void RenderContextImpl::setScissorRect(bool enabled, float x, float y, float width, float height)
+void GraphicsContextImpl::setScissorRect(bool enabled, float x, float y, float width, float height)
 {
     D3D12_RECT rect{};
     if (enabled)
@@ -553,7 +553,7 @@ void RenderContextImpl::setScissorRect(bool enabled, float x, float y, float wid
     }
 }
 
-void RenderContextImpl::setCullMode(CullMode mode)
+void GraphicsContextImpl::setCullMode(CullMode mode)
 {
     D3D12_CULL_MODE nativeMode{D3D12_CULL_MODE_NONE};
     switch (mode)
@@ -576,7 +576,7 @@ void RenderContextImpl::setCullMode(CullMode mode)
     }
 }
 
-void RenderContextImpl::setWinding(Winding winding)
+void GraphicsContextImpl::setWinding(Winding winding)
 {
     BOOL isFrontCounterClockwise = winding == Winding::COUNTER_CLOCK_WISE ? TRUE : FALSE;
     if (isFrontCounterClockwise != _cachedFrontCounterClockwise)
@@ -586,16 +586,16 @@ void RenderContextImpl::setWinding(Winding winding)
     }
 }
 
-void RenderContextImpl::setStencilReferenceValue(uint32_t value)
+void GraphicsContextImpl::setStencilReferenceValue(uint32_t value)
 {
     if (value != _stencilReferenceValue)
     {
-        RenderContext::setStencilReferenceValue(value);
+        GraphicsContext::setStencilReferenceValue(value);
         markDynamicStateDirty(DynamicStateBits::StencilRef);
     }
 }
 
-void RenderContextImpl::applyPendingDynamicStates()
+void GraphicsContextImpl::applyPendingDynamicStates()
 {
     if (bitmask::any(_inFlightDynamicDirtyBits[_frameIndex], DynamicStateBits::StencilRef))
     {
@@ -616,17 +616,17 @@ void RenderContextImpl::applyPendingDynamicStates()
     }
 }
 
-void RenderContextImpl::updateDepthStencilState(const DepthStencilDesc& desc)
+void GraphicsContextImpl::updateDepthStencilState(const DepthStencilDesc& desc)
 {
     AXASSERT(_depthStencilState, "DepthStencilStateImpl not set");
     _depthStencilState->update(desc);
 }
 
-void RenderContextImpl::updatePipelineState(const RenderTarget* rt,
-                                            const PipelineDesc& pipelineDesc,
-                                            PrimitiveType primitiveType)
+void GraphicsContextImpl::updatePipelineState(const RenderTarget* rt,
+                                              const PipelineDesc& pipelineDesc,
+                                              PrimitiveType primitiveType)
 {
-    RenderContext::updatePipelineState(rt, pipelineDesc, primitiveType);
+    GraphicsContext::updatePipelineState(rt, pipelineDesc, primitiveType);
     AXASSERT(_renderPipeline, "RenderPipelineImpl not set");
     _renderPipeline->prepareUpdate(_depthStencilState, _cachedCullMode, _cachedFrontCounterClockwise,
                                    toPrimitiveGroup(primitiveType));
@@ -672,7 +672,7 @@ void RenderContextImpl::updatePipelineState(const RenderTarget* rt,
     }
 }
 
-void RenderContextImpl::setVertexBuffer(Buffer* buffer)
+void GraphicsContextImpl::setVertexBuffer(Buffer* buffer)
 {
     if (!buffer || _vertexBuffer == buffer)
         return;
@@ -681,7 +681,7 @@ void RenderContextImpl::setVertexBuffer(Buffer* buffer)
     _vertexBuffer = static_cast<BufferImpl*>(buffer);
 }
 
-void RenderContextImpl::setIndexBuffer(Buffer* buffer)
+void GraphicsContextImpl::setIndexBuffer(Buffer* buffer)
 {
     if (!buffer || _indexBuffer == buffer)
         return;
@@ -690,7 +690,7 @@ void RenderContextImpl::setIndexBuffer(Buffer* buffer)
     _indexBuffer = static_cast<BufferImpl*>(buffer);
 }
 
-void RenderContextImpl::setInstanceBuffer(Buffer* buffer)
+void GraphicsContextImpl::setInstanceBuffer(Buffer* buffer)
 {
     if (!buffer || _instanceBuffer == buffer)
         return;
@@ -699,7 +699,7 @@ void RenderContextImpl::setInstanceBuffer(Buffer* buffer)
     _instanceBuffer = static_cast<BufferImpl*>(buffer);
 }
 
-void RenderContextImpl::drawArrays(size_t start, size_t count, bool /*wireframe*/)
+void GraphicsContextImpl::drawArrays(size_t start, size_t count, bool /*wireframe*/)
 {
     AXASSERT(_renderPipeline && _vertexBuffer, "Pipeline and vertex buffer must be set");
 
@@ -708,7 +708,7 @@ void RenderContextImpl::drawArrays(size_t start, size_t count, bool /*wireframe*
     _currentCmdList->DrawInstanced(static_cast<UINT>(count), 1, static_cast<UINT>(start), 0);
 }
 
-void RenderContextImpl::drawArraysInstanced(size_t start, size_t count, int instanceCount, bool /*wireframe*/)
+void GraphicsContextImpl::drawArraysInstanced(size_t start, size_t count, int instanceCount, bool /*wireframe*/)
 {
     AXASSERT(_renderPipeline && _vertexBuffer, "Pipeline and vertex buffer must be set");
 
@@ -718,7 +718,7 @@ void RenderContextImpl::drawArraysInstanced(size_t start, size_t count, int inst
                                    0);
 }
 
-void RenderContextImpl::drawElements(IndexFormat indexType, size_t count, size_t offset, bool /*wireframe*/)
+void GraphicsContextImpl::drawElements(IndexFormat indexType, size_t count, size_t offset, bool /*wireframe*/)
 {
     AXASSERT(_renderPipeline && _vertexBuffer && _indexBuffer, "Pipeline, vertex and index buffers must be set");
 
@@ -736,11 +736,11 @@ void RenderContextImpl::drawElements(IndexFormat indexType, size_t count, size_t
     _currentCmdList->DrawIndexedInstanced(static_cast<UINT>(count), 1, 0, 0, 0);
 }
 
-void RenderContextImpl::drawElementsInstanced(IndexFormat indexType,
-                                              size_t count,
-                                              size_t offset,
-                                              int instanceCount,
-                                              bool /*wireframe*/)
+void GraphicsContextImpl::drawElementsInstanced(IndexFormat indexType,
+                                                size_t count,
+                                                size_t offset,
+                                                int instanceCount,
+                                                bool /*wireframe*/)
 {
     AXASSERT(_renderPipeline && _vertexBuffer && _indexBuffer, "Pipeline, vertex and index buffers must be set");
 
@@ -758,7 +758,7 @@ void RenderContextImpl::drawElementsInstanced(IndexFormat indexType,
     _currentCmdList->DrawIndexedInstanced(static_cast<UINT>(count), static_cast<UINT>(instanceCount), 0, 0, 0);
 }
 
-void RenderContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
+void GraphicsContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
 {
     // callback uniforms
     auto& callbackUniforms = _programState->getCallbackUniforms();
@@ -851,7 +851,7 @@ void RenderContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
     }
 }
 
-void RenderContextImpl::createUniformRingBuffers(size_t capacityBytes)
+void GraphicsContextImpl::createUniformRingBuffers(size_t capacityBytes)
 {
     // Enforce minimum alignment-friendly capacity
     if (capacityBytes == 0)
@@ -901,7 +901,7 @@ void RenderContextImpl::createUniformRingBuffers(size_t capacityBytes)
     }
 }
 
-void RenderContextImpl::destroyUniformRingBuffers()
+void GraphicsContextImpl::destroyUniformRingBuffers()
 {
     for (auto& ring : _uniformRings)
     {
@@ -919,7 +919,7 @@ void RenderContextImpl::destroyUniformRingBuffers()
 }
 
 // Reset ring for the given frame (call after GPU finished that frame)
-void RenderContextImpl::resetUniformRingForCurrentFrame(UINT frameIndex)
+void GraphicsContextImpl::resetUniformRingForCurrentFrame(UINT frameIndex)
 {
     AXASSERT(frameIndex < _uniformRings.size(), "Invalid frame index");
     auto& ring = _uniformRings[frameIndex];
@@ -927,7 +927,7 @@ void RenderContextImpl::resetUniformRingForCurrentFrame(UINT frameIndex)
 }
 
 // Allocate an aligned slice for the given frame
-RenderContextImpl::UniformSlice RenderContextImpl::allocateUniformSlice(UINT frameIndex, size_t size)
+GraphicsContextImpl::UniformSlice GraphicsContextImpl::allocateUniformSlice(UINT frameIndex, size_t size)
 {
     AXASSERT(frameIndex < _uniformRings.size(), "Invalid frame index");
     auto& ring = _uniformRings[frameIndex];
@@ -958,7 +958,7 @@ RenderContextImpl::UniformSlice RenderContextImpl::allocateUniformSlice(UINT fra
     return slice;
 }
 
-void RenderContextImpl::readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback)
+void GraphicsContextImpl::readPixels(RenderTarget* rt, std::function<void(const PixelBufferDesc&)> callback)
 {
     if (!rt)
     {
@@ -974,7 +974,7 @@ void RenderContextImpl::readPixels(RenderTarget* rt, std::function<void(const Pi
     });
 }
 
-void RenderContextImpl::readPixelsInternal(RenderTarget* rt, std::function<void(const PixelBufferDesc&)>& callback)
+void GraphicsContextImpl::readPixelsInternal(RenderTarget* rt, std::function<void(const PixelBufferDesc&)>& callback)
 {
     PixelBufferDesc pbd{};
     auto* rtImpl = static_cast<RenderTargetImpl*>(rt);
@@ -1061,19 +1061,19 @@ void RenderContextImpl::readPixelsInternal(RenderTarget* rt, std::function<void(
     }
     else
     {
-        AXLOGE("RenderContextImpl::readPixelsInternal fail, hr={:x}", hr);
+        AXLOGE("GraphicsContextImpl::readPixelsInternal fail, hr={:x}", hr);
     }
 
     callback(pbd);
 }
 
-void RenderContextImpl::removeCachedPipelineObjects(Program* key)
+void GraphicsContextImpl::removeCachedPipelineObjects(Program* key)
 {
     if (_renderPipeline)
         _renderPipeline->removeCachedObjects(key);
 }
 
-bool RenderContextImpl::copyTexture(Texture* src, Texture* dst)
+bool GraphicsContextImpl::copyTexture(Texture* src, Texture* dst)
 {
     if (!validateTextureCopy(src, dst) || !_inFrame || !_currentCmdList)
         return false;
@@ -1125,7 +1125,7 @@ bool RenderContextImpl::copyTexture(Texture* src, Texture* dst)
     return true;
 }
 
-bool RenderContextImpl::copyTexture(RenderTarget* src, Texture* dst)
+bool GraphicsContextImpl::copyTexture(RenderTarget* src, Texture* dst)
 {
     if (!src || !dst)
         return false;

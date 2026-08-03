@@ -25,7 +25,7 @@
 
 #include "axmol/rhi/GraphicsCore.h"
 #include "axmol/rhi/DXUtils.h"
-#include "axmol/rhi/DriverFactory.h"
+#include "axmol/rhi/GraphicsDeviceFactory.h"
 #include <d3d11.h>
 #include <dxgi1_2.h>
 #include <optional>
@@ -42,22 +42,22 @@ namespace ax::rhi::d3d11
  * @brief A D3D11-based Driver implementation
  *
  */
-class DriverImpl : public DriverBase
+class GraphicsDeviceImpl : public GraphicsDevice
 {
 public:
     /// @name Constructor, Destructor and Initializers
-    DriverImpl();
-    ~DriverImpl();
+    GraphicsDeviceImpl();
+    ~GraphicsDeviceImpl();
 
     bool init() override;
-    DriverType type() override { return DriverType::D3D11; }
+    GraphicsBackend type() override { return GraphicsBackend::D3D11; }
 
     /// @name Setters & Getters
     /**
-     * Create a RenderContext object.
-     * @return A RenderContext object.
+     * Create a GraphicsContext object.
+     * @return A GraphicsContext object.
      */
-    RenderContext* createRenderContext(SurfaceHandle surface) override;
+    GraphicsContext* createGraphicsContext(SurfaceHandle surface) override;
 
     /**
      * Create a Buffer object.
@@ -158,7 +158,7 @@ protected:
 private:
     void selectAdapter(PowerPreference powerPreference);
     void initializeDevice(bool requestDebugLayer);
-    HRESULT createD3DDevice(int requestDriverType, int createFlags, std::span<const D3D_FEATURE_LEVEL> featureLevels);
+    HRESULT createD3DDevice(int requestedD3DType, int createFlags, std::span<const D3D_FEATURE_LEVEL> featureLevels);
 
     bool checkFormatSupport(DXGI_FORMAT format);
 

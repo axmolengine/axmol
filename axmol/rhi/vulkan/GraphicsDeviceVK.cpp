@@ -21,8 +21,8 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "axmol/rhi/vulkan/DriverVK.h"
-#include "axmol/rhi/vulkan/RenderContextVK.h"
+#include "axmol/rhi/vulkan/GraphicsDeviceVK.h"
+#include "axmol/rhi/vulkan/GraphicsContextVK.h"
 #include "axmol/rhi/vulkan/BufferVK.h"
 #include "axmol/rhi/vulkan/TextureVK.h"
 #include "axmol/rhi/vulkan/ProgramVK.h"
@@ -33,7 +33,7 @@
 #include "axmol/rhi/vulkan/VertexLayoutVK.h"
 #include "axmol/rhi/vulkan/UtilsVK.h"
 #include "axmol/rhi/GraphicsCore.h"
-#include "axmol/rhi/DriverFactory.h"
+#include "axmol/rhi/GraphicsDeviceFactory.h"
 #include "axmol/rhi/RHIUtils.h"
 #include "axmol/rhi/VulkanInterop.h"
 #include "axmol/tlx/hash.hpp"
@@ -46,9 +46,9 @@
 
 namespace ax::rhi
 {
-std::unique_ptr<DriverBase> VulkanDriverFactory::create()
+std::unique_ptr<GraphicsDevice> VulkanGraphicsDeviceFactory::create()
 {
-    return std::make_unique<vk::DriverImpl>();
+    return std::make_unique<vk::GraphicsDeviceImpl>();
 }
 }  // namespace ax::rhi
 
@@ -190,7 +190,7 @@ static std::pair<VkPhysicalDevice, uint32_t> resolveAdapter(const tlx::pod_vecto
 }
 
 // Helper: create a depth-stencil image as TextureImpl
-TextureImpl* createDepthStencilAttachment(DriverImpl* driver, const VkExtent2D& extent)
+TextureImpl* createDepthStencilAttachment(GraphicsDeviceImpl* driver, const VkExtent2D& extent)
 {
     TextureDesc depthDesc{};
     depthDesc.textureType  = TextureType::TEXTURE_2D;
@@ -209,13 +209,13 @@ TextureImpl* createDepthStencilAttachment(DriverImpl* driver, const VkExtent2D& 
 
 }  // namespace
 
-DriverImpl::DriverImpl() {}
-DriverImpl::~DriverImpl()
+GraphicsDeviceImpl::GraphicsDeviceImpl() {}
+GraphicsDeviceImpl::~GraphicsDeviceImpl()
 {
     if (auto interop = GraphicsCore::getVulkanInterop())
         interop->clearVulkanBinding();
 
-    AX_SAFE_RELEASE_NULL(_currentRenderContext);
+    AX_SAFE_RELEASE_NULL(_currentGraphicsContext);
 
     destroyStaleResources();
 
@@ -237,7 +237,7 @@ DriverImpl::~DriverImpl()
         vkDestroyInstance(_factory, nullptr);
 }
 
-bool DriverImpl::init()
+bool GraphicsDeviceImpl::init()
 {
     // Load basic Vulkan functions without instance/device
     auto gladVulkanVer = gladLoaderLoadVulkan(nullptr, nullptr, nullptr);
@@ -284,7 +284,7 @@ bool DriverImpl::init()
     return true;
 }
 
-bool DriverImpl::initializeFactory()
+bool GraphicsDeviceImpl::initializeFactory()
 {
     auto& contextAttrs = Application::getContextAttrs();
 
@@ -375,7 +375,7 @@ bool DriverImpl::initializeFactory()
     return true;
 }
 
-bool DriverImpl::initializeDevice()
+bool GraphicsDeviceImpl::initializeDevice()
 {
     auto& contextAttrs = Application::getContextAttrs();
 
@@ -667,7 +667,7 @@ bool DriverImpl::initializeDevice()
     return true;
 }
 
-bool DriverImpl::recreateSurface(const SurfaceCreateInfo& info)
+bool GraphicsDeviceImpl::recreateSurface(const SurfaceCreateInfo& info)
 {
     auto oldSurface = _surface;
     auto result     = info.createFunc(_factory, info.window, &_surface);
@@ -712,24 +712,24 @@ bool DriverImpl::recreateSurface(const SurfaceCreateInfo& info)
     return true;
 }
 
-RenderContext* DriverImpl::createRenderContext(SurfaceHandle surface)
+GraphicsContext* GraphicsDeviceImpl::createGraphicsContext(SurfaceHandle surface)
 {
-    auto context = new RenderContextImpl(this, surface);
-    Object::assign(_currentRenderContext, context);
+    auto context = new GraphicsContextImpl(this, surface);
+    Object::assign(_currentGraphicsContext, context);
     return context;
 }
 
-Buffer* DriverImpl::createBuffer(size_t size, BufferType type, BufferUsage usage, const void* initial)
+Buffer* GraphicsDeviceImpl::createBuffer(size_t size, BufferType type, BufferUsage usage, const void* initial)
 {
     return new BufferImpl(this, size, type, usage, initial);
 }
 
-Texture* DriverImpl::createTexture(const TextureDesc& descriptor, std::optional<Color>)
+Texture* GraphicsDeviceImpl::createTexture(const TextureDesc& descriptor, std::optional<Color>)
 {
     return new TextureImpl(this, descriptor);
 }
 
-Texture* DriverImpl::createTextureFromNativeHandle(const ExternalTextureDesc& descriptor)
+Texture* GraphicsDeviceImpl::createTextureFromNativeHandle(const ExternalTextureDesc& descriptor)
 {
     auto nativeImage = static_cast<VkImage>(descriptor.nativeTexture);
     if (nativeImage == VK_NULL_HANDLE)
@@ -744,7 +744,7 @@ Texture* DriverImpl::createTextureFromNativeHandle(const ExternalTextureDesc& de
     return new TextureImpl(this, nativeImage, nativeView, usage, descriptor.desc, initialLayout, finalLayout);
 }
 
-RenderTarget* DriverImpl::createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment)
+RenderTarget* GraphicsDeviceImpl::createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment)
 {
     auto rt = new RenderTargetImpl(this, false);
     rt->setColorTexture(colorAttachment);
@@ -752,27 +752,27 @@ RenderTarget* DriverImpl::createRenderTarget(Texture* colorAttachment, Texture* 
     return rt;
 }
 
-DepthStencilState* DriverImpl::createDepthStencilState()
+DepthStencilState* GraphicsDeviceImpl::createDepthStencilState()
 {
     return new DepthStencilStateImpl();
 }
 
-RenderPipeline* DriverImpl::createRenderPipeline()
+RenderPipeline* GraphicsDeviceImpl::createRenderPipeline()
 {
     return new RenderPipelineImpl(this);
 }
 
-Program* DriverImpl::createProgram(Data vsData, Data fsData)
+Program* GraphicsDeviceImpl::createProgram(Data vsData, Data fsData)
 {
     return new ProgramImpl(vsData, fsData);
 }
 
-ShaderModule* DriverImpl::createShaderModule(ShaderStage stage, Data& chunk)
+ShaderModule* GraphicsDeviceImpl::createShaderModule(ShaderStage stage, Data& chunk)
 {
     return new ShaderModuleImpl(_device, stage, chunk);
 }
 
-SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
+SamplerHandle GraphicsDeviceImpl::createSampler(const SamplerDesc& desc)
 {
     VkSamplerCreateInfo info{};
     info.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
@@ -852,7 +852,7 @@ SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
     return SamplerHandle(sampler);
 }
 
-void DriverImpl::destroySampler(SamplerHandle& h)
+void GraphicsDeviceImpl::destroySampler(SamplerHandle& h)
 {  // sampler is cached, so don't need queue
     if (h)
     {
@@ -861,29 +861,29 @@ void DriverImpl::destroySampler(SamplerHandle& h)
     }
 }
 
-VertexLayout* DriverImpl::createVertexLayout(VertexLayoutDesc&& desc)
+VertexLayout* GraphicsDeviceImpl::createVertexLayout(VertexLayoutDesc&& desc)
 {
     return new VertexLayoutImpl(std::move(desc));
 }
 
-std::string DriverImpl::getVendor() const
+std::string GraphicsDeviceImpl::getVendor() const
 {
     return _vendor;
 }
-std::string DriverImpl::getRenderer() const
+std::string GraphicsDeviceImpl::getRenderer() const
 {
     return _renderer;
 }
-std::string DriverImpl::getVersion() const
+std::string GraphicsDeviceImpl::getVersion() const
 {
     return _version;
 }
-std::string DriverImpl::getShaderVersion() const
+std::string GraphicsDeviceImpl::getShaderVersion() const
 {
     return _shaderVersion;
 }
 
-bool DriverImpl::checkForFeatureSupported(FeatureType feature)
+bool GraphicsDeviceImpl::checkForFeatureSupported(FeatureType feature)
 {
     // Basic, conservative feature checks; consider querying format properties for stricter checks
     switch (feature)
@@ -932,7 +932,7 @@ bool DriverImpl::checkForFeatureSupported(FeatureType feature)
     }
 }
 
-uint32_t DriverImpl::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) const
+uint32_t GraphicsDeviceImpl::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) const
 {
     VkPhysicalDeviceMemoryProperties memProperties;
     vkGetPhysicalDeviceMemoryProperties(_physical, &memProperties);
@@ -946,7 +946,7 @@ uint32_t DriverImpl::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags p
     return 0;
 }
 
-VkResult DriverImpl::allocateCommandBuffers(VkCommandBuffer* cmds, uint32_t count)
+VkResult GraphicsDeviceImpl::allocateCommandBuffers(VkCommandBuffer* cmds, uint32_t count)
 {  // allocate one primary command buffer from transient pool
     std::lock_guard<std::mutex> lk(_commandPoolMutex);
 
@@ -961,13 +961,13 @@ VkResult DriverImpl::allocateCommandBuffers(VkCommandBuffer* cmds, uint32_t coun
     return res;
 }
 
-void DriverImpl::freeCommandBuffers(VkCommandBuffer* cmds, uint32_t count)
+void GraphicsDeviceImpl::freeCommandBuffers(VkCommandBuffer* cmds, uint32_t count)
 {
     std::lock_guard<std::mutex> lk(_commandPoolMutex);
     vkFreeCommandBuffers(_device, _commandPool, count, cmds);
 }
 
-IsolateSubmission DriverImpl::allocateIsolateSubmission()
+IsolateSubmission GraphicsDeviceImpl::allocateIsolateSubmission()
 {
     VkCommandBuffer cmd{VK_NULL_HANDLE};
     VkFence fence{VK_NULL_HANDLE};
@@ -983,7 +983,7 @@ IsolateSubmission DriverImpl::allocateIsolateSubmission()
     return IsolateSubmission{cmd, fence};
 }
 
-void DriverImpl::freeIsolateSubmission(IsolateSubmission& submission)
+void GraphicsDeviceImpl::freeIsolateSubmission(IsolateSubmission& submission)
 {
     freeCommandBuffers(&submission.cmd, 1);
     if (submission.fence)
@@ -993,7 +993,7 @@ void DriverImpl::freeIsolateSubmission(IsolateSubmission& submission)
     submission.fence = VK_NULL_HANDLE;
 }
 
-void DriverImpl::beginRecordingIsolateSubmission(const IsolateSubmission& submission)
+void GraphicsDeviceImpl::beginRecordingIsolateSubmission(const IsolateSubmission& submission)
 {
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -1006,7 +1006,7 @@ void DriverImpl::beginRecordingIsolateSubmission(const IsolateSubmission& submis
     VK_REQUIRE(res, "vkBeginCommandBuffer failed");
 }
 
-void DriverImpl::commitIsolateSubmission(const IsolateSubmission& submission)
+void GraphicsDeviceImpl::commitIsolateSubmission(const IsolateSubmission& submission)
 {
     VK_REQUIRE_EXPR(submission.cmd != VK_NULL_HANDLE, "endSingleTimeCommands called with null cmd");
 
@@ -1029,55 +1029,55 @@ void DriverImpl::commitIsolateSubmission(const IsolateSubmission& submission)
     }
 }
 
-void DriverImpl::destroyFramebuffer(VkFramebuffer fb)
+void GraphicsDeviceImpl::destroyFramebuffer(VkFramebuffer fb)
 {
     vkDestroyFramebuffer(_device, fb, nullptr);
 }
 
-void DriverImpl::destroyRenderPass(VkRenderPass key)
+void GraphicsDeviceImpl::destroyRenderPass(VkRenderPass key)
 {
-    if (_currentRenderContext)
-        _currentRenderContext->removeCachedPipelineObjects(key);
+    if (_currentGraphicsContext)
+        _currentGraphicsContext->removeCachedPipelineObjects(key);
     vkDestroyRenderPass(_device, key, nullptr);
 }
 
-void DriverImpl::removeCachedPipelineObjects(Program* key)
+void GraphicsDeviceImpl::removeCachedPipelineObjects(Program* key)
 {
-    if (_currentRenderContext)
-        _currentRenderContext->removeCachedPipelineObjects(key);
+    if (_currentGraphicsContext)
+        _currentGraphicsContext->removeCachedPipelineObjects(key);
 }
 
-void DriverImpl::disposeSampler(VkSampler sampler, uint64_t fenceValue)
+void GraphicsDeviceImpl::disposeSampler(VkSampler sampler, uint64_t fenceValue)
 {
     queueDisposalInternal({.type = DisposableResource::Type::Sampler, .sampler = sampler, .fenceValue = fenceValue});
 }
 
-void DriverImpl::disposeImage(VkImage image, uint64_t fenceValue)
+void GraphicsDeviceImpl::disposeImage(VkImage image, uint64_t fenceValue)
 {
     queueDisposalInternal({.type = DisposableResource::Type::Image, .image = image, .fenceValue = fenceValue});
 }
 
-void DriverImpl::disposeImageView(VkImageView view, uint64_t fenceValue)
+void GraphicsDeviceImpl::disposeImageView(VkImageView view, uint64_t fenceValue)
 {
     queueDisposalInternal({.type = DisposableResource::Type::ImageView, .view = view, .fenceValue = fenceValue});
 }
 
-void DriverImpl::disposeBuffer(VkBuffer buffer, uint64_t fenceValue)
+void GraphicsDeviceImpl::disposeBuffer(VkBuffer buffer, uint64_t fenceValue)
 {
     queueDisposalInternal({.type = DisposableResource::Type::Buffer, .buffer = buffer, .fenceValue = fenceValue});
 }
 
-void DriverImpl::disposeVmaMemory(VmaAllocation memory, uint64_t fenceValue)
+void GraphicsDeviceImpl::disposeVmaMemory(VmaAllocation memory, uint64_t fenceValue)
 {
     queueDisposalInternal({.type = DisposableResource::Type::VmaMemory, .vmaMemory = memory, .fenceValue = fenceValue});
 }
 
-void DriverImpl::queueDisposalInternal(DisposableResource&& disposal)
+void GraphicsDeviceImpl::queueDisposalInternal(DisposableResource&& disposal)
 {
     _disposalQueue.emplace_back(disposal);
 }
 
-void DriverImpl::processDisposalQueue(uint64_t completedFenceValue)
+void GraphicsDeviceImpl::processDisposalQueue(uint64_t completedFenceValue)
 {
     if (!_disposalQueue.empty())
     {
@@ -1116,7 +1116,7 @@ void DriverImpl::processDisposalQueue(uint64_t completedFenceValue)
     }
 }
 
-void DriverImpl::destroyStaleResources()
+void GraphicsDeviceImpl::destroyStaleResources()
 {
     if (!_disposalQueue.empty())
     {
@@ -1125,7 +1125,7 @@ void DriverImpl::destroyStaleResources()
     }
 }
 
-bool DriverImpl::hasExtension(std::string_view extName) const
+bool GraphicsDeviceImpl::hasExtension(std::string_view extName) const
 {
     const auto key = tlx::hash32_bytes(extName.data(), extName.size());
     return _supportedExtensions.contains(key);

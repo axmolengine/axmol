@@ -22,92 +22,61 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-
 #pragma once
 
+#include "axmol/platform/GL.h"
 #include "axmol/rhi/GraphicsCore.h"
-#import <Metal/Metal.h>
-#import <QuartzCore/CAMetalLayer.h>
+#include "axmol/rhi/GraphicsDeviceFactory.h"
+#include "axmol/rhi/opengl/OpenGLState.h"
+#include "axmol/tlx/hlookup.hpp"
 
-namespace ax::rhi::mtl
+namespace ax::rhi::gl
 {
-
-enum class FeatureSet : int32_t
-{
-    Unknown                      = -1,
-    FeatureSet_iOS_GPUFamily1_v1 = 0,
-    FeatureSet_iOS_GPUFamily2_v1 = 1,
-
-    FeatureSet_iOS_GPUFamily1_v2 = 2,
-    FeatureSet_iOS_GPUFamily2_v2 = 3,
-    FeatureSet_iOS_GPUFamily3_v1 = 4,
-
-    FeatureSet_iOS_GPUFamily1_v3 = 5,
-    FeatureSet_iOS_GPUFamily2_v3 = 6,
-    FeatureSet_iOS_GPUFamily3_v2 = 7,
-
-    FeatureSet_iOS_GPUFamily1_v4 = 8,
-    FeatureSet_iOS_GPUFamily2_v4 = 9,
-    FeatureSet_iOS_GPUFamily3_v3 = 10,
-    FeatureSet_iOS_GPUFamily4_v1 = 11,
-
-    FeatureSet_iOS_GPUFamily1_v5 = 12,
-    FeatureSet_iOS_GPUFamily2_v5 = 13,
-    FeatureSet_iOS_GPUFamily3_v4 = 14,
-    FeatureSet_iOS_GPUFamily4_v2 = 15,
-
-    FeatureSet_macOS_GPUFamily1_v1 = 10000,
-
-    FeatureSet_macOS_GPUFamily1_v2         = 10001,
-    FeatureSet_macOS_ReadWriteTextureTier2 = 10002,
-
-    FeatureSet_macOS_GPUFamily1_v3 = 10003,
-
-    FeatureSet_macOS_GPUFamily1_v4 = 10004,
-    FeatureSet_macOS_GPUFamily2_v1 = 10005,
-};
-
 /**
- * @addtogroup _metal
+ * @addtogroup _opengl
  * @{
  */
 
+struct DriverCapImpl
+{
+    bool textureCompressionAstc{false};
+    bool textureCompressionEtc2{false};
+    bool vertexAttribBinding{false};
+    float maxAnisotropy{0.0f};
+};
+
 /**
- * Create resources from MTLDevice.
+ * Use to create resoureces.
  */
-class DriverImpl : public DriverBase
+class GraphicsDeviceImpl : public GraphicsDevice
 {
 public:
-    /* The max vertex attribs, it's not how many device supports which may be lower. */
-    static constexpr uint32_t MAX_VERTEX_ATTRIBS = 16;
-
-    /* The vertex data buffers binding index start, the axslcc(SPIRV-Cross), default UBO binding index is 0,
-    scope is per stage in MSL
-     */
-    static constexpr uint32_t VBO_BINDING_INDEX_START = 0;
-
-    /* The vertex instancing buffer binding index */
-    static constexpr uint32_t VBO_INSTANCING_BINDING_INDEX = VBO_BINDING_INDEX_START + 1;
-
-    /* The default attribs binding index */
-    static constexpr uint32_t DEFAULT_ATTRIBS_BINDING_INDEX = VBO_BINDING_INDEX_START + MAX_VERTEX_ATTRIBS;
-
-    /// @name Constructor, Destructor and Initializers
-    DriverImpl();
-    ~DriverImpl();
+    GraphicsDeviceImpl();
+    ~GraphicsDeviceImpl();
 
     bool init() override;
-    DriverType type() override { return DriverType::Metal; }
 
-    /// @name Setters & Getters
-    /**
-     * New a RenderContext object.
-     * @return A RenderContext object.
+    GraphicsBackend type() override { return GraphicsBackend::OpenGL; }
+
+    /* The vertex data buffers binding index start, the axslcc(SPIRV-Cross)
      */
-    RenderContext* createRenderContext(SurfaceHandle) override;
+    static constexpr uint32_t VBO_BINDING_INDEX = 0;
+
+    /* The vertex instancing buffer binding index */
+    static constexpr uint32_t VBO_INSTANCING_BINDING_INDEX = VBO_BINDING_INDEX + 1;
+
+    GLint getDefaultFBO() const;
+
+    GLuint getSharedVAO() const { return _sharedVAO; }
 
     /**
-     * New a Buffer object.
+     * Create a GraphicsContext object, not auto released.
+     * @return A GraphicsContext object.
+     */
+    GraphicsContext* createGraphicsContext(SurfaceHandle) override;
+
+    /**
+     * New a Buffer object, not auto released.
      * @param size Specifies the size in bytes of the buffer object's new data store.
      * @param type Specifies the target buffer object. The symbolic constant must be BufferType::VERTEX or
      * BufferType::INDEX.
@@ -118,7 +87,7 @@ public:
     Buffer* createBuffer(size_t size, BufferType type, BufferUsage usage, const void* initial) override;
 
     /**
-     * New a Texture object.
+     * New a Texture object, not auto released.
      * @param descriptor Specifies texture description.
      * @return A Texture object.
      */
@@ -127,31 +96,29 @@ public:
 
     RenderTarget* createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment) override;
 
-    /**
-     * New a DepthStencilState object.
-     */
     DepthStencilState* createDepthStencilState() override;
 
     /**
-     * New a RenderPipeline object.
+     * New a RenderPipeline object, not auto released.
      * @param descriptor Specifies render pipeline description.
      * @return A RenderPipeline object.
      */
     RenderPipeline* createRenderPipeline() override;
 
+    /**
+     * New a Program, not auto released.
+     * @param vertexShader Specifes this is a vertex shader source.
+     * @param fragmentShader Specifes this is a fragment shader source.
+     * @return A Program instance.
+     */
     Program* createProgram(Data vsData, Data fsData) override;
 
-    /**
-     * Get a MTLDevice object.
-     * @return A MTLDevice object.
-     */
-    inline id<MTLDevice> getMTLDevice() const { return _mtlDevice; }
+    VertexLayout* createVertexLayout(VertexLayoutDesc&&) override;
 
-    inline id<MTLCommandQueue> getMTLCmdQueue() const { return _mtlCmdQueue; }
+    void resetState() override;
 
-    /// below is driver info
+    /// below is driver info API
 
-    /// @name Setters & Getters
     /**
      * Get vendor device name.
      * @return Vendor device name.
@@ -165,37 +132,64 @@ public:
     std::string getRenderer() const override;
 
     /**
-     * Get featureSet name.
-     * @return FeatureSet name.
+     * Get version name.
+     * @return Version name.
      */
     std::string getVersion() const override;
 
     std::string getShaderVersion() const override;
 
     /**
-     * Check if feature supported by Metal.
+     * Check does device has extension.
+     */
+    bool hasExtension(std::string_view /*extName*/) const override;
+
+    /**
+     * Dump all extensions to string
+     */
+    std::string dumpExtensions() const override;
+
+    /**
+     * Check if feature supported by OpenGL ES.
      * @param feature Specify feature to be query.
      * @return true if the feature is supported, false otherwise.
      */
     bool checkForFeatureSupported(FeatureType feature) override;
 
-    static bool supportD24S8() { return _isDepth24Stencil8PixelFormatSupported; }
+    /*
+     * Check does the device only support GLES2.0
+     */
+    bool isGLES2Only() const;
 
 protected:
-    ShaderModule* createShaderModule(ShaderStage stage, Data& chunk) override;
+    /**
+     * New a shaderModule, not auto released.
+     * @param stage Specifies whether is vertex shader or fragment shader.
+     * @param source Specifies shader source.
+     * @return A ShaderModule object.
+     */
+    ShaderModule* createShaderModule(ShaderStage stage, Data& source) override;
 
     SamplerHandle createSampler(const SamplerDesc& desc) override;
-    void destroySampler(SamplerHandle& sampler) override;
+    void destroySampler(SamplerHandle&) override;
+
+    GLint _defaultFBO = 0;  // The value gets from glGetIntegerv, so need to use GLint
+    GLuint _sharedVAO = 0;  // The shared VAO for all vertex layouts
 
 private:
-    id<MTLDevice> _mtlDevice         = nil;
-    id<MTLCommandQueue> _mtlCmdQueue = nil;
+    std::set<uint32_t> _glExtensions;
 
-    std::string _deviceName;
-    FeatureSet _featureSet = FeatureSet::Unknown;
-    static bool _isDepth24Stencil8PixelFormatSupported;
+    struct VersionInfo
+    {
+        bool es{false};     // is GLES?
+        uint16_t major{0};  // major version
+        uint16_t minor{0};  // minor version
+    } _verInfo;
+
+    const char* _version{nullptr};
+
+    DriverCapImpl _cap{};
 };
-
-// end of _metal group
+// end of _opengl group
 /// @}
-}  // namespace ax::rhi::mtl
+}  // namespace ax::rhi::gl
