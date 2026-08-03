@@ -34,7 +34,7 @@ THE SOFTWARE.
 #include "axmol/math/Math.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/Utils.h"
-#include "axmol/rhi/metal/DriverMTL.h"
+#include "axmol/rhi/metal/GraphicsDeviceMTL.h"
 
 namespace ax
 {

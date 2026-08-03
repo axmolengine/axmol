@@ -26,7 +26,7 @@
 #include "axmol/rhi/metal/ProgramMTL.h"
 #include "axmol/rhi/metal/ShaderModuleMTL.h"
 #include "axmol/base/Macros.h"
-#include "axmol/rhi/metal/DriverMTL.h"
+#include "axmol/rhi/metal/GraphicsDeviceMTL.h"
 
 namespace ax::rhi::mtl
 {
