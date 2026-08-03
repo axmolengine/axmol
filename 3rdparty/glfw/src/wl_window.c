@@ -24,7 +24,9 @@
 //
 //========================================================================
 
-#define _GNU_SOURCE
+#if !defined(_GNU_SOURCE)
+ #define _GNU_SOURCE
+#endif
 
 #include "internal.h"
 
@@ -478,8 +480,9 @@ static void resizeFramebuffer(_GLFWwindow* window)
 {
     if (window->wl.fractionalScale)
     {
-        window->wl.fbWidth = (window->wl.width * window->wl.scalingNumerator) / 120;
-        window->wl.fbHeight = (window->wl.height * window->wl.scalingNumerator) / 120;
+        // Round halfway away from zero per fractional-scale-v1 protocol spec
+        window->wl.fbWidth = (window->wl.width * window->wl.scalingNumerator + 60) / 120;
+        window->wl.fbHeight = (window->wl.height * window->wl.scalingNumerator + 60) / 120;
     }
     else
     {
@@ -913,6 +916,10 @@ void libdecorFrameHandleConfigure(struct libdecor_frame* frame,
     libdecor_frame_commit(frame, frameState, config);
     libdecor_state_free(frameState);
 
+    // NOTE: Frame visibility must only be set after a frame state has been committed
+    if (window->decorated != libdecor_frame_is_visible(window->wl.libdecor.frame))
+        libdecor_frame_set_visibility(window->wl.libdecor.frame, window->decorated);
+
     if (window->wl.activated != activated)
     {
         window->wl.activated = activated;
@@ -994,36 +1001,39 @@ static GLFWbool createLibdecorFrame(_GLFWwindow* window)
         return GLFW_FALSE;
     }
 
-    struct libdecor_state* frameState =
-        libdecor_state_new(window->wl.width, window->wl.height);
-    libdecor_frame_commit(window->wl.libdecor.frame, frameState, NULL);
-    libdecor_state_free(frameState);
-
     if (strlen(window->wl.appId))
         libdecor_frame_set_app_id(window->wl.libdecor.frame, window->wl.appId);
 
     libdecor_frame_set_title(window->wl.libdecor.frame, window->title);
 
-    if (window->minwidth != GLFW_DONT_CARE &&
-        window->minheight != GLFW_DONT_CARE)
+    if (window->resizable)
     {
-        libdecor_frame_set_min_content_size(window->wl.libdecor.frame,
-                                            window->minwidth,
-                                            window->minheight);
-    }
+        if (window->minwidth != GLFW_DONT_CARE &&
+            window->minheight != GLFW_DONT_CARE)
+        {
+            libdecor_frame_set_min_content_size(window->wl.libdecor.frame,
+                                                window->minwidth,
+                                                window->minheight);
+        }
 
-    if (window->maxwidth != GLFW_DONT_CARE &&
-        window->maxheight != GLFW_DONT_CARE)
-    {
-        libdecor_frame_set_max_content_size(window->wl.libdecor.frame,
-                                            window->maxwidth,
-                                            window->maxheight);
+        if (window->maxwidth != GLFW_DONT_CARE &&
+            window->maxheight != GLFW_DONT_CARE)
+        {
+            libdecor_frame_set_max_content_size(window->wl.libdecor.frame,
+                                                window->maxwidth,
+                                                window->maxheight);
+        }
     }
-
-    if (!window->resizable)
+    else
     {
         libdecor_frame_unset_capabilities(window->wl.libdecor.frame,
                                           LIBDECOR_ACTION_RESIZE);
+        libdecor_frame_set_min_content_size(window->wl.libdecor.frame,
+                                            window->wl.width,
+                                            window->wl.height);
+        libdecor_frame_set_max_content_size(window->wl.libdecor.frame,
+                                            window->wl.width,
+                                            window->wl.height);
     }
 
     if (window->monitor)
@@ -1034,11 +1044,10 @@ static GLFWbool createLibdecorFrame(_GLFWwindow* window)
     }
     else
     {
+        // Frame visibility is applied in libdecorFrameHandleConfigure
+
         if (window->wl.maximized)
             libdecor_frame_set_maximized(window->wl.libdecor.frame);
-
-        if (!window->decorated)
-            libdecor_frame_set_visibility(window->wl.libdecor.frame, false);
 
         setIdleInhibitor(window, GLFW_FALSE);
     }
@@ -1392,24 +1401,27 @@ static void handleEvents(double* timeout)
 #endif
 
     GLFWbool event = GLFW_FALSE;
-    enum { DISPLAY_FD, KEYREPEAT_FD, CURSOR_FD, LIBDECOR_FD };
+    enum { DISPLAY_FD, KEYREPEAT_FD, CURSOR_FD };
     struct pollfd fds[] =
     {
         [DISPLAY_FD] = { wl_display_get_fd(_glfw.wl.display), POLLIN },
         [KEYREPEAT_FD] = { _glfw.wl.keyRepeatTimerfd, POLLIN },
-        [CURSOR_FD] = { _glfw.wl.cursorTimerfd, POLLIN },
-        [LIBDECOR_FD] = { -1, POLLIN }
+        [CURSOR_FD] = { _glfw.wl.cursorTimerfd, POLLIN }
     };
-
-    if (_glfw.wl.libdecor.context)
-        fds[LIBDECOR_FD].fd = libdecor_get_fd(_glfw.wl.libdecor.context);
 
     while (!event)
     {
+        if (_glfw.wl.libdecor.context)
+        {
+            // Dispatch unconditionally because it also processes non-Wayland events
+            if (libdecor_dispatch(_glfw.wl.libdecor.context, 0) > 0)
+                event = GLFW_TRUE;
+        }
+
         while (wl_display_prepare_read(_glfw.wl.display) != 0)
         {
             if (wl_display_dispatch_pending(_glfw.wl.display) > 0)
-                return;
+                event = GLFW_TRUE;
         }
 
         // If an error other than EAGAIN happens, we have likely been disconnected
@@ -1427,6 +1439,11 @@ static void handleEvents(double* timeout)
 
             return;
         }
+
+        double immediate = 0.0;
+
+        if (event)
+            timeout = &immediate;
 
         if (!_glfwPollPOSIX(fds, sizeof(fds) / sizeof(fds[0]), timeout))
         {
@@ -1473,12 +1490,6 @@ static void handleEvents(double* timeout)
 
             if (read(_glfw.wl.cursorTimerfd, &repeats, sizeof(repeats)) == 8)
                 incrementCursorImage();
-        }
-
-        if (fds[LIBDECOR_FD].revents & POLLIN)
-        {
-            if (libdecor_dispatch(_glfw.wl.libdecor.context, 0) > 0)
-                event = GLFW_TRUE;
         }
     }
 }
