@@ -77,7 +77,7 @@ void ShaderModule::parseShaderCode(void)
 
     // find target entry: prefer precompiled bytecode when available
     const auto driverType        = GraphicsCore::backend();
-    const auto shaderLanguage = GraphicsCore::shaderLanguage();
+    const auto shaderLanguage    = GraphicsCore::shaderLanguage();
     const auto currentProfileVer = GraphicsCore::shaderProfile();
     const auto bcProfile         = GraphicsCore::shaderILProfile();
 

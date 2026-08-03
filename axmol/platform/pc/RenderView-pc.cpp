@@ -877,7 +877,7 @@ SurfaceHandle RenderView::getNativeDisplay() const
     return glfwGetWin32Window(_mainWindow);
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_MAC
     return driverType == rhi::GraphicsBackend::Metal ? (void*)glfwGetCocoaView(_mainWindow)
-                                           : (void*)glfwGetNSGLContext(_mainWindow);
+                                                     : (void*)glfwGetNSGLContext(_mainWindow);
     return (void*)glfwGetNSGLContext(_mainWindow);
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
 #    if defined(AX_ENABLE_WAYLAND)

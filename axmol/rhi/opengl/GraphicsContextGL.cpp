@@ -170,8 +170,8 @@ void GraphicsContextImpl::updateDepthStencilState(const DepthStencilDesc& desc)
  * @param depthStencilState Specifies the depth and stencil status
  */
 void GraphicsContextImpl::updatePipelineState(const RenderTarget* rt,
-                                            const PipelineDesc& desc,
-                                            PrimitiveType primitiveType)
+                                              const PipelineDesc& desc,
+                                              PrimitiveType primitiveType)
 {
     GraphicsContext::updatePipelineState(rt, desc, primitiveType);
 
@@ -285,10 +285,10 @@ void GraphicsContextImpl::drawElements(IndexFormat indexType, size_t count, size
 }
 
 void GraphicsContextImpl::drawElementsInstanced(IndexFormat indexType,
-                                              size_t count,
-                                              size_t offset,
-                                              int instanceCount,
-                                              bool wireframe)
+                                                size_t count,
+                                                size_t offset,
+                                                int instanceCount,
+                                                bool wireframe)
 {
     prepareDrawing();
 #if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
@@ -460,12 +460,12 @@ void GraphicsContextImpl::readPixels(RenderTarget* rt, std::function<void(const 
 }
 
 void GraphicsContextImpl::readPixels(RenderTarget* rt,
-                                   int x,
-                                   int y,
-                                   uint32_t width,
-                                   uint32_t height,
-                                   uint32_t bytesPerRow,
-                                   PixelBufferDesc& pbd)
+                                     int x,
+                                     int y,
+                                     uint32_t width,
+                                     uint32_t height,
+                                     uint32_t bytesPerRow,
+                                     PixelBufferDesc& pbd)
 {
     auto rtGL = static_cast<RenderTargetImpl*>(rt);
     rtGL->bindFrameBuffer();

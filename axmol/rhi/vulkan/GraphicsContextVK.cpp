@@ -959,8 +959,8 @@ void GraphicsContextImpl::setInstanceBuffer(Buffer* buffer)
 }
 
 void GraphicsContextImpl::updatePipelineState(const RenderTarget* rt,
-                                            const PipelineDesc& desc,
-                                            PrimitiveType primitiveType)
+                                              const PipelineDesc& desc,
+                                              PrimitiveType primitiveType)
 {
     auto primitiveTopology = toVkPrimitiveTopology(primitiveType);
     if (_extendedDynamicState.primitiveTopology != primitiveTopology)
@@ -1243,10 +1243,10 @@ void GraphicsContextImpl::drawElements(IndexFormat indexType, size_t count, size
 }
 
 void GraphicsContextImpl::drawElementsInstanced(IndexFormat indexType,
-                                              size_t count,
-                                              size_t offset,
-                                              int instanceCount,
-                                              bool /*wireframe*/)
+                                                size_t count,
+                                                size_t offset,
+                                                int instanceCount,
+                                                bool /*wireframe*/)
 {
     prepareDrawing();
 

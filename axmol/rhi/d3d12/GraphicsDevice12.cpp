@@ -881,8 +881,8 @@ void GraphicsDeviceImpl::queueDisposalInternal(DisposableResource&& disposal)
 }
 
 ComPtr<IUnknown> GraphicsDeviceImpl::compileShader(std::span<uint8_t> shaderCode,
-                                           ShaderStage stage,
-                                           std::span<uint8_t>& blobView)
+                                                   ShaderStage stage,
+                                                   std::span<uint8_t>& blobView)
 {
     if (_dxcAvailable)
     {

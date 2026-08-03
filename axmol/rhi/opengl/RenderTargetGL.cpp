@@ -31,7 +31,8 @@ THE SOFTWARE.
 namespace ax::rhi::gl
 {
 
-RenderTargetImpl::RenderTargetImpl(GraphicsDeviceImpl* driver, bool defaultRenderTarget) : RenderTarget(defaultRenderTarget)
+RenderTargetImpl::RenderTargetImpl(GraphicsDeviceImpl* driver, bool defaultRenderTarget)
+    : RenderTarget(defaultRenderTarget)
 {
     if (!defaultRenderTarget)
     {

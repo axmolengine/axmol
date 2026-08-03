@@ -65,7 +65,7 @@ struct GraphicsCore::State
     GraphicsBackend backend;
     int shaderLanguage{axslc::SHADER_LANG_NONE};
     int shaderProfile{0};
-    int shaderILProfile{0};     // 0=unset, write by Driver init (D3D12: 60 DXIL or 51 DXBC)
+    int shaderILProfile{0};            // 0=unset, write by Driver init (D3D12: 60 DXIL or 51 DXBC)
     int vulkanMinAndroidApiLevel{31};  // Android 12+
     int backendPriorities[(int)rhi::GraphicsBackend::Count] = {
         rhi::DefaultDriverPriority::OpenGL, rhi::DefaultDriverPriority::D3D11, rhi::DefaultDriverPriority::D3D12,
@@ -171,27 +171,32 @@ void GraphicsCore::initialize()
     tlx::inlined_vector<std::unique_ptr<GraphicsDeviceFactory>, (int)GraphicsBackend::Count> factories;
 
 #if AX_ENABLE_D3D12
-    factories.push_back(std::make_unique<D3D12GraphicsDeviceFactory>(state().backendPriorities[(int)GraphicsBackend::D3D12]));
+    factories.push_back(
+        std::make_unique<D3D12GraphicsDeviceFactory>(state().backendPriorities[(int)GraphicsBackend::D3D12]));
 #endif
 
 #if AX_ENABLE_VK
 #    if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
     int apiLevel = android_get_device_api_level();
     if (apiLevel >= state().vulkanMinAndroidApiLevel)
-        factories.push_back(std::make_unique<VulkanGraphicsDeviceFactory>(state().backendPriorities[(int)GraphicsBackend::Vulkan]));
+        factories.push_back(
+            std::make_unique<VulkanGraphicsDeviceFactory>(state().backendPriorities[(int)GraphicsBackend::Vulkan]));
     else
         AXLOGI("Vulkan skipped: device API level {} < required {}", apiLevel, state().vulkanMinAndroidApiLevel);
 #    else
-    factories.push_back(std::make_unique<VulkanGraphicsDeviceFactory>(state().backendPriorities[(int)GraphicsBackend::Vulkan]));
+    factories.push_back(
+        std::make_unique<VulkanGraphicsDeviceFactory>(state().backendPriorities[(int)GraphicsBackend::Vulkan]));
 #    endif
 #endif
 
 #if AX_ENABLE_D3D11
-    factories.push_back(std::make_unique<D3D11GraphicsDeviceFactory>(state().backendPriorities[(int)GraphicsBackend::D3D11]));
+    factories.push_back(
+        std::make_unique<D3D11GraphicsDeviceFactory>(state().backendPriorities[(int)GraphicsBackend::D3D11]));
 #endif
 
 #if AX_ENABLE_MTL
-    factories.push_back(std::make_unique<MetalGraphicsDeviceFactory>(state().backendPriorities[(int)GraphicsBackend::Metal]));
+    factories.push_back(
+        std::make_unique<MetalGraphicsDeviceFactory>(state().backendPriorities[(int)GraphicsBackend::Metal]));
 #endif
 
     if (factories.size() > 1)
@@ -208,27 +213,27 @@ void GraphicsCore::initialize()
         if (driver->init())
         {
             state().backend = driver->type();
-            state().device     = std::move(driver);
+            state().device  = std::move(driver);
 
             switch (state().backend)
             {
             case GraphicsBackend::D3D11:
-                state().shaderLanguage      = axslc::SHADER_LANG_HLSL;
+                state().shaderLanguage  = axslc::SHADER_LANG_HLSL;
                 state().shaderProfile   = 50;
                 state().shaderILProfile = 50;
                 break;
             case GraphicsBackend::D3D12:
-                state().shaderLanguage      = axslc::SHADER_LANG_HLSL;
+                state().shaderLanguage  = axslc::SHADER_LANG_HLSL;
                 state().shaderProfile   = 51;
                 state().shaderILProfile = 51;
                 break;
             case GraphicsBackend::Vulkan:
-                state().shaderLanguage      = axslc::SHADER_LANG_SPIRV;
+                state().shaderLanguage  = axslc::SHADER_LANG_SPIRV;
                 state().shaderProfile   = 100;
                 state().shaderILProfile = 100;
                 break;
             case GraphicsBackend::Metal:
-                state().shaderLanguage      = axslc::SHADER_LANG_MSL;
+                state().shaderLanguage  = axslc::SHADER_LANG_MSL;
                 state().shaderProfile   = make_msl_version(2, 0);
                 state().shaderILProfile = make_msl_version(2, 0);
                 break;
@@ -253,8 +258,8 @@ void GraphicsCore::initialize()
     if (!state().device)
     {
 #if AX_ENABLE_GL
-        state().device     = std::make_unique<gl::GraphicsDeviceImpl>();
-        state().backend = state().device->type();
+        state().device         = std::make_unique<gl::GraphicsDeviceImpl>();
+        state().backend        = state().device->type();
         state().shaderLanguage = AX_GLES_PROFILE ? axslc::SHADER_LANG_ESSL : axslc::SHADER_LANG_GLSL;
 #else
         throw std::runtime_error(
@@ -269,7 +274,7 @@ void GraphicsCore::activate()
     if (state().device && isOpenGL() && !state().shaderProfile)
     {
         state().device->init();
-        auto& st                  = state();
+        auto& st           = state();
         st.shaderProfile   = AX_GLES_PROFILE ? 300 : 330;
         st.shaderILProfile = st.shaderProfile;
     }

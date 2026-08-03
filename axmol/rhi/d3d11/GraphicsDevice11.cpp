@@ -272,8 +272,8 @@ void GraphicsDeviceImpl::selectAdapter(PowerPreference powerPreference)
 }
 
 HRESULT GraphicsDeviceImpl::createD3DDevice(int requestedD3DType,
-                                    int createFlags,
-                                    std::span<const D3D_FEATURE_LEVEL> featureLevels)
+                                            int createFlags,
+                                            std::span<const D3D_FEATURE_LEVEL> featureLevels)
 {
     if (_dxgiAdapter)
         requestedD3DType = D3D_DRIVER_TYPE_UNKNOWN;

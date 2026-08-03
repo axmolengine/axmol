@@ -137,8 +137,8 @@ void VertexLayoutImpl::setupVAO()
 
     for (const auto& inputDesc : bindings)
     {
-        GLuint bindingIndex =
-            inputDesc.instanceStepRate ? GraphicsDeviceImpl::VBO_INSTANCING_BINDING_INDEX : GraphicsDeviceImpl::VBO_BINDING_INDEX;
+        GLuint bindingIndex = inputDesc.instanceStepRate ? GraphicsDeviceImpl::VBO_INSTANCING_BINDING_INDEX
+                                                         : GraphicsDeviceImpl::VBO_BINDING_INDEX;
 
         GLuint attribIndex = inputDesc.index;
         if (!inputDesc.instanceStepRate)

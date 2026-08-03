@@ -623,8 +623,8 @@ void GraphicsContextImpl::updateDepthStencilState(const DepthStencilDesc& desc)
 }
 
 void GraphicsContextImpl::updatePipelineState(const RenderTarget* rt,
-                                            const PipelineDesc& pipelineDesc,
-                                            PrimitiveType primitiveType)
+                                              const PipelineDesc& pipelineDesc,
+                                              PrimitiveType primitiveType)
 {
     GraphicsContext::updatePipelineState(rt, pipelineDesc, primitiveType);
     AXASSERT(_renderPipeline, "RenderPipelineImpl not set");
@@ -737,10 +737,10 @@ void GraphicsContextImpl::drawElements(IndexFormat indexType, size_t count, size
 }
 
 void GraphicsContextImpl::drawElementsInstanced(IndexFormat indexType,
-                                              size_t count,
-                                              size_t offset,
-                                              int instanceCount,
-                                              bool /*wireframe*/)
+                                                size_t count,
+                                                size_t offset,
+                                                int instanceCount,
+                                                bool /*wireframe*/)
 {
     AXASSERT(_renderPipeline && _vertexBuffer && _indexBuffer, "Pipeline, vertex and index buffers must be set");
 

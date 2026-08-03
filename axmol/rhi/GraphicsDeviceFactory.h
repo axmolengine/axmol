@@ -32,7 +32,7 @@ class GraphicsDeviceFactory
 {
 public:
     GraphicsDeviceFactory(GraphicsBackend driverType, int prio) : _driverType(driverType), _priority(prio) {}
-    virtual ~GraphicsDeviceFactory()                     = default;
+    virtual ~GraphicsDeviceFactory()                 = default;
     virtual std::unique_ptr<GraphicsDevice> create() = 0;
 
     GraphicsBackend type() const { return _driverType; };

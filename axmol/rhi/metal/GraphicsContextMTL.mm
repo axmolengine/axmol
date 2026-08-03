@@ -280,8 +280,8 @@ void GraphicsContextImpl::updateDepthStencilState(const DepthStencilDesc& desc)
 }
 
 void GraphicsContextImpl::updatePipelineState(const RenderTarget* rt,
-                                            const PipelineDesc& desc,
-                                            PrimitiveType primitiveType)
+                                              const PipelineDesc& desc,
+                                              PrimitiveType primitiveType)
 {
     _primitiveType = toMTLPrimitive(primitiveType);
     GraphicsContext::updatePipelineState(rt, desc, primitiveType);
@@ -344,7 +344,10 @@ void GraphicsContextImpl::drawArrays(size_t start, size_t count, bool wireframe 
     [_mtlRenderEncoder drawPrimitives:_primitiveType vertexStart:start vertexCount:count];
 }
 
-void GraphicsContextImpl::drawArraysInstanced(size_t start, size_t count, int instanceCount, bool wireframe /* unused */)
+void GraphicsContextImpl::drawArraysInstanced(size_t start,
+                                              size_t count,
+                                              int instanceCount,
+                                              bool wireframe /* unused */)
 {
     prepareDrawing();
     [_mtlRenderEncoder drawPrimitives:_primitiveType vertexStart:start vertexCount:count instanceCount:instanceCount];
@@ -361,10 +364,10 @@ void GraphicsContextImpl::drawElements(IndexFormat indexType, size_t count, size
 }
 
 void GraphicsContextImpl::drawElementsInstanced(IndexFormat indexType,
-                                              size_t count,
-                                              size_t offset,
-                                              int instanceCount,
-                                              bool /* wireframe */)
+                                                size_t count,
+                                                size_t offset,
+                                                int instanceCount,
+                                                bool /* wireframe */)
 {
     prepareDrawing();
     [_mtlRenderEncoder drawIndexedPrimitives:_primitiveType
@@ -626,11 +629,11 @@ void GraphicsContextImpl::setScissorRect(bool enabled, float x, float y, float w
 }
 
 void GraphicsContextImpl::readPixels(id<MTLTexture> texture,
-                                   size_t origX,
-                                   size_t origY,
-                                   size_t rectWidth,
-                                   size_t rectHeight,
-                                   PixelBufferDesc& pbd)
+                                     size_t origX,
+                                     size_t origY,
+                                     size_t rectWidth,
+                                     size_t rectHeight,
+                                     PixelBufferDesc& pbd)
 {
     NSUInteger texWidth   = texture.width;
     NSUInteger texHeight  = texture.height;

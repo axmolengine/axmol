@@ -56,8 +56,8 @@ bool GraphicsContext::validateTextureCopy(const Texture* src, const Texture* dst
 GraphicsContext::~GraphicsContext() {}
 
 void GraphicsContext::updatePipelineState(const RenderTarget* rt,
-                                        const PipelineDesc& desc,
-                                        PrimitiveType /*primitiveType*/)
+                                          const PipelineDesc& desc,
+                                          PrimitiveType /*primitiveType*/)
 {
     _programState = desc.programState;
     _vertexLayout = desc.vertexLayout;

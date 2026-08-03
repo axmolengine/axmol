@@ -240,7 +240,7 @@ void RenderPipelineImpl::setVertexLayout(MTLRenderPipelineDescriptor* mtlDesc, c
     auto vertexLayout = desc.vertexLayout;
     assert(vertexLayout);
 
-    auto vertexDesc                                                            = mtlDesc.vertexDescriptor;
+    auto vertexDesc                                                                    = mtlDesc.vertexDescriptor;
     vertexDesc.layouts[GraphicsDeviceImpl::DEFAULT_ATTRIBS_BINDING_INDEX].stride       = vertexLayout->getStride();
     vertexDesc.layouts[GraphicsDeviceImpl::DEFAULT_ATTRIBS_BINDING_INDEX].stepFunction = MTLVertexStepFunctionPerVertex;
 
@@ -260,7 +260,8 @@ void RenderPipelineImpl::setVertexLayout(MTLRenderPipelineDescriptor* mtlDesc, c
             {
                 attrib.bufferIndex = GraphicsDeviceImpl::VBO_INSTANCING_BINDING_INDEX;
                 ++instanceAttribCount;
-                vertexDesc.layouts[GraphicsDeviceImpl::VBO_INSTANCING_BINDING_INDEX].stepRate = bindingDesc.instanceStepRate;
+                vertexDesc.layouts[GraphicsDeviceImpl::VBO_INSTANCING_BINDING_INDEX].stepRate =
+                    bindingDesc.instanceStepRate;
             }
         }
         else
@@ -288,8 +289,9 @@ void RenderPipelineImpl::setVertexLayout(MTLRenderPipelineDescriptor* mtlDesc, c
 
     if (instanceAttribCount)
     {
-        vertexDesc.layouts[GraphicsDeviceImpl::VBO_INSTANCING_BINDING_INDEX].stride       = vertexLayout->getInstanceStride();
-        vertexDesc.layouts[GraphicsDeviceImpl::VBO_INSTANCING_BINDING_INDEX].stepFunction = MTLVertexStepFunctionPerInstance;
+        vertexDesc.layouts[GraphicsDeviceImpl::VBO_INSTANCING_BINDING_INDEX].stride = vertexLayout->getInstanceStride();
+        vertexDesc.layouts[GraphicsDeviceImpl::VBO_INSTANCING_BINDING_INDEX].stepFunction =
+            MTLVertexStepFunctionPerInstance;
     }
 }
 

@@ -394,8 +394,8 @@ void GraphicsContextImpl::updateDepthStencilState(const DepthStencilDesc& desc)
 }
 
 void GraphicsContextImpl::updatePipelineState(const RenderTarget* rt,
-                                            const PipelineDesc& desc,
-                                            PrimitiveType primitiveType)
+                                              const PipelineDesc& desc,
+                                              PrimitiveType primitiveType)
 {
     GraphicsContext::updatePipelineState(rt, desc, primitiveType);
     _renderPipeline->update(rt, desc);
@@ -595,10 +595,10 @@ void GraphicsContextImpl::drawElements(IndexFormat indexType, size_t count, size
 }
 
 void GraphicsContextImpl::drawElementsInstanced(IndexFormat indexType,
-                                              size_t count,
-                                              size_t offset,
-                                              int instanceCount,
-                                              bool /*wireframe*/)
+                                                size_t count,
+                                                size_t offset,
+                                                int instanceCount,
+                                                bool /*wireframe*/)
 {
     prepareDrawing();
 

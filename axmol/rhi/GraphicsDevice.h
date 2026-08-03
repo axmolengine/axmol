@@ -93,7 +93,7 @@ class AX_DLL GraphicsDevice
     friend class GraphicsCore;
 
 protected:
-    virtual bool init()       = 0;
+    virtual bool init()            = 0;
     virtual GraphicsBackend type() = 0;
 
 public:

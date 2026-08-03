@@ -29,7 +29,8 @@
 
 namespace ax::rhi::d3d12
 {
-ShaderModuleImpl::ShaderModuleImpl(GraphicsDeviceImpl* driver, ShaderStage stage, Data& chunk) : ShaderModule(stage, chunk)
+ShaderModuleImpl::ShaderModuleImpl(GraphicsDeviceImpl* driver, ShaderStage stage, Data& chunk)
+    : ShaderModule(stage, chunk)
 {
     if (_precompiled)
     {
