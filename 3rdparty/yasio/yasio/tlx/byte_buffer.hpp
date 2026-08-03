@@ -27,16 +27,32 @@ SOFTWARE.
 */
 #ifndef YASIO__BYTE_BUFFER_HPP
 #define YASIO__BYTE_BUFFER_HPP
+#include <span>
 #include "yasio/tlx/array_buffer.hpp"
 
 namespace tlx
 {
 // basic_byte_buffer restricted to byte types
 template <typename _Ty, typename _Alloc = tlx::crt_buffer_allocator<_Ty>>
-using basic_byte_buffer = typename std::enable_if<tlx::is_byte_type<_Ty>::value, tlx::array_buffer<_Ty, _Alloc>>::type;
+class basic_byte_buffer : public tlx::array_buffer<_Ty, _Alloc> {
+  static_assert(tlx::is_byte_type<_Ty>::value, "basic_byte_buffer only supports byte types!");
+  using base_type = tlx::array_buffer<_Ty, _Alloc>;
 
-using sbyte_buffer = basic_byte_buffer<char>;
-using byte_buffer  = basic_byte_buffer<unsigned char>;
+public:
+  using base_type::base_type;
+  using base_type::operator=;
+
+  std::span<char> as_chars() & noexcept
+  {
+    return {reinterpret_cast<char*>(this->data()), this->size()};
+  }
+  std::span<const char> as_chars() const & noexcept
+  {
+    return {reinterpret_cast<const char*>(this->data()), this->size()};
+  }
+};
+
+using byte_buffer = basic_byte_buffer<unsigned char>;
 
 } // namespace tlx
 #endif

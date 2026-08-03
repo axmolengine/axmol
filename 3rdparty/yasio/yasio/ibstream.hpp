@@ -123,7 +123,7 @@ public:
   using convert_traits_type = _Traits;
   using this_type           = binary_reader_impl<_Traits>;
   binary_reader_impl() { this->reset("", 0); }
-  binary_reader_impl(const tlx::sbyte_buffer& d) { this->reset(d); }
+  binary_reader_impl(const tlx::byte_buffer& d) { this->reset(d); }
   binary_reader_impl(const std::string_view& d) { this->reset(d); }
   binary_reader_impl(const void* data, size_t size) { this->reset(data, size); }
   template <typename _BufferType>
@@ -143,7 +143,7 @@ public:
 
   ~binary_reader_impl() {}
 
-  void reset(const tlx::sbyte_buffer& d) { reset(d.data(), d.size()); }
+  void reset(const tlx::byte_buffer& d) { reset(d.data(), d.size()); }
   void reset(const std::string_view& d) { reset(d.data(), d.length()); }
   void reset(const void* data, size_t size)
   {
@@ -305,7 +305,7 @@ template <typename _Traits>
 class basic_ibstream : public binary_reader_impl<_Traits> {
 public:
   basic_ibstream() {}
-  basic_ibstream(tlx::sbyte_buffer blob) : binary_reader_impl<_Traits>(), blob_(std::move(blob)) { this->reset(blob_.data(), static_cast<int>(blob_.size())); }
+  basic_ibstream(tlx::byte_buffer blob) : binary_reader_impl<_Traits>(), blob_(std::move(blob)) { this->reset(blob_.data(), static_cast<int>(blob_.size())); }
   basic_ibstream(const basic_obstream<_Traits>* obs) : binary_reader_impl<_Traits>(), blob_(obs->buffer())
   {
     this->reset(blob_.data(), static_cast<int>(blob_.size()));
@@ -323,7 +323,7 @@ public:
       {
         blob_.resize(static_cast<size_t>(size));
         fin.seekg(0, std::ios_base::beg);
-        fin.read(blob_.data(), blob_.size());
+        fin.read(blob_.as_chars().data(), blob_.size());
         this->reset(blob_.data(), static_cast<int>(blob_.size()));
         return true;
       }
@@ -332,7 +332,7 @@ public:
   }
 
 protected:
-  tlx::sbyte_buffer blob_;
+  tlx::byte_buffer blob_;
 };
 
 using ibstream_view = binary_reader_impl<convert_traits<network_convert_tag>>;

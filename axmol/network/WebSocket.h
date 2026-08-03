@@ -152,17 +152,17 @@ public:
     class MessageEvent : public Event
     {
     public:
-        MessageEvent(tlx::sbyte_buffer&& message, bool isBinary) : _message(std::move(message)), _isBinary(isBinary)
+        MessageEvent(tlx::byte_buffer&& message, bool isBinary) : _message(std::move(message)), _isBinary(isBinary)
         {
             this->_type = Type::ON_MESSAGE;
         }
 
-        tlx::sbyte_buffer& getMessage() { return _message; }
-        const tlx::sbyte_buffer& getMessage() const { return _message; }
+        tlx::byte_buffer& getMessage() { return _message; }
+        const tlx::byte_buffer& getMessage() const { return _message; }
         bool isBinary() const { return _isBinary; }
 
     private:
-        tlx::sbyte_buffer _message;
+        tlx::byte_buffer _message;
         bool _isBinary;
         /* TODO:
         issued;
@@ -178,7 +178,7 @@ public:
     {
         Data() : bytes(nullptr), len(0), issued(0), isBinary(false), ext(nullptr) {}
         Data(MessageEvent* event)
-            : bytes(event->getMessage().data())
+            : bytes(event->getMessage().as_chars().data())
             , len(event->getMessage().size())
             , isBinary(event->isBinary())
             , issued(0)
@@ -437,7 +437,7 @@ protected:
     std::string _closeReason;
 
     // for receiveData
-    tlx::sbyte_buffer _receivedData;
+    tlx::byte_buffer _receivedData;
     std::recursive_mutex _receivedDataMtx;
 
     CustomEventListener* _resetDirectorListener;

@@ -664,7 +664,7 @@ void io_transport_udp::set_primitives()
     };
   }
 }
-int io_transport_udp::handle_input(char* data, int bytes_transferred, int& /*error*/, tlx::highp_time_t&)
+int io_transport_udp::handle_input(uint8_t* data, int bytes_transferred, int& /*error*/, tlx::highp_time_t&)
 { // pure udp, dispatch to upper layer directly
   auto& service = get_service();
   if (!service.options_.forward_packet_)
@@ -737,7 +737,7 @@ int io_transport_kcp::do_read(int revent, int& error, tlx::highp_time_t& wait_du
       auto need_size = static_cast<size_t>(kdata_size + offset_);
       if (buffer_.size() < need_size)
         buffer_.resize(kdata_size + offset_);
-      n = ::ikcp_recv(kcp_, buffer_.data() + offset_, kdata_size);
+      n = ::ikcp_recv(kcp_, buffer_.as_chars().data() + offset_, kdata_size);
     }
     if (n > 0) // If got data from kcp, don't wait
       wait_duration = 0;
@@ -746,10 +746,10 @@ int io_transport_kcp::do_read(int revent, int& error, tlx::highp_time_t& wait_du
   }
   return n;
 }
-int io_transport_kcp::handle_input(char* buf, int len, int& error, tlx::highp_time_t& wait_duration)
+int io_transport_kcp::handle_input(uint8_t* buf, int len, int& error, tlx::highp_time_t& wait_duration)
 {
   // ikcp in event always in service thread, so no need to lock
-  if (0 == ::ikcp_input(kcp_, buf, len))
+  if (0 == ::ikcp_input(kcp_, reinterpret_cast<char*>(buf), len))
   {
     expire_time_ = 0;
     return len;
@@ -1192,7 +1192,7 @@ void io_service::handle_close(transport_handle_t thandle)
     cleanup_channel(ctx, false);
   }
 }
-int io_service::write(transport_handle_t transport, tlx::sbyte_buffer buffer, completion_cb_t handler)
+int io_service::write(transport_handle_t transport, tlx::byte_buffer buffer, completion_cb_t handler)
 {
   if (transport && transport->is_open())
     return !buffer.empty() ? transport->write(io_send_buffer{std::move(buffer)}, std::move(handler)) : 0;
@@ -1205,14 +1205,14 @@ int io_service::write(transport_handle_t transport, tlx::sbyte_buffer buffer, co
 int io_service::forward(transport_handle_t transport, const void* buf, size_t len, completion_cb_t handler)
 {
   if (transport && transport->is_open())
-    return len != 0 ? transport->write(io_send_buffer{(const char*)buf, len}, std::move(handler)) : 0;
+    return len != 0 ? transport->write(io_send_buffer{(const uint8_t*)buf, len}, std::move(handler)) : 0;
   else
   {
     YASIO_KLOGE("write failed, the connection not ok!");
     return -1;
   }
 }
-int io_service::write_to(transport_handle_t transport, tlx::sbyte_buffer buffer, const ip::endpoint& to, completion_cb_t handler)
+int io_service::write_to(transport_handle_t transport, tlx::byte_buffer buffer, const ip::endpoint& to, completion_cb_t handler)
 {
   if (transport && transport->is_open())
     return !buffer.empty() ? transport->write_to(io_send_buffer{std::move(buffer)}, to, std::move(handler)) : 0;
@@ -1225,7 +1225,7 @@ int io_service::write_to(transport_handle_t transport, tlx::sbyte_buffer buffer,
 int io_service::forward_to(transport_handle_t transport, const void* buf, size_t len, const ip::endpoint& to, completion_cb_t handler)
 {
   if (transport && transport->is_open())
-    return len != 0 ? transport->write_to(io_send_buffer{(const char*)buf, len}, to, std::move(handler)) : 0;
+    return len != 0 ? transport->write_to(io_send_buffer{(const uint8_t*)buf, len}, to, std::move(handler)) : 0;
   else
   {
     YASIO_KLOGE("write_to failed, the connection not ok!");
