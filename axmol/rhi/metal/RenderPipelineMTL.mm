@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 #include "axmol/rhi/metal/RenderPipelineMTL.h"
-#include "axmol/rhi/metal/DriverMTL.h"
+#include "axmol/rhi/metal/GraphicsDeviceMTL.h"
 #include "axmol/rhi/metal/RenderTargetMTL.h"
 #include "axmol/rhi/metal/ShaderModuleMTL.h"
 #include "axmol/rhi/metal/DepthStencilStateMTL.h"
@@ -241,8 +241,8 @@ void RenderPipelineImpl::setVertexLayout(MTLRenderPipelineDescriptor* mtlDesc, c
     assert(vertexLayout);
 
     auto vertexDesc                                                            = mtlDesc.vertexDescriptor;
-    vertexDesc.layouts[DriverImpl::DEFAULT_ATTRIBS_BINDING_INDEX].stride       = vertexLayout->getStride();
-    vertexDesc.layouts[DriverImpl::DEFAULT_ATTRIBS_BINDING_INDEX].stepFunction = MTLVertexStepFunctionPerVertex;
+    vertexDesc.layouts[GraphicsDeviceImpl::DEFAULT_ATTRIBS_BINDING_INDEX].stride       = vertexLayout->getStride();
+    vertexDesc.layouts[GraphicsDeviceImpl::DEFAULT_ATTRIBS_BINDING_INDEX].stepFunction = MTLVertexStepFunctionPerVertex;
 
     unsigned int instanceAttribCount = 0;
     for (const auto& bindingDesc : vertexLayout->getBindings())
@@ -254,13 +254,13 @@ void RenderPipelineImpl::setVertexLayout(MTLRenderPipelineDescriptor* mtlDesc, c
             attrib.offset = bindingDesc.offset;
             if (!bindingDesc.instanceStepRate)
             {
-                attrib.bufferIndex = DriverImpl::DEFAULT_ATTRIBS_BINDING_INDEX;
+                attrib.bufferIndex = GraphicsDeviceImpl::DEFAULT_ATTRIBS_BINDING_INDEX;
             }
             else
             {
-                attrib.bufferIndex = DriverImpl::VBO_INSTANCING_BINDING_INDEX;
+                attrib.bufferIndex = GraphicsDeviceImpl::VBO_INSTANCING_BINDING_INDEX;
                 ++instanceAttribCount;
-                vertexDesc.layouts[DriverImpl::VBO_INSTANCING_BINDING_INDEX].stepRate = bindingDesc.instanceStepRate;
+                vertexDesc.layouts[GraphicsDeviceImpl::VBO_INSTANCING_BINDING_INDEX].stepRate = bindingDesc.instanceStepRate;
             }
         }
         else
@@ -273,12 +273,12 @@ void RenderPipelineImpl::setVertexLayout(MTLRenderPipelineDescriptor* mtlDesc, c
                 attrib.offset = bindingDesc.offset + col * colStride;
                 if (!bindingDesc.instanceStepRate)
                 {
-                    attrib.bufferIndex = DriverImpl::DEFAULT_ATTRIBS_BINDING_INDEX;
+                    attrib.bufferIndex = GraphicsDeviceImpl::DEFAULT_ATTRIBS_BINDING_INDEX;
                 }
                 else
                 {
-                    attrib.bufferIndex = DriverImpl::VBO_INSTANCING_BINDING_INDEX;
-                    vertexDesc.layouts[DriverImpl::VBO_INSTANCING_BINDING_INDEX].stepRate =
+                    attrib.bufferIndex = GraphicsDeviceImpl::VBO_INSTANCING_BINDING_INDEX;
+                    vertexDesc.layouts[GraphicsDeviceImpl::VBO_INSTANCING_BINDING_INDEX].stepRate =
                         bindingDesc.instanceStepRate;
                     ++instanceAttribCount;
                 }
@@ -288,8 +288,8 @@ void RenderPipelineImpl::setVertexLayout(MTLRenderPipelineDescriptor* mtlDesc, c
 
     if (instanceAttribCount)
     {
-        vertexDesc.layouts[DriverImpl::VBO_INSTANCING_BINDING_INDEX].stride       = vertexLayout->getInstanceStride();
-        vertexDesc.layouts[DriverImpl::VBO_INSTANCING_BINDING_INDEX].stepFunction = MTLVertexStepFunctionPerInstance;
+        vertexDesc.layouts[GraphicsDeviceImpl::VBO_INSTANCING_BINDING_INDEX].stride       = vertexLayout->getInstanceStride();
+        vertexDesc.layouts[GraphicsDeviceImpl::VBO_INSTANCING_BINDING_INDEX].stepFunction = MTLVertexStepFunctionPerInstance;
     }
 }
 

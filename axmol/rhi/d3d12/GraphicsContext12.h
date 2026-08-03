@@ -22,7 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 #pragma once
-#include "axmol/rhi/RenderContext.h"
+#include "axmol/rhi/GraphicsContext.h"
 #include "axmol/rhi/d3d12/RenderPipeline12.h"
 #include "axmol/rhi/d3d12/DepthStencilState12.h"
 #include "axmol/rhi/d3d12/VertexLayout12.h"
@@ -39,7 +39,7 @@
 namespace ax::rhi::d3d12
 {
 
-class DriverImpl;
+class GraphicsDeviceImpl;
 class RenderTargetImpl;
 
 enum class DynamicStateBits : uint32_t
@@ -69,7 +69,7 @@ struct GPUFence
     uint64_t value{0};
 };
 
-class RenderContextImpl : public RenderContext
+class GraphicsContextImpl : public GraphicsContext
 {
 public:
     static constexpr int SWAPCHAIN_BUFFER_COUNT = 3;
@@ -85,8 +85,8 @@ public:
         DynamicStateBits::Viewport | DynamicStateBits::Scissor | DynamicStateBits::StencilRef |
         DynamicStateBits::CullMode | DynamicStateBits::FrontFace;
 
-    RenderContextImpl(DriverImpl* driver, SurfaceHandle surface);
-    ~RenderContextImpl() override;
+    GraphicsContextImpl(GraphicsDeviceImpl* driver, SurfaceHandle surface);
+    ~GraphicsContextImpl() override;
 
     RenderTarget* getScreenRenderTarget() const override { return (RenderTarget*)_screenRT; }
 
@@ -153,7 +153,7 @@ private:
 
     void applyPendingDynamicStates();
 
-    DriverImpl* _driver{nullptr};
+    GraphicsDeviceImpl* _driver{nullptr};
 
     RenderTargetImpl* _screenRT{nullptr};
 

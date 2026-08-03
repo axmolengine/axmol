@@ -298,7 +298,7 @@ void RenderViewCore::setSceneCompositor(std::unique_ptr<SceneCompositor>&& compo
                 {
                     AXLOGE(
                         "registerVulkanInterop() was not called in applicationWillLaunch(). "
-                        "Vulkan requires interop registration before makeCurrentDriver().");
+                        "Vulkan requires interop registration before initialize().");
                     return;
                 }
                 // Non-Vulkan backends (D3D, Metal, GL) do not need pre-driver interop registration.

@@ -27,7 +27,7 @@
 #include "axmol/rhi/vulkan/VertexLayoutVK.h"
 #include "axmol/rhi/vulkan/ProgramVK.h"
 #include "axmol/rhi/vulkan/ShaderModuleVK.h"
-#include "axmol/rhi/vulkan/DriverVK.h"
+#include "axmol/rhi/vulkan/GraphicsDeviceVK.h"
 #include "axmol/rhi/vulkan/UtilsVK.h"
 #include "axmol/rhi/axslc-spec.h"
 #include "axmol/tlx/hlookup.hpp"
@@ -318,7 +318,7 @@ DescriptorPool* DescriptorAllocator::spawnPool()
 /*
  * CLASS RenderPipelineImpl
  */
-RenderPipelineImpl::RenderPipelineImpl(DriverImpl* driver) : _driver(driver), _device(driver->getDevice())
+RenderPipelineImpl::RenderPipelineImpl(GraphicsDeviceImpl* driver) : _driver(driver), _device(driver->getDevice())
 {
     initializePipelineDefaults(driver);
 
@@ -374,7 +374,7 @@ RenderPipelineImpl::~RenderPipelineImpl()
     _pipelineCache.clear();
 }
 
-void RenderPipelineImpl::initializePipelineDefaults(DriverImpl* driver)
+void RenderPipelineImpl::initializePipelineDefaults(GraphicsDeviceImpl* driver)
 {
     // Input Assembly
     _iaState          = {};

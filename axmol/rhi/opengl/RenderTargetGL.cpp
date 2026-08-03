@@ -24,14 +24,14 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "axmol/rhi/opengl/RenderTargetGL.h"
-#include "axmol/rhi/opengl/DriverGL.h"
+#include "axmol/rhi/opengl/GraphicsDeviceGL.h"
 #include "axmol/rhi/opengl/MacrosGL.h"
 #include "axmol/rhi/opengl/TextureGL.h"
 
 namespace ax::rhi::gl
 {
 
-RenderTargetImpl::RenderTargetImpl(DriverImpl* driver, bool defaultRenderTarget) : RenderTarget(defaultRenderTarget)
+RenderTargetImpl::RenderTargetImpl(GraphicsDeviceImpl* driver, bool defaultRenderTarget) : RenderTarget(defaultRenderTarget)
 {
     if (!defaultRenderTarget)
     {

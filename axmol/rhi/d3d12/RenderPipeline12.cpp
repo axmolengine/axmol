@@ -25,8 +25,8 @@
 #include "axmol/rhi/d3d12/VertexLayout12.h"
 #include "axmol/rhi/d3d12/DepthStencilState12.h"
 #include "axmol/rhi/d3d12/Program12.h"
-#include "axmol/rhi/d3d12/RenderContext12.h"
-#include "axmol/rhi/d3d12/Driver12.h"
+#include "axmol/rhi/d3d12/GraphicsContext12.h"
+#include "axmol/rhi/d3d12/GraphicsDevice12.h"
 #include "axmol/base/Logging.h"
 #include "axmol/tlx/hash.hpp"
 
@@ -124,7 +124,7 @@ static inline uintptr_t makePSOKey(const rhi::BlendDesc& blendDesc,
     }
 }
 
-RenderPipelineImpl::RenderPipelineImpl(DriverImpl* driver) : _driver(driver)
+RenderPipelineImpl::RenderPipelineImpl(GraphicsDeviceImpl* driver) : _driver(driver)
 {
     initializePipelineDefaults();
 }

@@ -63,7 +63,7 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolEngine_nativeInit(JNIEnv* env,
     auto app = ax::Application::getInstance();
     app->applicationWillLaunch();
 
-    ax::rhi::GraphicsCore::makeCurrentDriver();
+    ax::rhi::GraphicsCore::initialize();
 }
 
 JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolEngine_nativeSetEditTextDialogResult(JNIEnv* env,
@@ -101,7 +101,7 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolEngine_nativePerformFrameBoundary
 
 JNIEXPORT int JNICALL Java_dev_axmol_lib_AxmolEngine_nativeGetRenderAPI(JNIEnv* env, jclass)
 {
-    return (int)ax::rhi::GraphicsCore::currentDriverType();
+    return (int)ax::rhi::GraphicsCore::backend();
 }
 
 JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolEngine_nativeRunOnAxmolThread(JNIEnv* env, jclass, jobject runnable)

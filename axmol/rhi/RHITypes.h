@@ -43,7 +43,7 @@ using namespace std::string_view_literals;
 
 inline constexpr int MAX_FRAMES_IN_FLIGHT = 3;
 
-enum class DriverType
+enum class GraphicsBackend
 {
     Auto = -1,
     OpenGL,  // GL or GLES

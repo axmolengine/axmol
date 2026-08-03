@@ -23,7 +23,7 @@
  ****************************************************************************/
 #include "axmol/rhi/vulkan/TextureVK.h"
 #include "axmol/rhi/vulkan/UtilsVK.h"
-#include "axmol/rhi/vulkan/DriverVK.h"
+#include "axmol/rhi/vulkan/GraphicsDeviceVK.h"
 #include "axmol/rhi/SamplerRegistry.h"
 #include "axmol/rhi/RHIUtils.h"
 #include "axmol/base/Logging.h"
@@ -171,7 +171,7 @@ static void transitionImageLayout(VkCommandBuffer cmd,
     vkCmdPipelineBarrier(cmd, srcStage, dstStage, 0, 0, nullptr, 0, nullptr, 1, &barrier);
 }
 
-void TextureHandle::destroy(DriverImpl* driver, uint64_t fenceValue)
+void TextureHandle::destroy(GraphicsDeviceImpl* driver, uint64_t fenceValue)
 {
     if (view != VK_NULL_HANDLE)
     {
@@ -193,7 +193,7 @@ void TextureHandle::destroy(DriverImpl* driver, uint64_t fenceValue)
 // ------------------------------------------------------------
 // ctor / dtor
 // ------------------------------------------------------------
-TextureImpl::TextureImpl(DriverImpl* driver, const TextureDesc& desc)
+TextureImpl::TextureImpl(GraphicsDeviceImpl* driver, const TextureDesc& desc)
     : _driver(driver), _ownResources(true), _layoutTracker(LEVEL_INITIAL_CAPS, LAYER_INITIAL_CAPS)
 {
     updateTextureDesc(desc);
@@ -202,7 +202,7 @@ TextureImpl::TextureImpl(DriverImpl* driver, const TextureDesc& desc)
         ensureNativeTexture();  // Create the image immediately for render targets
 }
 
-TextureImpl::TextureImpl(DriverImpl* driver,
+TextureImpl::TextureImpl(GraphicsDeviceImpl* driver,
                          VkImage existingImage,
                          VkImageView existingImageView,
                          VkImageUsageFlags usage)
@@ -214,7 +214,7 @@ TextureImpl::TextureImpl(DriverImpl* driver,
     // Note: existingImage is owned externally (e.g., swapchain), we only wrap it.
 }
 
-TextureImpl::TextureImpl(DriverImpl* driver,
+TextureImpl::TextureImpl(GraphicsDeviceImpl* driver,
                          VkImage existingImage,
                          VkImageView existingImageView,
                          VkImageUsageFlags usage,

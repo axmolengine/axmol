@@ -60,7 +60,7 @@ struct DepthStencilDesc;
  * @brief Store encoded commands for the GPU to execute.
  * A Render Context stores encoded commands until the buffer is committed for execution by the GPU
  */
-class RenderContext : public ax::Object
+class GraphicsContext : public ax::Object
 {
 public:
     /**
@@ -286,7 +286,7 @@ public:
     static bool validateTextureCopy(const Texture* src, const Texture* dst);
 
 protected:
-    virtual ~RenderContext();
+    virtual ~GraphicsContext();
 
     RenderTarget* _currentRT{nullptr};        // weak ref (managed by Renderer)
     ProgramState* _programState{nullptr};     // weak ref

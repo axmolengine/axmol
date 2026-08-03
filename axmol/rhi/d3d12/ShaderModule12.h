@@ -7,7 +7,7 @@
 namespace ax::rhi::d3d12
 {
 
-class DriverImpl;
+class GraphicsDeviceImpl;
 
 struct SLCReflectContext;
 
@@ -28,7 +28,7 @@ struct UniformBlockInfo
 class ShaderModuleImpl : public ShaderModule
 {
 public:
-    ShaderModuleImpl(DriverImpl* driver, ShaderStage stage, Data& chunk);
+    ShaderModuleImpl(GraphicsDeviceImpl* driver, ShaderStage stage, Data& chunk);
     ~ShaderModuleImpl();
 
     std::span<uint8_t> getBlob() const { return _blob; }

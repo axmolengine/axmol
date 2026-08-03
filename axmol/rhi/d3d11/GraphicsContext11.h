@@ -23,8 +23,8 @@
  ****************************************************************************/
 #pragma once
 
-#include "axmol/rhi/RenderContext.h"
-#include "axmol/rhi/d3d11/Driver11.h"
+#include "axmol/rhi/GraphicsContext.h"
+#include "axmol/rhi/d3d11/GraphicsDevice11.h"
 #include "axmol/rhi/DXUtils.h"
 
 namespace ax::rhi::d3d11
@@ -58,10 +58,10 @@ struct alignas(4) RasterStateDesc
 static_assert(sizeof(RasterStateDesc) == sizeof(uint32_t), "RasterStateDesc size must be 4 bytes");
 
 /**
- * @brief A D3D11-based RenderContext implementation
+ * @brief A D3D11-based GraphicsContext implementation
  *
  */
-class RenderContextImpl : public RenderContext
+class GraphicsContextImpl : public GraphicsContext
 {
 public:
     /* The max vertex attribs, it's not how many device supports which may be lower. */
@@ -76,11 +76,11 @@ public:
 
     /// @name Constructor, Destructor and Initializers
     /**
-     * @param driver The device for which d3d11DriverImpl object was created.
+     * @param driver The device for which d3d11GraphicsDeviceImpl object was created.
      * @param surface hwnd or IUnkown*(SwapChainPanel)
      */
-    RenderContextImpl(DriverImpl* driver, SurfaceHandle surface);
-    ~RenderContextImpl() override;
+    GraphicsContextImpl(GraphicsDeviceImpl* driver, SurfaceHandle surface);
+    ~GraphicsContextImpl() override;
 
     RenderTarget* getScreenRenderTarget() const override { return (RenderTarget*)_screenRT; }
 
@@ -142,7 +142,7 @@ protected:
 
     void prepareDrawing();
 
-    DriverImpl* _driver{nullptr};
+    GraphicsDeviceImpl* _driver{nullptr};
     ID3D11DeviceContext* _d3d11Context{nullptr};
 
     RenderTargetImpl* _screenRT{nullptr};

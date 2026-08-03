@@ -1,4 +1,5 @@
 /****************************************************************************
+ Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
@@ -22,50 +23,16 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#pragma once
-
 #include "axmol/rhi/GraphicsCore.h"
+
+#include "axmol/rhi/VertexLayout.h"
 
 namespace ax::rhi
 {
-class DriverFactory
+
+VertexLayout* GraphicsDevice::createVertexLayout(VertexLayoutDesc&& desc)
 {
-public:
-    DriverFactory(DriverType driverType, int prio) : _driverType(driverType), _priority(prio) {}
-    virtual ~DriverFactory()                     = default;
-    virtual std::unique_ptr<DriverBase> create() = 0;
+    return new VertexLayout(std::forward<VertexLayoutDesc>(desc));
+}
 
-    DriverType type() const { return _driverType; };
-
-    int priority() const { return _priority; }
-    void priority(int pri) { _priority = pri; }
-
-protected:
-    DriverType _driverType;
-    int _priority;
-};
-
-struct D3D12DriverFactory : DriverFactory
-{
-    D3D12DriverFactory(int prio) : DriverFactory(DriverType::D3D12, prio) {}
-    std::unique_ptr<DriverBase> create() override;
-};
-
-struct D3D11DriverFactory : DriverFactory
-{
-    D3D11DriverFactory(int prio) : DriverFactory(DriverType::D3D11, prio) {}
-    std::unique_ptr<DriverBase> create() override;
-};
-
-struct VulkanDriverFactory : DriverFactory
-{
-    VulkanDriverFactory(int prio) : DriverFactory(DriverType::Vulkan, prio) {}
-    std::unique_ptr<DriverBase> create() override;
-};
-
-struct MetalDriverFactory : DriverFactory
-{
-    MetalDriverFactory(int prio) : DriverFactory(DriverType::Metal, prio) {}
-    std::unique_ptr<DriverBase> create() override;
-};
 }  // namespace ax::rhi

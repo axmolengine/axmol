@@ -102172,7 +102172,7 @@ int lua_ax_base_Renderer_getContext(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getContext();
-        object_to_luaval<ax::rhi::RenderContext>(tolua_S, "axr.RenderContext",(ax::rhi::RenderContext*)ret);
+        object_to_luaval<ax::rhi::GraphicsContext>(tolua_S, "axr.GraphicsContext",(ax::rhi::GraphicsContext*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Renderer:getContext",argc, 0);

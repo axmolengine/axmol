@@ -24,25 +24,25 @@
 #include "axmol/platform/PlatformMacros.h"
 #include "axmol/platform/ApplicationCore.h"
 #include "axmol/rhi/GraphicsCore.h"
-#include "axmol/rhi/DriverFactory.h"
+#include "axmol/rhi/GraphicsDeviceFactory.h"
 #include "axmol/tlx/inlined_vector.hpp"
 
 #include "axmol/rhi/axslc-spec.h"
 
 #if AX_ENABLE_D3D12
-#    include "axmol/rhi/d3d12/Driver12.h"
+#    include "axmol/rhi/d3d12/GraphicsDevice12.h"
 #endif
 #if AX_ENABLE_VK
-#    include "axmol/rhi/vulkan/DriverVK.h"
+#    include "axmol/rhi/vulkan/GraphicsDeviceVK.h"
 #endif
 #if AX_ENABLE_D3D11
-#    include "axmol/rhi/d3d11/Driver11.h"
+#    include "axmol/rhi/d3d11/GraphicsDevice11.h"
 #endif
 #if AX_ENABLE_MTL
-#    include "axmol/rhi/metal/DriverMTL.h"
+#    include "axmol/rhi/metal/GraphicsDeviceMTL.h"
 #endif
 #if AX_ENABLE_GL
-#    include "axmol/rhi/opengl/DriverGL.h"
+#    include "axmol/rhi/opengl/GraphicsDeviceGL.h"
 #endif
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
@@ -60,14 +60,14 @@ static uint32_t make_msl_version(uint32_t major, uint32_t minor = 0, uint32_t pa
 
 struct GraphicsCore::State
 {
-    std::unique_ptr<DriverBase> currentDriver;
-    DriverPreference driverPreference{DriverType::Auto};
-    DriverType currentDriverType;
-    int currentShaderLang{axslc::SHADER_LANG_NONE};
-    int currentShaderProfile{0};
-    int currentShaderILProfile{0};     // 0=unset, write by Driver init (D3D12: 60 DXIL or 51 DXBC)
+    std::unique_ptr<GraphicsDevice> device;
+    GraphicsBackend preferredBackend{GraphicsBackend::Auto};
+    GraphicsBackend backend;
+    int shaderLanguage{axslc::SHADER_LANG_NONE};
+    int shaderProfile{0};
+    int shaderILProfile{0};     // 0=unset, write by Driver init (D3D12: 60 DXIL or 51 DXBC)
     int vulkanMinAndroidApiLevel{31};  // Android 12+
-    int driverPriorities[(int)rhi::DriverType::Count] = {
+    int backendPriorities[(int)rhi::GraphicsBackend::Count] = {
         rhi::DefaultDriverPriority::OpenGL, rhi::DefaultDriverPriority::D3D11, rhi::DefaultDriverPriority::D3D12,
         rhi::DefaultDriverPriority::Vulkan, rhi::DefaultDriverPriority::Metal};
 
@@ -80,14 +80,14 @@ GraphicsCore::State& GraphicsCore::state()
     return s_state;
 }
 
-DriverBase* GraphicsCore::currentDriver()
+GraphicsDevice* GraphicsCore::device()
 {
-    return state().currentDriver.get();
+    return state().device.get();
 }
 
-DriverType GraphicsCore::currentDriverType()
+GraphicsBackend GraphicsCore::backend()
 {
-    return state().currentDriverType;
+    return state().backend;
 }
 
 VulkanInterop* GraphicsCore::getVulkanInterop()
@@ -97,52 +97,52 @@ VulkanInterop* GraphicsCore::getVulkanInterop()
 
 bool GraphicsCore::isOpenGL()
 {
-    return state().currentDriverType == DriverType::OpenGL;
+    return state().backend == GraphicsBackend::OpenGL;
 }
 
 bool GraphicsCore::isMetal()
 {
-    return state().currentDriverType == DriverType::Metal;
+    return state().backend == GraphicsBackend::Metal;
 }
 
 bool GraphicsCore::isD3D11()
 {
-    return state().currentDriverType == DriverType::D3D11;
+    return state().backend == GraphicsBackend::D3D11;
 }
 
 bool GraphicsCore::isD3D12()
 {
-    return state().currentDriverType == DriverType::D3D12;
+    return state().backend == GraphicsBackend::D3D12;
 }
 
 bool GraphicsCore::isVulkan()
 {
-    return state().currentDriverType == DriverType::Vulkan;
+    return state().backend == GraphicsBackend::Vulkan;
 }
 
-int GraphicsCore::currentShaderLang()
+int GraphicsCore::shaderLanguage()
 {
-    return state().currentShaderLang;
+    return state().shaderLanguage;
 }
 
-int GraphicsCore::currentShaderProfile()
+int GraphicsCore::shaderProfile()
 {
-    return state().currentShaderProfile;
+    return state().shaderProfile;
 }
 
-int GraphicsCore::currentShaderILProfile()
+int GraphicsCore::shaderILProfile()
 {
-    return state().currentShaderILProfile;
+    return state().shaderILProfile;
 }
 
-void GraphicsCore::setCurrentShaderILProfile(int profile)
+void GraphicsCore::setShaderILProfile(int profile)
 {
-    state().currentShaderILProfile = profile;
+    state().shaderILProfile = profile;
 }
 
-void GraphicsCore::setDriverPreference(DriverPreference driverPreference)
+void GraphicsCore::setPreferredBackend(GraphicsBackend backend)
 {
-    state().driverPreference = driverPreference;
+    state().preferredBackend = backend;
 }
 
 void GraphicsCore::setVulkanMinAndroidApiLevel(int apiLevel)
@@ -155,43 +155,43 @@ void GraphicsCore::setVulkanInterop(VulkanInterop* interop)
     state().vulkanInterop = interop;
 }
 
-void GraphicsCore::setDriverPriority(DriverType driverType, int prio)
+void GraphicsCore::setBackendPriority(GraphicsBackend backend, int prio)
 {
-    if (driverType != DriverType::Auto)
-        state().driverPriorities[(int)driverType] = prio;
+    if (backend != GraphicsBackend::Auto)
+        state().backendPriorities[(int)backend] = prio;
 }
 
-int GraphicsCore::getDriverPriority(DriverType driverType)
+int GraphicsCore::getBackendPriority(GraphicsBackend backend)
 {
-    return driverType != DriverType::Auto ? state().driverPriorities[(int)driverType] : 0;
+    return backend != GraphicsBackend::Auto ? state().backendPriorities[(int)backend] : 0;
 }
 
-void GraphicsCore::makeCurrentDriver()
+void GraphicsCore::initialize()
 {
-    tlx::inlined_vector<std::unique_ptr<DriverFactory>, (int)DriverType::Count> factories;
+    tlx::inlined_vector<std::unique_ptr<GraphicsDeviceFactory>, (int)GraphicsBackend::Count> factories;
 
 #if AX_ENABLE_D3D12
-    factories.push_back(std::make_unique<D3D12DriverFactory>(state().driverPriorities[(int)DriverType::D3D12]));
+    factories.push_back(std::make_unique<D3D12GraphicsDeviceFactory>(state().backendPriorities[(int)GraphicsBackend::D3D12]));
 #endif
 
 #if AX_ENABLE_VK
 #    if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
     int apiLevel = android_get_device_api_level();
     if (apiLevel >= state().vulkanMinAndroidApiLevel)
-        factories.push_back(std::make_unique<VulkanDriverFactory>(state().driverPriorities[(int)DriverType::Vulkan]));
+        factories.push_back(std::make_unique<VulkanGraphicsDeviceFactory>(state().backendPriorities[(int)GraphicsBackend::Vulkan]));
     else
         AXLOGI("Vulkan skipped: device API level {} < required {}", apiLevel, state().vulkanMinAndroidApiLevel);
 #    else
-    factories.push_back(std::make_unique<VulkanDriverFactory>(state().driverPriorities[(int)DriverType::Vulkan]));
+    factories.push_back(std::make_unique<VulkanGraphicsDeviceFactory>(state().backendPriorities[(int)GraphicsBackend::Vulkan]));
 #    endif
 #endif
 
 #if AX_ENABLE_D3D11
-    factories.push_back(std::make_unique<D3D11DriverFactory>(state().driverPriorities[(int)DriverType::D3D11]));
+    factories.push_back(std::make_unique<D3D11GraphicsDeviceFactory>(state().backendPriorities[(int)GraphicsBackend::D3D11]));
 #endif
 
 #if AX_ENABLE_MTL
-    factories.push_back(std::make_unique<MetalDriverFactory>(state().driverPriorities[(int)DriverType::Metal]));
+    factories.push_back(std::make_unique<MetalGraphicsDeviceFactory>(state().backendPriorities[(int)GraphicsBackend::Metal]));
 #endif
 
     if (factories.size() > 1)
@@ -202,35 +202,35 @@ void GraphicsCore::makeCurrentDriver()
 
     for (auto& f : factories)
     {
-        if (state().driverPreference != DriverPreference::Auto && f->type() != state().driverPreference)
+        if (state().preferredBackend != GraphicsBackend::Auto && f->type() != state().preferredBackend)
             continue;
         auto driver = f->create();
         if (driver->init())
         {
-            state().currentDriverType = driver->type();
-            state().currentDriver     = std::move(driver);
+            state().backend = driver->type();
+            state().device     = std::move(driver);
 
-            switch (state().currentDriverType)
+            switch (state().backend)
             {
-            case DriverType::D3D11:
-                state().currentShaderLang      = axslc::SHADER_LANG_HLSL;
-                state().currentShaderProfile   = 50;
-                state().currentShaderILProfile = 50;
+            case GraphicsBackend::D3D11:
+                state().shaderLanguage      = axslc::SHADER_LANG_HLSL;
+                state().shaderProfile   = 50;
+                state().shaderILProfile = 50;
                 break;
-            case DriverType::D3D12:
-                state().currentShaderLang      = axslc::SHADER_LANG_HLSL;
-                state().currentShaderProfile   = 51;
-                state().currentShaderILProfile = 51;
+            case GraphicsBackend::D3D12:
+                state().shaderLanguage      = axslc::SHADER_LANG_HLSL;
+                state().shaderProfile   = 51;
+                state().shaderILProfile = 51;
                 break;
-            case DriverType::Vulkan:
-                state().currentShaderLang      = axslc::SHADER_LANG_SPIRV;
-                state().currentShaderProfile   = 100;
-                state().currentShaderILProfile = 100;
+            case GraphicsBackend::Vulkan:
+                state().shaderLanguage      = axslc::SHADER_LANG_SPIRV;
+                state().shaderProfile   = 100;
+                state().shaderILProfile = 100;
                 break;
-            case DriverType::Metal:
-                state().currentShaderLang      = axslc::SHADER_LANG_MSL;
-                state().currentShaderProfile   = make_msl_version(2, 0);
-                state().currentShaderILProfile = make_msl_version(2, 0);
+            case GraphicsBackend::Metal:
+                state().shaderLanguage      = axslc::SHADER_LANG_MSL;
+                state().shaderProfile   = make_msl_version(2, 0);
+                state().shaderILProfile = make_msl_version(2, 0);
                 break;
             }
 
@@ -250,34 +250,34 @@ void GraphicsCore::makeCurrentDriver()
     // - If AX_ENABLE_GL is disabled, no fallback is possible and
     //   we throw an exception to indicate that no suitable driver
     //   could be initialized.
-    if (!state().currentDriver)
+    if (!state().device)
     {
 #if AX_ENABLE_GL
-        state().currentDriver     = std::make_unique<gl::DriverImpl>();
-        state().currentDriverType = state().currentDriver->type();
-        state().currentShaderLang = AX_GLES_PROFILE ? axslc::SHADER_LANG_ESSL : axslc::SHADER_LANG_GLSL;
+        state().device     = std::make_unique<gl::GraphicsDeviceImpl>();
+        state().backend = state().device->type();
+        state().shaderLanguage = AX_GLES_PROFILE ? axslc::SHADER_LANG_ESSL : axslc::SHADER_LANG_GLSL;
 #else
         throw std::runtime_error(
-            "GraphicsCore::makeCurrentDriver failed: no suitable driver initialized "
+            "GraphicsCore::initialize failed: no suitable driver initialized "
             "and OpenGL fallback is not available (AX_ENABLE_GL disabled).");
 #endif
     }
 }
 
-void GraphicsCore::activateCurrentDriver()
+void GraphicsCore::activate()
 {
-    if (state().currentDriver && isOpenGL() && !state().currentShaderProfile)
+    if (state().device && isOpenGL() && !state().shaderProfile)
     {
-        state().currentDriver->init();
+        state().device->init();
         auto& st                  = state();
-        st.currentShaderProfile   = AX_GLES_PROFILE ? 300 : 330;
-        st.currentShaderILProfile = st.currentShaderProfile;
+        st.shaderProfile   = AX_GLES_PROFILE ? 300 : 330;
+        st.shaderILProfile = st.shaderProfile;
     }
 }
 
-void GraphicsCore::destroyCurrentDriver()
+void GraphicsCore::shutdown()
 {
-    state().currentDriver.reset();
+    state().device.reset();
 }
 
 }  // namespace ax::rhi

@@ -23,8 +23,8 @@
  ****************************************************************************/
 #include "axmol/rhi/d3d11/VertexLayout11.h"
 #include "axmol/rhi/d3d11/Program11.h"
-#include "axmol/rhi/d3d11/Driver11.h"
-#include "axmol/rhi/d3d11/RenderContext11.h"
+#include "axmol/rhi/d3d11/GraphicsDevice11.h"
+#include "axmol/rhi/d3d11/GraphicsContext11.h"
 
 namespace ax::rhi::d3d11
 {
@@ -79,7 +79,7 @@ void VertexLayoutImpl::apply(ID3D11DeviceContext* context, Program* program) con
     if (!_d3dVL)
     {
         auto progImpl = static_cast<ProgramImpl*>(program);
-        auto device   = static_cast<DriverImpl*>(axdrv)->getDevice();
+        auto device   = static_cast<GraphicsDeviceImpl*>(axdrv)->getDevice();
 
         tlx::pod_vector<D3D11_INPUT_ELEMENT_DESC> inputElements;
 
@@ -87,8 +87,8 @@ void VertexLayoutImpl::apply(ID3D11DeviceContext* context, Program* program) con
         inputElements.reserve(bindings.size());
 
         auto appendElement = [&inputElements](const InputBindingDesc& inputDesc) {
-            const auto inputSlot = inputDesc.instanceStepRate ? RenderContextImpl::VI_INSTANCING_BINDING_INDEX
-                                                              : RenderContextImpl::VI_BINDING_INDEX;
+            const auto inputSlot = inputDesc.instanceStepRate ? GraphicsContextImpl::VI_INSTANCING_BINDING_INDEX
+                                                              : GraphicsContextImpl::VI_BINDING_INDEX;
             const auto inputSlotClass =
                 inputDesc.instanceStepRate ? D3D11_INPUT_PER_INSTANCE_DATA : D3D11_INPUT_PER_VERTEX_DATA;
             if (inputDesc.format != VertexElementType::MAT4)

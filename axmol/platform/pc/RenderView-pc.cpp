@@ -50,16 +50,16 @@ The RenderView for win32,linux,macos,wasm
 
 #if AX_ENABLE_MTL
 #    include <Metal/Metal.h>
-#    include "axmol/rhi/metal/DriverMTL.h"
+#    include "axmol/rhi/metal/GraphicsDeviceMTL.h"
 #    include "axmol/rhi/metal/UtilsMTL.h"
 #endif
 #if AX_ENABLE_GL
-#    include "axmol/rhi/opengl/DriverGL.h"
+#    include "axmol/rhi/opengl/GraphicsDeviceGL.h"
 #    include "axmol/rhi/opengl/MacrosGL.h"
 #    include "axmol/rhi/opengl/OpenGLState.h"
 #endif
 #if AX_ENABLE_VK
-#    include "axmol/rhi/vulkan/DriverVK.h"
+#    include "axmol/rhi/vulkan/GraphicsDeviceVK.h"
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
 
 #include "axmol/rhi/GraphicsCore.h"
@@ -869,14 +869,14 @@ void* RenderView::getNativeWindow() const
 
 SurfaceHandle RenderView::getNativeDisplay() const
 {
-    auto driverType = GraphicsCore::currentDriverType();
-    if (driverType == DriverType::Vulkan)
+    auto driverType = GraphicsCore::backend();
+    if (driverType == rhi::GraphicsBackend::Vulkan)
         return _vkSurface;
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
     return glfwGetWin32Window(_mainWindow);
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_MAC
-    return driverType == DriverType::Metal ? (void*)glfwGetCocoaView(_mainWindow)
+    return driverType == rhi::GraphicsBackend::Metal ? (void*)glfwGetCocoaView(_mainWindow)
                                            : (void*)glfwGetNSGLContext(_mainWindow);
     return (void*)glfwGetNSGLContext(_mainWindow);
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
@@ -976,7 +976,7 @@ bool RenderView::initWithRect(std::string_view viewName, const ax::Rect& rect, f
     // If any of the high-performance APIs (D3D11/D3D12/Vulkan/Metal) are enabled,
     // the runtime will attempt initialization in the default priority order.
     // If all attempts fail, OpenGL will then be explicitly selected as the fallback.
-    GraphicsCore::makeCurrentDriver();
+    GraphicsCore::initialize();
     const auto fallbackGL = GraphicsCore::isOpenGL();
     if (fallbackGL)
     {
@@ -1047,7 +1047,7 @@ bool RenderView::initWithRect(std::string_view viewName, const ax::Rect& rect, f
     if (fallbackGL)
     {
         glfwMakeContextCurrent(_mainWindow);
-        GraphicsCore::activateCurrentDriver();
+        GraphicsCore::activate();
 
         glfwSetWindowUserPointer(_mainWindow, gl::__state);
     }
@@ -1077,7 +1077,7 @@ bool RenderView::initWithRect(std::string_view viewName, const ax::Rect& rect, f
         auto _createSurface = [](VkInstance inst, void* window, VkSurfaceKHR* surface) {
             return glfwCreateWindowSurface(inst, static_cast<GLFWwindow*>(window), nullptr, surface);
         };
-        auto driver = static_cast<vk::DriverImpl*>(axdrv);
+        auto driver = static_cast<vk::GraphicsDeviceImpl*>(axdrv);
         const vk::SurfaceCreateInfo createInfo{
             .window = _mainWindow, .width = fbWidth, .height = fbHeight, .createFunc = _createSurface};
         bool ok = driver->recreateSurface(createInfo);

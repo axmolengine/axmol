@@ -29,13 +29,13 @@
 
 namespace ax::rhi::vk
 {
-class DriverImpl;
+class GraphicsDeviceImpl;
 class RenderTargetImpl : public RenderTarget
 {
 public:
     using Attachment = TextureImpl*;
 
-    RenderTargetImpl(DriverImpl* driver, bool defaultRenderTarget);
+    RenderTargetImpl(GraphicsDeviceImpl* driver, bool defaultRenderTarget);
     ~RenderTargetImpl();
 
     // Destroy the current live framebuffer and mark attachments dirty
@@ -72,7 +72,7 @@ private:
 
     void prepareAttachmentsForRendering(VkCommandBuffer cmd);
 
-    DriverImpl* _driver{nullptr};
+    GraphicsDeviceImpl* _driver{nullptr};
 
     // Current attachment views for building renderpass/framebuffer
     tlx::inlined_vector<VkImageView, INITIAL_COLOR_CAPACITY + 1> _attachmentViews{};

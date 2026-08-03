@@ -22,7 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "axmol/rhi/d3d12/Buffer12.h"
-#include "axmol/rhi/d3d12/Driver12.h"
+#include "axmol/rhi/d3d12/GraphicsDevice12.h"
 #include "axmol/base/Logging.h"
 #include <algorithm>
 #include <limits>
@@ -78,10 +78,10 @@ size_t BufferImpl::alignTo(size_t value, size_t alignment)
 }
 
 /* -------------------------------------------------- ctor */
-BufferImpl::BufferImpl(DriverImpl* driver, size_t size, BufferType type, BufferUsage usage, const void* initial)
+BufferImpl::BufferImpl(GraphicsDeviceImpl* driver, size_t size, BufferType type, BufferUsage usage, const void* initial)
     : Buffer(size, type, usage), _driver(driver)
 {
-    AXASSERT(_driver, "DriverImpl must not be null");
+    AXASSERT(_driver, "GraphicsDeviceImpl must not be null");
 
     _resourceFlags = translateResourceFlags(type);
     _heapType      = (usage == BufferUsage::DYNAMIC) ? D3D12_HEAP_TYPE_UPLOAD : D3D12_HEAP_TYPE_DEFAULT;
@@ -178,7 +178,7 @@ void BufferImpl::createNativeBuffer(const void* initial)
 
 /* -------------------------------------------------- updateIndex
    Lazy switch to the per-frame upload resource corresponding to the current
-   frame index obtained from DriverImpl. Avoids iterating all buffers each frame.
+   frame index obtained from GraphicsDeviceImpl. Avoids iterating all buffers each frame.
 */
 void BufferImpl::updateIndex()
 {

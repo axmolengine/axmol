@@ -305,8 +305,6 @@ enum class CameraMode
     Classic,      ///< Calibrated perspective at (w/2, h/2, zEye) looking at center; z=0 has no distortion
 };
 
-using DriverPreference = rhi::DriverType;
-
 /**
  * @struct ContextAttrs
  * @brief Engine context attributes for rendering, window, and driver setup.

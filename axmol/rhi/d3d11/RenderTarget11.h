@@ -37,7 +37,7 @@ namespace ax::rhi::d3d11
 
 static constexpr DXGI_FORMAT DEFAULT_SWAPCHAIN_FORMAT = DXGI_FORMAT_R8G8B8A8_UNORM;
 
-class DriverImpl;
+class GraphicsDeviceImpl;
 
 /**
  * @brief A D3D11-based Shader RenderTarget implementation
@@ -51,7 +51,7 @@ public:
         ID3D11Texture2D* texure;
         TextureDesc desc;
     };
-    RenderTargetImpl(DriverImpl* driver, bool defaultRenderTarget);
+    RenderTargetImpl(GraphicsDeviceImpl* driver, bool defaultRenderTarget);
     ~RenderTargetImpl();
 
     void cleanupResources() override;
@@ -72,7 +72,7 @@ public:
                                  std::optional<UINT> swapchainFlags = std::nullopt);
 
 private:
-    DriverImpl* _driver{nullptr};
+    GraphicsDeviceImpl* _driver{nullptr};
     ID3D11Device* _device{nullptr};
     tlx::inlined_vector<ID3D11RenderTargetView*, INITIAL_COLOR_CAPACITY> _rtvs{};
     ID3D11DepthStencilView* _dsv{nullptr};

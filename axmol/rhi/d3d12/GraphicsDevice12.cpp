@@ -21,8 +21,8 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "axmol/rhi/d3d12/Driver12.h"
-#include "axmol/rhi/d3d12/RenderContext12.h"
+#include "axmol/rhi/d3d12/GraphicsDevice12.h"
+#include "axmol/rhi/d3d12/GraphicsContext12.h"
 #include "axmol/rhi/d3d12/Buffer12.h"
 #include "axmol/rhi/d3d12/Texture12.h"
 #include "axmol/rhi/d3d12/Program12.h"
@@ -51,9 +51,9 @@
 
 namespace ax::rhi
 {
-std::unique_ptr<DriverBase> D3D12DriverFactory::create()
+std::unique_ptr<GraphicsDevice> D3D12GraphicsDeviceFactory::create()
 {
-    return std::make_unique<d3d12::DriverImpl>();
+    return std::make_unique<d3d12::GraphicsDeviceImpl>();
 }
 }  // namespace ax::rhi
 
@@ -257,10 +257,10 @@ void IsolateSubmission::release()
     }
 }
 
-DriverImpl::DriverImpl() {}
-DriverImpl::~DriverImpl()
+GraphicsDeviceImpl::GraphicsDeviceImpl() {}
+GraphicsDeviceImpl::~GraphicsDeviceImpl()
 {
-    AX_SAFE_RELEASE_NULL(_currentRenderContext);
+    AX_SAFE_RELEASE_NULL(_currentGraphicsContext);
 
     destroyStaleResources();
 
@@ -303,7 +303,7 @@ DriverImpl::~DriverImpl()
         debugDevice->ReportLiveDeviceObjects(D3D12_RLDO_DETAIL);
 }
 
-bool DriverImpl::init()
+bool GraphicsDeviceImpl::init()
 {
     initializeDevice();
     createDescriptorAllocators();
@@ -383,12 +383,12 @@ bool DriverImpl::init()
 
     _dxcAvailable = detectDXCAvailability();
 
-    GraphicsCore::setCurrentShaderILProfile(_dxcAvailable ? 60 : 51);
+    GraphicsCore::setShaderILProfile(_dxcAvailable ? 60 : 51);
 
     return true;
 }
 
-void DriverImpl::initializeDevice()
+void GraphicsDeviceImpl::initializeDevice()
 {
     // Create factory
     auto& contextAttrs = Application::getContextAttrs();
@@ -517,7 +517,7 @@ void DriverImpl::initializeDevice()
     _uploadBufferAllocator      = std::make_unique<UploadBufferAllocator>(_device.Get(), uploadBufferSize);
 }
 
-void DriverImpl::createDescriptorAllocators()
+void GraphicsDeviceImpl::createDescriptorAllocators()
 {
     _srvAllocator =
         std::make_unique<DescriptorHeapAllocator>(_device.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 8192u, false);
@@ -531,30 +531,30 @@ void DriverImpl::createDescriptorAllocators()
     _samplerAllocator->setAllowGrow(false);
 }
 
-RenderContext* DriverImpl::createRenderContext(SurfaceHandle surface)
+GraphicsContext* GraphicsDeviceImpl::createGraphicsContext(SurfaceHandle surface)
 {
-    auto context = new RenderContextImpl(this, surface);
-    Object::assign(_currentRenderContext, context);
+    auto context = new GraphicsContextImpl(this, surface);
+    Object::assign(_currentGraphicsContext, context);
     return context;
 }
 
-void DriverImpl::removeCachedPipelineObjects(Program* key)
+void GraphicsDeviceImpl::removeCachedPipelineObjects(Program* key)
 {
-    if (_currentRenderContext)
-        _currentRenderContext->removeCachedPipelineObjects(key);
+    if (_currentGraphicsContext)
+        _currentGraphicsContext->removeCachedPipelineObjects(key);
 }
 
-Buffer* DriverImpl::createBuffer(size_t size, BufferType type, BufferUsage usage, const void* initial)
+Buffer* GraphicsDeviceImpl::createBuffer(size_t size, BufferType type, BufferUsage usage, const void* initial)
 {
     return new BufferImpl(this, size, type, usage, initial);
 }
 
-Texture* DriverImpl::createTexture(const TextureDesc& descriptor, std::optional<Color> clearColorHint)
+Texture* GraphicsDeviceImpl::createTexture(const TextureDesc& descriptor, std::optional<Color> clearColorHint)
 {
     return new TextureImpl(this, descriptor, clearColorHint);
 }
 
-Texture* DriverImpl::createTextureFromNativeHandle(const ExternalTextureDesc& descriptor)
+Texture* GraphicsDeviceImpl::createTextureFromNativeHandle(const ExternalTextureDesc& descriptor)
 {
     auto nativeResource = static_cast<ID3D12Resource*>(descriptor.nativeTexture.ptr);
     if (!nativeResource)
@@ -567,7 +567,7 @@ Texture* DriverImpl::createTextureFromNativeHandle(const ExternalTextureDesc& de
     return new TextureImpl(this, std::move(resource), descriptor.desc, initialState, finalState);
 }
 
-RenderTarget* DriverImpl::createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment)
+RenderTarget* GraphicsDeviceImpl::createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment)
 {
     auto rt = new RenderTargetImpl(this, false);
     rt->setColorTexture(colorAttachment);
@@ -575,22 +575,22 @@ RenderTarget* DriverImpl::createRenderTarget(Texture* colorAttachment, Texture* 
     return rt;
 }
 
-DepthStencilState* DriverImpl::createDepthStencilState()
+DepthStencilState* GraphicsDeviceImpl::createDepthStencilState()
 {
     return new DepthStencilStateImpl();
 }
 
-RenderPipeline* DriverImpl::createRenderPipeline()
+RenderPipeline* GraphicsDeviceImpl::createRenderPipeline()
 {
     return new RenderPipelineImpl(this);
 }
 
-Program* DriverImpl::createProgram(Data vsData, Data fsData)
+Program* GraphicsDeviceImpl::createProgram(Data vsData, Data fsData)
 {
     return new ProgramImpl(vsData, fsData);
 }
 
-ShaderModule* DriverImpl::createShaderModule(ShaderStage stage, Data& chunk)
+ShaderModule* GraphicsDeviceImpl::createShaderModule(ShaderStage stage, Data& chunk)
 {
     return new ShaderModuleImpl(this, stage, chunk);
 }
@@ -674,26 +674,26 @@ static D3D12_SAMPLER_DESC toD3DSamplerDesc(const SamplerDesc& desc)
     return sd;
 }
 
-SamplerHandle DriverImpl::createSampler(const SamplerDesc& desc)
+SamplerHandle GraphicsDeviceImpl::createSampler(const SamplerDesc& desc)
 {
     auto handle = allocateDescriptor(DisposableResource::Type::SamplerView);
     writeSamplerDescriptor(desc, handle->cpu);
     return SamplerHandle(handle);
 }
 
-void DriverImpl::writeSamplerDescriptor(const SamplerDesc& desc, D3D12_CPU_DESCRIPTOR_HANDLE destination)
+void GraphicsDeviceImpl::writeSamplerDescriptor(const SamplerDesc& desc, D3D12_CPU_DESCRIPTOR_HANDLE destination)
 {
     const auto sd = toD3DSamplerDesc(desc);
     _device->CreateSampler(&sd, destination);
 }
 
-void DriverImpl::destroySampler(SamplerHandle& h)
+void GraphicsDeviceImpl::destroySampler(SamplerHandle& h)
 {
     deallocateDescriptor(static_cast<DescriptorHandle*>(h), DisposableResource::Type::SamplerView);
     h = nullptr;
 }
 
-DescriptorHandle* DriverImpl::createSRV(ID3D12Resource* resource, const D3D12_SHADER_RESOURCE_VIEW_DESC* desc)
+DescriptorHandle* GraphicsDeviceImpl::createSRV(ID3D12Resource* resource, const D3D12_SHADER_RESOURCE_VIEW_DESC* desc)
 {
     // Allocate descriptor from SRV heap
     DescriptorHandle* handle = allocateDescriptor(DisposableResource::Type::ShaderResourceView);
@@ -704,7 +704,7 @@ DescriptorHandle* DriverImpl::createSRV(ID3D12Resource* resource, const D3D12_SH
     return handle;
 }
 
-DescriptorHandle* DriverImpl::createUAV(ID3D12Resource* resource, const D3D12_UNORDERED_ACCESS_VIEW_DESC* desc)
+DescriptorHandle* GraphicsDeviceImpl::createUAV(ID3D12Resource* resource, const D3D12_UNORDERED_ACCESS_VIEW_DESC* desc)
 {
     // Allocate descriptor from SRV/UAV heap (same allocator as SRV)
     DescriptorHandle* handle = allocateDescriptor(DisposableResource::Type::ShaderResourceView);
@@ -715,7 +715,7 @@ DescriptorHandle* DriverImpl::createUAV(ID3D12Resource* resource, const D3D12_UN
     return handle;
 }
 
-DescriptorHandle* DriverImpl::allocateDescriptor(DisposableResource::Type type)
+DescriptorHandle* GraphicsDeviceImpl::allocateDescriptor(DisposableResource::Type type)
 {
     switch (type)
     {
@@ -732,7 +732,7 @@ DescriptorHandle* DriverImpl::allocateDescriptor(DisposableResource::Type type)
     }
 }
 
-void DriverImpl::deallocateDescriptor(DescriptorHandle* handle, DisposableResource::Type type)
+void GraphicsDeviceImpl::deallocateDescriptor(DescriptorHandle* handle, DisposableResource::Type type)
 {
     switch (type)
     {
@@ -754,17 +754,17 @@ void DriverImpl::deallocateDescriptor(DescriptorHandle* handle, DisposableResour
     }
 }
 
-VertexLayout* DriverImpl::createVertexLayout(VertexLayoutDesc&& desc)
+VertexLayout* GraphicsDeviceImpl::createVertexLayout(VertexLayoutDesc&& desc)
 {
     return new VertexLayoutImpl(std::move(desc));
 }
 
-std::string DriverImpl::getVendor() const
+std::string GraphicsDeviceImpl::getVendor() const
 {
     return std::string{RHIUtils::vendorToString(_adapterDesc.VendorId)};
 }
 
-std::string DriverImpl::getVersion() const
+std::string GraphicsDeviceImpl::getVersion() const
 {
     if (_driverVersion.has_value())
     {
@@ -780,7 +780,7 @@ std::string DriverImpl::getVersion() const
     }
 }
 
-std::string DriverImpl::getRenderer() const
+std::string GraphicsDeviceImpl::getRenderer() const
 {
     auto desc = ntcvt::from_chars(_adapterDesc.Description);
     if (_dxcAvailable)
@@ -789,7 +789,7 @@ std::string DriverImpl::getRenderer() const
         return fmt::format("{} D3D12 vs_5_1 ps_5_1", desc);
 }
 
-std::string DriverImpl::getShaderVersion() const
+std::string GraphicsDeviceImpl::getShaderVersion() const
 {
     if (_dxcAvailable)
         return "HLSL Shader Model 6.0 (DXC)"s;
@@ -797,7 +797,7 @@ std::string DriverImpl::getShaderVersion() const
         return "D3D12 HLSL vs_5_1 ps_5_1"s;
 }
 
-IsolateSubmission& DriverImpl::startIsolateSubmission()
+IsolateSubmission& GraphicsDeviceImpl::startIsolateSubmission()
 {
     if (_isolateSubmission)
     {  // reuse isolate submission
@@ -814,7 +814,7 @@ IsolateSubmission& DriverImpl::startIsolateSubmission()
     return _isolateSubmission;
 }
 
-uint64_t DriverImpl::finishIsolateSubmission(IsolateSubmission& submission, bool waitForCompletion)
+uint64_t GraphicsDeviceImpl::finishIsolateSubmission(IsolateSubmission& submission, bool waitForCompletion)
 {
     if (!submission)
         return 0;
@@ -826,20 +826,20 @@ uint64_t DriverImpl::finishIsolateSubmission(IsolateSubmission& submission, bool
     return fenceValue;
 }
 
-void DriverImpl::queueDisposal(ID3D12Resource* res, uint64_t fenceValue)
+void GraphicsDeviceImpl::queueDisposal(ID3D12Resource* res, uint64_t fenceValue)
 {
     assert(res);
     queueDisposalInternal(
         DisposableResource{.type = DisposableResource::Type::Resource, .fenceValue = fenceValue, .resource = res});
 }
 
-void DriverImpl::queueDisposal(DescriptorHandle* handle, DisposableResource::Type type, uint64_t fenceValue)
+void GraphicsDeviceImpl::queueDisposal(DescriptorHandle* handle, DisposableResource::Type type, uint64_t fenceValue)
 {
     assert(handle);
     queueDisposalInternal(DisposableResource{.type = type, .fenceValue = fenceValue, .handle = handle});
 }
 
-void DriverImpl::processDisposalQueue(uint64_t completeFence)
+void GraphicsDeviceImpl::processDisposalQueue(uint64_t completeFence)
 {
     if (!_disposalQueue.empty())
     {
@@ -868,19 +868,19 @@ void DriverImpl::processDisposalQueue(uint64_t completeFence)
     }
 }
 
-void DriverImpl::destroyStaleResources()
+void GraphicsDeviceImpl::destroyStaleResources()
 {
     waitForGPU();
     processDisposalQueue(UINT64_MAX);
 }
 
-void DriverImpl::queueDisposalInternal(DisposableResource&& disposal)
+void GraphicsDeviceImpl::queueDisposalInternal(DisposableResource&& disposal)
 {
     std::lock_guard<std::mutex> lk(_disposalMutex);
     _disposalQueue.emplace_back(std::move(disposal));
 }
 
-ComPtr<IUnknown> DriverImpl::compileShader(std::span<uint8_t> shaderCode,
+ComPtr<IUnknown> GraphicsDeviceImpl::compileShader(std::span<uint8_t> shaderCode,
                                            ShaderStage stage,
                                            std::span<uint8_t>& blobView)
 {
@@ -954,7 +954,7 @@ ComPtr<IUnknown> DriverImpl::compileShader(std::span<uint8_t> shaderCode,
     }
 }
 
-bool DriverImpl::generateMipmaps(ID3D12GraphicsCommandList* cmd, ID3D12Resource* texture)
+bool GraphicsDeviceImpl::generateMipmaps(ID3D12GraphicsCommandList* cmd, ID3D12Resource* texture)
 {
     if (!cmd || !texture)
         return false;
@@ -1187,7 +1187,7 @@ bool DriverImpl::generateMipmaps(ID3D12GraphicsCommandList* cmd, ID3D12Resource*
     return true;
 }
 
-void DriverImpl::ensureMipmapPipeline(bool isArray)
+void GraphicsDeviceImpl::ensureMipmapPipeline(bool isArray)
 {
     if (!_mipmapRootSig)
     {
@@ -1244,7 +1244,7 @@ void DriverImpl::ensureMipmapPipeline(bool isArray)
     }
 }
 
-D3D12BlobHandle DriverImpl::compileMipmapCS(bool isArray)
+D3D12BlobHandle GraphicsDeviceImpl::compileMipmapCS(bool isArray)
 {
     tlx::byte_buffer hlslSource;
     if (isArray)
@@ -1256,7 +1256,7 @@ D3D12BlobHandle DriverImpl::compileMipmapCS(bool isArray)
     return handle;
 }
 
-void DriverImpl::waitForGPU()
+void GraphicsDeviceImpl::waitForGPU()
 {
     if (_idleFence && _idleEvent && _gfxQueue)
     {
@@ -1267,7 +1267,7 @@ void DriverImpl::waitForGPU()
     }
 }
 
-bool DriverImpl::checkForFeatureSupported(FeatureType feature)
+bool GraphicsDeviceImpl::checkForFeatureSupported(FeatureType feature)
 {
     // enum class FeatureType : uint32_t
     // {
@@ -1305,14 +1305,14 @@ bool DriverImpl::checkForFeatureSupported(FeatureType feature)
     return false;
 }
 
-bool DriverImpl::checkFormatSupport(DXGI_FORMAT format)
+bool GraphicsDeviceImpl::checkFormatSupport(DXGI_FORMAT format)
 {
     D3D12_FEATURE_DATA_FORMAT_SUPPORT support = {format};
     HRESULT hr = _device->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &support, sizeof(support));
     return SUCCEEDED(hr) && (support.Support1 & D3D12_FORMAT_SUPPORT1_TEXTURE2D) != 0;
 }
 
-bool DriverImpl::detectDXCAvailability()
+bool GraphicsDeviceImpl::detectDXCAvailability()
 {
     if (!_device || !_dxcLibrary || !_dxcCompiler)
     {

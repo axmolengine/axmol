@@ -30,12 +30,12 @@
 namespace ax::rhi::d3d11
 {
 
-class DriverImpl;
+class GraphicsDeviceImpl;
 
 class ShaderModuleImpl : public ShaderModule
 {
 public:
-    ShaderModuleImpl(DriverImpl* driver, ShaderStage stage, Data& data);
+    ShaderModuleImpl(GraphicsDeviceImpl* driver, ShaderStage stage, Data& data);
     ~ShaderModuleImpl();
 
     IUnknown* internalHandle() const { return _shader; }

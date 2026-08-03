@@ -35,8 +35,8 @@
 namespace ax::rhi::vk
 {
 
-class RenderContextImpl;
-class DriverImpl;
+class GraphicsContextImpl;
+class GraphicsDeviceImpl;
 class TextureImpl;
 
 struct DisposableResource
@@ -89,9 +89,9 @@ struct VulkanCaps
     bool timelineSemaphoreSupported{false};
 };
 
-class DriverImpl : public DriverBase
+class GraphicsDeviceImpl : public GraphicsDevice
 {
-    friend class RenderContextImpl;
+    friend class GraphicsContextImpl;
 
 public:
     static constexpr uint32_t MAX_VERTEX_ATTRIBS            = 16;
@@ -99,19 +99,19 @@ public:
     static constexpr uint32_t VBO_INSTANCING_BINDING_INDEX  = VBO_BINDING_INDEX_START + 1;
     static constexpr uint32_t DEFAULT_ATTRIBS_BINDING_INDEX = VBO_BINDING_INDEX_START + MAX_VERTEX_ATTRIBS;
 
-    DriverImpl();
-    ~DriverImpl();
+    GraphicsDeviceImpl();
+    ~GraphicsDeviceImpl();
 
     bool init() override;
 
-    DriverType type() override { return DriverType::Vulkan; }
+    GraphicsBackend type() override { return GraphicsBackend::Vulkan; }
 
     bool recreateSurface(const SurfaceCreateInfo& info);
     VkSurfaceKHR getSurface() const { return _surface; }
 
     const VkExtent2D& getSurfaceInitialExtent() const { return _surfaceInitalExtent; }
 
-    RenderContext* createRenderContext(SurfaceHandle surface) override;
+    GraphicsContext* createGraphicsContext(SurfaceHandle surface) override;
     Buffer* createBuffer(size_t size, BufferType type, BufferUsage usage, const void* initial) override;
     Texture* createTexture(const TextureDesc& descriptor, std::optional<Color> clearColorHint = std::nullopt) override;
     Texture* createTextureFromNativeHandle(const ExternalTextureDesc& descriptor) override;
@@ -205,7 +205,7 @@ private:
 
     VulkanCaps _vkCaps;
 
-    RenderContextImpl* _currentRenderContext{nullptr};
+    GraphicsContextImpl* _currentGraphicsContext{nullptr};
 
     VkDebugUtilsMessengerCreateInfoEXT _debugCreateInfo{};
     VkDebugUtilsMessengerEXT _debugMessenger{VK_NULL_HANDLE};

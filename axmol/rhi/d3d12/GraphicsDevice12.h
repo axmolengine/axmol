@@ -28,7 +28,7 @@
 #include "axmol/rhi/d3d12/UploadBufferAllocator12.h"
 #include "axmol/rhi/d3d12/ShaderModule12.h"
 #include "axmol/rhi/DXUtils.h"
-#include "axmol/rhi/DriverFactory.h"
+#include "axmol/rhi/GraphicsDeviceFactory.h"
 #include "axmol/tlx/byte_buffer.hpp"
 #include <d3d12.h>
 #include <dxgi1_4.h>
@@ -51,8 +51,8 @@ class RenderTarget;
 namespace ax::rhi::d3d12
 {
 
-class RenderContextImpl;
-class DriverImpl;
+class GraphicsContextImpl;
+class GraphicsDeviceImpl;
 class TextureImpl;
 
 struct DisposableResource
@@ -77,7 +77,7 @@ struct DisposableResource
 
 class IsolateSubmission
 {
-    friend class DriverImpl;
+    friend class GraphicsDeviceImpl;
 
 public:
     IsolateSubmission() = default;
@@ -107,20 +107,20 @@ private:
     UINT64 fenceValue = 0;
 };
 
-class DriverImpl : public DriverBase
+class GraphicsDeviceImpl : public GraphicsDevice
 {
-    friend class RenderContextImpl;
+    friend class GraphicsContextImpl;
 
 public:
     static constexpr uint32_t MAX_VERTEX_ATTRIBS = 16;
 
-    DriverImpl();
-    ~DriverImpl();
+    GraphicsDeviceImpl();
+    ~GraphicsDeviceImpl();
 
     bool init() override;
-    DriverType type() override { return DriverType::D3D12; }
+    GraphicsBackend type() override { return GraphicsBackend::D3D12; }
 
-    RenderContext* createRenderContext(SurfaceHandle surface) override;
+    GraphicsContext* createGraphicsContext(SurfaceHandle surface) override;
     Buffer* createBuffer(size_t size, BufferType type, BufferUsage usage, const void* initial) override;
     Texture* createTexture(const TextureDesc& descriptor, std::optional<Color> clearColorHint = std::nullopt) override;
     Texture* createTextureFromNativeHandle(const ExternalTextureDesc& descriptor) override;
@@ -204,7 +204,7 @@ private:
     bool checkFormatSupport(DXGI_FORMAT format);
     bool detectDXCAvailability();
 
-    RenderContextImpl* _currentRenderContext{nullptr};
+    GraphicsContextImpl* _currentGraphicsContext{nullptr};
 
     ComPtr<IDXGIFactory4> _dxgiFactory;
     ComPtr<IDXGIAdapter> _adapter;

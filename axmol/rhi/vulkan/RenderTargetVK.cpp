@@ -25,7 +25,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "axmol/rhi/vulkan/RenderTargetVK.h"
-#include "axmol/rhi/vulkan/DriverVK.h"
+#include "axmol/rhi/vulkan/GraphicsDeviceVK.h"
 #include "axmol/rhi/vulkan/UtilsVK.h"
 #include "axmol/base/Logging.h"
 #include "axmol/tlx/hash.hpp"
@@ -33,7 +33,7 @@
 namespace ax::rhi::vk
 {
 
-RenderTargetImpl::RenderTargetImpl(DriverImpl* driver, bool defaultRenderTarget)
+RenderTargetImpl::RenderTargetImpl(GraphicsDeviceImpl* driver, bool defaultRenderTarget)
     : RenderTarget(defaultRenderTarget), _driver(driver)
 {
     _clearValues.reserve(_color.size() + 1);

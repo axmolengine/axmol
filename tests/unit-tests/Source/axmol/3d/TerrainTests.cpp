@@ -47,7 +47,7 @@ void checkVec3Near(const Vec3& actual, const Vec3& expected, float epsilon = 0.0
 
 TEST_CASE("Terrain ray hit keeps local intersection and pointer world hit spaces separate")
 {
-    if (!rhi::GraphicsCore::currentDriver())
+    if (!rhi::GraphicsCore::device())
     {
         WARN("Terrain GPU resources require an active RHI driver; skipping this environment.");
         return;

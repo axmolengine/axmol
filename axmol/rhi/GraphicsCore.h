@@ -25,15 +25,13 @@
 #include <memory>
 #include <vector>
 #include <algorithm>
-#include "axmol/rhi/DriverBase.h"
+#include "axmol/rhi/GraphicsDevice.h"
 
 namespace ax
 {
 
 namespace rhi
 {
-using DriverPreference = rhi::DriverType;
-
 class VulkanInterop;
 
 /**
@@ -47,7 +45,7 @@ class VulkanInterop;
  *
  * @note GraphicsCore is the system-level entry point for all rendering operations.
  *       For actual GPU resource creation (e.g., textures, buffers, pipelines),
- *       use GraphicsCore::currentDriver() to obtain the active driver instance.
+ *       use GraphicsCore::device() to obtain the active driver instance.
  */
 class AX_DLL GraphicsCore
 {
@@ -55,14 +53,14 @@ public:
     /**
      * @brief Sets the preferred rendering backend (RHI).
      *
-     * This static method allows selecting a specific rendering driver
+     * This static method allows selecting a specific rendering backend
      * for the engine, such as OpenGL, D3D11, D3D12, Vulkan, or Metal.
      * If no preference is explicitly set, the default value is
-     * DriverPreference::Auto.
+     * GraphicsBackend::Auto.
      *
-     * @param driverPreference The desired rendering backend.
+     * @param backend The desired rendering backend.
      */
-    static void setDriverPreference(DriverPreference driverPreference);
+    static void setPreferredBackend(GraphicsBackend backend);
 
     /**
      * @brief Sets the minimum Android API level required to enable Vulkan.
@@ -103,7 +101,7 @@ public:
      * - The engine needs to use the same Vulkan instance/device for rendering
      * - VulkanInterop provides the necessary handles and synchronization primitives
      *
-     * @note This function must be called **before** GraphicsCore::makeCurrentDriver()
+     * @note This function must be called **before** GraphicsCore::initialize()
      *       to take effect. Once the driver is initialized, changing the interop
      *       object has no effect.
      *
@@ -117,78 +115,85 @@ public:
      *                instance creation.
      *
      * @see VulkanInterop
-     * @see makeCurrentDriver()
+     * @see initialize()
      */
     static void setVulkanInterop(VulkanInterop* interop);
 
     /**
-     * @brief Sets the priority value for a specific driver type.
+     * @brief Sets the priority value for a specific rendering backend.
      *
-     * This function allows advanced users to override the default driver
-     * selection order by assigning a custom priority to a given driver type.
-     * Higher values indicate higher preference when selecting the current driver.
+     * This function allows advanced users to override the default backend
+     * selection order by assigning a custom priority to a given backend.
+     * Higher values indicate higher preference when selecting the active backend.
      *
      * @note This call is **optional**. If not invoked, the engine will use
-     *       built-in default priorities to select the driver. It is primarily
+     *       built-in default priorities to select the backend. It is primarily
      *       intended for advanced users who need fine-grained control over
      *       backend selection.
      *
      * @warning To ensure the priority takes effect, this function should be
      *          invoked as early as possible, typically in the application
      *          delegate's constructor/applicationWillLaunch, before any rendering context or window
-     *          is created. Late changes may not apply if the driver has already
+     *          is created. Late changes may not apply if the backend has already
      *          been initialized.
-     *          **This API does not affect the fallback OpenGL driver.**
+     *          **This API does not affect the fallback OpenGL backend.**
      *
-     * @param driverType The driver type to assign a priority to.
-     * @param prio       The priority value (higher means more preferred).
+     * @param backend The backend to assign a priority to.
+     * @param prio    The priority value (higher means more preferred).
      */
-    static void setDriverPriority(DriverType driverType, int prio);
+    static void setBackendPriority(GraphicsBackend backend, int prio);
 
     /**
-     * @brief Retrieves the current priority value for a specific driver type.
+     * @brief Retrieves the current priority value for a specific rendering backend.
      *
      * This function returns the priority value previously assigned to the
-     * given driver type, either by default or via setDriverPriority().
+     * given backend, either by default or via setBackendPriority().
      *
-     * @param driverType The driver type to query.
-     * @return The priority value associated with the driver type.
+     * @param backend The backend to query.
+     * @return The priority value associated with the backend.
      */
-    static int getDriverPriority(DriverType driverType);
+    static int getBackendPriority(GraphicsBackend backend);
 
     /**
-     * @brief Selects and prepares the current driver instance.
+     * @brief Selects and prepares the active graphics device.
      *
-     * This function chooses the most suitable driver implementation based on
-     * the configured priorities and available backends. For non-OpenGL drivers,
-     * the driver is created and automatically initialized. For OpenGL, only the
-     * driver object is constructed here; initialization must be deferred until
+     * This function chooses the most suitable device implementation based on
+     * the configured priorities and available backends. For non-OpenGL backends,
+     * the device is created and automatically initialized. For OpenGL, only the
+     * device object is constructed here; initialization must be deferred until
      * a valid window/context is available.
      */
-    static void makeCurrentDriver();
+    static void initialize();
 
     /**
-     * @brief Activates the current driver (OpenGL only).
+     * @brief Activates the active graphics device (OpenGL only).
      *
      * This function is only required when using OpenGL, since its initialization
      * cannot be performed at construction time. It should be called after the
-     * window and GL context have been created, to complete the driver setup.
+     * window and GL context have been created, to complete the device setup.
      *
-     * For non-OpenGL drivers, initialization is already performed during
-     * makeCurrentDriver(), so this function is not needed and will typically
+     * For non-OpenGL backends, initialization is already performed during
+     * initialize(), so this function is not needed and will typically
      * be a no-op.
      */
-    static void activateCurrentDriver();
+    static void activate();
 
     /**
-     * @brief Releases and destroys the current driver instance, freeing all associated resources.
+     * @brief Releases and destroys the active graphics device, freeing all associated resources.
      */
-    static void destroyCurrentDriver();
+    static void shutdown();
 
     [[internal]] static VulkanInterop* getVulkanInterop();
 
-    static DriverBase* currentDriver();
-    static DriverType currentDriverType();
+    /**
+     * @brief Returns the active graphics device instance, or nullptr if not initialized.
+     */
+    static GraphicsDevice* device();
+
+    /**
+     * @brief Returns the active (actually initialized) graphics backend.
+     */
+    static GraphicsBackend backend();
 
     static bool isOpenGL();
     static bool isMetal();
@@ -196,10 +201,26 @@ public:
     static bool isD3D12();
     static bool isVulkan();
 
-    static int currentShaderLang();
-    static int currentShaderProfile();
-    static int currentShaderILProfile();
-    static void setCurrentShaderILProfile(int profile);
+    /**
+     * @brief Returns the shader language (e.g. GLSL, ESSL, HLSL, SPIRV, MSL) used by the active backend.
+     */
+    static int shaderLanguage();
+
+    /**
+     * @brief Returns the shader profile version used by the active backend.
+     */
+    static int shaderProfile();
+
+    /**
+     * @brief Returns the shader intermediate-language profile used by the active backend.
+     */
+    static int shaderILProfile();
+
+    /**
+     * @brief Sets the shader intermediate-language profile for the active backend.
+     * @param profile The shader IL profile value.
+     */
+    static void setShaderILProfile(int profile);
 
 private:
     struct State;
@@ -209,22 +230,13 @@ private:
 }  // namespace rhi
 
 /**
- * @brief Alias for rendering driver preference.
- *
- * Provides a shorthand for @c ax::rhi::DriverPreference,
- * which specifies the desired rendering backend (e.g.,
- * Auto, Vulkan, D3D12, Metal).
- */
-using DriverPreference = rhi::DriverPreference;
-
-/**
  * @brief Shorthand for @c ax::rhi::GraphicsCore.
  *
- * GraphicsCore manages the rendering backend selection, driver lifecycle,
+ * GraphicsCore manages the rendering backend selection, device lifecycle,
  * and graphics runtime state for the engine.
  */
 using GraphicsCore = rhi::GraphicsCore;
 
 }  // namespace ax
 
-#define axdrv ax::rhi::GraphicsCore::currentDriver()
+#define axdrv ax::rhi::GraphicsCore::device()

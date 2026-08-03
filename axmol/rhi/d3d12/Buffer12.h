@@ -37,8 +37,8 @@ namespace ax::rhi::d3d12
 
 using Microsoft::WRL::ComPtr;
 
-class DriverImpl;
-class RenderContextImpl;
+class GraphicsDeviceImpl;
+class GraphicsContextImpl;
 
 /**
  * @addtogroup _d3d12
@@ -57,10 +57,10 @@ class RenderContextImpl;
  */
 class BufferImpl final : public Buffer
 {
-    friend class RenderContextImpl;
+    friend class GraphicsContextImpl;
 
 public:
-    BufferImpl(DriverImpl* driver, size_t size, BufferType type, BufferUsage usage, const void* initial);
+    BufferImpl(GraphicsDeviceImpl* driver, size_t size, BufferType type, BufferUsage usage, const void* initial);
     ~BufferImpl();
 
     void updateData(const void* data, size_t size) override;
@@ -77,14 +77,14 @@ private:
     static size_t alignTo(size_t value, size_t alignment);
 
     // For dynamic (UPLOAD heap) buffers we allocate per-frame ComPtr<ID3D12Resource>
-    // and lazily switch to the one matching the current frame index retrieved from DriverImpl.
+    // and lazily switch to the one matching the current frame index retrieved from GraphicsDeviceImpl.
     void updateIndex();  // lazy switch to current frame backing
 
 private:
     tlx::byte_buffer _defaultData;
     bool _needDefaultStoredData = false;
 
-    DriverImpl* _driver{nullptr};
+    GraphicsDeviceImpl* _driver{nullptr};
 
     ComPtr<ID3D12Resource> _resource;                       // main GPU buffer for static/default case or convenience
     std::vector<ComPtr<ID3D12Resource>> _dynamicResources;  // per-frame upload resources for DYNAMIC

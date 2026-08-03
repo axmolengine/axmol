@@ -7,7 +7,7 @@
 namespace ax::rhi::gl
 {
 
-class DriverImpl;
+class GraphicsDeviceImpl;
 
 class RenderTargetImpl : public RenderTarget
 {
@@ -15,7 +15,7 @@ public:
     /*
      * generateFBO, false, use for screen framebuffer
      */
-    RenderTargetImpl(DriverImpl* driver, bool defaultRenderTarget);
+    RenderTargetImpl(GraphicsDeviceImpl* driver, bool defaultRenderTarget);
     ~RenderTargetImpl();
 
     void setColorTexture(Texture* texture, int level = 0, int index = 0) override;

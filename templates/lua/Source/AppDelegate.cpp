@@ -49,7 +49,7 @@ AppDelegate::~AppDelegate() {}
 void AppDelegate::applicationWillLaunch()
 {
     // Overrides any command-line driver preference (default is Auto).
-    // GraphicsCore::setDriverPreference(DriverPreference::Auto);
+    // GraphicsCore::setPreferredBackend(GraphicsBackend::Auto);
 
     // Enable logging output colored text style and prefix timestamp
     setLogFmtFlag(ax::LogFmtFlag::Full);
