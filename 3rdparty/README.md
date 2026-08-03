@@ -6,7 +6,7 @@
 
 ## astcenc
 - [![Upstream](https://img.shields.io/github/v/release/ARM-software/astc-encoder?label=Upstream)](https://github.com/ARM-software/astc-encoder)
-- Version: 5.6.0
+- Version: 5.7.0
 - License: Apache-2.0
 
 ## Box2D
@@ -241,7 +241,7 @@
 
 ## simdjson
 - [![Upstream](https://img.shields.io/github/v/tag/simdjson/simdjson?label=Upstream)](https://github.com/simdjson/simdjson)
-- Version: 4.6.5
+- Version: 4.6.6
 - License: Apache-2.0
 
 ## stb (stb_image)
