@@ -575,7 +575,8 @@ void WebSocket::handleNetworkEvent(yasio::io_event* event)
         else if (_state == State::OPEN)
         {
             auto&& pkt = event->packet_view();
-            websocket_parser_execute(&_wsParser, &_wsParserSettings, std::bit_cast<const char*>(pkt.data()), pkt.size());
+            websocket_parser_execute(&_wsParser, &_wsParserSettings, std::bit_cast<const char*>(pkt.data()),
+                                     pkt.size());
         }  // else unreachable
         break;
     case YEK_ON_OPEN:
