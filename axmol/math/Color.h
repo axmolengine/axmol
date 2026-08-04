@@ -181,7 +181,7 @@ struct AX_DLL Color : public Vec4Adapter<Color>
 
     static constexpr Color fromHex(uint32_t v) { return Color{Color32::fromHex(v)}; }
 
-    static constexpr Color fromBGRA(Color v) noexcept {return Color(v.b, v.g, v.r, v.a); }
+    static constexpr Color fromBGRA(Color v) noexcept { return Color(v.b, v.g, v.r, v.a); }
 
     inline Color& premultiplyAlpha()
     {
