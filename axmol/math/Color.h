@@ -59,6 +59,8 @@ struct AX_DLL Color32
         }
     }
 
+    static constexpr Color32 fromBGR(Color32 v) noexcept { return Color32(v.b, v.g, v.r, 255); }
+
     constexpr Color32() noexcept : value(0) {}
     constexpr Color32(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a) noexcept : r(_r), g(_g), b(_b), a(_a) {}
 
@@ -178,6 +180,8 @@ struct AX_DLL Color : public Vec4Adapter<Color>
     {}
 
     static constexpr Color fromHex(uint32_t v) { return Color{Color32::fromHex(v)}; }
+
+    static constexpr Color fromBGRA(Color v) noexcept {return Color(v.b, v.g, v.r, v.a); }
 
     inline Color& premultiplyAlpha()
     {
