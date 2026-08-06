@@ -125,13 +125,18 @@ void KeyboardEvent::execute()
 }
 
 WinRTKeyboardEvent::WinRTKeyboardEvent(WinRTKeyboardEventType type, const Windows::UI::Core::KeyEventArgs& args)
-	: m_type(type), m_key(args)
+    : m_type(type), m_key(args), m_modifiers(0)
+{
+}
+
+WinRTKeyboardEvent::WinRTKeyboardEvent(WinRTKeyboardEventType type, uint32_t modifiers, const Windows::UI::Core::KeyEventArgs& args)
+    : m_type(type), m_key(args), m_modifiers(modifiers)
 {
 }
 
 void WinRTKeyboardEvent::execute()
 {
-	RenderViewImpl::sharedRenderView()->OnWinRTKeyboardEvent(m_type, m_key);
+	RenderViewImpl::sharedRenderView()->OnWinRTKeyboardEvent(m_type, m_modifiers, m_key);
 }
 
 BackButtonEvent::BackButtonEvent()

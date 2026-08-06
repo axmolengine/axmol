@@ -154,7 +154,7 @@ void AxmolRenderer::QueueBackButtonEvent()
     RenderViewImpl::sharedRenderView()->QueueBackKeyPress();
 }
 
-void AxmolRenderer::QueueKeyboardEvent(WinRTKeyboardEventType type, Windows::UI::Core::KeyEventArgs const& args)
+void AxmolRenderer::QueueKeyboardEvent(WinRTKeyboardEventType type, uint32_t modifiers, Windows::UI::Core::KeyEventArgs const& args)
 {
-    RenderViewImpl::sharedRenderView()->QueueWinRTKeyboardEvent(type, args);
+    RenderViewImpl::sharedRenderView()->QueueWinRTKeyboardEvent(type, modifiers, args);
 }

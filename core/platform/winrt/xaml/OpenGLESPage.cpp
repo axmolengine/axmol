@@ -27,6 +27,7 @@
 
 #include <winrt/Windows.Graphics.h>
 #include <winrt/Windows.Graphics.Display.h>
+#include <winrt/Windows.System.h>
 #include <winrt/Windows.System.Threading.h>
 #include <winrt/Windows.Foundation.Metadata.h>
 #include <winrt/Windows.UI.Input.Core.h>
@@ -55,6 +56,54 @@ using namespace Windows::UI::Input;
 
 namespace winrt::AxmolAppWinRT::implementation
 {
+namespace
+{
+uint32_t GetKeyModifiers(CoreWindow const& sender)
+{
+    uint32_t modifiers = 0;
+
+    if ((sender.GetKeyState(Windows::System::VirtualKey::Control) & CoreVirtualKeyStates::Down) ==
+        CoreVirtualKeyStates::Down)
+    {
+        modifiers |= EventKeyboard::KeyModifier::CONTROL;
+    }
+
+    if ((sender.GetKeyState(Windows::System::VirtualKey::Shift) & CoreVirtualKeyStates::Down) ==
+        CoreVirtualKeyStates::Down)
+    {
+        modifiers |= EventKeyboard::KeyModifier::SHIFT;
+    }
+
+    if ((sender.GetKeyState(Windows::System::VirtualKey::Menu) & CoreVirtualKeyStates::Down) ==
+        CoreVirtualKeyStates::Down)
+    {
+        modifiers |= EventKeyboard::KeyModifier::ALT;
+    }
+
+    if ((sender.GetKeyState(Windows::System::VirtualKey::NumberKeyLock) & CoreVirtualKeyStates::Down) ==
+        CoreVirtualKeyStates::Down)
+    {
+        modifiers |= EventKeyboard::KeyModifier::NUM_LOCK;
+    }
+
+    if ((sender.GetKeyState(Windows::System::VirtualKey::CapitalLock) & CoreVirtualKeyStates::Down) ==
+        CoreVirtualKeyStates::Down)
+    {
+        modifiers |= EventKeyboard::KeyModifier::CAPS_LOCK;
+    }
+
+    if ((sender.GetKeyState(Windows::System::VirtualKey::LeftWindows) & CoreVirtualKeyStates::Down) ==
+            CoreVirtualKeyStates::Down ||
+        (sender.GetKeyState(Windows::System::VirtualKey::RightWindows) & CoreVirtualKeyStates::Down) ==
+            CoreVirtualKeyStates::Down)
+    {
+        modifiers |= EventKeyboard::KeyModifier::SUPER;
+    }
+
+    return modifiers;
+}
+}  // namespace
+
 OpenGLESPage::OpenGLESPage() : OpenGLESPage(nullptr) {}
 OpenGLESPage::OpenGLESPage(OpenGLES* openGLES)
     : mOpenGLES(openGLES)
@@ -411,7 +460,8 @@ void OpenGLESPage::OnKeyPressed(CoreWindow const& sender, KeyEventArgs const& ar
 {
     if (mRenderer)
     {
-        mRenderer->QueueKeyboardEvent(WinRTKeyboardEventType::Down, args);
+        const auto modifiers = GetKeyModifiers(sender);
+        mRenderer->QueueKeyboardEvent(WinRTKeyboardEventType::Down, modifiers, args);
     }
 }
 
@@ -419,11 +469,12 @@ void OpenGLESPage::_OnCharacterReceived(CoreWindow const& /*sender*/, CharacterR
 {
 }
 
-void OpenGLESPage::OnKeyReleased(CoreWindow const& /*sender*/, KeyEventArgs const& args)
+void OpenGLESPage::OnKeyReleased(CoreWindow const& sender, KeyEventArgs const& args)
 {
     if (mRenderer)
     {
-        mRenderer->QueueKeyboardEvent(WinRTKeyboardEventType::Up, args);
+        const auto modifiers = GetKeyModifiers(sender);
+        mRenderer->QueueKeyboardEvent(WinRTKeyboardEventType::Up, modifiers, args);
     }
 }
 
