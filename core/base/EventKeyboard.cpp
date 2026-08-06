@@ -31,7 +31,11 @@ namespace ax
 {
 
 EventKeyboard::EventKeyboard(KeyCode keyCode, bool isKeyDown, bool isRepeat)
-    : Event(Type::KEYBOARD), _keyCode(keyCode), _isKeyDown(isKeyDown), _isRepeat(isRepeat)
+    : Event(Type::KEYBOARD), _keyCode(keyCode), _isKeyDown(isKeyDown), _isRepeat(isRepeat), _modifiers(0)
 {}
 
-}
+EventKeyboard::EventKeyboard(KeyCode keyCode, bool isKeyDown, uint32_t modifiers, bool isRepeat)
+    : Event(Type::KEYBOARD), _keyCode(keyCode), _isKeyDown(isKeyDown), _isRepeat(isRepeat), _modifiers(modifiers)
+{}
+
+}  // namespace ax

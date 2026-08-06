@@ -220,6 +220,16 @@ public:
         KEY_PLAY
     };
 
+    enum KeyModifier : uint16_t
+    {
+        SHIFT = 1,
+        CONTROL = 2,
+        ALT = 4,
+        SUPER = 8,
+        CAPS_LOCK = 16,
+        NUM_LOCK = 32
+    };
+
     /** Constructor.
      *
      * @param keyCode A given keycode.
@@ -228,12 +238,22 @@ public:
      */
     EventKeyboard(KeyCode keyCode, bool isKeyDown, bool isRepeat = false);
 
+    /** Constructor.
+     *
+     * @param keyCode A given keycode.
+     * @param isKeyDown whether is key down event
+     * @param isRepeat whether key down repeat
+     * @param modifiers identifies any modifier keys that are active
+     */
+    EventKeyboard(KeyCode keyCode, bool isKeyDown, uint32_t modifiers, bool isRepeat = false);
+
     bool isRepeat() const { return _isRepeat; }
 
 private:
     KeyCode _keyCode;
     bool _isKeyDown;
     bool _isRepeat;
+    uint32_t _modifiers;
 
     friend class EventListenerKeyboard;
 };
