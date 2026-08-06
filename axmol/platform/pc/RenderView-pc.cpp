@@ -399,7 +399,50 @@ static constexpr KeyCodeItem s_keyCodeItems[] = {
     {GLFW_KEY_RIGHT_ALT, KeyboardEvent::KeyCode::KEY_RIGHT_ALT},
     {GLFW_KEY_RIGHT_SUPER, KeyboardEvent::KeyCode::KEY_HYPER},
     {GLFW_KEY_MENU, KeyboardEvent::KeyCode::KEY_MENU},
-    {GLFW_KEY_LAST, KeyboardEvent::KeyCode::KEY_NONE}};
+    {GLFW_KEY_LAST, KeyboardEvent::KeyCode::KEY_NONE}
+};
+
+static uint32_t mapModifiers(int glfwMods)
+{
+    if (glfwMods == 0)
+        return 0;
+
+    uint32_t result = 0;
+
+    if ((glfwMods & GLFW_MOD_CONTROL) != 0)
+    {
+        result |= EventKeyboard::KeyModifier::CONTROL;
+    }
+
+    if ((glfwMods & GLFW_MOD_ALT) != 0)
+    {
+        result |= EventKeyboard::KeyModifier::ALT;
+    }
+
+    if ((glfwMods & GLFW_MOD_SHIFT) != 0)
+    {
+        result |= EventKeyboard::KeyModifier::SHIFT;
+    }
+
+    if ((glfwMods & GLFW_MOD_SUPER) != 0)
+    {
+        result |= EventKeyboard::KeyModifier::SUPER;
+    }
+
+    // GLFW_MOD_CAPS_LOCK and GLFW_MOD_NUM_LOCK require
+    // GLFW_LOCK_KEY_MODS input mode to be set
+    if ((glfwMods & GLFW_MOD_CAPS_LOCK) != 0)
+    {
+        result |= EventKeyboard::KeyModifier::CAPS_LOCK;
+    }
+
+    if ((glfwMods & GLFW_MOD_NUM_LOCK) != 0)
+    {
+        result |= EventKeyboard::KeyModifier::NUM_LOCK;
+    }
+
+    return result;
+}
 
 // wasm input bridge
 #if defined(__EMSCRIPTEN__)
@@ -1716,9 +1759,11 @@ void RenderView::onGLFWMouseScrollCallback(GLFWwindow* window, double x, double 
 }
 #endif
 
-void RenderView::onGLFWKeyCallback(GLFWwindow* /*window*/, int key, int /*scancode*/, int action, int /*mods*/)
+void RenderView::onGLFWKeyCallback(GLFWwindow* /*window*/, int key, int /*scancode*/, int action, int mods)
 {
     auto keyCode = _keyCodeMap[key];
+    auto mappedModifiers = mapModifiers(mods);
+
 #if defined(__EMSCRIPTEN__)
     if (isWebInputFieldProxyFocused() && keyCode == KeyboardEvent::KeyCode::KEY_BACKSPACE)
         return;
@@ -1738,7 +1783,7 @@ void RenderView::onGLFWKeyCallback(GLFWwindow* /*window*/, int key, int /*scanco
         break;
     }
 
-    InputSystem::getInstance()->handleKeyEvent(keyCode, phase);
+    InputSystem::getInstance()->handleKeyEvent(keyCode, phase, mappedModifiers);
 }
 
 void RenderView::onGLFWCharCallback(GLFWwindow* /*window*/, unsigned int charCode)
