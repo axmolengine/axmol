@@ -34,7 +34,7 @@ KeyboardEvent::KeyboardEvent(KeyCode keyCode, InputPhase phase)
     : Event(Type::KEYBOARD), _keyCode(keyCode), _phase(phase), _modifiers(0)
 {}
 
-KeyboardEvent::KeyboardEvent(KeyCode keyCode, InputPhase phase, uint32_t modifiers) 
+KeyboardEvent::KeyboardEvent(KeyCode keyCode, InputPhase phase, uint32_t modifiers)
     : Event(Type::KEYBOARD), _keyCode(keyCode), _phase(phase), _modifiers(modifiers)
 {}
 
