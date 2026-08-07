@@ -85,6 +85,14 @@ $main_pkg_compress_args = @{
     Prefix           = "axmol-$version"
 }
 
+# Check if file is a candidate executable (no extension, .sh, or .ps1)
+function Test-IsCandidateExecutable {
+    param([string]$Path)
+
+    $ext = Split-Path $Path -Extension
+    return (-not $ext) -or $Path.EndsWith('.sh') -or $Path.EndsWith('.ps1')
+}
+
 function Compress-ArchiveEx() {
     param(
         $Path,
@@ -265,8 +273,7 @@ public class UnixFileStream : FileStream
                         $uxmode = $path.UnixStat.Mode
                     }
                     else {
-                        $fileext = Split-Path $rname -Extension
-                        if (!$fileext -or $rname.EndsWith('.sh')) {
+                        if (Test-IsCandidateExecutable -Path $rname) {
                             $filestatus = $(git -C $AX_ROOT ls-files -s $rname)
                             if ($filestatus) {
                                 $uxmode = [Convert]::ToInt32($filestatus.Split(' ')[0], 8)
@@ -279,7 +286,7 @@ public class UnixFileStream : FileStream
                     }
 
                     if ($prefix) {
-                        $rname = Join-Path $prefix $rname
+                        $rname = "$prefix/$rname"
                     }
                     $zentry = $archive.CreateEntry($rname)
                     $zentry.ExternalAttributes = (($Script:S_IFREG -bor $uxmode) -shl 16)
