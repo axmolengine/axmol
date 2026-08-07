@@ -404,16 +404,16 @@ options:
   -h    Show this help message.
 "@
     };
-    publish = @{
-        proc  = (Join-Path $PSScriptRoot 'plugins/publish.ps1');
+    xarchive = @{
+        proc  = (Join-Path $PSScriptRoot 'plugins/xarchive.ps1');
         usage = @"
-usage: axmol publish -version <ver>
+usage: axmol xarchive -version <ver>
 
-Publish axmol release.
+Create a cross-platform archive with specified version.
 
 options:
   -h          Show this help message.
-  -version    Release version to publish.
+  -version    Version in output archive info.
 "@
     }
 }
