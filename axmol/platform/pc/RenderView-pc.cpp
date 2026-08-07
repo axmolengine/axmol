@@ -399,8 +399,7 @@ static constexpr KeyCodeItem s_keyCodeItems[] = {
     {GLFW_KEY_RIGHT_ALT, KeyboardEvent::KeyCode::KEY_RIGHT_ALT},
     {GLFW_KEY_RIGHT_SUPER, KeyboardEvent::KeyCode::KEY_HYPER},
     {GLFW_KEY_MENU, KeyboardEvent::KeyCode::KEY_MENU},
-    {GLFW_KEY_LAST, KeyboardEvent::KeyCode::KEY_NONE}
-};
+    {GLFW_KEY_LAST, KeyboardEvent::KeyCode::KEY_NONE}};
 
 static uint32_t mapModifiers(int glfwMods)
 {
@@ -1761,7 +1760,7 @@ void RenderView::onGLFWMouseScrollCallback(GLFWwindow* window, double x, double 
 
 void RenderView::onGLFWKeyCallback(GLFWwindow* /*window*/, int key, int /*scancode*/, int action, int mods)
 {
-    auto keyCode = _keyCodeMap[key];
+    auto keyCode         = _keyCodeMap[key];
     auto mappedModifiers = mapModifiers(mods);
 
 #if defined(__EMSCRIPTEN__)
