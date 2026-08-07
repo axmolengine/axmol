@@ -49,8 +49,7 @@ Please [visit our Wiki](https://github.com/axmolengine/axmol/wiki) to know more 
 
 ## ⚡️Building
 
-* Download it: [Latest Release](https://github.com/axmolengine/axmol/releases) / [AtomGit Mirror](https://atomgit.com/axmol/axmol) / [SourceForge Mirror](https://sourceforge.net/projects/axmol-engine.mirror) / [Gitee Mirror](https://gitee.com/simdsoft/axmol)
-* [How to install](docs/DevSetup.md)
+👉 [Setup & Building Guide](docs/DevSetup.md)
 
 If you have a Cocos2d-x project, migrating to Axmol Engine is easy. We have prepared a [Migration Guide](https://github.com/axmolengine/axmol/wiki/Cocos2d%E2%80%90x-migration-guide).
 
