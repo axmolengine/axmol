@@ -23,7 +23,6 @@
     ```bash
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/axmolengine/axmol/dev/1k/pwshi.sh)"
     ```
-  - Then run `setup.ps1` directly.
 
 ### 2. **Get the source code**
 
