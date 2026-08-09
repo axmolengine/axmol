@@ -220,13 +220,30 @@ public:
         KEY_PLAY
     };
 
+    enum KeyModifier : uint16_t
+    {
+        SHIFT     = 1,
+        CONTROL   = 2,
+        ALT       = 4,
+        SUPER     = 8,
+        CAPS_LOCK = 16,
+        NUM_LOCK  = 32
+    };
+
     /** Constructor.
      *
      * @param keyCode A given keycode.
-     * @param isKeyDown whether is key down event
-     * @param isRepeat whether key down repeat
+     * @param phase Input phase
      */
     KeyboardEvent(KeyCode keyCode, InputPhase phase);
+
+    /** Constructor.
+     *
+     * @param keyCode A given keycode.
+     * @param phase Input phase
+     * @param modifiers identifies any modifier keys that are active
+     */
+    KeyboardEvent(KeyCode keyCode, InputPhase phase, uint32_t modifiers);
 
     /**
      * @brief Get the key code.
@@ -252,9 +269,20 @@ public:
      */
     InputPhase getPhase() const { return _phase; }
 
+    /**
+     * @brief Retrieve the modifiers of this keyboard event.
+     *
+     * Returns the modifier keys
+     *
+     * @return uint32_t bitmasked value of modifier keys as
+     * declared in KeyModifier
+     */
+    uint32_t getModifiers() const { return _modifiers; }
+
 private:
     KeyCode _keyCode;
     InputPhase _phase{InputPhase::KeyDown};
+    uint32_t _modifiers;
 
     friend class KeyboardEventListener;
 };

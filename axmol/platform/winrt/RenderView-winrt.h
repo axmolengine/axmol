@@ -100,7 +100,7 @@ public:
                         Windows::UI::Core::CoreWindowEventArgs const& args);
 
     void handlePointerEvent(ax::InputPhase phase, Windows::UI::Core::PointerEventArgs const& args);
-    void handleKeyboardEvent(ax::InputPhase phase, Windows::UI::Core::KeyEventArgs const& args);
+    void handleKeyboardEvent(ax::InputPhase phase, uint32_t modifiers, Windows::UI::Core::KeyEventArgs const& args);
 
     AlertResult showAlertDialog(const winrt::hstring& title, const winrt::hstring& message, AlertStyle style);
 
