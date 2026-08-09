@@ -365,6 +365,48 @@ static EventMouse::MouseButton checkMouseButton(GLFWwindow* window)
     return mouseButton;
 }
 
+static uint32_t mapModifiers(int glfwMods)
+{
+    if (glfwMods == 0)
+        return 0;
+
+    uint32_t result = 0;
+
+    if ((glfwMods & GLFW_MOD_CONTROL) != 0)
+    {
+        result |= EventKeyboard::KeyModifier::CONTROL;
+    }
+
+    if ((glfwMods & GLFW_MOD_ALT) != 0)
+    {
+        result |= EventKeyboard::KeyModifier::ALT;
+    }
+
+    if ((glfwMods & GLFW_MOD_SHIFT) != 0)
+    {
+        result |= EventKeyboard::KeyModifier::SHIFT;
+    }
+
+    if ((glfwMods & GLFW_MOD_SUPER) != 0)
+    {
+        result |= EventKeyboard::KeyModifier::SUPER;
+    }
+
+    // GLFW_MOD_CAPS_LOCK and GLFW_MOD_NUM_LOCK require 
+    // GLFW_LOCK_KEY_MODS input mode to be set
+    if ((glfwMods & GLFW_MOD_CAPS_LOCK) != 0)
+    {
+        result |= EventKeyboard::KeyModifier::CAPS_LOCK;
+    }
+
+    if ((glfwMods & GLFW_MOD_NUM_LOCK) != 0)
+    {
+        result |= EventKeyboard::KeyModifier::NUM_LOCK;
+    }
+
+    return result;
+}
+
 RenderViewImpl::RenderViewImpl(bool initglfw)
     : _captured(false)
     , _isInRetinaMonitor(false)
@@ -1243,10 +1285,11 @@ void RenderViewImpl::onGLFWMouseScrollCallback(GLFWwindow* window, double x, dou
     Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
 }
 
-void RenderViewImpl::onGLFWKeyCallback(GLFWwindow* /*window*/, int key, int /*scancode*/, int action, int /*mods*/)
+void RenderViewImpl::onGLFWKeyCallback(GLFWwindow* /*window*/, int key, int /*scancode*/, int action, int mods)
 {
     const auto isKeyDown = action != GLFW_RELEASE;
-    EventKeyboard event(g_keyCodeMap[key], isKeyDown, action == GLFW_REPEAT);
+    auto mappedModifiers = mapModifiers(mods);
+    EventKeyboard event(g_keyCodeMap[key], isKeyDown, mappedModifiers, action == GLFW_REPEAT);
     auto dispatcher = Director::getInstance()->getEventDispatcher();
     dispatcher->dispatchEvent(&event);
 

@@ -615,15 +615,19 @@ void RenderViewImpl::QueuePointerEvent(PointerEventType type, Windows::UI::Core:
     mInputEvents.push(e);
 }
 
-void RenderViewImpl::QueueWinRTKeyboardEvent(WinRTKeyboardEventType type, Windows::UI::Core::KeyEventArgs const& args)
+void RenderViewImpl::QueueWinRTKeyboardEvent(WinRTKeyboardEventType type,
+                                             uint32_t modifiers,
+                                             Windows::UI::Core::KeyEventArgs const& args)
 {
-    std::shared_ptr<WinRTKeyboardEvent> e(new WinRTKeyboardEvent(type, args));
+    std::shared_ptr<WinRTKeyboardEvent> e(new WinRTKeyboardEvent(type, modifiers, args));
     mInputEvents.push(e);
 }
 
-void RenderViewImpl::OnWinRTKeyboardEvent(WinRTKeyboardEventType type, Windows::UI::Core::KeyEventArgs const& args)
+void RenderViewImpl::OnWinRTKeyboardEvent(WinRTKeyboardEventType type,
+                                          uint32_t modifiers,
+                                          Windows::UI::Core::KeyEventArgs const& args)
 {
-    m_keyboard.OnWinRTKeyboardEvent(type, args);
+    m_keyboard.OnWinRTKeyboardEvent(type, modifiers, args);
 }
 
 void RenderViewImpl::QueueEvent(std::shared_ptr<InputEvent>& event)

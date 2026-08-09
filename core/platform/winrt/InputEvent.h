@@ -109,12 +109,14 @@ enum class WinRTKeyboardEventType
 class AX_DLL WinRTKeyboardEvent : public InputEvent
 {
 public:
-	WinRTKeyboardEvent(WinRTKeyboardEventType type, const Windows::UI::Core::KeyEventArgs& args);
-	virtual void execute();
+    WinRTKeyboardEvent(WinRTKeyboardEventType type, const Windows::UI::Core::KeyEventArgs& args);
+    WinRTKeyboardEvent(WinRTKeyboardEventType type, uint32_t modifiers, const Windows::UI::Core::KeyEventArgs& args);
+    virtual void execute();
 
 private:
 	WinRTKeyboardEventType m_type;
     Windows::UI::Core::KeyEventArgs m_key;
+    uint32_t m_modifiers;
 };
 
 

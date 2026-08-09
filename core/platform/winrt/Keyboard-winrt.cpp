@@ -274,7 +274,7 @@ void KeyBoardWinRT::HideKeyboard(winrt::hstring const& text)
     }
 }
 
-void KeyBoardWinRT::OnWinRTKeyboardEvent(WinRTKeyboardEventType type, KeyEventArgs const& args)
+void KeyBoardWinRT::OnWinRTKeyboardEvent(WinRTKeyboardEventType type, uint32_t modifiers, KeyEventArgs const& args)
 {
     const auto isKeyDown = type == WinRTKeyboardEventType::Down;
     const auto isRepeat = (isKeyDown && args.KeyStatus().WasKeyDown);
@@ -285,7 +285,7 @@ void KeyBoardWinRT::OnWinRTKeyboardEvent(WinRTKeyboardEventType type, KeyEventAr
     {
         EventKeyboard::KeyCode keyCode = it->second;
 
-        EventKeyboard event(keyCode, isKeyDown, isRepeat);
+        EventKeyboard event(keyCode, isKeyDown, modifiers, isRepeat);
         auto dispatcher = Director::getInstance()->getEventDispatcher();
         dispatcher->dispatchEvent(&event);
         if (keyCode == EventKeyboard::KeyCode::KEY_ENTER)

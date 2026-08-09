@@ -90,7 +90,9 @@ public:
     void OnMouseReleased(Windows::UI::Core::PointerEventArgs const& args);
     void OnMouseWheelChanged(Windows::UI::Core::PointerEventArgs const& args);
 
-    void OnWinRTKeyboardEvent(WinRTKeyboardEventType type, Windows::UI::Core::KeyEventArgs const& args);
+    void OnWinRTKeyboardEvent(WinRTKeyboardEventType type,
+                              uint32_t modifiers,
+                              Windows::UI::Core::KeyEventArgs const& args);
 
     void OnPointerPressed(Windows::UI::Core::CoreWindow const& sender, Windows::UI::Core::PointerEventArgs const& args);
     void OnPointerWheelChanged(Windows::UI::Core::CoreWindow const&, Windows::UI::Core::PointerEventArgs const& args);
@@ -110,7 +112,9 @@ public:
 
     void QueueBackKeyPress();
     void QueuePointerEvent(PointerEventType type, Windows::UI::Core::PointerEventArgs const& args);
-    void QueueWinRTKeyboardEvent(WinRTKeyboardEventType type, Windows::UI::Core::KeyEventArgs const& args);
+    void QueueWinRTKeyboardEvent(WinRTKeyboardEventType type,
+                                 uint32_t modifiers,
+                                 Windows::UI::Core::KeyEventArgs const& args);
     void QueueEvent(std::shared_ptr<InputEvent>& event);
 
     AlertResult ShowAlertDialog(const winrt::hstring& title, const winrt::hstring& message, AlertStyle style);

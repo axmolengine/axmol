@@ -45,7 +45,9 @@ public:
     void HideKeyboard(const winrt::hstring& text);
 
 public:
-    void OnWinRTKeyboardEvent(WinRTKeyboardEventType type, Windows::UI::Core::KeyEventArgs const& args);
+    void OnWinRTKeyboardEvent(WinRTKeyboardEventType type,
+                              uint32_t modifiers,
+                              Windows::UI::Core::KeyEventArgs const& args);
 
 private:
     void OnTextChanged(const Windows::Foundation::IInspectable& sender,
