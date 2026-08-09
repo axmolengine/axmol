@@ -3777,58 +3777,104 @@ int lua_ax_base_EventKeyboard_constructor(lua_State* tolua_S)
     int argc = 0;
     ax::EventKeyboard* obj = nullptr;
     bool ok  = true;
-
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-
-
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
-    {
-        ax::EventKeyboard::KeyCode arg0;
-        bool arg1;
+    do {
+        if (argc == 3) {
+            ax::EventKeyboard::KeyCode arg0;
+            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.EventKeyboard:EventKeyboard");
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.EventKeyboard:EventKeyboard");
+            if (!ok) { break; }
+            bool arg1;
+            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.EventKeyboard:EventKeyboard");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.EventKeyboard:EventKeyboard");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventKeyboard_constructor'", nullptr);
-            return 0;
+            if (!ok) { break; }
+            unsigned int arg2;
+            ok &= luaval_to_uint32(tolua_S, 4,&arg2, "ax.EventKeyboard:EventKeyboard");
+
+            if (!ok) { break; }
+            obj = new ax::EventKeyboard(arg0, arg1, arg2);
+            obj->autorelease();
+            int ID =  (int)obj->_ID ;
+            int* luaID =  &obj->_luaID ;
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.EventKeyboard");
+            return 1;
         }
-        obj = new ax::EventKeyboard(arg0, arg1);
-        obj->autorelease();
-        int ID =  (int)obj->_ID ;
-        int* luaID =  &obj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.EventKeyboard");
-        return 1;
-    }
-    if (argc == 3)
-    {
-        ax::EventKeyboard::KeyCode arg0;
-        bool arg1;
-        bool arg2;
+    }while(0);
+    ok  = true;
+    do {
+        if (argc == 4) {
+            ax::EventKeyboard::KeyCode arg0;
+            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.EventKeyboard:EventKeyboard");
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.EventKeyboard:EventKeyboard");
+            if (!ok) { break; }
+            bool arg1;
+            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.EventKeyboard:EventKeyboard");
 
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.EventKeyboard:EventKeyboard");
+            if (!ok) { break; }
+            unsigned int arg2;
+            ok &= luaval_to_uint32(tolua_S, 4,&arg2, "ax.EventKeyboard:EventKeyboard");
 
-        ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.EventKeyboard:EventKeyboard");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventKeyboard_constructor'", nullptr);
-            return 0;
+            if (!ok) { break; }
+            bool arg3;
+            ok &= luaval_to_boolean(tolua_S, 5,&arg3, "ax.EventKeyboard:EventKeyboard");
+
+            if (!ok) { break; }
+            obj = new ax::EventKeyboard(arg0, arg1, arg2, arg3);
+            obj->autorelease();
+            int ID =  (int)obj->_ID ;
+            int* luaID =  &obj->_luaID ;
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.EventKeyboard");
+            return 1;
         }
-        obj = new ax::EventKeyboard(arg0, arg1, arg2);
-        obj->autorelease();
-        int ID =  (int)obj->_ID ;
-        int* luaID =  &obj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.EventKeyboard");
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventKeyboard:EventKeyboard",argc, 2);
+    }while(0);
+    ok  = true;
+    do {
+        if (argc == 2) {
+            ax::EventKeyboard::KeyCode arg0;
+            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.EventKeyboard:EventKeyboard");
+
+            if (!ok) { break; }
+            bool arg1;
+            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.EventKeyboard:EventKeyboard");
+
+            if (!ok) { break; }
+            obj = new ax::EventKeyboard(arg0, arg1);
+            obj->autorelease();
+            int ID =  (int)obj->_ID ;
+            int* luaID =  &obj->_luaID ;
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.EventKeyboard");
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do {
+        if (argc == 3) {
+            ax::EventKeyboard::KeyCode arg0;
+            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.EventKeyboard:EventKeyboard");
+
+            if (!ok) { break; }
+            bool arg1;
+            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.EventKeyboard:EventKeyboard");
+
+            if (!ok) { break; }
+            bool arg2;
+            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.EventKeyboard:EventKeyboard");
+
+            if (!ok) { break; }
+            obj = new ax::EventKeyboard(arg0, arg1, arg2);
+            obj->autorelease();
+            int ID =  (int)obj->_ID ;
+            int* luaID =  &obj->_luaID ;
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.EventKeyboard");
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.EventKeyboard:EventKeyboard",argc, 2);
     return 0;
 
 #if _AX_DEBUG >= 1
