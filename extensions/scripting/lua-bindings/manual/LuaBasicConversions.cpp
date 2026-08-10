@@ -567,6 +567,8 @@ bool luaval_to_contact_point_3d(lua_State* L, int lo, ContactInfo3D::ContactPoin
     bool ok              = true;
     ok &= luaval_to_vec3_field(L, tableIndex, "pointA", &outValue->pointA, funcName);
     ok &= luaval_to_vec3_field(L, tableIndex, "pointB", &outValue->pointB, funcName);
+    ok &= luaval_to_vec3_field(L, tableIndex, "velocityA", &outValue->velocityA, funcName);
+    ok &= luaval_to_vec3_field(L, tableIndex, "velocityB", &outValue->velocityB, funcName);
     return ok;
 }
 
@@ -610,6 +612,13 @@ void push_number_field(lua_State* L, const char* field, float value)
 {
     lua_pushstring(L, field);
     lua_pushnumber(L, static_cast<lua_Number>(value));
+    lua_rawset(L, -3);
+}
+
+void push_bool_field(lua_State* L, const char* field, bool value)
+{
+    lua_pushstring(L, field);
+    lua_pushboolean(L, value);
     lua_rawset(L, -3);
 }
 
@@ -2702,6 +2711,7 @@ void contact_info_3d_to_luaval(lua_State* L, const ContactInfo3D& info)
     push_physics_actor_field(L, "actorA", info.actorA);
     push_physics_actor_field(L, "actorB", info.actorB);
     push_vec3_field(L, "normal", info.normal);
+    push_bool_field(L, "hasContactVelocity", info.hasContactVelocity);
 
     lua_pushstring(L, "points");
     lua_newtable(L);
@@ -2712,6 +2722,8 @@ void contact_info_3d_to_luaval(lua_State* L, const ContactInfo3D& info)
         lua_newtable(L);
         push_vec3_field(L, "pointA", point.pointA);
         push_vec3_field(L, "pointB", point.pointB);
+        push_vec3_field(L, "velocityA", point.velocityA);
+        push_vec3_field(L, "velocityB", point.velocityB);
         lua_rawset(L, -3);
     }
     lua_rawset(L, -3);

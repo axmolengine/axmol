@@ -112,16 +112,26 @@ static ContactInfo3D reorderSensorContactInfo(const ContactInfo3D& info)
     return reordered;
 }
 
-static void fillContactPoints(ContactInfo3D& info, const JPH::ContactManifold& manifold)
+static void fillContactPoints(ContactInfo3D& info,
+                              const JPH::Body& body1,
+                              const JPH::Body& body2,
+                              const JPH::ContactManifold& manifold,
+                              bool includeVelocity)
 {
     info.normal = jphutil::cast(manifold.mWorldSpaceNormal);
     info.points.clear();
     for (uint32_t i = 0; i < manifold.mRelativeContactPointsOn1.size(); ++i)
     {
-        Vec3 worldA = jphutil::cast(manifold.GetWorldSpaceContactPointOn1(i));
-        Vec3 worldB = jphutil::cast(manifold.GetWorldSpaceContactPointOn2(i));
+        JPH::RVec3 worldA = manifold.GetWorldSpaceContactPointOn1(i);
+        JPH::RVec3 worldB = manifold.GetWorldSpaceContactPointOn2(i);
 
-        info.points.push_back(ContactInfo3D::ContactPoint{worldA, worldB});
+        ContactInfo3D::ContactPoint point{jphutil::cast(worldA), jphutil::cast(worldB)};
+        if (includeVelocity)
+        {
+            point.velocityA = jphutil::cast(body1.GetPointVelocity(worldA));
+            point.velocityB = jphutil::cast(body2.GetPointVelocity(worldB));
+        }
+        info.points.push_back(point);
     }
 }
 
@@ -558,7 +568,14 @@ void PhysicsWorld3D::OnContactAdded(const JPH::Body& body1,
     if (!info.actorA || !info.actorB)
         return;
 
-    fillContactPoints(info, manifold);
+    const bool isSensor = body1.IsSensor() || body2.IsSensor();
+
+    const bool hitEventEnabled =
+        !isSensor && isGlobalEventEnabled(ContactEventBits::Hit) &&
+        (info.actorA->isEventEnabled(ContactEventBits::Hit) || info.actorB->isEventEnabled(ContactEventBits::Hit));
+
+    info.hasContactVelocity = hitEventEnabled;
+    fillContactPoints(info, body1, body2, manifold, hitEventEnabled);
 
     const uint64_t pairKey = makeBodyPairKey(body1.GetID(), body2.GetID());
     {
@@ -566,7 +583,6 @@ void PhysicsWorld3D::OnContactAdded(const JPH::Body& body1,
         _pairContacts[pairKey] = info;
     }
 
-    const bool isSensor = body1.IsSensor() || body2.IsSensor();
     if (isSensor)
     {
         ContactInfo3D sensorInfo = reorderSensorContactInfo(info);
@@ -575,8 +591,7 @@ void PhysicsWorld3D::OnContactAdded(const JPH::Body& body1,
         return;
     }
 
-    if (isGlobalEventEnabled(ContactEventBits::Hit) &&
-        (info.actorA->isEventEnabled(ContactEventBits::Hit) || info.actorB->isEventEnabled(ContactEventBits::Hit)))
+    if (hitEventEnabled)
     {
         Vec3 normal         = jphutil::cast(manifold.mWorldSpaceNormal);
         Vec3 velA           = jphutil::cast(body1.GetLinearVelocity());
@@ -584,9 +599,7 @@ void PhysicsWorld3D::OnContactAdded(const JPH::Body& body1,
         float approachSpeed = (velA - velB).dot(normal);
 
         if (approachSpeed > 0.0f && manifold.mPenetrationDepth < 1)
-        {
             queueContactEvent(ContactInfo3D(info), ContactEvent3D::EventCode::CollisionHit);
-        }
     }
 
     if (isGlobalEventEnabled(ContactEventBits::Contact) && (info.actorA->isEventEnabled(ContactEventBits::Contact) ||
