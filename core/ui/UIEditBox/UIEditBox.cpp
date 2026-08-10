@@ -879,6 +879,16 @@ void EditBox::setGlobalZOrder(float globalZOrder)
     }
 }
 
+bool EditBox::isEditing() const
+{
+    if (_editBoxImpl)
+    {
+        return _editBoxImpl->isEditing();
+    }
+
+    return false;
+}
+
 #if AX_ENABLE_SCRIPT_BINDING
 void EditBox::registerScriptEditBoxHandler(int handler)
 {
