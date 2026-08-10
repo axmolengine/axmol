@@ -93,7 +93,7 @@ EditBoxImplWin::~EditBoxImplWin()
 
 bool EditBoxImplWin::isEditing()
 {
-    return false;
+    return _editingMode;
 }
 
 void EditBoxImplWin::cleanupEditCtrl()

@@ -310,7 +310,7 @@ EditBoxImplLinux::~EditBoxImplLinux() {}
 
 bool EditBoxImplLinux::isEditing()
 {
-    return false;
+    return _editingMode;
 }
 
 void EditBoxImplLinux::nativeOpenKeyboard()
