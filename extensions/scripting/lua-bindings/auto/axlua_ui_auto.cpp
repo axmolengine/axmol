@@ -37373,6 +37373,53 @@ int lua_ax_ui_EditBox_closeKeyboard(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_ui_EditBox_isEditing(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::EditBox* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_ui_EditBox_isEditing'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_isEditing'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->isEditing();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.EditBox:isEditing",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_EditBox_isEditing'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_ui_EditBox_create(lua_State* tolua_S)
 {
     int argc = 0;
@@ -37645,6 +37692,7 @@ int lua_register_ax_ui_EditBox(lua_State* tolua_S)
         tolua_function(tolua_S,"keyboardDidHide",lua_ax_ui_EditBox_keyboardDidHide);
         tolua_function(tolua_S,"openKeyboard",lua_ax_ui_EditBox_openKeyboard);
         tolua_function(tolua_S,"closeKeyboard",lua_ax_ui_EditBox_closeKeyboard);
+        tolua_function(tolua_S,"isEditing",lua_ax_ui_EditBox_isEditing);
         tolua_function(tolua_S,"create", lua_ax_ui_EditBox_create);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::ui::EditBox).name(); // rtti is literal storage
