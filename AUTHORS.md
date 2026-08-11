@@ -14,15 +14,15 @@ Due to Axmol Engine is a fork of Cocos2d-x-4.0, so the [Cocos2d-x AUTHORS](https
 
 ## Project Founders
 
-    halx99 (halx99@live.com)
-
-## Lead Developer
-
-    halx99 (halx99@live.com)
+    halx99 <halx99 (at) simdsoft (dot) com>
 
 ## Project Manager
 
-    halx99 (halx99@live.com)
+    halx99 <halx99 (at) simdsoft (dot) com>
+
+## Lead Developer
+
+    halx99 <halx99 (at) simdsoft (dot) com>
 
 ## Developers
 
@@ -51,7 +51,7 @@ Due to Axmol Engine is a fork of Cocos2d-x-4.0, so the [Cocos2d-x AUTHORS](https
     j-jorge
     Joilnen
     Janglee123
-    lich426 (lich426@gmail.com)
+    lich426
     maksg (Maksymilian Galas)
     nowasm
     MartinLutherSu
