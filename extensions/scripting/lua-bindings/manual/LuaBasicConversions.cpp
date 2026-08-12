@@ -565,10 +565,10 @@ bool luaval_to_contact_point_3d(lua_State* L, int lo, ContactInfo3D::ContactPoin
 
     const int tableIndex = lua_table_abs_index(L, lo);
     bool ok              = true;
-    ok &= luaval_to_vec3_field(L, tableIndex, "pointA", &outValue->pointA, funcName);
-    ok &= luaval_to_vec3_field(L, tableIndex, "pointB", &outValue->pointB, funcName);
-    ok &= luaval_to_vec3_field(L, tableIndex, "velocityA", &outValue->velocityA, funcName);
-    ok &= luaval_to_vec3_field(L, tableIndex, "velocityB", &outValue->velocityB, funcName);
+    ok &= luaval_to_vec3_field(L, tableIndex, "pointA", &outValue->sideA.point, funcName);
+    ok &= luaval_to_vec3_field(L, tableIndex, "pointB", &outValue->sideB.point, funcName);
+    ok &= luaval_to_vec3_field(L, tableIndex, "velocityA", &outValue->sideA.velocity, funcName);
+    ok &= luaval_to_vec3_field(L, tableIndex, "velocityB", &outValue->sideB.velocity, funcName);
     return ok;
 }
 
@@ -2720,10 +2720,10 @@ void contact_info_3d_to_luaval(lua_State* L, const ContactInfo3D& info)
     {
         lua_pushnumber(L, index++);
         lua_newtable(L);
-        push_vec3_field(L, "pointA", point.pointA);
-        push_vec3_field(L, "pointB", point.pointB);
-        push_vec3_field(L, "velocityA", point.velocityA);
-        push_vec3_field(L, "velocityB", point.velocityB);
+        push_vec3_field(L, "pointA", point.sideA.point);
+        push_vec3_field(L, "pointB", point.sideB.point);
+        push_vec3_field(L, "velocityA", point.sideA.velocity);
+        push_vec3_field(L, "velocityB", point.sideB.velocity);
         lua_rawset(L, -3);
     }
     lua_rawset(L, -3);
