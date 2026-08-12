@@ -101,6 +101,9 @@ static Collider3D* asSensorCollider(PhysicsActor* actor)
     return collider && collider->isSensor() ? collider : nullptr;
 }
 
+// If both actors are sensors, actorA ends up being whichever one Jolt
+// reports first -- not guaranteed consistent across contacts of the same
+// pair. Compare against a known actor pointer, don't assume actorA == self.
 static ContactInfo3D reorderSensorContactInfo(const ContactInfo3D& info)
 {
     if (asSensorCollider(info.actorA) || !asSensorCollider(info.actorB))
@@ -109,6 +112,8 @@ static ContactInfo3D reorderSensorContactInfo(const ContactInfo3D& info)
     ContactInfo3D reordered = info;
     std::swap(reordered.actorA, reordered.actorB);
     reordered.normal = -reordered.normal;
+    for (auto& point : reordered.points)
+        std::swap(point.sideA, point.sideB);
     return reordered;
 }
 
@@ -125,11 +130,13 @@ static void fillContactPoints(ContactInfo3D& info,
         JPH::RVec3 worldA = manifold.GetWorldSpaceContactPointOn1(i);
         JPH::RVec3 worldB = manifold.GetWorldSpaceContactPointOn2(i);
 
-        ContactInfo3D::ContactPoint point{jphutil::cast(worldA), jphutil::cast(worldB)};
+        ContactInfo3D::ContactPoint point;
+        point.sideA.point = jphutil::cast(worldA);
+        point.sideB.point = jphutil::cast(worldB);
         if (includeVelocity)
         {
-            point.velocityA = jphutil::cast(body1.GetPointVelocity(worldA));
-            point.velocityB = jphutil::cast(body2.GetPointVelocity(worldB));
+            point.sideA.velocity = jphutil::cast(body1.GetPointVelocity(worldA));
+            point.sideB.velocity = jphutil::cast(body2.GetPointVelocity(worldB));
         }
         info.points.push_back(point);
     }
