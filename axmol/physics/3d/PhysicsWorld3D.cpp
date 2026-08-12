@@ -592,9 +592,8 @@ void PhysicsWorld3D::OnContactAdded(const JPH::Body& body1,
 
     if (isSensor)
     {
-        ContactInfo3D sensorInfo = reorderSensorContactInfo(info);
-        if (checkSensorEvent(sensorInfo))
-            queueContactEvent(std::move(sensorInfo), ContactEvent3D::EventCode::SensorBegin);
+        if (checkSensorEvent(info))
+            queueContactEvent(reorderSensorContactInfo(info), ContactEvent3D::EventCode::SensorBegin);
         return;
     }
 
@@ -646,9 +645,8 @@ void PhysicsWorld3D::OnContactRemoved(const JPH::SubShapeIDPair& subShapePair)
 
     if (isSensor)
     {
-        ContactInfo3D sensorInfo = reorderSensorContactInfo(info);
-        if (checkSensorEvent(sensorInfo))
-            queueContactEvent(std::move(sensorInfo), ContactEvent3D::EventCode::SensorEnd);
+        if (checkSensorEvent(info))
+            queueContactEvent(reorderSensorContactInfo(info), ContactEvent3D::EventCode::SensorEnd);
         return;
     }
 
