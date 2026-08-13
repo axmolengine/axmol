@@ -557,7 +557,7 @@ JPH::ValidateResult PhysicsWorld3D::OnContactValidate(const JPH::Body& body1,
     const Vec3 normal = jphutil::cast(-collisionResult.mPenetrationAxis.Normalized());
 
     ContactInfo3D info{.actorA = actorA, .actorB = actorB, .normal = normal};
-    info.points.push_back({worldA, worldB});
+    info.points.push_back({.sideA = {.point = worldA}, .sideB = {.point = worldB}});
 
     if (!_preSolveCallback || _preSolveCallback(info))
         return JPH::ValidateResult::AcceptAllContactsForThisBodyPair;
