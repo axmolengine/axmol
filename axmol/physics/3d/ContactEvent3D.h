@@ -54,26 +54,21 @@ struct ContactInfo3D
     // Contact normal in world coordinates from shape A toward shape B.
     Vec3 normal;
 
-    // True when points[].velocityA/velocityB below were actually captured
-    // (Hit events enabled for this pair, non-sensor contact). When false,
-    // those fields are default-zero, NOT a real measured zero velocity —
-    // do not use them.
+    // True when points[].sideA/sideB.velocity were actually captured; false
+    // means "not computed", not a real zero.
     bool hasContactVelocity{false};
 
     // Contact points in world coordinates.
     struct ContactPoint
     {
-        // Contact points on the surface of actor A
-        Vec3 pointA;
+        struct Side
+        {
+            Vec3 point;
+            Vec3 velocity;  // pre-solve; valid only if hasContactVelocity
+        };
 
-        // Contact points on the surface of actor B
-        Vec3 pointB;
-
-        // Pre-solve velocity (before Jolt's solver runs) of actor A's surface
-        // at pointA and actor B's surface at pointB. Only meaningful when the
-        // owning ContactInfo3D::hasContactVelocity is true.
-        Vec3 velocityA;
-        Vec3 velocityB;
+        Side sideA;
+        Side sideB;
     };
 
     tlx::inlined_vector<ContactPoint, 4> points;

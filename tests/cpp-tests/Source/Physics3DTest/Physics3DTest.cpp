@@ -844,12 +844,12 @@ bool Physics3DCollisionCallbackDemo::init()
             if (info.hasContactVelocity && !info.points.empty())
             {
                 const auto& point = info.points[0];
-                float impactSpeed = (point.velocityA - point.velocityB).dot(info.normal);
+                float impactSpeed = (point.sideA.velocity - point.sideB.velocity).dot(info.normal);
                 AXLOGD("CollisionHit impact speed: {:.2f} (point {})", impactSpeed, info.points.size());
             }
 
             auto ps = PUParticleSystem3D::create("Particle3D/scripts/mp_hit_04.pu");
-            ps->setPosition3D(contactEvent->getContactInfo().points[0].pointB);
+            ps->setPosition3D(contactEvent->getContactInfo().points[0].sideB.point);
             ps->setScale(0.05f);
             ps->startParticleSystem();
             ps->setCameraMask(2);

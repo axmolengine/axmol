@@ -101,6 +101,9 @@ static Collider3D* asSensorCollider(PhysicsActor* actor)
     return collider && collider->isSensor() ? collider : nullptr;
 }
 
+// If both actors are sensors, actorA ends up being whichever one Jolt
+// reports first -- not guaranteed consistent across contacts of the same
+// pair. Compare against a known actor pointer, don't assume actorA == self.
 static ContactInfo3D reorderSensorContactInfo(const ContactInfo3D& info)
 {
     if (asSensorCollider(info.actorA) || !asSensorCollider(info.actorB))
@@ -109,6 +112,8 @@ static ContactInfo3D reorderSensorContactInfo(const ContactInfo3D& info)
     ContactInfo3D reordered = info;
     std::swap(reordered.actorA, reordered.actorB);
     reordered.normal = -reordered.normal;
+    for (auto& point : reordered.points)
+        std::swap(point.sideA, point.sideB);
     return reordered;
 }
 
@@ -125,11 +130,13 @@ static void fillContactPoints(ContactInfo3D& info,
         JPH::RVec3 worldA = manifold.GetWorldSpaceContactPointOn1(i);
         JPH::RVec3 worldB = manifold.GetWorldSpaceContactPointOn2(i);
 
-        ContactInfo3D::ContactPoint point{jphutil::cast(worldA), jphutil::cast(worldB)};
+        ContactInfo3D::ContactPoint point;
+        point.sideA.point = jphutil::cast(worldA);
+        point.sideB.point = jphutil::cast(worldB);
         if (includeVelocity)
         {
-            point.velocityA = jphutil::cast(body1.GetPointVelocity(worldA));
-            point.velocityB = jphutil::cast(body2.GetPointVelocity(worldB));
+            point.sideA.velocity = jphutil::cast(body1.GetPointVelocity(worldA));
+            point.sideB.velocity = jphutil::cast(body2.GetPointVelocity(worldB));
         }
         info.points.push_back(point);
     }
@@ -550,7 +557,7 @@ JPH::ValidateResult PhysicsWorld3D::OnContactValidate(const JPH::Body& body1,
     const Vec3 normal = jphutil::cast(-collisionResult.mPenetrationAxis.Normalized());
 
     ContactInfo3D info{.actorA = actorA, .actorB = actorB, .normal = normal};
-    info.points.push_back({worldA, worldB});
+    info.points.push_back({.sideA = {.point = worldA}, .sideB = {.point = worldB}});
 
     if (!_preSolveCallback || _preSolveCallback(info))
         return JPH::ValidateResult::AcceptAllContactsForThisBodyPair;
@@ -585,9 +592,8 @@ void PhysicsWorld3D::OnContactAdded(const JPH::Body& body1,
 
     if (isSensor)
     {
-        ContactInfo3D sensorInfo = reorderSensorContactInfo(info);
-        if (checkSensorEvent(sensorInfo))
-            queueContactEvent(std::move(sensorInfo), ContactEvent3D::EventCode::SensorBegin);
+        if (checkSensorEvent(info))
+            queueContactEvent(reorderSensorContactInfo(info), ContactEvent3D::EventCode::SensorBegin);
         return;
     }
 
@@ -639,9 +645,8 @@ void PhysicsWorld3D::OnContactRemoved(const JPH::SubShapeIDPair& subShapePair)
 
     if (isSensor)
     {
-        ContactInfo3D sensorInfo = reorderSensorContactInfo(info);
-        if (checkSensorEvent(sensorInfo))
-            queueContactEvent(std::move(sensorInfo), ContactEvent3D::EventCode::SensorEnd);
+        if (checkSensorEvent(info))
+            queueContactEvent(reorderSensorContactInfo(info), ContactEvent3D::EventCode::SensorEnd);
         return;
     }
 
