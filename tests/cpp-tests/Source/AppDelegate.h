@@ -43,8 +43,6 @@ public:
 
     virtual void initGfxContextAttrs();
 
-    void initRenderContext() override;
-    
     /**
     @brief    Implement Director and ax::Scene* init code here.
     @return true    Initialize success, app continue.

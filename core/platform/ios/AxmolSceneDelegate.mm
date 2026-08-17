@@ -58,8 +58,6 @@ API_AVAILABLE(ios(13.0))
     // IMPORTANT: Setting the RenderView should be done after creating the RootViewController
     Director::getInstance()->setRenderView(renderView);
 
-    axmolApp->initRenderContext();
-    
     renderView->showWindow(_viewController);
 
     // run the axmol game scene

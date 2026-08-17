@@ -57,28 +57,6 @@ void AppDelegate::initGfxContextAttrs()
     Device::setPreferredOrientation(Device::Orientation::SensorLandscape);
 }
 
-void AppDelegate::initRenderContext()
-{
-    auto director = Director::getInstance();
-    
-    auto renderView = director->getRenderView();
-    if (!renderView)
-    {
-        std::string title = "Cpp Tests";
-#ifndef NDEBUG
-        title += " *Debug*",
-#endif
-#ifdef AX_PLATFORM_PC
-        renderView = RenderViewImpl::createWithRect(title, Rect(0, 0, g_resourceSize.width, g_resourceSize.height), 1.0F, true);
-#else
-        renderView = RenderViewImpl::createWithRect(title, Rect(0, 0, g_resourceSize.width, g_resourceSize.height));
-#endif
-        director->setRenderView(renderView);
-    }
-
-    renderView->setDesignResolutionSize(g_designSize.width, g_designSize.height, ResolutionPolicy::SHOW_ALL);
-}
-
 bool AppDelegate::applicationDidFinishLaunching()
 {
     // Enable logging output colored text style and prefix timestamp
@@ -94,11 +72,19 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     // initialize director
     auto director = Director::getInstance();
-    
     auto renderView   = director->getRenderView();
     if (!renderView)
     {
-        initRenderContext();
+        std::string title = "Cpp Tests";
+#ifndef NDEBUG
+        title += " *Debug*",
+#endif
+#ifdef AX_PLATFORM_PC
+        renderView = RenderViewImpl::createWithRect(title, Rect(0, 0, g_resourceSize.width, g_resourceSize.height), 1.0F, true);
+#else
+        renderView = RenderViewImpl::createWithRect(title, Rect(0, 0, g_resourceSize.width, g_resourceSize.height));
+#endif
+        director->setRenderView(renderView);
     }
 
     director->setStatsDisplay(true);
@@ -134,6 +120,8 @@ bool AppDelegate::applicationDidFinishLaunching()
     auto&& oldSearchPaths = fileUtils->getSearchPaths();
     std::copy(oldSearchPaths.begin(), oldSearchPaths.end(), std::back_inserter(searchPaths));
     fileUtils->setSearchPaths(searchPaths);
+
+    renderView->setDesignResolutionSize(g_designSize.width, g_designSize.height, ResolutionPolicy::SHOW_ALL);
 
     // Enable Remote Console
     auto console = director->getConsole();

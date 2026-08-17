@@ -40,8 +40,6 @@ public:
 
     void initGfxContextAttrs() override;
 
-    void initRenderContext() override;
-    
     /**
     @brief    Implement Director and Scene init code here.
     @return true    Initialize success, app continue.

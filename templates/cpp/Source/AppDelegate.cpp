@@ -56,8 +56,9 @@ void AppDelegate::initGfxContextAttrs()
     RenderView::setGfxContextAttrs(gfxContextAttrs);
 }
 
-void AppDelegate::initRenderContext()
+bool AppDelegate::applicationDidFinishLaunching()
 {
+    // initialize director
     auto director = Director::getInstance();
     auto renderView   = director->getRenderView();
     if (!renderView)
@@ -70,28 +71,16 @@ void AppDelegate::initRenderContext()
 #endif
         director->setRenderView(renderView);
     }
-    
-    // Set the design resolution
-    renderView->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height,
-                                    ResolutionPolicy::SHOW_ALL);   
-}
-
-bool AppDelegate::applicationDidFinishLaunching()
-{
-    // initialize director
-    auto director = Director::getInstance();
-    
-    auto renderView = director->getRenderView();
-    if (!renderView)
-    {
-        initRenderContext();
-    }
 
     // turn on display FPS
     director->setStatsDisplay(true);
 
     // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0f / 60);
+
+    // Set the design resolution
+    renderView->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height,
+                                    ResolutionPolicy::SHOW_ALL);
 
 #if !_AX_TESTS
     // create a scene. it's an autorelease object
