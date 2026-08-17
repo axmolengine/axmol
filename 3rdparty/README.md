@@ -41,7 +41,7 @@
 
 ## doctest
 - [![Upstream](https://img.shields.io/github/v/release/doctest/doctest?label=Upstream)](https://github.com/doctest/doctest)
-- Version: 2.4.12
+- Version: 2.5.3
 - License: MIT
 
 ## FastLZ
