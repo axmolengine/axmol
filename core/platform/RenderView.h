@@ -428,6 +428,7 @@ public:
     virtual void* getNSGLContext() = 0;  // stevetranby: added
 #elif (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
     virtual void* getEAWindow() const     = 0;  // @since axmol-2.8.0
+    virtual void setEAWindow(void*)       = 0;  // @since axmol-2.11.5
     virtual void* getEARenderView() const = 0;  // @since axmol-2.8.0
 #elif (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
     virtual void* getX11Window()  = 0;

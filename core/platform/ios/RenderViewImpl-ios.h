@@ -78,7 +78,10 @@ public:
 
     /** @since axmol-2.8.0, returns the objective-c UIWindow instance */
     void* getEAWindow() const override { return _hostWindowHandle; }
-
+    
+    /** @since axmol-2.11.5, sets the objective-c UIWindow instance */
+    void setEAWindow(void* window) override { _hostWindowHandle = window; }
+    
     /** @since axmol-2.8.0, returns the objective-c RenderHostView instance */
     void* getEARenderView() const override { return _hostViewHandle; }
 
@@ -98,6 +101,7 @@ protected:
 #ifndef AX_CORE_PROFILE
     AX_DEPRECATED(2.8) bool initWithEARenderView(void* viewHandle);
 #endif
+    
     bool initWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor, bool resizable = false);
     bool initWithFullScreen(std::string_view viewName);
 

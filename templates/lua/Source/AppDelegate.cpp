@@ -50,6 +50,8 @@ void AppDelegate::initGfxContextAttrs()
     RenderView::setGfxContextAttrs(gfxContextAttrs);
 }
 
+void AppDelegate::initRenderContext() {}
+
 bool AppDelegate::applicationDidFinishLaunching()
 {
     // set default FPS

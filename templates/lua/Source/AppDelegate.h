@@ -39,6 +39,8 @@ public:
     ~AppDelegate() override;
 
     void initGfxContextAttrs() override;
+    
+    void initRenderContext() override;
 
     /**
     @brief    Implement Director and Scene init code here.

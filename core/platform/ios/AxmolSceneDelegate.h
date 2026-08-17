@@ -1,5 +1,4 @@
 /****************************************************************************
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
@@ -22,50 +21,15 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-
 #pragma once
 
-#include "axmol.h"
+#import <UIKit/UIKit.h>
 
-/**
-@brief    The axmol Application.
+API_AVAILABLE(ios(13.0))
+@interface AxmolSceneDelegate : UIResponder <UIWindowSceneDelegate>
 
-Private inheritance here hides part of interface from Director.
-*/
-class AppDelegate : private ax::Application
-{
-public:
-    AppDelegate();
-    ~AppDelegate() override;
+@property (strong, nonatomic) UIWindow * window;
 
-    void initGfxContextAttrs() override;
+@property(nonatomic, readonly) UIViewController* viewController;
 
-    void initRenderContext() override;
-    
-    /**
-    @brief    Implement Director and Scene init code here.
-    @return true    Initialize success, app continue.
-    @return false   Initialize failed, app terminate.
-    */
-    bool applicationDidFinishLaunching() override;
-
-    /**
-    @brief  Called when the application moves to the background
-    */
-    void applicationDidEnterBackground() override;
-
-    /**
-    @brief  Called when the application reenters the foreground
-    */
-    void applicationWillEnterForeground() override;
-
-    /**
-	@brief Called when application will quit
-    @since axmol-2.10.0
-	*/
-    void applicationWillQuit() override;
-
-#if _AX_TESTS
-    int run(int argc, char** argv);
-#endif
-};
+@end

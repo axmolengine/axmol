@@ -123,6 +123,8 @@ public:
 #endif
     }
 
+    virtual void initRenderContext() = 0;
+    
     /**
     @brief Get current language config.
     @return Current language config.
