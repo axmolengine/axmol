@@ -117,7 +117,7 @@
 ## lua
 - plainlua
   - [![Upstream](https://img.shields.io/github/v/release/lua/lua?label=Upstream)](https://github.com/lua/lua) http://www.lua.org/
-  - Version: 5.5.0
+  - Version: 5.5.1 with Axmol-specific API extensions (`lspec.h` / `lspec.cpp`)
   - License: MIT (http://www.lua.org/license.html)
   
 - sol2
