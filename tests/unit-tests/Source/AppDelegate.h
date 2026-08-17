@@ -36,7 +36,8 @@ class AppDelegate : private ax::Application
 {
 public:
     virtual void initGfxContextAttrs();
-
+    virtual void initRenderContext();
+    
     virtual bool applicationDidFinishLaunching();
     virtual void applicationDidEnterBackground();
     virtual void applicationWillEnterForeground();

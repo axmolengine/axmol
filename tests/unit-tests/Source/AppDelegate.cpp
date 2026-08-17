@@ -43,6 +43,24 @@ void AppDelegate::initGfxContextAttrs()
     RenderView::setGfxContextAttrs(gfxContextAttrs);
 }
 
+void AppDelegate::initRenderContext()
+{
+    auto director = Director::getInstance();
+    
+    auto renderView = director->getRenderView();
+    if (!renderView)
+    {
+        std::string title = "Unit Tests";
+        #ifdef AX_PLATFORM_PC
+            renderView = RenderViewImpl::createWithRect(title, Rect(0, 0, gWindowSize.x, gWindowSize.y), 1.0F, true);
+        #else
+            renderView = RenderViewImpl::createWithRect(title, Rect(0, 0, gWindowSize.x, gWindowSize.y));
+        #endif
+        director->setRenderView(renderView);
+    }
+    
+    renderView->setDesignResolutionSize(gWindowSize.x, gWindowSize.y, ResolutionPolicy::SHOW_ALL);
+}
 
 bool AppDelegate::applicationDidFinishLaunching()
 {
@@ -54,16 +72,11 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     // initialize director
     auto director = Director::getInstance();
-    auto renderView   = director->getRenderView();
+    
+    auto renderView = director->getRenderView();
     if (!renderView)
     {
-        std::string title = "Unit Tests";
-        #ifdef AX_PLATFORM_PC
-            renderView = RenderViewImpl::createWithRect(title, Rect(0, 0, gWindowSize.x, gWindowSize.y), 1.0F, true);
-        #else
-            renderView = RenderViewImpl::createWithRect(title, Rect(0, 0, gWindowSize.x, gWindowSize.y));
-        #endif
-        director->setRenderView(renderView);
+        initRenderContext();
     }
 
     director->setStatsDisplay(true);
@@ -75,8 +88,6 @@ bool AppDelegate::applicationDidFinishLaunching()
     #endif
 
     auto screenSize = renderView->getFrameSize();
-
-    renderView->setDesignResolutionSize(gWindowSize.x, gWindowSize.y, ResolutionPolicy::SHOW_ALL);
 
     return true;
 }
