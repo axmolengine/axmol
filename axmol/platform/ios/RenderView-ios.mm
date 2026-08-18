@@ -162,8 +162,15 @@ bool RenderView::initWithRect(std::string_view /*viewName*/,
     CGRect r = CGRectMake(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
     choosePixelFormats();
 
-    // create platform window
-    _hostWindowHandle = [[UIWindow alloc] initWithFrame:r];
+    if (@available(iOS 13.0, *)) 
+    {
+        // Window is assigned via SceneDelegate
+    } 
+    else 
+    {
+        // create platform window
+        _hostWindowHandle = [[UIWindow alloc] initWithFrame:r];
+    }
 
     return true;
 }

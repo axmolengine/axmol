@@ -31,6 +31,7 @@ elseif(APPLE)
     list(APPEND GAME_HEADER
       proj.ios_mac/ios/GameAppController.h
       proj.ios_mac/ios/GameViewController.h
+      proj.ios_mac/ios/GameSceneDelegate.h
     )
 
     if(TVOS)
@@ -51,6 +52,7 @@ elseif(APPLE)
       proj.ios_mac/ios/main.mm
       proj.ios_mac/ios/GameAppController.mm
       proj.ios_mac/ios/GameViewController.mm
+      proj.ios_mac/ios/GameSceneDelegate.mm
       proj.ios_mac/ios/Prefix.pch
       ${APP_UI_RES}
     )

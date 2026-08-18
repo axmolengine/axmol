@@ -24,6 +24,7 @@
 
 #import "axmol/platform/ios/AxmolAppController.h"
 #import "axmol/platform/ios/AxmolViewController.h"
+#import "axmol/platform/ios/AxmolSceneDelegate.h"
 #include "axmol/platform/ios/RenderView-ios.h"
 #include "axmol/base/Director.h"
 #include "axmol/platform/Application.h"
@@ -31,6 +32,30 @@
 using namespace ax;
 
 @implementation AxmolAppController
+
+#pragma mark - UISceneSession Lifecycle
+
+- (UISceneConfiguration *)application:(UIApplication *)application
+configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession
+                              options:(UISceneConnectionOptions *)options API_AVAILABLE(ios(13.0)) {
+    
+    // Attempt to read the configuration from the project Info.plist
+    if ([connectingSceneSession.configuration.name isEqualToString:@"Default Configuration"]) {
+        return connectingSceneSession.configuration;
+    }
+    
+    // Fallback is to create the configuration programmatically
+    UISceneConfiguration *config = [[UISceneConfiguration alloc] initWithName:@"AxmolDefaultConfiguration"
+                                                                  sessionRole:connectingSceneSession.role];
+    
+    config.delegateClass = [AxmolSceneDelegate class];
+    
+    return config;
+}
+
+- (void)application:(UIApplication *)application didDiscardSceneSessions:(NSSet<UISceneSession *> *)sceneSessions API_AVAILABLE(ios(13.0)) {
+    // Handle resource cleanup for discarded scene sessions here
+}
 
 #pragma mark -
 #pragma mark Application lifecycle
@@ -42,28 +67,35 @@ using namespace ax;
 
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
 {
+    if (@available(iOS 13.0, *))
+    {
+        // do nothing here for iOS13+
+    }
+    else
+    {
+        auto axmolApp = ApplicationCore::getInstance();
 
-    auto axmolApp = ApplicationCore::getInstance();
+        // Initialize the Axmol Engine attributes
+        axmolApp->applicationWillLaunch();
 
-    // Initialize the Axmol Engine attributes
-    axmolApp->applicationWillLaunch();
+        // Override point for customization after application launch.
 
-    // Override point for customization after application launch.
+        auto renderView = ax::RenderView::createWithFullscreen("axmol3");
+        _viewController = [self createRootViewController];
 
-    auto renderView = ax::RenderView::createWithFullscreen("axmol3");
-    _viewController = [self createRootViewController];
+        renderView->showWindow(_viewController);
 
-    renderView->showWindow(_viewController);
+        // IMPORTANT: Setting the RenderView should be done after creating the RootViewController
+        Director::getInstance()->setRenderView(renderView);
 
-    // IMPORTANT: Setting the RenderView should be done after creating the RootViewController
-    Director::getInstance()->setRenderView(renderView);
-
-    // run the axmol game scene
-    axmolApp->run();
+        // run the axmol game scene
+        axmolApp->run();
+    }
 
     return YES;
 }
 
+#if defined(__IPHONE_OS_VERSION_MIN_REQUIRED) && __IPHONE_OS_VERSION_MIN_REQUIRED < 130000
 - (void)applicationWillResignActive:(UIApplication*)application
 {
     /*
@@ -104,6 +136,7 @@ using namespace ax;
      */
     ax::Application::getInstance()->applicationWillEnterForeground();
 }
+#endif
 
 - (void)applicationWillTerminate:(UIApplication*)application
 {
