@@ -29,4 +29,9 @@ using namespace ax;
 API_AVAILABLE(ios(13.0))
 @implementation GameSceneDelegate
 
+- createRootViewController {
+    GameViewController* viewController = [[GameViewController alloc] init];
+    return viewController;
+}
+
 @end
