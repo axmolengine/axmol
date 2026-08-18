@@ -33,7 +33,7 @@
 #pragma mark -
 #pragma mark Application lifecycle
 
-- createRootViewController
+- (UIViewController*)createRootViewController
 {
     GameViewController* viewController = [[GameViewController alloc] init];
     return viewController;
