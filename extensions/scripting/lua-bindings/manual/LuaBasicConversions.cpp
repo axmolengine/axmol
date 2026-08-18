@@ -538,6 +538,31 @@ bool luaval_to_vec3_field(lua_State* L, int tableIndex, const char* field, Vec3*
     return true;
 }
 
+bool luaval_to_optional_vec3_field(lua_State* L,
+                                   int tableIndex,
+                                   const char* field,
+                                   std::optional<Vec3>* outValue,
+                                   const char* funcName)
+{
+    lua_pushstring(L, field);
+    lua_gettable(L, tableIndex);
+
+    if (!lua_isnil(L, -1))
+    {
+        Vec3 value;
+        if (!luaval_to_vec3(L, lua_gettop(L), &value, funcName))
+        {
+            lua_pop(L, 1);
+            return false;
+        }
+
+        *outValue = value;
+    }
+
+    lua_pop(L, 1);
+    return true;
+}
+
 bool luaval_to_physics_actor_field(lua_State* L,
                                    int tableIndex,
                                    const char* field,
@@ -567,8 +592,8 @@ bool luaval_to_contact_point_3d(lua_State* L, int lo, ContactInfo3D::ContactPoin
     bool ok              = true;
     ok &= luaval_to_vec3_field(L, tableIndex, "pointA", &outValue->sideA.point, funcName);
     ok &= luaval_to_vec3_field(L, tableIndex, "pointB", &outValue->sideB.point, funcName);
-    ok &= luaval_to_vec3_field(L, tableIndex, "velocityA", &outValue->sideA.velocity, funcName);
-    ok &= luaval_to_vec3_field(L, tableIndex, "velocityB", &outValue->sideB.velocity, funcName);
+    ok &= luaval_to_optional_vec3_field(L, tableIndex, "velocityA", &outValue->sideA.velocity, funcName);
+    ok &= luaval_to_optional_vec3_field(L, tableIndex, "velocityB", &outValue->sideB.velocity, funcName);
     return ok;
 }
 
@@ -2711,7 +2736,6 @@ void contact_info_3d_to_luaval(lua_State* L, const ContactInfo3D& info)
     push_physics_actor_field(L, "actorA", info.actorA);
     push_physics_actor_field(L, "actorB", info.actorB);
     push_vec3_field(L, "normal", info.normal);
-    push_bool_field(L, "hasContactVelocity", info.hasContactVelocity);
 
     lua_pushstring(L, "points");
     lua_newtable(L);
@@ -2722,8 +2746,10 @@ void contact_info_3d_to_luaval(lua_State* L, const ContactInfo3D& info)
         lua_newtable(L);
         push_vec3_field(L, "pointA", point.sideA.point);
         push_vec3_field(L, "pointB", point.sideB.point);
-        push_vec3_field(L, "velocityA", point.sideA.velocity);
-        push_vec3_field(L, "velocityB", point.sideB.velocity);
+        if (point.sideA.velocity)
+            push_vec3_field(L, "velocityA", *point.sideA.velocity);
+        if (point.sideB.velocity)
+            push_vec3_field(L, "velocityB", *point.sideB.velocity);
         lua_rawset(L, -3);
     }
     lua_rawset(L, -3);

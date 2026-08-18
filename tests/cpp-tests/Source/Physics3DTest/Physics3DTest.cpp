@@ -841,11 +841,15 @@ bool Physics3DCollisionCallbackDemo::init()
         contactListener->onCollisionHit = [this](ContactEvent3D* contactEvent) {
             const auto& info = contactEvent->getContactInfo();
 
-            if (info.hasContactVelocity && !info.points.empty())
+            if (!info.points.empty())
             {
                 const auto& point = info.points[0];
-                float impactSpeed = (point.sideA.velocity - point.sideB.velocity).dot(info.normal);
-                AXLOGD("CollisionHit impact speed: {:.2f} (point {})", impactSpeed, info.points.size());
+
+                if (point.sideA.velocity && point.sideB.velocity)
+                {
+                    float impactSpeed = (*point.sideA.velocity - *point.sideB.velocity).dot(info.normal);
+                    AXLOGD("CollisionHit impact speed: {:.2f} (point {})", impactSpeed, info.points.size());
+                }
             }
 
             auto ps = PUParticleSystem3D::create("Particle3D/scripts/mp_hit_04.pu");
