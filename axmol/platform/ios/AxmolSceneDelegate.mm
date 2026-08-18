@@ -55,11 +55,11 @@ API_AVAILABLE(ios(13.0))
     renderView->setNativeWindow((__bridge void*)self.window);
 
     _viewController = [self createRootViewController];
+
+    renderView->showWindow(_viewController);
     
     // IMPORTANT: Setting the RenderView should be done after creating the RootViewController
     Director::getInstance()->setRenderView(renderView);
-
-    renderView->showWindow(_viewController);
 
     // run the axmol game scene
     axmolApp->run();
