@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#import "AxmolSceneDelegate.h"
+#import "axmol/platform/ios/AxmolSceneDelegate.h"
 #import "axmol/platform/ios/AxmolViewController.h"
 
 #include "axmol/platform/ios/RenderView-ios.h"
@@ -44,17 +44,18 @@ API_AVAILABLE(ios(13.0))
     if (![windowScene isKindOfClass:[UIWindowScene class]])
         return;
 
-    auto axmolApp = Application::getInstance();
+    auto axmolApp = ApplicationCore::getInstance();
 
-    axmolApp->initGfxContextAttrs();
+    // Initialize the Axmol Engine attributes
+    axmolApp->applicationWillLaunch();
     
     self.window = [[UIWindow alloc] initWithWindowScene:windowScene];
     
-    auto renderView = ax::RenderViewImpl::createWithFullScreen("axmol2");
+    auto renderView = ax::RenderView::createWithFullscreen("axmol3");
     renderView->setNativeWindow((__bridge void*)self.window);
-    
-    _viewController = [self createRootViewController];
 
+    _viewController = [self createRootViewController];
+    
     // IMPORTANT: Setting the RenderView should be done after creating the RootViewController
     Director::getInstance()->setRenderView(renderView);
 

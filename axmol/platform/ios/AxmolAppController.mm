@@ -69,7 +69,7 @@ configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession
 {
     if (@available(iOS 13.0, *))
     {
-        // do nothing here for iOS13+
+        // do nothing here for iOS13+∂
     }
     else
     {
@@ -125,7 +125,14 @@ configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession
      information to restore your application to its current state in case it is terminated later. If your application
      supports background execution, called instead of applicationWillTerminate: when the user quits.
      */
-    ax::Application::getInstance()->applicationDidEnterBackground();
+    if (@available(iOS 13.0, *))
+    {
+        // do nothing here for iOS13+
+    }
+    else
+    {
+        ax::Application::getInstance()->applicationDidEnterBackground();
+    }
 }
 
 - (void)applicationWillEnterForeground:(UIApplication*)application
@@ -134,7 +141,14 @@ configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession
      Called as part of  transition from the background to the inactive state: here you can undo many of the changes made
      on entering the background.
      */
-    ax::Application::getInstance()->applicationWillEnterForeground();
+    if (@available(iOS 13.0, *))
+    {
+        // do nothing here for iOS13+
+    }
+    else
+    {
+        ax::Application::getInstance()->applicationWillEnterForeground();
+    }
 }
 #endif
 
