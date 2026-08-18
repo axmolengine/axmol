@@ -22,9 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 #import "GameSceneDelegate.h"
-#import "axmol.h"
-
-using namespace ax;
+#import "GameViewController.h"
 
 API_AVAILABLE(ios(13.0))
 @implementation GameSceneDelegate
