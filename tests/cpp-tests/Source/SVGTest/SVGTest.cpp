@@ -31,25 +31,9 @@ using namespace ax;
 
 enum
 {
-    kTagTileMap         = 1,
     kTagSpriteBatchNode = 1,
-    kTagNode            = 2,
-    kTagAnimation1      = 1,
-    kTagSpriteLeft,
-    kTagSpriteRight,
 };
 
-enum
-{
-    kTagSprite1,
-    kTagSprite2,
-    kTagSprite3,
-    kTagSprite4,
-    kTagSprite5,
-    kTagSprite6,
-    kTagSprite7,
-    kTagSprite8,
-};
 
 SVGTests::SVGTests()
 {
@@ -75,10 +59,6 @@ SVG::SVG()
 
 void SVG::addNewSpriteWithCoords(Vec2 p)
 {
-    // int idx = (int)(AXRANDOM_0_1() * 1400.0f / 100.0f);
-    // int x = (idx % 5) * 85;
-    // int y = (idx / 5) * 121;
-
     ActionInterval* action;
     float random = AXRANDOM_0_1();
 
