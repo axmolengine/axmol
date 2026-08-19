@@ -204,6 +204,16 @@
 - Version: 3.0.21
 - License: Apache-2.0
 
+## plutosvg
+- [![Upstream](https://img.shields.io/github/v/tag/sammycage/plutosvg?label=Upstream)](https://github.com/sammycage/plutosvg)
+- Version: 0.0.8
+- License: MIT
+
+## plutovg
+- [![Upstream](https://img.shields.io/github/v/tag/sammycage/plutovg?label=Upstream)](https://github.com/sammycage/plutovg)
+- Version: 1.3.3
+- License: MIT
+
 ## png
 - [![Upstream](https://img.shields.io/github/v/tag/glennrp/libpng?label=Upstream)](https://github.com/glennrp/libpng)
 - Version: 1.6.58

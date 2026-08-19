@@ -487,7 +487,7 @@ Texture2D* TextureCache::addImage(std::string_view path, PixelFormat renderForma
         do
         {
             image = new Image();
-
+            image->_pixelFormat = renderFormat;
             bool bRet = image->initWithImageFile(fullpath);
             AX_BREAK_IF(!bRet);
 

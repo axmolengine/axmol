@@ -7,6 +7,7 @@ option(AX_WITH_CLIPPER2 "Build with internal Clipper2 support" ON)
 option(AX_WITH_POLY2TRI "Build with internal poly2tri support" ON)
 option(AX_WITH_FASTLZ "Build with internal fastlz support" ON)
 option(AX_WITH_TRACY "Build with internal Tracy support" ON)
+option(AX_WITH_SVG "Build with internal SVG support" ON)
 
 option(AX_WITH_CURL "Build with internal curl support" ON)
 option(AX_WITH_UNZIP "Build with internal unzip support" ON)
@@ -423,6 +424,11 @@ if(AX_WITH_TRACY)
   set(TRACY_ENABLE ON CACHE BOOL "" FORCE)
   set(TRACY_ON_DEMAND ON CACHE BOOL "" FORCE)
   ax_add_3rd(${tracy_SOURCE_DIR} TARGETS TracyClient)
+endif()
+
+if(AX_WITH_SVG)
+  ax_add_3rd(plutovg)
+  ax_add_3rd(plutosvg)
 endif()
 
 # yasio

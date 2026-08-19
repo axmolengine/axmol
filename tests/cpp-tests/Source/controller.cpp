@@ -111,6 +111,7 @@ public:
         addTest("Scene", []() { return new SceneTests(); });
         addTest("Spine", []() { return new SpineTests(); });
         addTest("Sprite", []() { return new SpriteTests(); });
+        addTest("Sprite - SVG", []() { return new SVGTests(); });
         addTest("MeshRenderer", []() { return new MeshRendererTests(); });
         addTest("SpritePolygon", []() { return new SpritePolygonTest(); });
         addTest("Terrain", []() { return new TerrainTests(); });
@@ -134,8 +135,6 @@ public:
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
         addTest("Vibrate", []() { return new VibrateTests(); });
 #endif
-        //       addTest("Zwoptex Deprecrated, will be removed in release axmol-2.2.0 (see #1602)", []() { return new
-        //       ZwoptexTests(); });
         addTest("SpriteFrameCache", []() { return new SpriteFrameCacheTests(); });  // TODO
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC || AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || \
      AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)

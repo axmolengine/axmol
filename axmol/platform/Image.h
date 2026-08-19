@@ -90,6 +90,8 @@ public:
         TGA,
         //! ASTC
         ASTC,
+        //! SVG
+        SVG,
         //! Raw Data
         RAW_DATA,
         //! Unknown format
@@ -193,6 +195,7 @@ protected:
     bool initWithBmpData(uint8_t* data, ssize_t dataLen);
     bool initWithWebpData(uint8_t* data, ssize_t dataLen);
     bool initWithTGAData(tImageTGA* tgaData);
+    bool initWithSVGData(uint8_t* data, ssize_t dataLen);
 
     // All internal init function have chance to own the data for fast forward data to hardware decoder
     // see: initWithImageData
@@ -255,6 +258,7 @@ protected:
     bool isPng(const uint8_t* data, ssize_t dataLen);
     bool isJpg(const uint8_t* data, ssize_t dataLen);
     bool isBmp(const uint8_t* data, ssize_t dataLen);
+    bool isSVG(const uint8_t* data, ssize_t dataLen);
     bool isWebp(const uint8_t* data, ssize_t dataLen);
     bool isPvr(const uint8_t* data, ssize_t dataLen);
     bool isEtc1(const uint8_t* data, ssize_t dataLen);
