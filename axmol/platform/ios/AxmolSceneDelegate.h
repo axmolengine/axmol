@@ -28,7 +28,7 @@
 API_AVAILABLE(ios(13.0))
 @interface AxmolSceneDelegate : UIResponder <UIWindowSceneDelegate>
 
-@property (strong, nonatomic) UIWindow * window;
+@property(strong, nonatomic) UIWindow* window;
 
 @property(nonatomic, readonly) UIViewController* viewController;
 

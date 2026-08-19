@@ -35,25 +35,29 @@ using namespace ax;
 
 #pragma mark - UISceneSession Lifecycle
 
-- (UISceneConfiguration *)application:(UIApplication *)application
-configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession
-                              options:(UISceneConnectionOptions *)options API_AVAILABLE(ios(13.0)) {
-    
+- (UISceneConfiguration*)application:(UIApplication*)application
+    configurationForConnectingSceneSession:(UISceneSession*)connectingSceneSession
+                                   options:(UISceneConnectionOptions*)options API_AVAILABLE(ios(13.0))
+{
+
     // Attempt to read the configuration from the project Info.plist
-    if ([connectingSceneSession.configuration.name isEqualToString:@"Default Configuration"]) {
+    if ([connectingSceneSession.configuration.name isEqualToString:@"Default Configuration"])
+    {
         return connectingSceneSession.configuration;
     }
-    
+
     // Fallback is to create the configuration programmatically
-    UISceneConfiguration *config = [[UISceneConfiguration alloc] initWithName:@"AxmolDefaultConfiguration"
+    UISceneConfiguration* config = [[UISceneConfiguration alloc] initWithName:@"AxmolDefaultConfiguration"
                                                                   sessionRole:connectingSceneSession.role];
-    
+
     config.delegateClass = [AxmolSceneDelegate class];
-    
+
     return config;
 }
 
-- (void)application:(UIApplication *)application didDiscardSceneSessions:(NSSet<UISceneSession *> *)sceneSessions API_AVAILABLE(ios(13.0)) {
+- (void)application:(UIApplication*)application
+    didDiscardSceneSessions:(NSSet<UISceneSession*>*)sceneSessions API_AVAILABLE(ios(13.0))
+{
     // Handle resource cleanup for discarded scene sessions here
 }
 

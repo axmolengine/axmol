@@ -33,14 +33,17 @@ using namespace ax;
 API_AVAILABLE(ios(13.0))
 @implementation AxmolSceneDelegate
 
-- (UIViewController*)createRootViewController 
+- (UIViewController*)createRootViewController
 {
     return [[AxmolViewController alloc] init];
 }
 
-- (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions {
-    
-    UIWindowScene *windowScene = (UIWindowScene *)scene;
+- (void)scene:(UIScene*)scene
+    willConnectToSession:(UISceneSession*)session
+                 options:(UISceneConnectionOptions*)connectionOptions
+{
+
+    UIWindowScene* windowScene = (UIWindowScene*)scene;
     if (![windowScene isKindOfClass:[UIWindowScene class]])
         return;
 
@@ -48,16 +51,16 @@ API_AVAILABLE(ios(13.0))
 
     // Initialize the Axmol Engine attributes
     axmolApp->applicationWillLaunch();
-    
+
     self.window = [[UIWindow alloc] initWithWindowScene:windowScene];
-    
+
     auto renderView = ax::RenderView::createWithFullscreen("axmol3");
     renderView->setNativeWindow((__bridge void*)self.window);
 
     _viewController = [self createRootViewController];
 
     renderView->showWindow(_viewController);
-    
+
     // IMPORTANT: Setting the RenderView should be done after creating the RootViewController
     Director::getInstance()->setRenderView(renderView);
 
@@ -65,10 +68,10 @@ API_AVAILABLE(ios(13.0))
     axmolApp->run();
 }
 
-- (void)sceneDidDisconnect:(UIScene *)scene
+- (void)sceneDidDisconnect:(UIScene*)scene
 {}
 
-- (void)sceneDidBecomeActive:(UIScene *)scene
+- (void)sceneDidBecomeActive:(UIScene*)scene
 {
     /*
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was
@@ -78,7 +81,7 @@ API_AVAILABLE(ios(13.0))
     /* ax::Director::getInstance()->resume(); */
 }
 
-- (void)sceneWillResignActive:(UIScene *)scene
+- (void)sceneWillResignActive:(UIScene*)scene
 {
     /*
      Sent when the application is about to move from active to inactive state. This can occur for certain types of
@@ -90,7 +93,7 @@ API_AVAILABLE(ios(13.0))
     /* ax::Director::getInstance()->pause(); */
 }
 
-- (void)sceneWillEnterForeground:(UIScene *)scene
+- (void)sceneWillEnterForeground:(UIScene*)scene
 {
     /*
      Called as part of  transition from the background to the inactive state: here you can undo many of the changes made
@@ -99,7 +102,7 @@ API_AVAILABLE(ios(13.0))
     ax::Application::getInstance()->applicationWillEnterForeground();
 }
 
-- (void)sceneDidEnterBackground:(UIScene *)scene
+- (void)sceneDidEnterBackground:(UIScene*)scene
 {
     /*
      Use this method to release shared resources, save user data, invalidate timers, and store enough application state
@@ -116,6 +119,5 @@ API_AVAILABLE(ios(13.0))
     [super dealloc];
 }
 #endif
-
 
 @end
