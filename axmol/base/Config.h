@@ -246,7 +246,7 @@ THE SOFTWARE.
 #    define AX_USE_PNG 1
 #endif  // AX_USE_PNG
 
- /** Support SVG or not. If your application don't use SVG format picture, you can undefine this macro to save package
+/** Support SVG or not. If your application don't use SVG format picture, you can undefine this macro to save package
  * size.
  */
 #ifndef AX_USE_SVG

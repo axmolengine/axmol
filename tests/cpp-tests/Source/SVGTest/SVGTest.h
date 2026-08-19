@@ -31,7 +31,6 @@
 
 DEFINE_TEST_SUITE(SVGTests);
 
-
 class SVG : public TestCase
 {
 public:

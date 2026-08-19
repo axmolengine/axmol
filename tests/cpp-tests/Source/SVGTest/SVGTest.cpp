@@ -31,10 +31,10 @@ using namespace ax;
 
 enum
 {
-    kTagTileMap = 1,
+    kTagTileMap         = 1,
     kTagSpriteBatchNode = 1,
-    kTagNode = 2,
-    kTagAnimation1 = 1,
+    kTagNode            = 2,
+    kTagAnimation1      = 1,
     kTagSpriteLeft,
     kTagSpriteRight,
 };
@@ -65,7 +65,7 @@ SVGTests::SVGTests()
 
 SVG::SVG()
 {
-    auto listener = PointerEventListener::create();
+    auto listener           = PointerEventListener::create();
     listener->onPointerDown = AX_CALLBACK_1(SVG::onPointerDown, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
@@ -75,9 +75,9 @@ SVG::SVG()
 
 void SVG::addNewSpriteWithCoords(Vec2 p)
 {
-    //int idx = (int)(AXRANDOM_0_1() * 1400.0f / 100.0f);
-    //int x = (idx % 5) * 85;
-    //int y = (idx / 5) * 121;
+    // int idx = (int)(AXRANDOM_0_1() * 1400.0f / 100.0f);
+    // int x = (idx % 5) * 85;
+    // int y = (idx / 5) * 121;
 
     ActionInterval* action;
     float random = AXRANDOM_0_1();
@@ -93,7 +93,7 @@ void SVG::addNewSpriteWithCoords(Vec2 p)
     else
         action = FadeOut::create(2);
     auto action_back = action->reverse();
-    auto seq = Sequence::create(action, action_back, nullptr);
+    auto seq         = Sequence::create(action, action_back, nullptr);
 
     ax::Sprite* sprite;
     if (AXRANDOM_MINUS1_1() > 0.5f)
@@ -134,7 +134,7 @@ std::string SVG::subtitle() const
 
 SVG1::SVG1()
 {
-    auto listener = PointerEventListener::create();
+    auto listener           = PointerEventListener::create();
     listener->onPointerDown = AX_CALLBACK_1(SVG1::onPointerDown, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
@@ -149,8 +149,8 @@ void SVG1::addNewSpriteWithCoords(Vec2 p)
 {
     auto BatchNode = static_cast<SpriteBatchNode*>(getChildByTag(kTagSpriteBatchNode));
 
-    float x = MIN(AXRANDOM_0_1() * 100, 50);
-    float y = MIN(AXRANDOM_0_1() * 100, 50);
+    float x     = MIN(AXRANDOM_0_1() * 100, 50);
+    float y     = MIN(AXRANDOM_0_1() * 100, 50);
     auto sprite = Sprite::createWithTexture(BatchNode->getTexture(), Rect(x, y, 50, 50));
     BatchNode->addChild(sprite);
 
@@ -171,7 +171,7 @@ void SVG1::addNewSpriteWithCoords(Vec2 p)
         action = FadeOut::create(2);
 
     auto action_back = action->reverse();
-    auto seq = Sequence::create(action, action_back, nullptr);
+    auto seq         = Sequence::create(action, action_back, nullptr);
 
     sprite->runAction(RepeatForever::create(seq));
 }
