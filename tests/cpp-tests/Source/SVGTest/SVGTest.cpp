@@ -34,7 +34,6 @@ enum
     kTagSpriteBatchNode = 1,
 };
 
-
 SVGTests::SVGTests()
 {
     ADD_TEST_CASE(SVG);
