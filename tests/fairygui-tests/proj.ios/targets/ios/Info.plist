@@ -55,7 +55,7 @@
                     <key>UISceneConfigurationName</key>
                     <string>Default Configuration</string>
                     <key>UISceneDelegateClassName</key>
-                    <string>GameSceneDelegate</string>
+                    <string>AxmolSceneDelegate</string>
                 </dict>
             </array>
         </dict>
