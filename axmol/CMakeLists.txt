@@ -185,7 +185,7 @@ option(AX_ENABLE_3D "Build 3D support" ON)
 cmake_dependent_option(AX_ENABLE_PHYSICS_3D "Build Physics3D support" ON "AX_ENABLE_3D" OFF)
 cmake_dependent_option(AX_ENABLE_NAVMESH "Build NavMesh support" ON "AX_ENABLE_3D" OFF)
 
-option(AX_ENABLE_SVG "Build SVG support" ON)
+option(AX_ENABLE_SVG "Build SVG support" OFF)
 option(AX_ENABLE_VR "Build VR support" OFF)
 
 option(AX_UPDATE_BUILD_VERSION "Update build version" ON)
