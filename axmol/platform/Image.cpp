@@ -34,10 +34,11 @@ THE SOFTWARE.
 
 #include "axmol/tlx/utility.hpp"
 #include "axmol/base/Config.h"  // AX_USE_JPEG, AX_USE_WEBP
-#include <plutosvg.h>
-#include <plutovg.h>
-#include <plutovg-private.h>
-
+#if AX_ENABLE_3RD_SVG
+#   include "plutosvg.h"
+#   include "plutovg.h"
+#   include "plutovg-private.h"
+#endif
 #define STBI_NO_JPEG
 #define STBI_NO_PNG
 #define STBI_NO_GIF
