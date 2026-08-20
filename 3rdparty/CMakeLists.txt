@@ -7,7 +7,6 @@ option(AX_WITH_CLIPPER2 "Build with internal Clipper2 support" ON)
 option(AX_WITH_POLY2TRI "Build with internal poly2tri support" ON)
 option(AX_WITH_FASTLZ "Build with internal fastlz support" ON)
 option(AX_WITH_TRACY "Build with internal Tracy support" ON)
-option(AX_WITH_SVG "Build with internal SVG support" ON)
 
 option(AX_WITH_CURL "Build with internal curl support" ON)
 option(AX_WITH_UNZIP "Build with internal unzip support" ON)
@@ -427,7 +426,7 @@ if(AX_WITH_TRACY)
 endif()
 
 # SVG
-if(AX_WITH_SVG)
+if(AX_ENABLE_SVG)
   ax_add_3rd(plutovg)
   ax_add_3rd(plutosvg)
   target_compile_definitions(plutosvg PUBLIC AX_ENABLE_SVG=1)

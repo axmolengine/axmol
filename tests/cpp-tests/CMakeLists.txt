@@ -350,9 +350,10 @@ list(APPEND GAME_SOURCE
   Source/ZipTest/ZipTests.cpp
 )
 
-# SVG support
+if(AX_ENABLE_SVG)
   list(APPEND GAME_HEADER Source/SVGTest/SVGTest.h)
   list(APPEND GAME_SOURCE Source/SVGTest/SVGTest.cpp)
+endif()
 
 if(AX_ENABLE_VIDEO)
   list(APPEND GAME_HEADER
