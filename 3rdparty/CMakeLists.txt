@@ -430,7 +430,7 @@ endif()
 if(AX_WITH_SVG)
   ax_add_3rd(plutovg)
   ax_add_3rd(plutosvg)
-  target_compile_definitions(plutosvg PUBLIC AX_ENABLE_3RD_SVG=1)
+  target_compile_definitions(plutosvg PUBLIC AX_ENABLE_SVG=1)
 endif()
 
 # yasio

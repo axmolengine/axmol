@@ -111,7 +111,7 @@ public:
         addTest("Scene", []() { return new SceneTests(); });
         addTest("Spine", []() { return new SpineTests(); });
         addTest("Sprite", []() { return new SpriteTests(); });
-#if AX_ENABLE_3RD_SVG
+#if AX_ENABLE_SVG
         addTest("Sprite - SVG", []() { return new SVGTests(); });
 #endif
         addTest("MeshRenderer", []() { return new MeshRendererTests(); });

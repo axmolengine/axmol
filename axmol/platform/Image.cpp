@@ -34,7 +34,7 @@ THE SOFTWARE.
 
 #include "axmol/tlx/utility.hpp"
 #include "axmol/base/Config.h"  // AX_USE_JPEG, AX_USE_WEBP
-#if AX_ENABLE_3RD_SVG
+#if AX_ENABLE_SVG
 #    include "plutosvg.h"
 #    include "plutovg.h"
 #    include "plutovg-private.h"
@@ -635,7 +635,7 @@ Image::~Image()
 {
     if (!_unpack)
     {
-#if AX_ENABLE_3RD_SVG
+#if AX_ENABLE_SVG
         if (_fileType == Format::SVG)
             plutovg_surface_destroy(reinterpret_cast<plutovg_surface_t*>(_data));
         else
@@ -755,7 +755,7 @@ bool Image::initWithImageData(uint8_t* data, ssize_t dataLen, bool ownData)
         case Format::BMP:
             ret = initWithBmpData(unpackedData, unpackedLen);
             break;
-#if AX_ENABLE_3RD_SVG
+#if AX_ENABLE_SVG
         case Format::SVG:
             ret = initWithSVGData(unpackedData, unpackedLen);
             break;
@@ -863,7 +863,7 @@ bool Image::isBmp(const uint8_t* data, ssize_t dataLen)
     return dataLen > 54 && data[0] == 'B' && data[1] == 'M';
 }
 
-#if AX_ENABLE_3RD_SVG
+#if AX_ENABLE_SVG
 bool Image::isSVG(const uint8_t* data, ssize_t dataLen)
 {
     if (dataLen > 10)  // aismann check it!
@@ -971,7 +971,7 @@ Image::Format Image::detectFormat(const uint8_t* data, ssize_t dataLen)
     {
         return Format::BMP;
     }
-#if AX_ENABLE_3RD_SVG
+#if AX_ENABLE_SVG
     else if (isSVG(data, dataLen))
     {
         return Format::SVG;
@@ -1464,7 +1464,7 @@ bool Image::initWithBmpData(uint8_t* data, ssize_t dataLen)
     return false;
 }
 
-#if AX_ENABLE_3RD_SVG
+#if AX_ENABLE_SVG
 bool Image::initWithSVGData(uint8_t* data, ssize_t dataLen)
 {
     if (data)

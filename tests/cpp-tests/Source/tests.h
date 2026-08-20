@@ -112,7 +112,7 @@
 #include "SpriteFrameCacheTest/SpriteFrameCacheTest.h"
 #include "SpritePolygonTest/SpritePolygonTest.h"
 #include "SpriteTest/SpriteTest.h"
-#if AX_ENABLE_3RD_SVG
+#if AX_ENABLE_SVG
 #    include "SVGTest/SVGTest.h"
 #endif
 #include "TerrainTest/TerrainTest.h"
