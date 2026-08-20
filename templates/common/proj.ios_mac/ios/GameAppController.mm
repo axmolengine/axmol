@@ -26,17 +26,7 @@
  ****************************************************************************/
 
 #import "GameAppController.h"
-#import "GameViewController.h"
 
 @implementation GameAppController
-
-#pragma mark -
-#pragma mark Application lifecycle
-
-- (UIViewController*)createRootViewController
-{
-    GameViewController* viewController = [[GameViewController alloc] init];
-    return viewController;
-}
 
 @end
