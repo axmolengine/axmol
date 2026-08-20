@@ -634,9 +634,11 @@ Image::~Image()
 {
     if (!_unpack)
     {
+#if AX_ENABLE_3RD_SVG
         if (_fileType == Format::SVG)
             plutovg_surface_destroy(reinterpret_cast<plutovg_surface_t*>(_data));
         else
+#endif
             AX_SAFE_FREE(_data);
     }
     else
@@ -752,9 +754,11 @@ bool Image::initWithImageData(uint8_t* data, ssize_t dataLen, bool ownData)
         case Format::BMP:
             ret = initWithBmpData(unpackedData, unpackedLen);
             break;
+#if AX_ENABLE_3RD_SVG
         case Format::SVG:
             ret = initWithSVGData(unpackedData, unpackedLen);
             break;
+#endif
         default:
         {
             // load and detect image format
@@ -857,6 +861,8 @@ bool Image::isBmp(const uint8_t* data, ssize_t dataLen)
 {
     return dataLen > 54 && data[0] == 'B' && data[1] == 'M';
 }
+
+#if AX_ENABLE_3RD_SVG
 bool Image::isSVG(const uint8_t* data, ssize_t dataLen)
 {
     if (dataLen > 10)  // aismann check it!
@@ -882,6 +888,7 @@ bool Image::isSVG(const uint8_t* data, ssize_t dataLen)
     }
     return false;
 }
+#endif
 
 bool Image::isEtc1(const uint8_t* data, ssize_t /*dataLen*/)
 {
@@ -963,10 +970,12 @@ Image::Format Image::detectFormat(const uint8_t* data, ssize_t dataLen)
     {
         return Format::BMP;
     }
+#if AX_ENABLE_3RD_SVG
     else if (isSVG(data, dataLen))
     {
         return Format::SVG;
     }
+#endif
     else if (isWebp(data, dataLen))
     {
         return Format::WEBP;
@@ -1454,6 +1463,7 @@ bool Image::initWithBmpData(uint8_t* data, ssize_t dataLen)
     return false;
 }
 
+#if AX_ENABLE_3RD_SVG
 bool Image::initWithSVGData(uint8_t* data, ssize_t dataLen)
 {
     if (data)
@@ -1490,6 +1500,7 @@ bool Image::initWithSVGData(uint8_t* data, ssize_t dataLen)
     }
     return false;
 }
+#endif
 
 bool Image::initWithWebpData(uint8_t* data, ssize_t dataLen)
 {

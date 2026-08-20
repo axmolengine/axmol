@@ -97,34 +97,6 @@ write_basic_package_version_file(plutovgConfigVersion.cmake
     COMPATIBILITY SameMajorVersion
 )
 
-install(FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/plutovg.h
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/plutovg
-)
-
-install(TARGETS plutovg
-    EXPORT plutovgTargets
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-)
-
-install(EXPORT plutovgTargets
-    FILE plutovgTargets.cmake
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/plutovg
-    NAMESPACE plutovg::
-)
-
-install(FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/plutovgConfig.cmake
-    ${CMAKE_CURRENT_BINARY_DIR}/plutovgConfigVersion.cmake
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/plutovg
-)
-
-export(EXPORT plutovgTargets
-    FILE ${CMAKE_CURRENT_BINARY_DIR}/plutovgTargets.cmake
-    NAMESPACE plutovg::
-)
 
 file(RELATIVE_PATH plutovg_pc_prefix_relative
     "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/pkgconfig"
@@ -161,7 +133,3 @@ Libs.private:@plutovg_pc_libs_private@
 ]] plutovg_pc @ONLY)
 
 file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/plutovg.pc" "${plutovg_pc}")
-
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/plutovg.pc"
-    DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig"
-)

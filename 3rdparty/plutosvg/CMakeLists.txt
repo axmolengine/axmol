@@ -35,7 +35,7 @@ target_include_directories(plutosvg PUBLIC
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/plutosvg>
 )
 
-target_link_libraries(plutosvg PUBLIC plutovg::plutovg)
+target_link_libraries(plutosvg PRIVATE plutovg::plutovg)
 
 find_library(MATH_LIBRARY m)
 if(MATH_LIBRARY)
@@ -65,35 +65,35 @@ write_basic_package_version_file(plutosvgConfigVersion.cmake
     COMPATIBILITY SameMajorVersion
 )
 
-install(FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/source/plutosvg.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/source/plutosvg-ft.h
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/plutosvg
-)
+#install(FILES
+#    ${CMAKE_CURRENT_SOURCE_DIR}/source/plutosvg.h
+#    ${CMAKE_CURRENT_SOURCE_DIR}/source/plutosvg-ft.h
+#    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/plutosvg
+#)
 
-install(TARGETS plutosvg
-    EXPORT plutosvgTargets
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-)
+#install(TARGETS plutosvg
+#    EXPORT plutosvgTargets
+#    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+#    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+#    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+#)
 
-install(EXPORT plutosvgTargets
-    FILE plutosvgTargets.cmake
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/plutosvg
-    NAMESPACE plutosvg::
-)
+#install(EXPORT plutosvgTargets
+#    FILE plutosvgTargets.cmake
+#    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/plutosvg
+#    NAMESPACE plutosvg::
+#)
 
-install(FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/plutosvgConfig.cmake
-    ${CMAKE_CURRENT_BINARY_DIR}/plutosvgConfigVersion.cmake
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/plutosvg
-)
+#install(FILES
+#    ${CMAKE_CURRENT_BINARY_DIR}/plutosvgConfig.cmake
+#    ${CMAKE_CURRENT_BINARY_DIR}/plutosvgConfigVersion.cmake
+#    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/plutosvg
+#)
 
-export(EXPORT plutosvgTargets
-    FILE ${CMAKE_CURRENT_BINARY_DIR}/plutosvgTargets.cmake
-    NAMESPACE plutosvg::
-)
+#export(EXPORT plutosvgTargets
+#    FILE ${CMAKE_CURRENT_BINARY_DIR}/plutosvgTargets.cmake
+#    NAMESPACE plutosvg::
+#)
 
 file(RELATIVE_PATH plutosvg_pc_prefix_relative
     "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/pkgconfig"

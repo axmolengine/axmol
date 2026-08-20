@@ -426,9 +426,11 @@ if(AX_WITH_TRACY)
   ax_add_3rd(${tracy_SOURCE_DIR} TARGETS TracyClient)
 endif()
 
+# SVG
 if(AX_WITH_SVG)
   ax_add_3rd(plutovg)
   ax_add_3rd(plutosvg)
+  target_compile_definitions(plutosvg PUBLIC AX_ENABLE_3RD_SVG=1)
 endif()
 
 # yasio
