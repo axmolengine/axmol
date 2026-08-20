@@ -23,13 +23,7 @@
  ****************************************************************************/
 
 #import "axmol/platform/ios/AxmolAppController.h"
-#import "axmol/platform/ios/AxmolViewController.h"
 #import "axmol/platform/ios/AxmolSceneDelegate.h"
-#include "axmol/platform/ios/RenderView-ios.h"
-#include "axmol/base/Director.h"
-#include "axmol/platform/Application.h"
-
-using namespace ax;
 
 @implementation AxmolAppController
 
