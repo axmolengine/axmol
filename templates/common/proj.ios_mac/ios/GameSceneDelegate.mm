@@ -1,7 +1,4 @@
 /****************************************************************************
- Copyright (c) 2010-2013 cocos2d-x.org
- Copyright (c) 2013-2016 Chukong Technologies Inc.
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
@@ -24,14 +21,11 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-
-#import "GameAppController.h"
+#import "GameSceneDelegate.h"
 #import "GameViewController.h"
 
-@implementation GameAppController
-
-#pragma mark -
-#pragma mark Application lifecycle
+API_AVAILABLE(ios(13.0))
+@implementation GameSceneDelegate
 
 - (UIViewController*)createRootViewController {
     GameViewController* viewController = [[GameViewController alloc] init];

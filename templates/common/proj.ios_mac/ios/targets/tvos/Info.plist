@@ -39,5 +39,22 @@
     <false/>
     <key>NSHumanReadableCopyright</key>
     <string>Copyright © 2023. All rights reserved.</string>
+    <key>UIApplicationSceneManifest</key>
+    <dict>
+        <key>UIApplicationSupportsMultipleScenes</key>
+        <false/>
+        <key>UISceneConfigurations</key>
+        <dict>
+            <key>UIWindowSceneSessionRoleApplication</key>
+            <array>
+                <dict>
+                    <key>UISceneConfigurationName</key>
+                    <string>Default Configuration</string>
+                    <key>UISceneDelegateClassName</key>
+                    <string>GameSceneDelegate</string>
+                </dict>
+            </array>
+        </dict>
+    </dict>    
 </dict>
 </plist>

@@ -1,7 +1,4 @@
 /****************************************************************************
- Copyright (c) 2010-2013 cocos2d-x.org
- Copyright (c) 2013-2016 Chukong Technologies Inc.
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
@@ -24,18 +21,32 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
+#import "AxmolLauncher.h"
+#import "AxmolViewController.h"
+#import "axmol.h"
+#import "RenderViewImpl-ios.h"
 
-#import "GameAppController.h"
-#import "GameViewController.h"
+#include "base/Director.h"
+#include "platform/Application.h"
 
-@implementation GameAppController
+namespace AxmolLauncher
+{
+void launchApp(UIViewController* viewController, UIWindow* windowHandle) 
+{
+    auto axmolApp = ax::Application::getInstance();
+    axmolApp->initGfxContextAttrs();
+    
+    auto renderView = ax::RenderViewImpl::createWithFullScreen("axmol2");
+    
+    // Only set Window if a handle was provided (iOS13+ SceneDelegate path)
+    if (windowHandle) 
+        renderView->setEAWindow((__bridge void*)windowHandle);
 
-#pragma mark -
-#pragma mark Application lifecycle
+    renderView->showWindow(viewController);
+    
+    // IMPORTANT: Must be done after creating RootViewController
+    ax::Director::getInstance()->setRenderView(renderView);
 
-- (UIViewController*)createRootViewController {
-    GameViewController* viewController = [[GameViewController alloc] init];
-    return viewController;
+    axmolApp->run();
 }
-
-@end
+}
