@@ -111,9 +111,7 @@ public:
         addTest("Scene", []() { return new SceneTests(); });
         addTest("Spine", []() { return new SpineTests(); });
         addTest("Sprite", []() { return new SpriteTests(); });
-#if AX_ENABLE_SVG
-        addTest("Sprite - SVG", []() { return new SVGTests(); });
-#endif
+        addTest("Sprite - from SVG", []() { return new SVGTests(); });
         addTest("MeshRenderer", []() { return new MeshRendererTests(); });
         addTest("SpritePolygon", []() { return new SpritePolygonTest(); });
         addTest("Terrain", []() { return new TerrainTests(); });
