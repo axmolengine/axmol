@@ -93,6 +93,7 @@ elseif(APPLE)
       platform/ios/InputView-ios.h
       platform/ios/AxmolAppController.h
       platform/ios/AxmolViewController.h
+      platform/ios/AxmolSceneDelegate.h
     )
     set(_AX_PLATFORM_SPECIFIC_SRC
       ${_AX_PLATFORM_SPECIFIC_SRC}
@@ -106,6 +107,7 @@ elseif(APPLE)
       platform/ios/InputView-ios.mm
       platform/ios/AxmolAppController.mm
       platform/ios/AxmolViewController.mm
+      platform/ios/AxmolSceneDelegate.mm
     )
 
     if(AX_ENABLE_GL)
