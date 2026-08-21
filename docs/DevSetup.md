@@ -32,13 +32,17 @@ There are two ways to get the source code:
   ```bash
   git clone https://github.com/axmolengine/axmol.git
   ```
+  Please use the stable v2 LTS branch for production: 
+  ```bash
+  git clone -b release/2.x <repo-url>
+  ```
+  **IMPORTANT**: `dev` branch is for the unreleased v3. It's experimental and unstable, and should not be used for production apps.
+  
   - Mirrors (choose one if GitHub is slow or unavailable):
     ```bash
     git clone https://gitee.com/simdsoft/axmol.git
     git clone https://atomgit.com/axmol/axmol.git
     ```
-  - For the v2 LTS branch: `git clone -b release/2.x <repo-url>`
-
 - **Download release ZIP**:
   - Download from the [Latest Release](https://github.com/axmolengine/axmol/releases) page.  
     SourceForge mirror: [axmol-engine.mirror](https://sourceforge.net/projects/axmol-engine.mirror)
