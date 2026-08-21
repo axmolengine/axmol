@@ -179,6 +179,7 @@ set(_AX_PLATFORM_HEADER
   platform/RenderView.h
   platform/RenderViewCore.h
   platform/Image.h
+  platform/ImageLoader.h
   platform/PlatformConfig.h
   platform/PlatformDefine.h
   platform/PlatformMacros.h
@@ -195,6 +196,7 @@ set(_AX_PLATFORM_SRC
   platform/RenderViewCore.cpp
   platform/FileUtils.cpp
   platform/Image.cpp
+  platform/ImageLoader.cpp
   platform/FileStream.cpp
   platform/ApplicationCore.cpp
   platform/CommandLineArgs.cpp

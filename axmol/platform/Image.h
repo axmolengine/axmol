@@ -90,10 +90,6 @@ public:
         TGA,
         //! ASTC
         ASTC,
-#if defined(AX_ENABLE_SVG)
-        //! SVG
-        SVG,
-#endif
         //! Raw Data
         RAW_DATA,
         //! Unknown format
@@ -197,9 +193,6 @@ protected:
     bool initWithBmpData(uint8_t* data, ssize_t dataLen);
     bool initWithWebpData(uint8_t* data, ssize_t dataLen);
     bool initWithTGAData(tImageTGA* tgaData);
-#if defined(AX_ENABLE_SVG)
-    bool initWithSVGData(uint8_t* data, ssize_t dataLen);
-#endif
     // All internal init function have chance to own the data for fast forward data to hardware decoder
     // see: initWithImageData
     bool initWithPVRData(uint8_t* data, ssize_t dataLen, bool ownData);
@@ -257,13 +250,12 @@ protected:
      */
     bool initWithImageFileThreadSafe(std::string_view fullpath);
 
+    bool initWithImageData(uint8_t* data, ssize_t dataLen, bool ownData, std::string_view extension);
+
     Format detectFormat(const uint8_t* data, ssize_t dataLen);
     bool isPng(const uint8_t* data, ssize_t dataLen);
     bool isJpg(const uint8_t* data, ssize_t dataLen);
     bool isBmp(const uint8_t* data, ssize_t dataLen);
-#if defined(AX_ENABLE_SVG)
-    bool isSVG(const uint8_t* data, ssize_t dataLen);
-#endif
     bool isWebp(const uint8_t* data, ssize_t dataLen);
     bool isPvr(const uint8_t* data, ssize_t dataLen);
     bool isEtc1(const uint8_t* data, ssize_t dataLen);

@@ -185,7 +185,6 @@ option(AX_ENABLE_3D "Build 3D support" ON)
 cmake_dependent_option(AX_ENABLE_PHYSICS_3D "Build Physics3D support" ON "AX_ENABLE_3D" OFF)
 cmake_dependent_option(AX_ENABLE_NAVMESH "Build NavMesh support" ON "AX_ENABLE_3D" OFF)
 
-option(AX_ENABLE_SVG "Build SVG support" OFF)
 option(AX_ENABLE_VR "Build VR support" OFF)
 
 option(AX_UPDATE_BUILD_VERSION "Update build version" ON)
@@ -218,6 +217,7 @@ cmake_dependent_option(AX_ENABLE_EXT_INSPECTOR "Build extension Inspector" ${AX_
 cmake_dependent_option(AX_ENABLE_EXT_SDFGEN "Build extension SDFGen" ${AX_EXT_HINT} "AX_ENABLE_EXT_IMGUI" OFF)
 
 option(AX_ENABLE_EXT_JSONDEFAULT "Build extension JSONDefault" ${AX_EXT_HINT})
+option(AX_ENABLE_EXT_SVG "Build extension SVG" OFF)
 set(_AX_THIRDPARTY_NAME "3rdparty" CACHE INTERNAL "")
 
 if(WIN32)
@@ -448,9 +448,9 @@ ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_VIDEO)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_AUDIO)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_VR)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_OPENXR)
-ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_SVG)
 ax_config_pred(${_AX_CORE_LIB} AX_CORE_PROFILE)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_WAYLAND)
+ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_EXT_SVG)
 
 ax_config_pred1(${_AX_CORE_LIB} AX_ENABLE_D3D11)
 ax_config_pred1(${_AX_CORE_LIB} AX_ENABLE_D3D12)

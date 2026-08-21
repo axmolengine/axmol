@@ -26,6 +26,7 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "axmol/platform/Image.h"
+#include "axmol/platform/ImageLoader.h"
 #include "axmol/rhi/RHIUtils.h"
 
 #include <string>
@@ -34,11 +35,6 @@ THE SOFTWARE.
 
 #include "axmol/tlx/utility.hpp"
 #include "axmol/base/Config.h"  // AX_USE_JPEG, AX_USE_WEBP
-#if defined(AX_ENABLE_SVG)
-#    include "plutosvg.h"
-#    include "plutovg.h"
-#    include "plutovg-private.h"
-#endif
 #define STBI_NO_JPEG
 #define STBI_NO_PNG
 #define STBI_NO_GIF
@@ -635,12 +631,7 @@ Image::~Image()
 {
     if (!_unpack)
     {
-#if defined(AX_ENABLE_SVG)
-        if (_fileType == Format::SVG)
-            plutovg_surface_destroy(reinterpret_cast<plutovg_surface_t*>(_data));
-        else
-#endif
-            AX_SAFE_FREE(_data);
+        AX_SAFE_FREE(_data);
     }
     else
     {
@@ -660,7 +651,7 @@ bool Image::initWithImageFile(std::string_view path)
     {
         ssize_t n = 0;
         auto buf  = data.takeBuffer(&n);
-        ret       = initWithImageData(buf, n, true);
+        ret       = initWithImageData(buf, n, true, FileUtils::getPathExtension(_filePath));
     }
 
     return ret;
@@ -677,7 +668,7 @@ bool Image::initWithImageFileThreadSafe(std::string_view fullpath)
     {
         ssize_t n = 0;
         auto buf  = data.takeBuffer(&n);
-        ret       = initWithImageData(buf, n, true);
+        ret       = initWithImageData(buf, n, true, FileUtils::getPathExtension(_filePath));
     }
 
     return ret;
@@ -685,10 +676,15 @@ bool Image::initWithImageFileThreadSafe(std::string_view fullpath)
 
 bool Image::initWithImageData(const uint8_t* data, ssize_t dataLen)
 {
-    return initWithImageData(const_cast<uint8_t*>(data), dataLen, false);
+    return initWithImageData(const_cast<uint8_t*>(data), dataLen, false, {});
 }
 
 bool Image::initWithImageData(uint8_t* data, ssize_t dataLen, bool ownData)
+{
+    return initWithImageData(data, dataLen, ownData, {});
+}
+
+bool Image::initWithImageData(uint8_t* data, ssize_t dataLen, bool ownData, std::string_view extension)
 {
     bool ret = false;
 
@@ -725,59 +721,68 @@ bool Image::initWithImageData(uint8_t* data, ssize_t dataLen, bool ownData)
 
         switch (_fileType)
         {
-        case Format::PNG:
-            ret = initWithPngData(unpackedData, unpackedLen);
-            break;
-        case Format::JPG:
-            ret = initWithJpgData(unpackedData, unpackedLen);
-            break;
-        case Format::WEBP:
-            ret = initWithWebpData(unpackedData, unpackedLen);
-            break;
-        case Format::PVR:
-            ret = initWithPVRData(unpackedData, unpackedLen, ownData);
-            break;
-        case Format::ETC1:
-            ret = initWithETCData(unpackedData, unpackedLen, ownData);
-            break;
-        case Format::ETC2:
-            ret = initWithETC2Data(unpackedData, unpackedLen, ownData);
-            break;
-        case Format::S3TC:
-            ret = initWithS3TCData(unpackedData, unpackedLen, ownData);
-            break;
-        case Format::ATITC:
-            ret = initWithATITCData(unpackedData, unpackedLen, ownData);
-            break;
-        case Format::ASTC:
-            ret = initWithASTCData(unpackedData, unpackedLen, ownData);
-            break;
-        case Format::BMP:
-            ret = initWithBmpData(unpackedData, unpackedLen);
-            break;
-#if defined(AX_ENABLE_SVG)
-        case Format::SVG:
-            ret = initWithSVGData(unpackedData, unpackedLen);
-            break;
-#endif
-        default:
+            case Format::PNG:
+                ret = initWithPngData(unpackedData, unpackedLen);
+                break;
+            case Format::JPG:
+                ret = initWithJpgData(unpackedData, unpackedLen);
+                break;
+            case Format::WEBP:
+                ret = initWithWebpData(unpackedData, unpackedLen);
+                break;
+            case Format::PVR:
+                ret = initWithPVRData(unpackedData, unpackedLen, ownData);
+                break;
+            case Format::ETC1:
+                ret = initWithETCData(unpackedData, unpackedLen, ownData);
+                break;
+            case Format::ETC2:
+                ret = initWithETC2Data(unpackedData, unpackedLen, ownData);
+                break;
+            case Format::S3TC:
+                ret = initWithS3TCData(unpackedData, unpackedLen, ownData);
+                break;
+            case Format::ATITC:
+                ret = initWithATITCData(unpackedData, unpackedLen, ownData);
+                break;
+            case Format::ASTC:
+                ret = initWithASTCData(unpackedData, unpackedLen, ownData);
+                break;
+            case Format::BMP:
+                ret = initWithBmpData(unpackedData, unpackedLen);
+                break;
+            default:
+            {
+                // load and detect image format
+                tImageTGA* tgaData = tgaLoadBuffer(unpackedData, static_cast<int32_t>(unpackedLen));
+
+                if (tgaData != nullptr && tgaData->status == TGA_OK)
+                {
+                    ret = initWithTGAData(tgaData);
+                }
+
+                free(tgaData);
+                break;
+            }
+        }
+
+        if (!ret)
         {
-            // load and detect image format
-            tImageTGA* tgaData = tgaLoadBuffer(unpackedData, static_cast<int32_t>(unpackedLen));
-
-            if (tgaData != nullptr && tgaData->status == TGA_OK)
+            ImageLoader::DecodedImage decoded;
+            if (ImageLoader::decode(extension, unpackedData, unpackedLen, decoded))
             {
-                ret = initWithTGAData(tgaData);
+                _data                  = decoded.data.takeBuffer(&_dataSize);
+                _width                 = decoded.width;
+                _height                = decoded.height;
+                _pixelFormat           = decoded.pixelFormat;
+                _hasPremultipliedAlpha = decoded.premultipliedAlpha;
+                _fileType              = Format::RAW_DATA;
+                ret                    = _data != nullptr;
             }
-            else
-            {
-                AXLOGW("unsupported image format!");
-            }
+        }
 
-            free(tgaData);
-            break;
-        }
-        }
+        if (!ret)
+            AXLOGW("unsupported image format!");
 
         if (_data != unpackedData && ownData)
             free(unpackedData);
@@ -863,34 +868,6 @@ bool Image::isBmp(const uint8_t* data, ssize_t dataLen)
     return dataLen > 54 && data[0] == 'B' && data[1] == 'M';
 }
 
-#if defined(AX_ENABLE_SVG)
-bool Image::isSVG(const uint8_t* data, ssize_t dataLen)
-{
-    if (dataLen > 10)  // aismann check it!
-    {
-        if (data[0] == '<' && data[1] == '?' && data[2] == 'x' && data[3] == 'm' && data[4] == 'l')  // <?xml... string?
-            return true;
-
-        for (uint8_t i = 0; i < dataLen - 10; i++)  // 10 = <p>
-        {
-            //       AXLOGD("{}", (char) data[i]);
-            if (data[i] == '<')
-            {
-                if (data[i + 1] == 's' && data[i + 2] == 'v' && data[i + 3] == 'g')  // <svg... string
-                    return true;
-                if (data[i + 1] == 'p')  // <p... support for path only string
-                    return true;
-            }
-            if (i > 50)
-            {
-                return false;
-            }
-        }
-    }
-    return false;
-}
-#endif
-
 bool Image::isEtc1(const uint8_t* data, ssize_t /*dataLen*/)
 {
     return !!etc1_pkm_is_valid((etc1_byte*)data);
@@ -971,12 +948,6 @@ Image::Format Image::detectFormat(const uint8_t* data, ssize_t dataLen)
     {
         return Format::BMP;
     }
-#if defined(AX_ENABLE_SVG)
-    else if (isSVG(data, dataLen))
-    {
-        return Format::SVG;
-    }
-#endif
     else if (isWebp(data, dataLen))
     {
         return Format::WEBP;
@@ -1463,45 +1434,6 @@ bool Image::initWithBmpData(uint8_t* data, ssize_t dataLen)
     }
     return false;
 }
-
-#if defined(AX_ENABLE_SVG)
-bool Image::initWithSVGData(uint8_t* data, ssize_t dataLen)
-{
-    if (data)
-    {
-        plutosvg_document_t* document = plutosvg_document_load_from_data(reinterpret_cast<char*>(data),
-                                                                         static_cast<int>(dataLen), -1, -1, NULL, NULL);
-        if (document == NULL)
-        {
-            AXLOGW("Unable to load initWithSVGData");
-            return false;
-        }
-        else
-        {
-            plutovg_surface_t* surface = plutosvg_document_render_to_surface(document, NULL, -1, -1, NULL, NULL, NULL);
-            if (surface == NULL)
-            {
-                AXLOGW("Unable to render initWithSVGData");
-                plutosvg_document_destroy(document);
-                plutovg_surface_destroy(reinterpret_cast<plutovg_surface_t*>(_data));
-                return false;
-            }
-
-            _data     = surface->data;
-            _width    = surface->width;
-            _height   = surface->height;
-            _dataSize = _width * _height;
-            _fileType = Format::SVG;
-            if (_pixelFormat == rhi::PixelFormat::NONE)
-                _pixelFormat = rhi::PixelFormat::BGRA8;  // Use as default PixelFormat
-
-            plutosvg_document_destroy(document);
-            return true;
-        }
-    }
-    return false;
-}
-#endif
 
 bool Image::initWithWebpData(uint8_t* data, ssize_t dataLen)
 {

@@ -983,6 +983,14 @@ function(ax_collect_sdk_targets dir out_list)
 
   # Filter targets
   foreach(tg IN LISTS local_targets)
+    # LunaSVG exports its bundled PlutoVG target separately. Exporting that
+    # implementation target again through Axmol creates an incompatible
+    # duplicate export set with recent CMake versions.
+    get_target_property(tg_source_dir ${tg} SOURCE_DIR)
+    if(tg STREQUAL "plutovg" AND tg_source_dir MATCHES "/cache/lunasvg/plutovg$")
+      continue()
+    endif()
+
     # Check target type (Static, Shared, Interface, Utility, etc.)
     get_target_property(tg_type ${tg} TYPE)
 

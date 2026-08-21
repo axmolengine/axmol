@@ -204,14 +204,9 @@
 - Version: 3.0.21
 - License: Apache-2.0
 
-## plutosvg
-- [![Upstream](https://img.shields.io/github/v/tag/sammycage/plutosvg?label=Upstream)](https://github.com/sammycage/plutosvg)
-- Version: 0.0.8
-- License: MIT
-
-## plutovg
-- [![Upstream](https://img.shields.io/github/v/tag/sammycage/plutovg?label=Upstream)](https://github.com/sammycage/plutovg)
-- Version: 1.3.3
+## lunasvg
+- [![Upstream](https://img.shields.io/github/v/tag/sammycage/lunasvg?label=Upstream)](https://github.com/sammycage/lunasvg)
+- Version: managed by `1k/build.profiles` and fetched only when `AX_ENABLE_EXT_SVG=ON`
 - License: MIT
 
 ## png
@@ -293,4 +288,3 @@
 - [![Upstream](https://img.shields.io/github/v/tag/madler/zlib?label=Upstream)](https://github.com/madler/zlib)
 - Version: 1.3.2
 - License: zlib
-

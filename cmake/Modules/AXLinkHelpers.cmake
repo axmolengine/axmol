@@ -201,6 +201,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
   ax_link_pred(AX_ENABLE_EXT_INSPECTOR LIBS Inspector INCLUDES "${AX_ROOT_DIR}/extensions/Inspector/src")
   ax_link_pred(AX_ENABLE_EXT_SDFGEN LIBS SDFGen INCLUDES "${AX_ROOT_DIR}/extensions/SDFGen/src")
   ax_link_pred(AX_ENABLE_EXT_GUI LIBS GUI INCLUDES "${AX_ROOT_DIR}/extensions/GUI/src" "${AX_ROOT_DIR}/extensions/GUI/src/GUI")
+  ax_link_pred(AX_ENABLE_EXT_SVG LIBS svg lunasvg plutovg INCLUDES "${AX_ROOT_DIR}/extensions/svg/src")
   ax_link_pred(AX_ENABLE_EXT_FAIRYGUI LIBS fairygui INCLUDES "${AX_ROOT_DIR}/extensions/fairygui/src" "${AX_ROOT_DIR}/extensions/fairygui/src/fairygui")
   ax_link_pred(AX_ENABLE_EXT_LIVE2D LIBS Live2D Live2DCubismCore INCLUDES "${AX_ROOT_DIR}/extensions/Live2D/Framework/src" "${AX_ROOT_DIR}/extensions/Live2D/Core/include")
   ax_link_pred(AX_ENABLE_EXT_EFFEKSEER LIBS EffekseerAxmol Effekseer EffekseerRendererCommon INCLUDES

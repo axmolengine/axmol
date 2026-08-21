@@ -11,7 +11,7 @@
   - AX_ENABLE_NAVMESH: whether to enable NavMesh support default: `TRUE`
   - AX_ENABLE_OPUS: whether to enable audio engine play .opus files support, default: `TRUE`
   - AX_ENABLE_PHYSICS_3D: whether to enable physics3d support, default: `TRUE`
-  - AX_ENABLE_SVG: whether to enable SVG support, default: `FALSE`
+  - AX_ENABLE_EXT_SVG: whether to enable the SVG extension, default: `FALSE`
   - AX_ENABLE_VIDEO: whether to enable video player, default: `TRUE`
   - AX_ENABLE_VLC_MEDIA: whether enable libvlc media, default: `TRUE on Linux`, `FALSE on Windows`, not support other platforms
   - AX_ENABLE_VR: whether to enable generic VR renderer support, status: `experimental`, default: `FALSE`

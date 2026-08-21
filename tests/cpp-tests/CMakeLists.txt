@@ -350,7 +350,7 @@ list(APPEND GAME_SOURCE
   Source/ZipTest/ZipTests.cpp
 )
 
-if(AX_ENABLE_SVG)
+if(AX_ENABLE_EXT_SVG)
   list(APPEND GAME_HEADER
     Source/SVGTest/SVGTest.h
   )

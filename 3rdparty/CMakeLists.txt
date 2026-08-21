@@ -426,9 +426,14 @@ if(AX_WITH_TRACY)
 endif()
 
 # SVG
-if(AX_ENABLE_SVG)
-  ax_add_3rd(plutovg)
-  ax_add_3rd(plutosvg)
+if(AX_ENABLE_EXT_SVG)
+  _1kfetch(lunasvg)
+  ax_add_3rd(${lunasvg_SOURCE_DIR}
+    TARGETS lunasvg
+    OPTIONS
+      "USE_SYSTEM_PLUTOVG OFF"
+      "LUNASVG_BUILD_EXAMPLES OFF"
+  )
 endif()
 
 # yasio
