@@ -651,7 +651,7 @@ bool Image::initWithImageFile(std::string_view path)
     {
         ssize_t n = 0;
         auto buf  = data.takeBuffer(&n);
-        ret       = initWithImageData(buf, n, true, FileUtils::getPathExtension(_filePath));
+        ret       = initWithImageData(buf, n, true);
     }
 
     return ret;
@@ -668,7 +668,7 @@ bool Image::initWithImageFileThreadSafe(std::string_view fullpath)
     {
         ssize_t n = 0;
         auto buf  = data.takeBuffer(&n);
-        ret       = initWithImageData(buf, n, true, FileUtils::getPathExtension(_filePath));
+        ret       = initWithImageData(buf, n, true);
     }
 
     return ret;
@@ -676,15 +676,15 @@ bool Image::initWithImageFileThreadSafe(std::string_view fullpath)
 
 bool Image::initWithImageData(const uint8_t* data, ssize_t dataLen)
 {
-    return initWithImageData(const_cast<uint8_t*>(data), dataLen, false, {});
+    return initWithImageData(const_cast<uint8_t*>(data), dataLen, false);
 }
 
 bool Image::initWithImageData(uint8_t* data, ssize_t dataLen, bool ownData)
 {
-    return initWithImageData(data, dataLen, ownData, {});
+    return initWithImageData(data, dataLen, ownData);
 }
 
-bool Image::initWithImageData(uint8_t* data, ssize_t dataLen, bool ownData, std::string_view extension)
+bool Image::initWithImageData(uint8_t* data, ssize_t dataLen, bool ownData)
 {
     bool ret = false;
 
@@ -766,9 +766,10 @@ bool Image::initWithImageData(uint8_t* data, ssize_t dataLen, bool ownData, std:
         }
         }
 
-        if (!ret)
+        if (!ret && !_filePath.empty())
         {
             ImageLoader::DecodedImage decoded;
+            const auto extension = FileUtils::getPathExtension(_filePath);
             if (ImageLoader::decode(extension, unpackedData, unpackedLen, decoded))
             {
                 _data                  = decoded.data.takeBuffer(&_dataSize);
