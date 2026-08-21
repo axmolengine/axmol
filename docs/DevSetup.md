@@ -34,7 +34,7 @@ There are two ways to get the source code:
   ```
   Please use the stable v2 LTS branch for production: 
   ```bash
-  git clone -b release/2.x <repo-url>
+  git clone -b release/2.x https://github.com/axmolengine/axmol.git
   ```
   **IMPORTANT**: `dev` branch is for the unreleased v3. It's experimental and unstable, and should not be used for production apps.
   
