@@ -25,6 +25,7 @@
 #import "AxmolAppController.h"
 #import "AxmolViewController.h"
 #import "AxmolSceneDelegate.h"
+#import "AxmolLauncher.h"
 
 #include "base/Director.h"
 #include "platform/Application.h"
@@ -38,10 +39,11 @@ using namespace ax;
 
 - (UISceneConfiguration *)application:(UIApplication *)application
 configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession
-                              options:(UISceneConnectionOptions *)options API_AVAILABLE(ios(13.0)) {
-    
+                              options:(UISceneConnectionOptions *)options API_AVAILABLE(ios(13.0))
+{
     // Attempt to read the configuration from the project Info.plist
-    if ([connectingSceneSession.configuration.name isEqualToString:@"Default Configuration"]) {
+    if ([connectingSceneSession.configuration.name isEqualToString:@"Default Configuration"])
+    {
         return connectingSceneSession.configuration;
     }
     
@@ -54,14 +56,16 @@ configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession
     return config;
 }
 
-- (void)application:(UIApplication *)application didDiscardSceneSessions:(NSSet<UISceneSession *> *)sceneSessions API_AVAILABLE(ios(13.0)) {
+- (void)application:(UIApplication *)application didDiscardSceneSessions:(NSSet<UISceneSession *> *)sceneSessions API_AVAILABLE(ios(13.0))
+{
     // Handle resource cleanup for discarded scene sessions here
 }
 
 #pragma mark -
 #pragma mark Application lifecycle
 
-- (UIViewController*)createRootViewController {
+- (UIViewController*)createRootViewController
+{
     return [[AxmolViewController alloc] initWithNibName:nil bundle:nil];
 }
 
@@ -73,23 +77,8 @@ configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession
     }
     else
     {
-        auto axmolApp = Application::getInstance();
-        
-        // Initialize the RenderView attributes
-        axmolApp->initGfxContextAttrs();
-        
-        // Override point for customization after application launch.
-        
-        auto renderView = ax::RenderViewImpl::createWithFullScreen("axmol2");
         _viewController = [self createRootViewController];
-        
-        renderView->showWindow(_viewController);
-        
-        // IMPORTANT: Setting the RenderView should be done after creating the RootViewController
-        Director::getInstance()->setRenderView(renderView);
-        
-        // run the axmol game scene
-        axmolApp->run();
+        AxmolLauncher::launchApp(_viewController, nil);
     }
     return YES;
 }

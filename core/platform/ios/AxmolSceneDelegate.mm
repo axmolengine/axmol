@@ -22,11 +22,10 @@
  THE SOFTWARE.
  ****************************************************************************/
 #import "AxmolSceneDelegate.h"
-#import "axmol.h"
 #import "RenderViewImpl-ios.h"
 #import "AxmolViewController.h"
+#import "AxmolLauncher.h"
 
-#include "base/Director.h"
 #include "platform/Application.h"
 
 using namespace ax;
@@ -34,7 +33,8 @@ using namespace ax;
 API_AVAILABLE(ios(13.0))
 @implementation AxmolSceneDelegate
 
-- (UIViewController*)createRootViewController {
+- (UIViewController*)createRootViewController
+{
     return [[AxmolViewController alloc] initWithNibName:nil bundle:nil];
 }
 
@@ -44,24 +44,10 @@ API_AVAILABLE(ios(13.0))
     if (![windowScene isKindOfClass:[UIWindowScene class]])
         return;
 
-    auto axmolApp = Application::getInstance();
-
-    axmolApp->initGfxContextAttrs();
-    
-    self.window = [[UIWindow alloc] initWithWindowScene:windowScene];
-    
-    auto renderView = ax::RenderViewImpl::createWithFullScreen("axmol2");
-    renderView->setEAWindow((__bridge void*)self.window);
-    
+    _window = [[UIWindow alloc] initWithWindowScene:windowScene];
     _viewController = [self createRootViewController];
 
-    // IMPORTANT: Setting the RenderView should be done after creating the RootViewController
-    Director::getInstance()->setRenderView(renderView);
-
-    renderView->showWindow(_viewController);
-
-    // run the axmol game scene
-    axmolApp->run();
+    AxmolLauncher::launchApp(_viewController, _window);
 }
 
 - (void)sceneDidDisconnect:(UIScene *)scene
@@ -112,6 +98,7 @@ API_AVAILABLE(ios(13.0))
 - (void)dealloc
 {
     [_viewController release];
+    [_window release];
     [super dealloc];
 }
 #endif
