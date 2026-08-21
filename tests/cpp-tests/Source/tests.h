@@ -113,7 +113,7 @@
 #include "SpritePolygonTest/SpritePolygonTest.h"
 #include "SpriteTest/SpriteTest.h"
 #ifdef AX_ENABLE_EXT_SVG
-#include "SVGTest/SVGTest.h"
+#    include "SVGTest/SVGTest.h"
 #endif
 #include "TerrainTest/TerrainTest.h"
 #include "Texture2dTest/Texture2dTest.h"

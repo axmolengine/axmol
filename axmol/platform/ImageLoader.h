@@ -15,10 +15,10 @@ public:
     struct DecodedImage
     {
         Data data;
-        int width = 0;
-        int height = 0;
+        int width                    = 0;
+        int height                   = 0;
         rhi::PixelFormat pixelFormat = rhi::PixelFormat::RGBA8;
-        bool premultipliedAlpha = false;
+        bool premultipliedAlpha      = false;
     };
 
     using Decoder = std::function<bool(const uint8_t*, ssize_t, DecodedImage&)>;

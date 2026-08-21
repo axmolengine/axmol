@@ -721,49 +721,49 @@ bool Image::initWithImageData(uint8_t* data, ssize_t dataLen, bool ownData, std:
 
         switch (_fileType)
         {
-            case Format::PNG:
-                ret = initWithPngData(unpackedData, unpackedLen);
-                break;
-            case Format::JPG:
-                ret = initWithJpgData(unpackedData, unpackedLen);
-                break;
-            case Format::WEBP:
-                ret = initWithWebpData(unpackedData, unpackedLen);
-                break;
-            case Format::PVR:
-                ret = initWithPVRData(unpackedData, unpackedLen, ownData);
-                break;
-            case Format::ETC1:
-                ret = initWithETCData(unpackedData, unpackedLen, ownData);
-                break;
-            case Format::ETC2:
-                ret = initWithETC2Data(unpackedData, unpackedLen, ownData);
-                break;
-            case Format::S3TC:
-                ret = initWithS3TCData(unpackedData, unpackedLen, ownData);
-                break;
-            case Format::ATITC:
-                ret = initWithATITCData(unpackedData, unpackedLen, ownData);
-                break;
-            case Format::ASTC:
-                ret = initWithASTCData(unpackedData, unpackedLen, ownData);
-                break;
-            case Format::BMP:
-                ret = initWithBmpData(unpackedData, unpackedLen);
-                break;
-            default:
+        case Format::PNG:
+            ret = initWithPngData(unpackedData, unpackedLen);
+            break;
+        case Format::JPG:
+            ret = initWithJpgData(unpackedData, unpackedLen);
+            break;
+        case Format::WEBP:
+            ret = initWithWebpData(unpackedData, unpackedLen);
+            break;
+        case Format::PVR:
+            ret = initWithPVRData(unpackedData, unpackedLen, ownData);
+            break;
+        case Format::ETC1:
+            ret = initWithETCData(unpackedData, unpackedLen, ownData);
+            break;
+        case Format::ETC2:
+            ret = initWithETC2Data(unpackedData, unpackedLen, ownData);
+            break;
+        case Format::S3TC:
+            ret = initWithS3TCData(unpackedData, unpackedLen, ownData);
+            break;
+        case Format::ATITC:
+            ret = initWithATITCData(unpackedData, unpackedLen, ownData);
+            break;
+        case Format::ASTC:
+            ret = initWithASTCData(unpackedData, unpackedLen, ownData);
+            break;
+        case Format::BMP:
+            ret = initWithBmpData(unpackedData, unpackedLen);
+            break;
+        default:
+        {
+            // load and detect image format
+            tImageTGA* tgaData = tgaLoadBuffer(unpackedData, static_cast<int32_t>(unpackedLen));
+
+            if (tgaData != nullptr && tgaData->status == TGA_OK)
             {
-                // load and detect image format
-                tImageTGA* tgaData = tgaLoadBuffer(unpackedData, static_cast<int32_t>(unpackedLen));
-
-                if (tgaData != nullptr && tgaData->status == TGA_OK)
-                {
-                    ret = initWithTGAData(tgaData);
-                }
-
-                free(tgaData);
-                break;
+                ret = initWithTGAData(tgaData);
             }
+
+            free(tgaData);
+            break;
+        }
         }
 
         if (!ret)

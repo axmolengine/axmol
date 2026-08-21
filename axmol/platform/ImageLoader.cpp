@@ -53,10 +53,7 @@ void ImageLoader::registerDecoder(std::string_view extension, Decoder decoder)
     registry().byExtension[normalized] = std::move(decoder);
 }
 
-bool ImageLoader::decode(std::string_view extension,
-                         const uint8_t* data,
-                         ssize_t dataLen,
-                         DecodedImage& result)
+bool ImageLoader::decode(std::string_view extension, const uint8_t* data, ssize_t dataLen, DecodedImage& result)
 {
     auto normalized = normalizeExtension(extension);
     Decoder decoder;

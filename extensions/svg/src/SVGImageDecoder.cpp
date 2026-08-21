@@ -53,8 +53,7 @@ bool decodeSVG(const uint8_t* data, ssize_t dataLen, ax::ImageLoader::DecodedIma
     const auto* source = bitmap.data();
     for (int y = 0; y < height; ++y)
     {
-        memcpy(pixels + static_cast<size_t>(y) * width * 4,
-               source + static_cast<size_t>(y) * stride,
+        memcpy(pixels + static_cast<size_t>(y) * width * 4, source + static_cast<size_t>(y) * stride,
                static_cast<size_t>(width) * 4);
     }
 

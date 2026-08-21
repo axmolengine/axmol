@@ -36,7 +36,7 @@
 #include "axmol/platform/CommandLineArgs.h"
 
 #ifdef AX_ENABLE_EXT_SVG
-#include "SVGImageDecoder.h"
+#    include "SVGImageDecoder.h"
 #endif
 
 #include <system_error>
