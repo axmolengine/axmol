@@ -2,7 +2,7 @@
 #include "axmol/base/Logging.h"
 
 #include <algorithm>
-#include <cctype>
+#include <ctype.h>
 #include <mutex>
 #include <string>
 #include <unordered_map>
@@ -38,7 +38,7 @@ std::string normalizeExtension(std::string_view extension)
 
     std::string normalized{extension};
     std::transform(normalized.begin(), normalized.end(), normalized.begin(),
-                   [](unsigned char ch) { return static_cast<char>(std::tolower(ch)); });
+                   [](unsigned char ch) { return static_cast<char>(tolower(ch)); });
     return normalized;
 }
 }  // namespace

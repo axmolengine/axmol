@@ -4,8 +4,8 @@
 #include <lunasvg.h>
 
 #include <algorithm>
-#include <cstdint>
-#include <cstring>
+#include <stdint.h>
+#include <string.h>
 
 namespace
 {
@@ -18,7 +18,7 @@ bool isSVG(const uint8_t* data, ssize_t dataLen)
     const auto* end   = begin + std::min<ssize_t>(dataLen, 4096);
     for (auto it = begin; it + 4 <= end; ++it)
     {
-        if (*it == '<' && std::memcmp(it + 1, "svg", 3) == 0)
+        if (*it == '<' && memcmp(it + 1, "svg", 3) == 0)
             return true;
     }
     return false;
@@ -53,9 +53,9 @@ bool decodeSVG(const uint8_t* data, ssize_t dataLen, ax::ImageLoader::DecodedIma
     const auto* source = bitmap.data();
     for (int y = 0; y < height; ++y)
     {
-        std::memcpy(pixels + static_cast<size_t>(y) * width * 4,
-                    source + static_cast<size_t>(y) * stride,
-                    static_cast<size_t>(width) * 4);
+        memcpy(pixels + static_cast<size_t>(y) * width * 4,
+               source + static_cast<size_t>(y) * stride,
+               static_cast<size_t>(width) * 4);
     }
 
     result.width              = width;
