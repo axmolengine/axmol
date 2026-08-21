@@ -581,7 +581,6 @@ void PhysicsWorld3D::OnContactAdded(const JPH::Body& body1,
         !isSensor && isGlobalEventEnabled(ContactEventBits::Hit) &&
         (info.actorA->isEventEnabled(ContactEventBits::Hit) || info.actorB->isEventEnabled(ContactEventBits::Hit));
 
-    info.hasContactVelocity = hitEventEnabled;
     fillContactPoints(info, body1, body2, manifold, hitEventEnabled);
 
     const uint64_t pairKey = makeBodyPairKey(body1.GetID(), body2.GetID());

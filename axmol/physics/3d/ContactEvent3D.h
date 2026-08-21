@@ -39,6 +39,7 @@
 #    include "axmol/tlx/inlined_vector.hpp"
 #    include <functional>
 #    include <vector>
+#    include <optional>
 
 namespace ax
 {
@@ -54,17 +55,13 @@ struct ContactInfo3D
     // Contact normal in world coordinates from shape A toward shape B.
     Vec3 normal;
 
-    // True when points[].sideA/sideB.velocity were actually captured; false
-    // means "not computed", not a real zero.
-    bool hasContactVelocity{false};
-
     // Contact points in world coordinates.
     struct ContactPoint
     {
         struct Side
         {
             Vec3 point;
-            Vec3 velocity;  // pre-solve; valid only if hasContactVelocity
+            std::optional<Vec3> velocity;
         };
 
         Side sideA;
