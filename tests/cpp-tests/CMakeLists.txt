@@ -4,8 +4,6 @@ set(APP_NAME cpp-tests)
 
 project(${APP_NAME})
 
-set(AX_ENABLE_SVG ON CACHE BOOL "Build with internal SVG support" FORCE)
-
 if(NOT DEFINED BUILD_ENGINE_DONE)
   if(XCODE)
     set(CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY TRUE)
@@ -225,7 +223,6 @@ list(APPEND GAME_HEADER
   Source/RenderTextureTest/RenderTextureTest.h
   Source/LayerTest/LayerTest.h
   Source/SpriteTest/SpriteTest.h
-  Source/SVGTest/SVGTest.h
   Source/FontTest/FontTest.h
   Source/LightTest/LightTest.h
   Source/VisibleRect.h
@@ -311,7 +308,6 @@ list(APPEND GAME_SOURCE
   Source/MeshRendererTest/MeshRendererTest.cpp
   Source/SpritePolygonTest/SpritePolygonTest.cpp
   Source/SpriteTest/SpriteTest.cpp
-  Source/SVGTest/SVGTest.cpp
   Source/TerrainTest/TerrainTest.cpp
   Source/Texture2dTest/Texture2dTest.cpp
   Source/TextureCacheTest/TextureCacheTest.cpp
@@ -353,6 +349,15 @@ list(APPEND GAME_SOURCE
   Source/controller.cpp
   Source/ZipTest/ZipTests.cpp
 )
+
+if(AX_ENABLE_SVG)
+  list(APPEND GAME_HEADER
+    Source/SVGTest/SVGTest.h
+  )
+  list(APPEND GAME_SOURCE
+    Source/SVGTest/SVGTest.cpp
+  )
+endif()
 
 if(AX_ENABLE_VIDEO)
   list(APPEND GAME_HEADER

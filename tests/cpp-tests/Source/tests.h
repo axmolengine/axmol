@@ -112,7 +112,9 @@
 #include "SpriteFrameCacheTest/SpriteFrameCacheTest.h"
 #include "SpritePolygonTest/SpritePolygonTest.h"
 #include "SpriteTest/SpriteTest.h"
+#ifdef AX_ENABLE_SVG
 #include "SVGTest/SVGTest.h"
+#endif
 #include "TerrainTest/TerrainTest.h"
 #include "Texture2dTest/Texture2dTest.h"
 #include "TextureCacheTest/TextureCacheTest.h"
