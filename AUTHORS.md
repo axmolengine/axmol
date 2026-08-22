@@ -1,28 +1,40 @@
 # Axmol Engine authors
 
-Axmol Engine is developed by a community of voluntary contributors who
-contribute code, bug reports, documentation, artwork, support, etc.
+Axmol Engine is led and maintained by Simdsoft Limited (深圳司脉科技有限公司),
+with contributions from the Axmol community, including code, bug reports,
+documentation, artwork, support, and other work.
 
-It is impossible to list them all; nevertheless, this file aims at listing
-the developers who contributed significant patches to this MIT licensed
-source code. "Significant" is arbitrarily decided, but should be fair :)
+It is impossible to list every contributor. This file therefore lists
+individuals and organizations that have made significant contributions to the
+MIT-licensed Axmol Engine project.
 
 GitHub usernames are indicated in parentheses, or as sole entry when no other
 name is available.
 
-Due to Axmol Engine is a fork of Cocos2d-x-4.0, so the [Cocos2d-x AUTHORS](https://github.com/cocos2d/cocos2d-x/blob/v4/AUTHORS) also be important part of Axmol Engine AUTOHRS.
+## Maintaining Organization
 
-## Project Founders
+```
+Simdsoft Limited (深圳司脉科技有限公司)
+https://simdsoft.com/
+```
 
-    halx99 <halx99 (at) simdsoft (dot) com>
+## Project Founder
+
+```scss
+halx99 <halx99 (at) simdsoft (dot) com>
+```
 
 ## Project Manager
 
-    halx99 <halx99 (at) simdsoft (dot) com>
+```scss
+halx99 <halx99 (at) simdsoft (dot) com>
+```
 
 ## Lead Developer
 
-    halx99 <halx99 (at) simdsoft (dot) com>
+```scss
+halx99 <halx99 (at) simdsoft (dot) com>
+```
 
 ## Developers
 
