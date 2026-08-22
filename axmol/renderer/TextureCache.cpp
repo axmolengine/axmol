@@ -486,9 +486,9 @@ Texture2D* TextureCache::addImage(std::string_view path, PixelFormat renderForma
         // all images are handled by UIImage except PVR extension that is handled by our own handler
         do
         {
-            image               = new Image();
-            image->_pixelFormat = renderFormat;
-            bool bRet           = image->initWithImageFile(fullpath);
+            image = new Image();
+
+            bool bRet = image->initWithImageFile(fullpath);
             AX_BREAK_IF(!bRet);
 
             texture = new Texture2D();

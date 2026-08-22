@@ -193,6 +193,7 @@ protected:
     bool initWithBmpData(uint8_t* data, ssize_t dataLen);
     bool initWithWebpData(uint8_t* data, ssize_t dataLen);
     bool initWithTGAData(tImageTGA* tgaData);
+
     // All internal init function have chance to own the data for fast forward data to hardware decoder
     // see: initWithImageData
     bool initWithPVRData(uint8_t* data, ssize_t dataLen, bool ownData);
