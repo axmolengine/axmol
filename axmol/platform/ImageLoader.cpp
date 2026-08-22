@@ -5,7 +5,7 @@
 #include <ctype.h>
 #include <mutex>
 #include <string>
-#include <unordered_map>
+#include "axmol/tlx/hlookup.hpp"
 #include <utility>
 
 namespace ax
@@ -14,9 +14,33 @@ namespace
 {
 using Decoder = ImageLoader::Decoder;
 
-struct DecoderRegistry
+class DecoderRegistry
 {
-    std::unordered_map<std::string, Decoder> byExtension;
+public:
+    void registerDecoder(std::string_view extension, Decoder decoder)
+    {
+        if (extension.empty() || !decoder)
+            return;
+
+        std::lock_guard lock(_mtx);
+        tlx::set_item(_decoders, extension, std::move(decoder));
+    }
+
+    Decoder findDecoder(std::string_view extension)
+    {
+        if (_decoders.empty() || extension.empty())
+            return nullptr;
+
+        std::lock_guard lock(_mtx);
+        auto it = _decoders.find(extension);
+        if (it != _decoders.end())
+            return it->second;
+        return nullptr;
+    }
+
+private:
+    std::mutex _mtx;
+    tlx::string_map<Decoder> _decoders;
 };
 
 DecoderRegistry& registry()
@@ -25,49 +49,23 @@ DecoderRegistry& registry()
     return value;
 }
 
-std::mutex& registryMutex()
-{
-    static std::mutex value;
-    return value;
-}
-
-std::string normalizeExtension(std::string_view extension)
-{
-    if (!extension.empty() && extension.front() == '.')
-        extension.remove_prefix(1);
-
-    std::string normalized{extension};
-    std::transform(normalized.begin(), normalized.end(), normalized.begin(),
-                   [](unsigned char ch) { return static_cast<char>(tolower(ch)); });
-    return normalized;
-}
 }  // namespace
 
 void ImageLoader::registerDecoder(std::string_view extension, Decoder decoder)
 {
-    auto normalized = normalizeExtension(extension);
-    if (normalized.empty() || !decoder)
+    if (extension.empty() || !decoder)
         return;
 
-    std::lock_guard lock(registryMutex());
-    registry().byExtension[normalized] = std::move(decoder);
+    registry().registerDecoder(extension, std::move(decoder));
 }
 
 bool ImageLoader::decode(std::string_view extension, const uint8_t* data, ssize_t dataLen, DecodedImage& result)
 {
-    auto normalized = normalizeExtension(extension);
-    Decoder decoder;
-
-    {
-        std::lock_guard lock(registryMutex());
-        auto it = registry().byExtension.find(normalized);
-        if (it != registry().byExtension.end())
-            decoder = it->second;
-    }
+    Decoder decoder = registry().findDecoder(extension);
 
     if (!decoder)
     {
-        AXLOGW("Image decoder not found for extension: '{}'", normalized);
+        AXLOGW("Image decoder not found for extension: '{}'", extension);
         return false;
     }
 

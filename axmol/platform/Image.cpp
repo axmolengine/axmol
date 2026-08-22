@@ -681,11 +681,6 @@ bool Image::initWithImageData(const uint8_t* data, ssize_t dataLen)
 
 bool Image::initWithImageData(uint8_t* data, ssize_t dataLen, bool ownData)
 {
-    return initWithImageData(data, dataLen, ownData);
-}
-
-bool Image::initWithImageData(uint8_t* data, ssize_t dataLen, bool ownData)
-{
     bool ret = false;
 
     do

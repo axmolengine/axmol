@@ -250,8 +250,6 @@ protected:
      */
     bool initWithImageFileThreadSafe(std::string_view fullpath);
 
-    bool initWithImageData(uint8_t* data, ssize_t dataLen, bool ownData);
-
     Format detectFormat(const uint8_t* data, ssize_t dataLen);
     bool isPng(const uint8_t* data, ssize_t dataLen);
     bool isJpg(const uint8_t* data, ssize_t dataLen);

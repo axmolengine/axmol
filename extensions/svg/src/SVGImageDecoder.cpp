@@ -68,5 +68,5 @@ bool decodeSVG(const uint8_t* data, ssize_t dataLen, ax::ImageLoader::DecodedIma
 
 void ax::svg::registerImageDecoder()
 {
-    ax::ImageLoader::registerDecoder("svg", decodeSVG);
+    ax::ImageLoader::registerDecoder(".svg", decodeSVG);
 }
