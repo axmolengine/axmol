@@ -89,7 +89,7 @@ void AppDelegate::applicationWillLaunch()
 bool AppDelegate::applicationDidFinishLaunching()
 {
 #ifdef AX_ENABLE_EXT_SVG
-    ax::svg::registerImageDecoder();
+    ax::ext::registerSVGImageDecoder();
 #endif
 
     // whether enable global SDF font render support, since axmol-2.0.1

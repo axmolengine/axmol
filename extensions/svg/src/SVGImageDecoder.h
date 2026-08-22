@@ -29,4 +29,4 @@ namespace ax::ext
 /** Registers the SVG image decoder with Axmol's image decoder registry. */
 void registerSVGImageDecoder();
 
-}  // namespace ax::svg
+}  // namespace ax::ext
