@@ -434,6 +434,9 @@ if(AX_ENABLE_EXT_SVG)
       "USE_SYSTEM_PLUTOVG OFF"
       "LUNASVG_BUILD_EXAMPLES OFF"
   )
+  if(TARGET plutovg)
+    set_property(TARGET plutovg PROPERTY AX_SKIP_SDK_EXPORT ON)
+  endif()
 endif()
 
 # yasio
