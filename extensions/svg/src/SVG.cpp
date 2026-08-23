@@ -51,9 +51,10 @@ std::string makeTextureKey(std::string_view path, int width, int height)
     key += std::to_string(height);
     return key;
 }
-}
+}  // namespace
 
-NS_AX_EXT_BEGIN
+namespace ax::ext
+{
 
 Texture2D* loadSVGTexture(std::string_view path, int width, int height)
 {
@@ -118,8 +119,8 @@ Texture2D* loadSVGTexture(std::string_view path, int width, int height)
     const auto* source = bitmap.data();
     for (int y = 0; y < bitmapHeight; ++y)
     {
-        memcpy(pixelData + static_cast<size_t>(y) * bitmapWidth * 4,
-               source + static_cast<size_t>(y) * bitmapStride, static_cast<size_t>(bitmapWidth) * 4);
+        memcpy(pixelData + static_cast<size_t>(y) * bitmapWidth * 4, source + static_cast<size_t>(y) * bitmapStride,
+               static_cast<size_t>(bitmapWidth) * 4);
     }
 
     auto* image = new Image();
@@ -141,4 +142,4 @@ Sprite* createSVGSprite(std::string_view path, int width, int height)
     return texture ? Sprite::createWithTexture(texture) : nullptr;
 }
 
-NS_AX_EXT_END
+}  // namespace ax::ext

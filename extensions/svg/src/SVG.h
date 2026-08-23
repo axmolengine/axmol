@@ -32,11 +32,12 @@ namespace ax
 {
 class Sprite;
 class Texture2D;
-}
 
-NS_AX_EXT_BEGIN
+namespace ext
+{
 
 AX_EXT_API Texture2D* loadSVGTexture(std::string_view path, int width = -1, int height = -1);
 AX_EXT_API Sprite* createSVGSprite(std::string_view path, int width = -1, int height = -1);
 
-NS_AX_EXT_END
+}  // namespace ext
+}  // namespace ax
