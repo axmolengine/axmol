@@ -35,10 +35,6 @@
 #include "axmol/tlx/charconv.hpp"
 #include "axmol/platform/CommandLineArgs.h"
 
-#ifdef AX_ENABLE_EXT_SVG
-#    include "SVGImageDecoder.h"
-#endif
-
 #include <system_error>
 
 using namespace ax;
@@ -88,10 +84,6 @@ void AppDelegate::applicationWillLaunch()
 
 bool AppDelegate::applicationDidFinishLaunching()
 {
-#ifdef AX_ENABLE_EXT_SVG
-    ax::ext::registerSVGImageDecoder();
-#endif
-
     // whether enable global SDF font render support, since axmol-2.0.1
     FontFreeType::setGlobalSDFEnabled(true);
 

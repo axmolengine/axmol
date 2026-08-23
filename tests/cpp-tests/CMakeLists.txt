@@ -459,6 +459,10 @@ target_link_libraries(${APP_NAME} ${_AX_CORE_LIB})
 
 target_include_directories(${APP_NAME} PRIVATE ${GAME_INC_DIRS})
 
+if(AX_ENABLE_EXT_SVG)
+  target_compile_definitions(${APP_NAME} PRIVATE AX_ENABLE_EXT_SVG=1)
+endif()
+
 if(AX_ENABLE_EXT_EFFEKSEER)
   target_compile_definitions(${APP_NAME} PRIVATE AX_ENABLE_EXT_EFFEKSEER=1)
   target_link_libraries(${APP_NAME} EffekseerAxmol)

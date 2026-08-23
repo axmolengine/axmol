@@ -87,6 +87,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
   ax_config_pred(${APP_NAME} AX_ENABLE_AUDIO)
   ax_config_pred(${APP_NAME} AX_ENABLE_VR)
   ax_config_pred(${APP_NAME} AX_ENABLE_OPENXR)
+  ax_config_pred(${APP_NAME} AX_ENABLE_EXT_SVG)
   # compile defines can't inherit when link prebuilts, so need to apply the
   # profiler backend define manually — mirrors the logic in axmol/CMakeLists.txt
   ax_apply_profiler_backend(${APP_NAME} PRIVATE)

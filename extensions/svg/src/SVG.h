@@ -23,10 +23,20 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-namespace ax::ext
+#include "extensions/ExtensionExport.h"
+#include "extensions/ExtensionMacros.h"
+
+#include <string_view>
+
+namespace ax
 {
+class Sprite;
+class Texture2D;
+}
 
-/** Registers the SVG image decoder with Axmol's image decoder registry. */
-void registerSVGImageDecoder();
+NS_AX_EXT_BEGIN
 
-}  // namespace ax::ext
+AX_EXT_API Texture2D* loadSVGTexture(std::string_view path, int width = -1, int height = -1);
+AX_EXT_API Sprite* createSVGSprite(std::string_view path, int width = -1, int height = -1);
+
+NS_AX_EXT_END

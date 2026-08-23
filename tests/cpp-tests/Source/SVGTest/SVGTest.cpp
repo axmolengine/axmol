@@ -23,6 +23,7 @@
  ****************************************************************************/
 
 #include "SVGTest.h"
+#include "SVG.h"
 
 #include <cmath>
 #include <algorithm>
@@ -77,11 +78,11 @@ void SVG::addNewSpriteWithCoords(Vec2 p)
     ax::Sprite* sprite;
     if (AXRANDOM_MINUS1_1() > 0.5f)
     {
-        sprite = Sprite::create("SVGs/camera.svg");
+        sprite = ax::ext::createSVGSprite("SVGs/camera.svg");
         sprite->setScale(0.5f);
     }
     else
-        sprite = Sprite::create("SVGs/splash.svg");
+        sprite = ax::ext::createSVGSprite("SVGs/splash.svg");
 
     addChild(sprite);
     sprite->setPosition(Vec2(p.x, p.y));
@@ -117,7 +118,7 @@ SVG1::SVG1()
     listener->onPointerDown = AX_CALLBACK_1(SVG1::onPointerDown, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
-    auto BatchNode = SpriteBatchNode::create("SVGs/camera.svg");
+    auto BatchNode = SpriteBatchNode::createWithTexture(ax::ext::loadSVGTexture("SVGs/camera.svg"));
     addChild(BatchNode, 0, kTagSpriteBatchNode);
 
     auto s = Director::getInstance()->getCanvasSize();

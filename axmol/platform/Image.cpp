@@ -26,7 +26,6 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "axmol/platform/Image.h"
-#include "axmol/platform/ImageLoader.h"
 #include "axmol/rhi/RHIUtils.h"
 
 #include <string>
@@ -759,22 +758,6 @@ bool Image::initWithImageData(uint8_t* data, ssize_t dataLen, bool ownData)
             free(tgaData);
             break;
         }
-        }
-
-        if (!ret && !_filePath.empty())
-        {
-            ImageLoader::DecodedImage decoded;
-            const auto extension = FileUtils::getPathExtension(_filePath);
-            if (ImageLoader::decode(extension, unpackedData, unpackedLen, decoded))
-            {
-                _data                  = decoded.data.takeBuffer(&_dataSize);
-                _width                 = decoded.width;
-                _height                = decoded.height;
-                _pixelFormat           = decoded.pixelFormat;
-                _hasPremultipliedAlpha = decoded.premultipliedAlpha;
-                _fileType              = Format::RAW_DATA;
-                ret                    = _data != nullptr;
-            }
         }
 
         if (!ret)

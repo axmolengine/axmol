@@ -1,8 +1,8 @@
 set(target_name svg)
 
 add_library(${target_name} STATIC
-  src/SVGImageDecoder.h
-  src/SVGImageDecoder.cpp
+  src/SVG.h
+  src/SVG.cpp
 )
 
 target_include_directories(${target_name}

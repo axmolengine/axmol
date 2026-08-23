@@ -450,7 +450,6 @@ ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_VR)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_OPENXR)
 ax_config_pred(${_AX_CORE_LIB} AX_CORE_PROFILE)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_WAYLAND)
-ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_EXT_SVG)
 
 ax_config_pred1(${_AX_CORE_LIB} AX_ENABLE_D3D11)
 ax_config_pred1(${_AX_CORE_LIB} AX_ENABLE_D3D12)
