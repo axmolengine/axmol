@@ -34,6 +34,7 @@ THE SOFTWARE.
 
 #include "axmol/tlx/utility.hpp"
 #include "axmol/base/Config.h"  // AX_USE_JPEG, AX_USE_WEBP
+
 #define STBI_NO_JPEG
 #define STBI_NO_PNG
 #define STBI_NO_GIF
@@ -754,14 +755,15 @@ bool Image::initWithImageData(uint8_t* data, ssize_t dataLen, bool ownData)
             {
                 ret = initWithTGAData(tgaData);
             }
+            else
+            {
+                AXLOGW("unsupported image format!");
+            }
 
             free(tgaData);
             break;
         }
         }
-
-        if (!ret)
-            AXLOGW("unsupported image format!");
 
         if (_data != unpackedData && ownData)
             free(unpackedData);

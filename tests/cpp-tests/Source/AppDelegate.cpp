@@ -34,7 +34,6 @@
 #include "axmol/rhi/GraphicsCore.h"
 #include "axmol/tlx/charconv.hpp"
 #include "axmol/platform/CommandLineArgs.h"
-
 #include <system_error>
 
 using namespace ax;
