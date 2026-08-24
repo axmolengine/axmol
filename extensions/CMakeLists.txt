@@ -122,6 +122,10 @@ if(AX_ENABLE_EXT_JSONDEFAULT)
   add_subdirectory(JSONDefault)
 endif()
 
+if(AX_ENABLE_EXT_SVG)
+  add_subdirectory(svg)
+endif()
+
 if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/local.cmake")
     include("${CMAKE_CURRENT_LIST_DIR}/local.cmake")
 endif()

@@ -31,6 +31,9 @@
     "openxr": {
       "sources": { "origin": "https://github.com/KhronosGroup/OpenXR-SDK.git" }
     },
+    "lunasvg": {
+      "sources": { "origin": "https://github.com/sammycage/lunasvg.git" }
+    },
     "sample-assets": {
       "sources": {
         "origin": "https://github.com/axmolengine/axmol-sample-assets.git",

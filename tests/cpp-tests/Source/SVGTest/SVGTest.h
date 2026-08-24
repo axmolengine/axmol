@@ -1,5 +1,5 @@
 /****************************************************************************
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md)
 
  https://axmol.dev/
 
@@ -22,26 +22,35 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#pragma once
+#ifndef _SVG_TEST_H_
+#define _SVG_TEST_H_
 
-#include "ExtensionMacros.h"
+#include "axmol/axmol.h"
+#include "../BaseTest.h"
+#include <string>
 
-#include "GUI/src/GUI/ScrollView/ScrollView.h"
-#include "GUI/src/GUI/ScrollView/TableView.h"
+DEFINE_TEST_SUITE(SVGTests);
 
-// Physics integration
-#include "physics-nodes/src/physics-nodes/PhysicsDebugNode.h"
-#include "physics-nodes/src/physics-nodes/PhysicsSprite.h"
+class SVG : public TestCase
+{
+public:
+    CREATE_FUNC(SVG);
+    SVG();
+    void addNewSpriteWithCoords(ax::Vec2 p);
+    virtual bool onPointerDown(ax::PointerEvent* event);
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+};
 
-#include "assets-manager/src/assets-manager/AssetsManager.h"
-#include "assets-manager/src/assets-manager/AssetsManagerEx.h"
-#include "assets-manager/src/assets-manager/EventAssetsManagerEx.h"
-#include "assets-manager/src/assets-manager/EventListenerAssetsManagerEx.h"
-#include "assets-manager/src/assets-manager/Manifest.h"
+class SVG1 : public TestCase
+{
+public:
+    CREATE_FUNC(SVG1);
+    SVG1();
+    void addNewSpriteWithCoords(ax::Vec2 p);
+    virtual bool onPointerDown(ax::PointerEvent* event);
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+};
 
-// Particle System, include Particle Universe Particle System
-#include "Particle3D/src/Particle3D/Particle3DRender.h"
-#include "Particle3D/src/Particle3D/ParticleSystem3D.h"
-#include "Particle3D/src/Particle3D/PU/PUParticleSystem3D.h"
-
-#include "svg/src/SVG.h"
+#endif

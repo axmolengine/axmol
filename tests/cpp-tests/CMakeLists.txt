@@ -350,6 +350,15 @@ list(APPEND GAME_SOURCE
   Source/ZipTest/ZipTests.cpp
 )
 
+if(AX_ENABLE_EXT_SVG)
+  list(APPEND GAME_HEADER
+    Source/SVGTest/SVGTest.h
+  )
+  list(APPEND GAME_SOURCE
+    Source/SVGTest/SVGTest.cpp
+  )
+endif()
+
 if(AX_ENABLE_VIDEO)
   list(APPEND GAME_HEADER
     Source/UITest/CocoStudioGUITest/UIVideoPlayerTest/UIVideoPlayerTest.h)
@@ -449,6 +458,10 @@ endif()
 target_link_libraries(${APP_NAME} ${_AX_CORE_LIB})
 
 target_include_directories(${APP_NAME} PRIVATE ${GAME_INC_DIRS})
+
+if(AX_ENABLE_EXT_SVG)
+  target_compile_definitions(${APP_NAME} PRIVATE AX_ENABLE_EXT_SVG=1)
+endif()
 
 if(AX_ENABLE_EXT_EFFEKSEER)
   target_compile_definitions(${APP_NAME} PRIVATE AX_ENABLE_EXT_EFFEKSEER=1)
