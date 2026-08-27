@@ -151,7 +151,7 @@ void Slider::initRenderNode()
 
     const auto globalZOrder = getGlobalZOrder();
 
-    _slidBallNormalRenderer  = Sprite::create();
+    _slidBallNormalRenderer = Sprite::create();
     _slidBallNormalRenderer->setGlobalZOrder(globalZOrder);
 
     _slidBallPressedRenderer = Sprite::create();
