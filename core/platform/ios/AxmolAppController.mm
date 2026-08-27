@@ -48,7 +48,7 @@ configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession
     }
     
     // Fallback is to create the configuration programmatically
-    UISceneConfiguration *config = [[UISceneConfiguration alloc] initWithName:@"AxmolDefaultConfiguration"
+    UISceneConfiguration *config = [[UISceneConfiguration alloc] initWithName:@"Default Configuration"
                                                                   sessionRole:connectingSceneSession.role];
     
     config.delegateClass = [AxmolSceneDelegate class];
