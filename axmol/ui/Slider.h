@@ -278,6 +278,8 @@ public:
     ResourceData getBallDisabledFile();
 
     bool init() override;
+    
+    void setGlobalZOrder(float globalZOrder) override;
 
 protected:
     void initRenderNode() override;
