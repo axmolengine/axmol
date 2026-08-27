@@ -33,7 +33,6 @@
     configurationForConnectingSceneSession:(UISceneSession*)connectingSceneSession
                                    options:(UISceneConnectionOptions*)options API_AVAILABLE(ios(13.0))
 {
-
     // Attempt to read the configuration from the project Info.plist
     if ([connectingSceneSession.configuration.name isEqualToString:@"Default Configuration"])
     {
@@ -41,7 +40,7 @@
     }
 
     // Fallback is to create the configuration programmatically
-    UISceneConfiguration* config = [[UISceneConfiguration alloc] initWithName:@"AxmolDefaultConfiguration"
+    UISceneConfiguration* config = [[UISceneConfiguration alloc] initWithName:@"Default Configuration"
                                                                   sessionRole:connectingSceneSession.role];
 
     config.delegateClass = [AxmolSceneDelegate class];
