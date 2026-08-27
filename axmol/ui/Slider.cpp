@@ -123,6 +123,20 @@ bool Slider::init()
     return false;
 }
 
+void Slider::setGlobalZOrder(float globalZOrder)
+{
+    Widget::setGlobalZOrder(globalZOrder);
+
+    if (_slidBallNormalRenderer)
+        _slidBallNormalRenderer->setGlobalZOrder(globalZOrder);
+
+    if (_slidBallPressedRenderer)
+        _slidBallPressedRenderer->setGlobalZOrder(globalZOrder);
+
+    if (_slidBallDisabledRenderer)
+        _slidBallDisabledRenderer->setGlobalZOrder(globalZOrder);
+}
+
 void Slider::initRenderNode()
 {
     _barRenderer         = Scale9Sprite::create();
@@ -135,11 +149,18 @@ void Slider::initRenderNode()
     addProtectedChild(_barRenderer, BASEBAR_RENDERER_Z, -1);
     addProtectedChild(_progressBarRenderer, PROGRESSBAR_RENDERER_Z, -1);
 
-    _slidBallNormalRenderer  = Sprite::create();
+    const auto globalZOrder = getGlobalZOrder();
+
+    _slidBallNormalRenderer = Sprite::create();
+    _slidBallNormalRenderer->setGlobalZOrder(globalZOrder);
+
     _slidBallPressedRenderer = Sprite::create();
     _slidBallPressedRenderer->setVisible(false);
+    _slidBallPressedRenderer->setGlobalZOrder(globalZOrder);
+
     _slidBallDisabledRenderer = Sprite::create();
     _slidBallDisabledRenderer->setVisible(false);
+    _slidBallDisabledRenderer->setGlobalZOrder(globalZOrder);
 
     _slidBallRenderer = Node::create();
 
