@@ -280,6 +280,8 @@ public:
 
     virtual bool init() override;
 
+    void setGlobalZOrder(float globalZOrder) override;
+
 protected:
     virtual void initRenderer() override;
     float getPercentWithBallPos(const Vec2& pt) const;
