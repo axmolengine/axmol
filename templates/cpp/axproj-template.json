@@ -124,12 +124,12 @@
     "do_mode_3d": [
         {
             "action": "cp",
-            "from": "$env:AX_ROOT/templates/cpp/3d/Source/MainScene.h",
+            "from": "$env:AX_ROOT/templates/3d/cpp/Source/MainScene.h",
             "to": "${projectDir}/Source/MainScene.h"
         },
         {
             "action": "cp",
-            "from": "$env:AX_ROOT/templates/cpp/3d/Source/MainScene.cpp",
+            "from": "$env:AX_ROOT/templates/3d/cpp/Source/MainScene.cpp",
             "to": "${projectDir}/Source/MainScene.cpp"
         }
     ]

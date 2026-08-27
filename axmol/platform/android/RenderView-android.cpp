@@ -33,7 +33,7 @@ THE SOFTWARE.
 #    include "axmol/platform/GL.h"
 #endif
 #if AX_ENABLE_VK
-#    include "axmol/rhi/vulkan/DriverVK.h"
+#    include "axmol/rhi/vulkan/GraphicsDeviceVK.h"
 #endif
 
 #include "axmol/rhi/GraphicsCore.h"
@@ -110,7 +110,7 @@ bool RenderView::initWithRect(std::string_view /*viewName*/,
     updateRenderSurface(rect.size.width, rect.size.height, SurfaceUpdateFlag::AllUpdatesSilently);
 
     if (rhi::GraphicsCore::isOpenGL())
-        rhi::GraphicsCore::activateCurrentDriver();
+        rhi::GraphicsCore::activate();
     else if (rhi::GraphicsCore::isVulkan())
         recreateVkSurface(false);
 
@@ -140,7 +140,7 @@ void RenderView::recreateVkSurface(bool needUpdateRenderSurface)
         AXLOGW("recreateVkSurface: window size is 0, skip");
         return;
     }
-    auto driver = static_cast<ax::rhi::vk::DriverImpl*>(axdrv);
+    auto driver = static_cast<ax::rhi::vk::GraphicsDeviceImpl*>(axdrv);
     bool ok     = driver->recreateSurface(createInfo);
     if (!ok)
     {

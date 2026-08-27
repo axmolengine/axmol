@@ -174,7 +174,7 @@ public:
     virtual void setAnimationInterval(float interval) = 0;
 
     /**
-     * @brief Called before makeCurrentDriver(). Override to configure engine options
+     * @brief Called before initialize(). Override to configure engine options
      *        (driver preference, OpenXR support, context attributes, etc.).
      *
      * Example:
@@ -192,7 +192,7 @@ public:
     virtual void applicationWillLaunch() {}
 
     /**
-     * Registers a VulkanInterop for OpenXR before makeCurrentDriver().
+     * Registers a VulkanInterop for OpenXR before initialize().
      * Required for Vulkan; harmless for other backends.
      */
     bool registerVulkanInterop(std::string_view appName);

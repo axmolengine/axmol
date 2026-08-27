@@ -35,7 +35,7 @@ namespace ax::rhi::vk
 class DepthStencilStateImpl;
 class VertexLayoutImpl;
 class ProgramImpl;
-class DriverImpl;
+class GraphicsDeviceImpl;
 
 static constexpr int MAX_DESCRIPTOR_SETS      = 3;
 static constexpr int SET_INDEX_UBO            = 0;
@@ -160,7 +160,7 @@ protected:
 class RenderPipelineImpl : public RenderPipeline
 {
 public:
-    explicit RenderPipelineImpl(DriverImpl* driver);
+    explicit RenderPipelineImpl(GraphicsDeviceImpl* driver);
     ~RenderPipelineImpl();
 
     void prepareUpdate(DepthStencilStateImpl* ds) { _dsState = ds; }
@@ -177,7 +177,7 @@ public:
     void removeCachedObjects(Program* key);
 
 private:
-    void initializePipelineDefaults(DriverImpl* driver);
+    void initializePipelineDefaults(GraphicsDeviceImpl* driver);
 
     void updateBlendState(const BlendDesc& blendDesc, uint32_t colorAttachmentCount);
     void updatePipelineLayoutState(ProgramImpl* program);
@@ -190,7 +190,7 @@ private:
     void freeDescriptorStates(DescriptorAllocator& allocator, DescriptorList& descriptorStates, bool needResortPools);
 
 private:
-    DriverImpl* _driver{nullptr};
+    GraphicsDeviceImpl* _driver{nullptr};
     VkDevice _device{VK_NULL_HANDLE};
 
     const DepthStencilStateImpl* _dsState{nullptr};

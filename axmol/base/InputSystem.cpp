@@ -374,9 +374,9 @@ void InputSystem::dispatchEvent(Event* event, bool immediate)
 
 // Platform-facing unified input handlers ---------------------------------
 
-void InputSystem::handleKeyEvent(KeyboardEvent::KeyCode keyCode, InputPhase phase)
+void InputSystem::handleKeyEvent(KeyboardEvent::KeyCode keyCode, InputPhase phase, uint32_t modifiers)
 {
-    KeyboardEvent event(keyCode, phase);
+    KeyboardEvent event(keyCode, phase, modifiers);
     dispatchEvent(&event);
     bool stopped = event.isStopped();
 

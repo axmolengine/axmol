@@ -23,13 +23,14 @@
  ****************************************************************************/
 // refer: https://learn.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-semantics
 #include "axmol/rhi/d3d12/ShaderModule12.h"
-#include "axmol/rhi/d3d12/Driver12.h"
+#include "axmol/rhi/d3d12/GraphicsDevice12.h"
 #include "axmol/platform/msw/ComPtr.h"
 #include "axmol/base/Logging.h"
 
 namespace ax::rhi::d3d12
 {
-ShaderModuleImpl::ShaderModuleImpl(DriverImpl* driver, ShaderStage stage, Data& chunk) : ShaderModule(stage, chunk)
+ShaderModuleImpl::ShaderModuleImpl(GraphicsDeviceImpl* driver, ShaderStage stage, Data& chunk)
+    : ShaderModule(stage, chunk)
 {
     if (_precompiled)
     {

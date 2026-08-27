@@ -33,7 +33,7 @@ function(ax_setup_ext_config target_name)
   )
 
   if(WINRT)
-    set_property(TARGET ${target_name} PROPERTY VS_PROJECT_IMPORT ${CMAKE_BINARY_DIR}/packages/Microsoft.Windows.CppWinRT/build/native/Microsoft.Windows.CppWinRT.props)
+    set_property(TARGET ${target_name} PROPERTY VS_PROJECT_IMPORT ${_NUGET_PACKAGE_DIR}/Microsoft.Windows.CppWinRT/build/native/Microsoft.Windows.CppWinRT.props)
   endif()
 
   if(NOT opt_DNTLINK)
@@ -120,6 +120,10 @@ endif()
 
 if(AX_ENABLE_EXT_JSONDEFAULT)
   add_subdirectory(JSONDefault)
+endif()
+
+if(AX_ENABLE_EXT_SVG)
+  add_subdirectory(svg)
 endif()
 
 if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/local.cmake")

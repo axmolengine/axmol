@@ -633,6 +633,12 @@ public:
     void openKeyboard() const;
     void closeKeyboard() const;
 
+    /**
+     * Get the editing state of the EditBox
+     * @return true if editing
+     */
+    bool isEditing() const;
+
 protected:
     void releaseUpEvent() override;
 

@@ -1633,7 +1633,7 @@ int lua_ax_base_KeyboardEvent_getPhase(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_KeyboardEvent_constructor(lua_State* tolua_S)
+int lua_ax_base_KeyboardEvent_getModifiers(lua_State* tolua_S)
 {
     int argc = 0;
     ax::KeyboardEvent* obj = nullptr;
@@ -1644,29 +1644,95 @@ int lua_ax_base_KeyboardEvent_constructor(lua_State* tolua_S)
 #endif
 
 
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.KeyboardEvent",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::KeyboardEvent*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_KeyboardEvent_getModifiers'", nullptr);
+        return 0;
+    }
+#endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 2)
+    if (argc == 0)
     {
-        ax::KeyboardEvent::KeyCode arg0;
-        ax::InputPhase arg1;
-
-        ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.KeyboardEvent:KeyboardEvent");
-
-        ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.KeyboardEvent:KeyboardEvent");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_KeyboardEvent_constructor'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_KeyboardEvent_getModifiers'", nullptr);
             return 0;
         }
-        obj = new ax::KeyboardEvent(arg0, arg1);
-        obj->autorelease();
-        int ID =  (int)obj->_ID ;
-        int* luaID =  &obj->_luaID ;
-        toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.KeyboardEvent");
+        auto&& ret = obj->getModifiers();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.KeyboardEvent:KeyboardEvent",argc, 2);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.KeyboardEvent:getModifiers",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_KeyboardEvent_getModifiers'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_KeyboardEvent_constructor(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::KeyboardEvent* obj = nullptr;
+    bool ok  = true;
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    do {
+        if (argc == 3) {
+            ax::KeyboardEvent::KeyCode arg0;
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.KeyboardEvent:KeyboardEvent");
+
+            if (!ok) { break; }
+            ax::InputPhase arg1;
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.KeyboardEvent:KeyboardEvent");
+
+            if (!ok) { break; }
+            unsigned int arg2;
+            ok &= luaval_to_int(tolua_S, 4, &arg2, "ax.KeyboardEvent:KeyboardEvent");
+
+            if (!ok) { break; }
+            obj = new ax::KeyboardEvent(arg0, arg1, arg2);
+            obj->autorelease();
+            int ID =  (int)obj->_ID ;
+            int* luaID =  &obj->_luaID ;
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.KeyboardEvent");
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do {
+        if (argc == 2) {
+            ax::KeyboardEvent::KeyCode arg0;
+            ok &= luaval_to_int(tolua_S, 2, &arg0, "ax.KeyboardEvent:KeyboardEvent");
+
+            if (!ok) { break; }
+            ax::InputPhase arg1;
+            ok &= luaval_to_int(tolua_S, 3, &arg1, "ax.KeyboardEvent:KeyboardEvent");
+
+            if (!ok) { break; }
+            obj = new ax::KeyboardEvent(arg0, arg1);
+            obj->autorelease();
+            int ID =  (int)obj->_ID ;
+            int* luaID =  &obj->_luaID ;
+            toluafix_pushusertype_object(tolua_S, ID, luaID, (void*)obj,"ax.KeyboardEvent");
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.KeyboardEvent:KeyboardEvent",argc, 2);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -1691,6 +1757,7 @@ int lua_register_ax_base_KeyboardEvent(lua_State* tolua_S)
         tolua_function(tolua_S,"new",lua_ax_base_KeyboardEvent_constructor);
         tolua_function(tolua_S,"getKeyCode",lua_ax_base_KeyboardEvent_getKeyCode);
         tolua_function(tolua_S,"getPhase",lua_ax_base_KeyboardEvent_getPhase);
+        tolua_function(tolua_S,"getModifiers",lua_ax_base_KeyboardEvent_getModifiers);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::KeyboardEvent).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.KeyboardEvent";
@@ -102172,7 +102239,7 @@ int lua_ax_base_Renderer_getContext(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = obj->getContext();
-        object_to_luaval<ax::rhi::RenderContext>(tolua_S, "axr.RenderContext",(ax::rhi::RenderContext*)ret);
+        object_to_luaval<ax::rhi::GraphicsContext>(tolua_S, "axr.GraphicsContext",(ax::rhi::GraphicsContext*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Renderer:getContext",argc, 0);

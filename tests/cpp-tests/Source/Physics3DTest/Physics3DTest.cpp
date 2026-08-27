@@ -839,27 +839,27 @@ bool Physics3DCollisionCallbackDemo::init()
 
         auto contactListener            = ContactEventListener3D::create();
         contactListener->onCollisionHit = [this](ContactEvent3D* contactEvent) {
+            const auto& info = contactEvent->getContactInfo();
+
+            if (!info.points.empty())
+            {
+                const auto& point = info.points[0];
+
+                if (point.sideA.velocity && point.sideB.velocity)
+                {
+                    float impactSpeed = (*point.sideA.velocity - *point.sideB.velocity).dot(info.normal);
+                    AXLOGD("CollisionHit impact speed: {:.2f} (point {})", impactSpeed, info.points.size());
+                }
+            }
+
             auto ps = PUParticleSystem3D::create("Particle3D/scripts/mp_hit_04.pu");
-            ps->setPosition3D(contactEvent->getContactInfo().points[0].pointB);
+            ps->setPosition3D(contactEvent->getContactInfo().points[0].sideB.point);
             ps->setScale(0.05f);
             ps->startParticleSystem();
             ps->setCameraMask(2);
             this->addChild(ps);
             ps->runAction(Sequence::create(DelayTime::create(1.0f), CallFunc::create([=]() { ps->removeFromParent(); }),
                                            nullptr));
-
-            // AXLOGD("------------BoxB Collision Info------------");
-            // AXLOGD("Collision Point Num: {}", ci.collisionPointList.size());
-            // for (auto&& iter : ci.collisionPointList){
-            //	AXLOGD("Collision Position On A: ({:.2},{:.2}, {:.2})", iter.worldPositionOnA.x,
-            // iter.worldPositionOnA.y,
-            // iter.worldPositionOnA.z); 	AXLOGD("Collision Position On B: ({:.2}, {:.2}, {:.2})",
-            // iter.worldPositionOnB.x, iter.worldPositionOnB.y, iter.worldPositionOnB.z); AXLOGD("Collision
-            // Normal
-            // On B: ({:.2}, {:.2}, {:.2})", iter.worldNormalOnB.x, iter.worldNormalOnB.y,
-            // iter.worldNormalOnB.z);
-            // }
-            // AXLOGD("------------BoxB Collision Info------------");
         };
         _eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
     }

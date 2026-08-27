@@ -54,15 +54,15 @@
 // because openxr_platform.h uses types like ID3D11Device, VkInstance, etc.
 // without including their headers.)
 #if AX_ENABLE_D3D11 && defined(_WIN32)
-#    include "axmol/rhi/d3d11/Driver11.h"
+#    include "axmol/rhi/d3d11/GraphicsDevice11.h"
 #    include "axmol/rhi/d3d11/Texture11.h"
 #endif
 #if AX_ENABLE_D3D12 && defined(_WIN32)
-#    include "axmol/rhi/d3d12/Driver12.h"
+#    include "axmol/rhi/d3d12/GraphicsDevice12.h"
 #    include "axmol/rhi/d3d12/Texture12.h"
 #endif
 #if AX_ENABLE_VK
-#    include "axmol/rhi/vulkan/DriverVK.h"
+#    include "axmol/rhi/vulkan/GraphicsDeviceVK.h"
 #    include "axmol/rhi/vulkan/TextureVK.h"
 #endif
 #if AX_ENABLE_GL
@@ -664,7 +664,7 @@ bool OpenXRDriver::acquireSwapchains(std::vector<AcquiredSwapchain>& acquired)
         acq.renderTarget = _colorSwapchains[i].renderTargets[acq.index];
 
 #if AX_ENABLE_VK
-        if (acq.texture && rhi::GraphicsCore::currentDriverType() == rhi::DriverType::Vulkan)
+        if (acq.texture && rhi::GraphicsCore::backend() == rhi::GraphicsBackend::Vulkan)
         {
             static_cast<rhi::vk::TextureImpl*>(acq.texture)->setKnownLayout(VK_IMAGE_LAYOUT_UNDEFINED);
         }
@@ -774,7 +774,7 @@ static std::vector<const char*> getXrExtensions()
     // was compiled with.  XrInstance allows enabling multiple graphics extensions
     // simultaneously; the runtime only validates the actual one used in
     // xrCreateSession.  This avoids a circular dependency with GraphicsCore
-    // (the driver type isn't known until after makeCurrentDriver()).
+    // (the driver type isn't known until after initialize()).
 #if AX_ENABLE_D3D11
     if (hasExt(XR_KHR_D3D11_ENABLE_EXTENSION_NAME))
         extensions.push_back(XR_KHR_D3D11_ENABLE_EXTENSION_NAME);
@@ -1010,7 +1010,7 @@ bool OpenXRDriver::initXrSwapchains()
             return false;
         }
 
-        const auto driverType = rhi::GraphicsCore::currentDriverType();
+        const auto driverType = rhi::GraphicsCore::backend();
         rhi::TextureDesc colorDesc;
         colorDesc.width        = static_cast<uint16_t>(_colorSwapchains[i].width);
         colorDesc.height       = static_cast<uint16_t>(_colorSwapchains[i].height);
@@ -1022,7 +1022,7 @@ bool OpenXRDriver::initXrSwapchains()
         colorDesc.mipLevels    = 1;
 
 #if AX_ENABLE_D3D11
-        if (driverType == rhi::DriverType::D3D11)
+        if (driverType == rhi::GraphicsBackend::D3D11)
         {
             std::vector<XrSwapchainImageD3D11KHR> xrImages(imageCount, {XR_TYPE_SWAPCHAIN_IMAGE_D3D11_KHR});
             if (!checkXr(xrEnumerateSwapchainImages(_colorSwapchains[i].handle, imageCount, &imageCount,
@@ -1044,7 +1044,7 @@ bool OpenXRDriver::initXrSwapchains()
         else
 #endif
 #if AX_ENABLE_D3D12
-            if (driverType == rhi::DriverType::D3D12)
+            if (driverType == rhi::GraphicsBackend::D3D12)
         {
             std::vector<XrSwapchainImageD3D12KHR> xrImages(imageCount, {XR_TYPE_SWAPCHAIN_IMAGE_D3D12_KHR});
             if (!checkXr(xrEnumerateSwapchainImages(_colorSwapchains[i].handle, imageCount, &imageCount,
@@ -1068,7 +1068,7 @@ bool OpenXRDriver::initXrSwapchains()
         else
 #endif
 #if AX_ENABLE_VK
-            if (driverType == rhi::DriverType::Vulkan)
+            if (driverType == rhi::GraphicsBackend::Vulkan)
         {
             std::vector<XrSwapchainImageVulkanKHR> xrImages(imageCount, {XR_TYPE_SWAPCHAIN_IMAGE_VULKAN_KHR});
             if (!checkXr(xrEnumerateSwapchainImages(_colorSwapchains[i].handle, imageCount, &imageCount,
@@ -1093,7 +1093,7 @@ bool OpenXRDriver::initXrSwapchains()
         else
 #endif
 #if AX_ENABLE_GL
-            if (driverType == rhi::DriverType::OpenGL)
+            if (driverType == rhi::GraphicsBackend::OpenGL)
         {
 #    if AX_GLES_PROFILE && AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
             std::vector<XrSwapchainImageOpenGLESKHR> xrImages(imageCount, {XR_TYPE_SWAPCHAIN_IMAGE_OPENGL_ES_KHR});
@@ -2094,34 +2094,34 @@ const void* OpenXRDriver::createGraphicsBinding()
 {
     // We allocate a persistent structure and store the pointer.
     // This structure must remain valid for the lifetime of the session.
-    const auto driverType = rhi::GraphicsCore::currentDriverType();
+    const auto driverType = rhi::GraphicsCore::backend();
 
 #if AX_ENABLE_D3D11
-    if (driverType == rhi::DriverType::D3D11)
+    if (driverType == rhi::GraphicsBackend::D3D11)
     {
         auto storage            = new XrGraphicsBindingD3D11KHR{XR_TYPE_GRAPHICS_BINDING_D3D11_KHR};
-        storage->device         = static_cast<rhi::d3d11::DriverImpl*>(axdrv)->getDevice();
+        storage->device         = static_cast<rhi::d3d11::GraphicsDeviceImpl*>(axdrv)->getDevice();
         _graphicsBindingStorage = storage;
         return storage;
     }
 #endif
 
 #if AX_ENABLE_D3D12
-    if (driverType == rhi::DriverType::D3D12)
+    if (driverType == rhi::GraphicsBackend::D3D12)
     {
         auto storage            = new XrGraphicsBindingD3D12KHR{XR_TYPE_GRAPHICS_BINDING_D3D12_KHR};
-        storage->device         = static_cast<rhi::d3d12::DriverImpl*>(axdrv)->getDevice();
-        storage->queue          = static_cast<rhi::d3d12::DriverImpl*>(axdrv)->getGraphicsQueue();
+        storage->device         = static_cast<rhi::d3d12::GraphicsDeviceImpl*>(axdrv)->getDevice();
+        storage->queue          = static_cast<rhi::d3d12::GraphicsDeviceImpl*>(axdrv)->getGraphicsQueue();
         _graphicsBindingStorage = storage;
         return storage;
     }
 #endif
 
 #if AX_ENABLE_VK
-    if (driverType == rhi::DriverType::Vulkan)
+    if (driverType == rhi::GraphicsBackend::Vulkan)
     {
         auto storage              = new XrGraphicsBindingVulkanKHR{XR_TYPE_GRAPHICS_BINDING_VULKAN_KHR};
-        auto vkDriver             = static_cast<rhi::vk::DriverImpl*>(axdrv);
+        auto vkDriver             = static_cast<rhi::vk::GraphicsDeviceImpl*>(axdrv);
         storage->instance         = vkDriver->getInstance();
         storage->physicalDevice   = vkDriver->getPhysical();
         storage->device           = vkDriver->getDevice();
@@ -2133,7 +2133,7 @@ const void* OpenXRDriver::createGraphicsBinding()
 #endif
 
 #if AX_ENABLE_GL
-    if (driverType == rhi::DriverType::OpenGL)
+    if (driverType == rhi::GraphicsBackend::OpenGL)
     {
 #    if AX_GLES_PROFILE && AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
         EGLDisplay display = eglGetCurrentDisplay();
@@ -2183,7 +2183,7 @@ const void* OpenXRDriver::createGraphicsBinding()
 bool OpenXRDriver::checkVulkanGraphicsDevice()
 {
 #if AX_ENABLE_VK
-    auto vkDriver = static_cast<rhi::vk::DriverImpl*>(axdrv);
+    auto vkDriver = static_cast<rhi::vk::GraphicsDeviceImpl*>(axdrv);
     if (!vkDriver || vkDriver->getInstance() == VK_NULL_HANDLE || vkDriver->getPhysical() == VK_NULL_HANDLE)
     {
         AXLOGW("[OpenXR] Vulkan graphics device check failed: RHI Vulkan instance or physical device is null");
@@ -2220,10 +2220,10 @@ bool OpenXRDriver::checkVulkanGraphicsDevice()
 
 bool OpenXRDriver::checkGraphicsRequirements()
 {
-    const auto driverType = rhi::GraphicsCore::currentDriverType();
+    const auto driverType = rhi::GraphicsCore::backend();
 
 #if AX_ENABLE_D3D11
-    if (driverType == rhi::DriverType::D3D11)
+    if (driverType == rhi::GraphicsBackend::D3D11)
     {
         PFN_xrGetD3D11GraphicsRequirementsKHR getRequirements = nullptr;
         if (!checkXr(xrGetInstanceProcAddr(_xrInstance, "xrGetD3D11GraphicsRequirementsKHR",
@@ -2237,7 +2237,7 @@ bool OpenXRDriver::checkGraphicsRequirements()
 #endif
 
 #if AX_ENABLE_D3D12
-    if (driverType == rhi::DriverType::D3D12)
+    if (driverType == rhi::GraphicsBackend::D3D12)
     {
         PFN_xrGetD3D12GraphicsRequirementsKHR getRequirements = nullptr;
         if (!checkXr(xrGetInstanceProcAddr(_xrInstance, "xrGetD3D12GraphicsRequirementsKHR",
@@ -2251,7 +2251,7 @@ bool OpenXRDriver::checkGraphicsRequirements()
 #endif
 
 #if AX_ENABLE_VK
-    if (driverType == rhi::DriverType::Vulkan)
+    if (driverType == rhi::GraphicsBackend::Vulkan)
     {
         PFN_xrGetVulkanGraphicsRequirementsKHR getRequirements = nullptr;
         if (!checkXr(xrGetInstanceProcAddr(_xrInstance, "xrGetVulkanGraphicsRequirementsKHR",
@@ -2268,7 +2268,7 @@ bool OpenXRDriver::checkGraphicsRequirements()
 #endif
 
 #if AX_ENABLE_GL
-    if (driverType == rhi::DriverType::OpenGL)
+    if (driverType == rhi::GraphicsBackend::OpenGL)
     {
 #    if AX_GLES_PROFILE && AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
         PFN_xrGetOpenGLESGraphicsRequirementsKHR getRequirements = nullptr;

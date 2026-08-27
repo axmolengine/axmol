@@ -145,7 +145,7 @@ void EditBoxImplAndroid::setNativeTextHorizontalAlignment(ax::TextHAlignment ali
 
 bool EditBoxImplAndroid::isEditing()
 {
-    return false;
+    return _editingMode;
 }
 
 void EditBoxImplAndroid::setNativeText(std::string_view text)

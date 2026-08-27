@@ -50,16 +50,16 @@ The RenderView for win32,linux,macos,wasm
 
 #if AX_ENABLE_MTL
 #    include <Metal/Metal.h>
-#    include "axmol/rhi/metal/DriverMTL.h"
+#    include "axmol/rhi/metal/GraphicsDeviceMTL.h"
 #    include "axmol/rhi/metal/UtilsMTL.h"
 #endif
 #if AX_ENABLE_GL
-#    include "axmol/rhi/opengl/DriverGL.h"
+#    include "axmol/rhi/opengl/GraphicsDeviceGL.h"
 #    include "axmol/rhi/opengl/MacrosGL.h"
 #    include "axmol/rhi/opengl/OpenGLState.h"
 #endif
 #if AX_ENABLE_VK
-#    include "axmol/rhi/vulkan/DriverVK.h"
+#    include "axmol/rhi/vulkan/GraphicsDeviceVK.h"
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
 
 #include "axmol/rhi/GraphicsCore.h"
@@ -401,6 +401,48 @@ static constexpr KeyCodeItem s_keyCodeItems[] = {
     {GLFW_KEY_MENU, KeyboardEvent::KeyCode::KEY_MENU},
     {GLFW_KEY_LAST, KeyboardEvent::KeyCode::KEY_NONE}};
 
+static uint32_t mapModifiers(int glfwMods)
+{
+    if (glfwMods == 0)
+        return 0;
+
+    uint32_t result = 0;
+
+    if ((glfwMods & GLFW_MOD_CONTROL) != 0)
+    {
+        result |= EventKeyboard::KeyModifier::CONTROL;
+    }
+
+    if ((glfwMods & GLFW_MOD_ALT) != 0)
+    {
+        result |= EventKeyboard::KeyModifier::ALT;
+    }
+
+    if ((glfwMods & GLFW_MOD_SHIFT) != 0)
+    {
+        result |= EventKeyboard::KeyModifier::SHIFT;
+    }
+
+    if ((glfwMods & GLFW_MOD_SUPER) != 0)
+    {
+        result |= EventKeyboard::KeyModifier::SUPER;
+    }
+
+    // GLFW_MOD_CAPS_LOCK and GLFW_MOD_NUM_LOCK require
+    // GLFW_LOCK_KEY_MODS input mode to be set
+    if ((glfwMods & GLFW_MOD_CAPS_LOCK) != 0)
+    {
+        result |= EventKeyboard::KeyModifier::CAPS_LOCK;
+    }
+
+    if ((glfwMods & GLFW_MOD_NUM_LOCK) != 0)
+    {
+        result |= EventKeyboard::KeyModifier::NUM_LOCK;
+    }
+
+    return result;
+}
+
 // wasm input bridge
 #if defined(__EMSCRIPTEN__)
 extern "C" {
@@ -448,6 +490,12 @@ axmol_onwebpointerevent(int type, int id, float x, float y, float pressure, int 
         button = 2;  // Axmol Middle
     else if (button == 2)
         button = 1;  // Axmol Right
+
+    // Touch contacts carry no mouse-style button index. Match Android's touch stream:
+    // down/up use InputButton::None (-1) so the captured touch-move lookup in
+    // EventDispatcher (keyed on InputButton::None) finds the listener.
+    if (mappedType == ax::PointerType::Touch)
+        button = ax::InputButton::None;
 
     // Assemble the modernized cohesive PointerInputState
     // W3C Pointer Events button values are aligned with both GLFW mouse button indices and Axmol’s InputButton
@@ -863,15 +911,15 @@ void* RenderView::getNativeWindow() const
 
 SurfaceHandle RenderView::getNativeDisplay() const
 {
-    auto driverType = GraphicsCore::currentDriverType();
-    if (driverType == DriverType::Vulkan)
+    auto driverType = GraphicsCore::backend();
+    if (driverType == rhi::GraphicsBackend::Vulkan)
         return _vkSurface;
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
     return glfwGetWin32Window(_mainWindow);
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_MAC
-    return driverType == DriverType::Metal ? (void*)glfwGetCocoaView(_mainWindow)
-                                           : (void*)glfwGetNSGLContext(_mainWindow);
+    return driverType == rhi::GraphicsBackend::Metal ? (void*)glfwGetCocoaView(_mainWindow)
+                                                     : (void*)glfwGetNSGLContext(_mainWindow);
     return (void*)glfwGetNSGLContext(_mainWindow);
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
 #    if defined(AX_ENABLE_WAYLAND)
@@ -970,7 +1018,7 @@ bool RenderView::initWithRect(std::string_view viewName, const ax::Rect& rect, f
     // If any of the high-performance APIs (D3D11/D3D12/Vulkan/Metal) are enabled,
     // the runtime will attempt initialization in the default priority order.
     // If all attempts fail, OpenGL will then be explicitly selected as the fallback.
-    GraphicsCore::makeCurrentDriver();
+    GraphicsCore::initialize();
     const auto fallbackGL = GraphicsCore::isOpenGL();
     if (fallbackGL)
     {
@@ -1041,7 +1089,7 @@ bool RenderView::initWithRect(std::string_view viewName, const ax::Rect& rect, f
     if (fallbackGL)
     {
         glfwMakeContextCurrent(_mainWindow);
-        GraphicsCore::activateCurrentDriver();
+        GraphicsCore::activate();
 
         glfwSetWindowUserPointer(_mainWindow, gl::__state);
     }
@@ -1071,7 +1119,7 @@ bool RenderView::initWithRect(std::string_view viewName, const ax::Rect& rect, f
         auto _createSurface = [](VkInstance inst, void* window, VkSurfaceKHR* surface) {
             return glfwCreateWindowSurface(inst, static_cast<GLFWwindow*>(window), nullptr, surface);
         };
-        auto driver = static_cast<vk::DriverImpl*>(axdrv);
+        auto driver = static_cast<vk::GraphicsDeviceImpl*>(axdrv);
         const vk::SurfaceCreateInfo createInfo{
             .window = _mainWindow, .width = fbWidth, .height = fbHeight, .createFunc = _createSurface};
         bool ok = driver->recreateSurface(createInfo);
@@ -1710,9 +1758,11 @@ void RenderView::onGLFWMouseScrollCallback(GLFWwindow* window, double x, double 
 }
 #endif
 
-void RenderView::onGLFWKeyCallback(GLFWwindow* /*window*/, int key, int /*scancode*/, int action, int /*mods*/)
+void RenderView::onGLFWKeyCallback(GLFWwindow* /*window*/, int key, int /*scancode*/, int action, int mods)
 {
-    auto keyCode = _keyCodeMap[key];
+    auto keyCode         = _keyCodeMap[key];
+    auto mappedModifiers = mapModifiers(mods);
+
 #if defined(__EMSCRIPTEN__)
     if (isWebInputFieldProxyFocused() && keyCode == KeyboardEvent::KeyCode::KEY_BACKSPACE)
         return;
@@ -1732,7 +1782,7 @@ void RenderView::onGLFWKeyCallback(GLFWwindow* /*window*/, int key, int /*scanco
         break;
     }
 
-    InputSystem::getInstance()->handleKeyEvent(keyCode, phase);
+    InputSystem::getInstance()->handleKeyEvent(keyCode, phase, mappedModifiers);
 }
 
 void RenderView::onGLFWCharCallback(GLFWwindow* /*window*/, unsigned int charCode)

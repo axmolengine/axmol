@@ -63,6 +63,9 @@ public:
     /** @since axmol-3.0, returns the objective-c UIWindow instance */
     void* getNativeWindow() const override { return _hostWindowHandle; }
 
+    /** @since axmol-3.0, sets the objective-c UIWindow instance */
+    void setNativeWindow(void* window) { _hostWindowHandle = window; }
+
     /** @since axmol-3.0, returns the objective-c EARenderView instance */
     SurfaceHandle getNativeDisplay() const override { return _hostViewHandle; }
 

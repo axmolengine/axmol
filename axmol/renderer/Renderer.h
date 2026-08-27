@@ -49,7 +49,7 @@ using SurfaceHandle = rhi::SurfaceHandle;
 namespace rhi
 {
 class Buffer;
-class RenderContext;
+class GraphicsContext;
 class RenderPipeline;
 class RenderPass;
 class Texture;
@@ -410,7 +410,7 @@ public:
     bool getScissorTest() const;                ///< Get whether scissor test is enabled or not.
     const ScissorRect& getScissorRect() const;  ///< Get scissor rectangle.
 
-    rhi::RenderContext* getContext() const { return _context; }
+    rhi::GraphicsContext* getContext() const { return _context; }
 
     /** returns whether or not a rectangle is visible or not */
     bool checkVisibility(const Mat4& transform, const Vec2& size);
@@ -524,7 +524,7 @@ protected:
     rhi::Buffer* _indexBuffer  = nullptr;
     TriangleCommandBufferManager _triangleCommandBufferManager;
 
-    rhi::RenderContext* _context = nullptr;
+    rhi::GraphicsContext* _context = nullptr;
     rhi::RenderPassDesc _renderPassDesc;
 
     rhi::DepthStencilState* _depthStencilState = nullptr;

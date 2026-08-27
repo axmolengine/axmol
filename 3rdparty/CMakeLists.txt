@@ -425,6 +425,20 @@ if(AX_WITH_TRACY)
   ax_add_3rd(${tracy_SOURCE_DIR} TARGETS TracyClient)
 endif()
 
+# SVG
+if(AX_ENABLE_EXT_SVG)
+  _1kfetch(lunasvg)
+  ax_add_3rd(${lunasvg_SOURCE_DIR}
+    TARGETS lunasvg
+    OPTIONS
+      "USE_SYSTEM_PLUTOVG OFF"
+      "LUNASVG_BUILD_EXAMPLES OFF"
+  )
+  if(TARGET plutovg)
+    set_property(TARGET plutovg PROPERTY AX_SKIP_SDK_EXPORT ON)
+  endif()
+endif()
+
 # yasio
 ax_add_3rd(yasio)
 

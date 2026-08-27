@@ -23,7 +23,7 @@
  ****************************************************************************/
 // refer: https://learn.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-semantics
 #include "axmol/rhi/d3d11/ShaderModule11.h"
-#include "axmol/rhi/d3d11/Driver11.h"
+#include "axmol/rhi/d3d11/GraphicsDevice11.h"
 #include "axmol/platform/msw/ComPtr.h"
 #include "axmol/base/Logging.h"
 
@@ -31,7 +31,8 @@
 
 namespace ax::rhi::d3d11
 {
-ShaderModuleImpl::ShaderModuleImpl(DriverImpl* driver, ShaderStage stage, Data& data) : ShaderModule(stage, data)
+ShaderModuleImpl::ShaderModuleImpl(GraphicsDeviceImpl* driver, ShaderStage stage, Data& data)
+    : ShaderModule(stage, data)
 {
     if (_precompiled)
     {

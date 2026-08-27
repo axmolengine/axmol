@@ -10,7 +10,7 @@ axslcc=3.99.1
 
 # The cmake, @gradle @axmol-cmdline
 # as latest as possible
-cmake=4.2.0~4.4.0+
+cmake=4.2.0~4.4.2+
 
 # The ninja
 ninja=1.10.0~1.13.2+
@@ -99,6 +99,7 @@ kcp=2.1.1
 lz4=v1.10.0
 sample-assets=master
 live2d-core=5.5
-openxr=release-1.1.61
+lunasvg=v3.5.0
+openxr=release-1.1.62
 tracy=v0.13.1
 # --- endregion

@@ -90,9 +90,9 @@ AX_DLL uint64_t hashNodeName(std::string_view);
 /**
  * Scene graph render traversal state for a single camera/view pass.
  *
- * This is intentionally separate from ax::rhi::RenderContext. It carries
+ * This is intentionally separate from ax::rhi::GraphicsContext. It carries
  * scene-level view information needed by Node::visit()/draw(), while RHI
- * RenderContext owns GPU command encoding.
+ * GraphicsContext owns GPU command encoding.
  */
 struct AX_DLL SceneViewData
 {

@@ -22,7 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "axmol/rhi/vulkan/ShaderModuleVK.h"
-#include "axmol/rhi/vulkan/DriverVK.h"
+#include "axmol/rhi/vulkan/GraphicsDeviceVK.h"
 #include "axmol/base/Logging.h"
 #include <assert.h>
 #include <algorithm>
@@ -42,7 +42,7 @@ ShaderModuleImpl::~ShaderModuleImpl()
         // Device should be accessible from a driver; here we assume destruction is handled externally.
         // If needed, store VkDevice in this class like other implementations.
         // Intentionally left minimal: the lifetime is managed by the owning renderer/driver.
-        auto device = static_cast<DriverImpl*>(axdrv)->getDevice();
+        auto device = static_cast<GraphicsDeviceImpl*>(axdrv)->getDevice();
         vkDestroyShaderModule(device, _shader, nullptr);
     }
 }

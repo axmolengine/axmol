@@ -1771,20 +1771,20 @@ static LRESULT CALLBACK ImGui_ImplGlfw_WndProc(HWND hWnd, UINT msg, WPARAM wPara
 IMGUI_IMPL_API bool ImGui_ImplGlfw_InitForAxmol(GLFWwindow* window, bool install_callbacks)
 {
     bool initialized = false;
-    auto driverType = ax::rhi::GraphicsCore::currentDriverType();
+    auto driverType = ax::rhi::GraphicsCore::backend();
     switch (driverType)
     {
-    case ax::rhi::DriverType::OpenGL:
+    case ax::rhi::GraphicsBackend::OpenGL:
         initialized = ImGui_ImplGlfw_Init(window, install_callbacks, GlfwClientApi_OpenGL);
         break;
-    case ax::rhi::DriverType::Metal:
+    case ax::rhi::GraphicsBackend::Metal:
         initialized = ImGui_ImplGlfw_Init(window, install_callbacks, GlfwClientApi_Metal);
         break;
-    case ax::rhi::DriverType::D3D12:
-    case ax::rhi::DriverType::D3D11:
+    case ax::rhi::GraphicsBackend::D3D12:
+    case ax::rhi::GraphicsBackend::D3D11:
         initialized = ImGui_ImplGlfw_Init(window, install_callbacks, GlfwClientApi_D3D);
         break;
-    case ax::rhi::DriverType::Vulkan:
+    case ax::rhi::GraphicsBackend::Vulkan:
         initialized = ImGui_ImplGlfw_Init(window, install_callbacks, GlfwClientApi_Vulkan);
         break;
     default:

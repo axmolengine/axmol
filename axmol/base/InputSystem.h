@@ -84,7 +84,7 @@ public:
     /////////////////////////////////////////////////////////////////////////////
 
     // handle key event
-    void handleKeyEvent(KeyboardEvent::KeyCode keyCode, InputPhase phase);
+    void handleKeyEvent(KeyboardEvent::KeyCode keyCode, InputPhase phase, uint32_t modifiers = 0);
 
     // pointer input handling helpers migrated from RenderView
     void handlePointerDown(Vec2 point, const PointerInputState& state);

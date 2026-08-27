@@ -14,6 +14,7 @@ Please [visit our Wiki](https://github.com/axmolengine/axmol/wiki) to know more 
 
 [![Latest Release](https://img.shields.io/github/v/release/axmolengine/axmol?label=release)](https://github.com/axmolengine/axmol/releases)
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/axmolengine/axmol)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/81fa1aba09ab41a98b949064b928d06e)](https://www.codacy.com/gh/axmolengine/axmol/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=axmolengine/axmol&amp;utm_campaign=Badge_Grade)
 [![cxxstd](https://img.shields.io/badge/cxxstd-c++20-8A2BE2.svg)](https://github.com/axmolengine/axmol)  
 
@@ -48,8 +49,7 @@ Please [visit our Wiki](https://github.com/axmolengine/axmol/wiki) to know more 
 
 ## ⚡️Building
 
-* Download it: [Latest Release](https://github.com/axmolengine/axmol/releases) / [AtomGit Mirror](https://atomgit.com/axmol/axmol) / [SourceForge Mirror](https://sourceforge.net/projects/axmol-engine.mirror) / [Gitee Mirror](https://gitee.com/simdsoft/axmol)
-* [How to install](docs/DevSetup.md)
+👉 [Setup & Building Guide](docs/DevSetup.md)
 
 If you have a Cocos2d-x project, migrating to Axmol Engine is easy. We have prepared a [Migration Guide](https://github.com/axmolengine/axmol/wiki/Cocos2d%E2%80%90x-migration-guide).
 
@@ -164,7 +164,7 @@ How to contribute:
 * Please do not forget to add the topic `axmol` and `axmolengine` to any related repository you create!
 * Adding a star on GitHub will help Axmol grow as well. Thank you!
 
-If you find **Axmol Engine** helpful, please consider donating in [https://axmol.dev/donate](https://axmol.dev/donate). Thank you very much!
+If you find **Axmol Engine** helpful, please consider [supporting its continued development](https://axmol.dev/sponsor). Thank you very much!
 
 ## Sponsors
 
@@ -180,7 +180,7 @@ If you find **Axmol Engine** helpful, please consider donating in [https://axmol
 
 #### More Sponsors
 
-Please visit: [https://axmol.dev/donate](https://axmol.dev/donate)
+Please visit: [our sponsor page](https://axmol.dev/sponsor)
 
 ## Community
 

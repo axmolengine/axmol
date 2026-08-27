@@ -34,7 +34,7 @@
 namespace ax::rhi::vk
 {
 
-class DriverImpl;
+class GraphicsDeviceImpl;
 
 /**
  * @addtogroup _vk
@@ -47,7 +47,7 @@ class DriverImpl;
  */
 class BufferImpl final : public Buffer
 {
-    friend class RenderContextImpl;
+    friend class GraphicsContextImpl;
 
 public:
     using Buffer::setLastFenceValue;
@@ -59,7 +59,7 @@ public:
      * @param usage    BufferUsage::STATIC / DYNAMIC / STREAM
      * @param initial  initial data
      */
-    BufferImpl(DriverImpl*, size_t size, BufferType type, BufferUsage usage, const void* initial);
+    BufferImpl(GraphicsDeviceImpl*, size_t size, BufferType type, BufferUsage usage, const void* initial);
 
     ~BufferImpl();
 
@@ -75,13 +75,13 @@ private:
 
     // If this buffer is created as DYNAMIC (host visible), we support
     // per-frame backing: allocate MAX_INFLIGHT_BUFFER backing buffers and switch
-    // among them based on the frame index provided by DriverImpl.
+    // among them based on the frame index provided by GraphicsDeviceImpl.
     void updateIndex();  // lazy switch to current frame backing
 
     tlx::byte_buffer _defaultData;
     bool _needDefaultStoredData = false;
 
-    DriverImpl* _driver{nullptr};
+    GraphicsDeviceImpl* _driver{nullptr};
 
     // Current active handle (may point to one of _dynamicBuffers or the single static buffer)
     VkBuffer _buffer{VK_NULL_HANDLE};

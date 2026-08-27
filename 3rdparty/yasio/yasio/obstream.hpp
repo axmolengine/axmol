@@ -143,7 +143,7 @@ private:
   std::array<char, _Extent> impl_;
 };
 
-template <typename _Cont = tlx::sbyte_buffer>
+template <typename _Cont = tlx::byte_buffer>
 class dynamic_buffer_span {
 public:
   using implementation_type = _Cont;
@@ -171,7 +171,7 @@ public:
   void reserve(size_t capacity) { outs_->reserve(static_cast<size_type>(capacity)); }
   void shrink_to_fit() { outs_->shrink_to_fit(); };
   void clear() { outs_->clear(); }
-  char* data() { return outs_->data(); }
+  uint8_t* data() { return outs_->data(); }
   size_t length() const { return outs_->size(); }
   bool empty() const { return outs_->empty(); }
 
@@ -179,7 +179,7 @@ private:
   implementation_type* outs_;
 };
 
-template <typename _Cont = tlx::sbyte_buffer>
+template <typename _Cont = tlx::byte_buffer>
 class dynamic_buffer : public dynamic_buffer_span<_Cont> {
 public:
   using super_type = dynamic_buffer_span<_Cont>;
@@ -342,8 +342,8 @@ public:
 
   bool empty() const { return outs_->empty(); }
   size_t length() const { return outs_->length(); }
-  const char* data() const { return outs_->data(); }
-  char* data() { return outs_->data(); }
+  const uint8_t* data() const { return outs_->data(); }
+  uint8_t* data() { return outs_->data(); }
 
   const buffer_implementation_type& buffer() const { return outs_->get_implementation(); }
   buffer_implementation_type& buffer() { return outs_->get_implementation(); }
@@ -396,7 +396,7 @@ public:
     std::ofstream fout;
     fout.open(filename, std::ios::binary);
     if (!this->empty())
-      fout.write(this->data(), this->length());
+      fout.write(reinterpret_cast<const char*>(this->data()), this->length());
   }
 
 private:
@@ -500,7 +500,7 @@ using obstream      = obstream_any<dynamic_extent>;
 using fast_obstream = fast_obstream_any<dynamic_extent>;
 
 //-------- basic_obstream_span
-template <typename _ConvertTraits, typename _Cont = tlx::sbyte_buffer>
+template <typename _ConvertTraits, typename _Cont = tlx::byte_buffer>
 class basic_obstream_span;
 
 template <typename _ConvertTraits, typename _Cont>

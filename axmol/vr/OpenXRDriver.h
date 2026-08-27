@@ -58,7 +58,7 @@ inline namespace experimental
  *
  * OpenXRDriver owns OpenXR instance/session/space/swapchain/action state and
  * wraps swapchain images for the active RHI backend. It is not a per-frame data
- * object and is intentionally separate from axmol's RHI RenderContext types.
+ * object and is intentionally separate from axmol's RHI GraphicsContext types.
  * `pollEvents()` is the single pre-update entry point; it handles OpenXR events,
  * waits frame timing, and syncs frame-bound input. `_inFrame` tracks only the
  * xrBeginFrame/xrEndFrame pairing state.
@@ -142,7 +142,7 @@ public:
      * via GraphicsCore::setVulkanInterop() so that the Vulkan driver can query required
      * extensions and physical device selection from the OpenXR runtime.
      *
-     * Must be called before GraphicsCore::makeCurrentDriver().
+     * Must be called before GraphicsCore::initialize().
      */
     bool registerVulkanInterop();
 

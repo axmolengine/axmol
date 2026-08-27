@@ -61,7 +61,7 @@ void AppDelegate::applicationWillLaunch()
     GraphicsCore::setVulkanMinAndroidApiLevel(31);
 
     // Overrides any command-line driver preference (default is Auto).
-    // GraphicsCore::setDriverPreference(DriverPreference::Auto);
+    // GraphicsCore::setPreferredBackend(GraphicsBackend::Auto);
 
     // set app context attributes: red,green,blue,alpha,depth,stencil,multisamplesCount
     // powerPreference only affect when RHI backend is D3D11, D3D12, Vulkan

@@ -19,9 +19,40 @@
     ⚠️ Note: `RemoteSigned` is more secure than `Bypass`.
 
 - **macOS / Linux**
-  - Run `setup.ps1` directly. (TIPS: `setup.ps1` can also be executed in **bash mode** on macOS/Linux.)
+  - Install PowerShell with a single command:
+    ```bash
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/axmolengine/axmol/dev/1k/pwshi.sh)"
+    ```
 
-### 2. **Install Compiler Toolchain**
+### 2. **Get the source code**
+
+There are two ways to get the source code:
+
+- **Clone from Git** (recommended for development):
+  ```bash
+  git clone https://github.com/axmolengine/axmol.git
+  ```
+  Please use the stable v2 LTS branch for production: 
+  ```bash
+  git clone -b release/2.x https://github.com/axmolengine/axmol.git
+  ```
+  **IMPORTANT**: `dev` branch is for the unreleased v3. It's experimental and unstable, and should not be used for production apps.
+  
+  - Mirrors (choose one if GitHub is slow or unavailable):
+    ```bash
+    git clone https://gitee.com/simdsoft/axmol.git
+    git clone https://atomgit.com/axmol/axmol.git
+    ```
+- **Download release ZIP**:
+  - Download from the [Latest Release](https://github.com/axmolengine/axmol/releases) page.  
+    SourceForge mirror: [axmol-engine.mirror](https://sourceforge.net/projects/axmol-engine.mirror)
+  - ⚠️ Extract with PowerShell `Expand-Archive` to preserve the executable permissions of the axmol command-line scripts inside the archive:
+    ```pwsh
+    Expand-Archive -Path <path-to-downloaded.zip> -DestinationPath ./axmol -Force
+    ```
+    (Avoid using Windows Explorer or other unzip tools that may drop the executable bit on the `*.sh` scripts, which would break the `axmol` command on macOS/Linux.)
+
+### 3. **Install Compiler Toolchain**
 
 - **Windows**  
   - Install **Visual Studio 2022 (version 17.9 or higher)** or **Visual Studio 2026**.  
@@ -35,20 +66,23 @@
 
 - **Linux**: Ensure GCC/G++ is installed (Ubuntu 22.04+, Debian 12+, ArchLinux).  
 
-### 3. **Run the setup script**
+### 4. **Run the setup script**
 ```pwsh
 ./setup.ps1
 ```
+
 This will install dependencies and configure environment variables. Restart your terminal after completion.
 
-### 4. **Create a new project**
+> TIPS: On macOS/Linux, `setup.ps1` can also be executed directly in **bash mode** (`./setup.ps1`), which will auto-install PowerShell via `1k/pwshi.sh` if it isn't present yet.
+
+### 5. **Create a new project**
 ```pwsh
 axmol new -p dev.axmol.hellocpp -d ./projects -l cpp HelloCpp
 ```
 - `-l` can be `cpp` or `lua`
 - `--portrait` optional, generates a portrait project
 
-### 5. **Build the project**
+### 6. **Build the project**
 ```pwsh
 axmol
 ```

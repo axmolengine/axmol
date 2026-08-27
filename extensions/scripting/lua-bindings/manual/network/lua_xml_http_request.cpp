@@ -99,7 +99,7 @@ public:
 
     void getByteData(unsigned char* byteData) const;
 
-    inline const char* getData() { return !_data.empty() ? _data.data() : ""; }
+    inline const char* getData() { return !_data.empty() ? _data.as_chars().data() : ""; }
     inline size_t getDataSize() const { return _data.size(); }
 
     inline void setErrorFlag(bool errorFlag) { _errorFlag = errorFlag; }
@@ -112,7 +112,7 @@ private:
     std::string _url;
     std::string _meth;
     std::string _type;
-    tlx::sbyte_buffer _data;
+    tlx::byte_buffer _data;
     int _readyState;
     int _status;
     std::string _statusText;

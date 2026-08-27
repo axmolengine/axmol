@@ -22,7 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "axmol/rhi/d3d12/Texture12.h"
-#include "axmol/rhi/d3d12/Driver12.h"
+#include "axmol/rhi/d3d12/GraphicsDevice12.h"
 #include "axmol/rhi/SamplerRegistry.h"
 #include "axmol/rhi/RHIUtils.h"
 #include "axmol/base/Logging.h"
@@ -70,7 +70,7 @@ static inline UINT D3D12CalcSubresource(UINT MipSlice, UINT ArraySlice, UINT Pla
     return MipSlice + ArraySlice * MipLevels + PlaneSlice * MipLevels * ArraySize;
 }
 
-TextureImpl::TextureImpl(DriverImpl* driver, const TextureDesc& desc, std::optional<Color> clearColorHint)
+TextureImpl::TextureImpl(GraphicsDeviceImpl* driver, const TextureDesc& desc, std::optional<Color> clearColorHint)
     : _driver(driver), _stateTracker(LEVEL_INITIAL_CAPS, LAYER_INITIAL_CAPS)
 {
     updateTextureDesc(desc);
@@ -78,7 +78,7 @@ TextureImpl::TextureImpl(DriverImpl* driver, const TextureDesc& desc, std::optio
         ensureNativeTexture(false, clearColorHint);
 }
 
-TextureImpl::TextureImpl(DriverImpl* driver, ComPtr<ID3D12Resource> existingResource)
+TextureImpl::TextureImpl(GraphicsDeviceImpl* driver, ComPtr<ID3D12Resource> existingResource)
     : _driver(driver), _stateTracker(LEVEL_INITIAL_CAPS, LAYER_INITIAL_CAPS)
 {
     D3D12_RESOURCE_DESC d3dDesc = existingResource->GetDesc();
@@ -89,7 +89,7 @@ TextureImpl::TextureImpl(DriverImpl* driver, ComPtr<ID3D12Resource> existingReso
     setKnownState(D3D12_RESOURCE_STATE_COMMON);
 }
 
-TextureImpl::TextureImpl(DriverImpl* driver,
+TextureImpl::TextureImpl(GraphicsDeviceImpl* driver,
                          ComPtr<ID3D12Resource> existingResource,
                          const TextureDesc& desc,
                          D3D12_RESOURCE_STATES initialState,

@@ -227,7 +227,7 @@ jobs:
 
     - name: Build
       shell: pwsh
-      run: ./tools/cmdline/axmol -p wasm -O3 -xc '-DAX_ENABLE_EXT_EFFEKSEER=ON,-DAX_WASM_THREADS=8,-DAX_ENABLE_VR=ON' -j2 -t 'cpp-tests,fairygui-tests,lua-tests'
+      run: ./tools/cmdline/axmol -p wasm -O3 -xc '-DAX_ENABLE_EXT_EFFEKSEER=ON,-DAX_ENABLE_EXT_SVG=ON,-DAX_WASM_THREADS=8,-DAX_ENABLE_VR=ON' -j2 -t 'cpp-tests,fairygui-tests,lua-tests'
     - uses: actions/upload-artifact@v6
       with:
         name: wasm

@@ -76,10 +76,10 @@ void ShaderModule::parseShaderCode(void)
     }
 
     // find target entry: prefer precompiled bytecode when available
-    const auto driverType        = GraphicsCore::currentDriverType();
-    const auto currentShaderLang = GraphicsCore::currentShaderLang();
-    const auto currentProfileVer = GraphicsCore::currentShaderProfile();
-    const auto bcProfile         = GraphicsCore::currentShaderILProfile();
+    const auto driverType        = GraphicsCore::backend();
+    const auto shaderLanguage    = GraphicsCore::shaderLanguage();
+    const auto currentProfileVer = GraphicsCore::shaderProfile();
+    const auto bcProfile         = GraphicsCore::shaderILProfile();
 
     for (int i = 0; i < chunk.num_targets; ++i)
     {
@@ -89,7 +89,7 @@ void ShaderModule::parseShaderCode(void)
         int profile      = profile_ver & ~SC_BYTECODE_FLAG;
         int expect       = precompiled ? bcProfile : currentProfileVer;
 
-        if (matchLang(currentShaderLang, expect, lang, profile))
+        if (matchLang(shaderLanguage, expect, lang, profile))
         {
             _stageOffset = ibs.read<uint32_t>();
             _precompiled = precompiled;
@@ -100,7 +100,7 @@ void ShaderModule::parseShaderCode(void)
     }
     if (!_stageOffset)
     {
-        AXLOGE("Can't find stag chunk, lang={}, profile_ver={}", currentShaderLang, currentProfileVer);
+        AXLOGE("Can't find stag chunk, lang={}, profile_ver={}", shaderLanguage, currentProfileVer);
         assert(false && "axmol: Can't find stag chunk");
     }
 

@@ -120,14 +120,14 @@ static void register_obstream(sol::table& lib, const char* usertype)
         return obstream_write_v<_Stream>(obs, sv, lfl);
       },
       "write_bytes", static_cast<void (_Stream::*)(std::string_view)>(&_Stream::write_bytes), "length", &_Stream::length, "to_string",
-      [](_Stream* obs) { return std::string_view(obs->data(), obs->length()); }, "save", &_Stream::save);
+      [](_Stream* obs) { return std::string_view(obs->buffer().as_chars().data(), obs->length()); }, "save", &_Stream::save);
 }
 
 template <typename _Stream, typename _StreamView, typename _OStream>
 static void register_ibstream(sol::table& lib, const char* usertype)
 {
   lib.new_usertype<_Stream>(
-      usertype, sol::constructors<_Stream(), _Stream(tlx::sbyte_buffer), _Stream(const _OStream*)>(), "load", &_Stream::load, "read_ix",
+      usertype, sol::constructors<_Stream(), _Stream(tlx::byte_buffer), _Stream(const _OStream*)>(), "load", &_Stream::load, "read_ix",
       &_Stream::template read_ix<int64_t>, "read_bool", &_Stream::template read<bool>, "read_i8", &_Stream::template read<int8_t>, "read_i16",
       &_Stream::template read<int16_t>, "read_i32", &_Stream::template read<int32_t>, "read_i64", &_Stream::template read<int64_t>, "read_u8",
       &_Stream::template read<uint8_t>, "read_u16", &_Stream::template read<uint16_t>, "read_u32", &_Stream::template read<uint32_t>, "read_u64",
@@ -170,7 +170,7 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
         switch (buffer_type)
         {
           case lyasio::BUFFER_RAW:
-            return sol::make_object(L, std::string_view{packet_data(pkt), packet_len(pkt)});
+            return sol::make_object(L, std::string_view{forward_packet(pkt).as_chars().data(), packet_len(pkt)});
           case lyasio::BUFFER_FAST:
             return sol::make_object(L, std::make_unique<yasio::fast_ibstream>(forward_packet((packet_t &&) pkt)));
           default:
@@ -259,13 +259,13 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
       "write",
       sol::overload(
           [](io_service* service, transport_handle_t transport, std::string_view s) {
-            return service->write(transport, tlx::sbyte_buffer{s.data(), s.data() + s.length()});
+            return service->write(transport, tlx::byte_buffer{(const unsigned char*)s.data(), (const unsigned char*)s.data() + s.length()});
           },
           [](io_service* service, transport_handle_t transport, yasio::obstream* obs) { return service->write(transport, std::move(obs->buffer())); }),
       "write_to",
       sol::overload(
           [](io_service* service, transport_handle_t transport, std::string_view s, std::string_view ip, u_short port) {
-            return service->write_to(transport, tlx::sbyte_buffer{s.data(), s.data() + s.length()}, ip::endpoint{ip.data(), port});
+            return service->write_to(transport, tlx::byte_buffer{(const unsigned char*)s.data(), (const unsigned char*)s.data() + s.length()}, ip::endpoint{ip.data(), port});
           },
           [](io_service* service, transport_handle_t transport, yasio::obstream* obs, std::string_view ip, u_short port) {
             return service->write_to(transport, std::move(obs->buffer()), ip::endpoint{ip.data(), port});
@@ -391,11 +391,11 @@ struct lua_type_traits<std::string_view> {
     return 1;
   }
 };
-// yasio::sbyte_buffer
+// yasio::byte_buffer
 template <>
-struct lua_type_traits<yasio::sbyte_buffer> {
-  typedef yasio::sbyte_buffer get_type;
-  typedef const yasio::sbyte_buffer& push_type;
+struct lua_type_traits<tlx::byte_buffer> {
+  typedef tlx::byte_buffer get_type;
+  typedef const tlx::byte_buffer& push_type;
 
   static bool strictCheckType(lua_State* l, int index) { return lua_type(l, index) == LUA_TSTRING; }
   static bool checkType(lua_State* l, int index) { return lua_isstring(l, index) != 0; }
@@ -403,7 +403,7 @@ struct lua_type_traits<yasio::sbyte_buffer> {
   {
     size_t size        = 0;
     const char* buffer = lua_tolstring(l, index, &size);
-    return yasio::sbyte_buffer(buffer, buffer + size);
+    return tlx::byte_buffer((const unsigned char*)buffer, (const unsigned char*)buffer + size);
   }
   static int push(lua_State* l, push_type s)
   {
@@ -483,7 +483,7 @@ namespace lyasio
 #  define kaguya_ibstream_view_class(_StreamView, _OStream) \
     kaguya::UserdataMetatable<_StreamView>().setConstructors<_StreamView(), _StreamView(const void*, size_t), _StreamView(const _OStream*)>()
 #  define kaguya_ibstream_class(_Stream, _StreamView, _OStream) \
-    kaguya::UserdataMetatable<_Stream, _StreamView>().setConstructors<_Stream(yasio::sbyte_buffer), _Stream(const _OStream*)>()
+    kaguya::UserdataMetatable<_Stream, _StreamView>().setConstructors<_Stream(tlx::byte_buffer), _Stream(const _OStream*)>()
 
 template <typename _Stream, typename _BaseStream>
 static void register_obstream(kaguya::LuaTable& lib, const char* usertype, const char* basetype, kaguya::UserdataMetatable<_Stream, _BaseStream>& userclass,
@@ -533,9 +533,9 @@ static void register_obstream(kaguya::LuaTable& lib, const char* usertype, const
                                  lfl = static_cast<int>(args[0]);
                                return lyasio::obstream_write_v(obs, sv, lfl);
                              })
-          .addFunction("write_bytes", static_cast<void (_BaseStream::*)(std::string_view)>(&_BaseStream::write_bytes))
-          .addFunction("length", &_BaseStream::length)
-          .addStaticFunction("to_string", [](_BaseStream* obs) { return std::string_view(obs->data(), obs->length()); }));
+           .addFunction("write_bytes", static_cast<void (_BaseStream::*)(std::string_view)>(&_BaseStream::write_bytes))
+           .addFunction("length", &_BaseStream::length)
+           .addStaticFunction("to_string", [](_BaseStream* obs) { return std::string_view(obs->buffer().as_chars().data(), obs->length()); }));
   // ##-- obstream
   lib[usertype].setClass(userclass);
 }
@@ -603,7 +603,7 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
                                                           auto& pkt = ev->packet();
                                                           if (is_packet_empty(pkt))
                                                             return std::string_view{""};
-                                                          return std::string_view{packet_data(pkt), packet_len(pkt)};
+                                                          return std::string_view{forward_packet(pkt).as_chars().data(), packet_len(pkt)};
                                                         })
                                      .addStaticFunction("fast_packet",
                                                         [](io_event* ev) {
@@ -653,13 +653,13 @@ end
           .addOverloadedFunctions(
               "write",
               [](io_service* service, transport_handle_t transport, std::string_view s) {
-                return service->write(transport, yasio::sbyte_buffer(s.data(), s.data() + s.length()));
+                return service->write(transport, tlx::byte_buffer((const unsigned char*)s.data(), (const unsigned char*)s.data() + s.length()));
               },
               [](io_service* service, transport_handle_t transport, yasio::obstream* obs) { return service->write(transport, std::move(obs->buffer())); })
           .addOverloadedFunctions(
               "write_to",
               [](io_service* service, transport_handle_t transport, std::string_view s, std::string_view ip, u_short port) {
-                return service->write_to(transport, yasio::sbyte_buffer(s.data(), s.data() + s.length()), ip::endpoint{ip.data(), port});
+                return service->write_to(transport, tlx::byte_buffer((const unsigned char*)s.data(), (const unsigned char*)s.data() + s.length()), ip::endpoint{ip.data(), port});
               },
               [](io_service* service, transport_handle_t transport, yasio::obstream* obs, std::string_view ip, u_short port) {
                 return service->write_to(transport, std::move(obs->buffer()), ip::endpoint{ip.data(), port});

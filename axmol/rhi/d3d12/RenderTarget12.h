@@ -24,7 +24,7 @@
 #pragma once
 
 #include "axmol/rhi/RenderTarget.h"
-#include "axmol/rhi/d3d12/Driver12.h"
+#include "axmol/rhi/d3d12/GraphicsDevice12.h"
 #include "axmol/rhi/d3d12/Texture12.h"
 #include <d3d12.h>
 #include <dxgi1_5.h>
@@ -34,7 +34,7 @@ namespace ax::rhi::d3d12
 {
 static constexpr DXGI_FORMAT DEFAULT_SWAPCHAIN_FORMAT = DXGI_FORMAT_R8G8B8A8_UNORM;
 
-class DriverImpl;
+class GraphicsDeviceImpl;
 
 /**
  * @brief A D3D12-based RenderTarget implementation
@@ -44,7 +44,7 @@ class RenderTargetImpl : public RenderTarget
 public:
     using Attachment = TextureImpl*;
 
-    RenderTargetImpl(DriverImpl* driver, bool defaultRenderTarget);
+    RenderTargetImpl(GraphicsDeviceImpl* driver, bool defaultRenderTarget);
     ~RenderTargetImpl();
 
     void cleanupResources() override;
@@ -73,7 +73,7 @@ public:
 
 private:
     uint64_t _lastFenceValue{0};
-    DriverImpl* _driver{nullptr};
+    GraphicsDeviceImpl* _driver{nullptr};
 
     tlx::inlined_vector<d3d12::DescriptorHandle*, INITIAL_COLOR_CAPACITY> _rtvsDescriptors{};
     DescriptorHandle* _dsvDescriptor{};

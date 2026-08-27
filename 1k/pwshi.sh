@@ -6,15 +6,12 @@
 
 HOST_OS=$(uname)
 
-script_root=$(dirname "$0")
-ax_root=$(realpath $script_root/..)
-
 cacheDir=~/.1kiss
 mkdir -p $cacheDir
 
 pwsh_ver=$1
 if [ "$pwsh_ver" = "" ] ; then
-    pwsh_ver='7.6.2'
+    pwsh_ver='7.6.4'
 fi
 
 pwsh_min_ver=$2
@@ -164,11 +161,11 @@ elif [ $HOST_OS = 'Linux' ] ; then
         if [ ! -f  "$pwsh_pkg_out" ] ; then
             curl -L "https://github.com/PowerShell/PowerShell/releases/download/v$pwsh_ver/$pwsh_pkg" -o "$pwsh_pkg_out"
         fi
-        pwsh_inst_dir="$ax_root/tools/external/powershell"
+        pwsh_inst_dir="$cacheDir/powershell"
         mkdir -p "$pwsh_inst_dir"
         pwsh_path="$pwsh_inst_dir/pwsh"
         if [ ! -f "$pwsh_path" ]; then
-            tar xvf $pwsh_pkg_out -C "$pwsh_inst_dir"
+            tar xvf "$pwsh_pkg_out" -C "$pwsh_inst_dir"
         fi
         chmod +x "$pwsh_path"
         $sudo_cmd ln -s "$pwsh_path" /usr/local/bin/pwsh

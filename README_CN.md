@@ -14,6 +14,7 @@
 
 [![Latest Release](https://img.shields.io/github/v/release/axmolengine/axmol?label=release)](https://github.com/axmolengine/axmol/releases)
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/axmolengine/axmol)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/81fa1aba09ab41a98b949064b928d06e)](https://www.codacy.com/gh/axmolengine/axmol/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=axmolengine/axmol&amp;utm_campaign=Badge_Grade)
 [![cxxstd](https://img.shields.io/badge/cxxstd-c++20-8A2BE2.svg)](https://github.com/axmolengine/axmol)  
 
@@ -48,8 +49,7 @@
 
 ## ⚡️构建
 
-* 下载: [官方最新发布](https://github.com/axmolengine/axmol/releases) / [AtomGit 镜像仓库](https://atomgit.com/axmol/axmol) / [SourceForge 镜像](https://sourceforge.net/projects/axmol-engine.mirror) / [Gitee 镜像仓库](https://gitee.com/simdsoft/axmol)
-* [如何安装](docs/DevSetup.md)
+👉 [安装与构建指南](docs/DevSetup.md)
 
 如果你有一个 Cocos2d-x 项目, 可以很容易迁移到 Axmol。 我们准备了 [迁移指导](https://github.com/axmolengine/axmol/wiki/Cocos2d%E2%80%90x-migration-guide)。
 
@@ -164,11 +164,11 @@ Axmol 引擎在 Cocos2d-x v4.0 的基础上进行迭代和改进。现在速度�
 * 请不要忘记将主题 axmol 和 axmolengine 添加到您创建的任何相关存储库中
 * 在 GitHub 上添加星也将有助于 Axmol 的成长。谢谢你!
 
-如果您发现 Axmol 引擎有帮助，请考虑在 [https://axmol.dev/donate](https://axmol.dev/donate) 赞助，非常感谢！
+如果您觉得 [Axmol Engine](https://axmol.dev) 对您有所帮助，欢迎支持其持续开发：[https://axmol.dev/sponsor](https://axmol.dev/sponsor)，非常感谢！
 
-## Sponsors
+## 支持者
 
-#### Corporate Diamond
+#### 企业钻石级支持者
 <p align="left">
   <a href="https://scorewarrior.com/?ad=axmol" target=_blank><img
     src="https://cdn.prod.website-files.com/633da33305ac754156026dd8/63566f1edf5f0712f94f7f1b_sw-triangle-821890.svg" height="160"
@@ -177,9 +177,9 @@ Axmol 引擎在 Cocos2d-x v4.0 的基础上进行迭代和改进。现在速度�
 
 <p>&nbsp;</p>
 
-#### More Sponsors
+#### 更多支持者
 
-Please visit: [https://axmol.dev/donate](https://axmol.dev/donate)
+请访问： [我们的官方支持者页面](https://axmol.dev/sponsor)
 
 ## 社区
 

@@ -22,7 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "axmol/rhi/vulkan/BufferVK.h"
-#include "axmol/rhi/vulkan/DriverVK.h"
+#include "axmol/rhi/vulkan/GraphicsDeviceVK.h"
 #include "axmol/rhi/vulkan/UtilsVK.h"
 #include "axmol/rhi/RHITypes.h"  // MAX_INFLIGHT_BUFFER
 
@@ -164,7 +164,7 @@ static inline size_t alignTo(size_t value, size_t alignment)
 }
 
 /* -------------------------------------------------- ctor */
-BufferImpl::BufferImpl(DriverImpl* driver, size_t size, BufferType type, BufferUsage usage, const void* initial)
+BufferImpl::BufferImpl(GraphicsDeviceImpl* driver, size_t size, BufferType type, BufferUsage usage, const void* initial)
     : Buffer(size, type, usage), _driver(driver)
 {
     translateUsage(usage, _usageFlags, _memoryProperties);
@@ -292,7 +292,7 @@ void BufferImpl::createNativeBuffer(const void* initial)
 
 /* -------------------------------------------------- updateIndex
    Lazy switch to the backing buffer corresponding to the current frame index
-   provided by DriverImpl. This avoids O(N) per-frame iteration and performs
+   provided by GraphicsDeviceImpl. This avoids O(N) per-frame iteration and performs
    the switch only when the buffer is actually updated.
 */
 void BufferImpl::updateIndex()
@@ -301,7 +301,7 @@ void BufferImpl::updateIndex()
     if (_dynamicBuffers.empty())
         return;
 
-    // DriverImpl is expected to provide a frame index in range [0, MAX_FRAMES_IN_FLIGHT)
+    // GraphicsDeviceImpl is expected to provide a frame index in range [0, MAX_FRAMES_IN_FLIGHT)
     int frameIndex = _driver->getFrameIndex();
 
     // If current backing already corresponds to this frame, nothing to do.

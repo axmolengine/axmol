@@ -32,7 +32,7 @@
 
 namespace ax::rhi::d3d12
 {
-class DriverImpl;
+class GraphicsDeviceImpl;
 struct DescriptorHandle;
 
 /**
@@ -85,9 +85,9 @@ private:
 class TextureImpl : public rhi::Texture
 {
 public:
-    TextureImpl(DriverImpl*, const TextureDesc& desc, std::optional<Color> clearColorHint = std::nullopt);
-    TextureImpl(DriverImpl*, ComPtr<ID3D12Resource> existingResource);
-    TextureImpl(DriverImpl*,
+    TextureImpl(GraphicsDeviceImpl*, const TextureDesc& desc, std::optional<Color> clearColorHint = std::nullopt);
+    TextureImpl(GraphicsDeviceImpl*, ComPtr<ID3D12Resource> existingResource);
+    TextureImpl(GraphicsDeviceImpl*,
                 ComPtr<ID3D12Resource> existingResource,
                 const TextureDesc& desc,
                 D3D12_RESOURCE_STATES initialState,
@@ -139,7 +139,7 @@ private:
     void generateMipmaps(ID3D12GraphicsCommandList* cmd);
 
     uint64_t _lastFenceValue{0};
-    DriverImpl* _driver{nullptr};  // weak pointer
+    GraphicsDeviceImpl* _driver{nullptr};  // weak pointer
     ResourceStateTracker _stateTracker;
     TextureHandle _nativeTexture{};
     TextureDesc _desc{};

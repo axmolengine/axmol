@@ -1,10 +1,10 @@
 #pragma once
 #include "axmol/rhi/RenderTarget.h"
-#include "axmol/rhi/metal/RenderContextMTL.h"
+#include "axmol/rhi/metal/GraphicsContextMTL.h"
 
 namespace ax::rhi::mtl
 {
-class RenderContextImpl;
+class GraphicsContextImpl;
 class RenderTargetImpl : public RenderTarget
 {
 public:
@@ -21,7 +21,7 @@ public:
      * generateFBO, false, use for screen framebuffer
      */
     RenderTargetImpl();
-    RenderTargetImpl(RenderContextImpl* context);
+    RenderTargetImpl(GraphicsContextImpl* context);
     ~RenderTargetImpl();
 
     void applyRenderPassAttachments(const RenderPassDesc&, MTLRenderPassDescriptor*);
@@ -40,7 +40,7 @@ public:
     MTLPixelFormat getNativeDSFormat() const { return _nativeDSFormat; }
 
 private:
-    RenderContextImpl* _context{nullptr};
+    GraphicsContextImpl* _context{nullptr};
 
     NativeColorFormatArray _nativeColorFormats;
     MTLPixelFormat _nativeDSFormat{MTLPixelFormatInvalid};

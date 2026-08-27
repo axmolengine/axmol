@@ -138,7 +138,7 @@ private:
  */
 class AX_DLL VertexLayout : public Object
 {
-    friend class DriverBase;
+    friend class GraphicsDevice;
     friend class ::ax::VertexLayoutManager;
 
 protected:

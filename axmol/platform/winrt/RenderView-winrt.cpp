@@ -276,6 +276,51 @@ uint32_t toAxPressedButtons(PointerPointProperties const& properties)
         buttons |= 1u << 4;
     return buttons;
 }
+
+uint32_t getKeyModifiers(CoreWindow const& sender)
+{
+    uint32_t modifiers = 0;
+
+    if ((sender.GetKeyState(Windows::System::VirtualKey::Control) & CoreVirtualKeyStates::Down) ==
+        CoreVirtualKeyStates::Down)
+    {
+        modifiers |= EventKeyboard::KeyModifier::CONTROL;
+    }
+
+    if ((sender.GetKeyState(Windows::System::VirtualKey::Shift) & CoreVirtualKeyStates::Down) ==
+        CoreVirtualKeyStates::Down)
+    {
+        modifiers |= EventKeyboard::KeyModifier::SHIFT;
+    }
+
+    if ((sender.GetKeyState(Windows::System::VirtualKey::Menu) & CoreVirtualKeyStates::Down) ==
+        CoreVirtualKeyStates::Down)
+    {
+        modifiers |= EventKeyboard::KeyModifier::ALT;
+    }
+
+    if ((sender.GetKeyState(Windows::System::VirtualKey::NumberKeyLock) & CoreVirtualKeyStates::Down) ==
+        CoreVirtualKeyStates::Down)
+    {
+        modifiers |= EventKeyboard::KeyModifier::NUM_LOCK;
+    }
+
+    if ((sender.GetKeyState(Windows::System::VirtualKey::CapitalLock) & CoreVirtualKeyStates::Down) ==
+        CoreVirtualKeyStates::Down)
+    {
+        modifiers |= EventKeyboard::KeyModifier::CAPS_LOCK;
+    }
+
+    if ((sender.GetKeyState(Windows::System::VirtualKey::LeftWindows) & CoreVirtualKeyStates::Down) ==
+            CoreVirtualKeyStates::Down ||
+        (sender.GetKeyState(Windows::System::VirtualKey::RightWindows) & CoreVirtualKeyStates::Down) ==
+            CoreVirtualKeyStates::Down)
+    {
+        modifiers |= EventKeyboard::KeyModifier::SUPER;
+    }
+
+    return modifiers;
+}
 }  // namespace
 
 RenderView* RenderView::create(std::string_view viewName)
@@ -744,14 +789,14 @@ void RenderView::onPointerWheelChanged(Windows::Foundation::IInspectable const& 
     handlePointerEvent(InputPhase::PointerScroll, args);
 }
 
-void RenderView::onKeyPressed(CoreWindow const& /*sender*/, KeyEventArgs const& args)
+void RenderView::onKeyPressed(CoreWindow const& sender, KeyEventArgs const& args)
 {
-    handleKeyboardEvent(ax::InputPhase::KeyDown, args);
+    handleKeyboardEvent(ax::InputPhase::KeyDown, getKeyModifiers(sender), args);
 }
 
-void RenderView::onKeyReleased(CoreWindow const& /*sender*/, KeyEventArgs const& args)
+void RenderView::onKeyReleased(CoreWindow const& sender, KeyEventArgs const& args)
 {
-    handleKeyboardEvent(ax::InputPhase::KeyUp, args);
+    handleKeyboardEvent(ax::InputPhase::KeyUp, getKeyModifiers(sender), args);
 }
 
 void RenderView::onCharacterReceived(CoreWindow const& /*sender*/, CharacterReceivedEventArgs const& args)
@@ -800,7 +845,7 @@ void RenderView::onBackButtonPressed(Windows::Foundation::IInspectable const& /*
                                      BackRequestedEventArgs const& args)
 {
     Director::getInstance()->postTask([]() {
-        InputSystem::getInstance()->handleKeyEvent(KeyboardEvent::KeyCode::KEY_ESCAPE, InputPhase::KeyUp);
+        InputSystem::getInstance()->handleKeyEvent(KeyboardEvent::KeyCode::KEY_ESCAPE, InputPhase::KeyUp, 0);
     }, Director::TaskTiming::FrameBoundary);
     args.Handled(true);
 }
@@ -907,7 +952,7 @@ void RenderView::handlePointerEvent(ax::InputPhase phase, PointerEventArgs const
     }, Director::TaskTiming::FrameBoundary);
 }
 
-void RenderView::handleKeyboardEvent(ax::InputPhase phase, KeyEventArgs const& args)
+void RenderView::handleKeyboardEvent(ax::InputPhase phase, uint32_t modifiers, KeyEventArgs const& args)
 {
     int key = static_cast<int>(args.VirtualKey());
     auto it = _keyCodeMap.find(key);
@@ -918,8 +963,8 @@ void RenderView::handleKeyboardEvent(ax::InputPhase phase, KeyEventArgs const& a
         const auto isKeyDown = phase == ax::InputPhase::KeyDown;
         if (isKeyDown && args.KeyStatus().WasKeyDown)
             phase = ax::InputPhase::KeyRepeat;
-        Director::getInstance()->postTask([keyCode, phase]() {
-            InputSystem::getInstance()->handleKeyEvent(keyCode, phase);
+        Director::getInstance()->postTask([keyCode, phase, modifiers]() {
+            InputSystem::getInstance()->handleKeyEvent(keyCode, phase, modifiers);
         }, Director::TaskTiming::FrameBoundary);
     }
     else

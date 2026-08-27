@@ -86,7 +86,7 @@ EditBoxImplWasm::~EditBoxImplWasm()
 
 bool EditBoxImplWasm::isEditing()
 {
-    return false;
+    return _editingMode;
 }
 
 void EditBoxImplWasm::createNativeControl()

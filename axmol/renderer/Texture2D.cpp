@@ -338,8 +338,8 @@ bool Texture2D::initWithSpecInternal(rhi::TextureDesc desc,
     }
 
     // !override renderFormat since some render format by RHI
-    const auto driverType = rhi::GraphicsCore::currentDriverType();
-    if (driverType == rhi::DriverType::Metal)
+    const auto driverType = rhi::GraphicsCore::backend();
+    if (driverType == rhi::GraphicsBackend::Metal)
     {
         switch (renderFormat)
         {
@@ -357,7 +357,7 @@ bool Texture2D::initWithSpecInternal(rhi::TextureDesc desc,
             break;
         }
     }
-    else if (driverType == rhi::DriverType::D3D11 || driverType == rhi::DriverType::D3D12)
+    else if (driverType == rhi::GraphicsBackend::D3D11 || driverType == rhi::GraphicsBackend::D3D12)
     {
         switch (renderFormat)
         {
@@ -372,7 +372,7 @@ bool Texture2D::initWithSpecInternal(rhi::TextureDesc desc,
             break;
         }
     }
-    else if (driverType == rhi::DriverType::Vulkan)
+    else if (driverType == rhi::GraphicsBackend::Vulkan)
     {
         switch (renderFormat)
         {
