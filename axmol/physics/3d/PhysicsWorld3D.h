@@ -34,6 +34,8 @@
 
 #include <stdint.h>
 #include <vector>
+#include <unordered_map>
+#include <unordered_set>
 
 #if defined(AX_ENABLE_PHYSICS_3D)
 
@@ -289,6 +291,7 @@ protected:
 
     void dispatchQueuedContactEvent(detail::QueuedContactEvent3D& queued);
     void dispatchQueuedEvents();
+    void flushPersistedContacts();
 
     void removePhysicsActorInternal(PhysicsActor* actor);
 
@@ -339,6 +342,10 @@ protected:
     std::unordered_map<uint64_t, ContactInfo3D> _pairContacts;
     std::vector<detail::QueuedContactEvent3D> _queuedEvents;
     std::mutex _eventMutex;
+
+    std::unordered_map<Rigidbody3D*, std::vector<ContactInfo3D>> _persistedContacts;
+    std::unordered_set<Rigidbody3D*> _activePersistedBodies;
+    std::mutex _persistedMutex;
 
     PreSolveCallback _preSolveCallback;
 
