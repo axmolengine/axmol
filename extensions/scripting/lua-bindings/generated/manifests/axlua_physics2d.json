@@ -1768,21 +1768,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "step",
-          "luaName": "step",
-          "declaringType": "ax::PhysicsWorld2D",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "stepSimulation",
           "luaName": "stepSimulation",
           "declaringType": "ax::PhysicsWorld2D",

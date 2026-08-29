@@ -1377,8 +1377,6 @@ void register_ax_base(lua_State* L)
     class_122_Label.method("getShadowColor", static_cast<ax::Color (ax::Label::*)() const>(&ax::Label::getShadowColor));
     class_122_Label.method("getShadowOffset", static_cast<ax::Vec2 (ax::Label::*)() const>(&ax::Label::getShadowOffset));
     class_122_Label.method("getString", static_cast<std::string_view (ax::Label::*)() const>(&ax::Label::getString));
-    class_122_Label.method("getStringLength", static_cast<int (ax::Label::*)()>(&ax::Label::getStringLength));
-    class_122_Label.method("getStringNumLines", static_cast<int (ax::Label::*)()>(&ax::Label::getStringNumLines));
     class_122_Label.method("getSystemFontName", static_cast<std::string_view (ax::Label::*)() const>(&ax::Label::getSystemFontName));
     class_122_Label.method("getSystemFontSize", static_cast<float (ax::Label::*)() const>(&ax::Label::getSystemFontSize));
     class_122_Label.method("getTTFConfig", static_cast<const ax::TTFConfig & (ax::Label::*)() const>(&ax::Label::getTTFConfig));

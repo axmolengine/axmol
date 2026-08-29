@@ -166,7 +166,6 @@ void register_ax_physics2d(lua_State* L)
     class_14_PhysicsWorld2D.method("setPreUpdateCallback", static_cast<void (ax::PhysicsWorld2D::*)(const std::function<void ()> &)>(&ax::PhysicsWorld2D::setPreUpdateCallback));
     class_14_PhysicsWorld2D.method("setSpeed", static_cast<void (ax::PhysicsWorld2D::*)(float)>(&ax::PhysicsWorld2D::setSpeed));
     class_14_PhysicsWorld2D.method("setSubsteps", static_cast<void (ax::PhysicsWorld2D::*)(int)>(&ax::PhysicsWorld2D::setSubsteps));
-    class_14_PhysicsWorld2D.method("step", static_cast<void (ax::PhysicsWorld2D::*)(float)>(&ax::PhysicsWorld2D::step));
     class_14_PhysicsWorld2D.method("stepSimulation", static_cast<void (ax::PhysicsWorld2D::*)(float)>(&ax::PhysicsWorld2D::stepSimulation));
     class_15_PinJoint2D.bases<ax::PivotJoint2D, ax::Joint2D, ax::Component, ax::Object>();
     class_15_PinJoint2D.static_method("create", static_cast<ax::PinJoint2D * (*)(const ax::Vec2 &, ax::Rigidbody2D *)>(&ax::PinJoint2D::create));

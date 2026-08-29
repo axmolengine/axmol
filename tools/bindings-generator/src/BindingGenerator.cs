@@ -460,6 +460,13 @@ public static unsafe class BindingGenerator
         if (cursor.IsNull || cursor.IsAnonymous || string.IsNullOrWhiteSpace(cursor.Spelling.CString))
             return false;
 
+        // Keep the generated Lua surface aligned with the legacy tolua
+        // bindings: declarations marked deprecated are not script APIs.  Do
+        // this at the AST selection boundary so the rule applies equally to
+        // direct and nested classes, regardless of the module configuration.
+        if (IsDeprecated(cursor))
+            return false;
+
         if (cursor.CXXAccessSpecifier is CX_CXXAccessSpecifier.CX_CXXProtected or
             CX_CXXAccessSpecifier.CX_CXXPrivate)
             return false;
@@ -482,6 +489,8 @@ public static unsafe class BindingGenerator
     private static bool IsSelectedEnum(CXCursor cursor, GenerationRequest request)
     {
         if (cursor.IsNull || cursor.IsAnonymous || string.IsNullOrWhiteSpace(cursor.Spelling.CString))
+            return false;
+        if (IsDeprecated(cursor))
             return false;
         if (request.NativeNamespaces.Count > 0 &&
             !request.NativeNamespaces.Contains(GetNamespaceName(cursor), StringComparer.Ordinal))
@@ -695,6 +704,7 @@ public static unsafe class BindingGenerator
     }
 
     private static bool IsUsableConstructor(CXCursor cursor) =>
+        !IsDeprecated(cursor) &&
         cursor.CXXAccessSpecifier == CX_CXXAccessSpecifier.CX_CXXPublic &&
         clang.CXXMethod_isDeleted(cursor) == 0 &&
         clang.CXXConstructor_isCopyConstructor(cursor) == 0 &&
@@ -702,6 +712,7 @@ public static unsafe class BindingGenerator
         clang.Cursor_isVariadic(cursor) == 0;
 
     private static bool IsUsableMethod(CXCursor cursor) =>
+        !IsDeprecated(cursor) &&
         cursor.CXXAccessSpecifier == CX_CXXAccessSpecifier.CX_CXXPublic &&
         clang.CXXMethod_isDeleted(cursor) == 0 &&
         clang.Cursor_isVariadic(cursor) == 0 &&
@@ -709,7 +720,8 @@ public static unsafe class BindingGenerator
 
     private static bool IsUsableField(CXCursor cursor, CursorTree tree)
     {
-        if (cursor.CXXAccessSpecifier != CX_CXXAccessSpecifier.CX_CXXPublic ||
+        if (IsDeprecated(cursor) ||
+            cursor.CXXAccessSpecifier != CX_CXXAccessSpecifier.CX_CXXPublic ||
             cursor.IsAnonymous || string.IsNullOrWhiteSpace(cursor.Spelling.CString))
             return false;
 
@@ -1112,6 +1124,7 @@ public static unsafe class BindingGenerator
                 : null,
             Values = GetChildren(tree, enumeration)
                 .Where(x => x.Kind == CXCursorKind.CXCursor_EnumConstantDecl)
+                .Where(x => !IsDeprecated(x))
                 .Select(x => new BindingEnumValue
                 {
                     Name = x.Spelling.CString,
@@ -1122,6 +1135,9 @@ public static unsafe class BindingGenerator
                 .ToArray()
         };
     }
+
+    private static bool IsDeprecated(CXCursor cursor) =>
+        clang.getCursorAvailability(cursor) == CXAvailabilityKind.CXAvailability_Deprecated;
 
     private static IReadOnlyList<CXCursor> GetChildren(CursorTree tree, CXCursor cursor) =>
         tree.Children.TryGetValue(cursor, out var children) ? children : Array.Empty<CXCursor>();

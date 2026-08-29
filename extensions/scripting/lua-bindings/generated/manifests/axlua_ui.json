@@ -8549,17 +8549,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getPreferredSize",
-          "luaName": "getPreferredSize",
-          "declaringType": "ax::ui::Scale9Sprite",
-          "returnType": "const ax::Size \u0026",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getRenderingType",
           "luaName": "getRenderingType",
           "declaringType": "ax::ui::Scale9Sprite",
@@ -8921,21 +8910,6 @@
           "returnType": "void",
           "parameterTypes": [
             "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setPreferredSize",
-          "luaName": "setPreferredSize",
-          "declaringType": "ax::ui::Scale9Sprite",
-          "returnType": "void",
-          "parameterTypes": [
-            "const ax::Size \u0026"
           ],
           "defaultValues": [
             null

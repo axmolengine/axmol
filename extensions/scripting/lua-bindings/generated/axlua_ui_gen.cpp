@@ -630,7 +630,6 @@ void register_ax_ui(lua_State* L)
     class_25_Scale9Sprite.method("getInsetRight", static_cast<float (ax::ui::Scale9Sprite::*)() const>(&ax::ui::Scale9Sprite::getInsetRight));
     class_25_Scale9Sprite.method("getInsetTop", static_cast<float (ax::ui::Scale9Sprite::*)() const>(&ax::ui::Scale9Sprite::getInsetTop));
     class_25_Scale9Sprite.method("getOriginalSize", static_cast<ax::Vec2 (ax::ui::Scale9Sprite::*)() const>(&ax::ui::Scale9Sprite::getOriginalSize));
-    class_25_Scale9Sprite.method("getPreferredSize", static_cast<const ax::Size & (ax::ui::Scale9Sprite::*)() const>(&ax::ui::Scale9Sprite::getPreferredSize));
     class_25_Scale9Sprite.method("getRenderingType", static_cast<ax::ui::Scale9Sprite::RenderingType (ax::ui::Scale9Sprite::*)() const>(&ax::ui::Scale9Sprite::getRenderingType));
     class_25_Scale9Sprite.method("getSprite", static_cast<ax::Sprite * (ax::ui::Scale9Sprite::*)()>(&ax::ui::Scale9Sprite::getSprite));
     class_25_Scale9Sprite.method("getState", static_cast<ax::ui::Scale9Sprite::State (ax::ui::Scale9Sprite::*)() const>(&ax::ui::Scale9Sprite::getState));
@@ -646,7 +645,6 @@ void register_ax_ui(lua_State* L)
     class_25_Scale9Sprite.method("setInsetLeft", static_cast<void (ax::ui::Scale9Sprite::*)(float)>(&ax::ui::Scale9Sprite::setInsetLeft));
     class_25_Scale9Sprite.method("setInsetRight", static_cast<void (ax::ui::Scale9Sprite::*)(float)>(&ax::ui::Scale9Sprite::setInsetRight));
     class_25_Scale9Sprite.method("setInsetTop", static_cast<void (ax::ui::Scale9Sprite::*)(float)>(&ax::ui::Scale9Sprite::setInsetTop));
-    class_25_Scale9Sprite.method("setPreferredSize", static_cast<void (ax::ui::Scale9Sprite::*)(const ax::Size &)>(&ax::ui::Scale9Sprite::setPreferredSize));
     class_25_Scale9Sprite.method("setRenderingType", static_cast<void (ax::ui::Scale9Sprite::*)(ax::ui::Scale9Sprite::RenderingType)>(&ax::ui::Scale9Sprite::setRenderingType));
     class_25_Scale9Sprite.method("setScale9Enabled", static_cast<void (ax::ui::Scale9Sprite::*)(bool)>(&ax::ui::Scale9Sprite::setScale9Enabled));
     class_25_Scale9Sprite.method("setSpriteFrame", axlua::overload(axlua::overload_candidate<std::string_view>(static_cast<void (ax::Sprite::*)(std::string_view)>(&ax::Sprite::setSpriteFrame)), axlua::overload_candidate<ax::SpriteFrame *>(static_cast<void (ax::Sprite::*)(ax::SpriteFrame *)>(&ax::Sprite::setSpriteFrame)), axlua::overload_candidate<ax::SpriteFrame *, const ax::Rect &>(static_cast<void (ax::ui::Scale9Sprite::*)(ax::SpriteFrame *, const ax::Rect &)>(&ax::ui::Scale9Sprite::setSpriteFrame))));

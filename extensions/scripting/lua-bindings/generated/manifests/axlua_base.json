@@ -15058,28 +15058,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getStringLength",
-          "luaName": "getStringLength",
-          "declaringType": "ax::Label",
-          "returnType": "int",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getStringNumLines",
-          "luaName": "getStringNumLines",
-          "declaringType": "ax::Label",
-          "returnType": "int",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getSystemFontName",
           "luaName": "getSystemFontName",
           "declaringType": "ax::Label",
