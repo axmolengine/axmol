@@ -414,7 +414,7 @@ public:
 
     /**
      * @brief Returns persisted contact manifolds recorded for this body during the last physics step.
-     * @note Requires ContactEventBits::PersistedContacts enabled globally and on this actor.
+     * @note Requires ContactEventBits::Persisted enabled globally and on this actor.
      */
     const std::vector<ContactInfo3D>& getPersistedContacts() const { return _persistedContacts; }
 
