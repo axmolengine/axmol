@@ -59,7 +59,7 @@ static ax::Scene* physicsScene = nullptr;
 Physics3DTests::Physics3DTests()
 {
     ADD_TEST_CASE(BasicPhysics3DDemo);
-    ADD_TEST_CASE(BasicPhysics3DPersistedContactsDemo);
+    ADD_TEST_CASE(Physics3DPersistedContactsDemo);
     ADD_TEST_CASE(Joint3DDemo);
     ADD_TEST_CASE(Physics3DOneWayPlatform);
     ADD_TEST_CASE(Physics3DKinematicDemo);
