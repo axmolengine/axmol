@@ -26,7 +26,7 @@
 
 #include "lua-bindings/runtime/axlua_adapter.h"
 
- int register_all_ax_ui_adapter(lua_State* L);
+int register_all_ax_ui_adapter(lua_State* L);
 
 /**
  * @addtogroup lua
@@ -40,7 +40,7 @@
  * If you don't register the ui module, the package size would become smaller .
  * The current mechanism,this registering function is called in the lua_module_register.h
  */
- int register_ui_module(lua_State* L);
+int register_ui_module(lua_State* L);
 
 // end group
 /// @}

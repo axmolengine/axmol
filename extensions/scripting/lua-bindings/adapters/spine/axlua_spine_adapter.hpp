@@ -28,7 +28,7 @@
 #    include "lua-bindings/runtime/axlua_adapter.h"
 
 /// @cond
- int register_all_ax_spine_adapter(lua_State* L);
+int register_all_ax_spine_adapter(lua_State* L);
 /// @endcond
 
 /**
@@ -43,7 +43,7 @@
  * If you don't register the spine module, the package size would become smaller .
  * The current mechanism,this registering function is called in the lua_module_register.h
  */
- int register_spine_module(lua_State* L);
+int register_spine_module(lua_State* L);
 
 // end group
 /// @}

@@ -50,13 +50,11 @@ private:
 void invalidate_borrowed_userdata(lua_State* state, int index);
 
 template <class T>
-using callback_argument_pointee_t =
-    std::remove_cv_t<std::remove_pointer_t<std::remove_reference_t<T>>>;
+using callback_argument_pointee_t = std::remove_cv_t<std::remove_pointer_t<std::remove_reference_t<T>>>;
 
 template <class T>
 inline constexpr bool is_borrowed_callback_argument_v =
-    std::is_pointer_v<std::remove_reference_t<T>> &&
-    std::is_base_of_v<ax::Event, callback_argument_pointee_t<T>>;
+    std::is_pointer_v<std::remove_reference_t<T>> && std::is_base_of_v<ax::Event, callback_argument_pointee_t<T>>;
 
 template <class T>
 int push_borrowed_object(lua_State* state, T* object, BorrowedObjectScope& scope)
@@ -164,12 +162,12 @@ private:
     void report_callback_error(const char* message);
 
     lua_State* _state = nullptr;
-    int _ref = LUA_NOREF;
-    bool _active = false;
+    int _ref          = LUA_NOREF;
+    bool _active      = false;
 
     friend std::shared_ptr<LuaCallbackState> create_callback_state(lua_State*, int);
 };
-} // namespace detail
+}  // namespace detail
 
 void shutdown_callbacks(lua_State* state);
 
@@ -199,7 +197,7 @@ struct LuaCallbackFactory<Return(Arguments...)>
         };
     }
 };
-} // namespace detail
+}  // namespace detail
 
 template <class Signature>
 std::function<Signature> make_lua_callback(lua_State* state, int index)
@@ -235,13 +233,11 @@ using AdapterObjectPusher = int (*)(lua_State* state, void* object);
 // register a typed bridge here so their return values are still constructed by
 // sol2, including all inheritance/type metadata expected by generated methods.
 void register_object_pusher(lua_State* state,
-                                          std::string_view typeName,
-                                          const std::type_info& nativeType,
-                                          AdapterObjectPusher pusher);
+                            std::string_view typeName,
+                            const std::type_info& nativeType,
+                            AdapterObjectPusher pusher);
 bool push_registered_object(lua_State* state, void* object, std::string_view typeName);
-bool push_registered_dynamic_object(lua_State* state,
-                                    ax::Object* object,
-                                    const std::type_info& staticType);
+bool push_registered_dynamic_object(lua_State* state, ax::Object* object, const std::type_info& staticType);
 
 template <class T>
 int push_object(lua_State* state, T* object)
@@ -330,9 +326,8 @@ auto overload(Candidates&&... candidates)
 template <class... Arguments>
 int overload_signature_matches(lua_State* state)
 {
-    const auto count = static_cast<int>(sizeof...(Arguments));
-    const bool matches = lua_gettop(state) == count &&
-                         sol::stack::multi_check<Arguments...>(state, 1, &sol::no_panic);
+    const auto count   = static_cast<int>(sizeof...(Arguments));
+    const bool matches = lua_gettop(state) == count && sol::stack::multi_check<Arguments...>(state, 1, &sol::no_panic);
     lua_pushboolean(state, matches ? 1 : 0);
     return 1;
 }
@@ -393,9 +388,9 @@ public:
     template <class F>
     Class& method(std::string_view name, F&& function)
     {
-        auto callable = std::forward<F>(function);
-        auto* state = _module.lua_state();
-        const auto methodName = std::string(name);
+        auto callable              = std::forward<F>(function);
+        auto* state                = _module.lua_state();
+        const auto methodName      = std::string(name);
         const auto qualifiedMethod = _namespace + "." + _name + ":" + methodName;
         _table.push();
         const int classTable = absolute_index(state, -1);
@@ -422,8 +417,8 @@ public:
         // `ax.Type:method(...)` spelling.  The latter supplies the class
         // table as an implicit first argument, which sol2's native callable
         // adapter quite correctly does not discard by itself.
-        auto* state = _module.lua_state();
-        const auto className = std::string(name);
+        auto* state                = _module.lua_state();
+        const auto className       = std::string(name);
         const auto qualifiedMethod = _namespace + "." + _name + ":" + className;
         _table.push();
         const int classTable = absolute_index(state, -1);
@@ -491,19 +486,17 @@ private:
     template <class... Candidates>
     Class& set_overload(std::string_view name, OverloadSet<Candidates...> overloads, bool isStatic)
     {
-        auto* state = _module.lua_state();
-        const auto methodName = std::string(name);
+        auto* state                = _module.lua_state();
+        const auto methodName      = std::string(name);
         const auto qualifiedMethod = _namespace + "." + _name + ":" + methodName;
         _table.push();
         const int classTable = absolute_index(state, -1);
         lua_newtable(state);
         const int candidatesTable = absolute_index(state, -1);
-        int candidateIndex = 1;
-        std::apply(
-            [&](const auto&... candidate) {
-                (append_overload_candidate(state, candidatesTable, candidateIndex++, candidate), ...);
-            },
-            overloads.candidates);
+        int candidateIndex        = 1;
+        std::apply([&](const auto&... candidate) {
+            (append_overload_candidate(state, candidatesTable, candidateIndex++, candidate), ...);
+        }, overloads.candidates);
         if (isStatic)
             lua_pushvalue(state, classTable);
         lua_pushlstring(state, qualifiedMethod.data(), qualifiedMethod.size());
@@ -517,11 +510,10 @@ private:
     template <class F>
     void set_accessor(std::string_view accessorName, const std::string& key, F&& callable)
     {
-        auto* state = _module.lua_state();
+        auto* state          = _module.lua_state();
         sol::object existing = _table[std::string(accessorName)];
-        sol::table accessors = existing.valid() && existing.is<sol::table>()
-            ? existing.as<sol::table>()
-            : sol::state_view(state).create_table();
+        sol::table accessors = existing.valid() && existing.is<sol::table>() ? existing.as<sol::table>()
+                                                                             : sol::state_view(state).create_table();
         // `table.set` stores an arbitrary lambda as a userdata in this sol2
         // fork.  Accessors are invoked by Lua through class_index/new_index,
         // so they must be materialized as Lua-callable functions explicitly.
@@ -618,7 +610,7 @@ private:
 
     static void ensure_pointer_metatable(lua_State* state)
     {
-        const auto& name = sol::usertype_traits<T*>::metatable();
+        const auto& name  = sol::usertype_traits<T*>::metatable();
         const int created = luaL_newmetatable(state, name.c_str());
         if (created == 1)
         {
@@ -645,7 +637,7 @@ private:
             return;
         }
         const int metatable = absolute_index(state, -1);
-        const void* key = lua_topointer(state, metatable);
+        const void* key     = lua_topointer(state, metatable);
 
         // sol2 uses distinct metatables for value and pointer userdata. Most
         // Axmol factories return pointers, so configuring only the named
@@ -692,15 +684,15 @@ private:
     static sol::constant_automagic_enrollments<sol::automagic_flags::none> no_automagic()
     {
         sol::constant_automagic_enrollments<sol::automagic_flags::none> result;
-        result.default_constructor = false;
-        result.destructor = false;
-        result.pairs_operator = false;
-        result.to_string_operator = false;
-        result.call_operator = false;
-        result.less_than_operator = false;
+        result.default_constructor            = false;
+        result.destructor                     = false;
+        result.pairs_operator                 = false;
+        result.to_string_operator             = false;
+        result.call_operator                  = false;
+        result.less_than_operator             = false;
         result.less_than_or_equal_to_operator = false;
-        result.length_operator = false;
-        result.equal_to_operator = false;
+        result.length_operator                = false;
+        result.equal_to_operator              = false;
         return result;
     }
 
@@ -771,9 +763,7 @@ private:
 class Module
 {
 public:
-    static Module from(lua_State* state,
-                       std::string_view namespaceName = "ax",
-                       std::string_view typeNamespace = {});
+    static Module from(lua_State* state, std::string_view namespaceName = "ax", std::string_view typeNamespace = {});
 
     template <class T>
     Class<T> class_(std::string_view name)
@@ -798,9 +788,11 @@ public:
 
 private:
     Module(sol::state_view state, sol::table table, std::string namespaceName, std::string typeNamespace)
-        : _state(state), _table(std::move(table)), _namespace(std::move(namespaceName)), _typeNamespace(std::move(typeNamespace))
-    {
-    }
+        : _state(state)
+        , _table(std::move(table))
+        , _namespace(std::move(namespaceName))
+        , _typeNamespace(std::move(typeNamespace))
+    {}
 
     sol::state_view _state;
     sol::table _table;
@@ -818,40 +810,36 @@ void push_peer(lua_State* state, int userdataIndex);
 void set_peer(lua_State* state, int userdataIndex, int peerIndex);
 void invalidate_object(lua_State* state, void* object);
 
-} // namespace axlua
+}  // namespace axlua
 
 // sol2's ADL extension points are intentionally kept in ax's namespace.  A
 // returned Axmol pointer therefore goes through the canonical identity table
 // before sol2 allocates a new userdata.
 namespace ax
 {
-#define AX_LUA_TABLE_VALUE_ADAPTER(Type, PushFunction, GetFunction)                                               \
-    inline int sol_lua_push(lua_State* state, const Type& value)                                                 \
-    {                                                                                                            \
-        ::PushFunction(state, value);                                                                            \
-        return 1;                                                                                                \
-    }                                                                                                            \
-                                                                                                                 \
-    inline Type sol_lua_get(sol::types<Type>, lua_State* state, int index, sol::stack::record& tracking)         \
-    {                                                                                                            \
-        tracking.use(1);                                                                                         \
-        Type value{};                                                                                            \
-        ::GetFunction(state, index, &value, "Axmol Lua binding");                                               \
-        return value;                                                                                            \
-    }                                                                                                            \
-                                                                                                                 \
-    template <class Handler>                                                                                     \
-    bool sol_lua_check(sol::types<Type>,                                                                         \
-                       lua_State* state,                                                                          \
-                       int index,                                                                                 \
-                       Handler&& handler,                                                                         \
-                       sol::stack::record& tracking)                                                              \
-    {                                                                                                            \
-        tracking.use(1);                                                                                         \
-        if (lua_istable(state, index))                                                                            \
-            return true;                                                                                         \
-        handler(state, index, sol::type::table, sol::type_of(state, index), "expected an Axmol value table");   \
-        return false;                                                                                            \
+#define AX_LUA_TABLE_VALUE_ADAPTER(Type, PushFunction, GetFunction)                                                    \
+    inline int sol_lua_push(lua_State* state, const Type& value)                                                       \
+    {                                                                                                                  \
+        ::PushFunction(state, value);                                                                                  \
+        return 1;                                                                                                      \
+    }                                                                                                                  \
+                                                                                                                       \
+    inline Type sol_lua_get(sol::types<Type>, lua_State* state, int index, sol::stack::record& tracking)               \
+    {                                                                                                                  \
+        tracking.use(1);                                                                                               \
+        Type value{};                                                                                                  \
+        ::GetFunction(state, index, &value, "Axmol Lua binding");                                                      \
+        return value;                                                                                                  \
+    }                                                                                                                  \
+                                                                                                                       \
+    template <class Handler>                                                                                           \
+    bool sol_lua_check(sol::types<Type>, lua_State* state, int index, Handler&& handler, sol::stack::record& tracking) \
+    {                                                                                                                  \
+        tracking.use(1);                                                                                               \
+        if (lua_istable(state, index))                                                                                 \
+            return true;                                                                                               \
+        handler(state, index, sol::type::table, sol::type_of(state, index), "expected an Axmol value table");          \
+        return false;                                                                                                  \
     }
 
 AX_LUA_TABLE_VALUE_ADAPTER(Vec2, vec2_to_luaval, luaval_to_vec2)
@@ -891,8 +879,8 @@ bool sol_lua_check(sol::types<Value>, lua_State* state, int index, Handler&& han
 {
     tracking.use(1);
     const int type = lua_type(state, index);
-    if (type == LUA_TNONE || type == LUA_TNIL || type == LUA_TBOOLEAN || type == LUA_TNUMBER ||
-        type == LUA_TSTRING || type == LUA_TTABLE)
+    if (type == LUA_TNONE || type == LUA_TNIL || type == LUA_TBOOLEAN || type == LUA_TNUMBER || type == LUA_TSTRING ||
+        type == LUA_TTABLE)
         return true;
     handler(state, index, sol::type::lua_nil, sol::type_of(state, index), "expected an Axmol Value");
     return false;
@@ -913,7 +901,11 @@ inline ValueVector sol_lua_get(sol::types<ValueVector>, lua_State* state, int in
 }
 
 template <class Handler>
-bool sol_lua_check(sol::types<ValueVector>, lua_State* state, int index, Handler&& handler, sol::stack::record& tracking)
+bool sol_lua_check(sol::types<ValueVector>,
+                   lua_State* state,
+                   int index,
+                   Handler&& handler,
+                   sol::stack::record& tracking)
 {
     tracking.use(1);
     if (lua_istable(state, index))
@@ -972,7 +964,11 @@ bool sol_lua_check(sol::types<T*>, lua_State* state, int index, Handler&& handle
 }
 
 template <class T, class Handler>
-sol::optional<T*> sol_lua_check_get(sol::types<T*>, lua_State* state, int index, Handler&& handler, sol::stack::record& tracking)
+sol::optional<T*> sol_lua_check_get(sol::types<T*>,
+                                    lua_State* state,
+                                    int index,
+                                    Handler&& handler,
+                                    sol::stack::record& tracking)
 {
     if (axlua::is_invalid_userdata(state, index))
     {
@@ -980,7 +976,7 @@ sol::optional<T*> sol_lua_check_get(sol::types<T*>, lua_State* state, int index,
         return sol::nullopt;
     }
 
-    T* object = sol::stack::unqualified_getter<sol::detail::as_pointer_tag<T>>::get(state, index, tracking);
+    T* object          = sol::stack::unqualified_getter<sol::detail::as_pointer_tag<T>>::get(state, index, tracking);
     const bool expired = [&]() {
         if constexpr (std::is_base_of_v<ax::Object, T>)
             return object != nullptr && axlua::object_expired(static_cast<ax::Object*>(object));
@@ -993,7 +989,7 @@ sol::optional<T*> sol_lua_check_get(sol::types<T*>, lua_State* state, int index,
     }
     return object;
 }
-} // namespace ax
+}  // namespace ax
 
 // The historical Axmol Lua API represents sequential C++ containers as Lua
 // tables.  sol2 deliberately exposes containers as userdata by default, which
@@ -1004,9 +1000,7 @@ sol::optional<T*> sol_lua_check_get(sol::types<T*>, lua_State* state, int index,
 namespace sol
 {
 template <class T, class Allocator>
-int sol_lua_push(types<std::vector<T, Allocator>>,
-                 lua_State* state,
-                 const std::vector<T, Allocator>& values)
+int sol_lua_push(types<std::vector<T, Allocator>>, lua_State* state, const std::vector<T, Allocator>& values)
 {
     return stack::push(state, as_nested_ref(values));
 }
@@ -1039,4 +1033,4 @@ bool sol_lua_check(types<std::vector<T, Allocator>>,
     stack::unqualified_checker<Vector, lua_type_of_v<Vector>> checker;
     return checker.check(state, index, std::forward<Handler>(handler), tracking);
 }
-} // namespace sol
+}  // namespace sol

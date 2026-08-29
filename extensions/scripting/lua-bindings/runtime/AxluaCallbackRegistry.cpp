@@ -71,8 +71,8 @@ bool LuaCallFunc::initWithFunction(const std::function<void(void*, Node*)>& func
 
 LuaCallFunc* LuaCallFunc::clone() const
 {
-    int handler =
-        AxluaCallbackRegistry::getInstance()->getObjectHandler((void*)this, AxluaCallbackRegistry::HandlerType::CALLFUNC);
+    int handler = AxluaCallbackRegistry::getInstance()->getObjectHandler((void*)this,
+                                                                         AxluaCallbackRegistry::HandlerType::CALLFUNC);
 
     if (0 == handler)
         return nullptr;
@@ -87,7 +87,7 @@ LuaCallFunc* LuaCallFunc::clone() const
     int newscriptHandler = ax::ScriptEngineManager::getInstance()->getScriptEngine()->reallocateScriptHandler(handler);
 
     AxluaCallbackRegistry::getInstance()->addObjectHandler((void*)ret, newscriptHandler,
-                                                      AxluaCallbackRegistry::HandlerType::CALLFUNC);
+                                                           AxluaCallbackRegistry::HandlerType::CALLFUNC);
 
     return ret;
 }
@@ -127,7 +127,7 @@ void AxluaCallbackRegistry::destroyInstance()
 void AxluaCallbackRegistry::init()
 {
     _mapObjectHandlers.clear();
-    _dispatcher = Director::getInstance()->getEventDispatcher();
+    _dispatcher        = Director::getInstance()->getEventDispatcher();
     _disposingListener = static_cast<EventListener*>(_dispatcher->addCustomEventListener(
         Director::EVENT_DISPOSING, [](CustomEvent*) { AxluaCallbackRegistry::destroyInstance(); }, 1));
 }

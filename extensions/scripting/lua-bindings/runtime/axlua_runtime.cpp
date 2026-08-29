@@ -56,7 +56,7 @@ public:
 private:
     AxluaRuntimeState()
     {
-        _dispatcher = ax::Director::getInstance()->getEventDispatcher();
+        _dispatcher        = ax::Director::getInstance()->getEventDispatcher();
         _disposingListener = _dispatcher->addCustomEventListener(
             ax::Director::EVENT_DISPOSING, [](ax::CustomEvent*) { AxluaRuntimeState::dispose(); }, 2);
     }
@@ -84,7 +84,7 @@ private:
     }
 
     static AxluaRuntimeState* _instance;
-    ax::EventDispatcher* _dispatcher = nullptr;
+    ax::EventDispatcher* _dispatcher            = nullptr;
     ax::CustomEventListener* _disposingListener = nullptr;
 };
 
@@ -256,8 +256,8 @@ bool push_class_table(lua_State* state, int userdataIndex)
     }
     lua_pushlightuserdata(state, const_cast<void*>(metatableKey));
     lua_rawget(state, -2);
-    lua_remove(state, -2); // class table registry
-    lua_remove(state, -2); // userdata metatable
+    lua_remove(state, -2);  // class table registry
+    lua_remove(state, -2);  // userdata metatable
     return lua_istable(state, -1);
 }
 
@@ -286,7 +286,7 @@ enum class ClassMemberKind
 bool lookup_class_accessor(lua_State* state, int classTableIndex, int keyIndex, const char* accessorTable)
 {
     classTableIndex = absolute_index(state, classTableIndex);
-    keyIndex = absolute_index(state, keyIndex);
+    keyIndex        = absolute_index(state, keyIndex);
     lua_getfield(state, classTableIndex, accessorTable);
     if (!lua_istable(state, -1))
     {
@@ -305,7 +305,7 @@ bool lookup_class_accessor(lua_State* state, int classTableIndex, int keyIndex, 
 ClassMemberKind lookup_class_member(lua_State* state, int classTableIndex, int keyIndex)
 {
     classTableIndex = absolute_index(state, classTableIndex);
-    keyIndex = absolute_index(state, keyIndex);
+    keyIndex        = absolute_index(state, keyIndex);
     for (int depth = 0; depth < 64; ++depth)
     {
         lua_pushvalue(state, keyIndex);
@@ -328,7 +328,7 @@ ClassMemberKind lookup_class_member(lua_State* state, int classTableIndex, int k
 bool lookup_class_setter(lua_State* state, int classTableIndex, int keyIndex)
 {
     classTableIndex = absolute_index(state, classTableIndex);
-    keyIndex = absolute_index(state, keyIndex);
+    keyIndex        = absolute_index(state, keyIndex);
     for (int depth = 0; depth < 64; ++depth)
     {
         if (lookup_class_accessor(state, classTableIndex, keyIndex, ".set"))
@@ -344,7 +344,7 @@ bool lookup_class_setter(lua_State* state, int classTableIndex, int keyIndex)
 bool lookup_registered_table_member(lua_State* state, int tableIndex, int keyIndex)
 {
     tableIndex = absolute_index(state, tableIndex);
-    keyIndex = absolute_index(state, keyIndex);
+    keyIndex   = absolute_index(state, keyIndex);
     lua_pushvalue(state, keyIndex);
     lua_gettable(state, tableIndex);
     return !lua_isnil(state, -1);
@@ -353,7 +353,7 @@ bool lookup_registered_table_member(lua_State* state, int tableIndex, int keyInd
 bool lookup_base_member(lua_State* state, int classTableIndex, int keyIndex)
 {
     classTableIndex = absolute_index(state, classTableIndex);
-    keyIndex = absolute_index(state, keyIndex);
+    keyIndex        = absolute_index(state, keyIndex);
     for (int depth = 0; depth < 64; ++depth)
     {
         if (!push_registered_base(state, classTableIndex))
@@ -377,16 +377,16 @@ void canonicalize_registered_userdata(lua_State* state, int firstResult)
         lua_getfield(state, LUA_REGISTRYINDEX, "axlua.class.pointer_tables");
         if (!lua_istable(state, -1))
         {
-            lua_pop(state, 2); // pointer registry and userdata metatable
+            lua_pop(state, 2);  // pointer registry and userdata metatable
             continue;
         }
         lua_pushlightuserdata(state, const_cast<void*>(metatableKey));
         lua_rawget(state, -2);
         const bool registered = lua_istable(state, -1);
-        lua_pop(state, 2); // class table and registry metatable
+        lua_pop(state, 2);  // class table and registry metatable
         if (!registered)
         {
-            lua_pop(state, 1); // userdata metatable
+            lua_pop(state, 1);  // userdata metatable
             continue;
         }
 
@@ -399,7 +399,7 @@ void canonicalize_registered_userdata(lua_State* state, int firstResult)
         lua_setfield(state, -2, "__newindex");
 
         void* nativeObject = *static_cast<void**>(lua_touserdata(state, index));
-        lua_pop(state, 1); // userdata metatable
+        lua_pop(state, 1);  // userdata metatable
         if (nativeObject == nullptr)
             continue;
 
@@ -426,7 +426,7 @@ void canonicalize_registered_userdata(lua_State* state, int firstResult)
             lua_pushvalue(state, index);
             lua_rawset(state, identityTable);
         }
-        lua_pop(state, 1); // identity table
+        lua_pop(state, 1);  // identity table
     }
 }
 
@@ -516,22 +516,22 @@ int lua_cast(lua_State* state)
     return 1;
 }
 
-} // namespace
+}  // namespace
 
 namespace axlua
 {
 
 void register_object_pusher(lua_State* state,
-                                          std::string_view typeName,
-                                          const std::type_info& nativeType,
-                                          AdapterObjectPusher pusher)
+                            std::string_view typeName,
+                            const std::type_info& nativeType,
+                            AdapterObjectPusher pusher)
 {
     if (state == nullptr || typeName.empty() || pusher == nullptr)
         return;
     runtime_state().objectPushers[state][std::string(typeName)] = pusher;
-    auto& dynamicPushers = runtime_state().dynamicObjectPushers[state];
-    dynamicPushers.byAddress[&nativeType] = pusher;
-    dynamicPushers.byName[nativeType.name()] = pusher;
+    auto& dynamicPushers                                        = runtime_state().dynamicObjectPushers[state];
+    dynamicPushers.byAddress[&nativeType]                       = pusher;
+    dynamicPushers.byName[nativeType.name()]                    = pusher;
     register_native_type_name(nativeType, typeName);
 }
 
@@ -554,7 +554,7 @@ void register_native_type_name(const std::type_info& nativeType, std::string_vie
     if (luaTypeName.empty())
         return;
     const std::string name(luaTypeName);
-    runtime_state().nativeTypeNamesByAddress[&nativeType] = name;
+    runtime_state().nativeTypeNamesByAddress[&nativeType]    = name;
     runtime_state().nativeTypeNamesByName[nativeType.name()] = name;
 }
 
@@ -570,9 +570,7 @@ const char* find_native_type_name(const std::type_info& nativeType)
     return runtime_state().nativeTypeNamesByAddress.emplace(&nativeType, fallback->second).first->second.c_str();
 }
 
-bool push_registered_dynamic_object(lua_State* state,
-                                    ax::Object* object,
-                                    const std::type_info& staticType)
+bool push_registered_dynamic_object(lua_State* state, ax::Object* object, const std::type_info& staticType)
 {
     if (state == nullptr || object == nullptr)
         return false;
@@ -638,7 +636,7 @@ std::shared_ptr<LuaCallbackState> LuaCallbackState::create(lua_State* state, int
 
     auto callback = std::shared_ptr<LuaCallbackState>(new LuaCallbackState(state));
     lua_pushvalue(state, index);
-    callback->_ref = luaL_ref(state, LUA_REGISTRYINDEX);
+    callback->_ref    = luaL_ref(state, LUA_REGISTRYINDEX);
     callback->_active = callback->_ref != LUA_NOREF && callback->_ref != LUA_REFNIL;
     if (callback->_active)
         runtime_state().luaCallbacks[state].emplace_back(callback);
@@ -654,8 +652,8 @@ void LuaCallbackState::invalidate() noexcept
 {
     if (_active && _state != nullptr && _ref != LUA_NOREF && _ref != LUA_REFNIL)
         luaL_unref(_state, LUA_REGISTRYINDEX, _ref);
-    _state = nullptr;
-    _ref = LUA_NOREF;
+    _state  = nullptr;
+    _ref    = LUA_NOREF;
     _active = false;
 }
 
@@ -663,7 +661,7 @@ void LuaCallbackState::report_callback_error(const char* message)
 {
     AXLOGE("[LUA CALLBACK ERROR] {}", message != nullptr ? message : "unknown Lua error");
 }
-} // namespace detail
+}  // namespace detail
 
 void shutdown_callbacks(lua_State* state)
 {
@@ -758,7 +756,7 @@ void remember_object(ax::Object* object)
     auto found = state->nativeObjects.find(object);
     if (found == state->nativeObjects.end() || found->second.expired())
     {
-        state->nativeObjects[object] = ax::WeakPtr<ax::Object>(object);
+        state->nativeObjects[object]       = ax::WeakPtr<ax::Object>(object);
         state->nativeObjectThreads[object] = std::this_thread::get_id();
     }
 }
@@ -770,7 +768,7 @@ bool object_expired(ax::Object* object)
         return true;
 
     std::lock_guard lock(state->nativeObjectsMutex);
-    auto found = state->nativeObjects.find(object);
+    auto found         = state->nativeObjects.find(object);
     const bool expired = found != state->nativeObjects.end() && found->second.expired();
     if (expired)
     {
@@ -885,9 +883,7 @@ int dispatch_callable(lua_State* state, int argumentCount, int contextUpvalue)
     {
         const char* context = lua_tostring(state, lua_upvalueindex(contextUpvalue));
         const char* message = lua_tostring(state, -1);
-        return luaL_error(state,
-                          "%s: %s",
-                          context != nullptr ? context : "generated Lua binding",
+        return luaL_error(state, "%s: %s", context != nullptr ? context : "generated Lua binding",
                           message != nullptr ? message : "unknown error");
     }
     canonicalize_registered_userdata(state, 1);
@@ -914,9 +910,9 @@ int static_method_dispatch(lua_State* state)
 
 int dispatch_overload_callable(lua_State* state, int argumentStart, int contextUpvalue)
 {
-    const int callArgumentCount = lua_gettop(state);
+    const int callArgumentCount      = lua_gettop(state);
     const int signatureArgumentCount = callArgumentCount - argumentStart + 1;
-    int selected = 0;
+    int selected                     = 0;
 
     for (int candidate = 1;; ++candidate)
     {
@@ -934,8 +930,7 @@ int dispatch_overload_callable(lua_State* state, int argumentStart, int contextU
         if (lua_pcall(state, signatureArgumentCount, 1, 0) != LUA_OK)
         {
             const char* message = lua_tostring(state, -1);
-            return luaL_error(state,
-                              "generated Lua overload matcher failed: %s",
+            return luaL_error(state, "generated Lua overload matcher failed: %s",
                               message != nullptr ? message : "unknown error");
         }
         const bool matches = lua_toboolean(state, -1) != 0;
@@ -950,8 +945,7 @@ int dispatch_overload_callable(lua_State* state, int argumentStart, int contextU
     if (selected == 0)
     {
         const char* context = lua_tostring(state, lua_upvalueindex(contextUpvalue));
-        return luaL_error(state,
-                          "%s: no overload accepts the supplied Lua arguments",
+        return luaL_error(state, "%s: no overload accepts the supplied Lua arguments",
                           context != nullptr ? context : "generated Lua binding");
     }
 
@@ -963,9 +957,7 @@ int dispatch_overload_callable(lua_State* state, int argumentStart, int contextU
     {
         const char* context = lua_tostring(state, lua_upvalueindex(contextUpvalue));
         const char* message = lua_tostring(state, -1);
-        return luaL_error(state,
-                          "%s: %s",
-                          context != nullptr ? context : "generated Lua binding",
+        return luaL_error(state, "%s: %s", context != nullptr ? context : "generated Lua binding",
                           message != nullptr ? message : "unknown error");
     }
     canonicalize_registered_userdata(state, 1);
@@ -989,10 +981,10 @@ Module Module::from(lua_State* state, std::string_view namespaceName, std::strin
     sol::state_view view(state);
     const std::string name(namespaceName);
     sol::object existing = view[name];
-    sol::table module = existing.valid() && existing.is<sol::table>()
-                           ? existing.as<sol::table>()
-                           : view.create_named_table(name);
-    const std::string effectiveTypeNamespace = typeNamespace.empty() ? std::string(namespaceName) : std::string(typeNamespace);
+    sol::table module =
+        existing.valid() && existing.is<sol::table>() ? existing.as<sol::table>() : view.create_named_table(name);
+    const std::string effectiveTypeNamespace =
+        typeNamespace.empty() ? std::string(namespaceName) : std::string(typeNamespace);
     return Module(view, module, std::string(namespaceName), effectiveTypeNamespace);
 }
 
@@ -1000,9 +992,8 @@ void install(lua_State* state)
 {
     sol::state_view view(state);
     sol::object existing = view["axlua"];
-    sol::table module = existing.valid() && existing.is<sol::table>()
-                          ? existing.as<sol::table>()
-                          : view.create_named_table("axlua");
+    sol::table module =
+        existing.valid() && existing.is<sol::table>() ? existing.as<sol::table>() : view.create_named_table("axlua");
 
     module.set_function("getpeer", &lua_getpeer);
     module.set_function("setpeer", &lua_setpeer);
@@ -1010,7 +1001,6 @@ void install(lua_State* state)
     module.set_function("type", &lua_type_name);
     module.set_function("iskindof", &lua_iskindof);
     module.set_function("cast", &lua_cast);
-
 }
 
 void shutdown(lua_State* state)
@@ -1100,4 +1090,4 @@ void invalidate_object(lua_State* state, void* object)
     }
 }
 
-} // namespace axlua
+}  // namespace axlua

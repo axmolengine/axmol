@@ -49,15 +49,15 @@ public:
 
 using namespace ax;
 
- int register_all_ax_adapter(lua_State* luaState);
+int register_all_ax_adapter(lua_State* luaState);
 
- int register_all_ax_module_adapter(lua_State* luaState);
+int register_all_ax_module_adapter(lua_State* luaState);
 
- int register_all_ax_math_adapter(lua_State* luaState);
+int register_all_ax_math_adapter(lua_State* luaState);
 
- int register_all_ax_shaders_adapter(lua_State* luaState);
+int register_all_ax_shaders_adapter(lua_State* luaState);
 
- int register_all_ax_bytearray_adapter(lua_State* tulua_S);
+int register_all_ax_bytearray_adapter(lua_State* tulua_S);
 
 struct LuaAccelerationEventData
 {

@@ -41,7 +41,7 @@
  * If you don't register the sceneext module, the package size would become smaller .
  * The current mechanism,this registering function is called in the lua_module_register.h
  */
- int register_sceneext_module(lua_State* L);
+int register_sceneext_module(lua_State* L);
 
 // end group
 /// @}

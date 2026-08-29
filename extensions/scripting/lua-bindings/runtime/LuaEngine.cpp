@@ -77,7 +77,7 @@ LuaEngine::~LuaEngine(void)
     // base destructor can run while ScriptEngineManager still tears down the
     // engine; callbacks during that phase must not re-enter Lua.
     LuaStack* stack = _stack;
-    _stack           = nullptr;
+    _stack          = nullptr;
     AxluaCallbackRegistry::destroyInstance();
     AX_SAFE_RELEASE(stack);
     _defaultEngine = nullptr;
@@ -222,7 +222,7 @@ int LuaEngine::handleNodeEvent(void* data)
         return 0;
 
     int handler = AxluaCallbackRegistry::getInstance()->getObjectHandler(basicScriptData->nativeObject,
-                                                                    AxluaCallbackRegistry::HandlerType::NODE);
+                                                                         AxluaCallbackRegistry::HandlerType::NODE);
 
     if (0 == handler)
         return 0;
@@ -269,8 +269,8 @@ int LuaEngine::handleMenuClickedEvent(void* data)
 
     MenuItem* menuItem = static_cast<MenuItem*>(basicScriptData->nativeObject);
 
-    int handler =
-        AxluaCallbackRegistry::getInstance()->getObjectHandler(menuItem, AxluaCallbackRegistry::HandlerType::MENU_CLICKED);
+    int handler = AxluaCallbackRegistry::getInstance()->getObjectHandler(
+        menuItem, AxluaCallbackRegistry::HandlerType::MENU_CLICKED);
     if (0 == handler)
         return 0;
 
@@ -291,7 +291,7 @@ int LuaEngine::handleCallFuncActionEvent(void* data)
         return 0;
 
     int handler = AxluaCallbackRegistry::getInstance()->getObjectHandler(basicScriptData->nativeObject,
-                                                                    AxluaCallbackRegistry::HandlerType::CALLFUNC);
+                                                                         AxluaCallbackRegistry::HandlerType::CALLFUNC);
 
     if (0 == handler)
         return 0;
@@ -330,7 +330,7 @@ int LuaEngine::handleKeypadEvent(void* data)
         return 0;
 
     int handler = AxluaCallbackRegistry::getInstance()->getObjectHandler(keypadScriptData->nativeObject,
-                                                                    AxluaCallbackRegistry::HandlerType::KEYPAD);
+                                                                         AxluaCallbackRegistry::HandlerType::KEYPAD);
 
     if (0 == handler)
         return 0;
@@ -363,8 +363,8 @@ int LuaEngine::handleAccelerometerEvent(void* data)
     if (nullptr == basicScriptData->nativeObject || nullptr == basicScriptData->value)
         return 0;
 
-    int handler = AxluaCallbackRegistry::getInstance()->getObjectHandler(basicScriptData->nativeObject,
-                                                                    AxluaCallbackRegistry::HandlerType::ACCELEROMETER);
+    int handler = AxluaCallbackRegistry::getInstance()->getObjectHandler(
+        basicScriptData->nativeObject, AxluaCallbackRegistry::HandlerType::ACCELEROMETER);
     if (0 == handler)
         return 0;
 
@@ -415,7 +415,7 @@ int LuaEngine::handleTouchEvent(void* data)
 
     auto* pointerEvent = static_cast<PointerEvent*>(touchScriptData->event);
     int handler        = AxluaCallbackRegistry::getInstance()->getObjectHandler((void*)touchScriptData->nativeObject,
-                                                                           AxluaCallbackRegistry::HandlerType::TOUCHES);
+                                                                                AxluaCallbackRegistry::HandlerType::TOUCHES);
 
     if (0 == handler)
         return 0;
@@ -445,7 +445,7 @@ int LuaEngine::handleTouchesEvent(void* data)
     auto* pointerEvent = static_cast<PointerEvent*>(touchesScriptData->event);
 
     int handler = AxluaCallbackRegistry::getInstance()->getObjectHandler((void*)touchesScriptData->nativeObject,
-                                                                    AxluaCallbackRegistry::HandlerType::TOUCHES);
+                                                                         AxluaCallbackRegistry::HandlerType::TOUCHES);
 
     if (0 == handler)
         return 0;
@@ -517,7 +517,7 @@ int LuaEngine::handleEventAcc(void* data)
         return 0;
 
     int handler = AxluaCallbackRegistry::getInstance()->getObjectHandler(basicScriptData->nativeObject,
-                                                                    AxluaCallbackRegistry::HandlerType::EVENT_ACC);
+                                                                         AxluaCallbackRegistry::HandlerType::EVENT_ACC);
     if (0 == handler)
         return 0;
 
@@ -545,8 +545,8 @@ int LuaEngine::handleEvenCustom(void* data)
         return 0;
 
     CustomEvent* eventCustom = static_cast<CustomEvent*>(basicData->value);
-    int handler              = AxluaCallbackRegistry::getInstance()->getObjectHandler((void*)basicData->nativeObject,
-                                                                                 AxluaCallbackRegistry::HandlerType::EVENT_CUSTIOM);
+    int handler              = AxluaCallbackRegistry::getInstance()->getObjectHandler(
+        (void*)basicData->nativeObject, AxluaCallbackRegistry::HandlerType::EVENT_CUSTIOM);
 
     if (0 == handler)
         return 0;
@@ -643,8 +643,7 @@ int LuaEngine::handleTableViewEvent(AxluaCallbackRegistry::HandlerType type, voi
             break;
         }
         axlua::adapter::push_object(_stack->getLuaState(), (void*)(obj), "ax.TableView");
-        axlua::adapter::push_object(_stack->getLuaState(), (void*)(cellObject),
-                                     "ax.TableViewCell");
+        axlua::adapter::push_object(_stack->getLuaState(), (void*)(cellObject), "ax.TableViewCell");
         ret = _stack->executeFunctionByHandler(handler, 2);
     }
     break;
@@ -758,8 +757,8 @@ int LuaEngine::handleArmatureWrapper(AxluaCallbackRegistry::HandlerType type, vo
 
     LuaArmatureWrapperEventData* wrapperData = static_cast<LuaArmatureWrapperEventData*>(eventData->value);
 
-    int handler = AxluaCallbackRegistry::getInstance()->getObjectHandler((void*)eventData->nativeObject,
-                                                                    AxluaCallbackRegistry::HandlerType::ARMATURE_EVENT);
+    int handler = AxluaCallbackRegistry::getInstance()->getObjectHandler(
+        (void*)eventData->nativeObject, AxluaCallbackRegistry::HandlerType::ARMATURE_EVENT);
 
     if (0 == handler)
         return 0;

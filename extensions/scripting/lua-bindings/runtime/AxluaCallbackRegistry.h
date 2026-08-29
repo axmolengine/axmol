@@ -294,7 +294,7 @@ public:
 private:
     void init(void);
     static AxluaCallbackRegistry* _instance;
-    ax::EventDispatcher* _dispatcher = nullptr;
+    ax::EventDispatcher* _dispatcher      = nullptr;
     ax::EventListener* _disposingListener = nullptr;
     // Entries are removed by native lifecycle notifications. Do not infer
     // Object-ness from void*: this registry also tracks stack-owned listeners

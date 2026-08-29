@@ -29,5 +29,5 @@
 #include "axmol/base/Object.h"
 #include <string>
 
- int register_all_ax_sceneio_adapter(lua_State* L);
- int register_sceneio_module(lua_State* L);
+int register_all_ax_sceneio_adapter(lua_State* L);
+int register_sceneio_module(lua_State* L);

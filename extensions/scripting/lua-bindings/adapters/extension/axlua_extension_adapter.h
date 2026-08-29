@@ -39,13 +39,13 @@
  * package size would become smaller . The current mechanism,this registering function is called in the
  * lua_module_register.h
  */
- int register_extension_module(lua_State* luaState);
+int register_extension_module(lua_State* luaState);
 
 // end group
 /// @}
 
 /// @cond
- int register_all_ax_extension_adapter(lua_State* luaState);
+int register_all_ax_extension_adapter(lua_State* luaState);
 /// @endcond
 
 struct LuaAssetsManagerEventData

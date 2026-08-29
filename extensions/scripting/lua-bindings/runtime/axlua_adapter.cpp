@@ -51,7 +51,7 @@ void set_error(axlua::adapter::Error* error, int index, const char* type)
         return;
     error->index = index;
     error->array = 0;
-    error->type = type;
+    error->type  = type;
 }
 
 void ensure_registry_table(lua_State* state, const char* name)
@@ -94,7 +94,7 @@ bool is_registered_class_table(lua_State* state, int index, const char* type)
     {
         lua_getfield(state, -1, "__axlua_name");
         const char* className = lua_tostring(state, -1);
-        const bool matched = className != nullptr && type != nullptr && std::strcmp(className, type) == 0;
+        const bool matched    = className != nullptr && type != nullptr && std::strcmp(className, type) == 0;
         lua_pop(state, 1);
         if (matched)
         {
@@ -110,8 +110,8 @@ bool is_registered_class_table(lua_State* state, int index, const char* type)
         }
         lua_pushlightuserdata(state, const_cast<void*>(lua_topointer(state, -2)));
         lua_rawget(state, -2);
-        lua_remove(state, -2); // base registry
-        lua_remove(state, -2); // previous class table
+        lua_remove(state, -2);  // base registry
+        lua_remove(state, -2);  // previous class table
     }
     lua_pop(state, 1);
     return false;
@@ -150,9 +150,9 @@ bool is_registered_class(lua_State* state, int index, const char* type)
         if (lua_istable(state, -1))
         {
             const bool matched = is_registered_class_table(state, -1, type);
-            lua_pop(state, 1); // generated class table
-            lua_pop(state, 1); // class table registry
-            lua_pop(state, 1); // userdata metatable
+            lua_pop(state, 1);  // generated class table
+            lua_pop(state, 1);  // class table registry
+            lua_pop(state, 1);  // userdata metatable
             return matched;
         }
         lua_pop(state, 1);
@@ -271,7 +271,7 @@ bool push_named_class_table(lua_State* state, const char* name)
 
 bool is_generated_class_table(lua_State* state, int index)
 {
-    index = absolute_index(state, index);
+    index                  = absolute_index(state, index);
     const auto storageName = sol::to_string(sol::meta_function::storage);
     lua_getfield(state, index, storageName.c_str());
     const bool generated = lua_islightuserdata(state, -1);
@@ -291,7 +291,7 @@ void register_adapter_class_table(lua_State* state, const char* name, int classT
 
 void register_class_metatable(lua_State* state, int metatableIndex, int classTableIndex)
 {
-    metatableIndex = absolute_index(state, metatableIndex);
+    metatableIndex  = absolute_index(state, metatableIndex);
     classTableIndex = absolute_index(state, classTableIndex);
     ensure_registry_table(state, "axlua.class.tables");
     lua_getfield(state, LUA_REGISTRYINDEX, "axlua.class.tables");
@@ -306,7 +306,7 @@ void register_class_base(lua_State* state, int classTableIndex, const char* base
     if (base == nullptr || *base == '\0' || !push_named_class_table(state, base))
         return;
 
-    classTableIndex = absolute_index(state, classTableIndex);
+    classTableIndex     = absolute_index(state, classTableIndex);
     const int baseTable = absolute_index(state, -1);
     ensure_registry_table(state, "axlua.class.bases");
     lua_getfield(state, LUA_REGISTRYINDEX, "axlua.class.bases");
@@ -401,7 +401,7 @@ int adapter_gc_event(lua_State* state)
     remove_pointer_registry_entry(state, "axlua.object.identity", value);
     remove_pointer_registry_entry(state, OBJECT_BOX_REGISTRY, value);
     remove_pointer_registry_entry(state, axlua::adapter::kValueRootRegistry, value);
-    lua_pop(state, 2); // owned metatable and ownership table
+    lua_pop(state, 2);  // owned metatable and ownership table
     return 0;
 }
 
@@ -475,7 +475,7 @@ void push_user_type(lua_State* state, void* value, const char* type, bool root)
     if (!generated)
     {
         void** userdata = static_cast<void**>(lua_newuserdata(state, sizeof(void*)));
-        *userdata = value;
+        *userdata       = value;
         if (type != nullptr)
         {
             luaL_getmetatable(state, type);
@@ -499,7 +499,7 @@ void push_user_type(lua_State* state, void* value, const char* type, bool root)
 }
 }  // namespace
 
- void axlua::adapter::open(lua_State* state)
+void axlua::adapter::open(lua_State* state)
 {
     ensure_registry_table(state, axlua::adapter::kValueRootRegistry);
     ensure_ubox(state);
@@ -510,7 +510,7 @@ void push_user_type(lua_State* state, void* value, const char* type, bool root)
     register_metatable(state, "axlua.common_class");
 }
 
- void axlua::adapter::register_usertype(lua_State* state, const char* type)
+void axlua::adapter::register_usertype(lua_State* state, const char* type)
 {
     register_metatable(state, type);
     if (type != nullptr)
@@ -520,7 +520,7 @@ void push_user_type(lua_State* state, void* value, const char* type, bool root)
     }
 }
 
- void axlua::adapter::module(lua_State* state, const char* name, int)
+void axlua::adapter::module(lua_State* state, const char* name, int)
 {
     if (name == nullptr)
         return;
@@ -541,7 +541,7 @@ void push_user_type(lua_State* state, void* value, const char* type, bool root)
         lua_pop(state, 1);
 }
 
- void axlua::adapter::begin_module(lua_State* state, const char* name)
+void axlua::adapter::begin_module(lua_State* state, const char* name)
 {
     if (name == nullptr)
     {
@@ -563,14 +563,17 @@ void push_user_type(lua_State* state, void* value, const char* type, bool root)
     lua_remove(state, parent);
 }
 
- void axlua::adapter::end_module(lua_State* state)
+void axlua::adapter::end_module(lua_State* state)
 {
     if (lua_gettop(state) > 0)
         lua_pop(state, 1);
 }
 
- void axlua::adapter::register_class(lua_State* state, const char* luaName, const char* nativeName, const char* base,
-                             lua_CFunction collector)
+void axlua::adapter::register_class(lua_State* state,
+                                    const char* luaName,
+                                    const char* nativeName,
+                                    const char* base,
+                                    lua_CFunction collector)
 {
     axlua::adapter::register_usertype(state, nativeName);
     if (base != nullptr && *base != '\0')
@@ -649,19 +652,19 @@ void push_user_type(lua_State* state, void* value, const char* type, bool root)
     lua_pop(state, 1);
 }
 
- void axlua::adapter::set_function(lua_State* state, const char* name, lua_CFunction function)
+void axlua::adapter::set_function(lua_State* state, const char* name, lua_CFunction function)
 {
     lua_pushcfunction(state, function);
     lua_setfield(state, -2, name);
 }
 
- void axlua::adapter::set_constant(lua_State* state, const char* name, lua_Number value)
+void axlua::adapter::set_constant(lua_State* state, const char* name, lua_Number value)
 {
     lua_pushnumber(state, value);
     lua_setfield(state, -2, name);
 }
 
- void axlua::adapter::set_variable(lua_State* state, const char* name, lua_CFunction getter, lua_CFunction setter)
+void axlua::adapter::set_variable(lua_State* state, const char* name, lua_CFunction getter, lua_CFunction setter)
 {
     lua_getfield(state, -1, ".get");
     if (!lua_istable(state, -1))
@@ -691,7 +694,7 @@ void push_user_type(lua_State* state, void* value, const char* type, bool root)
     }
 }
 
- int axlua::adapter::register_gc(lua_State* state, int index)
+int axlua::adapter::register_gc(lua_State* state, int index)
 {
     index = absolute_index(state, index);
     if (!lua_isuserdata(state, index))
@@ -706,7 +709,7 @@ void push_user_type(lua_State* state, void* value, const char* type, bool root)
         lua_pop(state, 1);
         return 0;
     }
-    lua_pop(state, 1); // collector
+    lua_pop(state, 1);  // collector
     install_gc_event(state, metatable);
 
     ensure_registry_table(state, OWNED_OBJECT_REGISTRY);
@@ -727,7 +730,7 @@ void push_user_type(lua_State* state, void* value, const char* type, bool root)
     return 1;
 }
 
- const char* axlua::adapter::type_name(lua_State* state, int index)
+const char* axlua::adapter::type_name(lua_State* state, int index)
 {
     if (lua_isnone(state, index))
     {
@@ -749,13 +752,13 @@ void push_user_type(lua_State* state, void* value, const char* type, bool root)
     return lua_tostring(state, -1);
 }
 
- void axlua::adapter::raise_error(lua_State* state, const char* message, axlua::adapter::Error* error)
+void axlua::adapter::raise_error(lua_State* state, const char* message, axlua::adapter::Error* error)
 {
     if (message != nullptr && message[0] == '#' && error != nullptr)
     {
-        const char* providedName = axlua::adapter::type_name(state, error->index);
+        const char* providedName   = axlua::adapter::type_name(state, error->index);
         const std::string provided = providedName != nullptr ? providedName : "value";
-        const char* expected = error->type != nullptr ? error->type : "value";
+        const char* expected       = error->type != nullptr ? error->type : "value";
         lua_remove(state, -1);
         luaL_error(state, "%s\n     argument #%d is '%s'; '%s' expected.", message + 2, error->index, provided.c_str(),
                    expected);
@@ -763,13 +766,13 @@ void push_user_type(lua_State* state, void* value, const char* type, bool root)
     luaL_error(state, "%s", message != nullptr ? message : "Lua binding error");
 }
 
-#define AXLUA_ADAPTER_CHECK(name, predicate, expected)                                                      \
-     int name(lua_State* state, int index, int hasDefault, axlua::adapter::Error* error)                \
-    {                                                                                                   \
-        if ((hasDefault && lua_gettop(state) < std::abs(index)) || predicate(state, index))           \
-            return 1;                                                                                  \
-        set_error(error, index, expected);                                                              \
-        return 0;                                                                                       \
+#define AXLUA_ADAPTER_CHECK(name, predicate, expected)                                      \
+    int name(lua_State* state, int index, int hasDefault, axlua::adapter::Error* error)     \
+    {                                                                                       \
+        if ((hasDefault && lua_gettop(state) < std::abs(index)) || predicate(state, index)) \
+            return 1;                                                                       \
+        set_error(error, index, expected);                                                  \
+        return 0;                                                                           \
     }
 
 AXLUA_ADAPTER_CHECK(axlua::adapter::is_boolean, lua_isboolean, "boolean")
@@ -779,7 +782,7 @@ AXLUA_ADAPTER_CHECK(axlua::adapter::is_table, lua_istable, "table")
 
 #undef AXLUA_ADAPTER_CHECK
 
- int axlua::adapter::is_no_object(lua_State* state, int index, axlua::adapter::Error* error)
+int axlua::adapter::is_no_object(lua_State* state, int index, axlua::adapter::Error* error)
 {
     if (lua_gettop(state) < std::abs(index))
         return 1;
@@ -787,7 +790,11 @@ AXLUA_ADAPTER_CHECK(axlua::adapter::is_table, lua_istable, "table")
     return 0;
 }
 
- int axlua::adapter::is_usertype(lua_State* state, int index, const char* type, int hasDefault, axlua::adapter::Error* error)
+int axlua::adapter::is_usertype(lua_State* state,
+                                int index,
+                                const char* type,
+                                int hasDefault,
+                                axlua::adapter::Error* error)
 {
     if ((hasDefault && lua_gettop(state) < std::abs(index)) || is_registered_class(state, index, type))
         return 1;
@@ -795,7 +802,11 @@ AXLUA_ADAPTER_CHECK(axlua::adapter::is_table, lua_istable, "table")
     return 0;
 }
 
- int axlua::adapter::is_usertable(lua_State* state, int index, const char* type, int hasDefault, axlua::adapter::Error* error)
+int axlua::adapter::is_usertable(lua_State* state,
+                                 int index,
+                                 const char* type,
+                                 int hasDefault,
+                                 axlua::adapter::Error* error)
 {
     if (lua_istable(state, index) && is_registered_class(state, index, type))
         return 1;
@@ -805,22 +816,22 @@ AXLUA_ADAPTER_CHECK(axlua::adapter::is_table, lua_istable, "table")
     return 0;
 }
 
- lua_Number axlua::adapter::to_number(lua_State* state, int index, lua_Number defaultValue)
+lua_Number axlua::adapter::to_number(lua_State* state, int index, lua_Number defaultValue)
 {
     return lua_gettop(state) < std::abs(index) ? defaultValue : lua_tonumber(state, index);
 }
 
- lua_Integer axlua::adapter::to_integer(lua_State* state, int index, lua_Integer defaultValue)
+lua_Integer axlua::adapter::to_integer(lua_State* state, int index, lua_Integer defaultValue)
 {
     return lua_gettop(state) < std::abs(index) ? defaultValue : lua_tointeger(state, index);
 }
 
- const char* axlua::adapter::to_string(lua_State* state, int index, const char* defaultValue)
+const char* axlua::adapter::to_string(lua_State* state, int index, const char* defaultValue)
 {
     return lua_gettop(state) < std::abs(index) ? defaultValue : lua_tostring(state, index);
 }
 
- void* axlua::adapter::to_usertype(lua_State* state, int index, void* defaultValue)
+void* axlua::adapter::to_usertype(lua_State* state, int index, void* defaultValue)
 {
     if (lua_gettop(state) < std::abs(index))
         return defaultValue;
@@ -832,12 +843,12 @@ AXLUA_ADAPTER_CHECK(axlua::adapter::is_table, lua_istable, "table")
     return value != nullptr ? *value : nullptr;
 }
 
- int axlua::adapter::to_boolean(lua_State* state, int index, int defaultValue)
+int axlua::adapter::to_boolean(lua_State* state, int index, int defaultValue)
 {
     return lua_gettop(state) < std::abs(index) ? defaultValue : lua_toboolean(state, index);
 }
 
- lua_Number axlua::adapter::to_field_number(lua_State* state, int tableIndex, int field, lua_Number defaultValue)
+lua_Number axlua::adapter::to_field_number(lua_State* state, int tableIndex, int field, lua_Number defaultValue)
 {
     lua_pushinteger(state, field);
     lua_gettable(state, tableIndex);
@@ -846,25 +857,31 @@ AXLUA_ADAPTER_CHECK(axlua::adapter::is_table, lua_istable, "table")
     return value;
 }
 
- void axlua::adapter::push_boolean(lua_State* state, int value) { lua_pushboolean(state, value); }
- void axlua::adapter::push_number(lua_State* state, lua_Number value) { lua_pushnumber(state, value); }
- void axlua::adapter::push_string(lua_State* state, const char* value)
+void axlua::adapter::push_boolean(lua_State* state, int value)
+{
+    lua_pushboolean(state, value);
+}
+void axlua::adapter::push_number(lua_State* state, lua_Number value)
+{
+    lua_pushnumber(state, value);
+}
+void axlua::adapter::push_string(lua_State* state, const char* value)
 {
     if (value == nullptr)
         lua_pushnil(state);
     else
         lua_pushstring(state, value);
 }
- void axlua::adapter::push_usertype(lua_State* state, void* value, const char* type)
+void axlua::adapter::push_usertype(lua_State* state, void* value, const char* type)
 {
     push_user_type(state, value, type, false);
 }
- void axlua::adapter::push_usertype_rooted(lua_State* state, void* value, const char* type)
+void axlua::adapter::push_usertype_rooted(lua_State* state, void* value, const char* type)
 {
     push_user_type(state, value, type, true);
 }
 
- void axlua::adapter::open_bindings(lua_State* L)
+void axlua::adapter::open_bindings(lua_State* L)
 {
     axlua::adapter::open(L);
     ensure_identity_table(L);
@@ -874,7 +891,7 @@ AXLUA_ADAPTER_CHECK(axlua::adapter::is_table, lua_istable, "table")
     lua_rawset(L, LUA_REGISTRYINDEX);
 }
 
- int axlua::adapter::push_object(lua_State* L, void* ptr, const char* type)
+int axlua::adapter::push_object(lua_State* L, void* ptr, const char* type)
 {
     if (ptr == NULL)
     {
@@ -882,7 +899,7 @@ AXLUA_ADAPTER_CHECK(axlua::adapter::is_table, lua_istable, "table")
         return -1;
     }
 
-    Object* vPtr      = static_cast<Object*>(ptr);
+    Object* vPtr = static_cast<Object*>(ptr);
     axlua::remember_object(vPtr);
     const char* vType = getLuaTypeName(vPtr, type);
 
@@ -891,7 +908,7 @@ AXLUA_ADAPTER_CHECK(axlua::adapter::is_table, lua_istable, "table")
     return 0;
 }
 
- int axlua::adapter::ref_function(lua_State* L, int lo, int def)
+int axlua::adapter::ref_function(lua_State* L, int lo, int def)
 {
     if (!lua_isfunction(L, lo))
         return 0;
@@ -904,7 +921,7 @@ AXLUA_ADAPTER_CHECK(axlua::adapter::is_table, lua_istable, "table")
     return refid;
 }
 
- void axlua::adapter::push_function(lua_State* L, int refid)
+void axlua::adapter::push_function(lua_State* L, int refid)
 {
     lua_pushstring(L, axlua::adapter::kFunctionRegistry);
     lua_rawget(L, LUA_REGISTRYINDEX);
@@ -912,7 +929,7 @@ AXLUA_ADAPTER_CHECK(axlua::adapter::is_table, lua_istable, "table")
     lua_remove(L, -2);
 }
 
- void axlua::adapter::remove_function(lua_State* L, int refid)
+void axlua::adapter::remove_function(lua_State* L, int refid)
 {
     lua_pushstring(L, axlua::adapter::kFunctionRegistry);
     lua_rawget(L, LUA_REGISTRYINDEX);
@@ -921,7 +938,7 @@ AXLUA_ADAPTER_CHECK(axlua::adapter::is_table, lua_istable, "table")
 }
 
 // check lua value is function
- int axlua::adapter::is_function(lua_State* L, int lo, const char* type, int def, axlua::adapter::Error* err)
+int axlua::adapter::is_function(lua_State* L, int lo, const char* type, int def, axlua::adapter::Error* err)
 {
     if (lua_gettop(L) >= abs(lo) && lua_isfunction(L, lo))
     {
@@ -933,7 +950,7 @@ AXLUA_ADAPTER_CHECK(axlua::adapter::is_table, lua_istable, "table")
     return 0;
 }
 
- int axlua::adapter::is_table(lua_State* L, int lo, const char* type, int def, axlua::adapter::Error* err)
+int axlua::adapter::is_table(lua_State* L, int lo, const char* type, int def, axlua::adapter::Error* err)
 {
     return axlua::adapter::is_table(L, lo, def, err);
 }

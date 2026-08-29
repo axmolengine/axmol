@@ -42,7 +42,7 @@
  * The current mechanism,this function is called in the lua_module_register.h
  */
 
- int register_navmesh_module(lua_State* L);
+int register_navmesh_module(lua_State* L);
 
 // end group
 /// @}

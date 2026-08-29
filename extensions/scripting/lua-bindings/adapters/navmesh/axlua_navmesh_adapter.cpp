@@ -66,7 +66,8 @@ int axlua_navmesh_NavMeshAgent_move(lua_State* luaState)
         ok &= luaval_to_vec3(luaState, 2, &arg0, "ax.NavMeshAgent:move");
         if (!ok)
         {
-            axlua::adapter::raise_error(luaState, "invalid arguments in function 'axlua_navmesh_NavMeshAgent_move'", nullptr);
+            axlua::adapter::raise_error(luaState, "invalid arguments in function 'axlua_navmesh_NavMeshAgent_move'",
+                                        nullptr);
             return 0;
         }
         obj->move(arg0);
@@ -90,7 +91,8 @@ int axlua_navmesh_NavMeshAgent_move(lua_State* luaState)
 
         if (!ok)
         {
-            axlua::adapter::raise_error(luaState, "invalid arguments in function 'axlua_navmesh_NavMeshAgent_move'", nullptr);
+            axlua::adapter::raise_error(luaState, "invalid arguments in function 'axlua_navmesh_NavMeshAgent_move'",
+                                        nullptr);
             return 0;
         }
         obj->move(arg0, [=](ax::NavMeshAgent* agent, float totalTimeAfterMove) {

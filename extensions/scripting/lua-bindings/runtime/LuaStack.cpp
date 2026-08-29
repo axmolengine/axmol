@@ -173,7 +173,7 @@ int lua_version(lua_State* L)
 
 void install_render_view_bridge(lua_State* L)
 {
-    auto module = axlua::Module::from(L, "ax").table();
+    auto module            = axlua::Module::from(L, "ax").table();
     sol::object coreObject = module["RenderViewCore"];
     if (!coreObject.valid() || !coreObject.is<sol::table>())
         return;
@@ -181,15 +181,13 @@ void install_render_view_bridge(lua_State* L)
     auto core = coreObject.as<sol::table>();
     core.set_function("createWithRect", [](lua_State* state) {
         const int firstArgument = lua_istable(state, 1) ? 2 : 1;
-        const auto name = sol::stack::get<std::string_view>(state, firstArgument);
-        const auto rectTable = sol::stack::get<sol::table>(state, firstArgument + 1);
-        const ax::Rect rect{rectTable.get_or("x", 0.0f),
-                            rectTable.get_or("y", 0.0f),
-                            rectTable.get_or("width", 0.0f),
+        const auto name         = sol::stack::get<std::string_view>(state, firstArgument);
+        const auto rectTable    = sol::stack::get<sol::table>(state, firstArgument + 1);
+        const ax::Rect rect{rectTable.get_or("x", 0.0f), rectTable.get_or("y", 0.0f), rectTable.get_or("width", 0.0f),
                             rectTable.get_or("height", 0.0f)};
         const auto scale = sol::stack::get<float>(state, firstArgument + 2);
         const auto vsync = sol::stack::get<bool>(state, firstArgument + 3);
-        auto* view = static_cast<ax::RenderViewCore*>(ax::RenderView::createWithRect(name, rect, scale, vsync));
+        auto* view       = static_cast<ax::RenderViewCore*>(ax::RenderView::createWithRect(name, rect, scale, vsync));
         return axlua::push_object(state, view);
     });
     module.set("RenderView", core);

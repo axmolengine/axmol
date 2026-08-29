@@ -36,7 +36,6 @@ int axlua_3d_AABB_updateMinMax(lua_State* L);
 int axlua_3d_OBB_getCorners(lua_State* L);
 int axlua_3d_Ray_intersects(lua_State* L);
 
-
 int axlua_3d_MeshRenderer_createAsync(lua_State* L)
 {
     int argc = 0;
@@ -484,7 +483,8 @@ int axlua_3d_Terrain_getIntersectionPoint(lua_State* luaState)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'axlua_3d_Terrain_getIntersectionPoint'", nullptr);
+        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'axlua_3d_Terrain_getIntersectionPoint'",
+                                    nullptr);
         return 0;
     }
 #endif
@@ -537,7 +537,8 @@ int axlua_3d_Terrain_getIntersectionPoint(lua_State* luaState)
 
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_3d_Terrain_getIntersectionPoint'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_3d_Terrain_getIntersectionPoint'.",
+                                &conversionError);
 #endif
 
     return 0;
@@ -578,7 +579,8 @@ int axlua_3d_Bundle3D_getTrianglesList(lua_State* L)
         ok &= luaval_to_std_string(L, 2, &arg0, "ax.Bundle3D:getTrianglesList");
         if (!ok)
         {
-            axlua::adapter::raise_error(L, "invalid arguments in function 'axlua_3d_Bundle3D_getTrianglesList'", nullptr);
+            axlua::adapter::raise_error(L, "invalid arguments in function 'axlua_3d_Bundle3D_getTrianglesList'",
+                                        nullptr);
             return 0;
         }
 
@@ -746,7 +748,6 @@ argumentError:
     return 0;
 }
 
-
 int axlua_3d_OBB_getCorners(lua_State* L)
 {
     int argc     = 0;
@@ -828,8 +829,6 @@ argumentError:
     return 0;
 }
 
-
-
 int axlua_3d_Ray_intersects(lua_State* L)
 {
     int argc      = 0;
@@ -873,8 +872,6 @@ argumentError:
 #endif
 }
 
-
-
 int register_ax_3d_module(lua_State* L)
 {
     lua_getglobal(L, "_G");
@@ -882,7 +879,6 @@ int register_ax_3d_module(lua_State* L)
     {
         register_all_ax_3d(L);
         register_all_ax_3d_adapter(L);
-
     }
     if (lua_gettop(L) > 0)
         lua_pop(L, 1);

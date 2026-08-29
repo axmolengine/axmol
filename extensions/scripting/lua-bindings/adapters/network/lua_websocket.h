@@ -49,6 +49,6 @@ public:
     };
 };
 
- int open_web_socket_binding(lua_State* luaState);
- int register_web_socket_adapter(lua_State* luaState);
+int open_web_socket_binding(lua_State* luaState);
+int register_web_socket_adapter(lua_State* luaState);
 ///@endcond

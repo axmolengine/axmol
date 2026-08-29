@@ -55,7 +55,8 @@ static int axlua_SkeletonAnimation_createWithFile(lua_State* L)
     if (2 == argc)
     {
 #    if _AX_DEBUG >= 1
-        if (!axlua::adapter::is_string(L, 2, 0, &conversionError) || !axlua::adapter::is_string(L, 3, 0, &conversionError))
+        if (!axlua::adapter::is_string(L, 2, 0, &conversionError) ||
+            !axlua::adapter::is_string(L, 3, 0, &conversionError))
         {
             goto argumentError;
         }
@@ -71,7 +72,8 @@ static int axlua_SkeletonAnimation_createWithFile(lua_State* L)
     else if (3 == argc)
     {
 #    if _AX_DEBUG >= 1
-        if (!axlua::adapter::is_string(L, 2, 0, &conversionError) || !axlua::adapter::is_string(L, 3, 0, &conversionError) ||
+        if (!axlua::adapter::is_string(L, 2, 0, &conversionError) ||
+            !axlua::adapter::is_string(L, 3, 0, &conversionError) ||
             !axlua::adapter::is_number(L, 4, 0, &conversionError))
         {
             goto argumentError;
@@ -183,7 +185,8 @@ int axlua_SkeletonAnimation_registerSpineEventHandler00(lua_State* luaState)
 {
     axlua::adapter::Error conversionError;
     if (!axlua::adapter::is_usertype(luaState, 1, "sp.SkeletonAnimation", 0, &conversionError) ||
-        !axlua::adapter::is_function(luaState, 2, "LUA_FUNCTION", 0, &conversionError) || !axlua::adapter::is_number(luaState, 3, 0, &conversionError) ||
+        !axlua::adapter::is_function(luaState, 2, "LUA_FUNCTION", 0, &conversionError) ||
+        !axlua::adapter::is_number(luaState, 3, 0, &conversionError) ||
         !axlua::adapter::is_no_object(luaState, 4, &conversionError))
         goto argumentError;
     else
@@ -260,7 +263,8 @@ int axlua_SkeletonAnimation_unregisterSpineEventHandler00(lua_State* luaState)
 {
     axlua::adapter::Error conversionError;
     if (!axlua::adapter::is_usertype(luaState, 1, "sp.SkeletonAnimation", 0, &conversionError) ||
-        !axlua::adapter::is_number(luaState, 2, 0, &conversionError) || !axlua::adapter::is_no_object(luaState, 3, &conversionError))
+        !axlua::adapter::is_number(luaState, 2, 0, &conversionError) ||
+        !axlua::adapter::is_no_object(luaState, 3, &conversionError))
         goto argumentError;
     else
     {
@@ -268,7 +272,8 @@ int axlua_SkeletonAnimation_unregisterSpineEventHandler00(lua_State* luaState)
         if (NULL != self)
         {
             spine::EventType eventType = static_cast<spine::EventType>((int)axlua::adapter::to_number(luaState, 2, 0));
-            AxluaCallbackRegistry::HandlerType handlerType = AxluaCallbackRegistry::HandlerType::EVENT_SPINE_ANIMATION_START;
+            AxluaCallbackRegistry::HandlerType handlerType =
+                AxluaCallbackRegistry::HandlerType::EVENT_SPINE_ANIMATION_START;
             switch (eventType)
             {
             case spine::EventType::EventType_Start:
@@ -326,7 +331,8 @@ static int axlua_spine_SkeletonAnimation_addAnimation(lua_State* luaState)
 #    if _AX_DEBUG >= 1
     if (!obj)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'axlua_spine_SkeletonAnimation_addAnimation'", nullptr);
+        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'axlua_spine_SkeletonAnimation_addAnimation'",
+                                    nullptr);
         return 0;
     }
 #    endif
@@ -381,7 +387,8 @@ static int axlua_spine_SkeletonAnimation_addAnimation(lua_State* luaState)
 
 #    if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_spine_SkeletonAnimation_addAnimation'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_spine_SkeletonAnimation_addAnimation'.",
+                                &conversionError);
 #    endif
 
     return 0;
@@ -407,7 +414,8 @@ static int axlua_spine_SkeletonAnimation_setAnimation(lua_State* luaState)
 #    if _AX_DEBUG >= 1
     if (!obj)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'axlua_spine_SkeletonAnimation_setAnimation'", nullptr);
+        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'axlua_spine_SkeletonAnimation_setAnimation'",
+                                    nullptr);
         return 0;
     }
 #    endif
@@ -439,7 +447,8 @@ static int axlua_spine_SkeletonAnimation_setAnimation(lua_State* luaState)
 
 #    if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_spine_SkeletonAnimation_setAnimation'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_spine_SkeletonAnimation_setAnimation'.",
+                                &conversionError);
 #    endif
 
     return 0;
@@ -452,7 +461,8 @@ static int axlua_spine_SkeletonAnimation_getBoundingBox(lua_State* luaState)
 #    if _AX_DEBUG >= 1
     if (!obj)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'axlua_spine_SkeletonAnimation_getBoundingBox'", nullptr);
+        axlua::adapter::raise_error(
+            luaState, "invalid 'obj' in function 'axlua_spine_SkeletonAnimation_getBoundingBox'", nullptr);
         return 0;
     }
 #    endif
@@ -490,7 +500,8 @@ static int axlua_spine_SkeletonAnimation_findBone(lua_State* luaState)
 #    if _AX_DEBUG >= 1
     if (!obj)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'axlua_spine_SkeletonAnimation_findBone'", nullptr);
+        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'axlua_spine_SkeletonAnimation_findBone'",
+                                    nullptr);
         return 0;
     }
 #    endif
@@ -545,7 +556,8 @@ static int axlua_spine_SkeletonAnimation_findBone(lua_State* luaState)
 
 #    if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_spine_SkeletonAnimation_findBone'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_spine_SkeletonAnimation_findBone'.",
+                                &conversionError);
 #    endif
 
     return 0;
@@ -558,8 +570,10 @@ static void extendSkeletonAnimation(lua_State* L)
     if (lua_istable(L, -1))
     {
         axlua::adapter::set_function(L, "create", axlua_SkeletonAnimation_createWithFile);
-        axlua::adapter::set_function(L, "registerSpineEventHandler", axlua_SkeletonAnimation_registerSpineEventHandler00);
-        axlua::adapter::set_function(L, "unregisterSpineEventHandler", axlua_SkeletonAnimation_unregisterSpineEventHandler00);
+        axlua::adapter::set_function(L, "registerSpineEventHandler",
+                                     axlua_SkeletonAnimation_registerSpineEventHandler00);
+        axlua::adapter::set_function(L, "unregisterSpineEventHandler",
+                                     axlua_SkeletonAnimation_unregisterSpineEventHandler00);
         axlua::adapter::set_function(L, "addAnimation", axlua_spine_SkeletonAnimation_addAnimation);
         axlua::adapter::set_function(L, "setAnimation", axlua_spine_SkeletonAnimation_setAnimation);
         axlua::adapter::set_function(L, "findBone", axlua_spine_SkeletonAnimation_findBone);

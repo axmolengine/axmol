@@ -69,7 +69,9 @@ int lua_module_register(lua_State* L)
     register_spine_module(L);
 #endif  // defined(AX_ENABLE_EXT_SPINE)
     register_ax_3d_module(L);
-#if defined(AX_ENABLE_AUDIO) && (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC || defined(_WIN32) || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX || AX_TARGET_PLATFORM == AX_PLATFORM_WASM)
+#if defined(AX_ENABLE_AUDIO) && (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || \
+                                 AX_TARGET_PLATFORM == AX_PLATFORM_MAC || defined(_WIN32) ||                           \
+                                 AX_TARGET_PLATFORM == AX_PLATFORM_LINUX || AX_TARGET_PLATFORM == AX_PLATFORM_WASM)
     register_all_ax_audioengine(L);
 #endif
 #if defined(AX_ENABLE_PHYSICS_3D)

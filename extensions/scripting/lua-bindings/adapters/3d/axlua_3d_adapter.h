@@ -37,7 +37,7 @@
  * If you don't register the cocos3d module, the package size would become smaller .
  * The current mechanism,this function is called in the lua_module_register.h
  */
- int register_ax_3d_module(lua_State* L);
+int register_ax_3d_module(lua_State* L);
 
 // end group
 /// @}

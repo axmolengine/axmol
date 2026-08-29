@@ -124,7 +124,8 @@ static int lua_ax_addSearchPath(lua_State* L)
     if (2 == argc)
     {
 #if _AX_DEBUG >= 1
-        if (!axlua::adapter::is_string(L, 1, 0, &conversionError) || !axlua::adapter::is_boolean(L, 2, 0, &conversionError))
+        if (!axlua::adapter::is_string(L, 1, 0, &conversionError) ||
+            !axlua::adapter::is_boolean(L, 2, 0, &conversionError))
             goto argumentError;
 #endif
         std::string pathToSave = axlua::adapter::to_string(L, 1, "");

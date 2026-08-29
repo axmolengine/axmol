@@ -89,7 +89,8 @@ static int axlua_ListView_addScrollViewEventListener(lua_State* L)
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        axlua::adapter::raise_error(L, "invalid 'self' in function 'axlua_ListView_addScrollViewEventListener'\n", NULL);
+        axlua::adapter::raise_error(L, "invalid 'self' in function 'axlua_ListView_addScrollViewEventListener'\n",
+                                    NULL);
         return 0;
     }
 #endif
@@ -301,7 +302,8 @@ static int axlua_EditBox_registerScriptEditBoxHandler(lua_State* L)
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        axlua::adapter::raise_error(L, "invalid 'self' in function 'axlua_EditBox_registerScriptEditBoxHandler'\n", NULL);
+        axlua::adapter::raise_error(L, "invalid 'self' in function 'axlua_EditBox_registerScriptEditBoxHandler'\n",
+                                    NULL);
         return 0;
     }
 #endif
@@ -327,7 +329,8 @@ static int axlua_EditBox_registerScriptEditBoxHandler(lua_State* L)
 
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(L, "#ferror in function 'axlua_EditBox_registerScriptEditBoxHandler'.", &conversionError);
+    axlua::adapter::raise_error(L, "#ferror in function 'axlua_EditBox_registerScriptEditBoxHandler'.",
+                                &conversionError);
     return 0;
 #endif
 }
@@ -352,7 +355,8 @@ static int axlua_EditBox_unregisterScriptEditBoxHandler(lua_State* L)
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        axlua::adapter::raise_error(L, "invalid 'self' in function 'axlua_EditBox_unregisterScriptEditBoxHandler'\n", NULL);
+        axlua::adapter::raise_error(L, "invalid 'self' in function 'axlua_EditBox_unregisterScriptEditBoxHandler'\n",
+                                    NULL);
         return 0;
     }
 #endif
@@ -371,7 +375,8 @@ static int axlua_EditBox_unregisterScriptEditBoxHandler(lua_State* L)
 
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(L, "#ferror in function 'axlua_EditBox_unregisterScriptEditBoxHandler'.", &conversionError);
+    axlua::adapter::raise_error(L, "#ferror in function 'axlua_EditBox_unregisterScriptEditBoxHandler'.",
+                                &conversionError);
     return 0;
 #endif
 }
@@ -444,15 +449,15 @@ static void cloneFocusHandler(const FocusEventListener* src, FocusEventListener*
     if (nullptr == src || nullptr == dst)
         return;
 
-    LUA_FUNCTION handler =
-        AxluaCallbackRegistry::getInstance()->getObjectHandler((void*)src, AxluaCallbackRegistry::HandlerType::EVENT_FOCUS);
+    LUA_FUNCTION handler = AxluaCallbackRegistry::getInstance()->getObjectHandler(
+        (void*)src, AxluaCallbackRegistry::HandlerType::EVENT_FOCUS);
     if (0 != handler)
     {
         int newscriptHandler =
             ax::ScriptEngineManager::getInstance()->getScriptEngine()->reallocateScriptHandler(handler);
 
         AxluaCallbackRegistry::getInstance()->addObjectHandler((void*)dst, newscriptHandler,
-                                                          AxluaCallbackRegistry::HandlerType::EVENT_FOCUS);
+                                                               AxluaCallbackRegistry::HandlerType::EVENT_FOCUS);
         dst->onFocusChanged = [=](ui::Widget* widgetLostFocus, ui::Widget* widgetGetFocus) {
             auto stack   = LuaEngine::getInstance()->getLuaStack();
             lua_State* L = stack->getLuaState();
@@ -527,7 +532,8 @@ static int toaxlua_FocusEventListener_registerScriptHandler(lua_State* L)
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        axlua::adapter::raise_error(L, "invalid 'self' in function 'toaxlua_FocusEventListener_registerScriptHandler'\n", nullptr);
+        axlua::adapter::raise_error(
+            L, "invalid 'self' in function 'toaxlua_FocusEventListener_registerScriptHandler'\n", nullptr);
         return 0;
     }
 #endif
@@ -544,7 +550,7 @@ static int toaxlua_FocusEventListener_registerScriptHandler(lua_State* L)
         LUA_FUNCTION handler = axlua::adapter::ref_function(L, 2, 0);
 
         AxluaCallbackRegistry::getInstance()->addObjectHandler((void*)self, handler,
-                                                          AxluaCallbackRegistry::HandlerType::EVENT_FOCUS);
+                                                               AxluaCallbackRegistry::HandlerType::EVENT_FOCUS);
 
         self->onFocusChanged = [=](ui::Widget* widgetLostFocus, ui::Widget* widgetGetFocus) {
             auto stack = LuaEngine::getInstance()->getLuaStack();
@@ -562,7 +568,8 @@ static int toaxlua_FocusEventListener_registerScriptHandler(lua_State* L)
 
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(L, "#ferror in function 'toaxlua_FocusEventListener_registerScriptHandler'.", &conversionError);
+    axlua::adapter::raise_error(L, "#ferror in function 'toaxlua_FocusEventListener_registerScriptHandler'.",
+                                &conversionError);
     return 0;
 #endif
 }

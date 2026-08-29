@@ -84,7 +84,8 @@ public:
         {
             LuaAssetsManagerEventData eventData(percent);
             BasicScriptData data((void*)this, &eventData);
-            LuaEngine::getInstance()->handleEvent(AxluaCallbackRegistry::HandlerType::ASSETSMANAGER_PROGRESS, (void*)&data);
+            LuaEngine::getInstance()->handleEvent(AxluaCallbackRegistry::HandlerType::ASSETSMANAGER_PROGRESS,
+                                                  (void*)&data);
         }
     }
 
@@ -96,7 +97,8 @@ public:
         {
             LuaAssetsManagerEventData eventData;
             BasicScriptData data((void*)this, &eventData);
-            LuaEngine::getInstance()->handleEvent(AxluaCallbackRegistry::HandlerType::ASSETSMANAGER_SUCCESS, (void*)&data);
+            LuaEngine::getInstance()->handleEvent(AxluaCallbackRegistry::HandlerType::ASSETSMANAGER_SUCCESS,
+                                                  (void*)&data);
         }
     }
 
@@ -108,7 +110,8 @@ public:
         {
             LuaAssetsManagerEventData eventData((int)errorCode);
             BasicScriptData data((void*)this, &eventData);
-            LuaEngine::getInstance()->handleEvent(AxluaCallbackRegistry::HandlerType::ASSETSMANAGER_ERROR, (void*)&data);
+            LuaEngine::getInstance()->handleEvent(AxluaCallbackRegistry::HandlerType::ASSETSMANAGER_ERROR,
+                                                  (void*)&data);
         }
     }
 };
@@ -142,7 +145,8 @@ static int axlua_AssetsManager_setDelegate(lua_State* L)
     if (2 == argc)
     {
 #if _AX_DEBUG >= 1
-        if (!axlua::adapter::is_function(L, 2, "LUA_FUNCTION", 0, &conversionError) || !axlua::adapter::is_number(L, 3, 0, &conversionError))
+        if (!axlua::adapter::is_function(L, 2, "LUA_FUNCTION", 0, &conversionError) ||
+            !axlua::adapter::is_number(L, 3, 0, &conversionError))
         {
             goto argumentError;
         }
@@ -160,7 +164,7 @@ static int axlua_AssetsManager_setDelegate(lua_State* L)
         LUA_FUNCTION handler = axlua::adapter::ref_function(L, 2, 0);
         AxluaCallbackRegistry::HandlerType handlerType =
             (AxluaCallbackRegistry::HandlerType)((int)axlua::adapter::to_number(L, 3, 0) +
-                                            (int)AxluaCallbackRegistry::HandlerType::ASSETSMANAGER_PROGRESS);
+                                                 (int)AxluaCallbackRegistry::HandlerType::ASSETSMANAGER_PROGRESS);
 
         AxluaCallbackRegistry::getInstance()->addObjectHandler((void*)delegate, handler, handlerType);
         return 0;
@@ -238,7 +242,8 @@ static int axlua_Extension_EventListenerAssetsManagerEx_create(lua_State* L)
 
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(L, "#ferror in function 'axlua_Extension_EventListenerAssetsManagerEx_create'.", &conversionError);
+    axlua::adapter::raise_error(L, "#ferror in function 'axlua_Extension_EventListenerAssetsManagerEx_create'.",
+                                &conversionError);
     return 0;
 #endif
 }
@@ -274,7 +279,8 @@ int axlua_extension_ParticleSystem3D_getParticlePool(lua_State* luaState)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'axlua_extension_ParticleSystem3D_getParticlePool'", nullptr);
+        axlua::adapter::raise_error(
+            luaState, "invalid 'obj' in function 'axlua_extension_ParticleSystem3D_getParticlePool'", nullptr);
         return 0;
     }
 #endif
@@ -284,8 +290,8 @@ int axlua_extension_ParticleSystem3D_getParticlePool(lua_State* luaState)
     {
         if (!ok)
         {
-            axlua::adapter::raise_error(luaState, "invalid arguments in function 'axlua_extension_ParticleSystem3D_getParticlePool'",
-                        nullptr);
+            axlua::adapter::raise_error(
+                luaState, "invalid arguments in function 'axlua_extension_ParticleSystem3D_getParticlePool'", nullptr);
             return 0;
         }
         const ax::ParticlePool& ret = obj->getParticlePool();
@@ -298,7 +304,8 @@ int axlua_extension_ParticleSystem3D_getParticlePool(lua_State* luaState)
 
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_extension_ParticleSystem3D_getParticlePool'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_extension_ParticleSystem3D_getParticlePool'.",
+                                &conversionError);
 #endif
 
     return 0;
@@ -335,7 +342,8 @@ int axlua_extension_ParticlePool_getActiveDataList(lua_State* luaState)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'axlua_extension_ParticlePool_getActiveDataList'", nullptr);
+        axlua::adapter::raise_error(
+            luaState, "invalid 'obj' in function 'axlua_extension_ParticlePool_getActiveDataList'", nullptr);
         return 0;
     }
 #endif
@@ -345,8 +353,8 @@ int axlua_extension_ParticlePool_getActiveDataList(lua_State* luaState)
     {
         if (!ok)
         {
-            axlua::adapter::raise_error(luaState, "invalid arguments in function 'axlua_extension_ParticlePool_getActiveDataList'",
-                        nullptr);
+            axlua::adapter::raise_error(
+                luaState, "invalid arguments in function 'axlua_extension_ParticlePool_getActiveDataList'", nullptr);
             return 0;
         }
         const ParticlePool::PoolList& ret = obj->getActiveDataList();
@@ -375,7 +383,8 @@ int axlua_extension_ParticlePool_getActiveDataList(lua_State* luaState)
 
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_extension_ParticlePool_getActiveParticleList'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_extension_ParticlePool_getActiveParticleList'.",
+                                &conversionError);
 #endif
 
     return 0;
@@ -446,7 +455,8 @@ static int axlua_extension_ScrollView_setDelegate(lua_State* luaState)
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'self' in function 'axlua_extension_ScrollView_setDelegate'\n", nullptr);
+        axlua::adapter::raise_error(luaState, "invalid 'self' in function 'axlua_extension_ScrollView_setDelegate'\n",
+                                    nullptr);
         return 0;
     }
 #endif
@@ -497,7 +507,8 @@ static int axlua_extension_ScrollView_registerScriptHandler(lua_State* luaState)
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'self' in function 'axlua_extension_ScrollView_registerScriptHandler'\n", NULL);
+        axlua::adapter::raise_error(
+            luaState, "invalid 'self' in function 'axlua_extension_ScrollView_registerScriptHandler'\n", NULL);
         return 0;
     }
 #endif
@@ -514,7 +525,7 @@ static int axlua_extension_ScrollView_registerScriptHandler(lua_State* luaState)
         LUA_FUNCTION handler = (axlua::adapter::ref_function(luaState, 2, 0));
         AxluaCallbackRegistry::HandlerType handlerType =
             (AxluaCallbackRegistry::HandlerType)((int)axlua::adapter::to_number(luaState, 3, 0) +
-                                            (int)AxluaCallbackRegistry::HandlerType::SCROLLVIEW_SCROLL);
+                                                 (int)AxluaCallbackRegistry::HandlerType::SCROLLVIEW_SCROLL);
 
         AxluaCallbackRegistry::getInstance()->addObjectHandler((void*)self, handler, handlerType);
         return 0;
@@ -526,7 +537,8 @@ static int axlua_extension_ScrollView_registerScriptHandler(lua_State* luaState)
 
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_extension_ScrollView_registerScriptHandler'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_extension_ScrollView_registerScriptHandler'.",
+                                &conversionError);
     return 0;
 #endif
 }
@@ -550,7 +562,8 @@ static int axlua_extension_ScrollView_unregisterScriptHandler(lua_State* luaStat
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'self' in function 'axlua_extension_ScrollView_unregisterScriptHandler'\n", NULL);
+        axlua::adapter::raise_error(
+            luaState, "invalid 'self' in function 'axlua_extension_ScrollView_unregisterScriptHandler'\n", NULL);
         return 0;
     }
 #endif
@@ -565,7 +578,7 @@ static int axlua_extension_ScrollView_unregisterScriptHandler(lua_State* luaStat
 #endif
         AxluaCallbackRegistry::HandlerType handlerType =
             (AxluaCallbackRegistry::HandlerType)((int)axlua::adapter::to_number(luaState, 2, 0) +
-                                            (int)AxluaCallbackRegistry::HandlerType::SCROLLVIEW_SCROLL);
+                                                 (int)AxluaCallbackRegistry::HandlerType::SCROLLVIEW_SCROLL);
         AxluaCallbackRegistry::getInstance()->removeObjectHandler((void*)self, handlerType);
         return 0;
     }
@@ -576,7 +589,8 @@ static int axlua_extension_ScrollView_unregisterScriptHandler(lua_State* luaStat
 
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_extension_ScrollView_unregisterScriptHandler'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_extension_ScrollView_unregisterScriptHandler'.",
+                                &conversionError);
     return 0;
 #endif
 }
@@ -620,7 +634,8 @@ public:
             {
                 LuaTableViewEventData eventData;
                 BasicScriptData data(view, &eventData);
-                LuaEngine::getInstance()->handleEvent(AxluaCallbackRegistry::HandlerType::SCROLLVIEW_SCROLL, (void*)&data);
+                LuaEngine::getInstance()->handleEvent(AxluaCallbackRegistry::HandlerType::SCROLLVIEW_SCROLL,
+                                                      (void*)&data);
             }
         }
     }
@@ -635,7 +650,8 @@ public:
             {
                 LuaTableViewEventData eventData;
                 BasicScriptData data(view, &eventData);
-                LuaEngine::getInstance()->handleEvent(AxluaCallbackRegistry::HandlerType::SCROLLVIEW_ZOOM, (void*)&data);
+                LuaEngine::getInstance()->handleEvent(AxluaCallbackRegistry::HandlerType::SCROLLVIEW_ZOOM,
+                                                      (void*)&data);
             }
         }
     }
@@ -650,7 +666,8 @@ public:
             {
                 LuaTableViewEventData eventData(cell);
                 BasicScriptData data(table, &eventData);
-                LuaEngine::getInstance()->handleEvent(AxluaCallbackRegistry::HandlerType::TABLECELL_TOUCHED, (void*)&data);
+                LuaEngine::getInstance()->handleEvent(AxluaCallbackRegistry::HandlerType::TABLECELL_TOUCHED,
+                                                      (void*)&data);
             }
         }
     }
@@ -665,7 +682,8 @@ public:
             {
                 LuaTableViewEventData eventData(cell);
                 BasicScriptData data(table, &eventData);
-                LuaEngine::getInstance()->handleEvent(AxluaCallbackRegistry::HandlerType::TABLECELL_HIGHLIGHT, (void*)&data);
+                LuaEngine::getInstance()->handleEvent(AxluaCallbackRegistry::HandlerType::TABLECELL_HIGHLIGHT,
+                                                      (void*)&data);
             }
         }
     }
@@ -809,8 +827,8 @@ public:
                 LuaTableViewEventData eventData(&idx);
                 BasicScriptData data(table, &eventData);
                 TableViewCell* viewCell = nullptr;
-                LuaEngine::getInstance()->handleEvent(AxluaCallbackRegistry::HandlerType::TABLECELL_AT_INDEX, (void*)&data,
-                                                      1, [&](lua_State* L, int numReturn) {
+                LuaEngine::getInstance()->handleEvent(AxluaCallbackRegistry::HandlerType::TABLECELL_AT_INDEX,
+                                                      (void*)&data, 1, [&](lua_State* L, int numReturn) {
                     AXASSERT(numReturn == 1, "tableCellAtIndex return count error");
                     viewCell = static_cast<TableViewCell*>(axlua::adapter::to_usertype(L, -1, nullptr));
                     lua_pop(L, 1);
@@ -866,7 +884,8 @@ static int axlua_extension_TableView_setDataSource(lua_State* L)
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        axlua::adapter::raise_error(L, "invalid 'self' in function 'axlua_extension_TableView_setDataSource'\n", nullptr);
+        axlua::adapter::raise_error(L, "invalid 'self' in function 'axlua_extension_TableView_setDataSource'\n",
+                                    nullptr);
         return 0;
     }
 #endif
@@ -991,7 +1010,8 @@ static int axlua_extension_TableView_registerScriptHandler(lua_State* L)
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        axlua::adapter::raise_error(L, "invalid 'self' in function 'axlua_extension_TableView_registerScriptHandler'\n", NULL);
+        axlua::adapter::raise_error(L, "invalid 'self' in function 'axlua_extension_TableView_registerScriptHandler'\n",
+                                    NULL);
         return 0;
     }
 #endif
@@ -999,7 +1019,8 @@ static int axlua_extension_TableView_registerScriptHandler(lua_State* L)
     if (2 == argc)
     {
 #if _AX_DEBUG >= 1
-        if (!axlua::adapter::is_function(L, 2, "LUA_FUNCTION", 0, &conversionError) || !axlua::adapter::is_number(L, 3, 0, &conversionError))
+        if (!axlua::adapter::is_function(L, 2, "LUA_FUNCTION", 0, &conversionError) ||
+            !axlua::adapter::is_number(L, 3, 0, &conversionError))
         {
             goto argumentError;
         }
@@ -1007,7 +1028,7 @@ static int axlua_extension_TableView_registerScriptHandler(lua_State* L)
         LUA_FUNCTION handler = (axlua::adapter::ref_function(L, 2, 0));
         AxluaCallbackRegistry::HandlerType handlerType =
             (AxluaCallbackRegistry::HandlerType)((int)axlua::adapter::to_number(L, 3, 0) +
-                                            (int)AxluaCallbackRegistry::HandlerType::SCROLLVIEW_SCROLL);
+                                                 (int)AxluaCallbackRegistry::HandlerType::SCROLLVIEW_SCROLL);
 
         AxluaCallbackRegistry::getInstance()->addObjectHandler((void*)self, handler, handlerType);
         return 0;
@@ -1019,7 +1040,8 @@ static int axlua_extension_TableView_registerScriptHandler(lua_State* L)
 
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(L, "#ferror in function 'axlua_extension_TableView_registerScriptHandler'.", &conversionError);
+    axlua::adapter::raise_error(L, "#ferror in function 'axlua_extension_TableView_registerScriptHandler'.",
+                                &conversionError);
     return 0;
 #endif
 }
@@ -1043,7 +1065,8 @@ static int axlua_extension_TableView_unregisterScriptHandler(lua_State* L)
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        axlua::adapter::raise_error(L, "invalid 'self' in function 'axlua_extension_TableView_unregisterScriptHandler'\n", NULL);
+        axlua::adapter::raise_error(
+            L, "invalid 'self' in function 'axlua_extension_TableView_unregisterScriptHandler'\n", NULL);
         return 0;
     }
 #endif
@@ -1058,7 +1081,7 @@ static int axlua_extension_TableView_unregisterScriptHandler(lua_State* L)
 #endif
         AxluaCallbackRegistry::HandlerType handlerType =
             (AxluaCallbackRegistry::HandlerType)((int)axlua::adapter::to_number(L, 2, 0) +
-                                            (int)AxluaCallbackRegistry::HandlerType::SCROLLVIEW_SCROLL);
+                                                 (int)AxluaCallbackRegistry::HandlerType::SCROLLVIEW_SCROLL);
         AxluaCallbackRegistry::getInstance()->removeObjectHandler((void*)self, handlerType);
         return 0;
     }
@@ -1069,7 +1092,8 @@ static int axlua_extension_TableView_unregisterScriptHandler(lua_State* L)
 
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(L, "#ferror in function 'axlua_extension_TableView_unregisterScriptHandler'.", &conversionError);
+    axlua::adapter::raise_error(L, "#ferror in function 'axlua_extension_TableView_unregisterScriptHandler'.",
+                                &conversionError);
     return 0;
 #endif
 }

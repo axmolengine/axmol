@@ -38,7 +38,7 @@
  * only don't call this registering function. If you don't register the network module, the package size would become
  * smaller . The current mechanism,this registering function is called in the lua_module_register.h
  */
- int register_network_module(lua_State* L);
+int register_network_module(lua_State* L);
 
 // end group
 /// @}

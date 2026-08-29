@@ -47,8 +47,8 @@ void LuaWebSocket::onOpen(WebSocket* ws)
     LuaWebSocket* luaWs = dynamic_cast<LuaWebSocket*>(ws);
     if (luaWs)
     {
-        int nHandler = AxluaCallbackRegistry::getInstance()->getObjectHandler((void*)this,
-                                                                         AxluaCallbackRegistry::HandlerType::WEBSOCKET_OPEN);
+        int nHandler = AxluaCallbackRegistry::getInstance()->getObjectHandler(
+            (void*)this, AxluaCallbackRegistry::HandlerType::WEBSOCKET_OPEN);
         if (0 != nHandler)
         {
             CommonScriptData data(nHandler, ""sv);
@@ -134,7 +134,8 @@ static int axlua_WebSocket_create00(lua_State* luaState)
         std::string_view protocols = ""sv;
         std::string_view caCertPath;
 
-        if (!axlua::adapter::is_usertable(luaState, 1, "ax.WebSocket", 0, &conversionError) || !axlua::adapter::is_string(luaState, 2, 0, &conversionError))
+        if (!axlua::adapter::is_usertable(luaState, 1, "ax.WebSocket", 0, &conversionError) ||
+            !axlua::adapter::is_string(luaState, 2, 0, &conversionError))
             goto argumentError;
         if (argumentCount == 3)
         {
@@ -173,12 +174,13 @@ argumentError:
 static int axlua_WebSocket_getReadyState00(lua_State* luaState)
 {
     axlua::adapter::Error conversionError;
-    if (!axlua::adapter::is_usertype(luaState, 1, "ax.WebSocket", 0, &conversionError) || !axlua::adapter::is_no_object(luaState, 2, &conversionError))
+    if (!axlua::adapter::is_usertype(luaState, 1, "ax.WebSocket", 0, &conversionError) ||
+        !axlua::adapter::is_no_object(luaState, 2, &conversionError))
         goto argumentError;
     else
     {
         LuaWebSocket* self = (LuaWebSocket*)axlua::adapter::to_usertype(luaState, 1, 0);
-        int returnValue      = -1;
+        int returnValue    = -1;
         if (self)
         {
             returnValue = (int)self->getReadyState();
@@ -195,7 +197,8 @@ argumentError:
 static int axlua_WebSocket_close00(lua_State* luaState)
 {
     axlua::adapter::Error conversionError;
-    if (!axlua::adapter::is_usertype(luaState, 1, "ax.WebSocket", 0, &conversionError) || !axlua::adapter::is_no_object(luaState, 2, &conversionError))
+    if (!axlua::adapter::is_usertype(luaState, 1, "ax.WebSocket", 0, &conversionError) ||
+        !axlua::adapter::is_no_object(luaState, 2, &conversionError))
         goto argumentError;
     else
     {
@@ -215,7 +218,8 @@ argumentError:
 static int axlua_WebSocket_sendString00(lua_State* luaState)
 {
     axlua::adapter::Error conversionError;
-    if (!axlua::adapter::is_usertype(luaState, 1, "ax.WebSocket", 0, &conversionError) || !axlua::adapter::is_string(luaState, 2, 0, &conversionError) ||
+    if (!axlua::adapter::is_usertype(luaState, 1, "ax.WebSocket", 0, &conversionError) ||
+        !axlua::adapter::is_string(luaState, 2, 0, &conversionError) ||
         !axlua::adapter::is_no_object(luaState, 3, &conversionError))
         goto argumentError;
     else
@@ -266,7 +270,7 @@ argumentError:
     return 0;
 }
 
- int open_web_socket_binding(lua_State* luaState)
+int open_web_socket_binding(lua_State* luaState)
 {
     axlua::adapter::open(luaState);
     register_web_socket_type(luaState);
@@ -289,7 +293,8 @@ int axlua_WebSocket_registerScriptHandler00(lua_State* luaState)
 {
     axlua::adapter::Error conversionError;
     if (!axlua::adapter::is_usertype(luaState, 1, "ax.WebSocket", 0, &conversionError) ||
-        !axlua::adapter::is_function(luaState, 2, "LUA_FUNCTION", 0, &conversionError) || !axlua::adapter::is_number(luaState, 3, 0, &conversionError) ||
+        !axlua::adapter::is_function(luaState, 2, "LUA_FUNCTION", 0, &conversionError) ||
+        !axlua::adapter::is_number(luaState, 3, 0, &conversionError) ||
         !axlua::adapter::is_no_object(luaState, 4, &conversionError))
         goto argumentError;
     else
@@ -300,7 +305,7 @@ int axlua_WebSocket_registerScriptHandler00(lua_State* luaState)
             int handler = (axlua::adapter::ref_function(luaState, 2, 0));
             AxluaCallbackRegistry::HandlerType handlerType =
                 (AxluaCallbackRegistry::HandlerType)((int)axlua::adapter::to_number(luaState, 3, 0) +
-                                                (int)AxluaCallbackRegistry::HandlerType::WEBSOCKET_OPEN);
+                                                     (int)AxluaCallbackRegistry::HandlerType::WEBSOCKET_OPEN);
             AxluaCallbackRegistry::getInstance()->addObjectHandler((void*)self, handler, handlerType);
         }
     }
@@ -313,7 +318,8 @@ argumentError:
 int axlua_WebSocket_unregisterScriptHandler00(lua_State* luaState)
 {
     axlua::adapter::Error conversionError;
-    if (!axlua::adapter::is_usertype(luaState, 1, "ax.WebSocket", 0, &conversionError) || !axlua::adapter::is_number(luaState, 2, 0, &conversionError) ||
+    if (!axlua::adapter::is_usertype(luaState, 1, "ax.WebSocket", 0, &conversionError) ||
+        !axlua::adapter::is_number(luaState, 2, 0, &conversionError) ||
         !axlua::adapter::is_no_object(luaState, 3, &conversionError))
         goto argumentError;
     else
@@ -323,7 +329,7 @@ int axlua_WebSocket_unregisterScriptHandler00(lua_State* luaState)
         {
             AxluaCallbackRegistry::HandlerType handlerType =
                 (AxluaCallbackRegistry::HandlerType)((int)axlua::adapter::to_number(luaState, 2, 0) +
-                                                (int)AxluaCallbackRegistry::HandlerType::WEBSOCKET_OPEN);
+                                                     (int)AxluaCallbackRegistry::HandlerType::WEBSOCKET_OPEN);
 
             AxluaCallbackRegistry::getInstance()->removeObjectHandler((void*)self, handlerType);
         }
@@ -334,7 +340,7 @@ argumentError:
     return 0;
 }
 
- int register_web_socket_adapter(lua_State* luaState)
+int register_web_socket_adapter(lua_State* luaState)
 {
     if (nullptr == luaState)
         return 0;

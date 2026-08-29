@@ -117,7 +117,8 @@ static int axlua_MenuItemImage_create(lua_State* luaState)
         if (argc == 2)
         {
 #if _AX_DEBUG >= 1
-            if (!axlua::adapter::is_string(luaState, 2, 0, &conversionError) || !axlua::adapter::is_string(luaState, 3, 0, &conversionError))
+            if (!axlua::adapter::is_string(luaState, 2, 0, &conversionError) ||
+                !axlua::adapter::is_string(luaState, 3, 0, &conversionError))
             {
                 ok = false;
             }
@@ -127,8 +128,8 @@ static int axlua_MenuItemImage_create(lua_State* luaState)
                 ok = true;
                 break;
             }
-            auto normalImage         = axlua_tosv(luaState, 2);
-            auto selectedImage       = axlua_tosv(luaState, 3);
+            auto normalImage           = axlua_tosv(luaState, 2);
+            auto selectedImage         = axlua_tosv(luaState, 3);
             MenuItemImage* returnValue = (MenuItemImage*)MenuItemImage::create(normalImage, selectedImage);
             axlua::adapter::push_object(luaState, (void*)returnValue, "ax.MenuItemImage");
             return 1;
@@ -139,7 +140,8 @@ static int axlua_MenuItemImage_create(lua_State* luaState)
         if (argc == 3)
         {
 #if _AX_DEBUG >= 1
-            if (!axlua::adapter::is_string(luaState, 2, 0, &conversionError) || !axlua::adapter::is_string(luaState, 3, 0, &conversionError) ||
+            if (!axlua::adapter::is_string(luaState, 2, 0, &conversionError) ||
+                !axlua::adapter::is_string(luaState, 3, 0, &conversionError) ||
                 !axlua::adapter::is_string(luaState, 4, 0, &conversionError))
             {
                 goto argumentError;
@@ -150,13 +152,15 @@ static int axlua_MenuItemImage_create(lua_State* luaState)
             auto selectedImage = axlua_tosv(luaState, 3);
             auto disabledImage = axlua_tosv(luaState, 4);
 
-            MenuItemImage* returnValue = (MenuItemImage*)MenuItemImage::create(normalImage, selectedImage, disabledImage);
+            MenuItemImage* returnValue =
+                (MenuItemImage*)MenuItemImage::create(normalImage, selectedImage, disabledImage);
             axlua::adapter::push_object(luaState, (void*)returnValue, "ax.MenuItemImage");
             return 1;
         }
     } while (0);
 
-    luaL_error(luaState, "%s has wrong number of arguments: %d, was expecting %d\n", "ax.MenuItemImage:create", argc, 0);
+    luaL_error(luaState, "%s has wrong number of arguments: %d, was expecting %d\n", "ax.MenuItemImage:create", argc,
+               0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -189,13 +193,14 @@ static int axlua_MenuItemLabel_create(lua_State* luaState)
             goto argumentError;
         }
 #endif
-        Node* label              = ((Node*)axlua::adapter::to_usertype(luaState, 2, 0));
+        Node* label                = ((Node*)axlua::adapter::to_usertype(luaState, 2, 0));
         MenuItemLabel* returnValue = (MenuItemLabel*)MenuItemLabel::create(label);
         axlua::adapter::push_object(luaState, (void*)returnValue, "ax.MenuItemLabel");
         return 1;
     }
 
-    luaL_error(luaState, "%s has wrong number of arguments: %d, was expecting %d\n", "ax.MenuItemLabel:create", argc, 1);
+    luaL_error(luaState, "%s has wrong number of arguments: %d, was expecting %d\n", "ax.MenuItemLabel:create", argc,
+               1);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -228,7 +233,7 @@ static int axlua_MenuItemFont_create(lua_State* luaState)
             goto argumentError;
         }
 #endif
-        auto value              = axlua_tosv(luaState, 2);
+        auto value                = axlua_tosv(luaState, 2);
         MenuItemFont* returnValue = (MenuItemFont*)MenuItemFont::create(value);
         axlua::adapter::push_object(luaState, (void*)returnValue, "ax.MenuItemFont");
         return 1;
@@ -419,7 +424,8 @@ static int toaxlua_Menu_alignItemsInColumns(lua_State* luaState)
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'self' in function 'toaxlua_Menu_alignItemsInColumns'\n", nullptr);
+        axlua::adapter::raise_error(luaState, "invalid 'self' in function 'toaxlua_Menu_alignItemsInColumns'\n",
+                                    nullptr);
         return 0;
     }
 #endif
@@ -443,7 +449,8 @@ static int toaxlua_Menu_alignItemsInColumns(lua_State* luaState)
 
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'toaxlua_Menu_alignItemsInColumns'.\n", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'toaxlua_Menu_alignItemsInColumns'.\n",
+                                &conversionError);
 #endif
     return 0;
 }
@@ -514,7 +521,8 @@ static int axlua_MenuItem_registerScriptTapHandler(lua_State* luaState)
 #if _AX_DEBUG >= 1
     if (nullptr == obj)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'axlua_MenuItem_registerScriptTapHandler'\n", NULL);
+        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'axlua_MenuItem_registerScriptTapHandler'\n",
+                                    NULL);
         return 0;
     }
 #endif
@@ -529,7 +537,7 @@ static int axlua_MenuItem_registerScriptTapHandler(lua_State* luaState)
 #endif
         LUA_FUNCTION handler = axlua::adapter::ref_function(luaState, 2, 0);
         AxluaCallbackRegistry::getInstance()->addObjectHandler((void*)obj, handler,
-                                                          AxluaCallbackRegistry::HandlerType::MENU_CLICKED);
+                                                               AxluaCallbackRegistry::HandlerType::MENU_CLICKED);
         return 0;
     }
 
@@ -539,7 +547,8 @@ static int axlua_MenuItem_registerScriptTapHandler(lua_State* luaState)
 
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_MenuItem_registerScriptTapHandler'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_MenuItem_registerScriptTapHandler'.",
+                                &conversionError);
     return 0;
 #endif
 }
@@ -563,7 +572,8 @@ static int axlua_MenuItem_unregisterScriptTapHandler(lua_State* luaState)
 #if _AX_DEBUG >= 1
     if (nullptr == obj)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'axlua_MenuItem_unregisterScriptTapHandler'\n", NULL);
+        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'axlua_MenuItem_unregisterScriptTapHandler'\n",
+                                    NULL);
         return 0;
     }
 #endif
@@ -572,7 +582,8 @@ static int axlua_MenuItem_unregisterScriptTapHandler(lua_State* luaState)
 
     if (0 == argc)
     {
-        AxluaCallbackRegistry::getInstance()->removeObjectHandler((void*)obj, AxluaCallbackRegistry::HandlerType::MENU_CLICKED);
+        AxluaCallbackRegistry::getInstance()->removeObjectHandler((void*)obj,
+                                                                  AxluaCallbackRegistry::HandlerType::MENU_CLICKED);
         return 0;
     }
 
@@ -582,7 +593,8 @@ static int axlua_MenuItem_unregisterScriptTapHandler(lua_State* luaState)
 
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_MenuItem_unregisterScriptTapHandler'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_MenuItem_unregisterScriptTapHandler'.",
+                                &conversionError);
     return 0;
 #endif
 }
@@ -606,7 +618,8 @@ static int axlua_Scheduler_scheduleScriptFunc(lua_State* luaState)
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'self' in function 'axlua_Scheduler_scheduleScriptFunc'\n", NULL);
+        axlua::adapter::raise_error(luaState, "invalid 'self' in function 'axlua_Scheduler_scheduleScriptFunc'\n",
+                                    NULL);
         return 0;
     }
 #endif
@@ -616,14 +629,15 @@ static int axlua_Scheduler_scheduleScriptFunc(lua_State* luaState)
     {
 #if _AX_DEBUG >= 1
         if (!axlua::adapter::is_function(luaState, 2, "LUA_FUNCTION", 0, &conversionError) ||
-            !axlua::adapter::is_number(luaState, 3, 0, &conversionError) || !axlua::adapter::is_boolean(luaState, 4, 0, &conversionError))
+            !axlua::adapter::is_number(luaState, 3, 0, &conversionError) ||
+            !axlua::adapter::is_boolean(luaState, 4, 0, &conversionError))
         {
             goto argumentError;
         }
 #endif
-        LUA_FUNCTION handler   = axlua::adapter::ref_function(luaState, 2, 0);
-        float interval         = (float)axlua::adapter::to_number(luaState, 3, 0);
-        bool paused            = (bool)axlua::adapter::to_boolean(luaState, 4, 0);
+        LUA_FUNCTION handler     = axlua::adapter::ref_function(luaState, 2, 0);
+        float interval           = (float)axlua::adapter::to_number(luaState, 3, 0);
+        bool paused              = (bool)axlua::adapter::to_boolean(luaState, 4, 0);
         unsigned int returnValue = (unsigned int)self->scheduleScriptFunc(handler, interval, paused);
         axlua::adapter::push_number(luaState, (lua_Number)returnValue);
         return 1;
@@ -635,7 +649,8 @@ static int axlua_Scheduler_scheduleScriptFunc(lua_State* luaState)
 
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_Scheduler_scheduleScriptFunc'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_Scheduler_scheduleScriptFunc'.",
+                                &conversionError);
     return 0;
 #endif
 }
@@ -659,7 +674,8 @@ static int axlua_Scheduler_unscheduleScriptEntry(lua_State* luaState)
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'self' in function 'axlua_Scheduler_unscheduleScriptEntry'\n", NULL);
+        axlua::adapter::raise_error(luaState, "invalid 'self' in function 'axlua_Scheduler_unscheduleScriptEntry'\n",
+                                    NULL);
         return 0;
     }
 #endif
@@ -685,7 +701,8 @@ static int axlua_Scheduler_unscheduleScriptEntry(lua_State* luaState)
 
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_Scheduler_unscheduleScriptEntry'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_Scheduler_unscheduleScriptEntry'.",
+                                &conversionError);
     return 0;
 #endif
 }
@@ -722,7 +739,8 @@ static int axlua_RenderTexture_newImage(lua_State* luaState)
         ok &= axlua::adapter::is_function(luaState, 2, "LUA_FUNCTION", 0, &conversionError);
         if (!ok)
         {
-            axlua::adapter::raise_error(luaState, "invalid arguments in function 'axlua_RenderTexture_newImage'", nullptr);
+            axlua::adapter::raise_error(luaState, "invalid arguments in function 'axlua_RenderTexture_newImage'",
+                                        nullptr);
             return 0;
         }
 #endif
@@ -883,7 +901,7 @@ static int axlua_CallFunc_create(lua_State* luaState)
         });
         returnValue->autorelease();
         AxluaCallbackRegistry::getInstance()->addObjectHandler((void*)returnValue, handler,
-                                                          AxluaCallbackRegistry::HandlerType::CALLFUNC);
+                                                               AxluaCallbackRegistry::HandlerType::CALLFUNC);
 
         axlua::adapter::push_object(luaState, (void*)returnValue, "ax.CallFunc");
         return 1;
@@ -993,7 +1011,8 @@ int axlua_Node_setContentSize(lua_State* luaState)
         return 1;
     }
 
-    luaL_error(luaState, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Node:setContentSize", argc, 1);
+    luaL_error(luaState, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Node:setContentSize", argc,
+               1);
     return 0;
 #if _AX_DEBUG >= 1
 argumentError:
@@ -1054,7 +1073,8 @@ int axlua_Node_setAnchorPoint(lua_State* luaState)
         return 1;
     }
 
-    luaL_error(luaState, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Node:setAnchorPoint", argc, 1);
+    luaL_error(luaState, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Node:setAnchorPoint", argc,
+               1);
     return 0;
 #if _AX_DEBUG >= 1
 argumentError:
@@ -1091,7 +1111,8 @@ static int axlua_Node_getPosition(lua_State* luaState)
     if (argc >= 0 && argc <= 2)
     {
 #if _AX_DEBUG >= 1
-        if (!axlua::adapter::is_number(luaState, 2, 1, &conversionError) || !axlua::adapter::is_number(luaState, 3, 1, &conversionError))
+        if (!axlua::adapter::is_number(luaState, 2, 1, &conversionError) ||
+            !axlua::adapter::is_number(luaState, 3, 1, &conversionError))
             goto argumentError;
 #endif
         float x = (float)axlua::adapter::to_number(luaState, 2, 0);
@@ -1430,7 +1451,8 @@ static int axlua_Spawn_create(lua_State* luaState)
                     goto argumentError;
 #endif
 
-                ax::FiniteTimeAction* item = static_cast<ax::FiniteTimeAction*>(axlua::adapter::to_usertype(luaState, 1 + i, NULL));
+                ax::FiniteTimeAction* item =
+                    static_cast<ax::FiniteTimeAction*>(axlua::adapter::to_usertype(luaState, 1 + i, NULL));
                 if (NULL != item)
                 {
                     array.pushBack(item);
@@ -1522,7 +1544,8 @@ int lua_cocos2d_CardinalSplineBy_create(lua_State* luaState)
 
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'lua_cocos2d_CardinalSplineBy_create'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'lua_cocos2d_CardinalSplineBy_create'.",
+                                &conversionError);
     return 0;
 #endif
 }
@@ -1800,8 +1823,10 @@ static int toaxlua_DrawNode_drawPolygon(lua_State* luaState)
     if (5 == argc)
     {
 #if _AX_DEBUG >= 1
-        if (!axlua::adapter::is_table(luaState, 2, 0, &conversionError) || !axlua::adapter::is_number(luaState, 3, 0, &conversionError) ||
-            !axlua::adapter::is_table(luaState, 4, 0, &conversionError) || !axlua::adapter::is_number(luaState, 5, 0, &conversionError) ||
+        if (!axlua::adapter::is_table(luaState, 2, 0, &conversionError) ||
+            !axlua::adapter::is_number(luaState, 3, 0, &conversionError) ||
+            !axlua::adapter::is_table(luaState, 4, 0, &conversionError) ||
+            !axlua::adapter::is_number(luaState, 5, 0, &conversionError) ||
             !axlua::adapter::is_table(luaState, 6, 0, &conversionError))
         {
             goto argumentError;
@@ -1854,7 +1879,8 @@ static int toaxlua_DrawNode_drawPolygon(lua_State* luaState)
         }
     }
 
-    luaL_error(luaState, "%s has wrong number of arguments: %d, was expecting %d\n", "ax.DrawNode:drawPolygon", argc, 5);
+    luaL_error(luaState, "%s has wrong number of arguments: %d, was expecting %d\n", "ax.DrawNode:drawPolygon", argc,
+               5);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -2037,7 +2063,8 @@ int toaxlua_DrawNode_drawCardinalSpline(lua_State* luaState)
 #if _AX_DEBUG >= 1
     if (!self)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'self' in function 'axlua_DrawNode_drawCardinalSpline'", nullptr);
+        axlua::adapter::raise_error(luaState, "invalid 'self' in function 'axlua_DrawNode_drawCardinalSpline'",
+                                    nullptr);
         return 0;
     }
 #endif
@@ -2142,8 +2169,8 @@ int toaxlua_DrawNode_drawCatmullRom(lua_State* luaState)
         return 0;
     }
 
-    luaL_error(luaState, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode:drawCatmullRom", argc,
-               3);
+    luaL_error(luaState, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode:drawCatmullRom",
+               argc, 3);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -2253,7 +2280,8 @@ int toaxlua_DrawNode_drawPoints(lua_State* luaState)
         }
     }
 
-    luaL_error(luaState, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode:drawPoints", argc, 3);
+    luaL_error(luaState, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode:drawPoints", argc,
+               3);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -2325,7 +2353,8 @@ int lua_ax_base_FileUtils_setSearchPaths(lua_State* luaState)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'lua_ax_base_FileUtils_setSearchPaths'", nullptr);
+        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'lua_ax_base_FileUtils_setSearchPaths'",
+                                    nullptr);
         return 0;
     }
 #endif
@@ -2338,7 +2367,8 @@ int lua_ax_base_FileUtils_setSearchPaths(lua_State* luaState)
         ok &= luaval_to_std_vector_string_view(luaState, 2, &arg0, "ax.FileUtils:setSearchPaths");
         if (!ok)
         {
-            axlua::adapter::raise_error(luaState, "invalid arguments in function 'lua_ax_base_FileUtils_setSearchPaths'", nullptr);
+            axlua::adapter::raise_error(
+                luaState, "invalid arguments in function 'lua_ax_base_FileUtils_setSearchPaths'", nullptr);
             return 0;
         }
         obj->setSearchPaths(arg0);
@@ -2351,7 +2381,8 @@ int lua_ax_base_FileUtils_setSearchPaths(lua_State* luaState)
 
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'lua_ax_base_FileUtils_setSearchPaths'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'lua_ax_base_FileUtils_setSearchPaths'.",
+                                &conversionError);
 #endif
 
     return 0;
@@ -2376,7 +2407,8 @@ static int toaxlua_FileUtils_getStringFromFile(lua_State* luaState)
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'self' in function 'toaxlua_FileUtils_getStringFromFile'\n", nullptr);
+        axlua::adapter::raise_error(luaState, "invalid 'self' in function 'toaxlua_FileUtils_getStringFromFile'\n",
+                                    nullptr);
         return 0;
     }
 #endif
@@ -2409,7 +2441,8 @@ static int toaxlua_FileUtils_getStringFromFile(lua_State* luaState)
 
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'toaxlua_FileUtils_getStringFromFile'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'toaxlua_FileUtils_getStringFromFile'.",
+                                &conversionError);
     return 0;
 #endif
 }
@@ -2434,7 +2467,8 @@ static int toaxlua_FileUtils_getDataFromFile(lua_State* luaState)
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'self' in function 'toaxlua_FileUtils_getDataFromFile'\n", nullptr);
+        axlua::adapter::raise_error(luaState, "invalid 'self' in function 'toaxlua_FileUtils_getDataFromFile'\n",
+                                    nullptr);
         return 0;
     }
 #endif
@@ -2531,7 +2565,8 @@ static int toaxlua_Texture2D_setTexParameters(lua_State* luaState)
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'self' in function 'toaxlua_Texture2D_setTexParameters'\n", nullptr);
+        axlua::adapter::raise_error(luaState, "invalid 'self' in function 'toaxlua_Texture2D_setTexParameters'\n",
+                                    nullptr);
         return 0;
     }
 #endif
@@ -2541,8 +2576,10 @@ static int toaxlua_Texture2D_setTexParameters(lua_State* luaState)
     if (4 == argc)
     {
 #if _AX_DEBUG >= 1
-        if (!axlua::adapter::is_number(luaState, 2, 0, &conversionError) || !axlua::adapter::is_number(luaState, 3, 0, &conversionError) ||
-            !axlua::adapter::is_number(luaState, 4, 0, &conversionError) || !axlua::adapter::is_number(luaState, 5, 0, &conversionError))
+        if (!axlua::adapter::is_number(luaState, 2, 0, &conversionError) ||
+            !axlua::adapter::is_number(luaState, 3, 0, &conversionError) ||
+            !axlua::adapter::is_number(luaState, 4, 0, &conversionError) ||
+            !axlua::adapter::is_number(luaState, 5, 0, &conversionError))
         {
             goto argumentError;
         }
@@ -2594,7 +2631,8 @@ static int toaxlua_SpriteBatchNode_getDescendants(lua_State* luaState)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'toaxlua_SpriteBatchNode_getDescendants'", NULL);
+        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'toaxlua_SpriteBatchNode_getDescendants'",
+                                    NULL);
         return 0;
     }
 #endif
@@ -2632,7 +2670,8 @@ static int toaxlua_SpriteBatchNode_getDescendants(lua_State* luaState)
     return 0;
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_SpriteBatchNode_getDescendants'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_SpriteBatchNode_getDescendants'.",
+                                &conversionError);
 #endif
     return 0;
 }
@@ -2669,15 +2708,16 @@ int axlua_Scene_getPhysicsWorld3D(lua_State* luaState)
     {
         if (!ok)
         {
-            axlua::adapter::raise_error(luaState, "invalid arguments in function 'axlua_Scene_getPhysicsWorld3D'", nullptr);
+            axlua::adapter::raise_error(luaState, "invalid arguments in function 'axlua_Scene_getPhysicsWorld3D'",
+                                        nullptr);
             return 0;
         }
         ax::PhysicsWorld3D* ret = obj->getPhysicsWorld3D();
         object_to_luaval<ax::PhysicsWorld3D>(luaState, "ax.PhysicsWorld3D", (ax::PhysicsWorld3D*)ret);
         return 1;
     }
-    luaL_error(luaState, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Scene:getPhysicsWorld3D", argc,
-               0);
+    luaL_error(luaState, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Scene:getPhysicsWorld3D",
+               argc, 0);
     return 0;
 
 #    if _AX_DEBUG >= 1
@@ -2710,7 +2750,8 @@ int axlua_RenderTexturePass_setViewport(lua_State* luaState)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'lua_ax_base_RenderTexturePass_setViewport'", nullptr);
+        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'lua_ax_base_RenderTexturePass_setViewport'",
+                                    nullptr);
         return 0;
     }
 #endif
@@ -2724,8 +2765,8 @@ int axlua_RenderTexturePass_setViewport(lua_State* luaState)
             ok &= luaval_to_recti(luaState, 2, &arg0, "ax.RenderTexturePass:setViewport");
             if (!ok && !lua_isnil(luaState, 2))
             {
-                axlua::adapter::raise_error(luaState, "invalid arguments in function 'lua_ax_base_RenderTexturePass_setViewport'",
-                            nullptr);
+                axlua::adapter::raise_error(
+                    luaState, "invalid arguments in function 'lua_ax_base_RenderTexturePass_setViewport'", nullptr);
                 return 0;
             }
             obj->setViewport(arg0);
@@ -2737,13 +2778,14 @@ int axlua_RenderTexturePass_setViewport(lua_State* luaState)
         lua_settop(luaState, 1);
         return 1;
     }
-    luaL_error(luaState, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.RenderTexturePass:setViewport",
-               argc, 1);
+    luaL_error(luaState, "%s has wrong number of arguments: %d, was expecting %d \n",
+               "ax.RenderTexturePass:setViewport", argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'lua_ax_base_RenderTexturePass_setViewport'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'lua_ax_base_RenderTexturePass_setViewport'.",
+                                &conversionError);
 #endif
 
     return 0;
@@ -3123,7 +3165,8 @@ int axlua_Sprite_initWithPolygon(lua_State* luaState)
         ok &= luaval_to_object<ax::PolygonInfo>(luaState, 2, "ax.PolygonInfo", &arg0, "ax.Sprite:initWithPolygon");
         if (!ok)
         {
-            axlua::adapter::raise_error(luaState, "invalid arguments in function 'axlua_Sprite_initWithPolygon'", nullptr);
+            axlua::adapter::raise_error(luaState, "invalid arguments in function 'axlua_Sprite_initWithPolygon'",
+                                        nullptr);
             return 0;
         }
         bool ret = obj->initWithPolygon(*arg0);
@@ -3174,7 +3217,8 @@ int axlua_Sprite_setPolygonInfo(lua_State* luaState)
         ok &= luaval_to_object<ax::PolygonInfo>(luaState, 2, "ax.PolygonInfo", &arg0, "ax.Sprite:setPolygonInfo");
         if (!ok)
         {
-            axlua::adapter::raise_error(luaState, "invalid arguments in function 'axlua_Sprite_setPolygonInfo'", nullptr);
+            axlua::adapter::raise_error(luaState, "invalid arguments in function 'axlua_Sprite_setPolygonInfo'",
+                                        nullptr);
             return 0;
         }
         obj->setPolygonInfo(*arg0);
@@ -3413,10 +3457,10 @@ static int toaxlua_LuaAccelerationEventListener_create(lua_State* luaState)
             goto argumentError;
         }
 #endif
-        LUA_FUNCTION handler                     = axlua::adapter::ref_function(luaState, 2, 0);
+        LUA_FUNCTION handler                       = axlua::adapter::ref_function(luaState, 2, 0);
         ax::AccelerationEventListener* returnValue = ax::LuaAccelerationEventListener::create();
         AxluaCallbackRegistry::getInstance()->addObjectHandler((void*)returnValue, handler,
-                                                          AxluaCallbackRegistry::HandlerType::EVENT_ACC);
+                                                               AxluaCallbackRegistry::HandlerType::EVENT_ACC);
         axlua::adapter::push_object(luaState, (void*)returnValue, "ax.AccelerationEventListener");
 
         return 1;
@@ -3428,7 +3472,8 @@ static int toaxlua_LuaAccelerationEventListener_create(lua_State* luaState)
 
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'toaxlua_LuaAccelerationEventListener_create'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'toaxlua_LuaAccelerationEventListener_create'.",
+                                &conversionError);
     return 0;
 #endif
 }
@@ -3456,11 +3501,11 @@ static int axlua_LuaCustomEventListener_create(lua_State* luaState)
             goto argumentError;
         }
 #endif
-        auto eventName                     = axlua_tosv(luaState, 2);
-        LUA_FUNCTION handler               = axlua::adapter::ref_function(luaState, 3, 0);
+        auto eventName                       = axlua_tosv(luaState, 2);
+        LUA_FUNCTION handler                 = axlua::adapter::ref_function(luaState, 3, 0);
         ax::CustomEventListener* returnValue = LuaCustomEventListener::create(eventName);
         AxluaCallbackRegistry::getInstance()->addObjectHandler((void*)returnValue, handler,
-                                                          AxluaCallbackRegistry::HandlerType::EVENT_CUSTIOM);
+                                                               AxluaCallbackRegistry::HandlerType::EVENT_CUSTIOM);
 
         axlua::adapter::push_object(luaState, (void*)returnValue, "ax.CustomEventListener");
 
@@ -3473,7 +3518,8 @@ static int axlua_LuaCustomEventListener_create(lua_State* luaState)
 
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_LuaCustomEventListener_create'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_LuaCustomEventListener_create'.",
+                                &conversionError);
     return 0;
 #endif
 }
@@ -3629,8 +3675,10 @@ static int axlua_Label_createWithTTF00(lua_State* L)
     {
 
 #if _AX_DEBUG >= 1
-        if (!axlua::adapter::is_table(L, 2, 0, &conversionError) || !axlua::adapter::is_string(L, 3, 0, &conversionError) ||
-            !axlua::adapter::is_number(L, 4, 1, &conversionError) || !axlua::adapter::is_number(L, 5, 1, &conversionError))
+        if (!axlua::adapter::is_table(L, 2, 0, &conversionError) ||
+            !axlua::adapter::is_string(L, 3, 0, &conversionError) ||
+            !axlua::adapter::is_number(L, 4, 1, &conversionError) ||
+            !axlua::adapter::is_number(L, 5, 1, &conversionError))
         {
             goto argumentError;
         }
@@ -3676,9 +3724,12 @@ static int axlua_Label_createWithTTF01(lua_State* L)
 
     if (argc >= 3 && argc <= 6)
     {
-        if (!axlua::adapter::is_string(L, 2, 0, &conversionError) || !axlua::adapter::is_string(L, 3, 0, &conversionError) ||
-            !axlua::adapter::is_number(L, 4, 0, &conversionError) || !axlua::adapter::is_table(L, 5, 1, &conversionError) ||
-            !axlua::adapter::is_number(L, 6, 1, &conversionError) || !axlua::adapter::is_number(L, 7, 1, &conversionError))
+        if (!axlua::adapter::is_string(L, 2, 0, &conversionError) ||
+            !axlua::adapter::is_string(L, 3, 0, &conversionError) ||
+            !axlua::adapter::is_number(L, 4, 0, &conversionError) ||
+            !axlua::adapter::is_table(L, 5, 1, &conversionError) ||
+            !axlua::adapter::is_number(L, 6, 1, &conversionError) ||
+            !axlua::adapter::is_number(L, 7, 1, &conversionError))
         {
             goto argumentError;
         }
@@ -3734,7 +3785,8 @@ static int axlua_TMXTiledMap_getPropertiesForGID(lua_State* luaState)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'axlua_TMXTiledMap_getPropertiesForGID'", NULL);
+        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'axlua_TMXTiledMap_getPropertiesForGID'",
+                                    NULL);
         return 0;
     }
 #endif
@@ -3757,7 +3809,8 @@ static int axlua_TMXTiledMap_getPropertiesForGID(lua_State* luaState)
 
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_TMXTiledMap_getPropertiesForGID'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_TMXTiledMap_getPropertiesForGID'.",
+                                &conversionError);
 #endif
 
     return 0;
@@ -3802,7 +3855,8 @@ static int axlua_OrbitCamera_sphericalRadius(lua_State* luaState)
     if (argc == 3)
     {
 #if _AX_DEBUG >= 1
-        if (!axlua::adapter::is_number(luaState, 2, 0, &conversionError) || !axlua::adapter::is_number(luaState, 3, 0, &conversionError) ||
+        if (!axlua::adapter::is_number(luaState, 2, 0, &conversionError) ||
+            !axlua::adapter::is_number(luaState, 3, 0, &conversionError) ||
             !axlua::adapter::is_number(luaState, 4, 0, &conversionError))
         {
             goto argumentError;
@@ -4083,8 +4137,8 @@ static int axlua_Application_getInstance(lua_State* luaState)
         return 1;
     }
 
-    luaL_error(luaState, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Application:getInstance", argc,
-               0);
+    luaL_error(luaState, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Application:getInstance",
+               argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
@@ -4164,7 +4218,8 @@ int axlua_Application_is64BitMobileDevice(lua_State* luaState)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'axlua_Application_is64BitMobileDevice'", nullptr);
+        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'axlua_Application_is64BitMobileDevice'",
+                                    nullptr);
         return 0;
     }
 #endif
@@ -4190,7 +4245,8 @@ int axlua_Application_is64BitMobileDevice(lua_State* luaState)
 
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_Application_is64BitMobileDevice'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_Application_is64BitMobileDevice'.",
+                                &conversionError);
 #endif
 
     return 0;
@@ -4436,7 +4492,8 @@ int axlua_Properties_createNonRefCounted(lua_State* luaState)
         ok &= luaval_to_std_string_view(luaState, 2, &arg0, "ax.Properties:createNonRefCounted");
         if (!ok)
         {
-            axlua::adapter::raise_error(luaState, "invalid arguments in function 'axlua_Properties_createNonRefCounted'", nullptr);
+            axlua::adapter::raise_error(
+                luaState, "invalid arguments in function 'axlua_Properties_createNonRefCounted'", nullptr);
             return 0;
         }
         ax::Properties* ret = ax::Properties::createNonRefCounted(arg0);
@@ -4449,7 +4506,8 @@ int axlua_Properties_createNonRefCounted(lua_State* luaState)
     return 0;
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_Properties_createNonRefCounted'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_Properties_createNonRefCounted'.",
+                                &conversionError);
 #endif
     return 0;
 }
@@ -4638,7 +4696,8 @@ int axlua_get_PipelineDescriptor_programState(lua_State* luaState)
 #if _AX_DEBUG >= 1
     if (nullptr == obj)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'self' in function 'axlua_get_PipelineDescriptor_programState'\n", nullptr);
+        axlua::adapter::raise_error(
+            luaState, "invalid 'self' in function 'axlua_get_PipelineDescriptor_programState'\n", nullptr);
         return 0;
     }
 #endif
@@ -4647,7 +4706,8 @@ int axlua_get_PipelineDescriptor_programState(lua_State* luaState)
 
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_get_PipelineDescriptor_programState'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_get_PipelineDescriptor_programState'.",
+                                &conversionError);
     return 0;
 #endif
 }
@@ -4667,7 +4727,8 @@ int axlua_set_PipelineDescriptor_programState(lua_State* luaState)
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'self' in function 'axlua_set_PipelineDescriptor_programState'\n", nullptr);
+        axlua::adapter::raise_error(
+            luaState, "invalid 'self' in function 'axlua_set_PipelineDescriptor_programState'\n", nullptr);
         return 0;
     }
 #endif
@@ -4687,7 +4748,8 @@ int axlua_set_PipelineDescriptor_programState(lua_State* luaState)
 
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_set_PipelineDescriptor_programState'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_set_PipelineDescriptor_programState'.",
+                                &conversionError);
     return 0;
 #endif
 }
@@ -4699,7 +4761,8 @@ static void extendPolygonInfo(lua_State* luaState)
     if (lua_istable(luaState, -1))
     {
         axlua::adapter::set_variable(luaState, "rect", axlua_get_PolygonInfo_rect, axlua_set_PolygonInfo_rect);
-        axlua::adapter::set_variable(luaState, "filename", axlua_get_PolygonInfo_filename, axlua_set_PolygonInfo_filename);
+        axlua::adapter::set_variable(luaState, "filename", axlua_get_PolygonInfo_filename,
+                                     axlua_set_PolygonInfo_filename);
     }
     lua_pop(luaState, 1);
 
@@ -4718,7 +4781,7 @@ static void extendPipelineDescriptor(lua_State* luaState)
     if (lua_istable(luaState, -1))
     {
         axlua::adapter::set_variable(luaState, "programState", axlua_get_PipelineDescriptor_programState,
-                       axlua_set_PipelineDescriptor_programState);
+                                     axlua_set_PipelineDescriptor_programState);
     }
     lua_pop(luaState, 1);
 }
@@ -4740,7 +4803,8 @@ static int axlua_rhi_ProgramState_getUniformLocation(lua_State* luaState)
 #if _AX_DEBUG >= 1
     if (!obj)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'axlua_rhi_ProgramState_getUniformLocation'", nullptr);
+        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'axlua_rhi_ProgramState_getUniformLocation'",
+                                    nullptr);
         return 0;
     }
 #endif
@@ -4784,7 +4848,8 @@ static int axlua_rhi_ProgramState_getUniformLocation(lua_State* luaState)
 
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_rhi_ProgramState_getUniformLocation'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_rhi_ProgramState_getUniformLocation'.",
+                                &conversionError);
 #endif
 
     return 0;
@@ -4851,7 +4916,8 @@ static int axlua_ProgramState_setUniform(lua_State* luaState)
 
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_set_PipelineDescriptor_vertexLayout'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_set_PipelineDescriptor_vertexLayout'.",
+                                &conversionError);
     return 0;
 #endif
 }
@@ -4895,7 +4961,8 @@ int axlua_AutoPolygon_generatePolygon(lua_State* luaState)
         ok &= luaval_to_std_string_view(luaState, 2, &arg0, "ax.AutoPolygon:generatePolygon");
         if (!ok)
         {
-            axlua::adapter::raise_error(luaState, "invalid arguments in function 'axlua_AutoPolygon_generatePolygon'", nullptr);
+            axlua::adapter::raise_error(luaState, "invalid arguments in function 'axlua_AutoPolygon_generatePolygon'",
+                                        nullptr);
             return 0;
         }
         ax::PolygonInfo* ret = new ax::PolygonInfo(ax::AutoPolygon::generatePolygon(arg0));
@@ -4911,7 +4978,8 @@ int axlua_AutoPolygon_generatePolygon(lua_State* luaState)
         ok &= luaval_to_rect(luaState, 3, &arg1, "ax.AutoPolygon:generatePolygon");
         if (!ok)
         {
-            axlua::adapter::raise_error(luaState, "invalid arguments in function 'axlua_AutoPolygon_generatePolygon'", nullptr);
+            axlua::adapter::raise_error(luaState, "invalid arguments in function 'axlua_AutoPolygon_generatePolygon'",
+                                        nullptr);
             return 0;
         }
         ax::PolygonInfo* ret = new ax::PolygonInfo(ax::AutoPolygon::generatePolygon(arg0, arg1));
@@ -4929,7 +4997,8 @@ int axlua_AutoPolygon_generatePolygon(lua_State* luaState)
         ok &= luaval_to_number(luaState, 4, &arg2, "ax.AutoPolygon:generatePolygon");
         if (!ok)
         {
-            axlua::adapter::raise_error(luaState, "invalid arguments in function 'axlua_AutoPolygon_generatePolygon'", nullptr);
+            axlua::adapter::raise_error(luaState, "invalid arguments in function 'axlua_AutoPolygon_generatePolygon'",
+                                        nullptr);
             return 0;
         }
         ax::PolygonInfo* ret = new ax::PolygonInfo(ax::AutoPolygon::generatePolygon(arg0, arg1, (float)arg2));
@@ -4949,7 +5018,8 @@ int axlua_AutoPolygon_generatePolygon(lua_State* luaState)
         ok &= luaval_to_number(luaState, 5, &arg3, "ax.AutoPolygon:generatePolygon");
         if (!ok)
         {
-            axlua::adapter::raise_error(luaState, "invalid arguments in function 'axlua_AutoPolygon_generatePolygon'", nullptr);
+            axlua::adapter::raise_error(luaState, "invalid arguments in function 'axlua_AutoPolygon_generatePolygon'",
+                                        nullptr);
             return 0;
         }
         ax::PolygonInfo* ret =
@@ -5064,7 +5134,8 @@ static int axlua_utils_captureNode(lua_State* luaState)
 {
 #if _AX_DEBUG >= 1
     axlua::adapter::Error conversionError;
-    if (!axlua::adapter::is_table(luaState, 1, 0, &conversionError) || !axlua::adapter::is_usertype(luaState, 2, "ax.Node", 0, &conversionError) ||
+    if (!axlua::adapter::is_table(luaState, 1, 0, &conversionError) ||
+        !axlua::adapter::is_usertype(luaState, 2, "ax.Node", 0, &conversionError) ||
         !axlua::adapter::is_function(luaState, 3, "LUA_FUNCTION", 0, &conversionError))
         goto argumentError;
     else
@@ -5106,7 +5177,8 @@ static int axlua_utils_captureScreen(lua_State* luaState)
 {
 #if _AX_DEBUG >= 1
     axlua::adapter::Error conversionError;
-    if (!axlua::adapter::is_table(luaState, 1, 0, &conversionError) || !axlua::adapter::is_function(luaState, 2, "LUA_FUNCTION", 0, &conversionError) ||
+    if (!axlua::adapter::is_table(luaState, 1, 0, &conversionError) ||
+        !axlua::adapter::is_function(luaState, 2, "LUA_FUNCTION", 0, &conversionError) ||
         !axlua::adapter::is_string(luaState, 3, 0, &conversionError))
         goto argumentError;
     else
@@ -5136,7 +5208,8 @@ static int axlua_utils_findChildren(lua_State* luaState)
 {
 #if _AX_DEBUG >= 1
     axlua::adapter::Error conversionError;
-    if (!axlua::adapter::is_table(luaState, 1, 0, &conversionError) || !axlua::adapter::is_usertype(luaState, 2, "ax.Node", 0, &conversionError) ||
+    if (!axlua::adapter::is_table(luaState, 1, 0, &conversionError) ||
+        !axlua::adapter::is_usertype(luaState, 2, "ax.Node", 0, &conversionError) ||
         !axlua::adapter::is_string(luaState, 3, 0, &conversionError))
         goto argumentError;
     else
@@ -5170,7 +5243,8 @@ static int axlua_utils_findChild(lua_State* luaState)
 {
 #if _AX_DEBUG >= 1
     axlua::adapter::Error conversionError;
-    if (!axlua::adapter::is_usertype(luaState, 1, "ax.Node", 0, &conversionError) || !axlua::adapter::is_string(luaState, 2, 0, &conversionError))
+    if (!axlua::adapter::is_usertype(luaState, 1, "ax.Node", 0, &conversionError) ||
+        !axlua::adapter::is_string(luaState, 2, 0, &conversionError))
         goto argumentError;
     else
 #endif
@@ -5232,7 +5306,8 @@ static int axlua_utils_getFileMD5Hash(lua_State* luaState)
 {
 #if _AX_DEBUG >= 1
     axlua::adapter::Error conversionError;
-    if (!axlua::adapter::is_table(luaState, 1, 0, &conversionError) || !axlua::adapter::is_string(luaState, 2, 0, &conversionError) ||
+    if (!axlua::adapter::is_table(luaState, 1, 0, &conversionError) ||
+        !axlua::adapter::is_string(luaState, 2, 0, &conversionError) ||
         !axlua::adapter::is_number(luaState, 3, 0, &conversionError))
         goto argumentError;
     else
@@ -5255,7 +5330,8 @@ static int axlua_utils_getStringMD5Hash(lua_State* luaState)
 {
 #if _AX_DEBUG >= 1
     axlua::adapter::Error conversionError;
-    if (!axlua::adapter::is_table(luaState, 1, 0, &conversionError) || !axlua::adapter::is_string(luaState, 2, 0, &conversionError))
+    if (!axlua::adapter::is_table(luaState, 1, 0, &conversionError) ||
+        !axlua::adapter::is_string(luaState, 2, 0, &conversionError))
         goto argumentError;
     else
 #endif
@@ -5277,7 +5353,8 @@ static int axlua_utils_base64Encode(lua_State* luaState)
 {
 #if _AX_DEBUG >= 1
     axlua::adapter::Error conversionError;
-    if (!axlua::adapter::is_table(luaState, 1, 0, &conversionError) || !axlua::adapter::is_string(luaState, 2, 0, &conversionError))
+    if (!axlua::adapter::is_table(luaState, 1, 0, &conversionError) ||
+        !axlua::adapter::is_string(luaState, 2, 0, &conversionError))
         goto argumentError;
     else
 #endif
@@ -5299,7 +5376,8 @@ static int axlua_utils_base64Decode(lua_State* luaState)
 {
 #if _AX_DEBUG >= 1
     axlua::adapter::Error conversionError;
-    if (!axlua::adapter::is_table(luaState, 1, 0, &conversionError) || !axlua::adapter::is_string(luaState, 2, 0, &conversionError))
+    if (!axlua::adapter::is_table(luaState, 1, 0, &conversionError) ||
+        !axlua::adapter::is_string(luaState, 2, 0, &conversionError))
         goto argumentError;
     else
 #endif
@@ -5321,7 +5399,8 @@ static int axlua_utils_getCascadeBoundingBox(lua_State* luaState)
 {
 #if _AX_DEBUG >= 1
     axlua::adapter::Error conversionError;
-    if (!axlua::adapter::is_table(luaState, 1, 0, &conversionError) || !axlua::adapter::is_usertype(luaState, 2, "ax.Node", 0, &conversionError))
+    if (!axlua::adapter::is_table(luaState, 1, 0, &conversionError) ||
+        !axlua::adapter::is_usertype(luaState, 2, "ax.Node", 0, &conversionError))
         goto argumentError;
     else
 #endif
@@ -5402,7 +5481,8 @@ static int axlua_Mat4_transformVector(lua_State* luaState)
     {
 #if _AX_DEBUG >= 1
 
-        if (!axlua::adapter::is_table(luaState, 1, 0, &conversionError) || !axlua::adapter::is_table(luaState, 2, 0, &conversionError))
+        if (!axlua::adapter::is_table(luaState, 1, 0, &conversionError) ||
+            !axlua::adapter::is_table(luaState, 2, 0, &conversionError))
             goto argumentError;
         else
 #endif
@@ -5429,8 +5509,10 @@ static int axlua_Mat4_transformVector(lua_State* luaState)
          float x, float y, float z, float w, Vec3* dst
          */
 #if _AX_DEBUG >= 1
-        if (!axlua::adapter::is_table(luaState, 1, 0, &conversionError) || !axlua::adapter::is_number(luaState, 2, 0, &conversionError) ||
-            !axlua::adapter::is_number(luaState, 3, 0, &conversionError) || !axlua::adapter::is_number(luaState, 4, 0, &conversionError) ||
+        if (!axlua::adapter::is_table(luaState, 1, 0, &conversionError) ||
+            !axlua::adapter::is_number(luaState, 2, 0, &conversionError) ||
+            !axlua::adapter::is_number(luaState, 3, 0, &conversionError) ||
+            !axlua::adapter::is_number(luaState, 4, 0, &conversionError) ||
             !axlua::adapter::is_number(luaState, 5, 0, &conversionError))
             goto argumentError;
         else
@@ -5699,7 +5781,8 @@ static int axlua_Vec3_cross(lua_State* luaState)
     if (2 == argc)
     {
 #if _AX_DEBUG >= 1
-        if (!axlua::adapter::is_table(luaState, 1, 0, &conversionError) || !axlua::adapter::is_table(luaState, 2, 0, &conversionError))
+        if (!axlua::adapter::is_table(luaState, 1, 0, &conversionError) ||
+            !axlua::adapter::is_table(luaState, 2, 0, &conversionError))
             goto argumentError;
         else
 #endif
@@ -5726,7 +5809,8 @@ static int axlua_Vec3_cross(lua_State* luaState)
     else if (3 == argc)
     {
 #if _AX_DEBUG >= 1
-        if (!axlua::adapter::is_table(luaState, 1, 0, &conversionError) || !axlua::adapter::is_table(luaState, 2, 0, &conversionError) ||
+        if (!axlua::adapter::is_table(luaState, 1, 0, &conversionError) ||
+            !axlua::adapter::is_table(luaState, 2, 0, &conversionError) ||
             !axlua::adapter::is_table(luaState, 3, 0, &conversionError))
             goto argumentError;
         else
@@ -5767,7 +5851,8 @@ static int axlua_Mat4_multiply(lua_State* luaState)
 {
 #if _AX_DEBUG >= 1
     axlua::adapter::Error conversionError;
-    if (!axlua::adapter::is_table(luaState, 1, 0, &conversionError) || !axlua::adapter::is_table(luaState, 2, 0, &conversionError))
+    if (!axlua::adapter::is_table(luaState, 1, 0, &conversionError) ||
+        !axlua::adapter::is_table(luaState, 2, 0, &conversionError))
         goto argumentError;
     else
 #endif
@@ -5806,7 +5891,8 @@ int axlua_Mat4_translate(lua_State* luaState)
     {
 #if _AX_DEBUG >= 1
 
-        if (!axlua::adapter::is_table(luaState, 1, 0, &conversionError) || !axlua::adapter::is_table(luaState, 2, 0, &conversionError))
+        if (!axlua::adapter::is_table(luaState, 1, 0, &conversionError) ||
+            !axlua::adapter::is_table(luaState, 2, 0, &conversionError))
             goto argumentError;
         else
 #endif
@@ -5847,7 +5933,8 @@ int axlua_Mat4_createRotationZ(lua_State* luaState)
     {
 #if _AX_DEBUG >= 1
 
-        if (!axlua::adapter::is_table(luaState, 1, 0, &conversionError) || !axlua::adapter::is_number(luaState, 2, 0, &conversionError))
+        if (!axlua::adapter::is_table(luaState, 1, 0, &conversionError) ||
+            !axlua::adapter::is_number(luaState, 2, 0, &conversionError))
             goto argumentError;
         else
 #endif
@@ -5919,7 +6006,8 @@ int axlua_Mat4_createTranslation(lua_State* luaState)
     {
 #if _AX_DEBUG >= 1
 
-        if (!axlua::adapter::is_number(luaState, 1, 0, &conversionError) || !axlua::adapter::is_number(luaState, 2, 0, &conversionError) ||
+        if (!axlua::adapter::is_number(luaState, 1, 0, &conversionError) ||
+            !axlua::adapter::is_number(luaState, 2, 0, &conversionError) ||
             !axlua::adapter::is_number(luaState, 3, 0, &conversionError))
             goto argumentError;
         else
@@ -5997,7 +6085,8 @@ int axlua_Mat4_createRotation(lua_State* luaState)
     {
 #if _AX_DEBUG >= 1
 
-        if (!axlua::adapter::is_table(luaState, 1, 0, &conversionError) || !axlua::adapter::is_number(luaState, 2, 0, &conversionError))
+        if (!axlua::adapter::is_table(luaState, 1, 0, &conversionError) ||
+            !axlua::adapter::is_number(luaState, 2, 0, &conversionError))
             goto argumentError;
         else
 #endif
@@ -6070,9 +6159,9 @@ int register_all_ax_shaders_adapter(lua_State* luaState)
 {
     if (nullptr == luaState)
         return 0;
-#define set_lua_field(field)                                    \
-    do                                                          \
-    {                                                           \
+#define set_lua_field(field)                                     \
+    do                                                           \
+    {                                                            \
         lua_pushlstring(luaState, #field, sizeof(#field) - 1);   \
         lua_pushlstring(luaState, field.data(), field.length()); \
         lua_rawset(luaState, -3);                                \

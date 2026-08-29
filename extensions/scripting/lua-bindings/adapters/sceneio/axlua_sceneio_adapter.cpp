@@ -107,8 +107,7 @@ int axlua_sceneio_CSLoader_createNode(lua_State* luaState)
                 if (nullptr == ref)
                     return;
                 auto stack = LuaEngine::getInstance()->getLuaStack();
-                axlua::adapter::push_object(stack->getLuaState(), (void*)ref,
-                                                    "axext.Object");
+                axlua::adapter::push_object(stack->getLuaState(), (void*)ref, "axext.Object");
                 stack->executeFunctionByHandler(handler, 1);
             };
 
@@ -135,7 +134,8 @@ int axlua_sceneio_CSLoader_createNode(lua_State* luaState)
         }
     } while (0);
     ok = true;
-    luaL_error(luaState, "%s has wrong number of arguments: %d, was expecting %d", "axext.CSLoader:createNode", argc, 1);
+    luaL_error(luaState, "%s has wrong number of arguments: %d, was expecting %d", "axext.CSLoader:createNode", argc,
+               1);
     return 0;
 #if _AX_DEBUG >= 1
 argumentError:

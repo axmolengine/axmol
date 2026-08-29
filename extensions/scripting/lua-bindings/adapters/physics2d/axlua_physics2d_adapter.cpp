@@ -33,12 +33,11 @@
 
 #    ifndef AX_SAFE_DELETE_ARRAY
 #        define AX_SAFE_DELETE_ARRAY(p) \
-            do                     \
-            {                      \
-                delete[] (p);      \
-                (p) = nullptr;     \
-            }                      \
-            while (0)
+            do                          \
+            {                           \
+                delete[] (p);           \
+                (p) = nullptr;          \
+            } while (0)
 #    endif
 
 int axlua_physics2d_PhysicsWorld2D_getScene(lua_State* luaState)
@@ -60,7 +59,8 @@ int axlua_physics2d_PhysicsWorld2D_getScene(lua_State* luaState)
 #    if _AX_DEBUG >= 1
     if (!obj)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'axlua_physics2d_PhysicsWorld2D_getScene'", NULL);
+        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'axlua_physics2d_PhysicsWorld2D_getScene'",
+                                    NULL);
         return 0;
     }
 #    endif
@@ -83,7 +83,8 @@ int axlua_physics2d_PhysicsWorld2D_getScene(lua_State* luaState)
 
 #    if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_physics2d_PhysicsWorld2D_getScene'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_physics2d_PhysicsWorld2D_getScene'.",
+                                &conversionError);
 #    endif
 
     return 0;
@@ -109,7 +110,8 @@ int axlua_physics2d_PhysicsWorld2D_rayCast(lua_State* luaState)
 #    if _AX_DEBUG >= 1
     if (!obj)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'axlua_physics2d_PhysicsWorld2D_rayCast'", NULL);
+        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'axlua_physics2d_PhysicsWorld2D_rayCast'",
+                                    NULL);
         return 0;
     }
 #    endif
@@ -149,7 +151,8 @@ int axlua_physics2d_PhysicsWorld2D_rayCast(lua_State* luaState)
 
 #    if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_physics2d_PhysicsWorld2D_rayCast'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_physics2d_PhysicsWorld2D_rayCast'.",
+                                &conversionError);
 #    endif
 
     return 0;
@@ -222,7 +225,8 @@ int axlua_physics2d_Collider2D_recenterPoints(lua_State* luaState)
     return 0;
 #    if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_physics2d_Collider2D_recenterPoints'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_physics2d_Collider2D_recenterPoints'.",
+                                &conversionError);
 #    endif
     return 0;
 }
@@ -269,7 +273,8 @@ int axlua_physics2d_Collider2D_getPolygonCenter(lua_State* luaState)
     return 0;
 #    if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_physics2d_Collider2D_getPolygonCenter'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_physics2d_Collider2D_getPolygonCenter'.",
+                                &conversionError);
 #    endif
     return 0;
 }
@@ -293,7 +298,8 @@ int axlua_physics2d_PolygonCollider2D_getPoints(lua_State* luaState)
 #    if _AX_DEBUG >= 1
     if (!obj)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'axlua_physics2d_PolygonCollider2D_getPoints'", NULL);
+        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'axlua_physics2d_PolygonCollider2D_getPoints'",
+                                    NULL);
         return 0;
     }
 #    endif
@@ -313,7 +319,8 @@ int axlua_physics2d_PolygonCollider2D_getPoints(lua_State* luaState)
 
 #    if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_physics2d_PolygonCollider2D_getPoints'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_physics2d_PolygonCollider2D_getPoints'.",
+                                &conversionError);
 #    endif
 
     return 0;
@@ -338,7 +345,8 @@ int axlua_physics2d_EdgePolygonCollider2D_getPoints(lua_State* luaState)
 #    if _AX_DEBUG >= 1
     if (!obj)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'axlua_physics2d_EdgePolygonCollider2D_getPoints'", NULL);
+        axlua::adapter::raise_error(
+            luaState, "invalid 'obj' in function 'axlua_physics2d_EdgePolygonCollider2D_getPoints'", NULL);
         return 0;
     }
 #    endif
@@ -358,7 +366,8 @@ int axlua_physics2d_EdgePolygonCollider2D_getPoints(lua_State* luaState)
 
 #    if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_physics2d_EdgePolygonCollider2D_getPoints'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_physics2d_EdgePolygonCollider2D_getPoints'.",
+                                &conversionError);
 #    endif
 
     return 0;
@@ -383,7 +392,8 @@ int axlua_physics2d_EdgeChainCollider2D_getPoints(lua_State* luaState)
 #    if _AX_DEBUG >= 1
     if (!obj)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'axlua_physics2d_EdgeChainCollider2D_getPoints'", NULL);
+        axlua::adapter::raise_error(luaState,
+                                    "invalid 'obj' in function 'axlua_physics2d_EdgeChainCollider2D_getPoints'", NULL);
         return 0;
     }
 #    endif
@@ -403,7 +413,8 @@ int axlua_physics2d_EdgeChainCollider2D_getPoints(lua_State* luaState)
 
 #    if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_physics2d_EdgeChainCollider2D_getPoints'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_physics2d_EdgeChainCollider2D_getPoints'.",
+                                &conversionError);
 #    endif
 
     return 0;

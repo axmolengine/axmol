@@ -63,7 +63,7 @@ namespace axlua
 // the runtime also keeps a name-content fallback and caches fallback hits.
 void register_native_type_name(const std::type_info& nativeType, std::string_view luaTypeName);
 const char* find_native_type_name(const std::type_info& nativeType);
-}
+}  // namespace axlua
 
 #if _AX_DEBUG >= 1
 void luaval_to_native_err(lua_State* L, const char* msg, axlua::adapter::Error* err, const char* funcName = "");
@@ -171,8 +171,6 @@ AX_LUA_DLL bool luaval_to_boolean(lua_State* L, int lo, bool* outValue, const ch
  */
 bool luaval_to_number(lua_State* L, int lo, double* outValue, const char* funcName = "");
 
-
-
 /**
  * Get a std::string value from the given acceptable index of stack.
  * If the value at the given acceptable index of stack is a string or a number convertible to a string it returns true,
@@ -258,17 +256,9 @@ bool luaval_to_color32(lua_State* L, int lo, Color32* outValue, const char* func
 bool luaval_to_color(lua_State* L, int lo, ax::Color* outValue, const char* funcName = "");
 #if defined(AX_ENABLE_PHYSICS_2D)
 
-
 #endif  // #if defined(AX_ENABLE_PHYSICS_2D)
 
 #if defined(AX_ENABLE_PHYSICS_3D)
-
-
-
-
-
-
-
 
 #endif  // #if defined(AX_ENABLE_PHYSICS_3D)
 
@@ -285,8 +275,6 @@ bool luaval_to_color(lua_State* L, int lo, ax::Color* outValue, const char* func
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
 bool luaval_to_affinetransform(lua_State* L, int lo, AffineTransform* outValue, const char* funcName = "");
-
-
 
 /**
  * Get a Mat object value from the given acceptable index of stack.
@@ -341,24 +329,15 @@ bool luaval_to_vec2(lua_State* L, int lo, ax::Vec2* outValue, const char* funcNa
 bool luaval_to_fontdefinition(lua_State* L, int lo, ax::FontDefinition* outValue, const char* funcName = "");
 void fontdefinition_to_luaval(lua_State* L, const ax::FontDefinition& value);
 
-bool luaval_to_texparams(lua_State* L,
-                         int lo,
-                         ax::Texture2D::TexParams* outValue,
-                         const char* funcName = "");
+bool luaval_to_texparams(lua_State* L, int lo, ax::Texture2D::TexParams* outValue, const char* funcName = "");
 void texParams_to_luaval(lua_State* L, const ax::Texture2D::TexParams& value);
 
-bool luaval_to_mesh_vertex_attrib(lua_State* L,
-                                  int lo,
-                                  ax::MeshVertexAttrib* outValue,
-                                  const char* funcName = "");
+bool luaval_to_mesh_vertex_attrib(lua_State* L, int lo, ax::MeshVertexAttrib* outValue, const char* funcName = "");
 void mesh_vertex_attrib_to_luaval(lua_State* L, const ax::MeshVertexAttrib& value);
 
 #if defined(AX_ENABLE_PHYSICS_2D)
 // PhysicsMaterial2D keeps the legacy Lua table representation.
-bool luaval_to_physics_material2d(lua_State* L,
-                                  int lo,
-                                  ax::PhysicsMaterial2D* outValue,
-                                  const char* funcName = "");
+bool luaval_to_physics_material2d(lua_State* L, int lo, ax::PhysicsMaterial2D* outValue, const char* funcName = "");
 #endif
 
 #if defined(AX_ENABLE_PHYSICS_3D)
@@ -374,10 +353,7 @@ void six_dof_limits_to_luaval(lua_State* L, const ax::SixDofLimits& value);
 void joint_spring_to_luaval(lua_State* L, const ax::JointSpring& value);
 void joint_motor_to_luaval(lua_State* L, const ax::JointMotor& value);
 void joint_limits_to_luaval(lua_State* L, const ax::JointLimits& value);
-bool luaval_to_contact_info_3d(lua_State* L,
-                               int lo,
-                               ax::ContactInfo3D* outValue,
-                               const char* funcName = "");
+bool luaval_to_contact_info_3d(lua_State* L, int lo, ax::ContactInfo3D* outValue, const char* funcName = "");
 void contact_info_3d_to_luaval(lua_State* L, const ax::ContactInfo3D& value);
 #endif
 
@@ -439,8 +415,6 @@ bool luaval_to_blendfunc(lua_State* L, int lo, ax::BlendFunc* outValue, const ch
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
 bool luaval_to_ttfconfig(lua_State* L, int lo, ax::TTFConfig* outValue, const char* funcName = "");
-
-
 
 /** Converts the variadic Object arguments used by LayerMultiplex::createWithArray. */
 template <class T>
@@ -512,14 +486,10 @@ bool luaval_to_axvector(lua_State* L, int lo, ax::Vector<T>* ret, const char* fu
     return ok;
 }
 
-
-
 AX_LUA_DLL bool luaval_to_std_vector_string_view(lua_State* L,
                                                  int lo,
                                                  std::vector<std::string_view>* ret,
                                                  const char* funcName = "");
-
-
 
 /**
  * Get a pointer points to a ax::Map whose key/value pair is string value and T object from a Lua hash-map table in
@@ -531,9 +501,6 @@ AX_LUA_DLL bool luaval_to_std_vector_string_view(lua_State* L,
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
-
-
-
 
 /**
  * Get a ax::ValueMap object from the given acceptable index of stack.
@@ -548,8 +515,6 @@ AX_LUA_DLL bool luaval_to_std_vector_string_view(lua_State* L,
 bool luaval_to_valuemap(lua_State* L, int lo, ax::ValueMap* ret, const char* funcName = "");
 bool luaval_to_value(lua_State* L, int lo, ax::Value* ret, const char* funcName = "");
 bool luaval_to_valuemapintkey(lua_State* L, int lo, ax::ValueMapIntKey* ret, const char* funcName = "");
-
-
 
 /**
  * Get a ax::ValueVector object from the given acceptable index of stack.
@@ -589,12 +554,6 @@ bool luaval_to_object(lua_State* L, int lo, const char* type, T** ret, const cha
     return true;
 }
 
-
-
-
-
-
-
 /**
  * Get a ax::Quat object value from the given acceptable index of stack.
  * If the value at the given acceptable index of stack is a table it returns true, otherwise returns false.
@@ -608,10 +567,6 @@ bool luaval_to_object(lua_State* L, int lo, const char* type, T** ret, const cha
  */
 bool luaval_to_quaternion(lua_State* L, int lo, ax::Quat* outValue, const char* funcName = "");
 
-
-
-
-
 /**
  * Get a ax::Tex2F object value from the given acceptable index of stack.
  * If the value at the given acceptable index of stack is a table it returns true, otherwise returns false.
@@ -624,13 +579,6 @@ bool luaval_to_quaternion(lua_State* L, int lo, ax::Quat* outValue, const char* 
  * @return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
 bool luaval_to_tex2f(lua_State* L, int lo, ax::Tex2F* outValue, const char* funcName = "");
-
-
-
-
-
-
-
 
 /**@}**/
 
@@ -706,9 +654,6 @@ void size_to_luaval(lua_State* L, const Size& sz);
  */
 void rect_to_luaval(lua_State* L, const Rect& rt);
 
-
-
-
 /**
  * Push a table converted from a ax::Color32 object into the Lua stack.
  * The format of table as follows: {r=numberValue1, g=numberValue2, b=numberValue3, a=numberValue4}
@@ -727,10 +672,7 @@ void color32_to_luaval(lua_State* L, const Color32& cc);
  */
 void color_to_luaval(lua_State* L, const ax::Color& cc);
 
-
 #if defined(AX_ENABLE_PHYSICS_2D)
-
-
 
 /**
  * Push a table converted from a ax::PhysicsRayCastInfo object into the Lua stack.
@@ -742,23 +684,11 @@ void color_to_luaval(lua_State* L, const ax::Color& cc);
  */
 void physics_raycastinfo_to_luaval(lua_State* L, const ax::RayCastHit2D& info);
 
-
 #endif  // #if defined(AX_ENABLE_PHYSICS_2D)
 
 #if defined(AX_ENABLE_PHYSICS_3D)
 
-
-
-
-
-
-
-
 #endif  // #if defined(AX_ENABLE_PHYSICS_3D)
-
-
-
-
 
 /**
  * Push a table converted from a ax::Mat4 object into the Lua stack.
@@ -787,7 +717,6 @@ void blendfunc_to_luaval(lua_State* L, const ax::BlendFunc& func);
  * @param config a ax::TTFConfig object.
  */
 void ttfconfig_to_luaval(lua_State* L, const ax::TTFConfig& config);
-
 
 /**
  * Get the real typename for the specified typename.
@@ -819,7 +748,6 @@ const char* getLuaTypeName(T* ret, const char* defaultTypeName)
  * @param inValue a ax::Vector object.
  */
 
-
 /**
  * Push a table converted from a ax::Map object into the Lua stack.
  * The format of table as follows: {name1=userdata1, name2=userdata2, ..., nameMapSize=userdataMapSize}
@@ -828,7 +756,6 @@ const char* getLuaTypeName(T* ret, const char* defaultTypeName)
  * @param L the current lua_State.
  * @param v a ax::Map object.
  */
-
 
 /**
  * Push a Lua value converted from a ax::Value object into the Lua stack.
@@ -904,16 +831,6 @@ void object_to_luaval(lua_State* L, const char* type, T* ret)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
 /**
  * Push a table converted from a ax::Quat object into the Lua stack.
  * The format of table as follows: {x=numberValue1, y=numberValue2, z=numberValue3, w=numberValue4}
@@ -922,8 +839,6 @@ void object_to_luaval(lua_State* L, const char* type, T* ret)
  * @param inValue a ax::Quat object.
  */
 void quaternion_to_luaval(lua_State* L, const ax::Quat& inValue);
-
-
 
 /**
  * Push a Lua array table converted from a std::vector<ax::Vec3> into the Lua stack.
@@ -934,13 +849,9 @@ void quaternion_to_luaval(lua_State* L, const ax::Quat& inValue);
  */
 void vec3span_to_luaval(lua_State* L, std::span<const ax::Vec3> inValue);
 
-
-
 /**
  * convert lua object VertexLayout to native object
  */
-
-
 
 /**
  * convert lua object to ax::rhi::UniformLocation
@@ -951,9 +862,6 @@ AX_LUA_DLL bool luaval_to_uniformLocation(lua_State* L, int pos, ax::rhi::Unifor
  * convert ax::rhi::UniformLocation to lua object
  */
 AX_LUA_DLL void uniformLocation_to_luaval(lua_State* L, const ax::rhi::UniformLocation& desc);
-
-
-
 
 // end group
 /// @}

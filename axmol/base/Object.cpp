@@ -48,8 +48,7 @@ static void trackRef(Object* ref);
 static void untrackRef(Object* ref);
 #endif
 
-Object::Object()
-    : _referenceCount(1), _ID(0)  // when the Object is created, the reference count of it is 1
+Object::Object() : _referenceCount(1), _ID(0)  // when the Object is created, the reference count of it is 1
 {
     static std::atomic<uint64_t> uObjectCount{0};
     _ID = uObjectCount.fetch_add(1, std::memory_order_relaxed) + 1;

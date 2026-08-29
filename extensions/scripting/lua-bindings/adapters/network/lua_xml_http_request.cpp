@@ -410,7 +410,8 @@ static int lua_get_XMLHttpRequest_withCredentials(lua_State* L)
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        axlua::adapter::raise_error(L, "invalid 'self' in function 'lua_get_XMLHttpRequest_withCredentials'\n", nullptr);
+        axlua::adapter::raise_error(L, "invalid 'self' in function 'lua_get_XMLHttpRequest_withCredentials'\n",
+                                    nullptr);
         return 0;
     }
 #endif
@@ -440,7 +441,8 @@ static int lua_set_XMLHttpRequest_withCredentials(lua_State* L)
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        axlua::adapter::raise_error(L, "invalid 'self' in function 'lua_set_XMLHttpRequest_withCredentials'\n", nullptr);
+        axlua::adapter::raise_error(L, "invalid 'self' in function 'lua_set_XMLHttpRequest_withCredentials'\n",
+                                    nullptr);
         return 0;
     }
 #endif
@@ -755,7 +757,8 @@ static int axlua_XMLHttpRequest_open(lua_State* L)
     if (argc >= 2)
     {
 #if _AX_DEBUG >= 1
-        if (!axlua::adapter::is_string(L, 2, 0, &conversionError) || !axlua::adapter::is_string(L, 3, 0, &conversionError))
+        if (!axlua::adapter::is_string(L, 2, 0, &conversionError) ||
+            !axlua::adapter::is_string(L, 3, 0, &conversionError))
             goto argumentError;
 #endif
 
@@ -949,7 +952,8 @@ static int axlua_XMLHttpRequest_setRequestHeader(lua_State* L)
     if (2 == argc)
     {
 #if _AX_DEBUG >= 1
-        if (!axlua::adapter::is_string(L, 2, 0, &conversionError) || !axlua::adapter::is_string(L, 3, 0, &conversionError))
+        if (!axlua::adapter::is_string(L, 2, 0, &conversionError) ||
+            !axlua::adapter::is_string(L, 3, 0, &conversionError))
             goto argumentError;
 #endif
 
@@ -987,7 +991,8 @@ static int axlua_XMLHttpRequest_getAllResponseHeaders(lua_State* L)
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        axlua::adapter::raise_error(L, "invalid 'self' in function 'axlua_XMLHttpRequest_getAllResponseHeaders'\n", nullptr);
+        axlua::adapter::raise_error(L, "invalid 'self' in function 'axlua_XMLHttpRequest_getAllResponseHeaders'\n",
+                                    nullptr);
         return 0;
     }
 #endif
@@ -1014,7 +1019,8 @@ static int axlua_XMLHttpRequest_getAllResponseHeaders(lua_State* L)
     return 0;
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(L, "#ferror in function 'axlua_XMLHttpRequest_getAllResponseHeaders'.", &conversionError);
+    axlua::adapter::raise_error(L, "#ferror in function 'axlua_XMLHttpRequest_getAllResponseHeaders'.",
+                                &conversionError);
     return 0;
 #endif
 }
@@ -1036,7 +1042,8 @@ static int axlua_XMLHttpRequest_getResponseHeader(lua_State* L)
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        axlua::adapter::raise_error(L, "invalid 'self' in function 'axlua_XMLHttpRequest_getAllResponseHeaders'\n", nullptr);
+        axlua::adapter::raise_error(L, "invalid 'self' in function 'axlua_XMLHttpRequest_getAllResponseHeaders'\n",
+                                    nullptr);
         return 0;
     }
 #endif
@@ -1069,7 +1076,8 @@ static int axlua_XMLHttpRequest_getResponseHeader(lua_State* L)
     return 0;
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(L, "#ferror in function 'axlua_XMLHttpRequest_getAllResponseHeaders'.", &conversionError);
+    axlua::adapter::raise_error(L, "#ferror in function 'axlua_XMLHttpRequest_getAllResponseHeaders'.",
+                                &conversionError);
     return 0;
 #endif
 }
@@ -1091,7 +1099,8 @@ static int axlua_XMLHttpRequest_registerScriptHandler(lua_State* L)
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        axlua::adapter::raise_error(L, "invalid 'self' in function 'axlua_XMLHttpRequest_registerScriptHandler'\n", nullptr);
+        axlua::adapter::raise_error(L, "invalid 'self' in function 'axlua_XMLHttpRequest_registerScriptHandler'\n",
+                                    nullptr);
         return 0;
     }
 #endif
@@ -1117,7 +1126,8 @@ static int axlua_XMLHttpRequest_registerScriptHandler(lua_State* L)
     return 0;
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(L, "#ferror in function 'axlua_XMLHttpRequest_registerScriptHandler'.", &conversionError);
+    axlua::adapter::raise_error(L, "#ferror in function 'axlua_XMLHttpRequest_registerScriptHandler'.",
+                                &conversionError);
     return 0;
 #endif
 }
@@ -1139,7 +1149,8 @@ static int axlua_XMLHttpRequest_unregisterScriptHandler(lua_State* L)
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        axlua::adapter::raise_error(L, "invalid 'self' in function 'axlua_XMLHttpRequest_unregisterScriptHandler'\n", nullptr);
+        axlua::adapter::raise_error(L, "invalid 'self' in function 'axlua_XMLHttpRequest_unregisterScriptHandler'\n",
+                                    nullptr);
         return 0;
     }
 #endif
@@ -1160,12 +1171,13 @@ static int axlua_XMLHttpRequest_unregisterScriptHandler(lua_State* L)
     return 0;
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(L, "#ferror in function 'axlua_XMLHttpRequest_unregisterScriptHandler'.", &conversionError);
+    axlua::adapter::raise_error(L, "#ferror in function 'axlua_XMLHttpRequest_unregisterScriptHandler'.",
+                                &conversionError);
     return 0;
 #endif
 }
 
- int register_xml_http_request(lua_State* L)
+int register_xml_http_request(lua_State* L)
 {
     axlua::adapter::open(L);
     lua_reg_xml_http_request(L);
@@ -1173,9 +1185,10 @@ argumentError:
     axlua::adapter::begin_module(L, "ax");
     axlua::adapter::register_class(L, "XMLHttpRequest", "ax.XMLHttpRequest", "ax.Object", lua_collect_xml_http_request);
     axlua::adapter::begin_module(L, "XMLHttpRequest");
-    axlua::adapter::set_variable(L, "responseType", lua_get_XMLHttpRequest_responseType, lua_set_XMLHttpRequest_responseType);
+    axlua::adapter::set_variable(L, "responseType", lua_get_XMLHttpRequest_responseType,
+                                 lua_set_XMLHttpRequest_responseType);
     axlua::adapter::set_variable(L, "withCredentials", lua_get_XMLHttpRequest_withCredentials,
-                   lua_set_XMLHttpRequest_withCredentials);
+                                 lua_set_XMLHttpRequest_withCredentials);
     axlua::adapter::set_variable(L, "timeout", lua_get_XMLHttpRequest_timeout, lua_set_XMLHttpRequest_timeout);
     axlua::adapter::set_variable(L, "readyState", lua_get_XMLHttpRequest_readyState, nullptr);
     axlua::adapter::set_variable(L, "status", lua_get_XMLHttpRequest_status, nullptr);

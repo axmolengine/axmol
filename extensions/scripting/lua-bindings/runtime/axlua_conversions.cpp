@@ -175,7 +175,6 @@ bool luaval_to_number(lua_State* L, int lo, double* outValue, const char* funcNa
     return ok;
 }
 
-
 bool luaval_to_std_string(lua_State* L, int lo, std::string* outValue, const char* funcName)
 {
     if (NULL == L || NULL == outValue)
@@ -291,19 +290,19 @@ bool luaval_to_fontdefinition(lua_State* L, int lo, ax::FontDefinition* outValue
         return false;
     }
 
-    *outValue = ax::FontDefinition{};
-    outValue->_fontName = "Arial";
-    outValue->_fontSize = 32;
-    outValue->_alignment = ax::TextHAlignment::LEFT;
-    outValue->_vertAlignment = ax::TextVAlignment::TOP;
-    outValue->_fontFillColor = ax::Color32::white;
+    *outValue                        = ax::FontDefinition{};
+    outValue->_fontName              = "Arial";
+    outValue->_fontSize              = 32;
+    outValue->_alignment             = ax::TextHAlignment::LEFT;
+    outValue->_vertAlignment         = ax::TextVAlignment::TOP;
+    outValue->_fontFillColor         = ax::Color32::white;
     outValue->_stroke._strokeEnabled = false;
 
     const int tableIndex = lua_table_abs_index(L, lo);
-    auto read_string = [&](const char* field, std::string* value) {
+    auto read_string     = [&](const char* field, std::string* value) {
         lua_getfield(L, tableIndex, field);
         const bool present = !lua_isnil(L, -1);
-        const bool ok = !present || luaval_to_std_string(L, -1, value, funcName);
+        const bool ok      = !present || luaval_to_std_string(L, -1, value, funcName);
         lua_pop(L, 1);
         return ok;
     };
@@ -322,7 +321,7 @@ bool luaval_to_fontdefinition(lua_State* L, int lo, ax::FontDefinition* outValue
     if (!read_string("fontName", &outValue->_fontName))
         return false;
     lua_Number number = 0;
-    bool present = false;
+    bool present      = false;
     if (!read_number("fontSize", &number, &present))
         return false;
     if (present)
@@ -362,7 +361,7 @@ bool luaval_to_fontdefinition(lua_State* L, int lo, ax::FontDefinition* outValue
     lua_pop(L, 1);
     if (outValue->_stroke._strokeEnabled)
     {
-        outValue->_stroke._strokeSize = 1;
+        outValue->_stroke._strokeSize  = 1;
         outValue->_stroke._strokeColor = ax::Color32::blue;
         lua_getfield(L, tableIndex, "strokeColor");
         if (!lua_isnil(L, -1) && !luaval_to_color32(L, -1, &outValue->_stroke._strokeColor, funcName))
@@ -380,10 +379,7 @@ bool luaval_to_fontdefinition(lua_State* L, int lo, ax::FontDefinition* outValue
 }
 
 #if defined(AX_ENABLE_PHYSICS_2D)
-bool luaval_to_physics_material2d(lua_State* L,
-                                  int lo,
-                                  ax::PhysicsMaterial2D* outValue,
-                                  const char* funcName)
+bool luaval_to_physics_material2d(lua_State* L, int lo, ax::PhysicsMaterial2D* outValue, const char* funcName)
 {
     if (L == nullptr || outValue == nullptr)
         return false;
@@ -403,9 +399,9 @@ bool luaval_to_physics_material2d(lua_State* L,
         lua_pop(L, 1);
         return value;
     };
-    outValue->density = read("density");
+    outValue->density     = read("density");
     outValue->restitution = read("restitution");
-    outValue->friction = read("friction");
+    outValue->friction    = read("friction");
     return true;
 }
 #endif
@@ -459,7 +455,7 @@ bool luaval_to_texparams(lua_State* L, int lo, ax::Texture2D::TexParams* outValu
         return false;
     }
     const int tableIndex = lua_table_abs_index(L, lo);
-    auto read = [&](const char* field, int fallback, auto setter) {
+    auto read            = [&](const char* field, int fallback, auto setter) {
         lua_getfield(L, tableIndex, field);
         if (!lua_isnil(L, -1))
         {
@@ -477,16 +473,17 @@ bool luaval_to_texparams(lua_State* L, int lo, ax::Texture2D::TexParams* outValu
         lua_pop(L, 1);
         return true;
     };
-    return read("minFilter", static_cast<int>(rhi::SamplerFilter::MIN_LINEAR),
-                [&](int v) { outValue->minFilter = static_cast<rhi::SamplerFilter>(v); }) &&
-           read("magFilter", static_cast<int>(rhi::SamplerFilter::MAG_LINEAR),
-                [&](int v) { outValue->magFilter = static_cast<rhi::SamplerFilter>(v); }) &&
-           read("mipFilter", static_cast<int>(rhi::SamplerFilter::MIP_DEFAULT),
-                [&](int v) { outValue->mipFilter = static_cast<rhi::SamplerFilter>(v); }) &&
-           read("sAddressMode", static_cast<int>(rhi::SamplerAddressMode::CLAMP),
-                [&](int v) { outValue->sAddressMode = static_cast<rhi::SamplerAddressMode>(v); }) &&
-           read("tAddressMode", static_cast<int>(rhi::SamplerAddressMode::CLAMP),
-                [&](int v) { outValue->tAddressMode = static_cast<rhi::SamplerAddressMode>(v); });
+    return read("minFilter", static_cast<int>(rhi::SamplerFilter::MIN_LINEAR), [&](int v) {
+        outValue->minFilter = static_cast<rhi::SamplerFilter>(v);
+    }) && read("magFilter", static_cast<int>(rhi::SamplerFilter::MAG_LINEAR), [&](int v) {
+        outValue->magFilter = static_cast<rhi::SamplerFilter>(v);
+    }) && read("mipFilter", static_cast<int>(rhi::SamplerFilter::MIP_DEFAULT), [&](int v) {
+        outValue->mipFilter = static_cast<rhi::SamplerFilter>(v);
+    }) && read("sAddressMode", static_cast<int>(rhi::SamplerAddressMode::CLAMP), [&](int v) {
+        outValue->sAddressMode = static_cast<rhi::SamplerAddressMode>(v);
+    }) && read("tAddressMode", static_cast<int>(rhi::SamplerAddressMode::CLAMP), [&](int v) {
+        outValue->tAddressMode = static_cast<rhi::SamplerAddressMode>(v);
+    });
 }
 
 void texParams_to_luaval(lua_State* L, const ax::Texture2D::TexParams& value)
@@ -949,16 +946,16 @@ bool luaval_to_contact_info_3d(lua_State* L, int lo, ContactInfo3D* outValue, co
     axlua::adapter::Error conversionError;
     if (!axlua::adapter::is_table(L, lo, 0, &conversionError))
     {
-#if _AX_DEBUG >= 1
+#    if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &conversionError, funcName);
-#endif
+#    endif
         return false;
     }
     const int tableIndex = lua_table_abs_index(L, lo);
-    bool ok = luaval_to_physics_actor_field(L, tableIndex, "actorA", &outValue->actorA, funcName);
-    ok = luaval_to_physics_actor_field(L, tableIndex, "actorB", &outValue->actorB, funcName) && ok;
-    ok = luaval_to_vec3_field(L, tableIndex, "normal", &outValue->normal, funcName) && ok;
-    ok = luaval_to_contact_points_3d(L, tableIndex, outValue, funcName) && ok;
+    bool ok              = luaval_to_physics_actor_field(L, tableIndex, "actorA", &outValue->actorA, funcName);
+    ok                   = luaval_to_physics_actor_field(L, tableIndex, "actorB", &outValue->actorB, funcName) && ok;
+    ok                   = luaval_to_vec3_field(L, tableIndex, "normal", &outValue->normal, funcName) && ok;
+    ok                   = luaval_to_contact_points_3d(L, tableIndex, outValue, funcName) && ok;
     return ok;
 }
 
@@ -1325,7 +1322,6 @@ bool luaval_to_affinetransform(lua_State* L, int lo, AffineTransform* outValue, 
     }
     return ok;
 }
-
 
 bool luaval_to_ttfconfig(lua_State* L, int lo, ax::TTFConfig* outValue, const char* funcName)
 {
@@ -1805,7 +1801,6 @@ bool luaval_to_valuevector(lua_State* L, int lo, ax::ValueVector* ret, const cha
     return ok;
 }
 
-
 bool luaval_to_std_vector_string_view(lua_State* L, int lo, std::vector<std::string_view>* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret || lua_gettop(L) < lo)
@@ -1846,7 +1841,6 @@ bool luaval_to_std_vector_string_view(lua_State* L, int lo, std::vector<std::str
 
     return ok;
 }
-
 
 bool luaval_to_quaternion(lua_State* L, int lo, ax::Quat* outValue, const char* funcName)
 {
@@ -1889,7 +1883,6 @@ bool luaval_to_quaternion(lua_State* L, int lo, ax::Quat* outValue, const char* 
     return ok;
 }
 
-
 bool luaval_to_tex2f(lua_State* L, int lo, ax::Tex2F* outValue, const char* funcName)
 {
     if (nullptr == L || nullptr == outValue)
@@ -1920,8 +1913,6 @@ bool luaval_to_tex2f(lua_State* L, int lo, ax::Tex2F* outValue, const char* func
     }
     return ok;
 }
-
-
 
 void vec2_array_to_luaval(lua_State* L, const ax::Vec2* points, int count)
 {
@@ -2138,7 +2129,6 @@ int quat_to_luaval(lua_State* L, const ax::Quat& quat)
 
 #if defined(AX_ENABLE_PHYSICS_2D)
 
-
 void physics_raycastinfo_to_luaval(lua_State* L, const RayCastHit2D& info)
 {
     if (NULL == L)
@@ -2171,16 +2161,9 @@ void physics_raycastinfo_to_luaval(lua_State* L, const RayCastHit2D& info)
     lua_rawset(L, -3);                            /* table[key] = value, L: table */
 }
 
-
 #endif  // #if defined(AX_ENABLE_PHYSICS_2D)
 
 #if defined(AX_ENABLE_PHYSICS_3D)
-
-
-
-
-
-
 
 #endif  // #if defined(AX_ENABLE_PHYSICS_3D)
 
@@ -2215,9 +2198,6 @@ void rect_to_luaval(lua_State* L, const Rect& rt)
     lua_pushnumber(L, (lua_Number)rt.size.height); /* L: table key value*/
     lua_rawset(L, -3);                             /* table[key] = value, L: table */
 }
-
-
-
 
 void color32_to_luaval(lua_State* L, const Color32& color)
 {
@@ -2256,8 +2236,6 @@ void color_to_luaval(lua_State* L, const ax::Color& color)
     lua_pushnumber(L, (lua_Number)color.a); /* L: table key value*/
     lua_rawset(L, -3);                      /* table[key] = value, L: table */
 }
-
-
 
 void value_to_luaval(lua_State* L, const ax::Value& inValue)
 {
@@ -2607,7 +2585,6 @@ void ttfconfig_to_luaval(lua_State* L, const ax::TTFConfig& config)
     lua_rawset(L, -3);
 }
 
-
 void quaternion_to_luaval(lua_State* L, const ax::Quat& inValue)
 {
     if (NULL == L)
@@ -2628,7 +2605,6 @@ void quaternion_to_luaval(lua_State* L, const ax::Quat& inValue)
     lua_rawset(L, -3);
 }
 
-
 void vec3span_to_luaval(lua_State* L, std::span<const ax::Vec3> inValue)
 {
     if (nullptr == L)
@@ -2645,10 +2621,6 @@ void vec3span_to_luaval(lua_State* L, std::span<const ax::Vec3> inValue)
         ++index;
     }
 }
-
-
-
-
 
 bool luaval_to_uniformLocation(lua_State* L, int pos, ax::rhi::UniformLocation& loc, const char* message)
 {

@@ -13,8 +13,7 @@ template <class Signature>
 std::function<Signature> make_lua_callback(lua_State* state, int index);
 }
 
-#define SOL_AXMOL_STD_FUNCTION_GETTER(Signature, State, Index) \
-    axlua::make_lua_callback<Signature>((State), (Index))
+#define SOL_AXMOL_STD_FUNCTION_GETTER(Signature, State, Index) axlua::make_lua_callback<Signature>((State), (Index))
 
 #include "sol/sol.hpp"
 

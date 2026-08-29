@@ -148,7 +148,8 @@ int axlua_physics3d_Rigidbody3D_setTransformInPhysics(lua_State* L)
 #    if _AX_DEBUG >= 1
     if (!obj)
     {
-        axlua::adapter::raise_error(L, "invalid 'obj' in function 'axlua_physics3d_Rigidbody3D_setTransformInPhysics'", nullptr);
+        axlua::adapter::raise_error(L, "invalid 'obj' in function 'axlua_physics3d_Rigidbody3D_setTransformInPhysics'",
+                                    nullptr);
         return 0;
     }
 #    endif
@@ -162,8 +163,8 @@ int axlua_physics3d_Rigidbody3D_setTransformInPhysics(lua_State* L)
         ok &= luaval_to_quaternion(L, 3, &arg1);
         if (!ok)
         {
-            axlua::adapter::raise_error(L, "invalid arguments in function 'axlua_physics3d_Rigidbody3D_setTransformInPhysics'",
-                        nullptr);
+            axlua::adapter::raise_error(
+                L, "invalid arguments in function 'axlua_physics3d_Rigidbody3D_setTransformInPhysics'", nullptr);
             return 0;
         }
         obj->setTransformInPhysics(arg0, arg1);
@@ -175,7 +176,8 @@ int axlua_physics3d_Rigidbody3D_setTransformInPhysics(lua_State* L)
     return 0;
 #    if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(L, "#ferror in function 'axlua_physics3d_Rigidbody3D_setTransformInPhysics'.", &conversionError);
+    axlua::adapter::raise_error(L, "#ferror in function 'axlua_physics3d_Rigidbody3D_setTransformInPhysics'.",
+                                &conversionError);
 #    endif
     return 0;
 }
@@ -210,7 +212,8 @@ int axlua_physics3d_Collider3D_setTransformInPhysics(lua_State* L)
 #    if _AX_DEBUG >= 1
     if (!obj)
     {
-        axlua::adapter::raise_error(L, "invalid 'obj' in function 'axlua_physics3d_Collider3D_setTransformInPhysics'", nullptr);
+        axlua::adapter::raise_error(L, "invalid 'obj' in function 'axlua_physics3d_Collider3D_setTransformInPhysics'",
+                                    nullptr);
         return 0;
     }
 #    endif
@@ -224,7 +227,8 @@ int axlua_physics3d_Collider3D_setTransformInPhysics(lua_State* L)
         ok &= luaval_to_quaternion(L, 3, &arg1);
         if (!ok)
         {
-            axlua::adapter::raise_error(L, "invalid arguments in function 'axlua_physics3d_Collider3D_setTransformInPhysics'", nullptr);
+            axlua::adapter::raise_error(
+                L, "invalid arguments in function 'axlua_physics3d_Collider3D_setTransformInPhysics'", nullptr);
             return 0;
         }
         obj->setTransformInPhysics(arg0, arg1);
@@ -236,7 +240,8 @@ int axlua_physics3d_Collider3D_setTransformInPhysics(lua_State* L)
     return 0;
 #    if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(L, "#ferror in function 'axlua_physics3d_Collider3D_setTransformInPhysics'.", &conversionError);
+    axlua::adapter::raise_error(L, "#ferror in function 'axlua_physics3d_Collider3D_setTransformInPhysics'.",
+                                &conversionError);
 #    endif
     return 0;
 }
@@ -292,7 +297,8 @@ int axlua_physics3d_PhysicsWorld3D_rayCast(lua_State* L)
 
         if (!ok)
         {
-            axlua::adapter::raise_error(L, "invalid arguments in function 'axlua_physics3d_PhysicsWorld3D_rayCast'", nullptr);
+            axlua::adapter::raise_error(L, "invalid arguments in function 'axlua_physics3d_PhysicsWorld3D_rayCast'",
+                                        nullptr);
             return 0;
         }
         bool ret = obj->rayCast(arg0, arg1, &arg2);

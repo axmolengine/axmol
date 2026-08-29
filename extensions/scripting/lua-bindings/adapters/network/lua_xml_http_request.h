@@ -26,4 +26,4 @@
 
 #include "lua-bindings/runtime/axlua_adapter.h"
 
- int register_xml_http_request(lua_State* L);
+int register_xml_http_request(lua_State* L);

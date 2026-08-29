@@ -51,8 +51,8 @@ LuaArmatureWrapper::~LuaArmatureWrapper() {}
 
 void LuaArmatureWrapper::addArmatureFileInfoAsyncCallback(float percent)
 {
-    int handler =
-        AxluaCallbackRegistry::getInstance()->getObjectHandler((void*)this, AxluaCallbackRegistry::HandlerType::ARMATURE_EVENT);
+    int handler = AxluaCallbackRegistry::getInstance()->getObjectHandler(
+        (void*)this, AxluaCallbackRegistry::HandlerType::ARMATURE_EVENT);
 
     if (0 != handler)
     {
@@ -84,7 +84,8 @@ static int axlua_ArmatureController_setMovementEventCallFunc(lua_State* L)
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        axlua::adapter::raise_error(L, "invalid 'self' in function 'axlua_ArmatureController_setMovementEventCallFunc'\n", NULL);
+        axlua::adapter::raise_error(
+            L, "invalid 'self' in function 'axlua_ArmatureController_setMovementEventCallFunc'\n", NULL);
         return 0;
     }
 #endif
@@ -107,7 +108,7 @@ static int axlua_ArmatureController_setMovementEventCallFunc(lua_State* L)
         Vector<LuaArmatureWrapper*> vec;
         vec.pushBack(wrapper);
         AxluaCallbackRegistry::getInstance()->addObjectHandler((void*)wrapper, handler,
-                                                          AxluaCallbackRegistry::HandlerType::ARMATURE_EVENT);
+                                                               AxluaCallbackRegistry::HandlerType::ARMATURE_EVENT);
 
         self->setMovementEventCallFunc(
             [=](Armature* armature, MovementEventType movementType, std::string_view movementID) {
@@ -159,7 +160,8 @@ static int axlua_ArmatureController_setFrameEventCallFunc(lua_State* L)
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        axlua::adapter::raise_error(L, "invalid 'self' in function 'axlua_ArmatureController_setFrameEventCallFunc'\n", NULL);
+        axlua::adapter::raise_error(L, "invalid 'self' in function 'axlua_ArmatureController_setFrameEventCallFunc'\n",
+                                    NULL);
         return 0;
     }
 #endif
@@ -183,7 +185,7 @@ static int axlua_ArmatureController_setFrameEventCallFunc(lua_State* L)
         vec.pushBack(wrapper);
 
         AxluaCallbackRegistry::getInstance()->addObjectHandler((void*)wrapper, handler,
-                                                          AxluaCallbackRegistry::HandlerType::ARMATURE_EVENT);
+                                                               AxluaCallbackRegistry::HandlerType::ARMATURE_EVENT);
 
         self->setFrameEventCallFunc(
             [=](ax::ext::Bone* bone, std::string_view frameEventName, int originFrameIndex, int currentFrameIndex) {
@@ -248,8 +250,8 @@ static int axlua_ArmatureDataManager_addArmatureFileInfoAsyncCallFunc(lua_State*
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        axlua::adapter::raise_error(L, "invalid 'self' in function 'axlua_ArmatureDataManager_addArmatureFileInfoAsyncCallFunc'\n",
-                    NULL);
+        axlua::adapter::raise_error(
+            L, "invalid 'self' in function 'axlua_ArmatureDataManager_addArmatureFileInfoAsyncCallFunc'\n", NULL);
         return 0;
     }
 #endif
@@ -258,7 +260,8 @@ static int axlua_ArmatureDataManager_addArmatureFileInfoAsyncCallFunc(lua_State*
     if (2 == argc)
     {
 #if _AX_DEBUG >= 1
-        if (!axlua::adapter::is_string(L, 2, 0, &conversionError) || !axlua::adapter::is_function(L, 3, "LUA_FUNCTION", 0, &conversionError))
+        if (!axlua::adapter::is_string(L, 2, 0, &conversionError) ||
+            !axlua::adapter::is_function(L, 3, "LUA_FUNCTION", 0, &conversionError))
         {
             goto argumentError;
         }
@@ -270,7 +273,7 @@ static int axlua_ArmatureDataManager_addArmatureFileInfoAsyncCallFunc(lua_State*
         wrapper->autorelease();
 
         AxluaCallbackRegistry::getInstance()->addObjectHandler((void*)wrapper, handler,
-                                                          AxluaCallbackRegistry::HandlerType::ARMATURE_EVENT);
+                                                               AxluaCallbackRegistry::HandlerType::ARMATURE_EVENT);
 
         self->addArmatureFileInfoAsync(configFilePath, wrapper,
                                        AX_SCHEDULE_SELECTOR(LuaArmatureWrapper::addArmatureFileInfoAsyncCallback));
@@ -280,8 +283,10 @@ static int axlua_ArmatureDataManager_addArmatureFileInfoAsyncCallFunc(lua_State*
     else if (4 == argc)
     {
 #if _AX_DEBUG >= 1
-        if (!axlua::adapter::is_string(L, 2, 0, &conversionError) || !axlua::adapter::is_string(L, 3, 0, &conversionError) ||
-            !axlua::adapter::is_string(L, 4, 0, &conversionError) || !axlua::adapter::is_function(L, 5, "LUA_FUNCTION", 0, &conversionError))
+        if (!axlua::adapter::is_string(L, 2, 0, &conversionError) ||
+            !axlua::adapter::is_string(L, 3, 0, &conversionError) ||
+            !axlua::adapter::is_string(L, 4, 0, &conversionError) ||
+            !axlua::adapter::is_function(L, 5, "LUA_FUNCTION", 0, &conversionError))
         {
             goto argumentError;
         }
@@ -296,7 +301,7 @@ static int axlua_ArmatureDataManager_addArmatureFileInfoAsyncCallFunc(lua_State*
         wrapper->autorelease();
 
         AxluaCallbackRegistry::getInstance()->addObjectHandler((void*)wrapper, handler,
-                                                          AxluaCallbackRegistry::HandlerType::ARMATURE_EVENT);
+                                                               AxluaCallbackRegistry::HandlerType::ARMATURE_EVENT);
 
         self->addArmatureFileInfoAsync(imagePath, plistPath, configFilePath, wrapper,
                                        AX_SCHEDULE_SELECTOR(LuaArmatureWrapper::addArmatureFileInfoAsyncCallback));
@@ -322,7 +327,8 @@ static void extendArmatureDataManager(lua_State* L)
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {
-        axlua::adapter::set_function(L, "addArmatureFileInfoAsync", axlua_ArmatureDataManager_addArmatureFileInfoAsyncCallFunc);
+        axlua::adapter::set_function(L, "addArmatureFileInfoAsync",
+                                     axlua_ArmatureDataManager_addArmatureFileInfoAsyncCallFunc);
     }
     lua_pop(L, 1);
 }
@@ -346,7 +352,8 @@ static int axlua_extension_Bone_setIgnoreMovementBoneData(lua_State* L)
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        axlua::adapter::raise_error(L, "invalid 'self' in function 'axlua_extension_Bone_setIgnoreMovementBoneData'\n", NULL);
+        axlua::adapter::raise_error(L, "invalid 'self' in function 'axlua_extension_Bone_setIgnoreMovementBoneData'\n",
+                                    NULL);
         return 0;
     }
 #endif
@@ -415,7 +422,8 @@ int axlua_studio_ActionTimelineCache_getInstance(lua_State* L)
     return 0;
 #if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(L, "#ferror in function 'axlua_studio_ActionTimelineCache_getInstance'.", &conversionError);
+    axlua::adapter::raise_error(L, "#ferror in function 'axlua_studio_ActionTimelineCache_getInstance'.",
+                                &conversionError);
 #endif
     return 0;
 }
@@ -450,7 +458,8 @@ static int axlua_ActionTimeline_setFrameEventCallFunc(lua_State* L)
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
-        axlua::adapter::raise_error(L, "invalid 'self' in function 'axlua_ActionTimeline_setFrameEventCallFunc'\n", NULL);
+        axlua::adapter::raise_error(L, "invalid 'self' in function 'axlua_ActionTimeline_setFrameEventCallFunc'\n",
+                                    NULL);
         return 0;
     }
 #endif
@@ -468,8 +477,7 @@ static int axlua_ActionTimeline_setFrameEventCallFunc(lua_State* L)
         LUA_FUNCTION handler = (axlua::adapter::ref_function(L, 2, 0));
         self->setFrameEventCallFunc([=](ext::timeline::Frame* frame) {
             auto stack = LuaEngine::getInstance()->getLuaStack();
-            axlua::adapter::push_object(stack->getLuaState(), (void*)frame,
-                                         getLuaTypeName(frame, "axext.Frame"));
+            axlua::adapter::push_object(stack->getLuaState(), (void*)frame, getLuaTypeName(frame, "axext.Frame"));
             stack->executeFunctionByHandler(handler, 1);
         });
 

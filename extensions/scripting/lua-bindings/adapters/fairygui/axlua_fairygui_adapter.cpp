@@ -81,7 +81,8 @@ static int lua_ax_fairygui_removeClickListener(lua_State* L)
         ok &= luaval_to_int(L, 2, (int*)&tag, "lua_ax_fairygui_removeClickListener");
         if (!ok)
         {
-            axlua::adapter::raise_error(L, "invalid arguments in function 'lua_ax_fairygui_removeClickListener'", nullptr);
+            axlua::adapter::raise_error(L, "invalid arguments in function 'lua_ax_fairygui_removeClickListener'",
+                                        nullptr);
             return 0;
         }
         self->removeClickListener(fairygui::EventTag(tag));
@@ -122,7 +123,8 @@ int lua_ax_fairygui_GObject_getData(lua_State* luaState)
     {
         if (!ok)
         {
-            axlua::adapter::raise_error(luaState, "invalid arguments in function 'lua_ax_fairygui_GObject_getData'", nullptr);
+            axlua::adapter::raise_error(luaState, "invalid arguments in function 'lua_ax_fairygui_GObject_getData'",
+                                        nullptr);
             return 0;
         }
         void* ret = obj->getData();
@@ -165,7 +167,8 @@ static int lua_ax_fairygui_removeEventListener(lua_State* L)
         ok &= luaval_to_int(L, 2, (int*)&eventType, "lua_ax_fairygui_removeEventListener");
         if (!ok)
         {
-            axlua::adapter::raise_error(L, "invalid arguments in function 'lua_ax_fairygui_removeEventListener'", nullptr);
+            axlua::adapter::raise_error(L, "invalid arguments in function 'lua_ax_fairygui_removeEventListener'",
+                                        nullptr);
             return 0;
         }
         self->removeEventListener(eventType);
@@ -178,14 +181,16 @@ static int lua_ax_fairygui_removeEventListener(lua_State* L)
         ok &= luaval_to_int(L, 2, (int*)&eventType, "lua_ax_fairygui_removeEventListener");
         if (!ok)
         {
-            axlua::adapter::raise_error(L, "invalid arguments in function 'lua_ax_fairygui_removeEventListener'", nullptr);
+            axlua::adapter::raise_error(L, "invalid arguments in function 'lua_ax_fairygui_removeEventListener'",
+                                        nullptr);
             return 0;
         }
         int tag;
         ok &= luaval_to_int(L, 3, (int*)&tag, "lua_ax_fairygui_removeEventListener");
         if (!ok)
         {
-            axlua::adapter::raise_error(L, "invalid arguments in function 'lua_ax_fairygui_removeEventListener'", nullptr);
+            axlua::adapter::raise_error(L, "invalid arguments in function 'lua_ax_fairygui_removeEventListener'",
+                                        nullptr);
             return 0;
         }
         self->removeEventListener(eventType, fairygui::EventTag(tag));
@@ -363,18 +368,18 @@ static int lua_ax_fairygui_UIObjectFactory_setPackageItemExtension(lua_State* lu
         ok &= luaval_to_std_string(luaState, 2, &url, "lua_ax_fairygui_UIObjectFactory_setPackageItemExtension");
         if (!ok)
         {
-            axlua::adapter::raise_error(luaState,
-                        "invalid arguments in function 'lua_ax_fairygui_UIObjectFactory_setPackageItemExtension'",
-                        nullptr);
+            axlua::adapter::raise_error(
+                luaState, "invalid arguments in function 'lua_ax_fairygui_UIObjectFactory_setPackageItemExtension'",
+                nullptr);
             return 0;
         }
         std::string retType;
         ok &= luaval_to_std_string(luaState, 4, &retType, "lua_ax_fairygui_UIObjectFactory_setPackageItemExtension");
         if (!ok)
         {
-            axlua::adapter::raise_error(luaState,
-                        "invalid arguments in function 'lua_ax_fairygui_UIObjectFactory_setPackageItemExtension'",
-                        nullptr);
+            axlua::adapter::raise_error(
+                luaState, "invalid arguments in function 'lua_ax_fairygui_UIObjectFactory_setPackageItemExtension'",
+                nullptr);
             return 0;
         }
         fairygui::UIObjectFactory::setPackageItemExtension(url, [=]() -> fairygui::GComponent* {
@@ -418,7 +423,8 @@ static int lua_ax_fairygui_UIObjectFactory_setPackageItemExtension(lua_State* lu
     return 0;
 #    if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'lua_ax_fairygui_UIObjectFactory_setPackageItemExtension'.", &conversionError);
+    axlua::adapter::raise_error(
+        luaState, "#ferror in function 'lua_ax_fairygui_UIObjectFactory_setPackageItemExtension'.", &conversionError);
     return 0;
 #    endif
 }
@@ -488,7 +494,8 @@ int lua_ax_fairygui_EventContext_getDataValue(lua_State* luaState)
 #    if _AX_DEBUG >= 1
     if (!obj)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'lua_ax_fairygui_EventContext_getDataValue'", nullptr);
+        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'lua_ax_fairygui_EventContext_getDataValue'",
+                                    nullptr);
         return 0;
     }
 #    endif
@@ -497,7 +504,8 @@ int lua_ax_fairygui_EventContext_getDataValue(lua_State* luaState)
     {
         if (!ok)
         {
-            axlua::adapter::raise_error(luaState, "invalid arguments in function 'lua_ax_fairygui_EventContext_getDataValue'", nullptr);
+            axlua::adapter::raise_error(
+                luaState, "invalid arguments in function 'lua_ax_fairygui_EventContext_getDataValue'", nullptr);
             return 0;
         }
         const cocos2d::Value& ret = obj->getDataValue();
@@ -509,7 +517,8 @@ int lua_ax_fairygui_EventContext_getDataValue(lua_State* luaState)
     return 0;
 #    if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'lua_ax_fairygui_EventContext_getDataValue'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'lua_ax_fairygui_EventContext_getDataValue'.",
+                                &conversionError);
     return 0;
 #    endif
 }
@@ -530,7 +539,8 @@ int lua_ax_fairygui_EventContext_getData(lua_State* luaState)
 #    if _AX_DEBUG >= 1
     if (!obj)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'lua_ax_fairygui_EventContext_getData'", nullptr);
+        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'lua_ax_fairygui_EventContext_getData'",
+                                    nullptr);
         return 0;
     }
 #    endif
@@ -539,7 +549,8 @@ int lua_ax_fairygui_EventContext_getData(lua_State* luaState)
     {
         if (!ok)
         {
-            axlua::adapter::raise_error(luaState, "invalid arguments in function 'lua_ax_fairygui_EventContext_getData'", nullptr);
+            axlua::adapter::raise_error(
+                luaState, "invalid arguments in function 'lua_ax_fairygui_EventContext_getData'", nullptr);
             return 0;
         }
         void* ret = obj->getData();
@@ -551,7 +562,8 @@ int lua_ax_fairygui_EventContext_getData(lua_State* luaState)
     return 0;
 #    if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'lua_ax_fairygui_EventContext_getData'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'lua_ax_fairygui_EventContext_getData'.",
+                                &conversionError);
     return 0;
 #    endif
 }
@@ -598,7 +610,8 @@ static void extendUIObjectFactory(lua_State* L)
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {
-        axlua::adapter::set_function(L, "setPackageItemExtension", lua_ax_fairygui_UIObjectFactory_setPackageItemExtension);
+        axlua::adapter::set_function(L, "setPackageItemExtension",
+                                     lua_ax_fairygui_UIObjectFactory_setPackageItemExtension);
     }
     lua_pop(L, 1);
 }
@@ -642,7 +655,8 @@ int lua_ax_fairygui_GMovieClip_setPlaySettings(lua_State* luaState)
 #    if _AX_DEBUG >= 1
     if (!obj)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'lua_ax_fairygui_GMovieClip_setPlaySettings'", nullptr);
+        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'lua_ax_fairygui_GMovieClip_setPlaySettings'",
+                                    nullptr);
         return 0;
     }
 #    endif
@@ -651,7 +665,8 @@ int lua_ax_fairygui_GMovieClip_setPlaySettings(lua_State* luaState)
     {
         if (!ok)
         {
-            axlua::adapter::raise_error(luaState, "invalid arguments in function 'lua_ax_fairygui_GMovieClip_setPlaySettings'", nullptr);
+            axlua::adapter::raise_error(
+                luaState, "invalid arguments in function 'lua_ax_fairygui_GMovieClip_setPlaySettings'", nullptr);
             return 0;
         }
         obj->setPlaySettings();
@@ -664,7 +679,8 @@ int lua_ax_fairygui_GMovieClip_setPlaySettings(lua_State* luaState)
         ok &= luaval_to_int(luaState, 2, (int*)&arg0, "fgui.GMovieClip:setPlaySettings");
         if (!ok)
         {
-            axlua::adapter::raise_error(luaState, "invalid arguments in function 'lua_ax_fairygui_GMovieClip_setPlaySettings'", nullptr);
+            axlua::adapter::raise_error(
+                luaState, "invalid arguments in function 'lua_ax_fairygui_GMovieClip_setPlaySettings'", nullptr);
             return 0;
         }
         obj->setPlaySettings(arg0);
@@ -679,7 +695,8 @@ int lua_ax_fairygui_GMovieClip_setPlaySettings(lua_State* luaState)
         ok &= luaval_to_int(luaState, 3, (int*)&arg1, "fgui.GMovieClip:setPlaySettings");
         if (!ok)
         {
-            axlua::adapter::raise_error(luaState, "invalid arguments in function 'lua_ax_fairygui_GMovieClip_setPlaySettings'", nullptr);
+            axlua::adapter::raise_error(
+                luaState, "invalid arguments in function 'lua_ax_fairygui_GMovieClip_setPlaySettings'", nullptr);
             return 0;
         }
         obj->setPlaySettings(arg0, arg1);
@@ -696,7 +713,8 @@ int lua_ax_fairygui_GMovieClip_setPlaySettings(lua_State* luaState)
         ok &= luaval_to_int(luaState, 4, (int*)&arg2, "fgui.GMovieClip:setPlaySettings");
         if (!ok)
         {
-            axlua::adapter::raise_error(luaState, "invalid arguments in function 'lua_ax_fairygui_GMovieClip_setPlaySettings'", nullptr);
+            axlua::adapter::raise_error(
+                luaState, "invalid arguments in function 'lua_ax_fairygui_GMovieClip_setPlaySettings'", nullptr);
             return 0;
         }
         obj->setPlaySettings(arg0, arg1, arg2);
@@ -715,7 +733,8 @@ int lua_ax_fairygui_GMovieClip_setPlaySettings(lua_State* luaState)
         ok &= luaval_to_int(luaState, 5, (int*)&arg3, "fgui.GMovieClip:setPlaySettings");
         if (!ok)
         {
-            axlua::adapter::raise_error(luaState, "invalid arguments in function 'lua_ax_fairygui_GMovieClip_setPlaySettings'", nullptr);
+            axlua::adapter::raise_error(
+                luaState, "invalid arguments in function 'lua_ax_fairygui_GMovieClip_setPlaySettings'", nullptr);
             return 0;
         }
         obj->setPlaySettings(arg0, arg1, arg2, arg3);
@@ -740,7 +759,8 @@ int lua_ax_fairygui_GMovieClip_setPlaySettings(lua_State* luaState)
         ok &= luaval_to_int(luaState, 5, (int*)&arg3, "fgui.GMovieClip:setPlaySettings");
         if (!ok)
         {
-            axlua::adapter::raise_error(luaState, "invalid arguments in function 'lua_ax_fairygui_GMovieClip_setPlaySettings'", nullptr);
+            axlua::adapter::raise_error(
+                luaState, "invalid arguments in function 'lua_ax_fairygui_GMovieClip_setPlaySettings'", nullptr);
             return 0;
         }
         LUA_FUNCTION handler = (axlua::adapter::ref_function(luaState, 6, 0));
@@ -754,7 +774,8 @@ int lua_ax_fairygui_GMovieClip_setPlaySettings(lua_State* luaState)
     return 0;
 #    if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'lua_ax_fairygui_GMovieClip_setPlaySettings'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'lua_ax_fairygui_GMovieClip_setPlaySettings'.",
+                                &conversionError);
 #    endif
     return 0;
 }
@@ -808,7 +829,8 @@ int lua_ax_fairygui_GTweener_onUpdate(lua_State* luaState)
         object_to_luaval<fairygui::GTweener>(luaState, "fgui.GTweener", (fairygui::GTweener*)ret);
         return 1;
     }
-    luaL_error(luaState, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GTweener:onUpdate", argc, 1);
+    luaL_error(luaState, "%s has wrong number of arguments: %d, was expecting %d \n", "fgui.GTweener:onUpdate", argc,
+               1);
     return 0;
 #    if _AX_DEBUG >= 1
 argumentError:
@@ -882,7 +904,8 @@ int lua_ax_fairygui_GTweener_onComplete(lua_State* luaState)
 #    if _AX_DEBUG >= 1
     if (!obj)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'lua_ax_fairygui_GTweener_onComplete'", nullptr);
+        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'lua_ax_fairygui_GTweener_onComplete'",
+                                    nullptr);
         return 0;
     }
 #    endif
@@ -906,7 +929,8 @@ int lua_ax_fairygui_GTweener_onComplete(lua_State* luaState)
     return 0;
 #    if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'lua_ax_fairygui_GTweener_onComplete'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'lua_ax_fairygui_GTweener_onComplete'.",
+                                &conversionError);
 #    endif
     return 0;
 }
@@ -927,7 +951,8 @@ int lua_ax_fairygui_GTweener_onComplete1(lua_State* luaState)
 #    if _AX_DEBUG >= 1
     if (!obj)
     {
-        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'lua_ax_fairygui_GTweener_onComplete1'", nullptr);
+        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'lua_ax_fairygui_GTweener_onComplete1'",
+                                    nullptr);
         return 0;
     }
 #    endif
@@ -956,7 +981,8 @@ int lua_ax_fairygui_GTweener_onComplete1(lua_State* luaState)
     return 0;
 #    if _AX_DEBUG >= 1
 argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'lua_ax_fairygui_GTweener_onComplete1'.", &conversionError);
+    axlua::adapter::raise_error(luaState, "#ferror in function 'lua_ax_fairygui_GTweener_onComplete1'.",
+                                &conversionError);
 #    endif
     return 0;
 }

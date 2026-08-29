@@ -5,8 +5,8 @@
 
 int main()
 {
-    auto* stack = ax::LuaEngine::getInstance()->getLuaStack();
-    auto* state = stack->getLuaState();
+    auto* stack        = ax::LuaEngine::getInstance()->getLuaStack();
+    auto* state        = stack->getLuaState();
     const char* script = R"lua(
         local material = { density = 1.0, restitution = 0.25, friction = 0.5 }
         local size = {x=1, y=1}

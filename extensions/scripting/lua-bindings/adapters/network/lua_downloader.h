@@ -36,4 +36,4 @@ extern "C" {
 
 #include "lua-bindings/runtime/axlua_adapter.h"
 
- int register_downloader(lua_State* L);
+int register_downloader(lua_State* L);
