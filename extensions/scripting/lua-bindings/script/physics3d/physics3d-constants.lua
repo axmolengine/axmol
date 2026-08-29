@@ -2,6 +2,17 @@ if nil == ax.Rigidbody3D then
     return
 end
 
+ax.ContactEventBits =
+{
+    None = 0,
+    PreSolve = 1,
+    Hit = 2,
+    Contact = 4,
+    Sensor = 8,
+    Persisted = 16,
+    AllBits = 31,
+}
+
 ax.Rigidbody3D.SyncFlag =
 {
     NONE = 0,
