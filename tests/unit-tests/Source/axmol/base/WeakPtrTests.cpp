@@ -27,6 +27,8 @@
 #include "axmol/base/RefPtr.h"
 #include "axmol/base/Object.h"
 
+#include <type_traits>
+
 using namespace ax;
 
 // Mock classes for testing
@@ -151,5 +153,25 @@ TEST_SUITE("base/WeakPtr")
         CHECK(weakValidInDispose == false);
         CHECK(lockWasNullInDispose == true);
         CHECK(weak.expired());
+    }
+}
+
+static_assert(!std::is_copy_constructible_v<Object>);
+static_assert(!std::is_copy_assignable_v<Object>);
+static_assert(!std::is_move_constructible_v<Object>);
+static_assert(!std::is_move_assignable_v<Object>);
+
+TEST_SUITE("base/Object")
+{
+    TEST_CASE("DiagnosticID")
+    {
+        Character first;
+        const auto firstID = first.getObjectID();
+        Character second;
+
+        CHECK(firstID != 0);
+        CHECK(first.getObjectID() == firstID);
+        CHECK(second.getObjectID() != 0);
+        CHECK(second.getObjectID() > firstID);
     }
 }

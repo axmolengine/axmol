@@ -1,0 +1,109 @@
+{
+  "module": "ax_rhi",
+  "target_namespace": "axr",
+  "cpp_namespace": "ax::rhi",
+  "macro_judgement": null,
+  "headers": [
+    "%(axdir)s/axmol/rhi/RHITypes.h",
+    "%(axdir)s/axmol/rhi/ProgramState.h",
+    "%(axdir)s/axmol/rhi/Texture.h",
+    "%(axdir)s/axmol/rhi/VertexLayout.h",
+    "%(axdir)s/axmol/rhi/GraphicsCore.h",
+    "%(axdir)s/axmol/rhi/RenderTarget.h"
+  ],
+  "clang_flags": [],
+  "classes": [
+    "GraphicsCore",
+    "VertexLayout",
+    "BufferUsage",
+    "BufferType",
+    "ShaderStage",
+    "VertexFormat",
+    "PixelFormat",
+    "TextureUsage",
+    "IndexFormat",
+    "VertexStepMode",
+    "PrimitiveType",
+    "TextureType",
+    "SamplerAddressMode",
+    "SamplerFilter",
+    "StencilOperation",
+    "CompareFunction",
+    "BlendOperation",
+    "BlendFactor",
+    "ColorWriteMask",
+    "SamplerDescriptor",
+    "CullMode",
+    "Winding",
+    "UniformInfo",
+    "UniformLocation",
+    "AttributeBindInfo",
+    "TextureCubeFace",
+    "ProgramState",
+    "Texture",
+    "Program",
+    "GraphicsDevice",
+    "ShaderCache"
+  ],
+  "abstract_classes": [],
+  "classes_have_no_parents": [],
+  "base_classes_to_skip": [],
+  "skip": [
+    {
+      "class": "VertexLayout",
+      "methods": [
+        "getBindings",
+        "getInstanceBindings"
+      ]
+    },
+    {
+      "class": "ProgramState",
+      "methods": [
+        "getTextureBindingSets",
+        "getCallbackUniforms",
+        "getActiveVertexInputs",
+        "getTextureBindingInfos",
+        "getUniformLocations",
+        "getActiveUniformBlockInfos",
+        "setTextureArray",
+        "setCallbackUniform",
+        "setUniform",
+        "getUniformBuffer",
+        "getVertexLayout",
+        "getUniformLocation"
+      ]
+    },
+    {
+      "class": "Program",
+      "methods": [
+        "getSamplerBindings",
+        "getActiveUniformInfos",
+        "getActiveVertexInputs",
+        "getActiveTextureInfos",
+        "getUniformLocations",
+        "getActiveUniformBlockInfos",
+        "getVertexInputDesc",
+        "getActiveSamplerInfos"
+      ]
+    },
+    {
+      "class": "GraphicsDevice",
+      "methods": [
+        "createGraphicsContext",
+        "createBuffer",
+        "createTexture",
+        "createDepthStencilState",
+        "createRenderPipeline",
+        "setFrameBufferOnly"
+      ]
+    },
+    {
+      "class": "ShaderCache",
+      "methods": [
+        "recompileAll"
+      ]
+    }
+  ],
+  "rename_functions": [],
+  "rename_classes": []
+}

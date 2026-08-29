@@ -1,0 +1,33 @@
+{
+  "module": "ax_sceneio",
+  "target_namespace": "ax",
+  "cpp_namespace": "ax",
+  "macro_judgement": null,
+  "headers": [
+    "%(axdir)s/extensions/sceneio/src/sceneio/ActionTimeline/CSLoader.h"
+  ],
+  "clang_flags": [],
+  "classes": [
+    "CSLoader"
+  ],
+  "abstract_classes": [],
+  "classes_have_no_parents": [],
+  "base_classes_to_skip": [],
+  "skip": [
+    {
+      "class": "CSLoader",
+      "methods": [
+        "nodeFromXML",
+        "nodeFromProtocolBuffers",
+        "createTimeline",
+        "nodeWithFlatBuffers",
+        "createActionTimelineNode",
+        "createNodeWithDataBuffer",
+        "createTimelineWithDataBuffer",
+        "^createNode$"
+      ]
+    }
+  ],
+  "rename_functions": [],
+  "rename_classes": []
+}

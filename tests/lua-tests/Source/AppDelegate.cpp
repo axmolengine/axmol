@@ -25,9 +25,9 @@
 
 #include "axmol/axmol.h"
 #include "AppDelegate.h"
-#include "lua-bindings/manual/LuaEngine.h"
+#include "lua-bindings/runtime/LuaEngine.h"
 #include "lua_assetsmanager_test_sample.h"
-#include "lua-bindings/manual/lua_module_register.h"
+#include "lua-bindings/runtime/lua_module_register.h"
 #include "lua_test_bindings.h"
 
 using namespace ax;
@@ -65,7 +65,8 @@ bool AppDelegate::applicationDidFinishLaunching()
 #endif
         register_test_binding(L);
     }
-    lua_pop(L, 1);
+    if (lua_gettop(L) > 0)
+        lua_pop(L, 1);
 
     FileUtils::getInstance()->addSearchPath("src");
     FileUtils::getInstance()->addSearchPath("res");

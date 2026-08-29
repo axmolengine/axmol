@@ -315,8 +315,8 @@ local function LayerTest1()
     end
 
     local listener = ax.PointerEventListener:create()
-    listener:registerScriptHandler(onTouchesBegan,ax.Handler.EVENT_POINTER_DOWN )
-    listener:registerScriptHandler(onPointerMove,ax.Handler.EVENT_POINTER_MOVE )
+    listener.onPointerDown = onTouchesBegan
+    listener.onPointerMove = onPointerMove
 
     local eventDispatcher = ret:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, ret)
@@ -407,7 +407,7 @@ local function LayerTestBlend()
         end
     end
 
-    ret:registerScriptHandler(onNodeEvent)
+    ret:setLifecycleCallback(onNodeEvent)
     return ret
 end
 
@@ -455,7 +455,7 @@ local function LayerGradient()
     end
 
     local listener = ax.PointerEventListener:create()
-    listener:registerScriptHandler(onPointerMove,ax.Handler.EVENT_POINTER_MOVE )
+    listener.onPointerMove = onPointerMove
 
     local eventDispatcher = ret:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, ret)

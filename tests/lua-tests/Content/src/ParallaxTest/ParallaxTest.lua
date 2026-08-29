@@ -127,7 +127,7 @@ local function Parallax2()
     ret:addChild(voidNode, 0, kTagNode)
 
     local function onPointerMove(event)
-        local diff = event:getDelta()
+        local diff = ax.pSub(event:getPoint(), event:getPrevPoint())
 
         local node = ret:getChildByTag(kTagNode)
         local currentPosX, currentPosY = node:getPosition()
@@ -135,7 +135,7 @@ local function Parallax2()
     end
 
     local listener = ax.PointerEventListener:create()
-    listener:registerScriptHandler(onPointerMove,ax.Handler.EVENT_POINTER_MOVE )
+    listener.onPointerMove = onPointerMove
     local eventDispatcher = ret:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, ret)
 

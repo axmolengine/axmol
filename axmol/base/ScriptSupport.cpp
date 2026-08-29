@@ -136,11 +136,13 @@ void ScriptEngineManager::setScriptEngine(ScriptEngineProtocol* scriptEngine)
 
 void ScriptEngineManager::removeScriptEngine()
 {
-    if (_scriptEngine)
-    {
-        delete _scriptEngine;
-        _scriptEngine = nullptr;
-    }
+    // Clear the published pointer before destruction.  Object destructors
+    // can run from inside a script engine destructor; they must observe that
+    // no script backend is available instead of calling the half-destroyed
+    // engine through a dangling manager pointer.
+    auto* scriptEngine = _scriptEngine;
+    _scriptEngine      = nullptr;
+    delete scriptEngine;
 }
 
 ScriptEngineManager* ScriptEngineManager::getInstance()
@@ -150,6 +152,11 @@ ScriptEngineManager* ScriptEngineManager::getInstance()
         s_pSharedScriptEngineManager = new ScriptEngineManager();
     }
     return s_pSharedScriptEngineManager;
+}
+
+ScriptEngineProtocol* ScriptEngineManager::getScriptEngineIfExists()
+{
+    return s_pSharedScriptEngineManager != nullptr ? s_pSharedScriptEngineManager->_scriptEngine : nullptr;
 }
 
 void ScriptEngineManager::destroyInstance()

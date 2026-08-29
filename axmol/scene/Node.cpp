@@ -187,10 +187,6 @@ Node::Node()
     , _ignoreAnchorPointForPosition(false)
     , _reorderChildDirty(false)
     , _isTransitionFinished(false)
-#if AX_ENABLE_SCRIPT_BINDING
-    , _scriptHandler(0)
-    , _updateScriptHandler(0)
-#endif
     , _componentContainer(nullptr)
     , _displayedColor(Color32::white)
     , _realColor(Color32::white)
@@ -201,6 +197,7 @@ Node::Node()
     , _onExitCallback(nullptr)
     , _onEnterTransitionDidFinishCallback(nullptr)
     , _onExitTransitionDidStartCallback(nullptr)
+    , _onCleanupCallback(nullptr)
 {
     // set default scheduler and actionManager
     _director      = Director::getInstance();
@@ -233,13 +230,6 @@ Node::~Node()
     AXLOGV("deallocing Node: {} - tag: {}", fmt::ptr(this), _tag);
 
     AX_SAFE_DELETE(_childrenIndexer);
-
-#if AX_ENABLE_SCRIPT_BINDING
-    if (_updateScriptHandler)
-    {
-        ScriptEngineManager::getInstance()->getScriptEngine()->removeScriptHandler(_updateScriptHandler);
-    }
-#endif
 
     // User object has to be released before others, since userObject may have a weak reference of this node
     // It may invoke `node->stopAllActions();` while `_actionManager` is null if the next line is after
@@ -292,6 +282,9 @@ bool Node::initLayer()
 
 void Node::cleanup()
 {
+    if (_onCleanupCallback)
+        _onCleanupCallback();
+
 #if AX_ENABLE_SCRIPT_BINDING
     ScriptEngineManager::sendNodeEventToLua(this, kNodeOnCleanup);
 #endif  // #if AX_ENABLE_SCRIPT_BINDING
@@ -1597,28 +1590,9 @@ void Node::scheduleUpdateWithPriority(int priority)
     _scheduler->scheduleUpdate(this, priority, !_running);
 }
 
-void Node::scheduleUpdateWithPriorityLua(int nHandler, int priority)
-{
-    unscheduleUpdate();
-
-#if AX_ENABLE_SCRIPT_BINDING
-    _updateScriptHandler = nHandler;
-#endif
-
-    _scheduler->scheduleUpdate(this, priority, !_running);
-}
-
 void Node::unscheduleUpdate()
 {
     _scheduler->unscheduleUpdate(this);
-
-#if AX_ENABLE_SCRIPT_BINDING
-    if (_updateScriptHandler)
-    {
-        ScriptEngineManager::getInstance()->getScriptEngine()->removeScriptHandler(_updateScriptHandler);
-        _updateScriptHandler = 0;
-    }
-#endif
 }
 
 void Node::schedule(SEL_SCHEDULE selector)
@@ -1704,16 +1678,6 @@ void Node::pause()
 // override me
 void Node::update(float fDelta)
 {
-#if AX_ENABLE_SCRIPT_BINDING
-    if (0 != _updateScriptHandler)
-    {
-        // only lua use
-        SchedulerScriptData data(_updateScriptHandler, fDelta);
-        ScriptEvent event(kScheduleEvent, &data);
-        ScriptEngineManager::sendEventToLua(event);
-    }
-#endif
-
     if (_componentContainer && !_componentContainer->isEmpty())
     {
         _componentContainer->visit(fDelta);

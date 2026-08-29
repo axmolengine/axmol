@@ -7285,7 +7285,8 @@ namespace sol { namespace detail {
 	};
 
 	template <typename T, std::size_t tag>
-	struct ebco<T, tag, std::enable_if_t<!std::is_reference_v<T> && std::is_class_v<T> && !std::is_final_v<T>>> : T {
+	struct ebco<T, tag,
+	     std::enable_if_t<!std::is_reference_v<T> && std::is_class_v<T> && !std::is_final_v<T> && std::is_destructible_v<T>>> : T {
 		ebco() = default;
 		ebco(const ebco&) = default;
 		ebco(ebco&&) = default;
@@ -21565,7 +21566,11 @@ namespace sol {
 				if (t == type::none || t == type::lua_nil) {
 					return nullptr;
 				}
+#if defined(SOL_AXMOL_STD_FUNCTION_GETTER)
+				return SOL_AXMOL_STD_FUNCTION_GETTER(Signature, L, index);
+#else
 				return get_std_func(return_types(), L, index);
+#endif
 			}
 		};
 

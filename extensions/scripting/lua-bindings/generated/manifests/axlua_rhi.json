@@ -1,0 +1,1901 @@
+{
+  "formatVersion": 1,
+  "module": "rhi",
+  "registrationName": "ax_rhi",
+  "luaNamespace": "axr",
+  "luaTypeNamespace": "axr",
+  "conditionalExpression": "",
+  "classes": [
+    {
+      "nativeName": "GraphicsCore",
+      "qualifiedName": "ax::rhi::GraphicsCore",
+      "luaName": "axr.GraphicsCore",
+      "luaClassName": "GraphicsCore",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [],
+      "methods": [
+        {
+          "nativeName": "activate",
+          "luaName": "activate",
+          "declaringType": "ax::rhi::GraphicsCore",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "backend",
+          "luaName": "backend",
+          "declaringType": "ax::rhi::GraphicsCore",
+          "returnType": "ax::rhi::GraphicsBackend",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "device",
+          "luaName": "device",
+          "declaringType": "ax::rhi::GraphicsCore",
+          "returnType": "ax::rhi::GraphicsDevice *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getBackendPriority",
+          "luaName": "getBackendPriority",
+          "declaringType": "ax::rhi::GraphicsCore",
+          "returnType": "int",
+          "parameterTypes": [
+            "ax::rhi::GraphicsBackend"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "initialize",
+          "luaName": "initialize",
+          "declaringType": "ax::rhi::GraphicsCore",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isD3D11",
+          "luaName": "isD3D11",
+          "declaringType": "ax::rhi::GraphicsCore",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isD3D12",
+          "luaName": "isD3D12",
+          "declaringType": "ax::rhi::GraphicsCore",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isMetal",
+          "luaName": "isMetal",
+          "declaringType": "ax::rhi::GraphicsCore",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isOpenGL",
+          "luaName": "isOpenGL",
+          "declaringType": "ax::rhi::GraphicsCore",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isVulkan",
+          "luaName": "isVulkan",
+          "declaringType": "ax::rhi::GraphicsCore",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setBackendPriority",
+          "luaName": "setBackendPriority",
+          "declaringType": "ax::rhi::GraphicsCore",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::rhi::GraphicsBackend",
+            "int"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setPreferredBackend",
+          "luaName": "setPreferredBackend",
+          "declaringType": "ax::rhi::GraphicsCore",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::rhi::GraphicsBackend"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setShaderILProfile",
+          "luaName": "setShaderILProfile",
+          "declaringType": "ax::rhi::GraphicsCore",
+          "returnType": "void",
+          "parameterTypes": [
+            "int"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setVulkanMinAndroidApiLevel",
+          "luaName": "setVulkanMinAndroidApiLevel",
+          "declaringType": "ax::rhi::GraphicsCore",
+          "returnType": "void",
+          "parameterTypes": [
+            "int"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "shaderILProfile",
+          "luaName": "shaderILProfile",
+          "declaringType": "ax::rhi::GraphicsCore",
+          "returnType": "int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "shaderLanguage",
+          "luaName": "shaderLanguage",
+          "declaringType": "ax::rhi::GraphicsCore",
+          "returnType": "int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "shaderProfile",
+          "luaName": "shaderProfile",
+          "declaringType": "ax::rhi::GraphicsCore",
+          "returnType": "int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "shutdown",
+          "luaName": "shutdown",
+          "declaringType": "ax::rhi::GraphicsCore",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "GraphicsDevice",
+      "qualifiedName": "ax::rhi::GraphicsDevice",
+      "luaName": "axr.GraphicsDevice",
+      "luaClassName": "GraphicsDevice",
+      "isAbstract": true,
+      "constructors": [],
+      "bases": [],
+      "methods": [
+        {
+          "nativeName": "checkForFeatureSupported",
+          "luaName": "checkForFeatureSupported",
+          "declaringType": "ax::rhi::GraphicsDevice",
+          "returnType": "bool",
+          "parameterTypes": [
+            "ax::rhi::FeatureType"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "destroyStaleResources",
+          "luaName": "destroyStaleResources",
+          "declaringType": "ax::rhi::GraphicsDevice",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "dumpExtensions",
+          "luaName": "dumpExtensions",
+          "declaringType": "ax::rhi::GraphicsDevice",
+          "returnType": "std::string",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMaxAttributes",
+          "luaName": "getMaxAttributes",
+          "declaringType": "ax::rhi::GraphicsDevice",
+          "returnType": "int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMaxSamplesAllowed",
+          "luaName": "getMaxSamplesAllowed",
+          "declaringType": "ax::rhi::GraphicsDevice",
+          "returnType": "int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMaxTextureSize",
+          "luaName": "getMaxTextureSize",
+          "declaringType": "ax::rhi::GraphicsDevice",
+          "returnType": "int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMaxTextureUnits",
+          "luaName": "getMaxTextureUnits",
+          "declaringType": "ax::rhi::GraphicsDevice",
+          "returnType": "int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getRenderer",
+          "luaName": "getRenderer",
+          "declaringType": "ax::rhi::GraphicsDevice",
+          "returnType": "std::string",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getShaderVersion",
+          "luaName": "getShaderVersion",
+          "declaringType": "ax::rhi::GraphicsDevice",
+          "returnType": "std::string",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getVendor",
+          "luaName": "getVendor",
+          "declaringType": "ax::rhi::GraphicsDevice",
+          "returnType": "std::string",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getVersion",
+          "luaName": "getVersion",
+          "declaringType": "ax::rhi::GraphicsDevice",
+          "returnType": "std::string",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "hasExtension",
+          "luaName": "hasExtension",
+          "declaringType": "ax::rhi::GraphicsDevice",
+          "returnType": "bool",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "resetState",
+          "luaName": "resetState",
+          "declaringType": "ax::rhi::GraphicsDevice",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "waitForGPU",
+          "luaName": "waitForGPU",
+          "declaringType": "ax::rhi::GraphicsDevice",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "Program",
+      "qualifiedName": "ax::rhi::Program",
+      "luaName": "axr.Program",
+      "luaClassName": "Program",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "getFSModule",
+          "luaName": "getFSModule",
+          "declaringType": "ax::rhi::Program",
+          "returnType": "ax::rhi::ShaderModule *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getProgramId",
+          "luaName": "getProgramId",
+          "declaringType": "ax::rhi::Program",
+          "returnType": "uint64_t",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getProgramType",
+          "luaName": "getProgramType",
+          "declaringType": "ax::rhi::Program",
+          "returnType": "uint32_t",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getUniformBufferSize",
+          "luaName": "getUniformBufferSize",
+          "declaringType": "ax::rhi::Program",
+          "returnType": "size_t",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getUniformLocation",
+          "luaName": "getUniformLocation",
+          "declaringType": "ax::rhi::Program",
+          "returnType": "ax::rhi::UniformLocation",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getUniformLocation",
+          "luaName": "getUniformLocation",
+          "declaringType": "ax::rhi::Program",
+          "returnType": "ax::rhi::UniformLocation",
+          "parameterTypes": [
+            "rhi::Uniform"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getVSModule",
+          "luaName": "getVSModule",
+          "declaringType": "ax::rhi::Program",
+          "returnType": "ax::rhi::ShaderModule *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isValid",
+          "luaName": "isValid",
+          "declaringType": "ax::rhi::Program",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "ProgramState",
+      "qualifiedName": "ax::rhi::ProgramState",
+      "luaName": "axr.ProgramState",
+      "luaClassName": "ProgramState",
+      "isAbstract": false,
+      "constructors": [
+        {
+          "parameterTypes": [
+            "ax::rhi::Program *"
+          ],
+          "defaultValues": [
+            null
+          ]
+        }
+      ],
+      "bases": [
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "clone",
+          "luaName": "clone",
+          "declaringType": "ax::rhi::ProgramState",
+          "returnType": "ax::rhi::ProgramState *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getBatchId",
+          "luaName": "getBatchId",
+          "declaringType": "ax::rhi::ProgramState",
+          "returnType": "uint64_t",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getProgram",
+          "luaName": "getProgram",
+          "declaringType": "ax::rhi::ProgramState",
+          "returnType": "rhi::Program *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isBatchable",
+          "luaName": "isBatchable",
+          "declaringType": "ax::rhi::ProgramState",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setParameterAutoBinding",
+          "luaName": "setParameterAutoBinding",
+          "declaringType": "ax::rhi::ProgramState",
+          "returnType": "void",
+          "parameterTypes": [
+            "std::string_view",
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setTexture",
+          "luaName": "setTexture",
+          "declaringType": "ax::rhi::ProgramState",
+          "returnType": "void",
+          "parameterTypes": [
+            "rhi::Texture *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setTexture",
+          "luaName": "setTexture",
+          "declaringType": "ax::rhi::ProgramState",
+          "returnType": "void",
+          "parameterTypes": [
+            "const rhi::UniformLocation \u0026",
+            "int",
+            "rhi::Texture *"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "updateBatchId",
+          "luaName": "updateBatchId",
+          "declaringType": "ax::rhi::ProgramState",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "ShaderCache",
+      "qualifiedName": "ax::rhi::ShaderCache",
+      "luaName": "axr.ShaderCache",
+      "luaClassName": "ShaderCache",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [],
+      "methods": [
+        {
+          "nativeName": "acquireFragmentShaderModule",
+          "luaName": "acquireFragmentShaderModule",
+          "declaringType": "ax::rhi::ShaderCache",
+          "returnType": "rhi::ShaderModule *",
+          "parameterTypes": [
+            "ax::Data \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "acquireVertexShaderModule",
+          "luaName": "acquireVertexShaderModule",
+          "declaringType": "ax::rhi::ShaderCache",
+          "returnType": "rhi::ShaderModule *",
+          "parameterTypes": [
+            "ax::Data \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "destroyInstance",
+          "luaName": "destroyInstance",
+          "declaringType": "ax::rhi::ShaderCache",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getInstance",
+          "luaName": "getInstance",
+          "declaringType": "ax::rhi::ShaderCache",
+          "returnType": "ax::rhi::ShaderCache *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "removeAllShaders",
+          "luaName": "removeAllShaders",
+          "declaringType": "ax::rhi::ShaderCache",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "removeUnusedShader",
+          "luaName": "removeUnusedShader",
+          "declaringType": "ax::rhi::ShaderCache",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "Texture",
+      "qualifiedName": "ax::rhi::Texture",
+      "luaName": "axr.Texture",
+      "luaClassName": "Texture",
+      "isAbstract": true,
+      "constructors": [],
+      "bases": [
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "getArraySize",
+          "luaName": "getArraySize",
+          "declaringType": "ax::rhi::Texture",
+          "returnType": "int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getHeight",
+          "luaName": "getHeight",
+          "declaringType": "ax::rhi::Texture",
+          "returnType": "int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMipLevels",
+          "luaName": "getMipLevels",
+          "declaringType": "ax::rhi::Texture",
+          "returnType": "int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getPixelFormat",
+          "luaName": "getPixelFormat",
+          "declaringType": "ax::rhi::Texture",
+          "returnType": "ax::rhi::PixelFormat",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getTextureType",
+          "luaName": "getTextureType",
+          "declaringType": "ax::rhi::Texture",
+          "returnType": "ax::rhi::TextureType",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getTextureUsage",
+          "luaName": "getTextureUsage",
+          "declaringType": "ax::rhi::Texture",
+          "returnType": "ax::rhi::TextureUsage",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getWidth",
+          "luaName": "getWidth",
+          "declaringType": "ax::rhi::Texture",
+          "returnType": "int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "hasMipmaps",
+          "luaName": "hasMipmaps",
+          "declaringType": "ax::rhi::Texture",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "shouldGenMipmaps",
+          "luaName": "shouldGenMipmaps",
+          "declaringType": "ax::rhi::Texture",
+          "returnType": "bool",
+          "parameterTypes": [
+            "int"
+          ],
+          "defaultValues": [
+            "0"
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "updateCompressedData",
+          "luaName": "updateCompressedData",
+          "declaringType": "ax::rhi::Texture",
+          "returnType": "void",
+          "parameterTypes": [
+            "const void *",
+            "int",
+            "int",
+            "size_t",
+            "int",
+            "int"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "updateCompressedSubData",
+          "luaName": "updateCompressedSubData",
+          "declaringType": "ax::rhi::Texture",
+          "returnType": "void",
+          "parameterTypes": [
+            "int",
+            "int",
+            "int",
+            "int",
+            "size_t",
+            "int",
+            "const void *",
+            "int"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "updateData",
+          "luaName": "updateData",
+          "declaringType": "ax::rhi::Texture",
+          "returnType": "void",
+          "parameterTypes": [
+            "const void *",
+            "int",
+            "int",
+            "int",
+            "int"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "updateFaceData",
+          "luaName": "updateFaceData",
+          "declaringType": "ax::rhi::Texture",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::rhi::TextureCubeFace",
+            "const void *"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "updateSamplerDesc",
+          "luaName": "updateSamplerDesc",
+          "declaringType": "ax::rhi::Texture",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::rhi::SamplerDesc \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "updateSubData",
+          "luaName": "updateSubData",
+          "declaringType": "ax::rhi::Texture",
+          "returnType": "void",
+          "parameterTypes": [
+            "int",
+            "int",
+            "int",
+            "int",
+            "int",
+            "const void *",
+            "int"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "UniformInfo",
+      "qualifiedName": "ax::rhi::UniformInfo",
+      "luaName": "axr.UniformInfo",
+      "luaClassName": "UniformInfo",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [],
+      "methods": [],
+      "fields": []
+    },
+    {
+      "nativeName": "UniformLocation",
+      "qualifiedName": "ax::rhi::UniformLocation",
+      "luaName": "axr.UniformLocation",
+      "luaClassName": "UniformLocation",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [],
+      "methods": [
+        {
+          "nativeName": "reset",
+          "luaName": "reset",
+          "declaringType": "ax::rhi::UniformLocation",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "VertexLayout",
+      "qualifiedName": "ax::rhi::VertexLayout",
+      "luaName": "axr.VertexLayout",
+      "luaClassName": "VertexLayout",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "getBuiltinId",
+          "luaName": "getBuiltinId",
+          "declaringType": "ax::rhi::VertexLayout",
+          "returnType": "int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getHash",
+          "luaName": "getHash",
+          "declaringType": "ax::rhi::VertexLayout",
+          "returnType": "uint32_t",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getInstanceStride",
+          "luaName": "getInstanceStride",
+          "declaringType": "ax::rhi::VertexLayout",
+          "returnType": "uint32_t",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getStride",
+          "luaName": "getStride",
+          "declaringType": "ax::rhi::VertexLayout",
+          "returnType": "uint32_t",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    }
+  ],
+  "enums": [
+    {
+      "nativeName": "BlendFactor",
+      "qualifiedName": "ax::rhi::BlendFactor",
+      "ownerQualifiedName": null,
+      "values": [
+        {
+          "name": "ZERO",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "ONE",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "SRC_COLOR",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        },
+        {
+          "name": "ONE_MINUS_SRC_COLOR",
+          "signedValue": 3,
+          "unsignedValue": 3,
+          "isUnsigned": false
+        },
+        {
+          "name": "SRC_ALPHA",
+          "signedValue": 4,
+          "unsignedValue": 4,
+          "isUnsigned": false
+        },
+        {
+          "name": "ONE_MINUS_SRC_ALPHA",
+          "signedValue": 5,
+          "unsignedValue": 5,
+          "isUnsigned": false
+        },
+        {
+          "name": "DST_COLOR",
+          "signedValue": 6,
+          "unsignedValue": 6,
+          "isUnsigned": false
+        },
+        {
+          "name": "ONE_MINUS_DST_COLOR",
+          "signedValue": 7,
+          "unsignedValue": 7,
+          "isUnsigned": false
+        },
+        {
+          "name": "DST_ALPHA",
+          "signedValue": 8,
+          "unsignedValue": 8,
+          "isUnsigned": false
+        },
+        {
+          "name": "ONE_MINUS_DST_ALPHA",
+          "signedValue": 9,
+          "unsignedValue": 9,
+          "isUnsigned": false
+        },
+        {
+          "name": "CONSTANT_ALPHA",
+          "signedValue": 10,
+          "unsignedValue": 10,
+          "isUnsigned": false
+        },
+        {
+          "name": "SRC_ALPHA_SATURATE",
+          "signedValue": 11,
+          "unsignedValue": 11,
+          "isUnsigned": false
+        },
+        {
+          "name": "ONE_MINUS_CONSTANT_ALPHA",
+          "signedValue": 12,
+          "unsignedValue": 12,
+          "isUnsigned": false
+        },
+        {
+          "name": "BLEND_COLOR",
+          "signedValue": 13,
+          "unsignedValue": 13,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "BufferType",
+      "qualifiedName": "ax::rhi::BufferType",
+      "ownerQualifiedName": null,
+      "values": [
+        {
+          "name": "ARRAY_BUFFER",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "ELEMENT_ARRAY_BUFFER",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "UNIFORM_BUFFER",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        },
+        {
+          "name": "PIXEL_PACK_BUFFER",
+          "signedValue": 3,
+          "unsignedValue": 3,
+          "isUnsigned": false
+        },
+        {
+          "name": "COUNT",
+          "signedValue": 4,
+          "unsignedValue": 4,
+          "isUnsigned": false
+        },
+        {
+          "name": "VERTEX",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "INDEX",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "UNIFORM",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "BufferUsage",
+      "qualifiedName": "ax::rhi::BufferUsage",
+      "ownerQualifiedName": null,
+      "values": [
+        {
+          "name": "STATIC",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "DYNAMIC",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "IMMUTABLE",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "ColorWriteMask",
+      "qualifiedName": "ax::rhi::ColorWriteMask",
+      "ownerQualifiedName": null,
+      "values": [
+        {
+          "name": "RED_BIT",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "GREEN_BIT",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "BLUE_BIT",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        },
+        {
+          "name": "ALPHA_BIT",
+          "signedValue": 3,
+          "unsignedValue": 3,
+          "isUnsigned": false
+        },
+        {
+          "name": "NONE",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "RED",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "GREEN",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        },
+        {
+          "name": "BLUE",
+          "signedValue": 4,
+          "unsignedValue": 4,
+          "isUnsigned": false
+        },
+        {
+          "name": "ALPHA",
+          "signedValue": 8,
+          "unsignedValue": 8,
+          "isUnsigned": false
+        },
+        {
+          "name": "ALL",
+          "signedValue": 15,
+          "unsignedValue": 15,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "CullMode",
+      "qualifiedName": "ax::rhi::CullMode",
+      "ownerQualifiedName": null,
+      "values": [
+        {
+          "name": "NONE",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "BACK",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "FRONT",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "IndexFormat",
+      "qualifiedName": "ax::rhi::IndexFormat",
+      "ownerQualifiedName": null,
+      "values": [
+        {
+          "name": "U_SHORT",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "U_INT",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "PixelFormat",
+      "qualifiedName": "ax::rhi::PixelFormat",
+      "ownerQualifiedName": null,
+      "values": [
+        {
+          "name": "PVRTC4",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "PVRTC4A",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "PVRTC2",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        },
+        {
+          "name": "PVRTC2A",
+          "signedValue": 3,
+          "unsignedValue": 3,
+          "isUnsigned": false
+        },
+        {
+          "name": "ETC1",
+          "signedValue": 4,
+          "unsignedValue": 4,
+          "isUnsigned": false
+        },
+        {
+          "name": "ETC2_RGB",
+          "signedValue": 5,
+          "unsignedValue": 5,
+          "isUnsigned": false
+        },
+        {
+          "name": "ETC2_RGBA",
+          "signedValue": 6,
+          "unsignedValue": 6,
+          "isUnsigned": false
+        },
+        {
+          "name": "S3TC_DXT1",
+          "signedValue": 7,
+          "unsignedValue": 7,
+          "isUnsigned": false
+        },
+        {
+          "name": "S3TC_DXT3",
+          "signedValue": 8,
+          "unsignedValue": 8,
+          "isUnsigned": false
+        },
+        {
+          "name": "S3TC_DXT5",
+          "signedValue": 9,
+          "unsignedValue": 9,
+          "isUnsigned": false
+        },
+        {
+          "name": "ATC_RGB",
+          "signedValue": 10,
+          "unsignedValue": 10,
+          "isUnsigned": false
+        },
+        {
+          "name": "ATC_EXPLICIT_ALPHA",
+          "signedValue": 11,
+          "unsignedValue": 11,
+          "isUnsigned": false
+        },
+        {
+          "name": "ATC_INTERPOLATED_ALPHA",
+          "signedValue": 12,
+          "unsignedValue": 12,
+          "isUnsigned": false
+        },
+        {
+          "name": "ASTC4x4",
+          "signedValue": 13,
+          "unsignedValue": 13,
+          "isUnsigned": false
+        },
+        {
+          "name": "ASTC5x4",
+          "signedValue": 14,
+          "unsignedValue": 14,
+          "isUnsigned": false
+        },
+        {
+          "name": "ASTC5x5",
+          "signedValue": 15,
+          "unsignedValue": 15,
+          "isUnsigned": false
+        },
+        {
+          "name": "ASTC6x5",
+          "signedValue": 16,
+          "unsignedValue": 16,
+          "isUnsigned": false
+        },
+        {
+          "name": "ASTC6x6",
+          "signedValue": 17,
+          "unsignedValue": 17,
+          "isUnsigned": false
+        },
+        {
+          "name": "ASTC8x5",
+          "signedValue": 18,
+          "unsignedValue": 18,
+          "isUnsigned": false
+        },
+        {
+          "name": "ASTC8x6",
+          "signedValue": 19,
+          "unsignedValue": 19,
+          "isUnsigned": false
+        },
+        {
+          "name": "ASTC8x8",
+          "signedValue": 20,
+          "unsignedValue": 20,
+          "isUnsigned": false
+        },
+        {
+          "name": "ASTC10x5",
+          "signedValue": 21,
+          "unsignedValue": 21,
+          "isUnsigned": false
+        },
+        {
+          "name": "ASTC10x6",
+          "signedValue": 22,
+          "unsignedValue": 22,
+          "isUnsigned": false
+        },
+        {
+          "name": "ASTC10x8",
+          "signedValue": 23,
+          "unsignedValue": 23,
+          "isUnsigned": false
+        },
+        {
+          "name": "ASTC10x10",
+          "signedValue": 24,
+          "unsignedValue": 24,
+          "isUnsigned": false
+        },
+        {
+          "name": "ASTC12x10",
+          "signedValue": 25,
+          "unsignedValue": 25,
+          "isUnsigned": false
+        },
+        {
+          "name": "ASTC12x12",
+          "signedValue": 26,
+          "unsignedValue": 26,
+          "isUnsigned": false
+        },
+        {
+          "name": "RGBA8",
+          "signedValue": 27,
+          "unsignedValue": 27,
+          "isUnsigned": false
+        },
+        {
+          "name": "BGRA8",
+          "signedValue": 28,
+          "unsignedValue": 28,
+          "isUnsigned": false
+        },
+        {
+          "name": "RGB8",
+          "signedValue": 29,
+          "unsignedValue": 29,
+          "isUnsigned": false
+        },
+        {
+          "name": "RGB565",
+          "signedValue": 30,
+          "unsignedValue": 30,
+          "isUnsigned": false
+        },
+        {
+          "name": "RGBA4",
+          "signedValue": 31,
+          "unsignedValue": 31,
+          "isUnsigned": false
+        },
+        {
+          "name": "RGB5A1",
+          "signedValue": 32,
+          "unsignedValue": 32,
+          "isUnsigned": false
+        },
+        {
+          "name": "R8",
+          "signedValue": 33,
+          "unsignedValue": 33,
+          "isUnsigned": false
+        },
+        {
+          "name": "RG8",
+          "signedValue": 34,
+          "unsignedValue": 34,
+          "isUnsigned": false
+        },
+        {
+          "name": "RGBA32F",
+          "signedValue": 35,
+          "unsignedValue": 35,
+          "isUnsigned": false
+        },
+        {
+          "name": "D24S8",
+          "signedValue": 36,
+          "unsignedValue": 36,
+          "isUnsigned": false
+        },
+        {
+          "name": "COUNT",
+          "signedValue": 37,
+          "unsignedValue": 37,
+          "isUnsigned": false
+        },
+        {
+          "name": "NONE",
+          "signedValue": -1,
+          "unsignedValue": 255,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "PrimitiveType",
+      "qualifiedName": "ax::rhi::PrimitiveType",
+      "ownerQualifiedName": null,
+      "values": [
+        {
+          "name": "POINT",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "LINE",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "LINE_LOOP",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        },
+        {
+          "name": "LINE_STRIP",
+          "signedValue": 3,
+          "unsignedValue": 3,
+          "isUnsigned": false
+        },
+        {
+          "name": "TRIANGLE",
+          "signedValue": 4,
+          "unsignedValue": 4,
+          "isUnsigned": false
+        },
+        {
+          "name": "TRIANGLE_STRIP",
+          "signedValue": 5,
+          "unsignedValue": 5,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "SamplerAddressMode",
+      "qualifiedName": "ax::rhi::SamplerAddressMode",
+      "ownerQualifiedName": null,
+      "values": [
+        {
+          "name": "REPEAT",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "MIRROR",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "CLAMP",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        },
+        {
+          "name": "BORDER",
+          "signedValue": 3,
+          "unsignedValue": 3,
+          "isUnsigned": false
+        },
+        {
+          "name": "CLAMP_TO_EDGE",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "SamplerFilter",
+      "qualifiedName": "ax::rhi::SamplerFilter",
+      "ownerQualifiedName": null,
+      "values": [
+        {
+          "name": "MIN_NEAREST",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "MIN_LINEAR",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "MIN_ANISOTROPIC",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        },
+        {
+          "name": "MAG_NEAREST",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "MAG_LINEAR",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "MIP_NEAREST",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "MIP_LINEAR",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "MIP_DEFAULT",
+          "signedValue": 3,
+          "unsignedValue": 3,
+          "isUnsigned": false
+        },
+        {
+          "name": "NEAREST",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "LINEAR",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "ShaderStage",
+      "qualifiedName": "ax::rhi::ShaderStage",
+      "ownerQualifiedName": null,
+      "values": [
+        {
+          "name": "UNKNOWN",
+          "signedValue": -1,
+          "unsignedValue": 65535,
+          "isUnsigned": false
+        },
+        {
+          "name": "FRAGMENT",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "VERTEX",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "COMPUTE",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        },
+        {
+          "name": "DEFAULT",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "TextureCubeFace",
+      "qualifiedName": "ax::rhi::TextureCubeFace",
+      "ownerQualifiedName": null,
+      "values": [
+        {
+          "name": "POSITIVE_X",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "NEGATIVE_X",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "POSITIVE_Y",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        },
+        {
+          "name": "NEGATIVE_Y",
+          "signedValue": 3,
+          "unsignedValue": 3,
+          "isUnsigned": false
+        },
+        {
+          "name": "POSITIVE_Z",
+          "signedValue": 4,
+          "unsignedValue": 4,
+          "isUnsigned": false
+        },
+        {
+          "name": "NEGATIVE_Z",
+          "signedValue": 5,
+          "unsignedValue": 5,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "TextureType",
+      "qualifiedName": "ax::rhi::TextureType",
+      "ownerQualifiedName": null,
+      "values": [
+        {
+          "name": "TEXTURE_2D",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "TEXTURE_CUBE",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "TextureUsage",
+      "qualifiedName": "ax::rhi::TextureUsage",
+      "ownerQualifiedName": null,
+      "values": [
+        {
+          "name": "READ",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "WRITE",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "RENDER_TARGET",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "Winding",
+      "qualifiedName": "ax::rhi::Winding",
+      "ownerQualifiedName": null,
+      "values": [
+        {
+          "name": "CLOCK_WISE",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "COUNTER_CLOCK_WISE",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        }
+      ]
+    }
+  ]
+}

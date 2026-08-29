@@ -24,7 +24,7 @@
 
 #include "lua_assetsmanager_test_sample.h"
 
-#include "lua-bindings/manual/tolua_fix.h"
+#include "lua-bindings/runtime/axlua_adapter.h"
 
 #include "axmol/axmol.h"
 #include "extensions/axmol-ext.h"
@@ -63,7 +63,7 @@ static int lua_ax_createDownloadDir(lua_State* L)
             CreateDirectoryA(pathToSave.c_str(), 0);
         }
 #endif
-        tolua_pushstring(L, pathToSave.c_str());
+        axlua::adapter::push_string(L, pathToSave.c_str());
         return 1;
     }
 
@@ -79,16 +79,16 @@ static int lua_ax_deleteDownloadDir(lua_State* L)
     int argc = lua_gettop(L);
 
 #if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
+    axlua::adapter::Error conversionError;
 #endif
 
     if (1 == argc)
     {
 #if _AX_DEBUG >= 1
-        if (!tolua_isstring(L, 1, 0, &tolua_err))
-            goto tolua_lerror;
+        if (!axlua::adapter::is_string(L, 1, 0, &conversionError))
+            goto argumentError;
 #endif
-        std::string pathToSave = tolua_tostring(L, 1, "");
+        std::string pathToSave = axlua::adapter::to_string(L, 1, "");
 
 #if AX_TARGET_OS_TVOS
         // Not implemented. "system" is not present on tvOS
@@ -104,8 +104,8 @@ static int lua_ax_deleteDownloadDir(lua_State* L)
     return 0;
 
 #if _AX_DEBUG >= 1
-tolua_lerror:
-    tolua_error(L, "#ferror in function 'resetDownloadDir'.", &tolua_err);
+argumentError:
+    axlua::adapter::raise_error(L, "#ferror in function 'resetDownloadDir'.", &conversionError);
     return 0;
 #endif
 }
@@ -118,17 +118,17 @@ static int lua_ax_addSearchPath(lua_State* L)
     int argc = lua_gettop(L);
 
 #if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
+    axlua::adapter::Error conversionError;
 #endif
 
     if (2 == argc)
     {
 #if _AX_DEBUG >= 1
-        if (!tolua_isstring(L, 1, 0, &tolua_err) || !tolua_isboolean(L, 2, 0, &tolua_err))
-            goto tolua_lerror;
+        if (!axlua::adapter::is_string(L, 1, 0, &conversionError) || !axlua::adapter::is_boolean(L, 2, 0, &conversionError))
+            goto argumentError;
 #endif
-        std::string pathToSave = tolua_tostring(L, 1, "");
-        bool before            = tolua_toboolean(L, 2, 0);
+        std::string pathToSave = axlua::adapter::to_string(L, 1, "");
+        bool before            = axlua::adapter::to_boolean(L, 2, 0);
         FileUtils::getInstance()->addSearchPath(pathToSave, before);
         return 0;
     }
@@ -136,20 +136,20 @@ static int lua_ax_addSearchPath(lua_State* L)
     return 0;
 
 #if _AX_DEBUG >= 1
-tolua_lerror:
-    tolua_error(L, "#ferror in function 'addSearchPath'.", &tolua_err);
+argumentError:
+    axlua::adapter::raise_error(L, "#ferror in function 'addSearchPath'.", &conversionError);
     return 0;
 #endif
 }
 
 int register_assetsmanager_test_sample(lua_State* L)
 {
-    tolua_open(L);
-    tolua_module(L, NULL, 0);
-    tolua_beginmodule(L, NULL);
-    tolua_function(L, "createDownloadDir", lua_ax_createDownloadDir);
-    tolua_function(L, "deleteDownloadDir", lua_ax_deleteDownloadDir);
-    tolua_function(L, "addSearchPath", lua_ax_addSearchPath);
-    tolua_endmodule(L);
+    axlua::adapter::open(L);
+    axlua::adapter::module(L, NULL, 0);
+    axlua::adapter::begin_module(L, NULL);
+    axlua::adapter::set_function(L, "createDownloadDir", lua_ax_createDownloadDir);
+    axlua::adapter::set_function(L, "deleteDownloadDir", lua_ax_deleteDownloadDir);
+    axlua::adapter::set_function(L, "addSearchPath", lua_ax_addSearchPath);
+    axlua::adapter::end_module(L);
     return 0;
 }

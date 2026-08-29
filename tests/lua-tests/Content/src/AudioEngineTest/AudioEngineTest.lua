@@ -10,7 +10,7 @@ SliderEx.TouchEventCancel = 3
 
 function SliderEx:create()
     local slider = SliderEx:new()
-    slider:registerScriptHandler(function(tag)
+    slider:setLifecycleCallback(function(tag)
         if "enter" == tag then
             slider:onEnter()
         elseif "exit" == tag then
@@ -37,7 +37,7 @@ function SliderEx:onEnter()
     self._thumbRect = ax.rect(0, 0, thumbSize.width, thumbSize.height)
 
     local  listenner = ax.PointerEventListener:create()
-    listenner:registerScriptHandler(function(event)
+    listenner.onPointerDown = function(event)
         local location = event:getWorldPoint()
         local locationInNode = self._thumb:convertToNodeSpace(location)
         if not ax.rectContainsPoint(self._thumbRect, locationInNode) then
@@ -50,25 +50,25 @@ function SliderEx:onEnter()
             self._callback(self,self._ratio,SliderEx.TouchEventDown)
         end
         return true
-    end, ax.Handler.EVENT_POINTER_DOWN )
+    end
 
-    listenner:registerScriptHandler(function(event)
+    listenner.onPointerMove = function(event)
         local locationInNodeX = self:convertToNodeSpace(event:getWorldPoint()).x
         self:setThumbPosX(self._thumbBeganX + locationInNodeX - self._touchBeganX)
 
         if self._callback then
             self._callback(self,self._ratio,SliderEx.TouchEventMove)
         end
-    end, ax.Handler.EVENT_POINTER_MOVE )
+    end
 
-    listenner:registerScriptHandler(function(event)
+    listenner.onPointerUp = function(event)
         local locationInNodeX = self:convertToNodeSpace(event:getWorldPoint()).x
         self:setThumbPosX(self._thumbBeganX + locationInNodeX - self._touchBeganX)
 
         if self._callback then
             self._callback(self,self._ratio,SliderEx.TouchEventUp)
         end
-    end, ax.Handler.EVENT_POINTER_UP )
+    end
 
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listenner, self)
@@ -272,14 +272,14 @@ function AudioControlTest.create()
         end
     end
 
-    layer:scheduleUpdateWithPriorityLua(step, 0.05)
+    layer:onUpdate(step)
 
     function onNodeEvent(tag)
         if tag == "exit" then
             ax.AudioEngine:stopAll()
         end
     end
-    layer:registerScriptHandler(onNodeEvent)
+    layer:setLifecycleCallback(onNodeEvent)
 
     return layer
 end
@@ -332,7 +332,7 @@ function PlaySimultaneouslyTest.create()
             ax.AudioEngine:stopAll()
         end
     end
-    layer:registerScriptHandler(onNodeEvent)
+    layer:setLifecycleCallback(onNodeEvent)
 
     return layer
 end
@@ -424,14 +424,14 @@ function AudioProfileTest.create()
             AudioProfileTest._timeSlider:setPercent(100 * AudioProfileTest._time / AudioProfileTest._minDelay)
         end
     end
-    layer:scheduleUpdateWithPriorityLua(step, 0.05)
+    layer:onUpdate(step)
 
     function onNodeEvent(tag)
         if tag == "exit" then
             ax.AudioEngine:stopAll()
         end
     end
-    layer:registerScriptHandler(onNodeEvent)
+    layer:setLifecycleCallback(onNodeEvent)
 
     return layer
 end
@@ -503,7 +503,7 @@ function LargeAudioFileTest.create()
             ax.AudioEngine:stopAll()
         end
     end
-    layer:registerScriptHandler(onNodeEvent)
+    layer:setLifecycleCallback(onNodeEvent)
 
     return layer
 end

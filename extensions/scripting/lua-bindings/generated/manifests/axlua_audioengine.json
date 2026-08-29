@@ -1,0 +1,750 @@
+{
+  "formatVersion": 1,
+  "module": "audioengine",
+  "registrationName": "ax_audioengine",
+  "luaNamespace": "ax",
+  "luaTypeNamespace": "ax",
+  "conditionalExpression": "defined(AX_ENABLE_AUDIO) \u0026\u0026 (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC || defined(_WIN32) || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX || AX_TARGET_PLATFORM == AX_PLATFORM_WASM)",
+  "classes": [
+    {
+      "nativeName": "AudioEngine",
+      "qualifiedName": "ax::AudioEngine",
+      "luaName": "ax.AudioEngine",
+      "luaClassName": "AudioEngine",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [],
+      "methods": [
+        {
+          "nativeName": "end",
+          "luaName": "endToLua",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getCurrentTime",
+          "luaName": "getCurrentTime",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "float",
+          "parameterTypes": [
+            "ax::AudioId"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getDefaultProfile",
+          "luaName": "getDefaultProfile",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "ax::AudioProfile *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getDistanceScale",
+          "luaName": "getDistanceScale",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getDuration",
+          "luaName": "getDuration",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "float",
+          "parameterTypes": [
+            "ax::AudioId"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getListenerPosition",
+          "luaName": "getListenerPosition",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "ax::Vec3",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMaxAudioInstance",
+          "luaName": "getMaxAudioInstance",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getPan",
+          "luaName": "getPan",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "float",
+          "parameterTypes": [
+            "ax::AudioId"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getPitch",
+          "luaName": "getPitch",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "float",
+          "parameterTypes": [
+            "ax::AudioId"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getPlayingAudioCount",
+          "luaName": "getPlayingAudioCount",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getProfile",
+          "luaName": "getProfile",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "ax::AudioProfile *",
+          "parameterTypes": [
+            "ax::AudioId"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getProfile",
+          "luaName": "getProfile",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "ax::AudioProfile *",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getSourcePosition",
+          "luaName": "getSourcePosition",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "ax::Vec3",
+          "parameterTypes": [
+            "ax::AudioId"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getState",
+          "luaName": "getState",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "ax::AudioEngine::AudioState",
+          "parameterTypes": [
+            "ax::AudioId"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getVolume",
+          "luaName": "getVolume",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "float",
+          "parameterTypes": [
+            "ax::AudioId"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isEnabled",
+          "luaName": "isEnabled",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isHRTFEnabled",
+          "luaName": "isHRTFEnabled",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isLoop",
+          "luaName": "isLoop",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "bool",
+          "parameterTypes": [
+            "ax::AudioId"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "lazyInit",
+          "luaName": "lazyInit",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "pause",
+          "luaName": "pause",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::AudioId"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "pauseAll",
+          "luaName": "pauseAll",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "play2d",
+          "luaName": "play2d",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "ax::AudioId",
+          "parameterTypes": [
+            "std::string_view",
+            "const ax::AudioPlayerSettings \u0026",
+            "const ax::AudioProfile *"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            "nullptr"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "play2d",
+          "luaName": "play2d",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "ax::AudioId",
+          "parameterTypes": [
+            "std::string_view",
+            "bool",
+            "float",
+            "const ax::AudioProfile *"
+          ],
+          "defaultValues": [
+            null,
+            "false",
+            "1.0f",
+            "nullptr"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "play3d",
+          "luaName": "play3d",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "ax::AudioId",
+          "parameterTypes": [
+            "std::string_view",
+            "const ax::AudioPlayerSettings \u0026",
+            "const ax::AudioProfile *"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            "nullptr"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "play3d",
+          "luaName": "play3d",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "ax::AudioId",
+          "parameterTypes": [
+            "std::string_view",
+            "const ax::Vec3 \u0026",
+            "bool",
+            "float",
+            "const ax::AudioProfile *"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            "false",
+            "1.0f",
+            "nullptr"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "preload",
+          "luaName": "preload",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "void",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "preload",
+          "luaName": "preload",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "void",
+          "parameterTypes": [
+            "std::string_view",
+            "std::function\u003Cvoid (bool)\u003E"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "resume",
+          "luaName": "resume",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::AudioId"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "resumeAll",
+          "luaName": "resumeAll",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setCurrentTime",
+          "luaName": "setCurrentTime",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "bool",
+          "parameterTypes": [
+            "ax::AudioId",
+            "float"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setDistanceScale",
+          "luaName": "setDistanceScale",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setEnabled",
+          "luaName": "setEnabled",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setFinishCallback",
+          "luaName": "setFinishCallback",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::AudioId",
+            "const std::function\u003Cvoid (ax::AudioId, std::string_view)\u003E \u0026"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setHRTFEnabled",
+          "luaName": "setHRTFEnabled",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setListenerPosition",
+          "luaName": "setListenerPosition",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec3 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setLoop",
+          "luaName": "setLoop",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::AudioId",
+            "bool"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setMaxAudioInstance",
+          "luaName": "setMaxAudioInstance",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "bool",
+          "parameterTypes": [
+            "int"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setPan",
+          "luaName": "setPan",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::AudioId",
+            "float",
+            "float"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            "-0.5f"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setPitch",
+          "luaName": "setPitch",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::AudioId",
+            "float"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setSourcePosition",
+          "luaName": "setSourcePosition",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::AudioId",
+            "const ax::Vec3 \u0026"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setVolume",
+          "luaName": "setVolume",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::AudioId",
+            "float"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "stop",
+          "luaName": "stop",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::AudioId"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "stopAll",
+          "luaName": "stopAll",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "uncache",
+          "luaName": "uncache",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "void",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "uncacheAll",
+          "luaName": "uncacheAll",
+          "declaringType": "ax::AudioEngine",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "AudioProfile",
+      "qualifiedName": "ax::AudioProfile",
+      "luaName": "ax.AudioProfile",
+      "luaClassName": "AudioProfile",
+      "isAbstract": false,
+      "constructors": [
+        {
+          "parameterTypes": [],
+          "defaultValues": []
+        }
+      ],
+      "bases": [],
+      "methods": [],
+      "fields": [
+        {
+          "nativeName": "maxInstances",
+          "luaName": "maxInstances",
+          "fieldType": "unsigned int"
+        },
+        {
+          "nativeName": "minDelay",
+          "luaName": "minDelay",
+          "fieldType": "double"
+        },
+        {
+          "nativeName": "name",
+          "luaName": "name",
+          "fieldType": "std::string"
+        }
+      ]
+    }
+  ],
+  "enums": [
+    {
+      "nativeName": "AudioState",
+      "qualifiedName": "ax::AudioEngine::AudioState",
+      "ownerQualifiedName": "ax::AudioEngine",
+      "values": [
+        {
+          "name": "ERROR",
+          "signedValue": -1,
+          "unsignedValue": 4294967295,
+          "isUnsigned": false
+        },
+        {
+          "name": "INITIALIZING",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "PLAYING",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "PAUSED",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        }
+      ]
+    }
+  ]
+}

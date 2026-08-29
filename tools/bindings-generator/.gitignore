@@ -1,8 +1,7 @@
 .DS_Store
-gen/
-*.pyc
-test/user.cfg
-test/userconf.ini
-test/simple_test_bindings/
-.idea
-.swp
+.idea/
+*.swp
+
+# Local .NET build output
+bin/
+obj/

@@ -1,0 +1,98 @@
+{
+  "module": "ax_physics2d",
+  "target_namespace": "ax",
+  "cpp_namespace": "ax",
+  "macro_judgement": "#if defined(AX_ENABLE_PHYSICS_2D)",
+  "headers": [
+    "%(axdir)s/axmol/physics/physics-2d.h"
+  ],
+  "clang_flags": [
+    "-DAX_ENABLE_PHYSICS_2D"
+  ],
+  "classes": [
+    "Rigidbody2D",
+    "PhysicsWorld2D",
+    "ContactEvent2D",
+    ".*Collider2D",
+    ".*Joint2D",
+    "ContactEventListener2D"
+  ],
+  "abstract_classes": [],
+  "classes_have_no_parents": [
+    "PhysicsWorld2D"
+  ],
+  "fields": [
+    {
+      "class": "ContactEventListener2D",
+      "names": [
+        "onContactFilter",
+        "onContactBegin",
+        "onContactEnd",
+        "onCollisionHit",
+        "onSensorBegin",
+        "onSensorEnd"
+      ]
+    }
+  ],
+  "base_classes_to_skip": [],
+  "skip": [
+    {
+      "class": "Collider2D",
+      "methods": [
+        "recenterPoints",
+        "getPolygonCenter"
+      ]
+    },
+    {
+      "class": "BoxCollider2D",
+      "methods": [
+        "^getPoints$"
+      ]
+    },
+    {
+      "class": "EdgeBoxCollider2D",
+      "methods": [
+        "^getPoints$"
+      ]
+    },
+    {
+      "class": "PolygonCollider2D",
+      "methods": [
+        "^getPoints$"
+      ]
+    },
+    {
+      "class": "EdgePolygonCollider2D",
+      "methods": [
+        "^getPoints$"
+      ]
+    },
+    {
+      "class": "EdgeChainCollider2D",
+      "methods": [
+        "^getPoints$"
+      ]
+    },
+    {
+      "class": "PhysicsWorld2D",
+      "methods": [
+        "getScene",
+        "setPreSolveCallback"
+      ]
+    },
+    {
+      "class": "ContactEvent2D",
+      "methods": [
+        "obtain"
+      ]
+    },
+    {
+      "class": "*",
+      "methods": [
+        "^internalHandle$"
+      ]
+    }
+  ],
+  "rename_functions": [],
+  "rename_classes": []
+}

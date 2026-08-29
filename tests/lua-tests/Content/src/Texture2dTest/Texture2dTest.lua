@@ -983,14 +983,14 @@ local function TextureAsync()
 
     local function onNodeEvent(event)
         if event == "enter" then
-            ret:scheduleUpdateWithPriorityLua(loadImages,0)
+            ret:onUpdate(loadImages)
         elseif event == "exit" then
             ret:unscheduleUpdate()
             ax.Director:getInstance():getTextureCache():removeAllTextures()
         end
     end
 
-    ret:registerScriptHandler(onNodeEvent)
+    ret:setLifecycleCallback(onNodeEvent)
     return ret
 end
 
@@ -1023,7 +1023,7 @@ local function TextureGlClamp()
         end
     end
 
-    ret:registerScriptHandler(onNodeEvent)
+    ret:setLifecycleCallback(onNodeEvent)
 
     return ret
 end
@@ -1057,7 +1057,7 @@ local function TextureGlRepeat()
         end
     end
 
-    ret:registerScriptHandler(onNodeEvent)
+    ret:setLifecycleCallback(onNodeEvent)
 
     return ret
 end

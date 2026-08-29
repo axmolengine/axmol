@@ -130,11 +130,6 @@
   - Version: 2.1-acb2234
   - License: MIT
 
-- tolua
-  - Upstream: https://github.com/LuaDist/toluapp
-  - Version: 1.0.93
-  - License: MIT
-  
 - lua-cjson
   - Upstream: https://github.com/simdsoft/lua-cjson
   - Version: 2.1.1

@@ -1,0 +1,946 @@
+{
+  "formatVersion": 1,
+  "module": "spine",
+  "registrationName": "ax_spine",
+  "luaNamespace": "sp",
+  "luaTypeNamespace": "sp",
+  "conditionalExpression": "",
+  "classes": [
+    {
+      "nativeName": "SkeletonAnimation",
+      "qualifiedName": "spine::SkeletonAnimation",
+      "luaName": "sp.SkeletonAnimation",
+      "luaClassName": "SkeletonAnimation",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Node",
+        "ax::Object",
+        "ax::BlendProtocol"
+      ],
+      "methods": [
+        {
+          "nativeName": "addEmptyAnimation",
+          "luaName": "addEmptyAnimation",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "spine::TrackEntry *",
+          "parameterTypes": [
+            "int",
+            "float",
+            "float"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            "0"
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "clearTrack",
+          "luaName": "clearTrack",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [
+            "int"
+          ],
+          "defaultValues": [
+            "0"
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "clearTracks",
+          "luaName": "clearTracks",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "clone",
+          "luaName": "clone",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "spine::SkeletonAnimation *",
+          "parameterTypes": [
+            "int",
+            "int"
+          ],
+          "defaultValues": [
+            "-1",
+            "-1"
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "spine::SkeletonAnimation *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "spine::SkeletonAnimation *",
+          "parameterTypes": [
+            "spine::SkeletonAsset *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "spine::SkeletonAnimation *",
+          "parameterTypes": [
+            "std::string_view",
+            "std::string_view",
+            "float"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            "1"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getAnimationName",
+          "luaName": "getAnimationName",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "std::string_view",
+          "parameterTypes": [
+            "int"
+          ],
+          "defaultValues": [
+            "0"
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getBlendFunc",
+          "luaName": "getBlendFunc",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "const ax::BlendFunc \u0026",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getBoundingBox",
+          "luaName": "getBoundingBox",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "ax::Rect",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getDebugBonesEnabled",
+          "luaName": "getDebugBonesEnabled",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getDebugBoundingRectEnabled",
+          "luaName": "getDebugBoundingRectEnabled",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getDebugMeshesEnabled",
+          "luaName": "getDebugMeshesEnabled",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getDebugSlotsEnabled",
+          "luaName": "getDebugSlotsEnabled",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getTimeScale",
+          "luaName": "getTimeScale",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "hasAnimation",
+          "luaName": "hasAnimation",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "bool",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "initWithAsset",
+          "luaName": "initWithAsset",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [
+            "spine::SkeletonAsset *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "initWithBinaryFile",
+          "luaName": "initWithBinaryFile",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [
+            "std::string_view",
+            "std::string_view",
+            "float"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            "1"
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "initWithJsonFile",
+          "luaName": "initWithJsonFile",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [
+            "std::string_view",
+            "std::string_view",
+            "float"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            "1"
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "initWithSkeleton",
+          "luaName": "initWithSkeleton",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [
+            "spine::Skeleton *",
+            "bool"
+          ],
+          "defaultValues": [
+            null,
+            "false"
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isAnimationComplete",
+          "luaName": "isAnimationComplete",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "bool",
+          "parameterTypes": [
+            "int"
+          ],
+          "defaultValues": [
+            "0"
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isAnimationLooping",
+          "luaName": "isAnimationLooping",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "bool",
+          "parameterTypes": [
+            "int"
+          ],
+          "defaultValues": [
+            "0"
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isOpacityModifyRGB",
+          "luaName": "isOpacityModifyRGB",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isTwoColorTint",
+          "luaName": "isTwoColorTint",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setAsset",
+          "luaName": "setAsset",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [
+            "spine::SkeletonAsset *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setAttachment",
+          "luaName": "setAttachment",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [
+            "std::string_view",
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setBlendFunc",
+          "luaName": "setBlendFunc",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::BlendFunc \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setBonePosition",
+          "luaName": "setBonePosition",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "bool",
+          "parameterTypes": [
+            "std::string_view",
+            "const ax::Vec2 \u0026"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setBoneWorldPosition",
+          "luaName": "setBoneWorldPosition",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "bool",
+          "parameterTypes": [
+            "std::string_view",
+            "const ax::Vec2 \u0026"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setCompleteListener",
+          "luaName": "setCompleteListener",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [
+            "const spine::CompleteListener \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setDebugBonesEnabled",
+          "luaName": "setDebugBonesEnabled",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setDebugBoundingRectEnabled",
+          "luaName": "setDebugBoundingRectEnabled",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setDebugMeshesEnabled",
+          "luaName": "setDebugMeshesEnabled",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setDebugSlotsEnabled",
+          "luaName": "setDebugSlotsEnabled",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setDisposeListener",
+          "luaName": "setDisposeListener",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [
+            "const spine::DisposeListener \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setEmptyAnimation",
+          "luaName": "setEmptyAnimation",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "spine::TrackEntry *",
+          "parameterTypes": [
+            "int",
+            "float"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setEmptyAnimations",
+          "luaName": "setEmptyAnimations",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setEndListener",
+          "luaName": "setEndListener",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [
+            "const spine::EndListener \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setEventListener",
+          "luaName": "setEventListener",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [
+            "const spine::EventListener \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setInterruptListener",
+          "luaName": "setInterruptListener",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [
+            "const spine::InterruptListener \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setMix",
+          "luaName": "setMix",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [
+            "std::string_view",
+            "std::string_view",
+            "float"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setOpacityModifyRGB",
+          "luaName": "setOpacityModifyRGB",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setPostUpdateWorldTransformsListener",
+          "luaName": "setPostUpdateWorldTransformsListener",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [
+            "const spine::UpdateWorldTransformsListener \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setPreUpdateWorldTransformsListener",
+          "luaName": "setPreUpdateWorldTransformsListener",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [
+            "const spine::UpdateWorldTransformsListener \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setSkin",
+          "luaName": "setSkin",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setSlotsRange",
+          "luaName": "setSlotsRange",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [
+            "int",
+            "int"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setStartListener",
+          "luaName": "setStartListener",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [
+            "const spine::StartListener \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setTimeScale",
+          "luaName": "setTimeScale",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setTrackCompleteListener",
+          "luaName": "setTrackCompleteListener",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [
+            "spine::TrackEntry *",
+            "const spine::CompleteListener \u0026"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setTrackDisposeListener",
+          "luaName": "setTrackDisposeListener",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [
+            "spine::TrackEntry *",
+            "const spine::DisposeListener \u0026"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setTrackEndListener",
+          "luaName": "setTrackEndListener",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [
+            "spine::TrackEntry *",
+            "const spine::EndListener \u0026"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setTrackEventListener",
+          "luaName": "setTrackEventListener",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [
+            "spine::TrackEntry *",
+            "const spine::EventListener \u0026"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setTrackInterruptListener",
+          "luaName": "setTrackInterruptListener",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [
+            "spine::TrackEntry *",
+            "const spine::InterruptListener \u0026"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setTrackStartListener",
+          "luaName": "setTrackStartListener",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [
+            "spine::TrackEntry *",
+            "const spine::StartListener \u0026"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setTwoColorTint",
+          "luaName": "setTwoColorTint",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setUpdateOnlyIfVisible",
+          "luaName": "setUpdateOnlyIfVisible",
+          "declaringType": "spine::SkeletonAnimation",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "SkeletonAsset",
+      "qualifiedName": "spine::SkeletonAsset",
+      "luaName": "sp.SkeletonAsset",
+      "luaClassName": "SkeletonAsset",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "getAtlasFile",
+          "luaName": "getAtlasFile",
+          "declaringType": "spine::SkeletonAsset",
+          "returnType": "std::string_view",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getDataFile",
+          "luaName": "getDataFile",
+          "declaringType": "spine::SkeletonAsset",
+          "returnType": "std::string_view",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getScale",
+          "luaName": "getScale",
+          "declaringType": "spine::SkeletonAsset",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getSkeletonData",
+          "luaName": "getSkeletonData",
+          "declaringType": "spine::SkeletonAsset",
+          "returnType": "spine::SkeletonData *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "obtain",
+          "luaName": "obtain",
+          "declaringType": "spine::SkeletonAsset",
+          "returnType": "spine::SkeletonAsset *",
+          "parameterTypes": [
+            "std::string_view",
+            "std::string_view",
+            "float"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    }
+  ],
+  "enums": []
+}

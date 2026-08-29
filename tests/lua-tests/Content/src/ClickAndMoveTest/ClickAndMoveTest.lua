@@ -44,8 +44,8 @@ local function initWithLayer()
     end
 
     local listener = ax.PointerEventListener:create()
-    listener:registerScriptHandler(onTouchBegan,ax.Handler.EVENT_POINTER_DOWN )
-    listener:registerScriptHandler(onTouchEnded,ax.Handler.EVENT_POINTER_UP )
+    listener.onPointerDown = onTouchBegan
+    listener.onPointerUp = onTouchEnded
     local eventDispatcher = layer:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, layer)
 

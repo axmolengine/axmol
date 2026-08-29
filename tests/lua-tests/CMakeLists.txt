@@ -72,8 +72,43 @@ _1kfetch(sample-assets)
 
 set(content_folder "${CMAKE_CURRENT_SOURCE_DIR}/Content")
 
-_1klink("${sample-assets_SOURCE_DIR}/cpp-tests/Content" "${CMAKE_CURRENT_LIST_DIR}/Content/res")
-_1klink("${_AX_ROOT}/extensions/scripting/lua-bindings/script" "${CMAKE_CURRENT_LIST_DIR}/Content/src/axmol")
+# Emscripten's file packager does not follow directory symlinks.  Native
+# targets can keep the fast source-tree links, while WASM must materialize
+# both the sample assets and framework scripts before the Content tree is
+# packaged so fonts/textures and axmol/init.lua are included in the virtual
+# filesystem.
+if(WASM)
+    file(TO_NATIVE_PATH "${sample-assets_SOURCE_DIR}/cpp-tests/Content" _sample_content_src)
+    file(TO_NATIVE_PATH "${CMAKE_CURRENT_LIST_DIR}/Content/res" _sample_content_dst)
+    if(IS_SYMLINK "${_sample_content_dst}")
+        file(REMOVE "${_sample_content_dst}")
+    endif()
+    execute_process(
+        COMMAND ${PWSH_EXECUTABLE} "${_AX_ROOT}/1k/fsync.ps1"
+                -s "${_sample_content_src}" -d "${_sample_content_dst}" -l 0
+        RESULT_VARIABLE _sample_content_sync_result
+    )
+    if(NOT _sample_content_sync_result EQUAL 0)
+        message(FATAL_ERROR "Failed to copy sample assets for WASM")
+    endif()
+
+    file(TO_NATIVE_PATH "${_AX_ROOT}/extensions/scripting/lua-bindings/script" _lua_script_src)
+    file(TO_NATIVE_PATH "${CMAKE_CURRENT_LIST_DIR}/Content/src/axmol" _lua_script_dst)
+    if(IS_SYMLINK "${_lua_script_dst}")
+        file(REMOVE "${_lua_script_dst}")
+    endif()
+    execute_process(
+        COMMAND ${PWSH_EXECUTABLE} "${_AX_ROOT}/1k/fsync.ps1"
+                -s "${_lua_script_src}" -d "${_lua_script_dst}" -l 0
+        RESULT_VARIABLE _lua_script_sync_result
+    )
+    if(NOT _lua_script_sync_result EQUAL 0)
+        message(FATAL_ERROR "Failed to copy Lua framework scripts for WASM")
+    endif()
+else()
+    _1klink("${sample-assets_SOURCE_DIR}/cpp-tests/Content" "${CMAKE_CURRENT_LIST_DIR}/Content/res")
+    _1klink("${_AX_ROOT}/extensions/scripting/lua-bindings/script" "${CMAKE_CURRENT_LIST_DIR}/Content/src/axmol")
+endif()
 
 set(content_folder
     "${CMAKE_CURRENT_SOURCE_DIR}/Content"

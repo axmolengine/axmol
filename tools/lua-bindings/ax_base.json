@@ -1,0 +1,1151 @@
+{
+  "module": "ax_base",
+  "target_namespace": "ax",
+  "cpp_namespace": "ax",
+  "macro_judgement": null,
+  "headers": [
+    "%(axdir)s/axmol/axmol.h",
+    "%(axdir)s/axmol/2d/ProtectedNode.h",
+    "%(axdir)s/extensions/scripting/lua-bindings/runtime/ComponentLua.h",
+    "%(axdir)s/axmol/renderer/Renderer.h",
+    "%(axdir)s/axmol/rhi/RenderTarget.h",
+    "%(axdir)s/axmol/renderer/ProgramManager.h"
+  ],
+  "clang_flags": [
+    "-DAX_ENABLE_3D=1",
+    "-DAX_ENABLE_PHYSICS_2D=1"
+  ],
+  "classes": [
+    "New.*",
+    "Sprite.*",
+    "Scene",
+    "Node.*",
+    "Director",
+    "Layer.*",
+    "Menu.*",
+    "Touch",
+    ".*Action.*",
+    "Move.*",
+    "Rotate.*",
+    "Blink.*",
+    "Tint.*",
+    "Sequence",
+    "Repeat.*",
+    "Fade.*",
+    "Ease.*",
+    "Scale.*",
+    "Transition.*",
+    "Spawn",
+    "Animat(?!e3D$|ion3D$).*",
+    "Flip.*",
+    "Delay.*",
+    "Skew.*",
+    "Jump.*",
+    "Place.*",
+    "Show.*",
+    "Progress.*",
+    "PointArray",
+    "ToggleVisibility.*",
+    "RemoveSelf",
+    "Hide",
+    "Particle.*",
+    "Label.*",
+    "Atlas.*",
+    "TextureCache.*",
+    "Texture2D",
+    "Cardinal.*",
+    "CatmullRom.*",
+    "ParallaxNode",
+    "TileMap.*",
+    ".*TMX.*",
+    "CallFunc",
+    "RenderTexture",
+    "RenderTexturePass",
+    "GridAction",
+    "Grid3DAction",
+    "GridBase$",
+    ".+Grid",
+    "Shaky3D",
+    "Waves3D",
+    "FlipX3D",
+    "FlipY3D",
+    "Speed",
+    "ActionManager",
+    "Set",
+    "Scheduler",
+    "Timer",
+    "Orbit.*",
+    "Follow.*",
+    "Bezier.*",
+    "CardinalSpline.*",
+    "Camera.*",
+    "DrawNode",
+    "Bone3D",
+    "Grid3D",
+    "Lens3D",
+    "PageTurn3D",
+    "Ripple3D",
+    "ShakyTiles3D",
+    "ShatteredTiles3D",
+    "TiledGrid3D",
+    "WavesTiles3D",
+    "Liquid$",
+    "Waves$",
+    "ShuffleTiles$",
+    "TurnOffTiles$",
+    "Split.*",
+    "Twirl$",
+    "FileUtils$",
+    "Application",
+    "ClippingNode",
+    "MotionStreak",
+    "^Object$",
+    "UserDefault",
+    "RenderView",
+    "RenderViewCore",
+    "Image",
+    "(?!ContactEvent(?:Listener)?2D$|ControllerEvent(?:Listener)?$).*Event(?!.*Physics).*",
+    "Component",
+    "ProtectedNode",
+    "Console",
+    "Device",
+    "ClippingRectangleNode",
+    ".*Light$",
+    "RenderState",
+    "Material",
+    "Properties",
+    "Technique",
+    "Pass",
+    "PolygonInfo",
+    "AutoPolygon",
+    "BoneNode",
+    "SkeletonNode",
+    "ComponentLua",
+    "PipelineDesc",
+    "Renderer",
+    "ProgramManager",
+    "FastTMXLayer",
+    "FastTMXTiledMap"
+  ],
+  "abstract_classes": [
+    "Action",
+    "FiniteTimeAction",
+    "ActionInterval",
+    "ActionEase",
+    "EaseRateAction",
+    "EaseElastic",
+    "EaseBounce",
+    "ActionInstant",
+    "GridAction",
+    "Grid3DAction",
+    "TiledGrid3DAction",
+    "Director",
+    "SpriteFrameCache",
+    "TransitionEaseScene",
+    "Set",
+    "FileUtils",
+    "Application",
+    "ClippingNode",
+    "Label",
+    "RenderView",
+    "RenderViewCore",
+    "AccelerationEvent",
+    "DisplayLinkDirector",
+    "Component",
+    "Console",
+    "EventListener",
+    "BaseLight"
+  ],
+  "classes_have_no_parents": [
+    "Director",
+    "FileUtils",
+    "TMXMapInfo",
+    "Application",
+    "Downloader"
+  ],
+  "base_classes_to_skip": [
+    "Clonable"
+  ],
+  "fields": [
+    {
+      "class": "PointerEventListener",
+      "names": [
+        "onPointerDown",
+        "onPointerMove",
+        "onPointerUp",
+        "onPointerCancel",
+        "onPointerScroll"
+      ]
+    },
+    {
+      "class": "KeyboardEventListener",
+      "names": [
+        "onKeyPressed",
+        "onKeyReleased",
+        "onKeyRepeat"
+      ]
+    }
+  ],
+  "skip": [
+    {
+      "class": "Node",
+      "methods": [
+        "_setLocalZOrder",
+        "getUserObject",
+        "getGLServerState",
+        "scheduleUpdate",
+        "scheduleUpdateWithPriority",
+        "unscheduleUpdate",
+        "unscheduleAllCallbacks",
+        "getPosition$",
+        "setContentSize",
+        "setAnchorPoint",
+        "enumerateChildren",
+        "getOnEnterTransitionDidFinishCallback",
+        "getOnEnterCallback",
+        "getOnExitCallback",
+        "getOnExitTransitionDidStartCallback",
+        "getOnCleanupCallback",
+        "setAdditionalTransform",
+        "setRotationQuat",
+        "getRotationQuat",
+        "sortNodes"
+      ]
+    },
+    {
+      "class": "Sprite",
+      "methods": [
+        "getQuad",
+        "^create$",
+        "setPolygonInfo",
+        "initWithPolygon",
+        "getPolygonInfo"
+      ]
+    },
+    {
+      "class": "SpriteFrame",
+      "methods": [
+        "setPolygonInfo",
+        "getPolygonInfo",
+        "hasPolygonInfo"
+      ]
+    },
+    {
+      "class": "SpriteBatchNode",
+      "methods": [
+        "getDescendants"
+      ]
+    },
+    {
+      "class": "MotionStreak",
+      "methods": [
+        "draw",
+        "update"
+      ]
+    },
+    {
+      "class": "ParticleSystem",
+      "methods": [
+        "updateQuadWithParticle",
+        "initParticle"
+      ]
+    },
+    {
+      "class": "DrawNode",
+      "methods": [
+        "drawPolygon",
+        "drawSolidPoly",
+        "drawPoly",
+        "drawCardinalSpline",
+        "drawCatmullRom",
+        "drawPoints",
+        "listenBackToForeground"
+      ]
+    },
+    {
+      "class": "Director",
+      "methods": [
+        "getAccelerometer",
+        "getProjection",
+        "getFrustum",
+        "getCocos2dThreadId",
+        "getJobSystem",
+        "runAsync",
+        "pushMatrix",
+        "popMatrix",
+        "loadIdentityMatrix",
+        "loadMatrix",
+        "multiplyMatrix",
+        "getMatrix",
+        "resetMatrixStack"
+      ]
+    },
+    {
+      "class": "Layer.*",
+      "methods": [
+        "didAccelerate",
+        "keyPressed",
+        "keyReleased"
+      ]
+    },
+    {
+      "class": "Menu.*",
+      "methods": [
+        ".*Target",
+        "getSubItems",
+        "create",
+        "initWithItems",
+        "alignItemsInRows",
+        "alignItemsInColumns"
+      ]
+    },
+    {
+      "class": "Label",
+      "methods": [
+        "createWithTTF"
+      ]
+    },
+    {
+      "class": "Copying",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "JobSystem",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "LabelProtocol",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "LabelTextFormatProtocol",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": ".*Delegate",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "PoolManager",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "Texture2D",
+      "methods": [
+        "setTexParameters",
+        "initWithData",
+        "getPixelFormatInfoMap",
+        "updateData",
+        "initWithMipmaps",
+        "initWithSpec",
+        "chooseSamplerDesc"
+      ]
+    },
+    {
+      "class": "Set",
+      "methods": [
+        "begin",
+        "end",
+        "acceptVisitor"
+      ]
+    },
+    {
+      "class": "IMEDispatcher",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "SAXParser",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "Thread",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "Profiler",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "ProfilingTimer",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "CallFunc",
+      "methods": [
+        "create",
+        "initWithFunction"
+      ]
+    },
+    {
+      "class": "SAXDelegator",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "ZipUtils",
+      "methods": [
+        "compressGZ",
+        "decomporessGZ"
+      ]
+    },
+    {
+      "class": "Color3bObject",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "TouchDispatcher",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "EGLTouchDelegate",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "ScriptEngineManager",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "KeypadHandler",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "Invocation",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "SchedulerScriptHandlerEntry",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "Size",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "Point",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "PointArray",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "Rect",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "String",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "Data",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "Dictionary",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "Array",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "Range",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "EventListenerVector",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "EventListener.*",
+      "methods": [
+        "create"
+      ]
+    },
+    {
+      "class": "NotificationObserver",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "Image",
+      "methods": [
+        "initWithString",
+        "initWithImageData",
+        "initWithRawData",
+        "getData",
+        "getMipmaps"
+      ]
+    },
+    {
+      "class": "Sequence",
+      "methods": [
+        "create"
+      ]
+    },
+    {
+      "class": "Spawn",
+      "methods": [
+        "create"
+      ]
+    },
+    {
+      "class": "Grid3DAction",
+      "methods": [
+        "create",
+        "actionWith.*",
+        "vertex",
+        "originalVertex",
+        "(g|s)etVertex",
+        "getOriginalVertex"
+      ]
+    },
+    {
+      "class": "Grid3D",
+      "methods": [
+        "vertex",
+        "originalVertex",
+        "(g|s)etVertex",
+        "getOriginalVertex"
+      ]
+    },
+    {
+      "class": "TiledGrid3DAction",
+      "methods": [
+        "create",
+        "actionWith.*",
+        "tile",
+        "originalTile",
+        "getOriginalTile",
+        "(g|s)etTile"
+      ]
+    },
+    {
+      "class": "TiledGrid3D",
+      "methods": [
+        "tile",
+        "originalTile",
+        "getOriginalTile",
+        "(g|s)etTile"
+      ]
+    },
+    {
+      "class": "TMXLayer",
+      "methods": [
+        "getTiles",
+        "getTileGIDAt",
+        "setTiles"
+      ]
+    },
+    {
+      "class": "FastTMXLayer",
+      "methods": [
+        "(g|s)etTiles",
+        "getTileGIDAt",
+        "create",
+        "getBatches",
+        "initWithTilesets"
+      ]
+    },
+    {
+      "class": "TMXMapInfo",
+      "methods": [
+        "startElement",
+        "endElement",
+        "textHandler"
+      ]
+    },
+    {
+      "class": "ParticleSystemQuad",
+      "methods": [
+        "postStep",
+        "setBatchNode",
+        "draw",
+        "setTexture$",
+        "setTotalParticles",
+        "updateQuadWithParticle",
+        "setupIndices",
+        "listenBackToForeground",
+        "initWithTotalParticles",
+        "particleWithFile",
+        "node"
+      ]
+    },
+    {
+      "class": "LayerMultiplex",
+      "methods": [
+        "create",
+        "layerWith.*",
+        "initWithLayers"
+      ]
+    },
+    {
+      "class": "CatmullRom.*",
+      "methods": [
+        "create",
+        "actionWithDuration"
+      ]
+    },
+    {
+      "class": "Bezier.*",
+      "methods": [
+        "create",
+        "actionWithDuration"
+      ]
+    },
+    {
+      "class": "CardinalSpline.*",
+      "methods": [
+        "create",
+        "actionWithDuration",
+        "setPoints"
+      ]
+    },
+    {
+      "class": "Scheduler",
+      "methods": [
+        "pause",
+        "resume",
+        "unschedule",
+        "schedule",
+        "update",
+        "isTargetPaused",
+        "isScheduled",
+        "performFunctionInCocosThread"
+      ]
+    },
+    {
+      "class": "TextureCache",
+      "methods": [
+        "addPVRTCImage",
+        "addImageAsync"
+      ]
+    },
+    {
+      "class": "Timer",
+      "methods": [
+        "getSelector",
+        "createWithScriptHandler"
+      ]
+    },
+    {
+      "class": "*",
+      "methods": [
+        "copyWith.*",
+        "onEnter.*",
+        "onExit.*",
+        "^description$",
+        "getObjectType",
+        "(g|s)etDelegate",
+        "onTouch.*",
+        "onAcc.*",
+        "onKey.*",
+        "onRegisterTouchListener"
+      ]
+    },
+    {
+      "class": "FileUtils",
+      "methods": [
+        "getFileData",
+        "getDataFromFile",
+        "writeDataToFile",
+        "writeXmlDocToFile",
+        "getFullPathCache",
+        "getContents",
+        "openFileStream",
+        "setSearchPaths"
+      ]
+    },
+    {
+      "class": "Application",
+      "methods": [
+        "^application.*",
+        "^run$"
+      ]
+    },
+    {
+      "class": "Camera",
+      "methods": [
+        "getEyeXYZ",
+        "getCenterXYZ",
+        "getUpXYZ",
+        "screenToRay"
+      ]
+    },
+    {
+      "class": "ccFontDefinition",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "Object",
+      "methods": [
+        "autorelease",
+        "isEqual",
+        "acceptVisitor",
+        "update",
+        "getObjectID"
+      ]
+    },
+    {
+      "class": "UserDefault",
+      "methods": [
+        "getInstance",
+        "(s|g)etDataForKey",
+        "encrypt"
+      ]
+    },
+    {
+      "class": "RenderViewCore",
+      "methods": [
+        "setTouchDelegate",
+        "getAllTouches",
+        "setInteractive",
+        "renderScene"
+      ]
+    },
+    {
+      "class": "RenderView",
+      "methods": [
+        "end",
+        "swapBuffers",
+        "loadGLES2"
+      ]
+    },
+    {
+      "class": "NewTextureAtlas",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "DisplayLinkDirector",
+      "methods": [
+        "mainLoop",
+        "setAnimationInterval",
+        "startAnimation",
+        "stopAnimation"
+      ]
+    },
+    {
+      "class": "RenderTexture",
+      "methods": [
+        "listenToBackground",
+        "listenToForeground",
+        "newImage",
+        "^begin$",
+        "isSharedRenderTarget"
+      ]
+    },
+    {
+      "class": "TMXTiledMap",
+      "methods": [
+        "getPropertiesForGID"
+      ]
+    },
+    {
+      "class": "CustomEvent",
+      "methods": [
+        "getUserData",
+        "setUserData"
+      ]
+    },
+    {
+      "class": "Component",
+      "methods": [
+        "serialize"
+      ]
+    },
+    {
+      "class": "Console",
+      "methods": [
+        "addCommand",
+        "addSubCommand",
+        "getSubCommand",
+        "delSubCommand",
+        "getCommand"
+      ]
+    },
+    {
+      "class": "ParallaxNode",
+      "methods": [
+        "(s|g)etParallaxArray"
+      ]
+    },
+    {
+      "class": "TileMapAtlas",
+      "methods": [
+        "(s|g)etTGAInfo"
+      ]
+    },
+    {
+      "class": "PointerEvent",
+      "methods": [
+        "getRay",
+        "getPreviousRay"
+      ]
+    },
+    {
+      "class": "XRInputEvent",
+      "methods": [
+        "getAimRay"
+      ]
+    },
+    {
+      "class": "GLProgramState",
+      "methods": [
+        "setVertexAttribCallback",
+        "setUniformCallback",
+        "setVertexAttribPointer"
+      ]
+    },
+    {
+      "class": "ActionCoroutine",
+      "methods": [
+        "create",
+        "initWithCoroutine"
+      ]
+    },
+    {
+      "class": "OrbitCamera",
+      "methods": [
+        "sphericalRadius"
+      ]
+    },
+    {
+      "class": "ShuffleTiles",
+      "methods": [
+        "placeTile",
+        "shuffle"
+      ]
+    },
+    {
+      "class": "TurnOffTiles",
+      "methods": [
+        "shuffle"
+      ]
+    },
+    {
+      "class": "LabelTTF",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "LabelBMFont",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "Scene",
+      "methods": [
+        "getCameras",
+        "getLights",
+        ".*(Physics3D).*",
+        ".*(NavMesh).*"
+      ]
+    },
+    {
+      "class": "Animate3D",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "MeshRenderer",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "AttachNode",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "Animation3D",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "Skeleton3D",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "Mesh",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "Animation3DCache",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "MeshMaterialCache",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "MeshMaterial",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "MeshRendererCache",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "Renderer",
+      "methods": [
+        "getCommandBuffer",
+        "getOffscreenRenderTarget"
+      ]
+    },
+    {
+      "class": "Bone3D",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "Device",
+      "methods": [
+        "getTextureDataForText"
+      ]
+    },
+    {
+      "class": "BillBoard",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "Camera",
+      "methods": [
+        "unproject"
+      ]
+    },
+    {
+      "class": "CustomEventListener",
+      "methods": [
+        "init"
+      ]
+    },
+    {
+      "class": "EventListener",
+      "methods": [
+        "init"
+      ]
+    },
+    {
+      "class": "RotateTo",
+      "methods": [
+        "calculateAngles"
+      ]
+    },
+    {
+      "class": "RenderState",
+      "methods": [
+        "finalize",
+        "setStateBlock",
+        "getStateBlock"
+      ]
+    },
+    {
+      "class": "Properties",
+      "methods": [
+        "createNonRefCounted"
+      ]
+    },
+    {
+      "class": "AutoPolygon",
+      "methods": [
+        "trace",
+        "reduce",
+        "expand",
+        "triangulate",
+        "calculateUV",
+        "generateTriangles",
+        "generatePolygon"
+      ]
+    },
+    {
+      "class": "PolygonInfo",
+      "methods": [
+        "operator="
+      ]
+    },
+    {
+      "class": "Technique",
+      "methods": [
+        "getStateBlock"
+      ]
+    },
+    {
+      "class": "Material",
+      "methods": [
+        "getStateBlock",
+        "setStateBlock"
+      ]
+    },
+    {
+      "class": "Pass",
+      "methods": [
+        "getStateBlock"
+      ]
+    },
+    {
+      "class": "SpriteSheetLoader",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "SpriteFrameCache",
+      "methods": [
+        "registerSpriteSheetLoader",
+        "insertFrame",
+        "addSpriteFramesWithFileContent"
+      ]
+    }
+  ],
+  "rename_functions": [
+    {
+      "class": "SpriteFrameCache",
+      "method": "^addSpriteFramesWithFile$",
+      "luaName": "addSpriteFrames"
+    },
+    {
+      "class": "SpriteFrameCache",
+      "method": "^getSpriteFrameByName$",
+      "luaName": "getSpriteFrame"
+    },
+    {
+      "class": "ProgressTimer",
+      "method": "^setReverseProgress$",
+      "luaName": "setReverseDirection"
+    },
+    {
+      "class": "AnimationCache",
+      "method": "^addAnimationsWithFile$",
+      "luaName": "addAnimations"
+    },
+    {
+      "class": "GLProgram",
+      "method": "^setUniformLocationWith1i$",
+      "luaName": "setUniformLocationI32"
+    },
+    {
+      "class": "Node",
+      "method": "^removeFromParentAndCleanup$",
+      "luaName": "removeFromParent"
+    },
+    {
+      "class": "Node",
+      "method": "^removeAllChildrenWithCleanup$",
+      "luaName": "removeAllChildren"
+    },
+    {
+      "class": "LabelAtlas",
+      "method": "^create$",
+      "luaName": "_create"
+    },
+    {
+      "class": "Touch",
+      "method": "^getID$",
+      "luaName": "getId"
+    },
+    {
+      "class": "FileUtils",
+      "method": "^loadFilenameLookupDictionaryFromFile$",
+      "luaName": "loadFilenameLookup"
+    },
+    {
+      "class": "Director",
+      "method": "^end$",
+      "luaName": "endToLua"
+    },
+    {
+      "class": "RenderViewCore",
+      "method": "^end$",
+      "luaName": "endToLua"
+    },
+    {
+      "class": "RenderTexturePass",
+      "method": "^end$",
+      "luaName": "endToLua"
+    }
+  ],
+  "rename_classes": []
+}

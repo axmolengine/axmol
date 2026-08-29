@@ -1,0 +1,2956 @@
+{
+  "formatVersion": 1,
+  "module": "extension",
+  "registrationName": "ax_extension",
+  "luaNamespace": "ax",
+  "luaTypeNamespace": "ax",
+  "conditionalExpression": "",
+  "classes": [
+    {
+      "nativeName": "PUParticleSystem3D",
+      "qualifiedName": "ax::PUParticleSystem3D",
+      "luaName": "ax.PUParticleSystem3D",
+      "luaClassName": "PUParticleSystem3D",
+      "isAbstract": false,
+      "constructors": [
+        {
+          "parameterTypes": [],
+          "defaultValues": []
+        }
+      ],
+      "bases": [
+        "ax::ParticleSystem3D",
+        "ax::Node",
+        "ax::Object",
+        "ax::BlendProtocol"
+      ],
+      "methods": [
+        {
+          "nativeName": "calulateRotationOffset",
+          "luaName": "calulateRotationOffset",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "clearAllParticles",
+          "luaName": "clearAllParticles",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "clone",
+          "luaName": "clone",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "ax::PUParticleSystem3D *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "copyAttributesTo",
+          "luaName": "copyAttributesTo",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::PUParticleSystem3D *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "ax::PUParticleSystem3D *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "ax::PUParticleSystem3D *",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "ax::PUParticleSystem3D *",
+          "parameterTypes": [
+            "std::string_view",
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "forceUpdate",
+          "luaName": "forceUpdate",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getAliveParticleCount",
+          "luaName": "getAliveParticleCount",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getDefaultDepth",
+          "luaName": "getDefaultDepth",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getDefaultHeight",
+          "luaName": "getDefaultHeight",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getDefaultWidth",
+          "luaName": "getDefaultWidth",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getDerivedPosition",
+          "luaName": "getDerivedPosition",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "ax::Vec3",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getDerivedScale",
+          "luaName": "getDerivedScale",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "ax::Vec3",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getEmittedEmitterQuota",
+          "luaName": "getEmittedEmitterQuota",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "unsigned int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getEmittedSystemQuota",
+          "luaName": "getEmittedSystemQuota",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "unsigned int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMaterialName",
+          "luaName": "getMaterialName",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "std::string_view",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMaxVelocity",
+          "luaName": "getMaxVelocity",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getParentParticleSystem",
+          "luaName": "getParentParticleSystem",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "ax::PUParticleSystem3D *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getParticleSystemScaleVelocity",
+          "luaName": "getParticleSystemScaleVelocity",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getTimeElapsedSinceStart",
+          "luaName": "getTimeElapsedSinceStart",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "initSystem",
+          "luaName": "initSystem",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "bool",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "initWithFilePath",
+          "luaName": "initWithFilePath",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "bool",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "initWithFilePathAndMaterialPath",
+          "luaName": "initWithFilePathAndMaterialPath",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "bool",
+          "parameterTypes": [
+            "std::string_view",
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isMarkedForEmission",
+          "luaName": "isMarkedForEmission",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "makeParticleLocal",
+          "luaName": "makeParticleLocal",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "bool",
+          "parameterTypes": [
+            "ax::PUParticle3D *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "pauseParticleSystem",
+          "luaName": "pauseParticleSystem",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "removeAllBehaviourTemplate",
+          "luaName": "removeAllBehaviourTemplate",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "removeAllEmitter",
+          "luaName": "removeAllEmitter",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "removeAllListener",
+          "luaName": "removeAllListener",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "removerAllObserver",
+          "luaName": "removerAllObserver",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "resumeParticleSystem",
+          "luaName": "resumeParticleSystem",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "rotationOffset",
+          "luaName": "rotationOffset",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::Vec3 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setDefaultDepth",
+          "luaName": "setDefaultDepth",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setDefaultHeight",
+          "luaName": "setDefaultHeight",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setDefaultWidth",
+          "luaName": "setDefaultWidth",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setEmittedEmitterQuota",
+          "luaName": "setEmittedEmitterQuota",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "unsigned int"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setEmittedSystemQuota",
+          "luaName": "setEmittedSystemQuota",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "unsigned int"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setMarkedForEmission",
+          "luaName": "setMarkedForEmission",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setMaterialName",
+          "luaName": "setMaterialName",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setMaxVelocity",
+          "luaName": "setMaxVelocity",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setParticleSystemScaleVelocity",
+          "luaName": "setParticleSystemScaleVelocity",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "startParticleSystem",
+          "luaName": "startParticleSystem",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "stopParticleSystem",
+          "luaName": "stopParticleSystem",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "update",
+          "luaName": "update",
+          "declaringType": "ax::PUParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "ParticleSystem3D",
+      "qualifiedName": "ax::ParticleSystem3D",
+      "luaName": "ax.ParticleSystem3D",
+      "luaClassName": "ParticleSystem3D",
+      "isAbstract": false,
+      "constructors": [
+        {
+          "parameterTypes": [],
+          "defaultValues": []
+        }
+      ],
+      "bases": [
+        "ax::Node",
+        "ax::Object",
+        "ax::BlendProtocol"
+      ],
+      "methods": [
+        {
+          "nativeName": "getAliveParticleCount",
+          "luaName": "getAliveParticleCount",
+          "declaringType": "ax::ParticleSystem3D",
+          "returnType": "int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getBlendFunc",
+          "luaName": "getBlendFunc",
+          "declaringType": "ax::ParticleSystem3D",
+          "returnType": "const ax::BlendFunc \u0026",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getParticleQuota",
+          "luaName": "getParticleQuota",
+          "declaringType": "ax::ParticleSystem3D",
+          "returnType": "unsigned int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getRender",
+          "luaName": "getRender",
+          "declaringType": "ax::ParticleSystem3D",
+          "returnType": "ax::Particle3DRender *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getState",
+          "luaName": "getState",
+          "declaringType": "ax::ParticleSystem3D",
+          "returnType": "ax::ParticleSystem3D::State",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isEnabled",
+          "luaName": "isEnabled",
+          "declaringType": "ax::ParticleSystem3D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isKeepLocal",
+          "luaName": "isKeepLocal",
+          "declaringType": "ax::ParticleSystem3D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "pauseParticleSystem",
+          "luaName": "pauseParticleSystem",
+          "declaringType": "ax::ParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "removeAffector",
+          "luaName": "removeAffector",
+          "declaringType": "ax::ParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "int"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "removeAllAffector",
+          "luaName": "removeAllAffector",
+          "declaringType": "ax::ParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "resumeParticleSystem",
+          "luaName": "resumeParticleSystem",
+          "declaringType": "ax::ParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setBlendFunc",
+          "luaName": "setBlendFunc",
+          "declaringType": "ax::ParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::BlendFunc \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setEnabled",
+          "luaName": "setEnabled",
+          "declaringType": "ax::ParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setKeepLocal",
+          "luaName": "setKeepLocal",
+          "declaringType": "ax::ParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setParticleQuota",
+          "luaName": "setParticleQuota",
+          "declaringType": "ax::ParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "unsigned int"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setRender",
+          "luaName": "setRender",
+          "declaringType": "ax::ParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::Particle3DRender *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "startParticleSystem",
+          "luaName": "startParticleSystem",
+          "declaringType": "ax::ParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "stopParticleSystem",
+          "luaName": "stopParticleSystem",
+          "declaringType": "ax::ParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "update",
+          "luaName": "update",
+          "declaringType": "ax::ParticleSystem3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "AssetsManager",
+      "qualifiedName": "ax::ext::AssetsManager",
+      "luaName": "ax.AssetsManager",
+      "luaClassName": "AssetsManager",
+      "isAbstract": false,
+      "constructors": [
+        {
+          "parameterTypes": [
+            "const char *",
+            "const char *",
+            "const char *"
+          ],
+          "defaultValues": [
+            "NULL",
+            "NULL",
+            "NULL"
+          ]
+        }
+      ],
+      "bases": [
+        "ax::Node",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "checkUpdate",
+          "luaName": "checkUpdate",
+          "declaringType": "ax::ext::AssetsManager",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::ext::AssetsManager",
+          "returnType": "ax::ext::AssetsManager *",
+          "parameterTypes": [
+            "const char *",
+            "const char *",
+            "const char *",
+            "ax::ext::AssetsManager::ErrorCallback",
+            "ax::ext::AssetsManager::ProgressCallback",
+            "ax::ext::AssetsManager::SuccessCallback"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "deleteVersion",
+          "luaName": "deleteVersion",
+          "declaringType": "ax::ext::AssetsManager",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getConnectionTimeout",
+          "luaName": "getConnectionTimeout",
+          "declaringType": "ax::ext::AssetsManager",
+          "returnType": "unsigned int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getPackageUrl",
+          "luaName": "getPackageUrl",
+          "declaringType": "ax::ext::AssetsManager",
+          "returnType": "const char *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getStoragePath",
+          "luaName": "getStoragePath",
+          "declaringType": "ax::ext::AssetsManager",
+          "returnType": "const char *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getVersion",
+          "luaName": "getVersion",
+          "declaringType": "ax::ext::AssetsManager",
+          "returnType": "std::string_view",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getVersionFileUrl",
+          "luaName": "getVersionFileUrl",
+          "declaringType": "ax::ext::AssetsManager",
+          "returnType": "const char *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setConnectionTimeout",
+          "luaName": "setConnectionTimeout",
+          "declaringType": "ax::ext::AssetsManager",
+          "returnType": "void",
+          "parameterTypes": [
+            "unsigned int"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setPackageUrl",
+          "luaName": "setPackageUrl",
+          "declaringType": "ax::ext::AssetsManager",
+          "returnType": "void",
+          "parameterTypes": [
+            "const char *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setStoragePath",
+          "luaName": "setStoragePath",
+          "declaringType": "ax::ext::AssetsManager",
+          "returnType": "void",
+          "parameterTypes": [
+            "const char *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setVersionFileUrl",
+          "luaName": "setVersionFileUrl",
+          "declaringType": "ax::ext::AssetsManager",
+          "returnType": "void",
+          "parameterTypes": [
+            "const char *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "update",
+          "luaName": "update",
+          "declaringType": "ax::ext::AssetsManager",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "update",
+          "luaName": "update",
+          "declaringType": "ax::Node",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "AssetsManagerEx",
+      "qualifiedName": "ax::ext::AssetsManagerEx",
+      "luaName": "ax.AssetsManagerEx",
+      "luaClassName": "AssetsManagerEx",
+      "isAbstract": false,
+      "constructors": [
+        {
+          "parameterTypes": [
+            "std::string_view",
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ]
+        }
+      ],
+      "bases": [
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "checkUpdate",
+          "luaName": "checkUpdate",
+          "declaringType": "ax::ext::AssetsManagerEx",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::ext::AssetsManagerEx",
+          "returnType": "ax::ext::AssetsManagerEx *",
+          "parameterTypes": [
+            "std::string_view",
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "downloadFailedAssets",
+          "luaName": "downloadFailedAssets",
+          "declaringType": "ax::ext::AssetsManagerEx",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getLocalManifest",
+          "luaName": "getLocalManifest",
+          "declaringType": "ax::ext::AssetsManagerEx",
+          "returnType": "const ax::ext::Manifest *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMaxConcurrentTask",
+          "luaName": "getMaxConcurrentTask",
+          "declaringType": "ax::ext::AssetsManagerEx",
+          "returnType": "const int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getRemoteManifest",
+          "luaName": "getRemoteManifest",
+          "declaringType": "ax::ext::AssetsManagerEx",
+          "returnType": "const ax::ext::Manifest *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getState",
+          "luaName": "getState",
+          "declaringType": "ax::ext::AssetsManagerEx",
+          "returnType": "ax::ext::AssetsManagerEx::State",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getStoragePath",
+          "luaName": "getStoragePath",
+          "declaringType": "ax::ext::AssetsManagerEx",
+          "returnType": "std::string_view",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setMaxConcurrentTask",
+          "luaName": "setMaxConcurrentTask",
+          "declaringType": "ax::ext::AssetsManagerEx",
+          "returnType": "void",
+          "parameterTypes": [
+            "const int"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setVerifyCallback",
+          "luaName": "setVerifyCallback",
+          "declaringType": "ax::ext::AssetsManagerEx",
+          "returnType": "void",
+          "parameterTypes": [
+            "const std::function\u003Cbool (std::string_view, ax::ext::Manifest::Asset)\u003E \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setVersionCompareHandle",
+          "luaName": "setVersionCompareHandle",
+          "declaringType": "ax::ext::AssetsManagerEx",
+          "returnType": "void",
+          "parameterTypes": [
+            "const std::function\u003Cint (std::string_view, std::string_view)\u003E \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "update",
+          "luaName": "update",
+          "declaringType": "ax::ext::AssetsManagerEx",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "EventAssetsManagerEx",
+      "qualifiedName": "ax::ext::EventAssetsManagerEx",
+      "luaName": "ax.EventAssetsManagerEx",
+      "luaClassName": "EventAssetsManagerEx",
+      "isAbstract": false,
+      "constructors": [
+        {
+          "parameterTypes": [
+            "std::string_view",
+            "ax::extension::AssetsManagerEx *",
+            "const ax::ext::EventAssetsManagerEx::EventCode \u0026",
+            "float",
+            "float",
+            "std::string_view",
+            "std::string_view",
+            "int",
+            "int"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            null,
+            "0",
+            "0",
+            "\u0022\u0022",
+            "\u0022\u0022",
+            "0",
+            "0"
+          ]
+        }
+      ],
+      "bases": [
+        "ax::CustomEvent",
+        "ax::Event",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "getAssetId",
+          "luaName": "getAssetId",
+          "declaringType": "ax::ext::EventAssetsManagerEx",
+          "returnType": "std::string",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getAssetsManagerEx",
+          "luaName": "getAssetsManagerEx",
+          "declaringType": "ax::ext::EventAssetsManagerEx",
+          "returnType": "ax::extension::AssetsManagerEx *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getCURLECode",
+          "luaName": "getCURLECode",
+          "declaringType": "ax::ext::EventAssetsManagerEx",
+          "returnType": "int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getCURLMCode",
+          "luaName": "getCURLMCode",
+          "declaringType": "ax::ext::EventAssetsManagerEx",
+          "returnType": "int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getEventCode",
+          "luaName": "getEventCode",
+          "declaringType": "ax::ext::EventAssetsManagerEx",
+          "returnType": "ax::ext::EventAssetsManagerEx::EventCode",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMessage",
+          "luaName": "getMessage",
+          "declaringType": "ax::ext::EventAssetsManagerEx",
+          "returnType": "std::string",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getPercent",
+          "luaName": "getPercent",
+          "declaringType": "ax::ext::EventAssetsManagerEx",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getPercentByFile",
+          "luaName": "getPercentByFile",
+          "declaringType": "ax::ext::EventAssetsManagerEx",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "EventListenerAssetsManagerEx",
+      "qualifiedName": "ax::ext::EventListenerAssetsManagerEx",
+      "luaName": "ax.EventListenerAssetsManagerEx",
+      "luaClassName": "EventListenerAssetsManagerEx",
+      "isAbstract": false,
+      "constructors": [
+        {
+          "parameterTypes": [],
+          "defaultValues": []
+        }
+      ],
+      "bases": [
+        "ax::CustomEventListener",
+        "ax::EventListener",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "checkAvailable",
+          "luaName": "checkAvailable",
+          "declaringType": "ax::ext::EventListenerAssetsManagerEx",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "clone",
+          "luaName": "clone",
+          "declaringType": "ax::ext::EventListenerAssetsManagerEx",
+          "returnType": "ax::ext::EventListenerAssetsManagerEx *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "init",
+          "luaName": "init",
+          "declaringType": "ax::ext::EventListenerAssetsManagerEx",
+          "returnType": "bool",
+          "parameterTypes": [
+            "const ax::ext::AssetsManagerEx *",
+            "const std::function\u003Cvoid (ax::ext::EventAssetsManagerEx *)\u003E \u0026"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "Manifest",
+      "qualifiedName": "ax::ext::Manifest",
+      "luaName": "ax.Manifest",
+      "luaClassName": "Manifest",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "getManifestFileUrl",
+          "luaName": "getManifestFileUrl",
+          "declaringType": "ax::ext::Manifest",
+          "returnType": "std::string_view",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getPackageUrl",
+          "luaName": "getPackageUrl",
+          "declaringType": "ax::ext::Manifest",
+          "returnType": "std::string_view",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getSearchPaths",
+          "luaName": "getSearchPaths",
+          "declaringType": "ax::ext::Manifest",
+          "returnType": "std::vector\u003Cstd::string\u003E",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getVersion",
+          "luaName": "getVersion",
+          "declaringType": "ax::ext::Manifest",
+          "returnType": "std::string_view",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getVersionFileUrl",
+          "luaName": "getVersionFileUrl",
+          "declaringType": "ax::ext::Manifest",
+          "returnType": "std::string_view",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isLoaded",
+          "luaName": "isLoaded",
+          "declaringType": "ax::ext::Manifest",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isVersionLoaded",
+          "luaName": "isVersionLoaded",
+          "declaringType": "ax::ext::Manifest",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "ScrollView",
+      "qualifiedName": "ax::ext::ScrollView",
+      "luaName": "ax.ScrollView",
+      "luaClassName": "ScrollView",
+      "isAbstract": false,
+      "constructors": [
+        {
+          "parameterTypes": [],
+          "defaultValues": []
+        }
+      ],
+      "bases": [
+        "ax::Layer",
+        "ax::Node",
+        "ax::Object",
+        "ax::ActionTweenDelegate"
+      ],
+      "methods": [
+        {
+          "nativeName": "addChild",
+          "luaName": "addChild",
+          "declaringType": "ax::Node",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::Node *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "addChild",
+          "luaName": "addChild",
+          "declaringType": "ax::Node",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::Node *",
+            "int"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "addChild",
+          "luaName": "addChild",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::Node *",
+            "int",
+            "int"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "addChild",
+          "luaName": "addChild",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::Node *",
+            "int",
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "ax::ext::ScrollView *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "ax::ext::ScrollView *",
+          "parameterTypes": [
+            "ax::Size",
+            "ax::Node *"
+          ],
+          "defaultValues": [
+            null,
+            "NULL"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getContainer",
+          "luaName": "getContainer",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "ax::Node *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getContentOffset",
+          "luaName": "getContentOffset",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "ax::Vec2",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getContentSize",
+          "luaName": "getContentSize",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "const ax::Size \u0026",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getDirection",
+          "luaName": "getDirection",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "ax::ext::ScrollView::Direction",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getViewSize",
+          "luaName": "getViewSize",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "ax::Size",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getZoomScale",
+          "luaName": "getZoomScale",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "hasVisibleParents",
+          "luaName": "hasVisibleParents",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "init",
+          "luaName": "init",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "initWithViewSize",
+          "luaName": "initWithViewSize",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "bool",
+          "parameterTypes": [
+            "ax::Size",
+            "ax::Node *"
+          ],
+          "defaultValues": [
+            null,
+            "NULL"
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isBounceable",
+          "luaName": "isBounceable",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isClippingToBounds",
+          "luaName": "isClippingToBounds",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isDragging",
+          "luaName": "isDragging",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isNodeVisible",
+          "luaName": "isNodeVisible",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "bool",
+          "parameterTypes": [
+            "ax::Node *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isTouchEnabled",
+          "luaName": "isTouchEnabled",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isTouchMoved",
+          "luaName": "isTouchMoved",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "maxContainerOffset",
+          "luaName": "maxContainerOffset",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "ax::Vec2",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "minContainerOffset",
+          "luaName": "minContainerOffset",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "ax::Vec2",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "onPointerCancel",
+          "luaName": "onPointerCancel",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::PointerEvent *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "onPointerDown",
+          "luaName": "onPointerDown",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "bool",
+          "parameterTypes": [
+            "ax::PointerEvent *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "onPointerHitTest",
+          "luaName": "onPointerHitTest",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "bool",
+          "parameterTypes": [
+            "ax::PointerEvent *",
+            "ax::Vec3 *"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "onPointerMove",
+          "luaName": "onPointerMove",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::PointerEvent *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "onPointerScroll",
+          "luaName": "onPointerScroll",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "bool",
+          "parameterTypes": [
+            "ax::PointerEvent *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "onPointerUp",
+          "luaName": "onPointerUp",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::PointerEvent *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "pause",
+          "luaName": "pause",
+          "declaringType": "ax::Node",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "pause",
+          "luaName": "pause",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::Object *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "removeAllChildren",
+          "luaName": "removeAllChildren",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "removeAllChildrenWithCleanup",
+          "luaName": "removeAllChildrenWithCleanup",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "removeChild",
+          "luaName": "removeChild",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::Node *",
+            "bool"
+          ],
+          "defaultValues": [
+            null,
+            "true"
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "resume",
+          "luaName": "resume",
+          "declaringType": "ax::Node",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "resume",
+          "luaName": "resume",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::Object *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setBounceable",
+          "luaName": "setBounceable",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setClippingToBounds",
+          "luaName": "setClippingToBounds",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setContainer",
+          "luaName": "setContainer",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::Node *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setContentOffset",
+          "luaName": "setContentOffset",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::Vec2",
+            "bool"
+          ],
+          "defaultValues": [
+            null,
+            "false"
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setContentOffsetInDuration",
+          "luaName": "setContentOffsetInDuration",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::Vec2",
+            "float"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setContentSize",
+          "luaName": "setContentSize",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Size \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setDirection",
+          "luaName": "setDirection",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::ext::ScrollView::Direction"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setMaxScale",
+          "luaName": "setMaxScale",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setMinScale",
+          "luaName": "setMinScale",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setTouchEnabled",
+          "luaName": "setTouchEnabled",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setViewSize",
+          "luaName": "setViewSize",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::Size"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setZoomScale",
+          "luaName": "setZoomScale",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setZoomScale",
+          "luaName": "setZoomScale",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "void",
+          "parameterTypes": [
+            "float",
+            "bool"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setZoomScaleInDuration",
+          "luaName": "setZoomScaleInDuration",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "void",
+          "parameterTypes": [
+            "float",
+            "float"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "stopAnimatedContentOffset",
+          "luaName": "stopAnimatedContentOffset",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "updateInset",
+          "luaName": "updateInset",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "updateTweenAction",
+          "luaName": "updateTweenAction",
+          "declaringType": "ax::ext::ScrollView",
+          "returnType": "void",
+          "parameterTypes": [
+            "float",
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "TableView",
+      "qualifiedName": "ax::ext::TableView",
+      "luaName": "ax.TableView",
+      "luaClassName": "TableView",
+      "isAbstract": false,
+      "constructors": [
+        {
+          "parameterTypes": [],
+          "defaultValues": []
+        }
+      ],
+      "bases": [
+        "ax::ext::ScrollView",
+        "ax::Layer",
+        "ax::Node",
+        "ax::Object",
+        "ax::ActionTweenDelegate",
+        "ax::ext::ScrollViewDelegate"
+      ],
+      "methods": [
+        {
+          "nativeName": "_updateContentSize",
+          "luaName": "_updateContentSize",
+          "declaringType": "ax::ext::TableView",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "cellAtIndex",
+          "luaName": "cellAtIndex",
+          "declaringType": "ax::ext::TableView",
+          "returnType": "ax::ext::TableViewCell *",
+          "parameterTypes": [
+            "ssize_t"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "dequeueCell",
+          "luaName": "dequeueCell",
+          "declaringType": "ax::ext::TableView",
+          "returnType": "ax::ext::TableViewCell *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getVerticalFillOrder",
+          "luaName": "getVerticalFillOrder",
+          "declaringType": "ax::ext::TableView",
+          "returnType": "ax::ext::TableView::VerticalFillOrder",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "initWithViewSize",
+          "luaName": "initWithViewSize",
+          "declaringType": "ax::ext::TableView",
+          "returnType": "bool",
+          "parameterTypes": [
+            "ax::Size",
+            "ax::Node *"
+          ],
+          "defaultValues": [
+            null,
+            "NULL"
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "insertCellAtIndex",
+          "luaName": "insertCellAtIndex",
+          "declaringType": "ax::ext::TableView",
+          "returnType": "void",
+          "parameterTypes": [
+            "ssize_t"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "onPointerCancel",
+          "luaName": "onPointerCancel",
+          "declaringType": "ax::ext::TableView",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::PointerEvent *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "onPointerDown",
+          "luaName": "onPointerDown",
+          "declaringType": "ax::ext::TableView",
+          "returnType": "bool",
+          "parameterTypes": [
+            "ax::PointerEvent *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "onPointerMove",
+          "luaName": "onPointerMove",
+          "declaringType": "ax::ext::TableView",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::PointerEvent *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "onPointerUp",
+          "luaName": "onPointerUp",
+          "declaringType": "ax::ext::TableView",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::PointerEvent *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "reloadData",
+          "luaName": "reloadData",
+          "declaringType": "ax::ext::TableView",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "removeCellAtIndex",
+          "luaName": "removeCellAtIndex",
+          "declaringType": "ax::ext::TableView",
+          "returnType": "void",
+          "parameterTypes": [
+            "ssize_t"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "scrollViewDidScroll",
+          "luaName": "scrollViewDidScroll",
+          "declaringType": "ax::ext::TableView",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::ext::ScrollView *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "scrollViewDidZoom",
+          "luaName": "scrollViewDidZoom",
+          "declaringType": "ax::ext::TableView",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::ext::ScrollView *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setVerticalFillOrder",
+          "luaName": "setVerticalFillOrder",
+          "declaringType": "ax::ext::TableView",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::ext::TableView::VerticalFillOrder"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "updateCellAtIndex",
+          "luaName": "updateCellAtIndex",
+          "declaringType": "ax::ext::TableView",
+          "returnType": "void",
+          "parameterTypes": [
+            "ssize_t"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "TableViewCell",
+      "qualifiedName": "ax::ext::TableViewCell",
+      "luaName": "ax.TableViewCell",
+      "luaClassName": "TableViewCell",
+      "isAbstract": false,
+      "constructors": [
+        {
+          "parameterTypes": [],
+          "defaultValues": []
+        }
+      ],
+      "bases": [
+        "ax::Node",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::ext::TableViewCell",
+          "returnType": "ax::ext::TableViewCell *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getIdx",
+          "luaName": "getIdx",
+          "declaringType": "ax::ext::TableViewCell",
+          "returnType": "ssize_t",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "reset",
+          "luaName": "reset",
+          "declaringType": "ax::ext::TableViewCell",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setIdx",
+          "luaName": "setIdx",
+          "declaringType": "ax::ext::TableViewCell",
+          "returnType": "void",
+          "parameterTypes": [
+            "ssize_t"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    }
+  ],
+  "enums": [
+    {
+      "nativeName": "State",
+      "qualifiedName": "ax::ParticleSystem3D::State",
+      "ownerQualifiedName": "ax::ParticleSystem3D",
+      "values": [
+        {
+          "name": "STOP",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "RUNNING",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "PAUSE",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "ErrorCode",
+      "qualifiedName": "ax::ext::AssetsManager::ErrorCode",
+      "ownerQualifiedName": "ax::ext::AssetsManager",
+      "values": [
+        {
+          "name": "CREATE_FILE",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "NETWORK",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "NO_NEW_VERSION",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        },
+        {
+          "name": "UNCOMPRESS",
+          "signedValue": 3,
+          "unsignedValue": 3,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "State",
+      "qualifiedName": "ax::ext::AssetsManagerEx::State",
+      "ownerQualifiedName": "ax::ext::AssetsManagerEx",
+      "values": [
+        {
+          "name": "UNCHECKED",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "PREDOWNLOAD_VERSION",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "DOWNLOADING_VERSION",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        },
+        {
+          "name": "VERSION_LOADED",
+          "signedValue": 3,
+          "unsignedValue": 3,
+          "isUnsigned": false
+        },
+        {
+          "name": "PREDOWNLOAD_MANIFEST",
+          "signedValue": 4,
+          "unsignedValue": 4,
+          "isUnsigned": false
+        },
+        {
+          "name": "DOWNLOADING_MANIFEST",
+          "signedValue": 5,
+          "unsignedValue": 5,
+          "isUnsigned": false
+        },
+        {
+          "name": "MANIFEST_LOADED",
+          "signedValue": 6,
+          "unsignedValue": 6,
+          "isUnsigned": false
+        },
+        {
+          "name": "NEED_UPDATE",
+          "signedValue": 7,
+          "unsignedValue": 7,
+          "isUnsigned": false
+        },
+        {
+          "name": "UPDATING",
+          "signedValue": 8,
+          "unsignedValue": 8,
+          "isUnsigned": false
+        },
+        {
+          "name": "UNZIPPING",
+          "signedValue": 9,
+          "unsignedValue": 9,
+          "isUnsigned": false
+        },
+        {
+          "name": "UP_TO_DATE",
+          "signedValue": 10,
+          "unsignedValue": 10,
+          "isUnsigned": false
+        },
+        {
+          "name": "FAIL_TO_UPDATE",
+          "signedValue": 11,
+          "unsignedValue": 11,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "UpdateEntry",
+      "qualifiedName": "ax::ext::AssetsManagerEx::UpdateEntry",
+      "ownerQualifiedName": "ax::ext::AssetsManagerEx",
+      "values": [
+        {
+          "name": "NONE",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "CHECK_UPDATE",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "DO_UPDATE",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "EventCode",
+      "qualifiedName": "ax::ext::EventAssetsManagerEx::EventCode",
+      "ownerQualifiedName": "ax::ext::EventAssetsManagerEx",
+      "values": [
+        {
+          "name": "ERROR_NO_LOCAL_MANIFEST",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "ERROR_DOWNLOAD_MANIFEST",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "ERROR_PARSE_MANIFEST",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        },
+        {
+          "name": "NEW_VERSION_FOUND",
+          "signedValue": 3,
+          "unsignedValue": 3,
+          "isUnsigned": false
+        },
+        {
+          "name": "ALREADY_UP_TO_DATE",
+          "signedValue": 4,
+          "unsignedValue": 4,
+          "isUnsigned": false
+        },
+        {
+          "name": "UPDATE_PROGRESSION",
+          "signedValue": 5,
+          "unsignedValue": 5,
+          "isUnsigned": false
+        },
+        {
+          "name": "ASSET_UPDATED",
+          "signedValue": 6,
+          "unsignedValue": 6,
+          "isUnsigned": false
+        },
+        {
+          "name": "ERROR_UPDATING",
+          "signedValue": 7,
+          "unsignedValue": 7,
+          "isUnsigned": false
+        },
+        {
+          "name": "UPDATE_FINISHED",
+          "signedValue": 8,
+          "unsignedValue": 8,
+          "isUnsigned": false
+        },
+        {
+          "name": "UPDATE_FAILED",
+          "signedValue": 9,
+          "unsignedValue": 9,
+          "isUnsigned": false
+        },
+        {
+          "name": "ERROR_DECOMPRESS",
+          "signedValue": 10,
+          "unsignedValue": 10,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "DiffType",
+      "qualifiedName": "ax::ext::Manifest::DiffType",
+      "ownerQualifiedName": "ax::ext::Manifest",
+      "values": [
+        {
+          "name": "ADDED",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "DELETED",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "MODIFIED",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "DownloadState",
+      "qualifiedName": "ax::ext::Manifest::DownloadState",
+      "ownerQualifiedName": "ax::ext::Manifest",
+      "values": [
+        {
+          "name": "UNSTARTED",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "DOWNLOADING",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "SUCCESSED",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        },
+        {
+          "name": "UNMARKED",
+          "signedValue": 3,
+          "unsignedValue": 3,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "Direction",
+      "qualifiedName": "ax::ext::ScrollView::Direction",
+      "ownerQualifiedName": "ax::ext::ScrollView",
+      "values": [
+        {
+          "name": "NONE",
+          "signedValue": -1,
+          "unsignedValue": 4294967295,
+          "isUnsigned": false
+        },
+        {
+          "name": "HORIZONTAL",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "VERTICAL",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "BOTH",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "VerticalFillOrder",
+      "qualifiedName": "ax::ext::TableView::VerticalFillOrder",
+      "ownerQualifiedName": "ax::ext::TableView",
+      "values": [
+        {
+          "name": "TOP_DOWN",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "BOTTOM_UP",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        }
+      ]
+    }
+  ]
+}

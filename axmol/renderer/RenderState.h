@@ -241,6 +241,21 @@ public:
 
     StateBlock& getStateBlock() const;
 
+    // Object is intentionally non-copyable. RenderState still needs value
+    // assignment when materials, techniques, and passes clone their state;
+    // copy only RenderState's own data and preserve the target Object state.
+    RenderState& operator=(const RenderState& other)
+    {
+        if (this != &other)
+        {
+            _hash      = other._hash;
+            _hashDirty = other._hashDirty;
+            _state     = other._state;
+            _name      = other._name;
+        }
+        return *this;
+    }
+
 protected:
     RenderState() = default;
 

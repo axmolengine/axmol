@@ -1,0 +1,308 @@
+/****************************************************************************
+ Copyright (c) 2013-2016 Chukong Technologies Inc.
+ Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+
+ https://axmol.dev/
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
+#pragma once
+
+#include "lua-bindings/runtime/axlua_adapter.h"
+#include "axmol/base/Object.h"
+#include "axmol/base/Macros.h"
+#include "axmol/2d/ActionInstant.h"
+#include <vector>
+#include <map>
+
+/**
+ * @addtogroup lua
+ * @{
+ */
+
+namespace ax
+{
+
+class EventDispatcher;
+class EventListener;
+
+/**
+ * The LuaCallFunc is wrapped to call the callback function in the Lua Conveniently and don't insert useless code to
+ * processing the lua in the CallFuncN.
+ *
+ * @lua NA
+ */
+class LuaCallFunc : public ax::CallFuncN
+{
+public:
+    /**
+     * Default constructor.
+     */
+    LuaCallFunc() : _functionLua(nullptr) {}
+
+    /**
+     *  Destructor.
+     */
+    virtual ~LuaCallFunc() {}
+
+    /**
+     * Create a LuaCallFunc object by a function pointer for callback.
+     *
+     * @param func a function pointer for callback.
+     */
+    static LuaCallFunc* create(const std::function<void(void* self, Node*)>& func);
+
+    /**
+     * Init a LuaCallFunc object by a function pointer for callback.
+     *
+     * @param func a function pointer for callback.
+     */
+    bool initWithFunction(const std::function<void(void* self, Node*)>& func);
+    LuaCallFunc* clone() const override;
+    void execute() override;
+
+protected:
+    std::function<void(void* self, Node*)> _functionLua;
+};
+
+/**
+ * In order to reduce the coupling of lua script engine and native c++ engine.
+ * In the current mechanism, for the class derived from the Object, we construct a mapping relationship among c++ Object
+ * object, HandlerType and the reference index corresponding to the pointer of Lua function. Then, using the
+ * AxluaCallbackRegistry to manager uniformly. By this mechanism, when native c++ Object object wants to call the Lua
+ * function, we didn't insert the processing code in the native c++ class.
+ */
+class AxluaCallbackRegistry
+{
+public:
+    /**
+     * HandlerType enum.
+     * This enum class represent the processing type for c++ call the Lua function.
+     *
+     */
+    enum class HandlerType : int
+    {
+        NODE = 0,
+        MENU_CLICKED,
+        CALLFUNC,
+        SCHEDULE,
+        TOUCHES,
+        KEYPAD,
+        ACCELEROMETER,
+
+        CONTROL_TOUCH_DOWN,
+        CONTROL_TOUCH_DRAG_INSIDE,
+        CONTROL_TOUCH_DRAG_OUTSIDE,
+        CONTROL_TOUCH_DRAG_ENTER,
+        CONTROL_TOUCH_DRAG_EXIT,
+        CONTROL_TOUCH_UP_INSIDE,
+        CONTROL_TOUCH_UP_OUTSIDE,
+        CONTROL_TOUCH_UP_CANCEL,
+        CONTROL_VALUE_CHANGED,
+
+        WEBSOCKET_OPEN,
+        WEBSOCKET_MESSAGE,
+        WEBSOCKET_CLOSE,
+        WEBSOCKET_ERROR,
+
+        LUANODE_DRAW,
+
+        SCROLLVIEW_SCROLL,
+        SCROLLVIEW_ZOOM,
+
+        TABLECELL_TOUCHED,
+        TABLECELL_HIGHLIGHT,
+        TABLECELL_UNHIGHLIGHT,
+        TABLECELL_WILL_RECYCLE,
+        TABLECELL_SIZE_FOR_INDEX,
+        TABLECELL_AT_INDEX,
+        TABLEVIEW_NUMS_OF_CELLS,
+
+        XMLHTTPREQUEST_READY_STATE_CHANGE,
+
+        ASSETSMANAGER_PROGRESS,
+        ASSETSMANAGER_SUCCESS,
+        ASSETSMANAGER_ERROR,
+
+        STUDIO_EVENT_LISTENER,
+        ARMATURE_EVENT,
+
+        EVENT_ACC,
+        EVENT_CUSTIOM,
+
+        EVENT_KEYBOARD_PRESSED,
+        EVENT_KEYBOARD_RELEASED,
+
+        EVENT_TOUCH_BEGAN,
+        EVENT_TOUCH_MOVED,
+        EVENT_TOUCH_ENDED,
+        EVENT_TOUCH_CANCELLED,
+
+        EVENT_TOUCHES_BEGAN,
+        EVENT_TOUCHES_MOVED,
+        EVENT_TOUCHES_ENDED,
+        EVENT_TOUCHES_CANCELLED,
+
+        EVENT_MOUSE_DOWN,
+        EVENT_MOUSE_UP,
+        EVENT_MOUSE_MOVE,
+        EVENT_MOUSE_SCROLL,
+
+        EVENT_SPINE,
+
+        EVENT_PHYSICS_2D_CONTACT_BEGIN,
+        EVENT_PHYSICS_2D_CONTACT_END,
+        EVENT_PHYSICS_2D_HIT,
+        EVENT_PHYSICS_2D_SENSOR_BEGIN,
+        EVENT_PHYSICS_2D_SENSOR_END,
+
+        EVENT_PHYSICS_3D_CONTACT_BEGIN,
+        EVENT_PHYSICS_3D_CONTACT_END,
+        EVENT_PHYSICS_3D_HIT,
+        EVENT_PHYSICS_3D_SENSOR_BEGIN,
+        EVENT_PHYSICS_3D_SENSOR_END,
+
+        EVENT_FOCUS,
+
+        EVENT_CONTROLLER_CONNECTED,
+        EVENT_CONTROLLER_DISCONNECTED,
+        EVENT_CONTROLLER_KEYDOWN,
+        EVENT_CONTROLLER_KEYUP,
+        EVENT_CONTROLLER_KEYREPEAT,
+        EVENT_CONTROLLER_AXIS,
+
+        EVENT_SPINE_ANIMATION_START,
+        EVENT_SPINE_ANIMATION_INTERRUPT,
+        EVENT_SPINE_ANIMATION_END,
+        EVENT_SPINE_ANIMATION_DISPOSE,
+        EVENT_SPINE_ANIMATION_COMPLETE,
+        EVENT_SPINE_ANIMATION_EVENT,
+
+        EVENT_CUSTOM_BEGAN = 10000,
+        EVENT_CUSTOM_ENDED = 11000,
+    };
+
+    ///! @cond
+    typedef int Handler;
+    typedef std::pair<HandlerType, Handler> HandlerPair;
+    typedef std::vector<HandlerPair> VecHandlerPairs;
+    typedef std::map<void*, VecHandlerPairs> MapObjectHandlers;
+    /// @endcond
+
+    /**
+     * Default constructor.
+     *
+     * @lua NA
+     */
+    AxluaCallbackRegistry(void);
+
+    /**
+     * Destructor.
+     *
+     * @lua NA
+     */
+    virtual ~AxluaCallbackRegistry(void);
+
+    /**
+     * Get the instance of the AxluaCallbackRegistry.
+     *
+     * @return the instance of the AxluaCallbackRegistry.
+     */
+    static AxluaCallbackRegistry* getInstance(void);
+
+    /** Returns the existing registry without creating one during teardown. */
+    static AxluaCallbackRegistry* getInstanceIfExists(void);
+
+    /**
+     * Destroy the instance of the AxluaCallbackRegistry.
+     *
+     * @lua NA
+     */
+    static void destroyInstance(void);
+
+    /**
+     * Construct or update the mapping relationship among c++ Object object ,HandlerType and the reference index
+     * corresponding to the pointer of Lua function.
+     *
+     * @param object a Object object.
+     * @param handler a reference index corresponding to the pointer of Lua function.
+     * @param handlerType AxluaCallbackRegistry::HandlerType.
+     * @lua registerScriptHandler
+     */
+    void addObjectHandler(void* object, int handler, AxluaCallbackRegistry::HandlerType handlerType);
+
+    /**
+     * By the handlerType and object, find the correct reference index corresponding to the pointer of Lua function.
+     * If found, remove the reference of Lua function corresponding to this index in the
+     * Lua function-reference registry.
+     *
+     * @param object a Object object.
+     * @param handlerType AxluaCallbackRegistry::HandlerType.
+     * @lua unregisterScriptHandler
+     */
+    void removeObjectHandler(void* object, AxluaCallbackRegistry::HandlerType handlerType);
+
+    /**
+     * By the handlerType and object, find the correct reference index corresponding to the pointer of Lua function.
+     *
+     * @param object a Object object.
+     * @param handlerType AxluaCallbackRegistry::HandlerType.
+     * @return index corresponding to the pointer of Lua function,otherwise 0.
+     * @lua NA
+     */
+    int getObjectHandler(void* object, AxluaCallbackRegistry::HandlerType handlerType);
+
+    /**
+     * Remove the all relationship among the object, HandlerType and the reference index corresponding to the pointer of
+     * Lua function. Meanwhile, remove the reference of Lua function corresponding to the indexs the object has in the
+     * Lua function-reference registry.
+     *
+     * @param object the Object object.
+     */
+    void removeObjectAllHandlers(void* object);
+
+    /**
+     * Add customizable relationship among c++ Object object, HandlerType and the reference index corresponding to the
+     * pointer of Lua function. In the customizable relationship, we don't pass the HandlerType, it will obtain the
+     * HandlerType by auto-increasing. The HandlerTypes used to customizable relationship are between
+     * EVENT_CUSTOM_BEGAN(10000) and EVENT_CUSTOM_ENDED(11000). If the HandlerType increased more than 12,it would
+     * trigger assert.
+     *
+     * @param object the Object object.
+     * @param handler a reference index corresponding to the pointer of Lua function.
+     * @return AxluaCallbackRegistry::HandlerType the value of current AxluaCallbackRegistry::HandlerType after adding.
+     * @lua NA
+     */
+    AxluaCallbackRegistry::HandlerType addCustomHandler(void* object, int handler);
+
+private:
+    void init(void);
+    static AxluaCallbackRegistry* _instance;
+    ax::EventDispatcher* _dispatcher = nullptr;
+    ax::EventListener* _disposingListener = nullptr;
+    // Entries are removed by native lifecycle notifications. Do not infer
+    // Object-ness from void*: this registry also tracks stack-owned listeners
+    // and callback helper objects which must never be wrapped in WeakPtr.
+    MapObjectHandlers _mapObjectHandlers;
+};
+
+}  // namespace ax
+
+// end group
+/// @}

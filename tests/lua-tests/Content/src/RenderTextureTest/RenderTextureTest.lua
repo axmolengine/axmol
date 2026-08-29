@@ -49,7 +49,7 @@ local function RenderTextureSave()
         end
     end
 
-    ret:registerScriptHandler(onNodeEvent)
+    ret:setLifecycleCallback(onNodeEvent)
 
     -- create a render texture, this is what we are going to draw into
     target = ax.RenderTexture:createForCanvas(s, ax.TEXTURE_PF_RGBA8)
@@ -64,7 +64,7 @@ local function RenderTextureSave()
 
     local function onPointerMove(event)
         local start = event:getWorldPoint()
-        local ended = event:getPreviousLocation()
+    local ended = event:getPrevWorldPoint()
 
         targetPass:begin()
 
@@ -103,7 +103,7 @@ local function RenderTextureSave()
     end
 
     local listener = ax.PointerEventListener:create()
-    listener:registerScriptHandler(onPointerMove,ax.Handler.EVENT_POINTER_MOVE )
+    listener.onPointerMove = onPointerMove
     local eventDispatcher = ret:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, ret)
     -- Save Image menu

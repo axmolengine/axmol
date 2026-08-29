@@ -110,7 +110,7 @@ local function ZwoptexGenericTest()
         end
     end
 
-    ret:registerScriptHandler(onNodeEvent)
+    ret:setLifecycleCallback(onNodeEvent)
 
     return ret
 end

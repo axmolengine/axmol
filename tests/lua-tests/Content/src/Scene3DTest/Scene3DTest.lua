@@ -66,7 +66,7 @@ end
 
 function Player:init()
     self._headingAxis = ax.vec3(0.0, 0.0, 0.0)
-    self:scheduleUpdateWithPriorityLua(function(dt)
+    self:onUpdate(function(dt)
         local curPos = self:getPosition3D()
         if self._playerState == PLAER_STATE.IDLE then
 
@@ -109,9 +109,9 @@ function Player:init()
         local playerPos = self:getPosition3D()
         self._cam:setPosition3D(ax.vec3add(playerPos, camera_offset))
         self:updateState()
-    end, 0)
+    end)
 
-    self:registerScriptHandler(function (event)
+    self:setLifecycleCallback(function (event)
         -- body
         if "exit" == event then
             self:unscheduleUpdate()
@@ -145,7 +145,7 @@ function TerrainWalkThru:ctor()
             self:onExit()
         end
     end
-     self:registerScriptHandler(onNodeEvent)
+     self:setLifecycleCallback(onNodeEvent)
 end
 
 function TerrainWalkThru:onEnter()
@@ -162,11 +162,11 @@ function TerrainWalkThru:init()
 
     local listener = ax.PointerEventListener:create()
 
-    listener:registerScriptHandler(function(event)
+    listener.onPointerDown = function(event)
 
-    end,ax.Handler.EVENT_POINTER_DOWN)
+    end
 
-    listener:registerScriptHandler(function(event)
+    listener.onPointerUp = function(event)
 
         local touch = event
         local location = event:getPoint()
@@ -202,7 +202,7 @@ function TerrainWalkThru:init()
                 self._player._playerState = PLAER_STATE.FORWARD
             end
         end
-    end,ax.Handler.EVENT_POINTER_UP)
+    end
 
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)
@@ -474,7 +474,7 @@ function Scene3DTest:createDetailDlg()
 --    self._detailDlg:addChild(skeletonNode)
 
     local listener = ax.PointerEventListener:create()
-    listener:registerScriptHandler(function(event)
+    listener.onPointerDown = function(event)
 --        if (not skeletonNode:getDebugBonesEnabled()) then
 --            skeletonNode:setDebugBonesEnabled(true)
 --        elseif skeletonNode:getTimeScale() == 1 then
@@ -485,7 +485,7 @@ function Scene3DTest:createDetailDlg()
 --        end
 
         return true
-    end,ax.Handler.EVENT_POINTER_DOWN )
+    end
 
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)

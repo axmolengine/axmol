@@ -26,6 +26,8 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "axmol/base/Object.h"
+
+#include <atomic>
 #include "axmol/base/AutoreleasePool.h"
 #include "axmol/base/Macros.h"
 #include "axmol/base/ScriptSupport.h"
@@ -47,15 +49,10 @@ static void untrackRef(Object* ref);
 #endif
 
 Object::Object()
-    : _referenceCount(1)  // when the Object is created, the reference count of it is 1
-#if AX_ENABLE_SCRIPT_BINDING
-    , _luaID(0)
-#endif
+    : _referenceCount(1), _ID(0)  // when the Object is created, the reference count of it is 1
 {
-#if AX_ENABLE_SCRIPT_BINDING
-    static unsigned int uObjectCount = 0;
-    _ID                              = ++uObjectCount;
-#endif
+    static std::atomic<uint64_t> uObjectCount{0};
+    _ID = uObjectCount.fetch_add(1, std::memory_order_relaxed) + 1;
 
 #if AX_OBJECT_LEAK_DETECTION
     trackRef(this);
@@ -67,11 +64,15 @@ Object::~Object()
     AXASSERT(_internalIndex == -1, "Weak-tracked Object must be destroyed through release().");
 
 #if AX_ENABLE_SCRIPT_BINDING
-    ScriptEngineProtocol* pEngine = ScriptEngineManager::getInstance()->getScriptEngine();
-    if (pEngine != nullptr && _luaID)
+    if (hasScriptBindingExposure())
     {
-        // if the object is referenced by Lua engine, remove it
-        pEngine->removeScriptObjectByObject(this);
+        ScriptEngineProtocol* pEngine = ScriptEngineManager::getScriptEngineIfExists();
+        if (pEngine != nullptr)
+        {
+            // The script backend owns the canonical-object registry and must
+            // be notified independently of the diagnostic object ID.
+            pEngine->invalidateScriptObject(this);
+        }
     }
 #endif  // AX_ENABLE_SCRIPT_BINDING
 

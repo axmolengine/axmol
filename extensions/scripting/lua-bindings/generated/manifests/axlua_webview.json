@@ -1,0 +1,365 @@
+{
+  "formatVersion": 1,
+  "module": "webview",
+  "registrationName": "ax_webview",
+  "luaNamespace": "axui",
+  "luaTypeNamespace": "axui",
+  "conditionalExpression": "(defined(_WIN32) \u0026\u0026 defined(AX_ENABLE_MSEDGE_WEBVIEW2)) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX \u0026\u0026 defined(AX_HAVE_WEBKIT2GTK)))",
+  "classes": [
+    {
+      "nativeName": "WebView",
+      "qualifiedName": "ax::ui::WebView",
+      "luaName": "axui.WebView",
+      "luaClassName": "WebView",
+      "isAbstract": false,
+      "constructors": [
+        {
+          "parameterTypes": [],
+          "defaultValues": []
+        }
+      ],
+      "bases": [
+        "ax::ui::Widget",
+        "ax::ProtectedNode",
+        "ax::Node",
+        "ax::Object",
+        "ax::ui::LayoutParameterProtocol"
+      ],
+      "methods": [
+        {
+          "nativeName": "canGoBack",
+          "luaName": "canGoBack",
+          "declaringType": "ax::ui::WebView",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "canGoForward",
+          "luaName": "canGoForward",
+          "declaringType": "ax::ui::WebView",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::ui::WebView",
+          "returnType": "ax::ui::WebView *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "evaluateJS",
+          "luaName": "evaluateJS",
+          "declaringType": "ax::ui::WebView",
+          "returnType": "void",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getOnJSCallback",
+          "luaName": "getOnJSCallback",
+          "declaringType": "ax::ui::WebView",
+          "returnType": "ax::ui::WebView::WebViewCallback",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getOpacityWebView",
+          "luaName": "getOpacityWebView",
+          "declaringType": "ax::ui::WebView",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "goBack",
+          "luaName": "goBack",
+          "declaringType": "ax::ui::WebView",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "goForward",
+          "luaName": "goForward",
+          "declaringType": "ax::ui::WebView",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "loadFile",
+          "luaName": "loadFile",
+          "declaringType": "ax::ui::WebView",
+          "returnType": "void",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "loadHTMLString",
+          "luaName": "loadHTMLString",
+          "declaringType": "ax::ui::WebView",
+          "returnType": "void",
+          "parameterTypes": [
+            "std::string_view",
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null,
+            "\u0022\u0022"
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "loadURL",
+          "luaName": "loadURL",
+          "declaringType": "ax::ui::WebView",
+          "returnType": "void",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "loadURL",
+          "luaName": "loadURL",
+          "declaringType": "ax::ui::WebView",
+          "returnType": "void",
+          "parameterTypes": [
+            "std::string_view",
+            "bool"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "onEnter",
+          "luaName": "onEnter",
+          "declaringType": "ax::ui::WebView",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "onExit",
+          "luaName": "onExit",
+          "declaringType": "ax::ui::WebView",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "reload",
+          "luaName": "reload",
+          "declaringType": "ax::ui::WebView",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setBackgroundTransparent",
+          "luaName": "setBackgroundTransparent",
+          "declaringType": "ax::ui::WebView",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setBounces",
+          "luaName": "setBounces",
+          "declaringType": "ax::ui::WebView",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setJavascriptInterfaceScheme",
+          "luaName": "setJavascriptInterfaceScheme",
+          "declaringType": "ax::ui::WebView",
+          "returnType": "void",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setOnDidFailLoading",
+          "luaName": "setOnDidFailLoading",
+          "declaringType": "ax::ui::WebView",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::ui::WebView::WebViewCallback \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setOnDidFinishLoading",
+          "luaName": "setOnDidFinishLoading",
+          "declaringType": "ax::ui::WebView",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::ui::WebView::WebViewCallback \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setOnShouldStartLoading",
+          "luaName": "setOnShouldStartLoading",
+          "declaringType": "ax::ui::WebView",
+          "returnType": "void",
+          "parameterTypes": [
+            "const std::function\u003Cbool (ax::ui::WebView *, std::string_view)\u003E \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setOpacityWebView",
+          "luaName": "setOpacityWebView",
+          "declaringType": "ax::ui::WebView",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setScalesPageToFit",
+          "luaName": "setScalesPageToFit",
+          "declaringType": "ax::ui::WebView",
+          "returnType": "void",
+          "parameterTypes": [
+            "const bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setVisible",
+          "luaName": "setVisible",
+          "declaringType": "ax::ui::WebView",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "stopLoading",
+          "luaName": "stopLoading",
+          "declaringType": "ax::ui::WebView",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    }
+  ],
+  "enums": []
+}

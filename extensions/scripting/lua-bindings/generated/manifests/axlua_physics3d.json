@@ -1,0 +1,2963 @@
+{
+  "formatVersion": 1,
+  "module": "physics3d",
+  "registrationName": "ax_physics3d",
+  "luaNamespace": "ax",
+  "luaTypeNamespace": "ax",
+  "conditionalExpression": "defined(AX_ENABLE_PHYSICS_3D)",
+  "classes": [
+    {
+      "nativeName": "BoxCollider3D",
+      "qualifiedName": "ax::BoxCollider3D",
+      "luaName": "ax.BoxCollider3D",
+      "luaClassName": "BoxCollider3D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Collider3D",
+        "ax::PhysicsActor",
+        "ax::Component",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::BoxCollider3D",
+          "returnType": "ax::BoxCollider3D *",
+          "parameterTypes": [
+            "const ax::Vec3 \u0026",
+            "const ax::PhysicsMaterial \u0026"
+          ],
+          "defaultValues": [
+            null,
+            "ax::DEFAULT_PHYSICS_MATERIAL"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "CapsuleCollider3D",
+      "qualifiedName": "ax::CapsuleCollider3D",
+      "luaName": "ax.CapsuleCollider3D",
+      "luaClassName": "CapsuleCollider3D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Collider3D",
+        "ax::PhysicsActor",
+        "ax::Component",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::CapsuleCollider3D",
+          "returnType": "ax::CapsuleCollider3D *",
+          "parameterTypes": [
+            "float",
+            "float",
+            "const ax::PhysicsMaterial \u0026"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            "ax::DEFAULT_PHYSICS_MATERIAL"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "Collider3D",
+      "qualifiedName": "ax::Collider3D",
+      "luaName": "ax.Collider3D",
+      "luaClassName": "Collider3D",
+      "isAbstract": true,
+      "constructors": [],
+      "bases": [
+        "ax::PhysicsActor",
+        "ax::Component",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "getMaterial",
+          "luaName": "getMaterial",
+          "declaringType": "ax::Collider3D",
+          "returnType": "const ax::PhysicsMaterial \u0026",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getType",
+          "luaName": "getType",
+          "declaringType": "ax::Collider3D",
+          "returnType": "ax::Collider3D::Type",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getWorld",
+          "luaName": "getWorld",
+          "declaringType": "ax::Collider3D",
+          "returnType": "ax::PhysicsWorld3D *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getWorldTransform",
+          "luaName": "getWorldTransform",
+          "declaringType": "ax::Collider3D",
+          "returnType": "ax::Mat4",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "hasOwnBody",
+          "luaName": "hasOwnBody",
+          "declaringType": "ax::Collider3D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isAttached",
+          "luaName": "isAttached",
+          "declaringType": "ax::Collider3D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isAttachedToWorld",
+          "luaName": "isAttachedToWorld",
+          "declaringType": "ax::Collider3D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isSensor",
+          "luaName": "isSensor",
+          "declaringType": "ax::Collider3D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isValid",
+          "luaName": "isValid",
+          "declaringType": "ax::Collider3D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setEnabled",
+          "luaName": "setEnabled",
+          "declaringType": "ax::Collider3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setMaterial",
+          "luaName": "setMaterial",
+          "declaringType": "ax::Collider3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::PhysicsMaterial \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setSensor",
+          "luaName": "setSensor",
+          "declaringType": "ax::Collider3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setUserData",
+          "luaName": "setUserData",
+          "declaringType": "ax::Collider3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "void *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "syncNodeToPhysics",
+          "luaName": "syncNodeToPhysics",
+          "declaringType": "ax::Collider3D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "syncPhysicsToNode",
+          "luaName": "syncPhysicsToNode",
+          "declaringType": "ax::Collider3D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "ConeTwistJoint3D",
+      "qualifiedName": "ax::ConeTwistJoint3D",
+      "luaName": "ax.ConeTwistJoint3D",
+      "luaClassName": "ConeTwistJoint3D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Joint3D",
+        "ax::Component",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "clearLimits",
+          "luaName": "clearLimits",
+          "declaringType": "ax::ConeTwistJoint3D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::ConeTwistJoint3D",
+          "returnType": "ax::ConeTwistJoint3D *",
+          "parameterTypes": [
+            "ax::Rigidbody3D *"
+          ],
+          "defaultValues": [
+            "nullptr"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "createInWorldSpace",
+          "luaName": "createInWorldSpace",
+          "declaringType": "ax::ConeTwistJoint3D",
+          "returnType": "ax::ConeTwistJoint3D *",
+          "parameterTypes": [
+            "const ax::Vec3 \u0026",
+            "const ax::Vec3 \u0026",
+            "ax::Rigidbody3D *"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            "nullptr"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getLimits",
+          "luaName": "getLimits",
+          "declaringType": "ax::ConeTwistJoint3D",
+          "returnType": "const ax::TwistLimits \u0026",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getPointForAngle",
+          "luaName": "getPointForAngle",
+          "declaringType": "ax::ConeTwistJoint3D",
+          "returnType": "ax::Vec3",
+          "parameterTypes": [
+            "float",
+            "float"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getSwingMotor",
+          "luaName": "getSwingMotor",
+          "declaringType": "ax::ConeTwistJoint3D",
+          "returnType": "const ax::JointMotor \u0026",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getSwingSpring",
+          "luaName": "getSwingSpring",
+          "declaringType": "ax::ConeTwistJoint3D",
+          "returnType": "const ax::JointSpring \u0026",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getTwistMotor",
+          "luaName": "getTwistMotor",
+          "declaringType": "ax::ConeTwistJoint3D",
+          "returnType": "const ax::JointMotor \u0026",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getTwistSpring",
+          "luaName": "getTwistSpring",
+          "declaringType": "ax::ConeTwistJoint3D",
+          "returnType": "const ax::JointSpring \u0026",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "hasLimits",
+          "luaName": "hasLimits",
+          "declaringType": "ax::ConeTwistJoint3D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isUseSwingMotor",
+          "luaName": "isUseSwingMotor",
+          "declaringType": "ax::ConeTwistJoint3D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isUseTwistMotor",
+          "luaName": "isUseTwistMotor",
+          "declaringType": "ax::ConeTwistJoint3D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setLimits",
+          "luaName": "setLimits",
+          "declaringType": "ax::ConeTwistJoint3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::TwistLimits \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setSwingMotor",
+          "luaName": "setSwingMotor",
+          "declaringType": "ax::ConeTwistJoint3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::JointMotor \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setSwingSpring",
+          "luaName": "setSwingSpring",
+          "declaringType": "ax::ConeTwistJoint3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::JointSpring \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setTwistMotor",
+          "luaName": "setTwistMotor",
+          "declaringType": "ax::ConeTwistJoint3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::JointMotor \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setTwistSpring",
+          "luaName": "setTwistSpring",
+          "declaringType": "ax::ConeTwistJoint3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::JointSpring \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setUseLimits",
+          "luaName": "setUseLimits",
+          "declaringType": "ax::ConeTwistJoint3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setUseSwingMotor",
+          "luaName": "setUseSwingMotor",
+          "declaringType": "ax::ConeTwistJoint3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setUseTwistMotor",
+          "luaName": "setUseTwistMotor",
+          "declaringType": "ax::ConeTwistJoint3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "ContactEvent3D",
+      "qualifiedName": "ax::ContactEvent3D",
+      "luaName": "ax.ContactEvent3D",
+      "luaClassName": "ContactEvent3D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::CustomEvent",
+        "ax::Event",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "getActorA",
+          "luaName": "getActorA",
+          "declaringType": "ax::ContactEvent3D",
+          "returnType": "ax::PhysicsActor *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getActorB",
+          "luaName": "getActorB",
+          "declaringType": "ax::ContactEvent3D",
+          "returnType": "ax::PhysicsActor *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getContactInfo",
+          "luaName": "getContactInfo",
+          "declaringType": "ax::ContactEvent3D",
+          "returnType": "const ax::ContactInfo3D \u0026",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getEventCode",
+          "luaName": "getEventCode",
+          "declaringType": "ax::ContactEvent3D",
+          "returnType": "ax::ContactEvent3D::EventCode",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "ContactEventListener3D",
+      "qualifiedName": "ax::ContactEventListener3D",
+      "luaName": "ax.ContactEventListener3D",
+      "luaClassName": "ContactEventListener3D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::CustomEventListener",
+        "ax::EventListener",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "checkAvailable",
+          "luaName": "checkAvailable",
+          "declaringType": "ax::ContactEventListener3D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "clone",
+          "luaName": "clone",
+          "declaringType": "ax::ContactEventListener3D",
+          "returnType": "ax::ContactEventListener3D *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::ContactEventListener3D",
+          "returnType": "ax::ContactEventListener3D *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": [
+        {
+          "nativeName": "onCollisionHit",
+          "luaName": "onCollisionHit",
+          "fieldType": "std::function\u003Cvoid (ax::ContactEvent3D *)\u003E"
+        },
+        {
+          "nativeName": "onContactBegin",
+          "luaName": "onContactBegin",
+          "fieldType": "std::function\u003Cvoid (ax::ContactEvent3D *)\u003E"
+        },
+        {
+          "nativeName": "onContactEnd",
+          "luaName": "onContactEnd",
+          "fieldType": "std::function\u003Cvoid (ax::ContactEvent3D *)\u003E"
+        },
+        {
+          "nativeName": "onContactFilter",
+          "luaName": "onContactFilter",
+          "fieldType": "std::function\u003Cbool (ax::ContactEvent3D *)\u003E"
+        },
+        {
+          "nativeName": "onSensorBegin",
+          "luaName": "onSensorBegin",
+          "fieldType": "std::function\u003Cvoid (ax::ContactEvent3D *)\u003E"
+        },
+        {
+          "nativeName": "onSensorEnd",
+          "luaName": "onSensorEnd",
+          "fieldType": "std::function\u003Cvoid (ax::ContactEvent3D *)\u003E"
+        }
+      ]
+    },
+    {
+      "nativeName": "ConvexCollider3D",
+      "qualifiedName": "ax::ConvexCollider3D",
+      "luaName": "ax.ConvexCollider3D",
+      "luaClassName": "ConvexCollider3D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Collider3D",
+        "ax::PhysicsActor",
+        "ax::Component",
+        "ax::Object"
+      ],
+      "methods": [],
+      "fields": []
+    },
+    {
+      "nativeName": "CylinderCollider3D",
+      "qualifiedName": "ax::CylinderCollider3D",
+      "luaName": "ax.CylinderCollider3D",
+      "luaClassName": "CylinderCollider3D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Collider3D",
+        "ax::PhysicsActor",
+        "ax::Component",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::CylinderCollider3D",
+          "returnType": "ax::CylinderCollider3D *",
+          "parameterTypes": [
+            "float",
+            "float",
+            "const ax::PhysicsMaterial \u0026"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            "ax::DEFAULT_PHYSICS_MATERIAL"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "HeightFieldCollider3D",
+      "qualifiedName": "ax::HeightFieldCollider3D",
+      "luaName": "ax.HeightFieldCollider3D",
+      "luaClassName": "HeightFieldCollider3D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Collider3D",
+        "ax::PhysicsActor",
+        "ax::Component",
+        "ax::Object"
+      ],
+      "methods": [],
+      "fields": []
+    },
+    {
+      "nativeName": "HingeJoint3D",
+      "qualifiedName": "ax::HingeJoint3D",
+      "luaName": "ax.HingeJoint3D",
+      "luaClassName": "HingeJoint3D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Joint3D",
+        "ax::Component",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "clearLimits",
+          "luaName": "clearLimits",
+          "declaringType": "ax::HingeJoint3D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::HingeJoint3D",
+          "returnType": "ax::HingeJoint3D *",
+          "parameterTypes": [
+            "ax::Rigidbody3D *"
+          ],
+          "defaultValues": [
+            "nullptr"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "createInWorldSpace",
+          "luaName": "createInWorldSpace",
+          "declaringType": "ax::HingeJoint3D",
+          "returnType": "ax::HingeJoint3D *",
+          "parameterTypes": [
+            "const ax::Vec3 \u0026",
+            "const ax::Vec3 \u0026",
+            "ax::Rigidbody3D *"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            "nullptr"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getAngle",
+          "luaName": "getAngle",
+          "declaringType": "ax::HingeJoint3D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getLimits",
+          "luaName": "getLimits",
+          "declaringType": "ax::HingeJoint3D",
+          "returnType": "const ax::JointLimits \u0026",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMotor",
+          "luaName": "getMotor",
+          "declaringType": "ax::HingeJoint3D",
+          "returnType": "ax::JointMotor",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getSpring",
+          "luaName": "getSpring",
+          "declaringType": "ax::HingeJoint3D",
+          "returnType": "const ax::JointSpring \u0026",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getVelocity",
+          "luaName": "getVelocity",
+          "declaringType": "ax::HingeJoint3D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "hasLimits",
+          "luaName": "hasLimits",
+          "declaringType": "ax::HingeJoint3D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isUseMotor",
+          "luaName": "isUseMotor",
+          "declaringType": "ax::HingeJoint3D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setLimits",
+          "luaName": "setLimits",
+          "declaringType": "ax::HingeJoint3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::JointLimits \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setMotor",
+          "luaName": "setMotor",
+          "declaringType": "ax::HingeJoint3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::JointMotor \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setSpring",
+          "luaName": "setSpring",
+          "declaringType": "ax::HingeJoint3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::JointSpring \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setUseLimits",
+          "luaName": "setUseLimits",
+          "declaringType": "ax::HingeJoint3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setUseMotor",
+          "luaName": "setUseMotor",
+          "declaringType": "ax::HingeJoint3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "Joint3D",
+      "qualifiedName": "ax::Joint3D",
+      "luaName": "ax.Joint3D",
+      "luaClassName": "Joint3D",
+      "isAbstract": true,
+      "constructors": [],
+      "bases": [
+        "ax::Component",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "getAnchor",
+          "luaName": "getAnchor",
+          "declaringType": "ax::Joint3D",
+          "returnType": "const ax::Vec3 \u0026",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getAttachedBody",
+          "luaName": "getAttachedBody",
+          "declaringType": "ax::Joint3D",
+          "returnType": "ax::Rigidbody3D *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getAxis",
+          "luaName": "getAxis",
+          "declaringType": "ax::Joint3D",
+          "returnType": "const ax::Vec3 \u0026",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getConnectedAnchor",
+          "luaName": "getConnectedAnchor",
+          "declaringType": "ax::Joint3D",
+          "returnType": "const ax::Vec3 \u0026",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getConnectedAxis",
+          "luaName": "getConnectedAxis",
+          "declaringType": "ax::Joint3D",
+          "returnType": "const ax::Vec3 \u0026",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getConnectedBody",
+          "luaName": "getConnectedBody",
+          "declaringType": "ax::Joint3D",
+          "returnType": "ax::Rigidbody3D *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getCoordinateSpace",
+          "luaName": "getCoordinateSpace",
+          "declaringType": "ax::Joint3D",
+          "returnType": "ax::Joint3D::CoordinateSpace",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getWorld",
+          "luaName": "getWorld",
+          "declaringType": "ax::Joint3D",
+          "returnType": "ax::PhysicsWorld3D *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isAttached",
+          "luaName": "isAttached",
+          "declaringType": "ax::Joint3D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "onEnter",
+          "luaName": "onEnter",
+          "declaringType": "ax::Joint3D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "onExit",
+          "luaName": "onExit",
+          "declaringType": "ax::Joint3D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setAnchor",
+          "luaName": "setAnchor",
+          "declaringType": "ax::Joint3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec3 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setAnchors",
+          "luaName": "setAnchors",
+          "declaringType": "ax::Joint3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec3 \u0026",
+            "const ax::Vec3 \u0026"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setAnchorsInWorldSpace",
+          "luaName": "setAnchorsInWorldSpace",
+          "declaringType": "ax::Joint3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec3 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setAxes",
+          "luaName": "setAxes",
+          "declaringType": "ax::Joint3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec3 \u0026",
+            "const ax::Vec3 \u0026"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setAxesInWorldSpace",
+          "luaName": "setAxesInWorldSpace",
+          "declaringType": "ax::Joint3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec3 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setAxis",
+          "luaName": "setAxis",
+          "declaringType": "ax::Joint3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec3 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setConnectedAnchor",
+          "luaName": "setConnectedAnchor",
+          "declaringType": "ax::Joint3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec3 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setConnectedAxis",
+          "luaName": "setConnectedAxis",
+          "declaringType": "ax::Joint3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec3 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setConnectedBody",
+          "luaName": "setConnectedBody",
+          "declaringType": "ax::Joint3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::Rigidbody3D *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setCoordinateSpace",
+          "luaName": "setCoordinateSpace",
+          "declaringType": "ax::Joint3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::Joint3D::CoordinateSpace"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setUserData",
+          "luaName": "setUserData",
+          "declaringType": "ax::Joint3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "void *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "MeshCollider3D",
+      "qualifiedName": "ax::MeshCollider3D",
+      "luaName": "ax.MeshCollider3D",
+      "luaClassName": "MeshCollider3D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Collider3D",
+        "ax::PhysicsActor",
+        "ax::Component",
+        "ax::Object"
+      ],
+      "methods": [],
+      "fields": []
+    },
+    {
+      "nativeName": "PhysicsActor",
+      "qualifiedName": "ax::PhysicsActor",
+      "luaName": "ax.PhysicsActor",
+      "luaClassName": "PhysicsActor",
+      "isAbstract": true,
+      "constructors": [],
+      "bases": [
+        "ax::Component",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "getActorType",
+          "luaName": "getActorType",
+          "declaringType": "ax::PhysicsActor",
+          "returnType": "int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getSyncFlag",
+          "luaName": "getSyncFlag",
+          "declaringType": "ax::PhysicsActor",
+          "returnType": "ax::PhysicsActor::SyncFlag",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getTag",
+          "luaName": "getTag",
+          "declaringType": "ax::PhysicsActor",
+          "returnType": "unsigned int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getWorldTransform",
+          "luaName": "getWorldTransform",
+          "declaringType": "ax::PhysicsActor",
+          "returnType": "ax::Mat4",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isEventEnabled",
+          "luaName": "isEventEnabled",
+          "declaringType": "ax::PhysicsActor",
+          "returnType": "bool",
+          "parameterTypes": [
+            "ax::ContactEventBits"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "postSimulate",
+          "luaName": "postSimulate",
+          "declaringType": "ax::PhysicsActor",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "preSimulate",
+          "luaName": "preSimulate",
+          "declaringType": "ax::PhysicsActor",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setEventEnabled",
+          "luaName": "setEventEnabled",
+          "declaringType": "ax::PhysicsActor",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::ContactEventBits",
+            "bool"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setSyncFlag",
+          "luaName": "setSyncFlag",
+          "declaringType": "ax::PhysicsActor",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::PhysicsActor::SyncFlag"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setTag",
+          "luaName": "setTag",
+          "declaringType": "ax::PhysicsActor",
+          "returnType": "void",
+          "parameterTypes": [
+            "unsigned int"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "syncNodeToPhysics",
+          "luaName": "syncNodeToPhysics",
+          "declaringType": "ax::PhysicsActor",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "syncPhysicsToNode",
+          "luaName": "syncPhysicsToNode",
+          "declaringType": "ax::PhysicsActor",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "PhysicsWorld3D",
+      "qualifiedName": "ax::PhysicsWorld3D",
+      "luaName": "ax.PhysicsWorld3D",
+      "luaClassName": "PhysicsWorld3D",
+      "isAbstract": false,
+      "constructors": [
+        {
+          "parameterTypes": [],
+          "defaultValues": []
+        }
+      ],
+      "bases": [
+        "ax::Object",
+        "JPH::ContactListener",
+        "JPH::ObjectVsBroadPhaseLayerFilter",
+        "JPH::ObjectLayerPairFilter",
+        "JPH::BroadPhaseLayerInterface"
+      ],
+      "methods": [
+        {
+          "nativeName": "addPhysicsActor",
+          "luaName": "addPhysicsActor",
+          "declaringType": "ax::PhysicsWorld3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::PhysicsActor *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getGravity",
+          "luaName": "getGravity",
+          "declaringType": "ax::PhysicsWorld3D",
+          "returnType": "ax::Vec3",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isAutoStep",
+          "luaName": "isAutoStep",
+          "declaringType": "ax::PhysicsWorld3D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isDebugDrawEnabled",
+          "luaName": "isDebugDrawEnabled",
+          "declaringType": "ax::PhysicsWorld3D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isGlobalEventEnabled",
+          "luaName": "isGlobalEventEnabled",
+          "declaringType": "ax::PhysicsWorld3D",
+          "returnType": "bool",
+          "parameterTypes": [
+            "ax::ContactEventBits"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "release",
+          "luaName": "release",
+          "declaringType": "ax::PhysicsWorld3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::PhysicsWorld3D *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "removePhysicsActor",
+          "luaName": "removePhysicsActor",
+          "declaringType": "ax::PhysicsWorld3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::PhysicsActor *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setAutoStep",
+          "luaName": "setAutoStep",
+          "declaringType": "ax::PhysicsWorld3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setDebugDrawEnabled",
+          "luaName": "setDebugDrawEnabled",
+          "declaringType": "ax::PhysicsWorld3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setGlobalEventEnabled",
+          "luaName": "setGlobalEventEnabled",
+          "declaringType": "ax::PhysicsWorld3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::ContactEventBits",
+            "bool"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setGravity",
+          "luaName": "setGravity",
+          "declaringType": "ax::PhysicsWorld3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec3 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "stepSimulation",
+          "luaName": "stepSimulation",
+          "declaringType": "ax::PhysicsWorld3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "PivotJoint3D",
+      "qualifiedName": "ax::PivotJoint3D",
+      "luaName": "ax.PivotJoint3D",
+      "luaClassName": "PivotJoint3D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Joint3D",
+        "ax::Component",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::PivotJoint3D",
+          "returnType": "ax::PivotJoint3D *",
+          "parameterTypes": [
+            "ax::Rigidbody3D *"
+          ],
+          "defaultValues": [
+            "nullptr"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setAnchor",
+          "luaName": "setAnchor",
+          "declaringType": "ax::PivotJoint3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec3 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setConnectedAnchor",
+          "luaName": "setConnectedAnchor",
+          "declaringType": "ax::PivotJoint3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec3 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "Rigidbody3D",
+      "qualifiedName": "ax::Rigidbody3D",
+      "luaName": "ax.Rigidbody3D",
+      "luaClassName": "Rigidbody3D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::PhysicsActor",
+        "ax::Component",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "applyAngularImpulse",
+          "luaName": "applyAngularImpulse",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec3 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "applyForce",
+          "luaName": "applyForce",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec3 \u0026",
+            "const ax::Vec3 \u0026"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "applyImpulse",
+          "luaName": "applyImpulse",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec3 \u0026",
+            "const ax::Vec3 \u0026"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "applyTorque",
+          "luaName": "applyTorque",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec3 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "ax::Rigidbody3D *",
+          "parameterTypes": [
+            "ax::Collider3D *",
+            "float"
+          ],
+          "defaultValues": [
+            "nullptr",
+            "0"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getAngularDamping",
+          "luaName": "getAngularDamping",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getAngularVelocity",
+          "luaName": "getAngularVelocity",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "ax::Vec3",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getCollider",
+          "luaName": "getCollider",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "ax::Collider3D *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getCollisionDetectionMode",
+          "luaName": "getCollisionDetectionMode",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "ax::Rigidbody3D::CollisionDetectionMode",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getGravityScale",
+          "luaName": "getGravityScale",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getInertia",
+          "luaName": "getInertia",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "ax::Vec3",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getLinearDamping",
+          "luaName": "getLinearDamping",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getLinearVelocity",
+          "luaName": "getLinearVelocity",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "ax::Vec3",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMass",
+          "luaName": "getMass",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMaterial",
+          "luaName": "getMaterial",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "ax::PhysicsMaterial",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMotionType",
+          "luaName": "getMotionType",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "ax::Rigidbody3D::MotionType",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getPosition",
+          "luaName": "getPosition",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "ax::Vec3",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getRotation",
+          "luaName": "getRotation",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "ax::Quat",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getTotalForce",
+          "luaName": "getTotalForce",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "ax::Vec3",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getTotalTorque",
+          "luaName": "getTotalTorque",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "ax::Vec3",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getWorld",
+          "luaName": "getWorld",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "ax::PhysicsWorld3D *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getWorldTransform",
+          "luaName": "getWorldTransform",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "ax::Mat4",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isAllowSleeping",
+          "luaName": "isAllowSleeping",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isAttached",
+          "luaName": "isAttached",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isDynamic",
+          "luaName": "isDynamic",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isKinematic",
+          "luaName": "isKinematic",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isRotationEnabled",
+          "luaName": "isRotationEnabled",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "bool",
+          "parameterTypes": [
+            "int"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "local2World",
+          "luaName": "local2World",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "ax::Vec3",
+          "parameterTypes": [
+            "const ax::Vec3 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setActive",
+          "luaName": "setActive",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setAllowSleeping",
+          "luaName": "setAllowSleeping",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setAngularDamping",
+          "luaName": "setAngularDamping",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setAngularVelocity",
+          "luaName": "setAngularVelocity",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec3 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setCollisionDetectionMode",
+          "luaName": "setCollisionDetectionMode",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::Rigidbody3D::CollisionDetectionMode"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setDynamic",
+          "luaName": "setDynamic",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setEnabled",
+          "luaName": "setEnabled",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setGravityScale",
+          "luaName": "setGravityScale",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setInertia",
+          "luaName": "setInertia",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec3 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setKinematic",
+          "luaName": "setKinematic",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setLinearDamping",
+          "luaName": "setLinearDamping",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setLinearVelocity",
+          "luaName": "setLinearVelocity",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec3 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setMass",
+          "luaName": "setMass",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setMassData",
+          "luaName": "setMassData",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float",
+            "const ax::Vec3 \u0026"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setMaterial",
+          "luaName": "setMaterial",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::PhysicsMaterial \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setMotionType",
+          "luaName": "setMotionType",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::Rigidbody3D::MotionType"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setPosition",
+          "luaName": "setPosition",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec3 \u0026",
+            "bool"
+          ],
+          "defaultValues": [
+            null,
+            "false"
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setRotation",
+          "luaName": "setRotation",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Quat \u0026",
+            "bool"
+          ],
+          "defaultValues": [
+            null,
+            "false"
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setRotationEnabled",
+          "luaName": "setRotationEnabled",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::bvec3"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setUserData",
+          "luaName": "setUserData",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "void *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "syncNodeToPhysics",
+          "luaName": "syncNodeToPhysics",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "syncPhysicsToNode",
+          "luaName": "syncPhysicsToNode",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "world2Local",
+          "luaName": "world2Local",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "ax::Vec3",
+          "parameterTypes": [
+            "const ax::Vec3 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "SixDofJoint3D",
+      "qualifiedName": "ax::SixDofJoint3D",
+      "luaName": "ax.SixDofJoint3D",
+      "luaClassName": "SixDofJoint3D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Joint3D",
+        "ax::Component",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::SixDofJoint3D",
+          "returnType": "ax::SixDofJoint3D *",
+          "parameterTypes": [
+            "ax::Rigidbody3D *"
+          ],
+          "defaultValues": [
+            "nullptr"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "createInWorldSpace",
+          "luaName": "createInWorldSpace",
+          "declaringType": "ax::SixDofJoint3D",
+          "returnType": "ax::SixDofJoint3D *",
+          "parameterTypes": [
+            "const ax::Vec3 \u0026",
+            "const ax::Vec3 \u0026",
+            "ax::Rigidbody3D *"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            "nullptr"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getAngularLimits",
+          "luaName": "getAngularLimits",
+          "declaringType": "ax::SixDofJoint3D",
+          "returnType": "const ax::SixDofLimits \u0026",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getLinearLimits",
+          "luaName": "getLinearLimits",
+          "declaringType": "ax::SixDofJoint3D",
+          "returnType": "const ax::SixDofLimits \u0026",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isLimited",
+          "luaName": "isLimited",
+          "declaringType": "ax::SixDofJoint3D",
+          "returnType": "bool",
+          "parameterTypes": [
+            "int"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setAngularLimits",
+          "luaName": "setAngularLimits",
+          "declaringType": "ax::SixDofJoint3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::SixDofLimits \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setLinearLimits",
+          "luaName": "setLinearLimits",
+          "declaringType": "ax::SixDofJoint3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::SixDofLimits \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "SliderJoint3D",
+      "qualifiedName": "ax::SliderJoint3D",
+      "luaName": "ax.SliderJoint3D",
+      "luaClassName": "SliderJoint3D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Joint3D",
+        "ax::Component",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "clearLimits",
+          "luaName": "clearLimits",
+          "declaringType": "ax::SliderJoint3D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::SliderJoint3D",
+          "returnType": "ax::SliderJoint3D *",
+          "parameterTypes": [
+            "ax::Rigidbody3D *"
+          ],
+          "defaultValues": [
+            "nullptr"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "createInWorldSpace",
+          "luaName": "createInWorldSpace",
+          "declaringType": "ax::SliderJoint3D",
+          "returnType": "ax::SliderJoint3D *",
+          "parameterTypes": [
+            "const ax::Vec3 \u0026",
+            "const ax::Vec3 \u0026",
+            "const ax::Vec3 \u0026",
+            "ax::Rigidbody3D *"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            null,
+            "nullptr"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getLimits",
+          "luaName": "getLimits",
+          "declaringType": "ax::SliderJoint3D",
+          "returnType": "const ax::JointLimits \u0026",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMotor",
+          "luaName": "getMotor",
+          "declaringType": "ax::SliderJoint3D",
+          "returnType": "ax::JointMotor",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getSpring",
+          "luaName": "getSpring",
+          "declaringType": "ax::SliderJoint3D",
+          "returnType": "const ax::JointSpring \u0026",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getVelocity",
+          "luaName": "getVelocity",
+          "declaringType": "ax::SliderJoint3D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "hasLimits",
+          "luaName": "hasLimits",
+          "declaringType": "ax::SliderJoint3D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isUseMotor",
+          "luaName": "isUseMotor",
+          "declaringType": "ax::SliderJoint3D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setLimits",
+          "luaName": "setLimits",
+          "declaringType": "ax::SliderJoint3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::JointLimits \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setMotor",
+          "luaName": "setMotor",
+          "declaringType": "ax::SliderJoint3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::JointMotor \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setSpring",
+          "luaName": "setSpring",
+          "declaringType": "ax::SliderJoint3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::JointSpring \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setUseMotor",
+          "luaName": "setUseMotor",
+          "declaringType": "ax::SliderJoint3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "SphereCollider3D",
+      "qualifiedName": "ax::SphereCollider3D",
+      "luaName": "ax.SphereCollider3D",
+      "luaClassName": "SphereCollider3D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Collider3D",
+        "ax::PhysicsActor",
+        "ax::Component",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::SphereCollider3D",
+          "returnType": "ax::SphereCollider3D *",
+          "parameterTypes": [
+            "float",
+            "const ax::PhysicsMaterial \u0026"
+          ],
+          "defaultValues": [
+            null,
+            "ax::DEFAULT_PHYSICS_MATERIAL"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    }
+  ],
+  "enums": [
+    {
+      "nativeName": "Type",
+      "qualifiedName": "ax::Collider3D::Type",
+      "ownerQualifiedName": "ax::Collider3D",
+      "values": [
+        {
+          "name": "UNKNOWN",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "BOX",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "SPHERE",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        },
+        {
+          "name": "CYLINDER",
+          "signedValue": 3,
+          "unsignedValue": 3,
+          "isUnsigned": false
+        },
+        {
+          "name": "CAPSULE",
+          "signedValue": 4,
+          "unsignedValue": 4,
+          "isUnsigned": false
+        },
+        {
+          "name": "CONVEX",
+          "signedValue": 5,
+          "unsignedValue": 5,
+          "isUnsigned": false
+        },
+        {
+          "name": "MESH",
+          "signedValue": 6,
+          "unsignedValue": 6,
+          "isUnsigned": false
+        },
+        {
+          "name": "HEIGHT_FIELD",
+          "signedValue": 7,
+          "unsignedValue": 7,
+          "isUnsigned": false
+        },
+        {
+          "name": "COMPOUND",
+          "signedValue": 8,
+          "unsignedValue": 8,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "EventCode",
+      "qualifiedName": "ax::ContactEvent3D::EventCode",
+      "ownerQualifiedName": "ax::ContactEvent3D",
+      "values": [
+        {
+          "name": "None",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "ContactBegin",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "ContactEnd",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        },
+        {
+          "name": "CollisionHit",
+          "signedValue": 3,
+          "unsignedValue": 3,
+          "isUnsigned": false
+        },
+        {
+          "name": "SensorBegin",
+          "signedValue": 4,
+          "unsignedValue": 4,
+          "isUnsigned": false
+        },
+        {
+          "name": "SensorEnd",
+          "signedValue": 5,
+          "unsignedValue": 5,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "CoordinateSpace",
+      "qualifiedName": "ax::Joint3D::CoordinateSpace",
+      "ownerQualifiedName": "ax::Joint3D",
+      "values": [
+        {
+          "name": "Local",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "World",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "SyncFlag",
+      "qualifiedName": "ax::PhysicsActor::SyncFlag",
+      "ownerQualifiedName": "ax::PhysicsActor",
+      "values": [
+        {
+          "name": "NONE",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "NODE_TO_PHYSICS",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "PHYSICS_TO_NODE",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        },
+        {
+          "name": "NODE_AND_PHYSICS",
+          "signedValue": 3,
+          "unsignedValue": 3,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "CollisionDetectionMode",
+      "qualifiedName": "ax::Rigidbody3D::CollisionDetectionMode",
+      "ownerQualifiedName": "ax::Rigidbody3D",
+      "values": [
+        {
+          "name": "Discrete",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "Continuous",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "MotionType",
+      "qualifiedName": "ax::Rigidbody3D::MotionType",
+      "ownerQualifiedName": "ax::Rigidbody3D",
+      "values": [
+        {
+          "name": "Unspec",
+          "signedValue": -1,
+          "unsignedValue": 4294967295,
+          "isUnsigned": false
+        },
+        {
+          "name": "Static",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "Dynamic",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        },
+        {
+          "name": "Kinematic",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        }
+      ]
+    }
+  ]
+}

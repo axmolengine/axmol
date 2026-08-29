@@ -1,0 +1,258 @@
+{
+  "formatVersion": 1,
+  "module": "sceneio",
+  "registrationName": "ax_sceneio",
+  "luaNamespace": "ax",
+  "luaTypeNamespace": "ax",
+  "conditionalExpression": "",
+  "classes": [
+    {
+      "nativeName": "CSLoader",
+      "qualifiedName": "ax::CSLoader",
+      "luaName": "ax.CSLoader",
+      "luaClassName": "CSLoader",
+      "isAbstract": false,
+      "constructors": [
+        {
+          "parameterTypes": [],
+          "defaultValues": []
+        }
+      ],
+      "bases": [],
+      "methods": [
+        {
+          "nativeName": "bindCallback",
+          "luaName": "bindCallback",
+          "declaringType": "ax::CSLoader",
+          "returnType": "bool",
+          "parameterTypes": [
+            "std::string_view",
+            "std::string_view",
+            "ax::ui::Widget *",
+            "ax::Node *"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "createNodeFromJson",
+          "luaName": "createNodeFromJson",
+          "declaringType": "ax::CSLoader",
+          "returnType": "ax::Node *",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "createNodeWithFlatBuffersFile",
+          "luaName": "createNodeWithFlatBuffersFile",
+          "declaringType": "ax::CSLoader",
+          "returnType": "ax::Node *",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "createNodeWithFlatBuffersForSimulator",
+          "luaName": "createNodeWithFlatBuffersForSimulator",
+          "declaringType": "ax::CSLoader",
+          "returnType": "ax::Node *",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "createNodeWithVisibleSize",
+          "luaName": "createNodeWithVisibleSize",
+          "declaringType": "ax::CSLoader",
+          "returnType": "ax::Node *",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "createNodeWithVisibleSize",
+          "luaName": "createNodeWithVisibleSize",
+          "declaringType": "ax::CSLoader",
+          "returnType": "ax::Node *",
+          "parameterTypes": [
+            "std::string_view",
+            "const ax::ccNodeLoadCallback \u0026"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "destroyInstance",
+          "luaName": "destroyInstance",
+          "declaringType": "ax::CSLoader",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getInstance",
+          "luaName": "getInstance",
+          "declaringType": "ax::CSLoader",
+          "returnType": "ax::CSLoader *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getJsonPath",
+          "luaName": "getJsonPath",
+          "declaringType": "ax::CSLoader",
+          "returnType": "std::string",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "init",
+          "luaName": "init",
+          "declaringType": "ax::CSLoader",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isRecordJsonPath",
+          "luaName": "isRecordJsonPath",
+          "declaringType": "ax::CSLoader",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "loadNodeWithContent",
+          "luaName": "loadNodeWithContent",
+          "declaringType": "ax::CSLoader",
+          "returnType": "ax::Node *",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "loadNodeWithFile",
+          "luaName": "loadNodeWithFile",
+          "declaringType": "ax::CSLoader",
+          "returnType": "ax::Node *",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "registReaderObject",
+          "luaName": "registReaderObject",
+          "declaringType": "ax::CSLoader",
+          "returnType": "void",
+          "parameterTypes": [
+            "std::string_view",
+            "ax::ObjectFactory::Instance"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setJsonPath",
+          "luaName": "setJsonPath",
+          "declaringType": "ax::CSLoader",
+          "returnType": "void",
+          "parameterTypes": [
+            "std::string"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setRecordJsonPath",
+          "luaName": "setRecordJsonPath",
+          "declaringType": "ax::CSLoader",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    }
+  ],
+  "enums": []
+}

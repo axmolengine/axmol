@@ -89,7 +89,7 @@ local function MotionStreakTest1()
     streak:runAction(colorAction)
 
 	firstTick = true
-	layer:registerScriptHandler(MotionStreakTest1_onEnterOrExit)
+	layer:setLifecycleCallback(MotionStreakTest1_onEnterOrExit)
 
 	Helper.titleLabel:setString("MotionStreak test 1")
 	return layer
@@ -111,7 +111,7 @@ local function MotionStreakTest2()
     end
 
     local listener = ax.PointerEventListener:create()
-    listener:registerScriptHandler(onPointerMove,ax.Handler.EVENT_POINTER_MOVE )
+    listener.onPointerMove = onPointerMove
     local eventDispatcher = layer:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, layer)
 
@@ -158,7 +158,7 @@ local function Issue1358()
     fAngle = 0
 
 	firstTick = true
-	layer:registerScriptHandler(Issue1358_onEnterOrExit)
+	layer:setLifecycleCallback(Issue1358_onEnterOrExit)
 
 	Helper.titleLabel:setString("Issue 1358")
 	Helper.subtitleLabel:setString("The tail should use the texture")

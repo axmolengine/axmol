@@ -43,11 +43,11 @@ function TerrainSimple:init()
     self._terrain:setDrawWire(false)
 
     local listener = ax.PointerEventListener:create()
-    listener:registerScriptHandler(function(event)
+    listener.onPointerMove = function(event)
         local delta = ax.Director:getInstance():getDeltaTime()
         local touch = event
         local location = event:getWorldPoint()
-        local previousLocation = event:getPreviousLocation()
+        local previousLocation = event:getPrevWorldPoint()
         local newPos = {x=previousLocation.x - location.x, y=previousLocation.y - location.y}
 
         local matTransform = self:getNodeToWorldTransform()
@@ -65,7 +65,7 @@ function TerrainSimple:init()
         cameraPos = { x = cameraPos.x + cameraRightDir.x * newPos.x * 0.5 * delta, y = cameraPos.y + cameraRightDir.y * newPos.x * 0.5 * delta, z = cameraPos.z + cameraRightDir.z * newPos.x * 0.5 * delta }
         self._camera:setPosition3D(cameraPos)
 
-    end,ax.Handler.EVENT_POINTER_MOVE)
+    end
 
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)
@@ -120,7 +120,7 @@ end
 
 function Player:init()
     self._headingAxis = ax.vec3(0.0, 0.0, 0.0)
-    self:scheduleUpdateWithPriorityLua(function(dt)
+    self:onUpdate(function(dt)
         local curPos = self:getPosition3D()
         if self._playerState == PLAER_STATE.IDLE then
 
@@ -163,9 +163,9 @@ function Player:init()
         local playerPos = self:getPosition3D()
         self._cam:setPosition3D(ax.vec3add(playerPos, camera_offset))
         self:updateState()
-    end, 0)
+    end)
 
-    self:registerScriptHandler(function (event)
+    self:setLifecycleCallback(function (event)
         -- body
         if "exit" == event then
             self:unscheduleUpdate()
@@ -201,11 +201,11 @@ function TerrainWalkThru:init()
 
     local listener = ax.PointerEventListener:create()
 
-    listener:registerScriptHandler(function(event)
+    listener.onPointerDown = function(event)
 
-    end,ax.Handler.EVENT_POINTER_DOWN)
+    end
 
-    listener:registerScriptHandler(function(event)
+    listener.onPointerUp = function(event)
 
         local touch = event
         local location = event:getPoint()
@@ -242,7 +242,7 @@ function TerrainWalkThru:init()
                 self._player._playerState = PLAER_STATE.FORWARD
             end
         end
-    end,ax.Handler.EVENT_POINTER_UP)
+    end
 
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)

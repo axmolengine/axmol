@@ -193,14 +193,6 @@ local function Effect5()
     local  stopEffect = ax.Sequence:create(effect, ax.DelayTime:create(2), ax.StopGrid:create())
     local  bg = ret:getChildByTag(kTagBackground)
     bg:runAction(stopEffect)
-    local function onNodeEvent(event)
-        if event == "exit" then
-            ax.Director:getInstance():setProjection(ax.DIRECTOR_PROJECTION_3D)
-        end
-    end
-
-    ret:registerScriptHandler(onNodeEvent)
-
     return ret
 end
 

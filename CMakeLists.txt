@@ -70,6 +70,11 @@ if(AX_BUILD_TESTS)
     add_test_target(unit-tests ${_AX_ROOT}/tests/unit-tests)
   endif()
 
+  # Headless Lua binding regression tests (no render context required).
+  if(AX_ENABLE_EXT_LUA)
+    add_test_target(lua-binding-runtime ${_AX_ROOT}/tests/lua-binding-runtime)
+  endif()
+
   # add fairygui tests when fairygui extension is enabled
   if(AX_ENABLE_EXT_FAIRYGUI)
     add_test_target(fairygui-tests ${_AX_ROOT}/tests/fairygui-tests)

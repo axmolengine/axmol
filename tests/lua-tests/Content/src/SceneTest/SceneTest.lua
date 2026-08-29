@@ -67,7 +67,7 @@ SceneTestLayer1 = function()
         end
     end
 
-    ret:registerScriptHandler(onNodeEvent)
+    ret:setLifecycleCallback(onNodeEvent)
     return ret
 end
 

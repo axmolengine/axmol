@@ -217,7 +217,7 @@ local function BugTest624()
 			scheduler:unscheduleScriptEntry(BugTest624_entry)
 		end
     end
-    pLayer:registerScriptHandler(BugTest624_OnEnterOrExit)
+    pLayer:setLifecycleCallback(BugTest624_OnEnterOrExit)
 
     return pLayer
 end
@@ -249,7 +249,7 @@ function BugTest624_2()
 			scheduler:unscheduleScriptEntry(BugTest624_2_entry)
 		end
     end
-    pLayer:registerScriptHandler(BugTest624_2_OnEnterOrExit)
+    pLayer:setLifecycleCallback(BugTest624_2_OnEnterOrExit)
 end
 
 --BugTest886
@@ -329,8 +329,8 @@ local function BugTest914()
 		onPointerMove(event)
     end
     local listener = ax.PointerEventListener:create()
-    listener:registerScriptHandler(onTouchBegan,ax.Handler.EVENT_POINTER_DOWN )
-    listener:registerScriptHandler(onPointerMove,ax.Handler.EVENT_POINTER_MOVE )
+    listener.onPointerDown = onTouchBegan
+    listener.onPointerMove = onPointerMove
 
     local eventDispatcher = layer:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, layer)
@@ -384,7 +384,7 @@ local function BugTest1159()
         end
     end
 
-    pLayer:registerScriptHandler(onNodeEvent)
+    pLayer:setLifecycleCallback(onNodeEvent)
 
 	return pLayer
 end
@@ -644,8 +644,8 @@ local function BugsTestMainLayer()
         ptBeginPos = event:getWorldPoint()
     end
     local listener = ax.PointerEventListener:create()
-    listener:registerScriptHandler(onTouchBegan,ax.Handler.EVENT_POINTER_DOWN )
-    listener:registerScriptHandler(onPointerMove,ax.Handler.EVENT_POINTER_MOVE )
+    listener.onPointerDown = onTouchBegan
+    listener.onPointerMove = onPointerMove
 
     local eventDispatcher = ret:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, ret)

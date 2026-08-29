@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Axmol Lua binding module",
+  "type": "object",
+  "required": ["module", "headers", "target_namespace"],
+  "properties": {
+    "module": { "type": "string", "pattern": "^ax_[a-z0-9_]+$" },
+    "target_namespace": { "type": "string" },
+    "cpp_namespace": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "array", "items": { "type": "string" } },
+        { "type": "null" }
+      ]
+    },
+    "macro_judgement": { "type": ["string", "null"] },
+    "headers": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "clang_flags": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "classes": { "$ref": "#/$defs/stringList" },
+    "abstract_classes": { "$ref": "#/$defs/stringList" },
+    "no_constructors": { "$ref": "#/$defs/stringList" },
+    "classes_have_no_parents": { "$ref": "#/$defs/stringList" },
+    "base_classes_to_skip": { "$ref": "#/$defs/stringList" },
+    "fields": { "$ref": "#/$defs/fieldList" },
+    "skip": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["class", "methods"],
+        "properties": {
+          "class": { "type": "string" },
+          "methods": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "rename_functions": { "$ref": "#/$defs/renameList" },
+    "rename_classes": { "$ref": "#/$defs/classRenameList" }
+  },
+  "$defs": {
+    "stringList": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "renameList": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["class", "method", "luaName"],
+        "properties": {
+          "class": { "type": "string" },
+          "method": { "type": "string" },
+          "luaName": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "classRenameList": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["native", "luaName"],
+        "properties": {
+          "native": { "type": "string" },
+          "luaName": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "fieldList": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["class", "names"],
+        "properties": {
+          "class": { "type": "string" },
+          "names": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": true
+}

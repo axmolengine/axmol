@@ -182,14 +182,17 @@ function Camera3DTestDemo:onEnter()
     local s = ax.Director:getInstance():getCanvasSize()
     local listener = ax.PointerEventListener:create()
 
-    listener:registerScriptHandler(function(event)
+    listener.onPointerDown = function(event)
+        -- InputSystem routes move/up only to the listener that captured the
+        -- pointer during PointerDown.
+        return true
+    end
 
-    end,ax.Handler.EVENT_POINTER_DOWN)
-
-    listener:registerScriptHandler(function(event)
+    listener.onPointerMove = function(event)
         if event ~= nil then
             local location = event:getWorldPoint()
-            local newPos  = ax.p(event:getPreviousLocation().x - location.x, event:getPreviousLocation().y - location.y)
+            local previous = event:getPrevWorldPoint()
+            local newPos  = ax.p(previous.x - location.x, previous.y - location.y)
             if self._cameraType == CameraType.FreeCamera or self._cameraType == CameraType.FirstCamera then
                 local cameraRightDir
                 local transformMat = self._camera:getNodeToWorldTransform()
@@ -213,9 +216,9 @@ function Camera3DTestDemo:onEnter()
                 end
             end
         end
-    end, ax.Handler.EVENT_POINTER_MOVE)
+    end
 
-    listener:registerScriptHandler(function(event)
+    listener.onPointerUp = function(event)
         local location = event:getPoint()
         if self._camera ~= nil and self._sprite3D ~= nil and self._cameraType == CameraType.ThirdCamera then
             local nearP = ax.vec3(location.x, location.y, -1.0)
@@ -240,7 +243,7 @@ function Camera3DTestDemo:onEnter()
             if p.z < -100 then p.z = -100 end
             self._targetPos = p
         end
-    end, ax.Handler.EVENT_POINTER_UP)
+    end
 
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)
@@ -453,7 +456,7 @@ function Camera3DTestDemo:init()
     Helper.titleLabel:setString(self:title())
     Helper.subtitleLabel:setString(self:subtitle())
 
-    self:registerScriptHandler(function (event)
+    self:setLifecycleCallback(function (event)
     if event == "enter" then
         self:onEnter()
     elseif event == "exit" then
@@ -477,7 +480,7 @@ function CameraRotationTest:init()
     -- body
     Helper.titleLabel:setString(self:title())
     Helper.subtitleLabel:setString(self:subtitle())
-    self:registerScriptHandler(function (event)
+    self:setLifecycleCallback(function (event)
         if event == "enter" then
             self:onEnter()
         elseif event == "exit" then
@@ -550,15 +553,15 @@ function CameraRotationTest:onEnter()
 
     --Listener
     lis = ax.PointerEventListener:create()
-    lis:registerScriptHandler(function(event)
+    lis.onPointerDown = function(event)
         return true
-    end,ax.Handler.EVENT_POINTER_DOWN )
+    end
 
-    lis:registerScriptHandler(function(event)
+    lis.onPointerMove = function(event)
         if not event:isPrimaryPressed() then
             return
         end
-        local dx = event:getDelta().x
+        local dx = ax.pSub(event:getPoint(), event:getPrevPoint()).x
         local rot = camControlNode:getRotation3D()
         rot.y = rot.y + dx
         camControlNode:setRotation3D(rot)
@@ -568,7 +571,7 @@ function CameraRotationTest:onEnter()
         worldPos = decompose.translation
         ax.Camera:getDefaultCamera():setPosition3D(worldPos)
         ax.Camera:getDefaultCamera():lookAt(camControlNode:getPosition3D())
-    end, ax.Handler.EVENT_POINTER_MOVE)
+    end
 
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(lis, self)
@@ -608,7 +611,7 @@ function FogTestDemo:init()
     Helper.titleLabel:setString(self:title())
     Helper.subtitleLabel:setString(self:subtitle())
 
-    self:registerScriptHandler(function (event)
+    self:setLifecycleCallback(function (event)
         if event == "enter" then
             self:onEnter()
         elseif event == "exit" then
@@ -620,10 +623,10 @@ end
 function FogTestDemo:setEventListener()
     local listener = ax.PointerEventListener:create()
 
-    listener:registerScriptHandler(function(event)
+    listener.onPointerMove = function(event)
         if event ~= nil then
             local touch = event
-            local prelocation = event:getPreviousScreenLocation()
+            local prelocation = event:getPrevPoint()
             local location = event:getPoint()
             local newPos = ax.p(prelocation.x - location.x, prelocation.y - location.y)
             if self._cameraType == CameraType.FreeCamera then
@@ -645,7 +648,7 @@ function FogTestDemo:setEventListener()
 
             end
         end
-    end, ax.Handler.EVENT_POINTER_MOVE)
+    end
 
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)
@@ -824,7 +827,7 @@ function CameraArcBallDemo:init()
     Helper.titleLabel:setString(self:title())
     Helper.subtitleLabel:setString(self:subtitle())
 
-    self:registerScriptHandler(function (event)
+    self:setLifecycleCallback(function (event)
         if event == "enter" then
             self:onEnter()
         elseif event == "exit" then
@@ -882,11 +885,11 @@ end
 function CameraArcBallDemo:setEventListener()
     local listener = ax.PointerEventListener:create()
 
-    listener:registerScriptHandler(function(event)
+    listener.onPointerMove = function(event)
         if event ~= nil then
             if self._operate == OperateCamType.RotateCamera then
                 local visibleSize = ax.Director:getInstance():getVisibleSize()
-                local prelocation = event:getPreviousScreenLocation()
+                local prelocation = event:getPrevPoint()
                 local location = event:getPoint()
                 location.x = 2.0 * (location.x) / (visibleSize.width) - 1.0
                 location.y = 2.0 * (visibleSize.height - location.y) / (visibleSize.height) - 1.0
@@ -914,7 +917,7 @@ function CameraArcBallDemo:setEventListener()
                 self:updateCameraTransform()
 
             elseif self._operate == OperateCamType.MoveCamera then
-                local previousLocation = event:getPreviousLocation()
+                local previousLocation = event:getPrevWorldPoint()
                 local location         = event:getWorldPoint()
                 local newPos = ax.p(previousLocation.x - location.x, previousLocation.y - location.y)
                 self._distanceZ = self._distanceZ - newPos.y * 0.1
@@ -922,7 +925,7 @@ function CameraArcBallDemo:setEventListener()
                 self:updateCameraTransform()
             end
         end
-    end, ax.Handler.EVENT_POINTER_MOVE)
+    end
 
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)

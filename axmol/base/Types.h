@@ -346,7 +346,7 @@ struct ContextAttrs
 /** @struct Acceleration
  * The device accelerometer reports values for each axis in units of g-force.
  */
-class AX_DLL Acceleration : public Object
+class AX_DLL Acceleration
 {
 public:
     double x = 0;

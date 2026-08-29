@@ -66,7 +66,7 @@ function Sprite1.create()
     Sprite1.addNewSpriteWithCoords(layer, ax.p(size.width/2, size.height/2))
 
     local listener = ax.PointerEventListener:create()
-    listener:registerScriptHandler(Sprite1.onTouchesEnd,ax.Handler.EVENT_POINTER_UP )
+    listener.onPointerUp = Sprite1.onTouchesEnd
     local eventDispatcher = layer:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, layer)
 
@@ -126,7 +126,7 @@ function SpriteBatchNode1.create()
     SpriteBatchNode1.addNewSpriteWithCoords(layer, ax.p(size.width/2, size.height/2))
 
     local listener = ax.PointerEventListener:create()
-    listener:registerScriptHandler(Sprite1.onTouchesEnd,ax.Handler.EVENT_POINTER_UP )
+    listener.onPointerUp = Sprite1.onTouchesEnd
     local eventDispatcher = layer:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, layer)
 
@@ -193,7 +193,7 @@ function SpriteColorOpacity.setLayerSprite(layer)
     layer:addChild(sprite7, 0, kTagSprite7)
     layer:addChild(sprite8, 0, kTagSprite8)
 
-    layer:registerScriptHandler(SpriteColorOpacity.onEnterOrExit)
+    layer:setLifecycleCallback(SpriteColorOpacity.onEnterOrExit)
 end
 
 function SpriteColorOpacity.onEnterOrExit(tag)
@@ -218,7 +218,7 @@ function SpriteColorOpacity.create()
     local layer = ax.Layer:create()
     Helper.initWithLayer(layer)
     SpriteColorOpacity.setLayerSprite(layer)
-    layer:registerScriptHandler(SpriteColorOpacity.onEnterOrExit)
+    layer:setLifecycleCallback(SpriteColorOpacity.onEnterOrExit)
     Helper.titleLabel:setString("Sprite: Color & Opacity")
 
     return layer
@@ -345,7 +345,7 @@ function SpriteFrameTest.create()
     local layer = ax.Layer:create()
     Helper.initWithLayer(layer)
 
-    layer:registerScriptHandler(SpriteFrameTest.onEnterOrExit)
+    layer:setLifecycleCallback(SpriteFrameTest.onEnterOrExit)
     Helper.titleLabel:setString("Sprite vs. SpriteBatchNode animation")
 
     return layer
@@ -369,8 +369,8 @@ function SpriteFrameAliasNameTest.onEnter()
     sprite:setPosition(ax.p(s.width * 0.5, s.height * 0.5))
 
     local spriteBatch = ax.SpriteBatchNode:create("animations/grossini-aliases.png")
-    cclog("spriteBatch = " .. tostring(tolua.isnull(spriteBatch)))
-    cclog("sprite = " .. tostring(tolua.isnull(sprite)))
+    cclog("spriteBatch = " .. tostring(axlua.isnull(spriteBatch)))
+    cclog("sprite = " .. tostring(axlua.isnull(sprite)))
     spriteBatch:addChild(sprite)
     Helper.currentLayer:addChild(spriteBatch)
 
@@ -401,7 +401,7 @@ function SpriteFrameAliasNameTest.create()
     local layer = ax.Layer:create()
     Helper.initWithLayer(layer)
 
-    layer:registerScriptHandler(SpriteFrameAliasNameTest.onEnterOrExit)
+    layer:setLifecycleCallback(SpriteFrameAliasNameTest.onEnterOrExit)
     Helper.titleLabel:setString("SpriteFrame Alias Name")
     Helper.subtitleLabel:setString("SpriteFrames are obtained using the alias name")
 
@@ -575,7 +575,7 @@ end
 
 function SpriteOffsetAnchorRotation.create()
     local layer = ax.Layer:create()
-    layer:registerScriptHandler(SpriteOffsetAnchorRotation.eventHandler)
+    layer:setLifecycleCallback(SpriteOffsetAnchorRotation.eventHandler)
     Helper.initWithLayer(layer)
 
     layer = SpriteOffsetAnchorRotation.initLayer(layer)
@@ -653,7 +653,7 @@ end
 
 function SpriteBatchNodeOffsetAnchorRotation.create()
     local layer = ax.Layer:create()
-    layer:registerScriptHandler(SpriteBatchNodeOffsetAnchorRotation.eventHandler)
+    layer:setLifecycleCallback(SpriteBatchNodeOffsetAnchorRotation.eventHandler)
     Helper.initWithLayer(layer)
 
     layer = SpriteBatchNodeOffsetAnchorRotation.initLayer(layer)
@@ -731,7 +731,7 @@ end
 
 function SpriteOffsetAnchorScale.create()
     local layer = ax.Layer:create()
-    layer:registerScriptHandler(SpriteOffsetAnchorScale.eventHandler)
+    layer:setLifecycleCallback(SpriteOffsetAnchorScale.eventHandler)
     Helper.initWithLayer(layer)
 
     layer = SpriteOffsetAnchorScale.initLayer(layer)
@@ -815,7 +815,7 @@ end
 function SpriteBatchNodeOffsetAnchorScale.create()
     local layer = ax.Layer:create()
     Helper.initWithLayer(layer)
-    layer:registerScriptHandler(SpriteBatchNodeOffsetAnchorScale.eventHandler)
+    layer:setLifecycleCallback(SpriteBatchNodeOffsetAnchorScale.eventHandler)
 
     layer = SpriteBatchNodeOffsetAnchorScale.initLayer(layer)
     Helper.titleLabel:setString("SpriteBatchNode offset + anchor + scale")
@@ -895,7 +895,7 @@ end
 
 function SpriteOffsetAnchorSkew.create()
     local layer = ax.Layer:create()
-    layer:registerScriptHandler(SpriteOffsetAnchorSkew.eventHandler)
+    layer:setLifecycleCallback(SpriteOffsetAnchorSkew.eventHandler)
     Helper.initWithLayer(layer)
 
     layer = SpriteOffsetAnchorSkew.initLayer(layer)
@@ -972,7 +972,7 @@ end
 
 function SpriteOffsetAnchorRotationalSkew.create()
     local layer = ax.Layer:create()
-    layer:registerScriptHandler(SpriteOffsetAnchorRotationalSkew.eventHandler)
+    layer:setLifecycleCallback(SpriteOffsetAnchorRotationalSkew.eventHandler)
     Helper.initWithLayer(layer)
 
     layer = SpriteOffsetAnchorRotationalSkew.initLayer(layer)
@@ -1055,7 +1055,7 @@ end
 
 function SpriteBatchNodeOffsetAnchorSkew.create()
     local layer = ax.Layer:create()
-    layer:registerScriptHandler(SpriteBatchNodeOffsetAnchorSkew.eventHandler)
+    layer:setLifecycleCallback(SpriteBatchNodeOffsetAnchorSkew.eventHandler)
     Helper.initWithLayer(layer)
 
     layer = SpriteBatchNodeOffsetAnchorSkew.initLayer(layer)
@@ -1139,7 +1139,7 @@ end
 
 function SpriteBatchNodeOffsetAnchorRotationalSkew.create()
     local layer = ax.Layer:create()
-    layer:registerScriptHandler(SpriteBatchNodeOffsetAnchorRotationalSkew.eventHandler)
+    layer:setLifecycleCallback(SpriteBatchNodeOffsetAnchorRotationalSkew.eventHandler)
     Helper.initWithLayer(layer)
 
     layer = SpriteBatchNodeOffsetAnchorRotationalSkew.initLayer(layer)
@@ -1221,7 +1221,7 @@ end
 
 function SpriteOffsetAnchorSkewScale.create()
     local layer = ax.Layer:create()
-    layer:registerScriptHandler(SpriteOffsetAnchorSkewScale.eventHandler)
+    layer:setLifecycleCallback(SpriteOffsetAnchorSkewScale.eventHandler)
     Helper.initWithLayer(layer)
 
     layer = SpriteOffsetAnchorSkewScale.initLayer(layer)
@@ -1302,7 +1302,7 @@ end
 
 function SpriteOffsetAnchorRotationalSkewScale.create()
     local layer = ax.Layer:create()
-    layer:registerScriptHandler(SpriteOffsetAnchorRotationalSkewScale.eventHandler)
+    layer:setLifecycleCallback(SpriteOffsetAnchorRotationalSkewScale.eventHandler)
     Helper.initWithLayer(layer)
 
     layer = SpriteOffsetAnchorRotationalSkewScale.initLayer(layer)
@@ -1386,7 +1386,7 @@ end
 
 function SpriteBatchNodeOffsetAnchorSkewScale.create()
     local layer = ax.Layer:create()
-    layer:registerScriptHandler(SpriteBatchNodeOffsetAnchorSkewScale.eventHandler)
+    layer:setLifecycleCallback(SpriteBatchNodeOffsetAnchorSkewScale.eventHandler)
     Helper.initWithLayer(layer)
 
     SpriteBatchNodeOffsetAnchorSkewScale.initLayer(layer)
@@ -1468,7 +1468,7 @@ end
 
 function SpriteBatchNodeOffsetAnchorRotationalSkewScale.create()
     local layer = ax.Layer:create()
-    layer:registerScriptHandler(SpriteBatchNodeOffsetAnchorRotationalSkewScale.eventHandler)
+    layer:setLifecycleCallback(SpriteBatchNodeOffsetAnchorRotationalSkewScale.eventHandler)
     Helper.initWithLayer(layer)
     SpriteBatchNodeOffsetAnchorRotationalSkewScale.initLayer(layer)
 
@@ -1539,7 +1539,7 @@ end
 
 function SpriteOffsetAnchorFlip.create()
     local layer = ax.Layer:create()
-    layer:registerScriptHandler(SpriteOffsetAnchorFlip.eventHandler)
+    layer:setLifecycleCallback(SpriteOffsetAnchorFlip.eventHandler)
     Helper.initWithLayer(layer)
 
     SpriteOffsetAnchorFlip.initLayer(layer)

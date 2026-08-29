@@ -181,13 +181,13 @@ local function getBaseLayer()
     end
 
     local listener = ax.PointerEventListener:create()
-    listener:registerScriptHandler(onTouchesBegan,ax.Handler.EVENT_POINTER_DOWN )
-    listener:registerScriptHandler(onPointerMove,ax.Handler.EVENT_POINTER_MOVE )
-    listener:registerScriptHandler(onTouchesEnded,ax.Handler.EVENT_POINTER_UP )
+    listener.onPointerDown = onTouchesBegan
+    listener.onPointerMove = onPointerMove
+    listener.onPointerUp = onTouchesEnded
     local eventDispatcher = layer:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, layer)
 
-	layer:registerScriptHandler(baseLayer_onEnterOrExit)
+	layer:setLifecycleCallback(baseLayer_onEnterOrExit)
 
 	return layer
 end
@@ -289,7 +289,7 @@ local function ParticleReorder()
             ParticleReorder_layer:addChild(parent, 10, 1000 + i)
         end
 
-        ParticleReorder_layer:registerScriptHandler(ParticleReorder_onEnterOrExit)
+        ParticleReorder_layer:setLifecycleCallback(ParticleReorder_onEnterOrExit)
 
         titleLabel:setString("Reordering particles")
         subtitleLabel:setString("Reordering particles with and without batches batches")
@@ -359,7 +359,7 @@ local function ParticleBatchHybrid()
         ParticleBatchHybrid_parent1 = batch
         ParticleBatchHybrid_parent2 = node
 
-        layer:registerScriptHandler(ParticleBatchHybrid_onEnterOrExit)
+        layer:setLifecycleCallback(ParticleBatchHybrid_onEnterOrExit)
 
         titleLabel:setString("Particle Batch")
         subtitleLabel:setString("Hybrid: batched and non batched every 2 seconds")
@@ -1263,7 +1263,7 @@ local function Issue870()
         emitter:retain()
 
         Issue870_index = 0
-        layer:registerScriptHandler(Issue870_onEnterOrExit)
+        layer:setLifecycleCallback(Issue870_onEnterOrExit)
 
         titleLabel:setString("Issue 870. SubRect")
         subtitleLabel:setString("Every 2 seconds the particle should change")
@@ -1397,7 +1397,7 @@ local function AddAndDeleteParticleSystems()
             AddAndDeleteParticleSystems_batchNode:addChild(particleSystem, randZ, -1)
         end
 
-        layer:registerScriptHandler(AddAndDeleteParticleSystems_onEnterOrExit)
+        layer:setLifecycleCallback(AddAndDeleteParticleSystems_onEnterOrExit)
         emitter = nil
 
         titleLabel:setString("Add and remove Particle System")
@@ -1518,7 +1518,7 @@ local function ReorderParticleSystems()
             --particleSystem:release()
         end
 
-        layer:registerScriptHandler(ReorderParticleSystems_onEnterOrExit)
+        layer:setLifecycleCallback(ReorderParticleSystems_onEnterOrExit)
         emitter = nil
 
         titleLabel:setString("reorder systems")

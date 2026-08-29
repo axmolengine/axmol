@@ -20,11 +20,6 @@ jobs:
     steps:
     - uses: actions/checkout@v6
 
-    - name: Setup Python
-      uses: actions/setup-python@v6
-      with:
-        python-version: '3.12.10' # python-3.12 is last release that support axmol traditional binding generator
-
     - name: Genbindings
       run: tools\cmdline\plugins\genbindings.ps1
 

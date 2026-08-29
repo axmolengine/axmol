@@ -38,7 +38,7 @@ local function TestNode()
         end
     end
 
-    node:registerScriptHandler(onNodeEvent)
+    node:setLifecycleCallback(onNodeEvent)
 
     return node
 end

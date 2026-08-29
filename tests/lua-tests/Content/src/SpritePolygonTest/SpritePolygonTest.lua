@@ -14,7 +14,7 @@ function SpritePolygonTestDemo:registerNodeEvent()
         end
     end
 
-    self:registerScriptHandler(onNodeEvent)
+    self:setLifecycleCallback(onNodeEvent)
 end
 
 function SpritePolygonTestDemo:onEnter()
@@ -427,7 +427,7 @@ function SpritePolygonPerformance:init()
     self._continuousHighDtTime = 0.0
     self._waitingTime = 0.0
 
-    self:scheduleUpdateWithPriorityLua(function (dt)
+    self:onUpdate(function (dt)
             dt = dt * 0.3 + self._prevDt * 0.7
             self._prevDt = dt
             self._elapsedTime = self._elapsedTime + dt
@@ -471,7 +471,7 @@ function SpritePolygonPerformance:init()
             else
                 self._waitingTime = self._waitingTime + dt
             end
-        end, 0)
+        end)
 end
 
 function SpritePolygonPerformance:initExtend()
