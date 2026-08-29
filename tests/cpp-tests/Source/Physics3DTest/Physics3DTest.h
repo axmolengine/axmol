@@ -34,6 +34,7 @@ namespace ax
 {
 
 class Joint3D;
+class Label;
 class Ray;
 class Rigidbody3D;
 
@@ -79,6 +80,18 @@ public:
     virtual std::string subtitle() const override;
 
     virtual bool init() override;
+};
+
+class Physics3DPersistedContactsDemo : public Physics3DTestDemo
+{
+public:
+    CREATE_FUNC(Physics3DPersistedContactsDemo);
+    virtual std::string subtitle() const override;
+    virtual bool init() override;
+    virtual void update(float delta) override;
+private:
+    ax::Rigidbody3D* _floorBody{nullptr};
+    ax::Label* _contactLabel{nullptr};
 };
 
 class Physics3DOneWayPlatform : public Physics3DTestDemo
