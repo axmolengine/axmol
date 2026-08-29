@@ -2755,7 +2755,7 @@ void contact_info_3d_to_luaval(lua_State* L, const ContactInfo3D& info)
     lua_rawset(L, -3);
 }
 
-void contact_info_3d_span_to_luaval(lua_State* L, const std::span<ax::ContactInfo3D>& infos)
+void contact_info_3d_span_to_luaval(lua_State* L, std::span<const ax::ContactInfo3D> infos)
 {
     if (nullptr == L)
         return;

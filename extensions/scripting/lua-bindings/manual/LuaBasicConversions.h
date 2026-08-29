@@ -943,7 +943,7 @@ void joint_spring_to_luaval(lua_State* L, const ax::JointSpring& spring);
 void joint_motor_to_luaval(lua_State* L, const ax::JointMotor& motor);
 void joint_limits_to_luaval(lua_State* L, const ax::JointLimits& limits);
 void contact_info_3d_to_luaval(lua_State* L, const ax::ContactInfo3D& info);
-void contact_info_3d_span_to_luaval(lua_State* L, const std::span<ax::ContactInfo3D>& infos);
+void contact_info_3d_span_to_luaval(lua_State* L, std::span<const ax::ContactInfo3D> infos);
 
 #endif  // #if defined(AX_ENABLE_PHYSICS_3D)
 
