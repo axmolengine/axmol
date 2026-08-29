@@ -316,7 +316,7 @@ bool Physics3DPersistedContactsDemo::init()
         body->setSyncFlag(Rigidbody3D::SyncFlag::PHYSICS_TO_NODE);
     }
     TTFConfig ttfConfig("fonts/arial.ttf", 20);
-    _contactLabel = Label::createWithTTF(ttfConfig, "Manifolds: 0  Contact points: 0");
+    _contactLabel   = Label::createWithTTF(ttfConfig, "Manifolds: 0  Contact points: 0");
     const auto size = Director::getInstance()->getCanvasSize();
     _contactLabel->setPosition(Vec2(size.width * 0.5f, size.height - 110.0f));
     addChild(_contactLabel, 1);
