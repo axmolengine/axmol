@@ -1837,8 +1837,6 @@ void register_ax_base(lua_State* L)
     class_146_NodeGrid.method("setGridRect", static_cast<void (ax::NodeGrid::*)(const ax::Rect &)>(&ax::NodeGrid::setGridRect));
     class_146_NodeGrid.method("setTarget", static_cast<void (ax::NodeGrid::*)(ax::Node *)>(&ax::NodeGrid::setTarget));
     class_147_Object.method("getReferenceCount", static_cast<unsigned int (ax::Object::*)() const>(&ax::Object::getReferenceCount));
-    class_147_Object.method("hasScriptBindingExposure", static_cast<bool (ax::Object::*)() const>(&ax::Object::hasScriptBindingExposure));
-    class_147_Object.method("markScriptBindingExposed", static_cast<void (ax::Object::*)()>(&ax::Object::markScriptBindingExposed));
     class_147_Object.method("release", static_cast<void (ax::Object::*)()>(&ax::Object::release));
     class_147_Object.method("retain", static_cast<void (ax::Object::*)()>(&ax::Object::retain));
     class_148_OrbitCamera.bases<ax::ActionCamera, ax::ActionInterval, ax::FiniteTimeAction, ax::Action, ax::Object>();

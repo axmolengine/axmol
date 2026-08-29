@@ -22093,28 +22093,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "hasScriptBindingExposure",
-          "luaName": "hasScriptBindingExposure",
-          "declaringType": "ax::Object",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "markScriptBindingExposed",
-          "luaName": "markScriptBindingExposed",
-          "declaringType": "ax::Object",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "release",
           "luaName": "release",
           "declaringType": "ax::Object",

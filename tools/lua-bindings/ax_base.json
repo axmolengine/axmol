@@ -743,7 +743,9 @@
         "isEqual",
         "acceptVisitor",
         "update",
-        "getObjectID"
+        "getObjectID",
+        "markScriptBindingExposed",
+        "hasScriptBindingExposure"
       ]
     },
     {
