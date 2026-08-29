@@ -13,7 +13,8 @@ local ContactEventBits =
     Hit = 2,
     Contact = 4,
     Sensor = 8,
-    AllBits = 15,
+    Persisted = 16,
+    AllBits = 31,
 }
 
 local CollisionDetectionMode =
@@ -238,7 +239,27 @@ function BasicPhysics3DDemo:extend()
         end
     end
 
+    self._persistedContactsWorld = self._physicsScene:getPhysicsWorld3D()
+    self._persistedContactsWorld:setGlobalEventEnabled(ContactEventBits.Persisted, true)
+    floorBody:setEventEnabled(ContactEventBits.Persisted, true)
+    self:scheduleUpdateWithPriorityLua(function()
+        local contacts = floorBody:getPersistedContacts()
+        assert(type(contacts) == "table", "getPersistedContacts() must return a table")
+        if #contacts > 0 then
+            assert(type(contacts[1].points) == "table", "persisted contact must contain points")
+            self:unscheduleUpdate()
+            self._persistedContactsWorld:setGlobalEventEnabled(ContactEventBits.Persisted, false)
+        end
+    end, 0)
+
     self._physicsScene:setDebugCamera(self._camera)
+end
+
+function BasicPhysics3DDemo:onExit()
+    self:unscheduleUpdate()
+    if self._persistedContactsWorld ~= nil then
+        self._persistedContactsWorld:setGlobalEventEnabled(ContactEventBits.Persisted, false)
+    end
 end
 
 ----------------------------------------
