@@ -89,6 +89,7 @@ public:
     virtual std::string subtitle() const override;
     virtual bool init() override;
     virtual void update(float delta) override;
+
 private:
     ax::Rigidbody3D* _floorBody{nullptr};
     ax::Label* _contactLabel{nullptr};
