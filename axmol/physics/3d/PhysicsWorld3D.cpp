@@ -664,16 +664,28 @@ void PhysicsWorld3D::OnContactPersisted(const JPH::Body& body1,
     if (!actorA || !actorB)
         return;
 
-    if (!actorA->isEventEnabled(ContactEventBits::Persisted) && !actorB->isEventEnabled(ContactEventBits::Persisted))
+    const bool persistedEnabledAcrorA = actorA->isEventEnabled(ContactEventBits::Persisted);
+    const bool persistedEnabledAcrorB = actorB->isEventEnabled(ContactEventBits::Persisted);
+    if (!persistedEnabledAcrorA && !persistedEnabledAcrorB)
         return;
 
     ContactInfo3D info{.actorA = actorA, .actorB = actorB};
     fillContactPoints(info, body1, body2, manifold, /*includeVelocity=*/true);
 
+    const bool pushA = actorA->getActorType() == PhysicsActor::kRigidbody && persistedEnabledAcrorA;
+    const bool pushB = actorB->getActorType() == PhysicsActor::kRigidbody && persistedEnabledAcrorB;
+
+    // Hot path (every step, per persisted pair); single-side subscription is the
+    // common case — branch to avoid an unnecessary allocation+copy.
     std::scoped_lock lock(_persistedMutex);
-    if (actorA->getActorType() == PhysicsActor::kRigidbody)
+    if (pushA && pushB)
+    {
         _persistedContacts[static_cast<Rigidbody3D*>(actorA)].push_back(info);
-    if (actorB->getActorType() == PhysicsActor::kRigidbody)
+        _persistedContacts[static_cast<Rigidbody3D*>(actorB)].push_back(std::move(info));
+    }
+    else if (pushA)
+        _persistedContacts[static_cast<Rigidbody3D*>(actorA)].push_back(std::move(info));
+    else if (pushB)
         _persistedContacts[static_cast<Rigidbody3D*>(actorB)].push_back(std::move(info));
 }
 
