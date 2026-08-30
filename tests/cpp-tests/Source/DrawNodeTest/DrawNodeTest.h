@@ -360,6 +360,30 @@ public:
     virtual std::string subtitle() const override;
 };
 
+class DrawNodeCornerRectTest : public DrawNodeBaseTest
+{
+public:
+    CREATE_FUNC(DrawNodeCornerRectTest);
+
+    DrawNodeCornerRectTest();
+
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+};
+
+
+class DrawNodeSolidCornerRectTest : public DrawNodeBaseTest
+{
+public:
+    CREATE_FUNC(DrawNodeSolidCornerRectTest);
+
+    DrawNodeSolidCornerRectTest();
+
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+};
+
+
 class DrawNodeSolidCircleTest : public DrawNodeBaseTest
 {
 public:
@@ -401,7 +425,7 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void onPointerUp(ax::PointerEvent* event);
+    bool onPointerDown(ax::PointerEvent* event);
     void addNewControlPoint(ax::Vec2 p);
     void update(float dt) override;
 
@@ -409,17 +433,6 @@ private:
     ax::DrawNode* drawNodeCP = nullptr;
     std::vector<ax::Vec2> points;
     ax::PointArray* array;
-};
-
-class DrawNodeRoundRectTest : public DrawNodeBaseTest
-{
-public:
-    CREATE_FUNC(DrawNodeRoundRectTest);
-
-    DrawNodeRoundRectTest();
-
-    virtual std::string title() const override;
-    virtual std::string subtitle() const override;
 };
 
 class DrawNodeButtonTest : public DrawNodeBaseTest
