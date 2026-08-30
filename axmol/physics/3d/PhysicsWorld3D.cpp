@@ -548,6 +548,12 @@ void PhysicsWorld3D::removePhysicsActorInternal(PhysicsActor* actor)
                 bodyInterface.RemoveBody(bodyID);
             rigidbody->invalidate();
         }
+
+        _activePersistedBodies.erase(rigidbody);
+        {
+            std::scoped_lock lock(_persistedMutex);
+            _persistedContacts.erase(rigidbody);
+        }
     }
     else if (actor->getActorType() == PhysicsActor::kCollider)
     {
