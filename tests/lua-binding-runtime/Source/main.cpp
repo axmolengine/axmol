@@ -49,6 +49,23 @@ int main()
         -- becoming opaque sol2 userdata.
         local values = ax.FileUtils:getInstance():getValueVectorFromFile("__axlua_missing_values__.plist")
         assert(type(values) == "table")
+
+        -- std::span-based mesh colliders keep the legacy Lua table factory;
+        -- verify the returned derived userdata is accepted by a Collider3D*
+        -- parameter (both static call spellings).
+        if ax.MeshCollider3D ~= nil then
+            local triangles = {
+                { x = 0, y = 0, z = 0 },
+                { x = 1, y = 0, z = 0 },
+                { x = 0, y = 1, z = 0 },
+            }
+            local collider = ax.MeshCollider3D:create(triangles)
+            assert(collider ~= nil)
+            local colliderDot = ax.MeshCollider3D.create(triangles)
+            assert(colliderDot ~= nil)
+            local body = ax.Rigidbody3D:create(collider, 0.0)
+            assert(body ~= nil)
+        end
     )lua";
 
     if (luaL_dostring(state, script) != LUA_OK)

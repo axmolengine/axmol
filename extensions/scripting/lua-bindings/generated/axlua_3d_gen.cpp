@@ -196,7 +196,7 @@ void register_ax_3d(lua_State* L)
     class_13_Terrain.bases<ax::Node, ax::Object>();
     class_13_Terrain.constructors<ax::Terrain()>();
     class_13_Terrain.method("convertToTerrainSpace", static_cast<ax::Vec2 (ax::Terrain::*)(const ax::Vec2 &) const>(&ax::Terrain::convertToTerrainSpace));
-    class_13_Terrain.method("getHeightData", static_cast<std::vector<float> (ax::Terrain::*)() const>(&ax::Terrain::getHeightData));
+    class_13_Terrain.method("getHeightData", [](const ax::Terrain& self) -> auto { return sol::as_table(static_cast<const ax::Terrain&>(self).getHeightData()); });
     class_13_Terrain.method("getImageHeight", static_cast<float (ax::Terrain::*)(int, int) const>(&ax::Terrain::getImageHeight));
     class_13_Terrain.method("getMaxHeight", static_cast<float (ax::Terrain::*)()>(&ax::Terrain::getMaxHeight));
     class_13_Terrain.method("getMinHeight", static_cast<float (ax::Terrain::*)()>(&ax::Terrain::getMinHeight));
@@ -221,7 +221,7 @@ void register_ax_3d(lua_State* L)
     class_14_TextureCube.bases<ax::Object>();
     class_14_TextureCube.constructors<ax::TextureCube()>();
     class_14_TextureCube.static_method("create", static_cast<ax::TextureCube * (*)(std::string_view, std::string_view, std::string_view, std::string_view, std::string_view, std::string_view)>(&ax::TextureCube::create));
-    class_14_TextureCube.method("getImagePaths", static_cast<const std::vector<std::string> & (ax::TextureCube::*)() const>(&ax::TextureCube::getImagePaths));
+    class_14_TextureCube.method("getImagePaths", [](const ax::TextureCube& self) -> auto { return sol::as_table(static_cast<const ax::TextureCube&>(self).getImagePaths()); });
     class_14_TextureCube.method("getRHITexture", static_cast<rhi::Texture * (ax::TextureCube::*)()>(&ax::TextureCube::getRHITexture));
     class_14_TextureCube.method("reloadTexture", static_cast<bool (ax::TextureCube::*)()>(&ax::TextureCube::reloadTexture));
     class_14_TextureCube.method("setTexParameters", static_cast<void (ax::TextureCube::*)(const ax::Texture2D::TexParams &)>(&ax::TextureCube::setTexParameters));

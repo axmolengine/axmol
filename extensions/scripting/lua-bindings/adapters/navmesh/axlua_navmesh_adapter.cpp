@@ -31,7 +31,71 @@
 #    include "lua-bindings/runtime/axlua_adapter.h"
 #    include "lua-bindings/runtime/axlua_conversions.h"
 #    include "lua-bindings/runtime/LuaEngine.h"
+#    include "axlua_navmesh_conversions.h"
 #    include "axmol/navmesh/NavMesh.h"
+
+int axlua_navmesh_NavMeshAgent_create(lua_State* L)
+{
+    // NavMeshAgentParam is intentionally represented as a Lua table for
+    // compatibility with the legacy binding.  The generic sol2 binding only
+    // knows how to consume userdata, so handle this value type explicitly.
+    if (axlua::adapter::is_usertable(L, 1, "ax.NavMeshAgent", 0, nullptr))
+        lua_remove(L, 1);  // accept both colon and dot static calls
+
+    const int argc = lua_gettop(L);
+    if (argc != 1)
+    {
+        luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n ",
+                   "ax.NavMeshAgent:create", argc, 1);
+        return 0;
+    }
+
+    ax::NavMeshAgentParam param;
+    if (!luaval_to_navmeshagentparam(L, 1, &param, "ax.NavMeshAgent:create"))
+    {
+        axlua::adapter::raise_error(L, "invalid arguments in function 'axlua_navmesh_NavMeshAgent_create'", nullptr);
+        return 0;
+    }
+
+    auto* agent = ax::NavMeshAgent::create(param);
+    object_to_luaval<ax::NavMeshAgent>(L, "ax.NavMeshAgent", agent);
+    return 1;
+}
+
+int axlua_navmesh_NavMeshAgent_getCurrentOffMeshLinkData(lua_State* L)
+{
+    ax::NavMeshAgent* obj = nullptr;
+#    if _AX_DEBUG >= 1
+    axlua::adapter::Error conversionError;
+    if (!axlua::adapter::is_usertype(L, 1, "ax.NavMeshAgent", 0, &conversionError))
+        goto argumentError;
+#    endif
+
+    obj = static_cast<ax::NavMeshAgent*>(axlua::adapter::to_usertype(L, 1, 0));
+    if (!obj)
+    {
+        axlua::adapter::raise_error(
+            L, "invalid 'obj' in function 'axlua_navmesh_NavMeshAgent_getCurrentOffMeshLinkData'", nullptr);
+        return 0;
+    }
+
+    if (lua_gettop(L) - 1 != 0)
+    {
+        luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n ",
+                   "ax.NavMeshAgent:getCurrentOffMeshLinkData", lua_gettop(L) - 1, 0);
+        return 0;
+    }
+
+    offmeshlinkdata_to_luaval(L, obj->getCurrentOffMeshLinkData());
+    return 1;
+
+#    if _AX_DEBUG >= 1
+argumentError:
+    axlua::adapter::raise_error(L, "#ferror in function 'axlua_navmesh_NavMeshAgent_getCurrentOffMeshLinkData'.",
+                                &conversionError);
+#    endif
+    return 0;
+}
 
 int axlua_navmesh_NavMeshAgent_move(lua_State* luaState)
 {
@@ -123,6 +187,9 @@ static void extendNavMeshAgent(lua_State* L)
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {
+        axlua::adapter::set_function(L, "create", axlua_navmesh_NavMeshAgent_create);
+        axlua::adapter::set_function(L, "getCurrentOffMeshLinkData",
+                                     axlua_navmesh_NavMeshAgent_getCurrentOffMeshLinkData);
         axlua::adapter::set_function(L, "move", axlua_navmesh_NavMeshAgent_move);
     }
     lua_pop(L, 1);

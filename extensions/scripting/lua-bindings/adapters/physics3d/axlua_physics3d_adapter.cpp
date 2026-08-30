@@ -32,6 +32,62 @@
 #    include "lua-bindings/runtime/axlua_conversions.h"
 #    include "axmol/physics/physics-3d.h"
 
+#    include <vector>
+
+namespace
+{
+bool luaval_to_vec3_vector(lua_State* L, int index, std::vector<ax::Vec3>* value, const char* funcName)
+{
+    if (L == nullptr || value == nullptr || !lua_istable(L, index))
+        return false;
+
+    const size_t count = lua_objlen(L, index);
+    value->reserve(count);
+    for (size_t i = 1; i <= count; ++i)
+    {
+        lua_rawgeti(L, index, static_cast<int>(i));
+        ax::Vec3 point;
+        const bool ok = luaval_to_vec3(L, -1, &point, funcName);
+        lua_pop(L, 1);
+        if (!ok)
+            return false;
+        value->push_back(point);
+    }
+    return true;
+}
+
+bool luaval_to_float_vector(lua_State* L, int index, std::vector<float>* value)
+{
+    if (L == nullptr || value == nullptr || !lua_istable(L, index))
+        return false;
+
+    const size_t count = lua_objlen(L, index);
+    value->reserve(count);
+    for (size_t i = 1; i <= count; ++i)
+    {
+        lua_rawgeti(L, index, static_cast<int>(i));
+        if (!lua_isnumber(L, -1))
+        {
+            lua_pop(L, 1);
+            return false;
+        }
+        value->push_back(static_cast<float>(lua_tonumber(L, -1)));
+        lua_pop(L, 1);
+    }
+    return true;
+}
+
+bool strip_class_argument(lua_State* L, const char* type)
+{
+    if (axlua::adapter::is_usertable(L, 1, type, 0, nullptr))
+    {
+        lua_remove(L, 1);
+        return true;
+    }
+    return false;
+}
+}  // namespace
+
 bool luaval_to_PhysicsWorld3D_HitResult(lua_State* L,
                                         int lo,
                                         ax::PhysicsWorld3D::HitResult* outValue,
@@ -193,6 +249,177 @@ void extendRigidbody3D(lua_State* L)
     lua_pop(L, 1);
 }
 
+int axlua_physics3d_MeshCollider3D_create(lua_State* L)
+{
+    // This overload was part of the legacy Lua API.  The native signature
+    // uses std::span, which is intentionally not emitted by the generic
+    // generator because a span cannot own the Lua table's temporary storage.
+    // Convert the table to a local vector for the duration of the native call.
+    strip_class_argument(L, "ax.MeshCollider3D");  // accept colon and dot syntax
+
+    const int argc = lua_gettop(L);
+    if (argc != 1 && argc != 2)
+    {
+        luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n ",
+                   "ax.MeshCollider3D:create", argc, 1);
+        return 0;
+    }
+
+    std::vector<ax::Vec3> triangles;
+    if (!luaval_to_vec3_vector(L, 1, &triangles, "ax.MeshCollider3D:create"))
+    {
+        axlua::adapter::raise_error(L, "invalid arguments in function 'axlua_physics3d_MeshCollider3D_create'",
+                                    nullptr);
+        return 0;
+    }
+
+    ax::MeshCollider3D* collider = nullptr;
+    if (argc == 2)
+    {
+        ax::PhysicsMaterial material;
+        if (!luaval_to_physics_material(L, 2, &material, "ax.MeshCollider3D:create"))
+        {
+            axlua::adapter::raise_error(L, "invalid arguments in function 'axlua_physics3d_MeshCollider3D_create'",
+                                        nullptr);
+            return 0;
+        }
+        collider = ax::MeshCollider3D::create(triangles, material);
+    }
+    else
+    {
+        collider = ax::MeshCollider3D::create(triangles);
+    }
+
+    object_to_luaval<ax::MeshCollider3D>(L, "ax.MeshCollider3D", collider);
+    return 1;
+}
+
+void extendMeshCollider3D(lua_State* L)
+{
+    lua_pushstring(L, "ax.MeshCollider3D");
+    lua_rawget(L, LUA_REGISTRYINDEX);
+    if (lua_istable(L, -1))
+        axlua::adapter::set_function(L, "create", axlua_physics3d_MeshCollider3D_create);
+    lua_pop(L, 1);
+}
+
+int axlua_physics3d_ConvexCollider3D_create(lua_State* L)
+{
+    strip_class_argument(L, "ax.ConvexCollider3D");
+    const int argc = lua_gettop(L);
+    if (argc != 1 && argc != 2)
+    {
+        luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n ",
+                   "ax.ConvexCollider3D:create", argc, 1);
+        return 0;
+    }
+
+    std::vector<ax::Vec3> points;
+    if (!luaval_to_vec3_vector(L, 1, &points, "ax.ConvexCollider3D:create"))
+    {
+        axlua::adapter::raise_error(L, "invalid arguments in function 'axlua_physics3d_ConvexCollider3D_create'",
+                                    nullptr);
+        return 0;
+    }
+
+    ax::ConvexCollider3D* collider = nullptr;
+    if (argc == 2)
+    {
+        ax::PhysicsMaterial material;
+        if (!luaval_to_physics_material(L, 2, &material, "ax.ConvexCollider3D:create"))
+        {
+            axlua::adapter::raise_error(L, "invalid arguments in function 'axlua_physics3d_ConvexCollider3D_create'",
+                                        nullptr);
+            return 0;
+        }
+        collider = ax::ConvexCollider3D::create(points, material);
+    }
+    else
+    {
+        collider = ax::ConvexCollider3D::create(points);
+    }
+
+    object_to_luaval<ax::ConvexCollider3D>(L, "ax.ConvexCollider3D", collider);
+    return 1;
+}
+
+void extendConvexCollider3D(lua_State* L)
+{
+    lua_pushstring(L, "ax.ConvexCollider3D");
+    lua_rawget(L, LUA_REGISTRYINDEX);
+    if (lua_istable(L, -1))
+        axlua::adapter::set_function(L, "create", axlua_physics3d_ConvexCollider3D_create);
+    lua_pop(L, 1);
+}
+
+int axlua_physics3d_HeightFieldCollider3D_create(lua_State* L)
+{
+    strip_class_argument(L, "ax.HeightFieldCollider3D");
+    const int argc = lua_gettop(L);
+    if (argc != 8 && argc != 9)
+    {
+        luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n ",
+                   "ax.HeightFieldCollider3D:create", argc, 8);
+        return 0;
+    }
+
+    if (!lua_isnumber(L, 1) || !lua_isnumber(L, 2) || !lua_istable(L, 3) ||
+        !lua_isnumber(L, 4) || !lua_isnumber(L, 5) || !lua_isnumber(L, 6) || !lua_isboolean(L, 7) ||
+        !lua_isboolean(L, 8))
+    {
+        axlua::adapter::raise_error(L, "invalid arguments in function 'axlua_physics3d_HeightFieldCollider3D_create'",
+                                    nullptr);
+        return 0;
+    }
+
+    std::vector<float> heights;
+    if (!luaval_to_float_vector(L, 3, &heights))
+    {
+        axlua::adapter::raise_error(L, "invalid arguments in function 'axlua_physics3d_HeightFieldCollider3D_create'",
+                                    nullptr);
+        return 0;
+    }
+
+    const int width       = static_cast<int>(lua_tointeger(L, 1));
+    const int length      = static_cast<int>(lua_tointeger(L, 2));
+    const float scale     = static_cast<float>(lua_tonumber(L, 4));
+    const float minHeight = static_cast<float>(lua_tonumber(L, 5));
+    const float maxHeight = static_cast<float>(lua_tonumber(L, 6));
+    const bool flipEdges  = lua_toboolean(L, 7) != 0;
+    const bool diamond    = lua_toboolean(L, 8) != 0;
+
+    ax::HeightFieldCollider3D* collider = nullptr;
+    if (argc == 9)
+    {
+        ax::PhysicsMaterial material;
+        if (!luaval_to_physics_material(L, 9, &material, "ax.HeightFieldCollider3D:create"))
+        {
+            axlua::adapter::raise_error(L, "invalid arguments in function 'axlua_physics3d_HeightFieldCollider3D_create'",
+                                        nullptr);
+            return 0;
+        }
+        collider = ax::HeightFieldCollider3D::create(width, length, heights, scale, minHeight, maxHeight, flipEdges,
+                                                      diamond, material);
+    }
+    else
+    {
+        collider = ax::HeightFieldCollider3D::create(width, length, heights, scale, minHeight, maxHeight, flipEdges,
+                                                      diamond);
+    }
+
+    object_to_luaval<ax::HeightFieldCollider3D>(L, "ax.HeightFieldCollider3D", collider);
+    return 1;
+}
+
+void extendHeightFieldCollider3D(lua_State* L)
+{
+    lua_pushstring(L, "ax.HeightFieldCollider3D");
+    lua_rawget(L, LUA_REGISTRYINDEX);
+    if (lua_istable(L, -1))
+        axlua::adapter::set_function(L, "create", axlua_physics3d_HeightFieldCollider3D_create);
+    lua_pop(L, 1);
+}
+
 int axlua_physics3d_Collider3D_setTransformInPhysics(lua_State* L)
 {
     int argc            = 0;
@@ -334,6 +561,9 @@ int register_all_physics3d_adapter(lua_State* L)
         return 0;
 
     extendRigidbody3D(L);
+    extendConvexCollider3D(L);
+    extendMeshCollider3D(L);
+    extendHeightFieldCollider3D(L);
     extendCollider3D(L);
     extendPhysicsWorld3D(L);
 

@@ -52,6 +52,7 @@ end
 
 function NavMeshBaseTestDemo:init()
     self._angle = 0.0
+    self._pointerDown = false
     self._agents = {}
     local size = ax.Director:getInstance():getCanvasSize()
     self._camera = ax.Camera:createPerspective(30.0, size.width / size.height, 1.0, 1000.0)
@@ -236,13 +237,14 @@ end
 function NavMeshBasicTestDemo:registerTouchEvent()
     local listener = ax.PointerEventListener:create()
     listener.onPointerDown = function(event)
+        self._pointerDown = true
         self._needMoveAgents = true
+        return true
     end
 
     listener.onPointerMove = function(event)
 
-        if event ~= nil and self._camera ~= nil then
-            local touch = event
+        if self._pointerDown and event ~= nil and self._camera ~= nil then
             local delta = ax.pSub(event:getPoint(), event:getPrevPoint())
 
             self._angle = self._angle - delta.x * math.pi / 180.0
@@ -256,6 +258,7 @@ function NavMeshBasicTestDemo:registerTouchEvent()
     end
 
     listener.onPointerUp = function(event)
+        self._pointerDown = false
         if not self._needMoveAgents then
             return
         end
@@ -275,6 +278,10 @@ function NavMeshBasicTestDemo:registerTouchEvent()
             ret, hitResult = physicsWorld:rayCast(nearP, farP, hitResult)
             self:moveAgents(hitResult.hitPosition)
         end
+    end
+
+    listener.onPointerCancel = function(event)
+        self._pointerDown = false
     end
 
     local eventDispatcher = self:getEventDispatcher()
@@ -322,13 +329,14 @@ end
 function NavMeshAdvanceTestDemo:registerTouchEvent()
     local listener = ax.PointerEventListener:create()
     listener.onPointerDown = function(event)
+        self._pointerDown = true
         self._needMoveAgents = true
+        return true
     end
 
     listener.onPointerMove = function(event)
 
-        if event ~= nil and self._camera ~= nil then
-            local touch = event
+        if self._pointerDown and event ~= nil and self._camera ~= nil then
             local delta = ax.pSub(event:getPoint(), event:getPrevPoint())
 
             self._angle = self._angle - delta.x * math.pi / 180.0
@@ -342,6 +350,7 @@ function NavMeshAdvanceTestDemo:registerTouchEvent()
     end
 
     listener.onPointerUp = function(event)
+        self._pointerDown = false
         if not self._needMoveAgents then
             return
         end
@@ -361,6 +370,10 @@ function NavMeshAdvanceTestDemo:registerTouchEvent()
             ret, hitResult = physicsWorld:rayCast(nearP, farP, hitResult)
             self:moveAgents(hitResult.hitPosition)
         end
+    end
+
+    listener.onPointerCancel = function(event)
+        self._pointerDown = false
     end
 
     local eventDispatcher = self:getEventDispatcher()

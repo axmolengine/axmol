@@ -585,7 +585,7 @@ void register_ax_sceneext(lua_State* L)
     class_46_Frame.bases<ax::Object>();
     class_46_Frame.method("apply", static_cast<void (ax::ext::timeline::Frame::*)(float)>(&ax::ext::timeline::Frame::apply));
     class_46_Frame.method("clone", static_cast<ax::ext::timeline::Frame * (ax::ext::timeline::Frame::*)()>(&ax::ext::timeline::Frame::clone));
-    class_46_Frame.method("getEasingParams", static_cast<const std::vector<float> & (ax::ext::timeline::Frame::*)() const>(&ax::ext::timeline::Frame::getEasingParams));
+    class_46_Frame.method("getEasingParams", [](const ax::ext::timeline::Frame& self) -> auto { return sol::as_table(static_cast<const ax::ext::timeline::Frame&>(self).getEasingParams()); });
     class_46_Frame.method("getFrameIndex", static_cast<unsigned int (ax::ext::timeline::Frame::*)() const>(&ax::ext::timeline::Frame::getFrameIndex));
     class_46_Frame.method("getNode", static_cast<ax::Node * (ax::ext::timeline::Frame::*)() const>(&ax::ext::timeline::Frame::getNode));
     class_46_Frame.method("getTimeline", static_cast<ax::ext::timeline::Timeline * (ax::ext::timeline::Frame::*)() const>(&ax::ext::timeline::Frame::getTimeline));

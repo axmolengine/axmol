@@ -1,4 +1,10 @@
 #include "lua-bindings/runtime/axlua_runtime.h"
+
+template <>
+std::function<void()> axlua::make_lua_callback<void()>(lua_State* state, int index)
+{
+    return axlua::detail::LuaCallbackFactory<void()>::create(state, index);
+}
 #include "axmol/base/Object.h"
 #include "axmol/base/WeakPtr.h"
 #include "axmol/base/Logging.h"

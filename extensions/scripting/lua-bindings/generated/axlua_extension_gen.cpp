@@ -132,7 +132,7 @@ void register_ax_extension(lua_State* L)
     class_6_Manifest.bases<ax::Object>();
     class_6_Manifest.method("getManifestFileUrl", static_cast<std::string_view (ax::ext::Manifest::*)() const>(&ax::ext::Manifest::getManifestFileUrl));
     class_6_Manifest.method("getPackageUrl", static_cast<std::string_view (ax::ext::Manifest::*)() const>(&ax::ext::Manifest::getPackageUrl));
-    class_6_Manifest.method("getSearchPaths", static_cast<std::vector<std::string> (ax::ext::Manifest::*)() const>(&ax::ext::Manifest::getSearchPaths));
+    class_6_Manifest.method("getSearchPaths", [](const ax::ext::Manifest& self) -> auto { return sol::as_table(static_cast<const ax::ext::Manifest&>(self).getSearchPaths()); });
     class_6_Manifest.method("getVersion", static_cast<std::string_view (ax::ext::Manifest::*)() const>(&ax::ext::Manifest::getVersion));
     class_6_Manifest.method("getVersionFileUrl", static_cast<std::string_view (ax::ext::Manifest::*)() const>(&ax::ext::Manifest::getVersionFileUrl));
     class_6_Manifest.method("isLoaded", static_cast<bool (ax::ext::Manifest::*)() const>(&ax::ext::Manifest::isLoaded));

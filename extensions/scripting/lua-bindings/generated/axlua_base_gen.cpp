@@ -1152,14 +1152,14 @@ void register_ax_base(lua_State* L)
     class_102_FileUtils.method("getFileSize", static_cast<int64_t (ax::FileUtils::*)(std::string_view) const>(&ax::FileUtils::getFileSize));
     class_102_FileUtils.static_method("getInstance", static_cast<ax::FileUtils * (*)()>(&ax::FileUtils::getInstance));
     class_102_FileUtils.method("getNativeWritableAbsolutePath", static_cast<std::string (ax::FileUtils::*)() const>(&ax::FileUtils::getNativeWritableAbsolutePath));
-    class_102_FileUtils.method("getOriginalSearchPaths", static_cast<const std::vector<std::string> & (ax::FileUtils::*)() const>(&ax::FileUtils::getOriginalSearchPaths));
+    class_102_FileUtils.method("getOriginalSearchPaths", [](const ax::FileUtils& self) -> auto { return sol::as_table(static_cast<const ax::FileUtils&>(self).getOriginalSearchPaths()); });
     class_102_FileUtils.static_method("getPathBaseName", static_cast<std::string (*)(std::string_view)>(&ax::FileUtils::getPathBaseName));
     class_102_FileUtils.static_method("getPathBaseNameNoExtension", static_cast<std::string (*)(std::string_view)>(&ax::FileUtils::getPathBaseNameNoExtension));
     class_102_FileUtils.static_method("getPathDirName", static_cast<std::string (*)(std::string_view)>(&ax::FileUtils::getPathDirName));
     class_102_FileUtils.static_method("getPathExtension", static_cast<std::string (*)(std::string_view)>(&ax::FileUtils::getPathExtension));
-    class_102_FileUtils.method("getSearchPaths", static_cast<const std::vector<std::string> & (ax::FileUtils::*)() const>(&ax::FileUtils::getSearchPaths));
+    class_102_FileUtils.method("getSearchPaths", [](const ax::FileUtils& self) -> auto { return sol::as_table(static_cast<const ax::FileUtils&>(self).getSearchPaths()); });
     class_102_FileUtils.method("getStringFromFile", static_cast<std::string (ax::FileUtils::*)(std::string_view) const>(&ax::FileUtils::getStringFromFile));
-    class_102_FileUtils.method("getValueVectorFromFile", static_cast<ax::ValueVector (ax::FileUtils::*)(std::string_view) const>(&ax::FileUtils::getValueVectorFromFile));
+    class_102_FileUtils.method("getValueVectorFromFile", [](const ax::FileUtils& self, std::string_view arg0) -> auto { return sol::as_table(static_cast<const ax::FileUtils&>(self).getValueVectorFromFile(arg0)); });
     class_102_FileUtils.method("getWritablePath", static_cast<std::string (ax::FileUtils::*)() const>(&ax::FileUtils::getWritablePath));
     class_102_FileUtils.method("isAbsolutePath", static_cast<bool (ax::FileUtils::*)(std::string_view) const>(&ax::FileUtils::isAbsolutePath));
     class_102_FileUtils.static_method("isAbsolutePathInternal", static_cast<bool (*)(std::string_view)>(&ax::FileUtils::isAbsolutePathInternal));
@@ -1168,7 +1168,7 @@ void register_ax_base(lua_State* L)
     class_102_FileUtils.method("isFileExist", static_cast<bool (ax::FileUtils::*)(std::string_view) const>(&ax::FileUtils::isFileExist));
     class_102_FileUtils.method("isFileExistInternal", static_cast<bool (ax::FileUtils::*)(std::string_view) const>(&ax::FileUtils::isFileExistInternal));
     class_102_FileUtils.method("isPopupNotify", static_cast<bool (ax::FileUtils::*)() const>(&ax::FileUtils::isPopupNotify));
-    class_102_FileUtils.method("listFiles", static_cast<std::vector<std::string> (ax::FileUtils::*)(std::string_view) const>(&ax::FileUtils::listFiles));
+    class_102_FileUtils.method("listFiles", [](const ax::FileUtils& self, std::string_view arg0) -> auto { return sol::as_table(static_cast<const ax::FileUtils&>(self).listFiles(arg0)); });
     class_102_FileUtils.method("listFilesRecursively", static_cast<void (ax::FileUtils::*)(std::string_view, std::vector<std::string> *) const>(&ax::FileUtils::listFilesRecursively));
     class_102_FileUtils.method("purgeCachedEntries", static_cast<void (ax::FileUtils::*)()>(&ax::FileUtils::purgeCachedEntries));
     class_102_FileUtils.method("removeDirectory", static_cast<bool (ax::FileUtils::*)(std::string_view) const>(&ax::FileUtils::removeDirectory));
@@ -2882,7 +2882,7 @@ void register_ax_base(lua_State* L)
     class_224_TMXObjectGroup.bases<ax::Object>();
     class_224_TMXObjectGroup.constructors<ax::TMXObjectGroup()>();
     class_224_TMXObjectGroup.method("getGroupName", static_cast<std::string_view (ax::TMXObjectGroup::*)() const>(&ax::TMXObjectGroup::getGroupName));
-    class_224_TMXObjectGroup.method("getObjects", axlua::overload(axlua::overload_candidate<>(static_cast<const ax::ValueVector & (ax::TMXObjectGroup::*)() const>(&ax::TMXObjectGroup::getObjects)), axlua::overload_candidate<>(static_cast<ax::ValueVector & (ax::TMXObjectGroup::*)()>(&ax::TMXObjectGroup::getObjects))));
+    class_224_TMXObjectGroup.method("getObjects", axlua::overload(axlua::overload_candidate<>([](const ax::TMXObjectGroup& self) -> auto { return sol::as_table(static_cast<const ax::TMXObjectGroup&>(self).getObjects()); }), axlua::overload_candidate<>([](ax::TMXObjectGroup& self) -> auto { return sol::as_table(static_cast<ax::TMXObjectGroup&>(self).getObjects()); })));
     class_224_TMXObjectGroup.method("getPositionOffset", static_cast<const ax::Vec2 & (ax::TMXObjectGroup::*)() const>(&ax::TMXObjectGroup::getPositionOffset));
     class_224_TMXObjectGroup.method("getProperty", static_cast<ax::Value (ax::TMXObjectGroup::*)(std::string_view) const>(&ax::TMXObjectGroup::getProperty));
     class_224_TMXObjectGroup.method("setGroupName", static_cast<void (ax::TMXObjectGroup::*)(std::string_view)>(&ax::TMXObjectGroup::setGroupName));

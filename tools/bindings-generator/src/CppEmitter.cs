@@ -254,7 +254,10 @@ internal static class CppEmitter
         while (trimmed.EndsWith("&", StringComparison.Ordinal))
             trimmed = trimmed[..^1].TrimEnd();
         return trimmed.StartsWith("Vector<", StringComparison.Ordinal) ||
-               trimmed.StartsWith("ax::Vector<", StringComparison.Ordinal);
+               trimmed.StartsWith("ax::Vector<", StringComparison.Ordinal) ||
+               trimmed.StartsWith("std::vector<", StringComparison.Ordinal) ||
+               string.Equals(trimmed, "ValueVector", StringComparison.Ordinal) ||
+               string.Equals(trimmed, "ax::ValueVector", StringComparison.Ordinal);
     }
 
     private static string LambdaParameterType(string type)

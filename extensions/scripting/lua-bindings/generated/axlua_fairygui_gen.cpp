@@ -98,8 +98,8 @@ void register_ax_fairygui(lua_State* L)
     class_4_GComboBox.static_method("create", static_cast<fairygui::GComboBox * (*)()>(&fairygui::GComboBox::create));
     class_4_GComboBox.method("getDropdown", static_cast<fairygui::GObject * (fairygui::GComboBox::*)() const>(&fairygui::GComboBox::getDropdown));
     class_4_GComboBox.method("getIcon", static_cast<const std::string & (fairygui::GComboBox::*)() const>(&fairygui::GComboBox::getIcon));
-    class_4_GComboBox.method("getIcons", static_cast<std::vector<std::string> & (fairygui::GComboBox::*)()>(&fairygui::GComboBox::getIcons));
-    class_4_GComboBox.method("getItems", static_cast<std::vector<std::string> & (fairygui::GComboBox::*)()>(&fairygui::GComboBox::getItems));
+    class_4_GComboBox.method("getIcons", [](fairygui::GComboBox& self) -> auto { return sol::as_table(static_cast<fairygui::GComboBox&>(self).getIcons()); });
+    class_4_GComboBox.method("getItems", [](fairygui::GComboBox& self) -> auto { return sol::as_table(static_cast<fairygui::GComboBox&>(self).getItems()); });
     class_4_GComboBox.method("getProp", static_cast<ax::Value (fairygui::GComboBox::*)(fairygui::ObjectPropID)>(&fairygui::GComboBox::getProp));
     class_4_GComboBox.method("getSelectedIndex", static_cast<int (fairygui::GComboBox::*)() const>(&fairygui::GComboBox::getSelectedIndex));
     class_4_GComboBox.method("getSelectionController", static_cast<fairygui::GController * (fairygui::GComboBox::*)() const>(&fairygui::GComboBox::getSelectionController));
@@ -109,7 +109,7 @@ void register_ax_fairygui(lua_State* L)
     class_4_GComboBox.method("getTitleColor", static_cast<const ax::Color32 (fairygui::GComboBox::*)() const>(&fairygui::GComboBox::getTitleColor));
     class_4_GComboBox.method("getTitleFontSize", static_cast<int (fairygui::GComboBox::*)() const>(&fairygui::GComboBox::getTitleFontSize));
     class_4_GComboBox.method("getValue", static_cast<const std::string & (fairygui::GComboBox::*)() const>(&fairygui::GComboBox::getValue));
-    class_4_GComboBox.method("getValues", static_cast<std::vector<std::string> & (fairygui::GComboBox::*)()>(&fairygui::GComboBox::getValues));
+    class_4_GComboBox.method("getValues", [](fairygui::GComboBox& self) -> auto { return sol::as_table(static_cast<fairygui::GComboBox&>(self).getValues()); });
     class_4_GComboBox.method("refresh", static_cast<void (fairygui::GComboBox::*)()>(&fairygui::GComboBox::refresh));
     class_4_GComboBox.method("setIcon", static_cast<void (fairygui::GComboBox::*)(const std::string &)>(&fairygui::GComboBox::setIcon));
     class_4_GComboBox.method("setProp", static_cast<void (fairygui::GComboBox::*)(fairygui::ObjectPropID, const ax::Value &)>(&fairygui::GComboBox::setProp));
