@@ -327,7 +327,9 @@ void PhysicsWorld3D::flushPersistedContacts()
     // Clear stale contacts for bodies that stopped colliding in this step
     for (auto it = _activePersistedBodies.begin(); it != _activePersistedBodies.end();)
     {
-        if (contacts.find(*it) == contacts.end())
+        // Sleeping bodies stop getting OnContactPersisted even while still touching —
+        // only clear when the body is genuinely active and separated.
+        if (contacts.find(*it) == contacts.end() && _physicsSystem.GetBodyInterface().IsActive((*it)->internalHandle()))
         {
             (*it)->_persistedContacts.clear();
             it = _activePersistedBodies.erase(it);
