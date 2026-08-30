@@ -346,14 +346,14 @@ public:
      * @param mode The mode for drawing the corners.
      */
     void drawCornerRect(const Vec2& origin,
-                       const Vec2& destination,
-                       const Color& color,
-                       float thickness = 1.0f,
-                       float crLB      = 5.0f,
-                       float crLT      = 5.0f,
-                       float crRT      = 5.0f,
-                       float crRB      = 5.0f,
-                       CornerMode mode = CornerMode::ROUND);
+                        const Vec2& destination,
+                        const Color& color,
+                        float thickness = 1.0f,
+                        float crLB      = 5.0f,
+                        float crLT      = 5.0f,
+                        float crRT      = 5.0f,
+                        float crRB      = 5.0f,
+                        CornerMode mode = CornerMode::ROUND);
 
     /** Draws a solid rectangle with 4 rounded corners.
      *
@@ -369,15 +369,15 @@ public:
      * @param mode The mode for drawing the corners.
      */
     void drawSolidCornerRect(const Vec2& origin,
-                            const Vec2& destination,
-                            const Color& fillColor,
-                            const Color& borderColor,
-                            float thickness = 1.0f,
-                            float crLB      = 5.0f,
-                            float crLT      = 5.0f,
-                            float crRT      = 5.0f,
-                            float crRB      = 5.0f,
-                            CornerMode mode = CornerMode::ROUND);
+                             const Vec2& destination,
+                             const Color& fillColor,
+                             const Color& borderColor,
+                             float thickness = 1.0f,
+                             float crLB      = 5.0f,
+                             float crLT      = 5.0f,
+                             float crRT      = 5.0f,
+                             float crRB      = 5.0f,
+                             CornerMode mode = CornerMode::ROUND);
 
     /** Draws a solid rectangle given the origin and destination point measured in points.
      * The origin and the destination can not have the same x and y coordinate.
@@ -694,26 +694,26 @@ private:
 
     // Internal function _drawCornerRect
     void _drawCornerRect(const Vec2& origin,
-                        const Vec2& destination,
-                        const Color& color,
-                        float thickness = 1.0f,
-                        float crLB      = 5.0f,
-                        float crLT      = 5.0f,
-                        float crRT      = 5.0f,
-                        float crRB      = 5.0f,
-                        CornerMode mode = CornerMode::ROUND);
+                         const Vec2& destination,
+                         const Color& color,
+                         float thickness = 1.0f,
+                         float crLB      = 5.0f,
+                         float crLT      = 5.0f,
+                         float crRT      = 5.0f,
+                         float crRB      = 5.0f,
+                         CornerMode mode = CornerMode::ROUND);
 
     // Internal function _drawSolidCornerRect
     void _drawSolidCornerRect(const Vec2& origin,
-                        const Vec2& destination,
-                        const Color& color,
-                        const Color& borderColor,
-                        float thickness = 1.0f,
-                        float crLB      = 5.0f,
-                        float crLT      = 5.0f,
-                        float crRT      = 5.0f,
-                        float crRB      = 5.0f,
-                        CornerMode mode = CornerMode::ROUND);
+                              const Vec2& destination,
+                              const Color& color,
+                              const Color& borderColor,
+                              float thickness = 1.0f,
+                              float crLB      = 5.0f,
+                              float crLT      = 5.0f,
+                              float crRT      = 5.0f,
+                              float crRB      = 5.0f,
+                              CornerMode mode = CornerMode::ROUND);
 
     // Internal function _drawFilledRect
     void _drawFilledRect(const Vec2& origin, const Vec2& destination, const Color& color);

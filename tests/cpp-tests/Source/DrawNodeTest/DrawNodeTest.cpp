@@ -2907,11 +2907,11 @@ DrawNodeSolidCornerRectTest::DrawNodeSolidCornerRectTest()
     float crRB               = 5.0f;
 
     drawNode->drawSolidCornerRect(origin + Vec2(20, 50), destination + Vec2(20, 50), Color::green, Color::yellow, 0.0f,
-                                  crLB, crLT, crRT, crRB,DrawNode::CornerMode::BEVEL);
-    drawNode->drawSolidCornerRect(origin + Vec2(160, -50), destination + Vec2(160, -50), Color::yellow, Color::red, 14.0f,
-                                  30, 0, 30, 10);
-    drawNode->drawSolidCornerRect(origin - Vec2(80, 50), destination - Vec2(80, 50), Color::blue, Color::orange,
-                                  10.0f, 10, 10, 10, 10);
+                                  crLB, crLT, crRT, crRB, DrawNode::CornerMode::BEVEL);
+    drawNode->drawSolidCornerRect(origin + Vec2(160, -50), destination + Vec2(160, -50), Color::yellow, Color::red,
+                                  14.0f, 30, 0, 30, 10);
+    drawNode->drawSolidCornerRect(origin - Vec2(80, 50), destination - Vec2(80, 50), Color::blue, Color::orange, 10.0f,
+                                  10, 10, 10, 10);
 }
 
 string DrawNodeSolidCornerRectTest::title() const

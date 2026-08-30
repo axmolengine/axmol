@@ -507,28 +507,28 @@ void DrawNode::drawRect(const Vec2& p1,
 }
 
 void DrawNode::drawCornerRect(const Vec2& origin,
-                             const Vec2& destination,
-                             const Color& color,
-                             float thickness,
-                             float crLB,
-                             float crLT,
-                             float crRT,
-                             float crRB,
-                             CornerMode mode)
+                              const Vec2& destination,
+                              const Color& color,
+                              float thickness,
+                              float crLB,
+                              float crLT,
+                              float crRT,
+                              float crRB,
+                              CornerMode mode)
 {
     _drawCornerRect(origin, destination, color, thickness, crLB, crLT, crRT, crRB, mode);
 }
 
 void DrawNode::drawSolidCornerRect(const Vec2& origin,
-                                  const Vec2& destination,
-                                  const Color& fillColor,
-                                  const Color& borderColor,
-                                  float thickness,
-                                  float crLB,
-                                  float crLT,
-                                  float crRT,
-                                  float crRB,
-                                  CornerMode mode)
+                                   const Vec2& destination,
+                                   const Color& fillColor,
+                                   const Color& borderColor,
+                                   float thickness,
+                                   float crLB,
+                                   float crLT,
+                                   float crRT,
+                                   float crRB,
+                                   CornerMode mode)
 {
     _drawSolidCornerRect(origin, destination, fillColor, borderColor, thickness, crLB, crLT, crRT, crRB, mode);
 }
@@ -983,14 +983,14 @@ void DrawNode::_drawRect(const Vec2& origin, const Vec2& destination, const Colo
 }
 
 void DrawNode::_drawCornerRect(const Vec2& origin,
-                              const Vec2& destination,
-                              const Color& color,
-                              float thickness,
-                              float crLB,
-                              float crLT,
-                              float crRT,
-                              float crRB,
-                              CornerMode mode)
+                               const Vec2& destination,
+                               const Color& color,
+                               float thickness,
+                               float crLB,
+                               float crLT,
+                               float crRT,
+                               float crRB,
+                               CornerMode mode)
 {
     //  Draw the four corners
     if (mode == CornerMode::ROUND)
@@ -1023,21 +1023,20 @@ void DrawNode::_drawCornerRect(const Vec2& origin,
                              Vec2(destination.x, origin.y + crRB),
                              Vec2(destination.x - crRB, origin.y),
                              origin + Vec2(crLB, 0)};
-        _drawPoly(_vertices8, 8, true, color, thickness, true); 
+        _drawPoly(_vertices8, 8, true, color, thickness, true);
     }
-
 }
 
 void DrawNode::_drawSolidCornerRect(const Vec2& origin,
-                                   const Vec2& destination,
-                                   const Color& fillColor,
-                                   const Color& borderColor,
-                                   float thickness,
-                                   float crLB,
-                                   float crLT,
-                                   float crRT,
-                                   float crRB,
-                                   CornerMode mode)
+                                    const Vec2& destination,
+                                    const Color& fillColor,
+                                    const Color& borderColor,
+                                    float thickness,
+                                    float crLB,
+                                    float crLT,
+                                    float crRT,
+                                    float crRB,
+                                    CornerMode mode)
 {
     Vec2 _vertices8[] = {origin + Vec2(0, crLB),
                          Vec2(origin.x, destination.y - crLT),
@@ -1053,17 +1052,13 @@ void DrawNode::_drawSolidCornerRect(const Vec2& origin,
         _drawCornerRect(origin, destination, borderColor, thickness, crLB, crLT, crRT, crRB, CornerMode::ROUND);
         //  Draw the four corners
         _drawPie({origin.x + crLB, origin.y + crLB}, crLB, 0.0f, 270.0f, 180.0f, 1.0f, 1.0f, fillColor, borderColor,
-                 DrawMode::FILL_NO_OUTLINE,
-                 thickness);
-        _drawPie({origin.x + crLT, destination.y - crLT}, crLT, 0.0f, 90.0f, 180.0f, 1.0f, 1.0f, fillColor,
-        borderColor,
+                 DrawMode::FILL_NO_OUTLINE, thickness);
+        _drawPie({origin.x + crLT, destination.y - crLT}, crLT, 0.0f, 90.0f, 180.0f, 1.0f, 1.0f, fillColor, borderColor,
                  DrawMode::FILL_NO_OUTLINE, thickness);
         _drawPie({destination.x - crRT, destination.y - crRT}, crRT, 0.0f, 0.0f, 90.0f, 1.0f, 1.0f, fillColor,
-        borderColor,
-                 DrawMode::FILL_NO_OUTLINE, thickness);
+                 borderColor, DrawMode::FILL_NO_OUTLINE, thickness);
         _drawPie({destination.x - crRB, origin.y + crRB}, crRB, 0.0f, 270.0f, 360.0f, 1.0f, 1.0f, fillColor,
-        borderColor,
-                 DrawMode::FILL_NO_OUTLINE, thickness);
+                 borderColor, DrawMode::FILL_NO_OUTLINE, thickness);
     }
 }
 
@@ -1607,7 +1602,7 @@ void DrawNode::_drawPie(const Vec2& center,
             _vertices[n++] = center;
             _vertices[n++] = _vertices[0];
             _drawPolygon(_vertices.data(), n, fillColor, fillColor, true, 0, false);
-            _drawPoly(_vertices.data(), n-2, false, borderColor, thickness, false);
+            _drawPoly(_vertices.data(), n - 2, false, borderColor, thickness, false);
             break;
         case DrawMode::OUTLINE:
             _vertices[n++] = center;
