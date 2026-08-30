@@ -45,8 +45,7 @@ int axlua_navmesh_NavMeshAgent_create(lua_State* L)
     const int argc = lua_gettop(L);
     if (argc != 1)
     {
-        luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n ",
-                   "ax.NavMeshAgent:create", argc, 1);
+        luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.NavMeshAgent:create", argc, 1);
         return 0;
     }
 

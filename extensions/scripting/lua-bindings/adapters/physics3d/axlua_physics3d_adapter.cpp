@@ -260,8 +260,7 @@ int axlua_physics3d_MeshCollider3D_create(lua_State* L)
     const int argc = lua_gettop(L);
     if (argc != 1 && argc != 2)
     {
-        luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n ",
-                   "ax.MeshCollider3D:create", argc, 1);
+        luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.MeshCollider3D:create", argc, 1);
         return 0;
     }
 
@@ -309,8 +308,8 @@ int axlua_physics3d_ConvexCollider3D_create(lua_State* L)
     const int argc = lua_gettop(L);
     if (argc != 1 && argc != 2)
     {
-        luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n ",
-                   "ax.ConvexCollider3D:create", argc, 1);
+        luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.ConvexCollider3D:create", argc,
+                   1);
         return 0;
     }
 
@@ -358,14 +357,13 @@ int axlua_physics3d_HeightFieldCollider3D_create(lua_State* L)
     const int argc = lua_gettop(L);
     if (argc != 8 && argc != 9)
     {
-        luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n ",
-                   "ax.HeightFieldCollider3D:create", argc, 8);
+        luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.HeightFieldCollider3D:create",
+                   argc, 8);
         return 0;
     }
 
-    if (!lua_isnumber(L, 1) || !lua_isnumber(L, 2) || !lua_istable(L, 3) ||
-        !lua_isnumber(L, 4) || !lua_isnumber(L, 5) || !lua_isnumber(L, 6) || !lua_isboolean(L, 7) ||
-        !lua_isboolean(L, 8))
+    if (!lua_isnumber(L, 1) || !lua_isnumber(L, 2) || !lua_istable(L, 3) || !lua_isnumber(L, 4) ||
+        !lua_isnumber(L, 5) || !lua_isnumber(L, 6) || !lua_isboolean(L, 7) || !lua_isboolean(L, 8))
     {
         axlua::adapter::raise_error(L, "invalid arguments in function 'axlua_physics3d_HeightFieldCollider3D_create'",
                                     nullptr);
@@ -394,17 +392,17 @@ int axlua_physics3d_HeightFieldCollider3D_create(lua_State* L)
         ax::PhysicsMaterial material;
         if (!luaval_to_physics_material(L, 9, &material, "ax.HeightFieldCollider3D:create"))
         {
-            axlua::adapter::raise_error(L, "invalid arguments in function 'axlua_physics3d_HeightFieldCollider3D_create'",
-                                        nullptr);
+            axlua::adapter::raise_error(
+                L, "invalid arguments in function 'axlua_physics3d_HeightFieldCollider3D_create'", nullptr);
             return 0;
         }
         collider = ax::HeightFieldCollider3D::create(width, length, heights, scale, minHeight, maxHeight, flipEdges,
-                                                      diamond, material);
+                                                     diamond, material);
     }
     else
     {
-        collider = ax::HeightFieldCollider3D::create(width, length, heights, scale, minHeight, maxHeight, flipEdges,
-                                                      diamond);
+        collider =
+            ax::HeightFieldCollider3D::create(width, length, heights, scale, minHeight, maxHeight, flipEdges, diamond);
     }
 
     object_to_luaval<ax::HeightFieldCollider3D>(L, "ax.HeightFieldCollider3D", collider);

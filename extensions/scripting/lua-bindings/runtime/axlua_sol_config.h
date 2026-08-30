@@ -18,7 +18,7 @@ std::function<Signature> make_lua_callback(lua_State* state, int index);
 // function-template reference at link time.
 template <>
 std::function<void()> make_lua_callback<void()>(lua_State* state, int index);
-}
+}  // namespace axlua
 
 #define SOL_AXMOL_STD_FUNCTION_GETTER(Signature, State, Index) axlua::make_lua_callback<Signature>((State), (Index))
 
