@@ -270,6 +270,12 @@ function SpritePolygonTest4:ctor()
     slider:loadProgressBarTexture("cocosui/sliderProgress.png")
     slider:setPosition(ax.p(vsize.width/2, vsize.height/4))
 
+    -- setPercent dispatches the registered callback immediately. Create the
+    -- label before installing the callback so the initial value update cannot
+    -- dereference a nil field.
+    self._epsilonLabel = ax.Label:createWithTTF(self._ttfConfig, "Epsilon: 2.0")
+    self:addChild(self._epsilonLabel)
+    self._epsilonLabel:setPosition(ax.p(vsize.width/2, vsize.height/4 + 15))
 
     local function percentChangedEvent(sender,eventType)
         if eventType == ccui.SliderEventType.percentChanged then
@@ -296,9 +302,6 @@ function SpritePolygonTest4:ctor()
         end)
     slider:setPercent(math.sqrt(1.0 /19.0 )*100)
 
-    self._epsilonLabel = ax.Label:createWithTTF(self._ttfConfig, "Epsilon: 2.0")
-    self:addChild(self._epsilonLabel)
-    self._epsilonLabel:setPosition(ax.p(vsize.width/2, vsize.height/4 + 15))
     self:addChild(slider)
 
     local list = {

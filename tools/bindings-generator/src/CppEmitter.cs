@@ -8,6 +8,8 @@ namespace Axmol.LuaBindings;
 
 internal static class CppEmitter
 {
+    internal sealed record Source(string FileName, string Contents);
+
     private static string RegistrationName(GenerationRequest request) =>
         string.IsNullOrWhiteSpace(request.RegistrationName) ? request.Module : request.RegistrationName;
 
@@ -33,6 +35,37 @@ internal static class CppEmitter
         return text.ToString();
     }
 
+    public static IReadOnlyList<Source> EmitSources(
+        GenerationRequest request,
+        IReadOnlyList<BindingClass> classes,
+        IReadOnlyList<BindingEnum> enums)
+    {
+        if (request.CppChunkCount <= 1 || classes.Count <= 1)
+            return new[] { new Source($"axlua_{request.Module}_gen.cpp", Emit(request, classes, enums)) };
+
+        var chunks = PartitionClasses(classes, request.CppChunkCount);
+        var sources = new List<Source> { new($"axlua_{request.Module}_gen.cpp", EmitChunkDispatcher(request, chunks.Count)) };
+        var chunkByClass = chunks
+            .SelectMany((chunk, index) => chunk.Select(bindingClass => (bindingClass.QualifiedName, Index: index)))
+            .ToDictionary(x => x.QualifiedName, x => x.Index, StringComparer.Ordinal);
+        var chunkEnums = Enumerable.Range(0, chunks.Count).Select(_ => new List<BindingEnum>()).ToArray();
+        foreach (var bindingEnum in enums)
+        {
+            var index = bindingEnum.OwnerQualifiedName is not null &&
+                        chunkByClass.TryGetValue(bindingEnum.OwnerQualifiedName, out var ownerChunk)
+                ? ownerChunk
+                : 0;
+            chunkEnums[index].Add(bindingEnum);
+        }
+
+        for (var index = 0; index < chunks.Count; index++)
+        {
+            sources.Add(new Source($"axlua_{request.Module}_gen_{index}.cpp",
+                EmitChunk(request, index, chunks[index], chunkEnums[index])));
+        }
+        return sources;
+    }
+
     public static string Emit(GenerationRequest request, IReadOnlyList<BindingClass> classes, IReadOnlyList<BindingEnum> enums)
     {
         var registrationName = RegistrationName(request);
@@ -43,21 +76,14 @@ internal static class CppEmitter
         AppendConditionalOpen(text, request);
         text.AppendLine();
 
-        foreach (var header in request.Headers.Distinct(StringComparer.Ordinal))
-        {
-            var fullHeader = Path.GetFullPath(Path.Combine(request.RepositoryRoot, header));
-            var relativeHeader = Path.GetRelativePath(request.RepositoryRoot, fullHeader).Replace('\\', '/');
-            text.Append("#include \"").Append(relativeHeader).AppendLine("\"");
-        }
+        AppendNativeHeaders(text, request);
 
         text.AppendLine();
         text.AppendLine("namespace ax::lua {");
         text.AppendLine();
         text.Append("void register_").Append(registrationName).AppendLine("(lua_State* L)");
         text.AppendLine("{");
-        text.Append("    auto module = axlua::Module::from(L, \"")
-            .Append(Escape(request.LuaNamespace)).Append("\", \"")
-            .Append(Escape(request.LuaTypeNamespace)).AppendLine("\");");
+        AppendModule(text, request);
 
         var classVariables = classes
             .Select((bindingClass, index) => new
@@ -77,43 +103,179 @@ internal static class CppEmitter
         foreach (var bindingClass in classes)
         {
             var variable = classVariables[bindingClass.QualifiedName];
-            var bases = bindingClass.Bases.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
-            if (bases.Length > 0)
-            {
-                text.Append("    ").Append(variable).Append(".bases<").AppendJoin(", ", bases).AppendLine(">();");
-            }
-            if (!bindingClass.IsAbstract && bindingClass.Constructors.Count > 0)
-            {
-                text.Append("    ").Append(variable).Append(".constructors<");
-                var constructorSignatures = bindingClass.Constructors
-                    .SelectMany(constructor => ConstructorSignatures(bindingClass.QualifiedName, constructor))
-                    .Distinct(StringComparer.Ordinal)
-                    .ToArray();
-                text.AppendJoin(", ", constructorSignatures);
-                text.AppendLine(">();");
-            }
-            foreach (var methodGroup in bindingClass.Methods.GroupBy(x => x.LuaName, StringComparer.Ordinal))
-            {
-                var registration = methodGroup.All(x => x.IsStatic) ? "static_method" : "method";
-                text.Append("    ").Append(variable).Append('.').Append(registration).Append("(\"")
-                    .Append(Escape(methodGroup.Key)).Append("\", ");
-                var callables = methodGroup.SelectMany(method => FormatCallables(method, bindingClass)).ToArray();
-                if (callables.Length > 1)
-                    text.Append("axlua::overload(");
-                text.AppendJoin(", ", callables.Select(callable =>
-                    callables.Length > 1 ? FormatOverloadCandidate(callable) : callable.Expression));
-                if (callables.Length > 1)
-                    text.Append(')');
-                text.AppendLine(");");
-            }
-            foreach (var field in bindingClass.Fields)
-            {
-                text.Append("    ").Append(variable).Append(".field(\"")
-                    .Append(Escape(field.LuaName)).Append("\", &")
-                    .Append(bindingClass.QualifiedName).Append("::").Append(field.NativeName).AppendLine(");");
-            }
+            AppendClassMembers(text, bindingClass, variable);
         }
 
+        AppendEnums(text, enums, classVariables);
+
+        text.AppendLine("}");
+        text.AppendLine();
+        text.AppendLine("} // namespace ax::lua");
+        AppendConditionalClose(text, request);
+        return text.ToString();
+    }
+
+    private static string EmitChunkDispatcher(GenerationRequest request, int chunkCount)
+    {
+        var registrationName = RegistrationName(request);
+        var text = new StringBuilder();
+        text.AppendLine("// Generated by Axmol.LuaBindings.Generator. Do not edit.");
+        text.AppendLine("#include \"lua.hpp\"");
+        AppendConditionalOpen(text, request);
+        text.AppendLine();
+        text.AppendLine("namespace ax::lua::detail {");
+        for (var index = 0; index < chunkCount; index++)
+        {
+            text.Append("void register_").Append(registrationName).Append("_types_").Append(index).AppendLine("(lua_State* L);");
+            text.Append("void register_").Append(registrationName).Append("_members_").Append(index).AppendLine("(lua_State* L);");
+            text.Append("void register_").Append(registrationName).Append("_enums_").Append(index).AppendLine("(lua_State* L);");
+        }
+        text.AppendLine("} // namespace ax::lua::detail");
+        text.AppendLine();
+        text.AppendLine("namespace ax::lua {");
+        text.AppendLine();
+        text.Append("void register_").Append(registrationName).AppendLine("(lua_State* L)");
+        text.AppendLine("{");
+        foreach (var phase in new[] { "types", "members", "enums" })
+        {
+            for (var index = 0; index < chunkCount; index++)
+            {
+                text.Append("    detail::register_").Append(registrationName).Append('_').Append(phase)
+                    .Append('_').Append(index).AppendLine("(L);");
+            }
+        }
+        text.AppendLine("}");
+        text.AppendLine();
+        text.AppendLine("} // namespace ax::lua");
+        AppendConditionalClose(text, request);
+        return text.ToString();
+    }
+
+    private static string EmitChunk(
+        GenerationRequest request,
+        int chunkIndex,
+        IReadOnlyList<BindingClass> classes,
+        IReadOnlyList<BindingEnum> enums)
+    {
+        var registrationName = RegistrationName(request);
+        var text = new StringBuilder();
+        text.AppendLine("// Generated by Axmol.LuaBindings.Generator. Do not edit.");
+        text.AppendLine("#include \"lua-bindings/runtime/axlua_runtime.h\"");
+        text.AppendLine("#include \"lua.hpp\"");
+        AppendConditionalOpen(text, request);
+        text.AppendLine();
+        AppendNativeHeaders(text, request);
+        text.AppendLine();
+        text.AppendLine("namespace ax::lua::detail {");
+        text.AppendLine();
+        text.Append("void register_").Append(registrationName).Append("_types_").Append(chunkIndex).AppendLine("(lua_State* L)");
+        text.AppendLine("{");
+        AppendModule(text, request);
+        foreach (var bindingClass in classes)
+        {
+            text.Append("    module.class_<").Append(bindingClass.QualifiedName).Append(">(\"")
+                .Append(bindingClass.LuaClassName).AppendLine("\");");
+        }
+        text.AppendLine("}");
+        text.AppendLine();
+        text.Append("void register_").Append(registrationName).Append("_members_").Append(chunkIndex).AppendLine("(lua_State* L)");
+        text.AppendLine("{");
+        AppendModule(text, request);
+        var classVariables = classes
+            .Select((bindingClass, index) => new
+            {
+                bindingClass.QualifiedName,
+                Variable = $"class_{index}_{Sanitize(bindingClass.NativeName)}"
+            })
+            .ToDictionary(x => x.QualifiedName, x => x.Variable, StringComparer.Ordinal);
+        foreach (var bindingClass in classes)
+        {
+            var variable = classVariables[bindingClass.QualifiedName];
+            text.Append("    auto ").Append(variable).Append(" = module.class_<")
+                .Append(bindingClass.QualifiedName).Append(">(\"").Append(bindingClass.LuaClassName).AppendLine("\");");
+            AppendClassMembers(text, bindingClass, variable);
+        }
+        text.AppendLine("}");
+        text.AppendLine();
+        text.Append("void register_").Append(registrationName).Append("_enums_").Append(chunkIndex).AppendLine("(lua_State* L)");
+        text.AppendLine("{");
+        AppendModule(text, request);
+        var enumOwners = enums
+            .Where(x => x.OwnerQualifiedName is not null && classVariables.ContainsKey(x.OwnerQualifiedName))
+            .Select(x => x.OwnerQualifiedName!)
+            .Distinct(StringComparer.Ordinal)
+            .ToDictionary(x => x, x => classVariables[x], StringComparer.Ordinal);
+        foreach (var owner in enumOwners)
+        {
+            var bindingClass = classes.First(x => x.QualifiedName == owner.Key);
+            text.Append("    auto ").Append(owner.Value).Append(" = module.class_<")
+                .Append(bindingClass.QualifiedName).Append(">(\"").Append(bindingClass.LuaClassName).AppendLine("\");");
+        }
+        AppendEnums(text, enums, enumOwners);
+        text.AppendLine("}");
+        text.AppendLine();
+        text.AppendLine("} // namespace ax::lua::detail");
+        AppendConditionalClose(text, request);
+        return text.ToString();
+    }
+
+    private static void AppendNativeHeaders(StringBuilder text, GenerationRequest request)
+    {
+        foreach (var header in request.Headers.Distinct(StringComparer.Ordinal))
+        {
+            var fullHeader = Path.GetFullPath(Path.Combine(request.RepositoryRoot, header));
+            var relativeHeader = Path.GetRelativePath(request.RepositoryRoot, fullHeader).Replace('\\', '/');
+            text.Append("#include \"").Append(relativeHeader).AppendLine("\"");
+        }
+    }
+
+    private static void AppendModule(StringBuilder text, GenerationRequest request)
+    {
+        text.Append("    auto module = axlua::Module::from(L, \"")
+            .Append(Escape(request.LuaNamespace)).Append("\", \"")
+            .Append(Escape(request.LuaTypeNamespace)).AppendLine("\");");
+    }
+
+    private static void AppendClassMembers(StringBuilder text, BindingClass bindingClass, string variable)
+    {
+        var bases = bindingClass.Bases.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
+        if (bases.Length > 0)
+            text.Append("    ").Append(variable).Append(".bases<").AppendJoin(", ", bases).AppendLine(">();");
+        if (!bindingClass.IsAbstract && bindingClass.Constructors.Count > 0)
+        {
+            text.Append("    ").Append(variable).Append(".constructors<");
+            text.AppendJoin(", ", bindingClass.Constructors
+                .SelectMany(constructor => ConstructorSignatures(bindingClass.QualifiedName, constructor))
+                .Distinct(StringComparer.Ordinal));
+            text.AppendLine(">();");
+        }
+        foreach (var methodGroup in bindingClass.Methods.GroupBy(x => x.LuaName, StringComparer.Ordinal))
+        {
+            var registration = methodGroup.All(x => x.IsStatic) ? "static_method" : "method";
+            text.Append("    ").Append(variable).Append('.').Append(registration).Append("(\"")
+                .Append(Escape(methodGroup.Key)).Append("\", ");
+            var callables = methodGroup.SelectMany(method => FormatCallables(method, bindingClass)).ToArray();
+            if (callables.Length > 1)
+                text.Append("axlua::overload(");
+            text.AppendJoin(", ", callables.Select(callable =>
+                callables.Length > 1 ? FormatOverloadCandidate(callable) : callable.Expression));
+            if (callables.Length > 1)
+                text.Append(')');
+            text.AppendLine(");");
+        }
+        foreach (var field in bindingClass.Fields)
+        {
+            text.Append("    ").Append(variable).Append(".field(\"")
+                .Append(Escape(field.LuaName)).Append("\", &")
+                .Append(bindingClass.QualifiedName).Append("::").Append(field.NativeName).AppendLine(");");
+        }
+    }
+
+    private static void AppendEnums(
+        StringBuilder text,
+        IReadOnlyList<BindingEnum> enums,
+        IReadOnlyDictionary<string, string> classVariables)
+    {
         var enumIndex = 0;
         foreach (var bindingEnum in enums)
         {
@@ -132,18 +294,43 @@ internal static class CppEmitter
                         ? value.UnsignedValue.ToString(System.Globalization.CultureInfo.InvariantCulture) + "ull"
                         : value.SignedValue.ToString(System.Globalization.CultureInfo.InvariantCulture) + "ll";
                 text.Append("    ").Append(enumVariable).Append(".set(\"")
-                    .Append(Escape(value.Name)).Append("\", ")
-                    .Append(literal)
-                    .AppendLine(");");
+                    .Append(Escape(value.Name)).Append("\", ").Append(literal).AppendLine(");");
             }
         }
-
-        text.AppendLine("}");
-        text.AppendLine();
-        text.AppendLine("} // namespace ax::lua");
-        AppendConditionalClose(text, request);
-        return text.ToString();
     }
+
+    private static IReadOnlyList<IReadOnlyList<BindingClass>> PartitionClasses(
+        IReadOnlyList<BindingClass> classes,
+        int requestedChunkCount)
+    {
+        var chunkCount = Math.Min(Math.Max(1, requestedChunkCount), classes.Count);
+        var weights = classes.Select(ClassWeight).ToArray();
+        var remainingWeight = weights.Sum();
+        var chunks = new List<IReadOnlyList<BindingClass>>(chunkCount);
+        var classIndex = 0;
+        for (var chunkIndex = 0; chunkIndex < chunkCount; chunkIndex++)
+        {
+            var remainingChunks = chunkCount - chunkIndex;
+            var targetWeight = (remainingWeight + remainingChunks - 1) / remainingChunks;
+            var chunk = new List<BindingClass>();
+            var chunkWeight = 0;
+            while (classIndex < classes.Count - (remainingChunks - 1))
+            {
+                chunk.Add(classes[classIndex]);
+                chunkWeight += weights[classIndex++];
+                if (chunkWeight >= targetWeight)
+                    break;
+            }
+            remainingWeight -= chunkWeight;
+            chunks.Add(chunk);
+        }
+        return chunks;
+    }
+
+    private static int ClassWeight(BindingClass bindingClass) =>
+        1 + bindingClass.Bases.Count + bindingClass.Fields.Count * 2 +
+        bindingClass.Constructors.Sum(x => Math.Max(1, ConstructorSignatures(bindingClass.QualifiedName, x).Count())) +
+        bindingClass.Methods.Sum(x => Math.Max(1, FormatCallables(x, bindingClass).Count()));
 
     private static void AppendConditionalOpen(StringBuilder text, GenerationRequest request)
     {

@@ -22,6 +22,7 @@
       "type": "array",
       "items": { "type": "string" }
     },
+    "cpp_chunks": { "type": "integer", "minimum": 1 },
     "classes": { "$ref": "#/$defs/stringList" },
     "abstract_classes": { "$ref": "#/$defs/stringList" },
     "no_constructors": { "$ref": "#/$defs/stringList" },

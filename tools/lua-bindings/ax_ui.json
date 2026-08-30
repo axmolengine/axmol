@@ -2,6 +2,7 @@
   "module": "ax_ui",
   "target_namespace": "axui",
   "cpp_namespace": "ax::ui",
+  "cpp_chunks": 4,
   "macro_judgement": null,
   "headers": [
     "%(axdir)s/axmol/ui/CocosGUI.h"

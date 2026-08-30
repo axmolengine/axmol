@@ -104,6 +104,13 @@ set(lua_bindings_generated_files
   generated/axlua_fairygui_gen.cpp
 )
 
+# Large generated modules are emitted as independently compiled shards.  The
+# stable *_gen.cpp dispatcher remains in the explicit list above, while this
+# pattern picks up the generator-owned *_gen_<n>.cpp implementation files.
+file(GLOB lua_bindings_generated_chunks CONFIGURE_DEPENDS
+  "${CMAKE_CURRENT_SOURCE_DIR}/generated/axlua_*_gen_[0-9]*.cpp")
+list(APPEND lua_bindings_generated_files ${lua_bindings_generated_chunks})
+
 if(APPLE)
   # CCLuaObjcBridge.mm needed by ios and mac
   set(lua_bindings_platform_headers

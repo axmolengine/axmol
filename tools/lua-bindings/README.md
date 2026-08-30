@@ -36,7 +36,7 @@ inferred from all public fields, which keeps ownership and ABI-sensitive data
 private unless a module explicitly adopts it. `abstract_classes`,
 `no_constructors`, `classes_have_no_parents`, and `base_classes_to_skip` also
 accept arrays.
-`-Mode all` writes a complete generated API manifest for
+The default generation mode writes a complete generated API manifest for
 each module under `generated/manifests`; it is an audit and review snapshot,
 not a build input. The compatibility schema is in `schema.json`. The boundary
 between generated output and justified specialized code is documented in
@@ -56,19 +56,18 @@ between generated output and justified specialized code is documented in
 3. Verify the headers without changing checked-in output:
 
    ```powershell
-   pwsh ./tools/cmdline/axmol.ps1 genbindings -Mode verify -HostClang
+   pwsh ./tools/cmdline/axmol.ps1 genbindings -Verify
    ```
 
 4. Regenerate all checked-in C++ bindings when the C++ headers or JSON policy
    changes:
 
    ```powershell
-   pwsh ./tools/cmdline/axmol.ps1 genbindings -Mode all -HostClang
+   pwsh ./tools/cmdline/axmol.ps1 genbindings
    ```
 
 The generated `*_gen.h/.cpp` files are written to
 `extensions/scripting/lua-bindings/generated`; complete API manifests are
 written to its `manifests/` subdirectory.
-For Android, omit `-HostClang`; the entry point reuses `ANDROID_NDK` or
-`-NdkRoot`, and otherwise invokes `setup.ps1 -p android` before collecting
-against the Android target headers.
+The entry point reuses `ANDROID_NDK` or `-NdkRoot`, and otherwise invokes
+`setup.ps1 -p android` before collecting against the Android target headers.

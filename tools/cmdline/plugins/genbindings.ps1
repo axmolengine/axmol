@@ -1,14 +1,12 @@
 #requires -Version 7.4
 
 param(
-    [ValidateSet('all', 'verify')]
-    [string]$Mode = 'all',
+    [switch]$Verify,
     [string]$ClangSharpRoot = $env:AXMOL_CLANGSHARP_ROOT,
     [string]$LibClangRoot = $env:AXMOL_LIBCLANG_ROOT,
     [string]$GeneratorAssembly = $env:AXMOL_LUA_GENERATOR_ASSEMBLY,
     [Alias('m')]
     [string]$Module = 'all',
-    [switch]$HostClang,
     [string]$OutputDirectory,
     [string[]]$ExtraClangArguments = @(),
     [string]$NdkRoot = $env:ANDROID_NDK,
@@ -272,7 +270,7 @@ if ($libClangLibrary) {
 }
 
 Write-Host "Axmol Lua binding generator loaded from $GeneratorAssembly"
-Write-Host "Mode=$Mode Module=$Module"
+Write-Host "Verify=$Verify Module=$Module"
 
 function Resolve-Ndk([string]$Root) {
     if ($Root -and (Test-Path $Root -PathType Container)) { return (Resolve-Path $Root).Path }
@@ -382,60 +380,6 @@ function Convert-ClassRenames([object]$Value) {
     return $renames.ToArray()
 }
 
-if ($HostClang) {
-    if (-not (Get-Command clang++ -ErrorAction SilentlyContinue)) {
-        throw 'The -HostClang verification mode requires clang++ on PATH.'
-    }
-    $hostSystemRoots = @()
-    $hostClangArguments = @()
-    if ($IsMacOS -and (Get-Command xcrun -ErrorAction SilentlyContinue)) {
-        $sdkRoot = (& xcrun --sdk macosx --show-sdk-path).Trim()
-        $resourceRoot = (& clang++ -print-resource-dir).Trim()
-        $hostClangArguments += @('-isysroot', $sdkRoot, '-resource-dir', $resourceRoot)
-        $hostSystemRoots += @(
-            (Join-Path $sdkRoot 'usr/include/c++/v1'),
-            (Join-Path $sdkRoot 'usr/include'),
-            (Join-Path $resourceRoot 'include'))
-    }
-    $includeRoots = @(
-        $axmolRoot,
-        (Join-Path $axmolRoot 'extensions'),
-        (Join-Path $axmolRoot 'extensions/scripting'),
-        (Join-Path $axmolRoot '3rdparty'),
-        (Join-Path $axmolRoot '3rdparty/yasio'),
-        (Join-Path $axmolRoot '3rdparty/glfw/include'),
-        (Join-Path $axmolRoot '3rdparty/fmt/include'),
-        (Join-Path $axmolRoot '3rdparty/robin-map/include'),
-        (Join-Path $axmolRoot '3rdparty/jni.hpp/include'),
-        (Join-Path $axmolRoot '3rdparty/glad/include'),
-        (Join-Path $axmolRoot '3rdparty/box2d/include'),
-        (Join-Path $axmolRoot '3rdparty/bullet'),
-        (Join-Path $axmolRoot '3rdparty/jolt'),
-        (Join-Path $axmolRoot 'extensions/spine/runtime/include'),
-        (Join-Path $axmolRoot 'extensions/spine/src'),
-        (Join-Path $axmolRoot 'extensions/sceneext/src'),
-        (Join-Path $axmolRoot 'extensions/sceneio/src'),
-        (Join-Path $axmolRoot 'extensions/fairygui/src'),
-        (Join-Path $axmolRoot 'extensions/fairygui/src/fairygui'),
-        (Join-Path $axmolRoot 'extensions/Particle3D/src'),
-        (Join-Path $axmolRoot 'extensions/GUI/src'),
-        (Join-Path $axmolRoot '3rdparty/lua'),
-        (Join-Path $axmolRoot '3rdparty/lua/plainlua'),
-        (Join-Path $axmolRoot '3rdparty/lua/lua-cjson'),
-        (Join-Path $axmolRoot '3rdparty/llhttp/include'),
-        (Join-Path $axmolRoot '3rdparty/websocket-parser')
-    )
-    $includeRoots += $hostSystemRoots
-    $clangArguments = [System.Collections.Generic.List[string]]::new()
-    $clangArguments.AddRange([string[]]@(
-        '-x', 'c++', '-std=c++23', '-fsigned-char',
-        '-Wno-pragma-once-outside-header', '-Wno-unknown-attributes'))
-    $clangArguments.AddRange([string[]]$hostClangArguments)
-    $clangArguments.AddRange([string[]]@('-DAX_ENABLE_MEDIA=1', '-D_AX_GEN_SCRIPT_BINDINGS=1'))
-    if ($ExtraClangArguments.Count -gt 0) { $clangArguments.AddRange($ExtraClangArguments) }
-    foreach ($includeRoot in $includeRoots) { $clangArguments.Add('-I'); $clangArguments.Add($includeRoot) }
-    Write-Host 'Clang mode: host verification'
-} else {
     $ndk = Ensure-Ndk
     $llvm = Find-LlvmInclude $ndk
     $includeRoots = @(
@@ -494,7 +438,6 @@ if ($HostClang) {
         '-D__builtin_neon_vcltz_f16(...)=(uint16x4_t{})'))
     if ($ExtraClangArguments.Count -gt 0) { $clangArguments.AddRange($ExtraClangArguments) }
     foreach ($includeRoot in $includeRoots) { $clangArguments.Add('-isystem'); $clangArguments.Add($includeRoot) }
-}
 
 $moduleMap = [ordered]@{
     ax_base = 'ax_base.json'; ax_rhi = 'ax_rhi.json'; ax_extension = 'ax_extension.json'; ax_ui = 'ax_ui.json'
@@ -581,8 +524,9 @@ foreach ($name in $selected) {
     $request.LuaNamespace = $targetNamespace
     $request.LuaTypeNamespace = $typeNamespace
     $request.ConditionalExpression = $conditionalExpression
-    $request.EmitCpp = ($Mode -eq 'all')
-    $request.EmitManifest = ($Mode -eq 'all')
+    $request.CppChunkCount = if ($null -eq $config.cpp_chunks) { 1 } else { [Math]::Max(1, [int]$config.cpp_chunks) }
+    $request.EmitCpp = -not $Verify
+    $request.EmitManifest = -not $Verify
     $result = $generatorType::Generate($request)
     $results += $result
     foreach ($bindingClass in $result.Classes) {

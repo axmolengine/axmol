@@ -2,6 +2,7 @@
   "module": "ax_physics3d",
   "target_namespace": "ax",
   "cpp_namespace": "ax",
+  "cpp_chunks": 2,
   "macro_judgement": "#if defined(AX_ENABLE_PHYSICS_3D)",
   "headers": [
     "%(axdir)s/axmol/physics/physics-3d.h"

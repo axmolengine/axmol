@@ -25,6 +25,7 @@ public sealed class GenerationRequest
     public string LuaNamespace { get; init; } = "ax";
     public string LuaTypeNamespace { get; init; } = "ax";
     public string? ConditionalExpression { get; init; }
+    public int CppChunkCount { get; init; } = 1;
     public bool EmitCpp { get; init; } = true;
     public bool EmitManifest { get; init; } = true;
 }

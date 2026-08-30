@@ -2,6 +2,7 @@
   "module": "ax_base",
   "target_namespace": "ax",
   "cpp_namespace": "ax",
+  "cpp_chunks": 8,
   "macro_judgement": null,
   "headers": [
     "%(axdir)s/axmol/axmol.h",

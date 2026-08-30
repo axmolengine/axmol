@@ -392,12 +392,10 @@ Generate Lua bindings for axmol engine.
 options:
   -m <module>      Generate one module; default is all. Use -m all to generate all modules.
                    Both short names (base) and configured names (ax_base) are accepted.
-  -Mode            Optional advanced mode: all (default, emit C++ and manifests)
-                   or verify (parse only).
+  -Verify          Parse and validate without writing generated files.
   -ClangSharpRoot  Local ClangSharp checkout (optional).
   -LibClangRoot    Directory containing the libclang runtime downloaded by 1kiss.
   -GeneratorAssembly Prebuilt C# generator DLL (or AXMOL_LUA_GENERATOR_ASSEMBLY).
-  -HostClang        Use host clang++ for local generator verification (not Android output).
   -ExtraClangArguments Additional target/platform defines, e.g. -DAX_ENABLE_VIDEO=1 or -DANDROID=1.
   -OutputDirectory  Override generated-file directory for staged verification.
   -NdkRoot         Android NDK root; defaults to ANDROID_NDK. If omitted,

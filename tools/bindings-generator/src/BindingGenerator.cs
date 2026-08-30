@@ -346,8 +346,8 @@ public static unsafe class BindingGenerator
         {
             outputFiles.Add((Path.Combine(request.OutputDirectory, $"axlua_{request.Module}_gen.h"),
                              CppEmitter.EmitHeader(request)));
-            outputFiles.Add((Path.Combine(request.OutputDirectory, $"axlua_{request.Module}_gen.cpp"),
-                             CppEmitter.Emit(request, uniqueClasses, uniqueEnums)));
+            outputFiles.AddRange(CppEmitter.EmitSources(request, uniqueClasses, uniqueEnums)
+                .Select(source => (Path.Combine(request.OutputDirectory, source.FileName), source.Contents)));
         }
         if (request.EmitManifest)
             outputFiles.Add((manifestPath, JsonSerializer.Serialize(new BindingManifest
@@ -359,9 +359,11 @@ public static unsafe class BindingGenerator
                 ConditionalExpression = request.ConditionalExpression,
                 Classes = uniqueClasses,
                 Enums = uniqueEnums
-            }, JsonOptions)));
+            }, JsonOptions) + "\n"));
 
         CommitGeneratedFiles(outputFiles, generatedFiles);
+        if (request.EmitCpp)
+            RemoveStaleCppChunks(request, outputFiles.Select(x => x.Path));
 
         return new GenerationResult
         {
@@ -372,6 +374,21 @@ public static unsafe class BindingGenerator
             Classes = uniqueClasses,
             Enums = uniqueEnums
         };
+    }
+
+    private static void RemoveStaleCppChunks(GenerationRequest request, IEnumerable<string> generatedPaths)
+    {
+        var retained = generatedPaths.Select(Path.GetFullPath).ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var prefix = $"axlua_{request.Module}_gen_";
+        foreach (var path in Directory.GetFiles(request.OutputDirectory, $"{prefix}*.cpp"))
+        {
+            var fileName = Path.GetFileNameWithoutExtension(path);
+            if (!fileName.StartsWith(prefix, StringComparison.Ordinal) ||
+                !int.TryParse(fileName[prefix.Length..], out _))
+                continue;
+            if (!retained.Contains(Path.GetFullPath(path)))
+                File.Delete(path);
+        }
     }
 
     private static void CommitGeneratedFiles(

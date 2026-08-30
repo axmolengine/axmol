@@ -54,14 +54,14 @@ the generator.
 From the repository root:
 
 ```powershell
-./tools/cmdline/axmol genbindings -Mode verify
+./tools/cmdline/axmol genbindings -Verify
 ./tools/cmdline/axmol -p wasm -O0 -t lua-tests
 ```
 
 `axmol genbindings` generates all modules by default. Use `-m base` (or
 `-m ax_base`) to generate one module, and `-m all` to explicitly select all
-modules. `-Mode verify` is an optional parse-only mode; use `-Mode all` only
-when intentionally regenerating C++ output and the API manifests. The
+modules. `-Verify` is an optional parse-only switch; omit it when intentionally
+regenerating C++ output and the API manifests. The
 generator requires PowerShell 7.4; its `Add-Type` compiler
 produces the C# assembly in-process, so no separately installed .NET SDK is
 required. It never falls back to old Python output. By default

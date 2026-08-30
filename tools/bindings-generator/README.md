@@ -91,6 +91,14 @@ Platform-specific modules accept extra clang defines
 through `-ExtraClangArguments`, for example `-DAX_ENABLE_VIDEO=1` or
 `-DANDROID=1`; generated C++ also preserves each module's conditional guard.
 
+Modules with a large template-instantiation workload can set `cpp_chunks` in
+their JSON configuration. The stable `axlua_<module>_gen.cpp` then dispatches
+to independently compiled shards: every shard creates its types first, all
+members are bound in a second pass, and enums are registered last. This keeps
+the existing public registration entry point and class-registration ordering
+while avoiding a single oversized compiler job. Successful regeneration also
+removes obsolete shards for that module.
+
 ## Clean checkout and CI workflow
 
 The repository contains the generator source and project file. It deliberately
@@ -105,16 +113,16 @@ source configuration, and never restores or ships `libClangSharp` or the NuGet
 
 `axmol genbindings` generates all configured modules by default. Use
 `-m base` (or `-m ax_base`) for one module, or `-m all` to explicitly select
-all modules. For a host-side verification run:
+all modules. For a verification run:
 
 ```powershell
 pwsh ./tools/cmdline/axmol.ps1 genbindings `
-  -Mode verify -HostClang
+  -Verify
 ```
 
 Verification parses every selected header without writing output. For an
 intentional regeneration of checked-in `*_gen.h/.cpp` files and complete API
-manifests, use `-Mode all`. Manifests are written below
+manifests, omit `-Verify`. Manifests are written below
 `lua-bindings/generated/manifests` and record the module, classes, and both
 class-owned and standalone enums for code review; the build does not consume
 them.
