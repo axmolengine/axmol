@@ -39,15 +39,30 @@
   "fields": [
     {
       "class": "AABB",
-      "names": ["_min", "_max"]
+      "names": [
+        "_min",
+        "_max"
+      ]
     },
     {
       "class": "OBB",
-      "names": ["_center", "_xAxis", "_yAxis", "_zAxis", "_extentX", "_extentY", "_extentZ", "_extents"]
+      "names": [
+        "_center",
+        "_xAxis",
+        "_yAxis",
+        "_zAxis",
+        "_extentX",
+        "_extentY",
+        "_extentZ",
+        "_extents"
+      ]
     },
     {
       "class": "Ray",
-      "names": ["origin", "direction"]
+      "names": [
+        "origin",
+        "direction"
+      ]
     }
   ],
   "base_classes_to_skip": [
@@ -63,13 +78,10 @@
         "hasVertexAttrib",
         "getSkin",
         "getMeshIndexData",
-        "getGLProgramState",
         "getPrimitiveType",
         "getIndexCount",
         "getIndexFormat",
         "getIndexBuffer",
-        "getMeshCommand",
-        "getDefaultGLProgram",
         "getTexture",
         "setTexture"
       ]
@@ -77,7 +89,6 @@
     {
       "class": "MeshRenderer",
       "methods": [
-        "getSkin",
         "getMeshArrayByName",
         "createAsync",
         "init",
@@ -86,7 +97,6 @@
         "loadFromCache",
         "loadFromFile",
         "visit",
-        "genGLProgramState",
         "createNode",
         "createAttachMeshRendererNode",
         "createMeshRendererNode",

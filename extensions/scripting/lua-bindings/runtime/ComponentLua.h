@@ -29,6 +29,8 @@
 #include <unordered_map>
 #include "axmol/scene/Component.h"
 
+struct lua_State;
+
 namespace ax
 {
 
@@ -41,7 +43,11 @@ public:
     /**
      * This function is used to be invoked from lua side to get the corresponding script object of this component.
      */
-    void* getScriptObject() const;
+    // This is a stack-side compatibility helper, not a native pointer API.
+    // Keep it out of generated bindings; `pushScriptObject` below is the
+    // explicit adapter bridge that returns the original Lua table.
+    [[internal]] void* getScriptObject() const;
+    [[internal]] int pushScriptObject(lua_State* state) const;
 
     virtual void update(float dt);
     virtual void onEnter();

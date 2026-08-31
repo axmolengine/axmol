@@ -27,23 +27,17 @@
         "getAttachment",
         "update",
         "draw",
-        "createWithData",
-        "setAnimationStateData",
-        "createWithData",
         "addAnimation",
-        "getCurrent",
         "setAnimation",
         "onAnimationStateEvent",
-        "onTrackEntryEvent",
-        "getState"
+        "onTrackEntryEvent"
       ]
     },
     {
       "class": "*",
       "methods": [
         "update",
-        "draw",
-        "drawSkeleton"
+        "draw"
       ]
     }
   ],

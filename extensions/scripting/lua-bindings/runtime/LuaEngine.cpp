@@ -186,8 +186,6 @@ int LuaEngine::sendEvent(const ScriptEvent& evt)
 {
     switch (evt.type)
     {
-    case kNodeEvent:
-        return handleNodeEvent(evt.data);
     case kMenuClickedEvent:
         return handleMenuClickedEvent(evt.data);
     case kCallFuncEvent:
@@ -210,52 +208,6 @@ int LuaEngine::sendEvent(const ScriptEvent& evt)
     }
 
     return 0;
-}
-
-int LuaEngine::handleNodeEvent(void* data)
-{
-    if (nullptr == data)
-        return 0;
-
-    BasicScriptData* basicScriptData = (BasicScriptData*)data;
-    if (nullptr == basicScriptData->nativeObject || nullptr == basicScriptData->value)
-        return 0;
-
-    int handler = AxluaCallbackRegistry::getInstance()->getObjectHandler(basicScriptData->nativeObject,
-                                                                         AxluaCallbackRegistry::HandlerType::NODE);
-
-    if (0 == handler)
-        return 0;
-
-    int action = *((int*)(basicScriptData->value));
-    switch (action)
-    {
-    case kNodeOnEnter:
-        _stack->pushString("enter");
-        break;
-
-    case kNodeOnExit:
-        _stack->pushString("exit");
-        break;
-
-    case kNodeOnEnterTransitionDidFinish:
-        _stack->pushString("enterTransitionFinish");
-        break;
-
-    case kNodeOnExitTransitionDidStart:
-        _stack->pushString("exitTransitionStart");
-        break;
-
-    case kNodeOnCleanup:
-        _stack->pushString("cleanup");
-        break;
-
-    default:
-        return 0;
-    }
-    int ret = _stack->executeFunctionByHandler(handler, 1);
-    _stack->clean();
-    return ret;
 }
 
 int LuaEngine::handleMenuClickedEvent(void* data)

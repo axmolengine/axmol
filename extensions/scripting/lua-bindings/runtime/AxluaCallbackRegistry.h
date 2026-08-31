@@ -30,6 +30,7 @@
 #include "axmol/2d/ActionInstant.h"
 #include <vector>
 #include <map>
+#include <mutex>
 
 /**
  * @addtogroup lua
@@ -98,8 +99,7 @@ public:
      */
     enum class HandlerType : int
     {
-        NODE = 0,
-        MENU_CLICKED,
+        MENU_CLICKED = 0,
         CALLFUNC,
         SCHEDULE,
         TOUCHES,
@@ -300,6 +300,7 @@ private:
     // Object-ness from void*: this registry also tracks stack-owned listeners
     // and callback helper objects which must never be wrapped in WeakPtr.
     MapObjectHandlers _mapObjectHandlers;
+    mutable std::mutex _mutex;
 };
 
 }  // namespace ax

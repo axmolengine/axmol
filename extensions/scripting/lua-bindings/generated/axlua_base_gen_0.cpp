@@ -170,7 +170,6 @@ void register_ax_base_members_0(lua_State* L)
     class_10_ActionManager.method("resumeTargets", static_cast<void (ax::ActionManager::*)(const Vector<ax::Node *> &)>(&ax::ActionManager::resumeTargets));
     class_10_ActionManager.method("update", static_cast<void (ax::ActionManager::*)(float)>(&ax::ActionManager::update));
     auto class_11_ActionObjectScriptData = module.class_<ax::ActionObjectScriptData>("ActionObjectScriptData");
-    class_11_ActionObjectScriptData.constructors<ax::ActionObjectScriptData(void *), ax::ActionObjectScriptData(void *, int *), ax::ActionObjectScriptData(void *, int *, void *)>();
     auto class_12_ActionTween = module.class_<ax::ActionTween>("ActionTween");
     class_12_ActionTween.bases<ax::ActionInterval, ax::FiniteTimeAction, ax::Action, ax::Object>();
     class_12_ActionTween.method("clone", static_cast<ax::ActionTween * (ax::ActionTween::*)() const>(&ax::ActionTween::clone));
@@ -243,7 +242,6 @@ void register_ax_base_members_0(lua_State* L)
     auto class_22_AnimationFrameData = module.class_<ax::AnimationFrameData>("AnimationFrameData");
     auto class_23_Application = module.class_<ax::Application>("Application");
     class_23_Application.method("getCurrentLanguage", static_cast<ax::LanguageType (ax::Application::*)()>(&ax::Application::getCurrentLanguage));
-    class_23_Application.method("getCurrentLanguageCode", static_cast<const char * (ax::Application::*)()>(&ax::Application::getCurrentLanguageCode));
     class_23_Application.method("getTargetPlatform", static_cast<ax::ApplicationCore::Platform (ax::Application::*)()>(&ax::Application::getTargetPlatform));
     class_23_Application.method("getVersion", static_cast<std::string (ax::Application::*)()>(&ax::Application::getVersion));
     class_23_Application.method("openURL", static_cast<bool (ax::Application::*)(std::string_view)>(&ax::Application::openURL));
@@ -463,7 +461,6 @@ void register_ax_base_members_0(lua_State* L)
     auto class_45_ComponentLua = module.class_<ax::ComponentLua>("ComponentLua");
     class_45_ComponentLua.bases<ax::Component, ax::Object>();
     class_45_ComponentLua.static_method("create", static_cast<ax::ComponentLua * (*)(std::string_view)>(&ax::ComponentLua::create));
-    class_45_ComponentLua.method("getScriptObject", static_cast<void * (ax::ComponentLua::*)() const>(&ax::ComponentLua::getScriptObject));
     class_45_ComponentLua.method("update", static_cast<void (ax::ComponentLua::*)(float)>(&ax::ComponentLua::update));
     auto class_46_CustomEvent = module.class_<ax::CustomEvent>("CustomEvent");
     class_46_CustomEvent.bases<ax::Event, ax::Object>();

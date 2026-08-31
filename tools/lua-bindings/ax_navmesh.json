@@ -35,6 +35,8 @@
     {
       "class": "NavMeshAgent",
       "methods": [
+        "create",
+        "getCurrentOffMeshLinkData",
         "move"
       ]
     }

@@ -5,8 +5,9 @@ Lua API changes and application migration notes are documented in
 
 The binding toolchain is intentionally split into three layers:
 
-1. PowerShell owns repository/toolchain discovery and module configuration.
-2. `Axmol.LuaBindings.Generator` owns Clang AST inspection and C++ emission.
+1. PowerShell owns repository and host-toolchain discovery.
+2. `Axmol.LuaBindings.Generator` owns module configuration, policy validation,
+   Clang AST inspection, and C++ emission.
 3. `lua-bindings/runtime/axlua_runtime.*` owns Lua object identity, peer tables,
    lifecycle invalidation, and Lua-version compatibility.
 
@@ -101,12 +102,14 @@ removes obsolete shards for that module.
 
 ## Clean checkout and CI workflow
 
-The repository contains the generator source and project file. It deliberately
-does not contain `bin/` or `obj/`; those are local build output. A clean machine
+The repository contains the generator source and an optional SDK project file
+for Windows/Visual Studio debugging. The project file is not part of the
+supported generation path: `genbindings.ps1` compiles the sources directly
+with PowerShell `Add-Type`, so a clean machine
 needs PowerShell 7.4 or newer and access to the NuGet feed containing the
 pinned managed package. The first run downloads the exact
-`ClangSharp.Interop` managed package version declared in the project, compiles
-the generator with PowerShell itself, copies only that DLL beside the
+`ClangSharp.Interop` managed package version declared in `genbindings.ps1`,
+compiles the generator with PowerShell itself, copies only that DLL beside the
 generator, downloads the native libclang archive via the checked-in 1kiss
 source configuration, and never restores or ships `libClangSharp` or the NuGet
 `libclang` package.

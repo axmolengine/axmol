@@ -21,7 +21,9 @@
 
 #include <string_view>
 #include <string>
+#include <atomic>
 #include <memory>
+#include <thread>
 #include <tuple>
 #include <type_traits>
 #include <typeinfo>
@@ -94,8 +96,13 @@ public:
     template <class Return, class... Arguments>
     Return invoke(Arguments&&... arguments)
     {
-        if (!_active || _state == nullptr)
+        if (!_active.load(std::memory_order_acquire) || _state == nullptr)
             return default_callback_result<Return>();
+        if (std::this_thread::get_id() != _ownerThread)
+        {
+            report_callback_error("attempted to invoke a Lua callback from a non-owner thread");
+            return default_callback_result<Return>();
+        }
 
         const int top = lua_gettop(_state);
         lua_rawgeti(_state, LUA_REGISTRYINDEX, _ref);
@@ -146,7 +153,7 @@ public:
     }
 
 private:
-    explicit LuaCallbackState(lua_State* state) : _state(state) {}
+    LuaCallbackState(lua_State* state, lua_State* vmState) : _state(state), _vmState(vmState), _ownerThread(std::this_thread::get_id()) {}
 
     template <class Return>
     static Return default_callback_result()
@@ -162,8 +169,13 @@ private:
     void report_callback_error(const char* message);
 
     lua_State* _state = nullptr;
+    // A callback can be created from a Lua coroutine. Its registry reference
+    // and invocation state both belong to the owning VM's main Lua thread,
+    // while `_vmState` remains the key used for shutdown bookkeeping.
+    lua_State* _vmState = nullptr;
     int _ref          = LUA_NOREF;
-    bool _active      = false;
+    std::atomic_bool _active{false};
+    std::thread::id _ownerThread;
 
     friend std::shared_ptr<LuaCallbackState> create_callback_state(lua_State*, int);
 };
@@ -206,7 +218,7 @@ std::function<Signature> make_lua_callback(lua_State* state, int index)
 }
 
 bool is_invalid_userdata(lua_State* state, int index);
-void remember_object(ax::Object* object);
+void remember_object(lua_State* state, ax::Object* object);
 bool object_expired(ax::Object* object);
 inline int absolute_index(lua_State* state, int index)
 {
@@ -252,7 +264,7 @@ int push_object(lua_State* state, T* object)
     if constexpr (std::is_base_of_v<ax::Object, NativeT>)
     {
         auto* nativeObject = static_cast<ax::Object*>(const_cast<NativeT*>(object));
-        remember_object(nativeObject);
+        remember_object(state, nativeObject);
         if (push_registered_dynamic_object(state, nativeObject, typeid(NativeT)))
             return 1;
     }
@@ -828,7 +840,8 @@ namespace ax
     {                                                                                                                  \
         tracking.use(1);                                                                                               \
         Type value{};                                                                                                  \
-        ::GetFunction(state, index, &value, "Axmol Lua binding");                                                      \
+        if (!::GetFunction(state, index, &value, "Axmol Lua binding"))                                                  \
+            luaL_error(state, "invalid Axmol value table for argument #%d", index);                                  \
         return value;                                                                                                  \
     }                                                                                                                  \
                                                                                                                        \

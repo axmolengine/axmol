@@ -52,8 +52,7 @@
     {
       "class": "VertexLayout",
       "methods": [
-        "getBindings",
-        "getInstanceBindings"
+        "getBindings"
       ]
     },
     {
@@ -62,7 +61,6 @@
         "getTextureBindingSets",
         "getCallbackUniforms",
         "getActiveVertexInputs",
-        "getTextureBindingInfos",
         "getUniformLocations",
         "getActiveUniformBlockInfos",
         "setTextureArray",
@@ -93,8 +91,7 @@
         "createBuffer",
         "createTexture",
         "createDepthStencilState",
-        "createRenderPipeline",
-        "setFrameBufferOnly"
+        "createRenderPipeline"
       ]
     },
     {

@@ -4,7 +4,7 @@
   "registrationName": "ax_extension",
   "luaNamespace": "ax",
   "luaTypeNamespace": "ax",
-  "conditionalExpression": "",
+  "conditionalExpression": null,
   "classes": [
     {
       "nativeName": "PUParticleSystem3D",
@@ -867,20 +867,7 @@
       "luaName": "ax.AssetsManager",
       "luaClassName": "AssetsManager",
       "isAbstract": false,
-      "constructors": [
-        {
-          "parameterTypes": [
-            "const char *",
-            "const char *",
-            "const char *"
-          ],
-          "defaultValues": [
-            "NULL",
-            "NULL",
-            "NULL"
-          ]
-        }
-      ],
+      "constructors": [],
       "bases": [
         "ax::Node",
         "ax::Object"
@@ -894,31 +881,6 @@
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "create",
-          "luaName": "create",
-          "declaringType": "ax::ext::AssetsManager",
-          "returnType": "ax::ext::AssetsManager *",
-          "parameterTypes": [
-            "const char *",
-            "const char *",
-            "const char *",
-            "ax::ext::AssetsManager::ErrorCallback",
-            "ax::ext::AssetsManager::ProgressCallback",
-            "ax::ext::AssetsManager::SuccessCallback"
-          ],
-          "defaultValues": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          "isStatic": true,
           "isConst": false,
           "isVariadic": false
         },
@@ -945,28 +907,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getPackageUrl",
-          "luaName": "getPackageUrl",
-          "declaringType": "ax::ext::AssetsManager",
-          "returnType": "const char *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getStoragePath",
-          "luaName": "getStoragePath",
-          "declaringType": "ax::ext::AssetsManager",
-          "returnType": "const char *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getVersion",
           "luaName": "getVersion",
           "declaringType": "ax::ext::AssetsManager",
@@ -978,68 +918,12 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getVersionFileUrl",
-          "luaName": "getVersionFileUrl",
-          "declaringType": "ax::ext::AssetsManager",
-          "returnType": "const char *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setConnectionTimeout",
           "luaName": "setConnectionTimeout",
           "declaringType": "ax::ext::AssetsManager",
           "returnType": "void",
           "parameterTypes": [
             "unsigned int"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setPackageUrl",
-          "luaName": "setPackageUrl",
-          "declaringType": "ax::ext::AssetsManager",
-          "returnType": "void",
-          "parameterTypes": [
-            "const char *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setStoragePath",
-          "luaName": "setStoragePath",
-          "declaringType": "ax::ext::AssetsManager",
-          "returnType": "void",
-          "parameterTypes": [
-            "const char *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setVersionFileUrl",
-          "luaName": "setVersionFileUrl",
-          "declaringType": "ax::ext::AssetsManager",
-          "returnType": "void",
-          "parameterTypes": [
-            "const char *"
           ],
           "defaultValues": [
             null

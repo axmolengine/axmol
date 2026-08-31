@@ -26,6 +26,7 @@
 #include "lua-bindings/runtime/AxluaCallbackRegistry.h"
 #include <map>
 #include <string>
+#include <mutex>
 
 #include "lua-bindings/runtime/LuaStack.h"
 #include "lua-bindings/runtime/LuaValue.h"
@@ -93,6 +94,10 @@ LuaCallFunc* LuaCallFunc::clone() const
 }
 
 AxluaCallbackRegistry* AxluaCallbackRegistry::_instance = nullptr;
+namespace
+{
+std::mutex s_registryInstanceMutex;
+}
 
 AxluaCallbackRegistry::AxluaCallbackRegistry() {}
 
@@ -101,11 +106,13 @@ AxluaCallbackRegistry::~AxluaCallbackRegistry()
     if (_dispatcher != nullptr && _disposingListener != nullptr)
         _dispatcher->removeEventListener(_disposingListener);
     _disposingListener = nullptr;
+    std::lock_guard lock(_mutex);
     _mapObjectHandlers.clear();
 }
 
 AxluaCallbackRegistry* AxluaCallbackRegistry::getInstance()
 {
+    std::lock_guard lock(s_registryInstanceMutex);
     if (nullptr == _instance)
     {
         _instance = new AxluaCallbackRegistry();
@@ -116,11 +123,13 @@ AxluaCallbackRegistry* AxluaCallbackRegistry::getInstance()
 
 AxluaCallbackRegistry* AxluaCallbackRegistry::getInstanceIfExists()
 {
+    std::lock_guard lock(s_registryInstanceMutex);
     return _instance;
 }
 
 void AxluaCallbackRegistry::destroyInstance()
 {
+    std::lock_guard lock(s_registryInstanceMutex);
     AX_SAFE_DELETE(_instance);
 }
 
@@ -140,6 +149,7 @@ void AxluaCallbackRegistry::addObjectHandler(void* object, int handler, AxluaCal
     // may be not need
     removeObjectHandler(object, handlerType);
 
+    std::lock_guard lock(_mutex);
     auto iter = _mapObjectHandlers.find(object);
     VecHandlerPairs vecHandlers;
     vecHandlers.clear();
@@ -152,38 +162,42 @@ void AxluaCallbackRegistry::addObjectHandler(void* object, int handler, AxluaCal
 }
 void AxluaCallbackRegistry::removeObjectHandler(void* object, AxluaCallbackRegistry::HandlerType handlerType)
 {
-    if (nullptr == object || _mapObjectHandlers.empty())
+    if (nullptr == object)
         return;
 
-    auto iterMap = _mapObjectHandlers.find(object);
-    if (_mapObjectHandlers.end() == iterMap)
-        return;
-
-    if (iterMap->second.empty())
-        return;
-
-    auto iterVec = iterMap->second.begin();
-    for (; iterVec != iterMap->second.end(); ++iterVec)
+    int handler = 0;
     {
-        if (iterVec->first == handlerType)
+        std::lock_guard lock(_mutex);
+        auto iterMap = _mapObjectHandlers.find(object);
+        if (_mapObjectHandlers.end() == iterMap || iterMap->second.empty())
+            return;
+
+        auto iterVec = iterMap->second.begin();
+        for (; iterVec != iterMap->second.end(); ++iterVec)
         {
-            if (auto* engine = ScriptEngineManager::getScriptEngineIfExists())
-                engine->removeScriptHandler(iterVec->second);
-            iterMap->second.erase(iterVec);
-            if (iterMap->second.empty())
+            if (iterVec->first == handlerType)
             {
-                _mapObjectHandlers.erase(iterMap);
+                handler = iterVec->second;
+                iterMap->second.erase(iterVec);
+                if (iterMap->second.empty())
+                    _mapObjectHandlers.erase(iterMap);
+                break;
             }
-            break;
         }
+    }
+    if (handler != 0)
+    {
+        if (auto* engine = ScriptEngineManager::getScriptEngineIfExists())
+            engine->removeScriptHandler(handler);
     }
 }
 
 int AxluaCallbackRegistry::getObjectHandler(void* object, AxluaCallbackRegistry::HandlerType handlerType)
 {
-    if (nullptr == object || _mapObjectHandlers.empty())
+    if (nullptr == object)
         return 0;
 
+    std::lock_guard lock(_mutex);
     auto iter = _mapObjectHandlers.find(object);
     if (_mapObjectHandlers.end() != iter)
     {
@@ -197,23 +211,22 @@ int AxluaCallbackRegistry::getObjectHandler(void* object, AxluaCallbackRegistry:
 
 void AxluaCallbackRegistry::removeObjectAllHandlers(void* object)
 {
-    if (nullptr == object || _mapObjectHandlers.empty())
+    if (nullptr == object)
         return;
 
-    auto iter = _mapObjectHandlers.find(object);
-    if (_mapObjectHandlers.end() != iter)
+    VecHandlerPairs handlers;
     {
-        if (!iter->second.empty())
-        {
-            for (auto& handlerPair : iter->second)
-            {
-                if (auto* engine = ScriptEngineManager::getScriptEngineIfExists())
-                    engine->removeScriptHandler(handlerPair.second);
-            }
-
-            (iter->second).clear();
-        }
+        std::lock_guard lock(_mutex);
+        auto iter = _mapObjectHandlers.find(object);
+        if (_mapObjectHandlers.end() == iter)
+            return;
+        handlers = std::move(iter->second);
         _mapObjectHandlers.erase(iter);
+    }
+    for (const auto& handlerPair : handlers)
+    {
+        if (auto* engine = ScriptEngineManager::getScriptEngineIfExists())
+            engine->removeScriptHandler(handlerPair.second);
     }
 }
 
@@ -221,6 +234,7 @@ AxluaCallbackRegistry::HandlerType AxluaCallbackRegistry::addCustomHandler(void*
 {
     assert(nullptr != object);
 
+    std::lock_guard lock(_mutex);
     auto iter = _mapObjectHandlers.find(object);
     VecHandlerPairs vecHandlers;
     vecHandlers.clear();

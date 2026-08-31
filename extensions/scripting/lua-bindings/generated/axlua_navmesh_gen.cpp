@@ -27,8 +27,6 @@ void register_ax_navmesh(lua_State* L)
     class_1_NavMeshAgent.bases<ax::Component, ax::Object>();
     class_1_NavMeshAgent.constructors<ax::NavMeshAgent()>();
     class_1_NavMeshAgent.method("completeOffMeshLink", static_cast<void (ax::NavMeshAgent::*)()>(&ax::NavMeshAgent::completeOffMeshLink));
-    class_1_NavMeshAgent.static_method("create", static_cast<ax::NavMeshAgent * (*)(const ax::NavMeshAgentParam &)>(&ax::NavMeshAgent::create));
-    class_1_NavMeshAgent.method("getCurrentOffMeshLinkData", static_cast<ax::OffMeshLinkData (ax::NavMeshAgent::*)()>(&ax::NavMeshAgent::getCurrentOffMeshLinkData));
     class_1_NavMeshAgent.method("getCurrentVelocity", static_cast<ax::Vec3 (ax::NavMeshAgent::*)() const>(&ax::NavMeshAgent::getCurrentVelocity));
     class_1_NavMeshAgent.method("getHeight", static_cast<float (ax::NavMeshAgent::*)() const>(&ax::NavMeshAgent::getHeight));
     class_1_NavMeshAgent.method("getMaxAcceleration", static_cast<float (ax::NavMeshAgent::*)() const>(&ax::NavMeshAgent::getMaxAcceleration));
@@ -38,7 +36,6 @@ void register_ax_navmesh(lua_State* L)
     class_1_NavMeshAgent.method("getRadius", static_cast<float (ax::NavMeshAgent::*)() const>(&ax::NavMeshAgent::getRadius));
     class_1_NavMeshAgent.method("getSeparationWeight", static_cast<float (ax::NavMeshAgent::*)() const>(&ax::NavMeshAgent::getSeparationWeight));
     class_1_NavMeshAgent.method("getSyncFlag", static_cast<ax::NavMeshAgent::NavMeshAgentSyncFlag (ax::NavMeshAgent::*)() const>(&ax::NavMeshAgent::getSyncFlag));
-    class_1_NavMeshAgent.method("getUserData", static_cast<void * (ax::NavMeshAgent::*)() const>(&ax::NavMeshAgent::getUserData));
     class_1_NavMeshAgent.method("getVelocity", static_cast<ax::Vec3 (ax::NavMeshAgent::*)() const>(&ax::NavMeshAgent::getVelocity));
     class_1_NavMeshAgent.method("isOnOffMeshLink", static_cast<bool (ax::NavMeshAgent::*)()>(&ax::NavMeshAgent::isOnOffMeshLink));
     class_1_NavMeshAgent.method("onEnter", static_cast<void (ax::NavMeshAgent::*)()>(&ax::NavMeshAgent::onEnter));
@@ -55,7 +52,6 @@ void register_ax_navmesh(lua_State* L)
     class_1_NavMeshAgent.method("setRadius", static_cast<void (ax::NavMeshAgent::*)(float)>(&ax::NavMeshAgent::setRadius));
     class_1_NavMeshAgent.method("setSeparationWeight", static_cast<void (ax::NavMeshAgent::*)(float)>(&ax::NavMeshAgent::setSeparationWeight));
     class_1_NavMeshAgent.method("setSyncFlag", static_cast<void (ax::NavMeshAgent::*)(const ax::NavMeshAgent::NavMeshAgentSyncFlag &)>(&ax::NavMeshAgent::setSyncFlag));
-    class_1_NavMeshAgent.method("setUserData", static_cast<void (ax::NavMeshAgent::*)(void *)>(&ax::NavMeshAgent::setUserData));
     class_1_NavMeshAgent.method("stop", static_cast<void (ax::NavMeshAgent::*)()>(&ax::NavMeshAgent::stop));
     class_1_NavMeshAgent.method("syncToAgent", static_cast<void (ax::NavMeshAgent::*)()>(&ax::NavMeshAgent::syncToAgent));
     class_1_NavMeshAgent.method("syncToNode", static_cast<void (ax::NavMeshAgent::*)()>(&ax::NavMeshAgent::syncToNode));

@@ -30,7 +30,7 @@
 #    include "lua-bindings/generated/axlua_navmesh_gen.h"
 #    include "lua-bindings/runtime/axlua_adapter.h"
 #    include "lua-bindings/runtime/axlua_conversions.h"
-#    include "lua-bindings/runtime/LuaEngine.h"
+#    include "lua-bindings/runtime/axlua_runtime.h"
 #    include "axlua_navmesh_conversions.h"
 #    include "axmol/navmesh/NavMesh.h"
 
@@ -140,7 +140,6 @@ int axlua_navmesh_NavMeshAgent_move(lua_State* luaState)
     if (argc == 2)
     {
         ax::Vec3 arg0;
-        LUA_FUNCTION handler;
 
         ok &= luaval_to_vec3(luaState, 2, &arg0, "ax.NavMeshAgent:move");
 
@@ -150,22 +149,13 @@ int axlua_navmesh_NavMeshAgent_move(lua_State* luaState)
             goto argumentError;
         }
 #    endif
-        handler = axlua::adapter::ref_function(luaState, 3, 0);
-
         if (!ok)
         {
             axlua::adapter::raise_error(luaState, "invalid arguments in function 'axlua_navmesh_NavMeshAgent_move'",
                                         nullptr);
             return 0;
         }
-        obj->move(arg0, [=](ax::NavMeshAgent* agent, float totalTimeAfterMove) {
-            auto stack = LuaEngine::getInstance()->getLuaStack();
-            auto Ls    = stack->getLuaState();
-            object_to_luaval<ax::NavMeshAgent>(Ls, "ax.NavMeshAgent", (ax::NavMeshAgent*)agent);
-            axlua::adapter::push_number(Ls, (lua_Number)totalTimeAfterMove);
-            stack->executeFunctionByHandler(handler, 2);
-        });
-        AxluaCallbackRegistry::getInstance()->addCustomHandler((void*)obj, handler);
+        obj->move(arg0, axlua::make_lua_callback<void(ax::NavMeshAgent*, float)>(luaState, 3));
         lua_settop(luaState, 1);
         return 1;
     }

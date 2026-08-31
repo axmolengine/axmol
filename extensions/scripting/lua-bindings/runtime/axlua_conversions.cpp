@@ -411,6 +411,9 @@ bool luaval_to_vec3(lua_State* L, int lo, ax::Vec3* outValue, const char* funcNa
     if (nullptr == L || nullptr == outValue)
         return false;
 
+    // Callers converting array elements pass -1. Resolve it before pushing
+    // field names, otherwise lua_gettable indexes the string instead of Vec3.
+    lo = lua_table_abs_index(L, lo);
     bool ok = true;
 
     axlua::adapter::Error conversionError;

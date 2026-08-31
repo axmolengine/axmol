@@ -1338,7 +1338,7 @@ function LabelShadowTest.create()
     layer:addChild(shadowLabelBMFont)
 
     local function sliderEvent(sender, eventType)
-        if eventType == ccui.SliderEventType.percentChanged then
+        if eventType == axui.SliderEventType.percentChanged then
             local  slider = layer:getChildByTag(1)
             local  slider2 = layer:getChildByTag(2)
             local offset = ax.size(slider:getPercent() - 50,50 - slider2:getPercent())
@@ -1348,7 +1348,7 @@ function LabelShadowTest.create()
         end
     end
 
-    local slider = ccui.Slider:create()
+    local slider = axui.Slider:create()
     slider:setTag(1)
     slider:setTouchEnabled(true)
     slider:loadBarTexture("cocosui/sliderTrack.png")
@@ -1359,7 +1359,7 @@ function LabelShadowTest.create()
     slider:addEventListener(sliderEvent)
     layer:addChild(slider)
 
-    local slider2 = ccui.Slider:create()
+    local slider2 = axui.Slider:create()
     slider2:setTag(2)
     slider2:setTouchEnabled(true)
     slider2:loadBarTexture("cocosui/sliderTrack.png")
@@ -1622,7 +1622,7 @@ function LabelIssue4428Test.create()
     label:setAnchorPoint(ax.p(0.5, 0.5))
     layer:addChild(label)
 
-    local len = label:getStringLength()
+    local len = label:getCharCount()
     for i = 0, len -1 do
         local sprite = label:getLetter(i)
         if nil ~= sprite then

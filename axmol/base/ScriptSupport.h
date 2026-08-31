@@ -726,16 +726,6 @@ public:
     static void destroyInstance();
 
     /**
-     * Call the Lua function when the event of node is triggered.
-     *
-     * @param node the nativeobject triggers the event.
-     * @param action the specific type.
-     *
-     * @lua NA
-     */
-    static void sendNodeEventToLua(Node* node, int action);
-
-    /**
      * Send a event to lua script
      *
      * @param event: the script event

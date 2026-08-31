@@ -39,6 +39,7 @@ namespace
 constexpr auto OBJECT_BOX_REGISTRY           = axlua::adapter::kObjectBoxRegistry;
 constexpr auto OWNED_OBJECT_REGISTRY         = axlua::adapter::kOwnedObjectRegistry;
 constexpr auto ADAPTER_CLASS_TABLES_REGISTRY = "axlua.adapter.class_tables";
+constexpr auto MANUAL_FUNCTIONS_REGISTRY     = "axlua.adapter.manual_functions";
 
 int absolute_index(lua_State* state, int index)
 {
@@ -65,6 +66,41 @@ void ensure_registry_table(lua_State* state, const char* name)
         lua_setfield(state, LUA_REGISTRYINDEX, name);
     }
     lua_pop(state, 1);
+}
+
+bool mark_manual_function(lua_State* state, const char* name)
+{
+    const int tableIndex = absolute_index(state, -1);
+    lua_getfield(state, LUA_REGISTRYINDEX, MANUAL_FUNCTIONS_REGISTRY);
+    if (!lua_istable(state, -1))
+    {
+        lua_pop(state, 1);
+        lua_newtable(state);
+        lua_pushvalue(state, -1);
+        lua_setfield(state, LUA_REGISTRYINDEX, MANUAL_FUNCTIONS_REGISTRY);
+    }
+    const int functions = absolute_index(state, -1);
+    lua_pushlightuserdata(state, const_cast<void*>(lua_topointer(state, tableIndex)));
+    lua_rawget(state, functions);
+    if (!lua_istable(state, -1))
+    {
+        lua_pop(state, 1);
+        lua_newtable(state);
+        lua_pushlightuserdata(state, const_cast<void*>(lua_topointer(state, tableIndex)));
+        lua_pushvalue(state, -1);
+        lua_rawset(state, functions);
+    }
+    const int names = absolute_index(state, -1);
+    lua_getfield(state, names, name);
+    const bool duplicate = !lua_isnil(state, -1);
+    lua_pop(state, 1);
+    if (!duplicate)
+    {
+        lua_pushboolean(state, 1);
+        lua_setfield(state, names, name);
+    }
+    lua_pop(state, 2);  // names and registry table
+    return !duplicate;
 }
 
 void register_metatable(lua_State* state, const char* name)
@@ -654,6 +690,13 @@ void axlua::adapter::register_class(lua_State* state,
 
 void axlua::adapter::set_function(lua_State* state, const char* name, lua_CFunction function)
 {
+    if (state == nullptr || name == nullptr || function == nullptr)
+        return;
+    if (!mark_manual_function(state, name))
+    {
+        luaL_error(state, "duplicate manual Lua binding registration: %s", name);
+        return;
+    }
     lua_pushcfunction(state, function);
     lua_setfield(state, -2, name);
 }
@@ -796,7 +839,10 @@ int axlua::adapter::is_usertype(lua_State* state,
                                 int hasDefault,
                                 axlua::adapter::Error* error)
 {
-    if ((hasDefault && lua_gettop(state) < std::abs(index)) || is_registered_class(state, index, type))
+    const bool missing = hasDefault && lua_gettop(state) < std::abs(index);
+    const bool valid = is_registered_class(state, index, type) && !axlua::is_invalid_userdata(state, index) &&
+                       axlua::adapter::to_usertype(state, index, nullptr) != nullptr;
+    if (missing || valid)
         return 1;
     set_error(error, index, type);
     return 0;
@@ -900,7 +946,7 @@ int axlua::adapter::push_object(lua_State* L, void* ptr, const char* type)
     }
 
     Object* vPtr = static_cast<Object*>(ptr);
-    axlua::remember_object(vPtr);
+    axlua::remember_object(L, vPtr);
     const char* vType = getLuaTypeName(vPtr, type);
 
     axlua::adapter::push_usertype_rooted(L, vPtr, vType);

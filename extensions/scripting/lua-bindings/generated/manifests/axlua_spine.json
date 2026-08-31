@@ -4,7 +4,7 @@
   "registrationName": "ax_spine",
   "luaNamespace": "sp",
   "luaTypeNamespace": "sp",
-  "conditionalExpression": "",
+  "conditionalExpression": null,
   "classes": [
     {
       "nativeName": "SkeletonAnimation",

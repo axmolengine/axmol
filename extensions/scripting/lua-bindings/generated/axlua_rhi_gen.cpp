@@ -88,12 +88,7 @@ void register_ax_rhi(lua_State* L)
     class_5_Texture.method("getWidth", static_cast<int (ax::rhi::Texture::*)() const>(&ax::rhi::Texture::getWidth));
     class_5_Texture.method("hasMipmaps", static_cast<bool (ax::rhi::Texture::*)() const>(&ax::rhi::Texture::hasMipmaps));
     class_5_Texture.method("shouldGenMipmaps", axlua::overload(axlua::overload_candidate<int>(static_cast<bool (ax::rhi::Texture::*)(int) const>(&ax::rhi::Texture::shouldGenMipmaps)), axlua::overload_candidate<>([](const ax::rhi::Texture& self) -> bool { return static_cast<const ax::rhi::Texture&>(self).shouldGenMipmaps(0); })));
-    class_5_Texture.method("updateCompressedData", static_cast<void (ax::rhi::Texture::*)(const void *, int, int, size_t, int, int)>(&ax::rhi::Texture::updateCompressedData));
-    class_5_Texture.method("updateCompressedSubData", static_cast<void (ax::rhi::Texture::*)(int, int, int, int, size_t, int, const void *, int)>(&ax::rhi::Texture::updateCompressedSubData));
-    class_5_Texture.method("updateData", static_cast<void (ax::rhi::Texture::*)(const void *, int, int, int, int)>(&ax::rhi::Texture::updateData));
-    class_5_Texture.method("updateFaceData", static_cast<void (ax::rhi::Texture::*)(ax::rhi::TextureCubeFace, const void *)>(&ax::rhi::Texture::updateFaceData));
     class_5_Texture.method("updateSamplerDesc", static_cast<void (ax::rhi::Texture::*)(const ax::rhi::SamplerDesc &)>(&ax::rhi::Texture::updateSamplerDesc));
-    class_5_Texture.method("updateSubData", static_cast<void (ax::rhi::Texture::*)(int, int, int, int, int, const void *, int)>(&ax::rhi::Texture::updateSubData));
     class_7_UniformLocation.method("reset", static_cast<void (ax::rhi::UniformLocation::*)()>(&ax::rhi::UniformLocation::reset));
     class_8_VertexLayout.bases<ax::Object>();
     class_8_VertexLayout.method("getBuiltinId", static_cast<int (ax::rhi::VertexLayout::*)() const>(&ax::rhi::VertexLayout::getBuiltinId));

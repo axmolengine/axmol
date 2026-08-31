@@ -172,32 +172,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "create",
-          "luaName": "create",
-          "declaringType": "ax::NavMeshAgent",
-          "returnType": "ax::NavMeshAgent *",
-          "parameterTypes": [
-            "const ax::NavMeshAgentParam \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getCurrentOffMeshLinkData",
-          "luaName": "getCurrentOffMeshLinkData",
-          "declaringType": "ax::NavMeshAgent",
-          "returnType": "ax::OffMeshLinkData",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getCurrentVelocity",
           "luaName": "getCurrentVelocity",
           "declaringType": "ax::NavMeshAgent",
@@ -290,17 +264,6 @@
           "luaName": "getSyncFlag",
           "declaringType": "ax::NavMeshAgent",
           "returnType": "ax::NavMeshAgent::NavMeshAgentSyncFlag",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getUserData",
-          "luaName": "getUserData",
-          "declaringType": "ax::NavMeshAgent",
-          "returnType": "void *",
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": false,
@@ -515,21 +478,6 @@
           "returnType": "void",
           "parameterTypes": [
             "const ax::NavMeshAgent::NavMeshAgentSyncFlag \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setUserData",
-          "luaName": "setUserData",
-          "declaringType": "ax::NavMeshAgent",
-          "returnType": "void",
-          "parameterTypes": [
-            "void *"
           ],
           "defaultValues": [
             null

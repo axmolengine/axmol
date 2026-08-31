@@ -17,8 +17,8 @@ param(
 $ErrorActionPreference = 'Stop'
 $axmolRoot = (Resolve-Path (Join-Path $PSScriptRoot '../../..')).Path
 $OutputDirectory = if ($OutputDirectory) { (New-Item -ItemType Directory -Force -Path $OutputDirectory).FullName } else { Join-Path $axmolRoot 'extensions/scripting/lua-bindings/generated' }
-$generatorProject = Join-Path $axmolRoot 'tools/bindings-generator/Axmol.LuaBindings.Generator.csproj'
-$generatorRoot = Split-Path $generatorProject -Parent
+$generatorRoot = Join-Path $axmolRoot 'tools/bindings-generator'
+$adapterAllowlistPath = Join-Path $axmolRoot 'tools/lua-bindings/manual-adapters.json'
 
 function Get-PlatformLibClangName {
     if ($IsWindows) { return 'libclang.dll' }
@@ -162,6 +162,9 @@ function Get-PowerShellReferenceAssemblies {
 }
 
 function Build-GeneratorAssemblyWithPowerShell([string]$OutputPath, [System.IO.FileInfo[]]$Sources) {
+    # Keep this bootstrap independent of the .NET SDK.  PowerShell 7 ships
+    # the Roslyn compiler used by Add-Type, which is the supported clean-host
+    # path for genbindings.
     $interopAssembly = Ensure-ClangSharpInteropAssembly
     $temporaryOutput = Join-Path ([IO.Path]::GetTempPath()) "Axmol.LuaBindings.Generator.$PID.dll"
     if (Test-Path $temporaryOutput -PathType Leaf) { Remove-Item -LiteralPath $temporaryOutput -Force }
@@ -193,10 +196,7 @@ function Build-GeneratorAssemblyWithPowerShell([string]$OutputPath, [System.IO.F
 if ([string]::IsNullOrWhiteSpace($GeneratorAssembly)) {
     $localGeneratorAssembly = Join-Path $axmolRoot 'tools/bindings-generator/bin/Release/net8.0/Axmol.LuaBindings.Generator.dll'
     $localAssemblyExists = Test-Path $localGeneratorAssembly -PathType Leaf
-    $generatorSources = @(
-        Get-Item -LiteralPath $generatorProject
-        Get-ChildItem -LiteralPath (Join-Path $generatorRoot 'src') -Filter '*.cs' -File -Recurse
-    )
+    $generatorSources = @(Get-ChildItem -LiteralPath (Join-Path $generatorRoot 'src') -Filter '*.cs' -File -Recurse)
     $generatorNeedsBuild = -not $localAssemblyExists
     if ($localAssemblyExists) {
         $assemblyTimestamp = (Get-Item -LiteralPath $localGeneratorAssembly).LastWriteTimeUtc
@@ -260,9 +260,9 @@ if (-not (Test-Path $GeneratorAssembly -PathType Leaf)) {
 $GeneratorAssembly = (Resolve-Path $GeneratorAssembly).Path
 
 $loadedGeneratorTypes = @(Add-Type -Path $GeneratorAssembly -PassThru)
-$requestType = $loadedGeneratorTypes | Where-Object FullName -EQ 'Axmol.LuaBindings.GenerationRequest' | Select-Object -First 1
 $generatorType = $loadedGeneratorTypes | Where-Object FullName -EQ 'Axmol.LuaBindings.BindingGenerator' | Select-Object -First 1
-if (-not $requestType -or -not $generatorType) {
+$batchType = $loadedGeneratorTypes | Where-Object FullName -EQ 'Axmol.LuaBindings.BatchBindingGenerator' | Select-Object -First 1
+if (-not $generatorType -or -not $batchType) {
     throw "The generator assembly does not expose the required Axmol.LuaBindings API: $GeneratorAssembly"
 }
 if ($libClangLibrary) {
@@ -313,71 +313,6 @@ function Find-LlvmInclude([string]$Ndk) {
     $stdarg = Get-ChildItem $prebuilt.FullName -Filter stdarg.h -File -Recurse -ErrorAction Stop | Select-Object -First 1
     if (-not $stdarg) { throw "Clang builtin include directory was not found below $($prebuilt.FullName)." }
     return @{ Root = $prebuilt.FullName; Builtin = $stdarg.DirectoryName }
-}
-
-function Convert-RegexList([object]$Value) {
-    if ($null -eq $Value) { return [string[]]@() }
-    if ($Value -isnot [System.Array]) { throw 'Binding configuration lists must be JSON arrays.' }
-    return [string[]]($Value | ForEach-Object { [string]$_ } | Where-Object { $_.Length -gt 0 })
-}
-
-function Convert-SkipRules([object]$Value) {
-    $rules = [System.Collections.Generic.List[Axmol.LuaBindings.BindingSkipRule]]::new()
-    if ($null -eq $Value) { return $rules.ToArray() }
-    if ($Value -isnot [System.Array]) { throw 'Binding skip rules must be a JSON array.' }
-    foreach ($entry in $Value) {
-        $methodPatterns = [string[]]@(Convert-RegexList $entry.methods | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
-        if ($methodPatterns.Count -eq 0) { continue }
-        $rule = [Axmol.LuaBindings.BindingSkipRule]::new()
-        $rule.ClassPattern = [string]$entry.class
-        $rule.MethodPatterns = $methodPatterns
-        if (-not [string]::IsNullOrWhiteSpace($rule.ClassPattern)) {
-            $rules.Add($rule)
-        }
-    }
-    return $rules.ToArray()
-}
-
-function Convert-FieldRules([object]$Value) {
-    $rules = [System.Collections.Generic.List[Axmol.LuaBindings.BindingFieldRule]]::new()
-    if ($null -eq $Value) { return $rules.ToArray() }
-    if ($Value -isnot [System.Array]) { throw 'Binding field rules must be a JSON array.' }
-    foreach ($entry in $Value) {
-        $fieldPatterns = [string[]]@(Convert-RegexList $entry.names | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
-        if ($fieldPatterns.Count -eq 0) { continue }
-        $rule = [Axmol.LuaBindings.BindingFieldRule]::new()
-        $rule.ClassPattern = [string]$entry.class
-        $rule.FieldPatterns = $fieldPatterns
-        if (-not [string]::IsNullOrWhiteSpace($rule.ClassPattern)) { $rules.Add($rule) }
-    }
-    return $rules.ToArray()
-}
-
-function Convert-RenameRules([object]$Value) {
-    $rules = [System.Collections.Generic.List[Axmol.LuaBindings.BindingRenameRule]]::new()
-    if ($null -eq $Value) { return $rules.ToArray() }
-    if ($Value -isnot [System.Array]) { throw 'Binding rename rules must be a JSON array.' }
-    foreach ($entry in $Value) {
-        $rule = [Axmol.LuaBindings.BindingRenameRule]::new()
-        $rule.ClassPattern = [string]$entry.class
-        $rule.MethodPattern = [string]$entry.method
-        $rule.LuaName = [string]$entry.luaName
-        if ($rule.ClassPattern -and $rule.MethodPattern -and $rule.LuaName) { $rules.Add($rule) }
-    }
-    return $rules.ToArray()
-}
-
-function Convert-ClassRenames([object]$Value) {
-    $renames = [System.Collections.Generic.List[Axmol.LuaBindings.BindingClassRename]]::new()
-    if ($null -eq $Value) { return $renames.ToArray() }
-    if ($Value -isnot [System.Array]) { throw 'Binding class renames must be a JSON array.' }
-    foreach ($entry in $Value) {
-        $rename = [Axmol.LuaBindings.BindingClassRename]::new()
-        $rename.NativeName = [string]$entry.native
-        $rename.LuaName = [string]$entry.luaName
-        if ($rename.NativeName -and $rename.LuaName) { $renames.Add($rename) }
-    }
-    return $renames.ToArray()
 }
 
     $ndk = Ensure-Ndk
@@ -439,117 +374,26 @@ function Convert-ClassRenames([object]$Value) {
     if ($ExtraClangArguments.Count -gt 0) { $clangArguments.AddRange($ExtraClangArguments) }
     foreach ($includeRoot in $includeRoots) { $clangArguments.Add('-isystem'); $clangArguments.Add($includeRoot) }
 
-$moduleMap = [ordered]@{
-    ax_base = 'ax_base.json'; ax_rhi = 'ax_rhi.json'; ax_extension = 'ax_extension.json'; ax_ui = 'ax_ui.json'
-    ax_sceneext = 'ax_sceneext.json'; ax_sceneio = 'ax_sceneio.json'; ax_spine = 'ax_spine.json'; ax_physics2d = 'ax_physics2d.json'
-    ax_physics3d = 'ax_physics3d.json'; ax_video = 'ax_video.json'; ax_3d = 'ax_3d.json'
-    ax_audioengine = 'ax_audioengine.json'; ax_webview = 'ax_webview.json'; ax_navmesh = 'ax_navmesh.json'; ax_fairygui = 'ax_fairygui.json'
-}
-$selected = if ($Module -eq 'all') {
-    @($moduleMap.Keys)
-}
-else {
-    @($Module | ForEach-Object {
-        if ($moduleMap.Contains($_)) {
-            $_
-        }
-        elseif ($moduleMap.Contains("ax_$_")) {
-            "ax_$_"
-        }
-        else {
-            throw "Unknown binding module '$($_)'. Use 'all' or one of: $($moduleMap.Keys -join ', ')."
-        }
-    })
-}
-$results = @()
-$registeredClasses = [System.Collections.Generic.List[object]]::new()
-foreach ($name in $selected) {
-    if (-not $moduleMap.Contains($name)) { throw "Unknown binding module '$name'." }
-    $config = Get-Content -LiteralPath (Join-Path $axmolRoot "tools/lua-bindings/$($moduleMap[$name])") -Raw | ConvertFrom-Json
-    $headerValues = Convert-RegexList $config.headers
-    $headers = [string[]]($headerValues | Where-Object { $_ -and $_ -notmatch '^-I' } | ForEach-Object {
-        $_.Trim('"') -replace '%\([^)]+\)s', $axmolRoot -replace '\\','/'
-    })
-    $patterns = Convert-RegexList $config.classes
-    $noConstructorPatterns = Convert-RegexList $config.abstract_classes
-    $explicitNoConstructorPatterns = Convert-RegexList $config.no_constructors
-    if ($explicitNoConstructorPatterns.Count -gt 0) {
-        $noConstructorPatterns = [string[]](@($noConstructorPatterns) + @($explicitNoConstructorPatterns))
-    }
-    $noParentPatterns = Convert-RegexList $config.classes_have_no_parents
-    $skippedBasePatterns = Convert-RegexList $config.base_classes_to_skip
-    $skipRules = Convert-SkipRules $config.skip
-    $fieldRules = Convert-FieldRules $config.fields
-    $renameRules = Convert-RenameRules $config.rename_functions
-    $classRenames = Convert-ClassRenames $config.rename_classes
-    $moduleFlags = [string[]]@(Convert-RegexList $config.clang_flags)
-    $nativeNamespaces = [string[]]@($config.cpp_namespace | ForEach-Object { ([string]$_).Trim() } | Where-Object { $_ })
-    $targetNamespace = if ([string]::IsNullOrWhiteSpace([string]$config.target_namespace)) { 'ax' } else { ([string]$config.target_namespace).Trim() }
-    $conditionalExpression = [string]$config.macro_judgement
-    if ($conditionalExpression -match '^\s*#if\s+(.+?)\s*$') { $conditionalExpression = $Matches[1] }
-    elseif ([string]::IsNullOrWhiteSpace($conditionalExpression)) { $conditionalExpression = $null }
-    # RHI uses axr for both its public module table and fully-qualified type
-    # namespace.
-    $typeNamespace = if ($name -eq 'ax_rhi') { 'axr' } else { $targetNamespace }
-    $moduleArguments = [System.Collections.Generic.List[string]]::new()
-    $moduleArguments.AddRange($clangArguments.ToArray())
-    if ($moduleFlags.Count -gt 0) { $moduleArguments.AddRange($moduleFlags) }
-    $request = [Axmol.LuaBindings.GenerationRequest]::new()
-    $request.RepositoryRoot = $axmolRoot
-    $request.OutputDirectory = $OutputDirectory
-    $request.Module = $name -replace '^ax_', ''
-    $request.RegistrationName = $name
-    $request.Headers = [System.Collections.Generic.List[string]]::new()
-    $request.Headers.AddRange([string[]]$headers)
-    $request.ClangArguments = [System.Collections.Generic.List[string]]::new()
-    $request.ClangArguments.AddRange([string[]]$moduleArguments.ToArray())
-    $request.NativeNamespaces = [System.Collections.Generic.List[string]]::new()
-    if ($nativeNamespaces) { $request.NativeNamespaces.AddRange([string[]]$nativeNamespaces) }
-    $request.ClassPatterns = [System.Collections.Generic.List[string]]::new()
-    if ($patterns) { $request.ClassPatterns.AddRange([string[]]$patterns) }
-    $request.NoConstructorPatterns = [System.Collections.Generic.List[string]]::new()
-    if ($noConstructorPatterns) { $request.NoConstructorPatterns.AddRange([string[]]$noConstructorPatterns) }
-    $request.NoParentPatterns = [System.Collections.Generic.List[string]]::new()
-    if ($noParentPatterns) { $request.NoParentPatterns.AddRange([string[]]$noParentPatterns) }
-    $request.SkippedBasePatterns = [System.Collections.Generic.List[string]]::new()
-    if ($skippedBasePatterns) { $request.SkippedBasePatterns.AddRange([string[]]$skippedBasePatterns) }
-    $request.SkipRules = [System.Collections.Generic.List[Axmol.LuaBindings.BindingSkipRule]]::new()
-    if ($skipRules) { $request.SkipRules.AddRange([Axmol.LuaBindings.BindingSkipRule[]]$skipRules) }
-    $request.FieldRules = [System.Collections.Generic.List[Axmol.LuaBindings.BindingFieldRule]]::new()
-    if ($fieldRules) { $request.FieldRules.AddRange([Axmol.LuaBindings.BindingFieldRule[]]$fieldRules) }
-    $request.RenameRules = [System.Collections.Generic.List[Axmol.LuaBindings.BindingRenameRule]]::new()
-    if ($renameRules) { $request.RenameRules.AddRange([Axmol.LuaBindings.BindingRenameRule[]]$renameRules) }
-    $request.ClassRenames = [System.Collections.Generic.List[Axmol.LuaBindings.BindingClassRename]]::new()
-    if ($classRenames) { $request.ClassRenames.AddRange([Axmol.LuaBindings.BindingClassRename[]]$classRenames) }
-    $request.LuaNamespace = $targetNamespace
-    $request.LuaTypeNamespace = $typeNamespace
-    $request.ConditionalExpression = $conditionalExpression
-    $request.CppChunkCount = if ($null -eq $config.cpp_chunks) { 1 } else { [Math]::Max(1, [int]$config.cpp_chunks) }
-    $request.EmitCpp = -not $Verify
-    $request.EmitManifest = -not $Verify
-    $result = $generatorType::Generate($request)
-    $results += $result
-    foreach ($bindingClass in $result.Classes) {
-        $registeredClasses.Add([pscustomobject]@{
-            LuaName = "$targetNamespace.$($bindingClass.LuaClassName)"
-            Module = $name
-            NativeName = $bindingClass.QualifiedName
-        })
-    }
+$batchRequest = [Axmol.LuaBindings.BatchGenerationRequest]::new()
+$batchRequest.RepositoryRoot = $axmolRoot
+$batchRequest.ConfigurationDirectory = Join-Path $axmolRoot 'tools/lua-bindings'
+$batchRequest.OutputDirectory = $OutputDirectory
+$batchRequest.AdapterAllowlistPath = $adapterAllowlistPath
+$batchRequest.Module = $Module
+$batchRequest.ClangArguments = [string[]]$clangArguments.ToArray()
+$batchRequest.Verify = $Verify
+
+$batchResult = $batchType::Generate($batchRequest)
+foreach ($result in $batchResult.Results) {
     $errors = @($result.Diagnostics | Where-Object Severity -eq 'error')
-    $warnings = @($result.Diagnostics | Where-Object Severity -ne 'error')
-    Write-Host "$name`: $($result.Classes.Count) classes, $($result.GeneratedFiles.Count) files, $($errors.Count) errors"
-    if ($warnings.Count -gt 0) { $warnings | ForEach-Object { Write-Warning "$($_.Severity): $($_.Message)" } }
-    if ($errors.Count -gt 0) { $errors | ForEach-Object { Write-Error $_.Message } }
+    Write-Host "$($result.Module): $($result.Classes.Count) classes, $($result.GeneratedFiles.Count) files, $($errors.Count) errors"
+    $result.Diagnostics |
+        Where-Object Severity -ne 'error' |
+        ForEach-Object { Write-Warning "$($_.Severity): $($_.Message)" }
 }
-if (@($results.Diagnostics | Where-Object Severity -eq 'error').Count -gt 0) {
+foreach ($diagnostic in $batchResult.Diagnostics | Where-Object Severity -eq 'error') {
+    Write-Host "error: $($diagnostic.Message)"
+}
+if (@($batchResult.Diagnostics | Where-Object Severity -eq 'error').Count -gt 0) {
     throw 'Lua binding generation failed. Existing generated files were not used as a fallback.'
-}
-$registrationCollisions = @($registeredClasses | Group-Object LuaName | Where-Object Count -gt 1)
-if ($registrationCollisions.Count -gt 0) {
-    foreach ($collision in $registrationCollisions) {
-        $sources = $collision.Group | ForEach-Object { "$($_.Module):$($_.NativeName)" }
-        Write-Error "Lua class '$($collision.Name)' is registered by multiple modules: $($sources -join ', ')"
-    }
-    throw 'Lua binding generation failed because modules contain overlapping Lua class registrations.'
 }

@@ -227,7 +227,7 @@ local function Issue631()
     --bf.src = GL_SRC_ALPHA
     --bf.dst = GL_ONE_MINUS_SRC_ALPHA
 
-    fog:setBlendFunc(ax.blendFunc(ccb.BlendFactor.SRC_ALPHA , ccb.BlendFactor.ONE_MINUS_SRC_ALPHA))
+    fog:setBlendFunc(ax.blendFunc(axr.BlendFactor.SRC_ALPHA , axr.BlendFactor.ONE_MINUS_SRC_ALPHA))
     layer2:addChild(fog, 1)
     ret:addChild(layer2BaseGrid, 1)
     layer2BaseGrid:addChild(layer2)

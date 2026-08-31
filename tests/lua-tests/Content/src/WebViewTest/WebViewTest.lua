@@ -20,7 +20,7 @@ function WebViewTest:init()
     local canvasSize = ax.Director:getInstance():getVisibleSize()
     self._webView = axui.WebView:create()
     self._webView:setPosition(canvasSize.width / 2, canvasSize.height / 2)
-    self._webView:setContentSize(canvasSize.width / 2,  canvasSize.height / 2)
+    self._webView:setContentSize(ax.size(canvasSize.width / 2, canvasSize.height / 2))
     self._webView:loadURL("https://axmol.dev")
     self._webView:setScalesPageToFit(true)
 

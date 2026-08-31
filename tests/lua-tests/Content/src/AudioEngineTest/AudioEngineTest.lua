@@ -220,7 +220,7 @@ function AudioControlTest.create()
             ax.AudioEngine:setVolume(AudioControlTest._audioID, AudioControlTest._volume)
         end
     end
-    local volumeSlider = ccui.Slider:create()
+    local volumeSlider = axui.Slider:create()
     volumeSlider:setTouchEnabled(true)
     volumeSlider:loadBarTexture("cocosui/sliderTrack.png")
     volumeSlider:loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "")
@@ -407,7 +407,7 @@ function AudioProfileTest.create()
     AudioProfileTest._showLabel:setPosition(ax.p(origin.x, origin.y + size.height * 0.5))
     layer:addChild(AudioProfileTest._showLabel)
 
-    AudioProfileTest._timeSlider = ccui.Slider:create()
+    AudioProfileTest._timeSlider = axui.Slider:create()
     AudioProfileTest._timeSlider:setTouchEnabled(false)
     AudioProfileTest._timeSlider:loadBarTexture("cocosui/sliderTrack.png")
     AudioProfileTest._timeSlider:loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "")

@@ -168,19 +168,6 @@ void ScriptEngineManager::destroyInstance()
     }
 }
 
-void ScriptEngineManager::sendNodeEventToLua(Node* node, int action)
-{
-    auto scriptEngine = getInstance()->getScriptEngine();
-    if (scriptEngine)
-    {
-
-        BasicScriptData data(node, (void*)&action);
-        ScriptEvent scriptEvent(kNodeEvent, (void*)&data);
-
-        scriptEngine->sendEvent(scriptEvent);
-    }
-}
-
 int ScriptEngineManager::sendEventToLua(const ScriptEvent& event)
 {
     auto scriptEngine = getInstance()->getScriptEngine();

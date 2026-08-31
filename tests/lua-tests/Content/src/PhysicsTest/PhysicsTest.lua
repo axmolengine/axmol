@@ -1666,19 +1666,19 @@ local function PhysicsIssue9959()
         local origin = ax.Director:getInstance():getVisibleOrigin()
         local visibleSize = ax.Director:getInstance():getVisibleSize()
 
-        local scale9Sprite1 = ccui.Scale9Sprite:create("Images/ball.png")
+        local scale9Sprite1 = axui.Scale9Sprite:create("Images/ball.png")
         scale9Sprite1:setPosition(ax.p(origin.x+visibleSize.width/2,origin.y+visibleSize.height/2))
         layer:addChild(scale9Sprite1)
         scale9Sprite1:runAction(ax.RepeatForever:create(ax.Sequence:create(ax.MoveBy:create(2.0,ax.p(100.0,0.0)),
                     ax.MoveBy:create(2.0,ax.p(-100,0.0)))))
 
-        local scale9Sprite2 = ccui.Scale9Sprite:create("Images/ball.png")
+        local scale9Sprite2 = axui.Scale9Sprite:create("Images/ball.png")
         scale9Sprite2:setPosition(ax.p(origin.x+visibleSize.width/2,origin.y+visibleSize.height/2+50))
         layer:addChild(scale9Sprite2)
         scale9Sprite2:runAction(ax.RepeatForever:create(ax.Sequence:create(ax.ScaleTo:create(2.0,1.5),
                     ax.ScaleTo:create(2.0,1.0))))
 
-        local scale9Sprite3 = ccui.Scale9Sprite:create("Images/ball.png")
+        local scale9Sprite3 = axui.Scale9Sprite:create("Images/ball.png")
         scale9Sprite3:setPosition(ax.p(origin.x+visibleSize.width/2,origin.y+visibleSize.height/2-50))
         layer:addChild(scale9Sprite3)
         scale9Sprite3:runAction(ax.RepeatForever:create(ax.Sequence:create(ax.RotateBy:create(2.0,360))))

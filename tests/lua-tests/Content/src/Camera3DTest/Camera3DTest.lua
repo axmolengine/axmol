@@ -724,8 +724,8 @@ function FogTestDemo:createLayer3D()
     self:addChild(layer3D,0)
     self._layer3D = layer3D
 
-    local program = axr.ProgramManager:getInstance():loadProgram('custom/fog_vs', 'custom/fog_fs')
-    self._shader1 = ccb.ProgramState:new(program)
+    local program = ax.ProgramManager:getInstance():loadProgram('custom/fog_vs', 'custom/fog_fs')
+    self._shader1 = axr.ProgramState:new(program)
     self._shader2 = self._shader1:clone()
 
     self._sprite3D1 = ax.Sprite3D:create("MeshRendererTest/teapot.c3b")

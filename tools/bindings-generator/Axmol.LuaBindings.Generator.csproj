@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <!-- Keep the production generator compatible with PowerShell 7.4/.NET 8.
-         A local ClangSharp checkout is an explicit development override and
-         must itself be net8-compatible. -->
+    <!-- Optional Visual Studio debugging project.  genbindings.ps1 never
+         invokes the .NET SDK or this project; production generation uses
+         PowerShell Add-Type so a clean host needs no SDK. -->
     <GeneratorTargetFramework>net8.0</GeneratorTargetFramework>
     <TargetFramework>$(GeneratorTargetFramework)</TargetFramework>
     <LangVersion>latest</LangVersion>
@@ -20,9 +20,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(ClangSharpRoot)' == ''">
-    <!-- PackageDownload fetches only this managed interop assembly.  A normal
-         PackageReference would pull libClangSharp/libclang transitively;
-         Axmol deliberately supplies libclang through 1kiss instead. -->
+    <!-- Development-only reference for Visual Studio debugging. -->
     <PackageDownload Include="ClangSharp.Interop" Version="[$(ClangSharpInteropVersion)]" />
     <Reference Include="ClangSharp.Interop">
       <HintPath>$(NuGetPackageRoot)\clangsharp.interop\$(ClangSharpInteropVersion)\lib\net8.0\ClangSharp.Interop.dll</HintPath>

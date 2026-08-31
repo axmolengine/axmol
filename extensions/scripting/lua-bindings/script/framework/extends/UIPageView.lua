@@ -23,7 +23,7 @@ THE SOFTWARE.
 
 ]]
 
-local PageView = ccui.PageView
+local PageView = axui.PageView
 
 function PageView:onEvent(callback)
     self:addEventListener(function(sender, eventType)

@@ -37,7 +37,8 @@ LuaSkeletonAnimation::LuaSkeletonAnimation() : spine::SkeletonAnimation() {}
 
 LuaSkeletonAnimation::~LuaSkeletonAnimation()
 {
-    AxluaCallbackRegistry::getInstance()->removeObjectAllHandlers((void*)this);
+    if (auto* registry = AxluaCallbackRegistry::getInstanceIfExists())
+        registry->removeObjectAllHandlers(this);
 }
 
 LuaSkeletonAnimation* LuaSkeletonAnimation::createWithFile(std::string_view dataFile,

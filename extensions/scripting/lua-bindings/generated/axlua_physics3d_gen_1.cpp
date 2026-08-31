@@ -108,7 +108,6 @@ void register_ax_physics3d_members_1(lua_State* L)
     class_4_Rigidbody3D.method("setPosition", axlua::overload(axlua::overload_candidate<const ax::Vec3 &, bool>(static_cast<void (ax::Rigidbody3D::*)(const ax::Vec3 &, bool)>(&ax::Rigidbody3D::setPosition)), axlua::overload_candidate<const ax::Vec3 &>([](ax::Rigidbody3D& self, const ax::Vec3 & arg0) -> void { static_cast<ax::Rigidbody3D&>(self).setPosition(arg0, false); })));
     class_4_Rigidbody3D.method("setRotation", axlua::overload(axlua::overload_candidate<const ax::Quat &, bool>(static_cast<void (ax::Rigidbody3D::*)(const ax::Quat &, bool)>(&ax::Rigidbody3D::setRotation)), axlua::overload_candidate<const ax::Quat &>([](ax::Rigidbody3D& self, const ax::Quat & arg0) -> void { static_cast<ax::Rigidbody3D&>(self).setRotation(arg0, false); })));
     class_4_Rigidbody3D.method("setRotationEnabled", static_cast<void (ax::Rigidbody3D::*)(ax::bvec3)>(&ax::Rigidbody3D::setRotationEnabled));
-    class_4_Rigidbody3D.method("setUserData", static_cast<void (ax::Rigidbody3D::*)(void *)>(&ax::Rigidbody3D::setUserData));
     class_4_Rigidbody3D.method("syncNodeToPhysics", static_cast<void (ax::Rigidbody3D::*)()>(&ax::Rigidbody3D::syncNodeToPhysics));
     class_4_Rigidbody3D.method("syncPhysicsToNode", static_cast<void (ax::Rigidbody3D::*)()>(&ax::Rigidbody3D::syncPhysicsToNode));
     class_4_Rigidbody3D.method("world2Local", static_cast<ax::Vec3 (ax::Rigidbody3D::*)(const ax::Vec3 &)>(&ax::Rigidbody3D::world2Local));

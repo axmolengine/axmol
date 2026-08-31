@@ -1,10 +1,12 @@
 Lua binding module configuration
 ================================
 
-The active entry point is tools/cmdline/plugins/genbindings.ps1. The JSON
-files in this directory define module headers, namespaces, skip rules, rename
-rules, and conditional compilation expressions for the PowerShell/C#
-generator. No Python or INI parser is involved. The entry point accepts only
+The active entry point is tools/cmdline/plugins/genbindings.ps1. PowerShell
+prepares the host toolchain; the C# generator owns module discovery, JSON
+configuration parsing, policy validation, and C++ emission. The JSON files in
+this directory define module headers, namespaces, skip rules, rename rules,
+and conditional compilation expressions. No Python or INI parser is involved.
+The entry point accepts only
 the typed JSON arrays and objects described by `schema.json`; legacy scalar
 encodings are intentionally rejected.
 

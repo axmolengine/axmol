@@ -36,6 +36,34 @@
 
 using namespace ax::ext;
 
+// GUIReader returns an ax::ui::Widget, which is declared in a separate
+// binding module and is therefore intentionally omitted by the generator's
+// sceneext pass. Keep this single legacy factory available to Lua.
+static int axlua_GUIReader_widgetFromJsonFile(lua_State* L)
+{
+    axlua::adapter::Error conversionError;
+    if (!axlua::adapter::is_usertype(L, 1, "ax.GUIReader", 0, &conversionError) ||
+        !axlua::adapter::is_string(L, 2, 0, &conversionError))
+    {
+        axlua::adapter::raise_error(L, "#ferror in function 'GUIReader:widgetFromJsonFile'.", &conversionError);
+        return 0;
+    }
+
+    auto reader = static_cast<GUIReader*>(axlua::adapter::to_usertype(L, 1, 0));
+    auto widget = reader->widgetFromJsonFile(axlua::adapter::to_string(L, 2, ""));
+    axlua::adapter::push_object(L, widget, "axui.Widget");
+    return 1;
+}
+
+static void extendGUIReader(lua_State* L)
+{
+    lua_pushstring(L, "ax.GUIReader");
+    lua_rawget(L, LUA_REGISTRYINDEX);
+    if (lua_istable(L, -1))
+        axlua::adapter::set_function(L, "widgetFromJsonFile", axlua_GUIReader_widgetFromJsonFile);
+    lua_pop(L, 1);
+}
+
 class LuaArmatureWrapper : public Object
 {
 public:
@@ -569,6 +597,7 @@ int register_all_ax_sceneext_adapter(lua_State* L)
     extendBone(L);
     extendActionTimelineCache(L);
     extendActionTimeline(L);
+    extendGUIReader(L);
 
     return 0;
 }

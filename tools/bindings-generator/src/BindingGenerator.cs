@@ -198,6 +198,10 @@ public static unsafe class BindingGenerator
         var classes = new List<BindingClass>();
         var enums = new List<BindingEnum>();
         var generatedFiles = new List<string>();
+        // Validate configuration against the selected C++ declarations, not
+        // only against emitted methods.  A skip often names an internal or
+        // special-signature declaration which is intentionally filtered later.
+        var availableMethods = new Dictionary<string, HashSet<string>>(StringComparer.Ordinal);
 
         using var index = CXIndex.Create();
         foreach (var header in request.Headers)
@@ -257,7 +261,21 @@ public static unsafe class BindingGenerator
                 foreach (var record in tree.Records.Distinct())
                 {
                     if (IsSelected(record, request) && IsDefinition(record))
+                    {
+                        var nativeName = record.Spelling.CString;
+                        if (!availableMethods.TryGetValue(nativeName, out var methods))
+                        {
+                            methods = new HashSet<string>(StringComparer.Ordinal);
+                            availableMethods.Add(nativeName, methods);
+                        }
+                        foreach (var method in GetChildren(tree, record).Where(x => x.Kind == CXCursorKind.CXCursor_CXXMethod))
+                        {
+                            var methodName = method.Spelling.CString;
+                            if (!string.IsNullOrWhiteSpace(methodName))
+                                methods.Add(methodName);
+                        }
                         classes.Add(ToBindingClass(record, tree, request));
+                    }
                 }
 
                 foreach (var enumeration in tree.Enums.Distinct())
@@ -280,24 +298,18 @@ public static unsafe class BindingGenerator
             .ToArray();
 
         // A typo in a skip rule silently leaves an implementation detail in
-        // the public Lua surface.  Validate rules against the selected AST;
-        // feature-gated modules with no matching class remain valid.
+        // the public Lua surface.  Validate every rule against the selected
+        // AST; feature-gated modules with no matching class remain valid.
         foreach (var rule in request.SkipRules)
         {
-            var matchingClasses = uniqueClasses.Where(bindingClass =>
-                rule.ClassPattern == "*" || MatchesConfiguredPattern(bindingClass.NativeName, rule.ClassPattern));
-            if (rule.ClassPattern == "*" || !matchingClasses.Any())
+            var matchingClasses = availableMethods.Where(entry =>
+                rule.ClassPattern == "*" || MatchesConfiguredPattern(entry.Key, rule.ClassPattern));
+            if (rule.ClassPattern != "*" && !matchingClasses.Any())
                 continue;
             foreach (var methodPattern in rule.MethodPatterns.Where(x => !string.IsNullOrWhiteSpace(x)))
             {
-                // Historical compatibility lists contain names for methods
-                // filtered earlier by signature policy.  Strictly validate
-                // implementation-detail skips while retaining those entries.
-                if (methodPattern == "*" ||
-                    !string.Equals(methodPattern, "^internalHandle$", StringComparison.Ordinal))
-                    continue;
-                var matched = matchingClasses.Any(bindingClass => bindingClass.Methods.Any(method =>
-                    MatchesConfiguredPrefix(method.NativeName, methodPattern)));
+                var matched = matchingClasses.Any(entry => entry.Value.Any(methodName =>
+                    methodPattern == "*" || MatchesConfiguredPrefix(methodName, methodPattern)));
                 if (!matched)
                 {
                     diagnostics.Add(new GenerationDiagnostic
@@ -785,6 +797,14 @@ public static unsafe class BindingGenerator
             !type.Contains("ValueMap", StringComparison.Ordinal) &&
             !type.Contains("std::span", StringComparison.Ordinal) &&
             !type.Contains("std::unique_ptr", StringComparison.Ordinal) &&
+            // An erased native pointer has no stable Lua representation or
+            // ownership contract.  It must use a dedicated adapter/table
+            // converter, never sol2's light/userdata fallback.
+            !ContainsOpaquePointer(type) &&
+            // Scalar out-parameters are an implementation detail of the C++
+            // API.  Lua has no addressable float*/int* value, and sol2 would
+            // otherwise emit a callable that can never be invoked correctly.
+            !ContainsScalarPointer(type) &&
             // Cocos-era selector aliases are member-function pointers, not
             // Lua-callable std::function parameters.  Keep them out of an
             // overload group so a modern lambda overload remains bindable.
@@ -809,6 +829,14 @@ public static unsafe class BindingGenerator
             $@"(?<![A-Za-z0-9_])(?:[A-Za-z_][A-Za-z0-9_]*::)*{Regex.Escape(name)}(?=\s*(?:[&*]|$))",
             RegexOptions.CultureInvariant));
     }
+
+    private static bool ContainsOpaquePointer(string type) =>
+        Regex.IsMatch(type, @"(?<![A-Za-z0-9_])(?:const\s+)?void\s*\*", RegexOptions.CultureInvariant);
+
+    private static bool ContainsScalarPointer(string type) =>
+        Regex.IsMatch(type,
+            @"(?<![A-Za-z0-9_])(?:const\s+)?(?:bool|char|short|int|long|long\s+long|float|double|size_t|uint\d*_t|int\d*_t)\s*\*",
+            RegexOptions.CultureInvariant);
 
     private static bool HasIncompleteNamedType(string type, string context, CursorTree tree)
     {

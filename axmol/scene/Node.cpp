@@ -285,10 +285,6 @@ void Node::cleanup()
     if (_onCleanupCallback)
         _onCleanupCallback();
 
-#if AX_ENABLE_SCRIPT_BINDING
-    ScriptEngineManager::sendNodeEventToLua(this, kNodeOnCleanup);
-#endif  // #if AX_ENABLE_SCRIPT_BINDING
-
     // actions
     this->stopAllActions();
     // timers
@@ -1421,9 +1417,6 @@ void Node::onEnter()
 
     _running = true;
 
-#if AX_ENABLE_SCRIPT_BINDING
-    ScriptEngineManager::sendNodeEventToLua(this, kNodeOnEnter);
-#endif
 }
 
 void Node::onEnterTransitionDidFinish()
@@ -1435,9 +1428,6 @@ void Node::onEnterTransitionDidFinish()
     for (const auto& child : _children)
         child->onEnterTransitionDidFinish();
 
-#if AX_ENABLE_SCRIPT_BINDING
-    ScriptEngineManager::sendNodeEventToLua(this, kNodeOnEnterTransitionDidFinish);
-#endif
 }
 
 void Node::onExitTransitionDidStart()
@@ -1448,9 +1438,6 @@ void Node::onExitTransitionDidStart()
     for (const auto& child : _children)
         child->onExitTransitionDidStart();
 
-#if AX_ENABLE_SCRIPT_BINDING
-    ScriptEngineManager::sendNodeEventToLua(this, kNodeOnExitTransitionDidStart);
-#endif
 }
 
 void Node::onExit()
@@ -1475,9 +1462,6 @@ void Node::onExit()
     for (const auto& child : _children)
         child->onExit();
 
-#if AX_ENABLE_SCRIPT_BINDING
-    ScriptEngineManager::sendNodeEventToLua(this, kNodeOnExit);
-#endif
 }
 
 void Node::setEventDispatcher(EventDispatcher* dispatcher)

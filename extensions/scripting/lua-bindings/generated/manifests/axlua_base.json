@@ -4,7 +4,7 @@
   "registrationName": "ax_base",
   "luaNamespace": "ax",
   "luaTypeNamespace": "ax",
-  "conditionalExpression": "",
+  "conditionalExpression": null,
   "classes": [
     {
       "nativeName": "AccelerationEvent",
@@ -1204,20 +1204,7 @@
       "luaName": "ax.ActionObjectScriptData",
       "luaClassName": "ActionObjectScriptData",
       "isAbstract": false,
-      "constructors": [
-        {
-          "parameterTypes": [
-            "void *",
-            "int *",
-            "void *"
-          ],
-          "defaultValues": [
-            null,
-            "nullptr",
-            "nullptr"
-          ]
-        }
-      ],
+      "constructors": [],
       "bases": [],
       "methods": [],
       "fields": []
@@ -2107,17 +2094,6 @@
           "luaName": "getCurrentLanguage",
           "declaringType": "ax::Application",
           "returnType": "ax::LanguageType",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getCurrentLanguageCode",
-          "luaName": "getCurrentLanguageCode",
-          "declaringType": "ax::Application",
-          "returnType": "const char *",
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": false,
@@ -4831,17 +4807,6 @@
           ],
           "isStatic": true,
           "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getScriptObject",
-          "luaName": "getScriptObject",
-          "declaringType": "ax::ComponentLua",
-          "returnType": "void *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
           "isVariadic": false
         },
         {
@@ -10098,25 +10063,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "dispatchCustomEvent",
-          "luaName": "dispatchCustomEvent",
-          "declaringType": "ax::EventDispatcher",
-          "returnType": "void",
-          "parameterTypes": [
-            "std::string_view",
-            "void *",
-            "bool"
-          ],
-          "defaultValues": [
-            null,
-            "nullptr",
-            "false"
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "dispatchEvent",
           "luaName": "dispatchEvent",
           "declaringType": "ax::EventDispatcher",
@@ -12263,25 +12209,6 @@
             null
           ],
           "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "writeBinaryToFile",
-          "luaName": "writeBinaryToFile",
-          "declaringType": "ax::FileUtils",
-          "returnType": "bool",
-          "parameterTypes": [
-            "const void *",
-            "size_t",
-            "std::string_view"
-          ],
-          "defaultValues": [
-            null,
-            null,
-            null
-          ],
-          "isStatic": true,
           "isConst": false,
           "isVariadic": false
         },
@@ -18937,23 +18864,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getPosition",
-          "luaName": "getPosition",
-          "declaringType": "ax::MotionStreak",
-          "returnType": "void",
-          "parameterTypes": [
-            "float *",
-            "float *"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getPosition3D",
           "luaName": "getPosition3D",
           "declaringType": "ax::MotionStreak",
@@ -20487,28 +20397,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getUserData",
-          "luaName": "getUserData",
-          "declaringType": "ax::Node",
-          "returnType": "void *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getUserData",
-          "luaName": "getUserData",
-          "declaringType": "ax::Node",
-          "returnType": "const void *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getWorldBoundingBox",
           "luaName": "getWorldBoundingBox",
           "declaringType": "ax::Node",
@@ -21058,6 +20946,21 @@
           "isVariadic": false
         },
         {
+          "nativeName": "setContentSize",
+          "luaName": "setContentSize",
+          "declaringType": "ax::Node",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec2 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
           "nativeName": "setEventDispatcher",
           "luaName": "setEventDispatcher",
           "declaringType": "ax::Node",
@@ -21484,6 +21387,21 @@
           "isVariadic": false
         },
         {
+          "nativeName": "setRotationQuat",
+          "luaName": "setRotationQuat",
+          "declaringType": "ax::Node",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Quat \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
           "nativeName": "setRotationSkewX",
           "luaName": "setRotationSkewX",
           "declaringType": "ax::Node",
@@ -21651,21 +21569,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "setUserData",
-          "luaName": "setUserData",
-          "declaringType": "ax::Node",
-          "returnType": "void",
-          "parameterTypes": [
-            "void *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setUserObject",
           "luaName": "setUserObject",
           "declaringType": "ax::Node",
@@ -21803,6 +21706,17 @@
           "defaultValues": [
             null
           ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "unscheduleUpdate",
+          "luaName": "unscheduleUpdate",
+          "declaringType": "ax::Node",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
@@ -26614,91 +26528,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "setUniformAmbientLigthColor",
-          "luaName": "setUniformAmbientLigthColor",
-          "declaringType": "ax::Pass",
-          "returnType": "void",
-          "parameterTypes": [
-            "const void *",
-            "size_t"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setUniformColor",
-          "luaName": "setUniformColor",
-          "declaringType": "ax::Pass",
-          "returnType": "void",
-          "parameterTypes": [
-            "const void *",
-            "size_t"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setUniformDirLightColor",
-          "luaName": "setUniformDirLightColor",
-          "declaringType": "ax::Pass",
-          "returnType": "void",
-          "parameterTypes": [
-            "const void *",
-            "size_t"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setUniformDirLightDir",
-          "luaName": "setUniformDirLightDir",
-          "declaringType": "ax::Pass",
-          "returnType": "void",
-          "parameterTypes": [
-            "const void *",
-            "size_t"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setUniformMatrixPalette",
-          "luaName": "setUniformMatrixPalette",
-          "declaringType": "ax::Pass",
-          "returnType": "void",
-          "parameterTypes": [
-            "const void *",
-            "size_t"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setUniformNormTexture",
           "luaName": "setUniformNormTexture",
           "declaringType": "ax::Pass",
@@ -26706,159 +26535,6 @@
           "parameterTypes": [
             "uint32_t",
             "rhi::Texture *"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setUniformPointLightColor",
-          "luaName": "setUniformPointLightColor",
-          "declaringType": "ax::Pass",
-          "returnType": "void",
-          "parameterTypes": [
-            "const void *",
-            "size_t"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setUniformPointLightPosition",
-          "luaName": "setUniformPointLightPosition",
-          "declaringType": "ax::Pass",
-          "returnType": "void",
-          "parameterTypes": [
-            "const void *",
-            "size_t"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setUniformPointLightRangeInverse",
-          "luaName": "setUniformPointLightRangeInverse",
-          "declaringType": "ax::Pass",
-          "returnType": "void",
-          "parameterTypes": [
-            "const void *",
-            "size_t"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setUniformSpotLightColor",
-          "luaName": "setUniformSpotLightColor",
-          "declaringType": "ax::Pass",
-          "returnType": "void",
-          "parameterTypes": [
-            "const void *",
-            "size_t"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setUniformSpotLightDir",
-          "luaName": "setUniformSpotLightDir",
-          "declaringType": "ax::Pass",
-          "returnType": "void",
-          "parameterTypes": [
-            "const void *",
-            "size_t"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setUniformSpotLightInnerAngleCos",
-          "luaName": "setUniformSpotLightInnerAngleCos",
-          "declaringType": "ax::Pass",
-          "returnType": "void",
-          "parameterTypes": [
-            "const void *",
-            "size_t"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setUniformSpotLightOuterAngleCos",
-          "luaName": "setUniformSpotLightOuterAngleCos",
-          "declaringType": "ax::Pass",
-          "returnType": "void",
-          "parameterTypes": [
-            "const void *",
-            "size_t"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setUniformSpotLightPosition",
-          "luaName": "setUniformSpotLightPosition",
-          "declaringType": "ax::Pass",
-          "returnType": "void",
-          "parameterTypes": [
-            "const void *",
-            "size_t"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setUniformSpotLightRangeInverse",
-          "luaName": "setUniformSpotLightRangeInverse",
-          "declaringType": "ax::Pass",
-          "returnType": "void",
-          "parameterTypes": [
-            "const void *",
-            "size_t"
           ],
           "defaultValues": [
             null,
@@ -29696,17 +29372,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getNativeWindow",
-          "luaName": "getNativeWindow",
-          "declaringType": "ax::RenderView",
-          "returnType": "void *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getSafeAreaRect",
           "luaName": "getSafeAreaRect",
           "declaringType": "ax::RenderView",
@@ -29795,17 +29460,6 @@
           "luaName": "getNativeDisplay",
           "declaringType": "ax::RenderViewCore",
           "returnType": "ax::SurfaceHandle",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getNativeWindow",
-          "luaName": "getNativeWindow",
-          "declaringType": "ax::RenderViewCore",
-          "returnType": "void *",
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": false,
@@ -32730,18 +32384,7 @@
       "luaName": "ax.ScriptEvent",
       "luaClassName": "ScriptEvent",
       "isAbstract": false,
-      "constructors": [
-        {
-          "parameterTypes": [
-            "ax::ScriptEventType",
-            "void *"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ]
-        }
-      ],
+      "constructors": [],
       "bases": [],
       "methods": [],
       "fields": []
@@ -38294,17 +37937,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getStringForFormat",
-          "luaName": "getStringForFormat",
-          "declaringType": "ax::Texture2D",
-          "returnType": "const char *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getWidth",
           "luaName": "getWidth",
           "declaringType": "ax::Texture2D",
@@ -38486,33 +38118,6 @@
           ],
           "defaultValues": [
             null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "updateSubData",
-          "luaName": "updateSubData",
-          "declaringType": "ax::Texture2D",
-          "returnType": "bool",
-          "parameterTypes": [
-            "const void *",
-            "int",
-            "int",
-            "int",
-            "int",
-            "int",
-            "int"
-          ],
-          "defaultValues": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            "0",
-            "0"
           ],
           "isStatic": false,
           "isConst": false,
@@ -41888,21 +41493,6 @@
       "bases": [],
       "methods": [
         {
-          "nativeName": "deleteValueForKey",
-          "luaName": "deleteValueForKey",
-          "declaringType": "ax::UserDefault",
-          "returnType": "void",
-          "parameterTypes": [
-            "const char *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "destroyInstance",
           "luaName": "destroyInstance",
           "declaringType": "ax::UserDefault",
@@ -41920,232 +41510,6 @@
           "returnType": "void",
           "parameterTypes": [],
           "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getBoolForKey",
-          "luaName": "getBoolForKey",
-          "declaringType": "ax::UserDefault",
-          "returnType": "bool",
-          "parameterTypes": [
-            "const char *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getBoolForKey",
-          "luaName": "getBoolForKey",
-          "declaringType": "ax::UserDefault",
-          "returnType": "bool",
-          "parameterTypes": [
-            "const char *",
-            "bool"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getDoubleForKey",
-          "luaName": "getDoubleForKey",
-          "declaringType": "ax::UserDefault",
-          "returnType": "double",
-          "parameterTypes": [
-            "const char *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getDoubleForKey",
-          "luaName": "getDoubleForKey",
-          "declaringType": "ax::UserDefault",
-          "returnType": "double",
-          "parameterTypes": [
-            "const char *",
-            "double"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getFloatForKey",
-          "luaName": "getFloatForKey",
-          "declaringType": "ax::UserDefault",
-          "returnType": "float",
-          "parameterTypes": [
-            "const char *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getFloatForKey",
-          "luaName": "getFloatForKey",
-          "declaringType": "ax::UserDefault",
-          "returnType": "float",
-          "parameterTypes": [
-            "const char *",
-            "float"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getIntegerForKey",
-          "luaName": "getIntegerForKey",
-          "declaringType": "ax::UserDefault",
-          "returnType": "int",
-          "parameterTypes": [
-            "const char *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getIntegerForKey",
-          "luaName": "getIntegerForKey",
-          "declaringType": "ax::UserDefault",
-          "returnType": "int",
-          "parameterTypes": [
-            "const char *",
-            "int"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getLargeIntForKey",
-          "luaName": "getLargeIntForKey",
-          "declaringType": "ax::UserDefault",
-          "returnType": "int64_t",
-          "parameterTypes": [
-            "const char *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getLargeIntForKey",
-          "luaName": "getLargeIntForKey",
-          "declaringType": "ax::UserDefault",
-          "returnType": "int64_t",
-          "parameterTypes": [
-            "const char *",
-            "int64_t"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getStringForKey",
-          "luaName": "getStringForKey",
-          "declaringType": "ax::UserDefault",
-          "returnType": "std::string_view",
-          "parameterTypes": [
-            "const char *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getStringForKey",
-          "luaName": "getStringForKey",
-          "declaringType": "ax::UserDefault",
-          "returnType": "std::string_view",
-          "parameterTypes": [
-            "const char *",
-            "std::string_view"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setBoolForKey",
-          "luaName": "setBoolForKey",
-          "declaringType": "ax::UserDefault",
-          "returnType": "void",
-          "parameterTypes": [
-            "const char *",
-            "bool"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setDoubleForKey",
-          "luaName": "setDoubleForKey",
-          "declaringType": "ax::UserDefault",
-          "returnType": "void",
-          "parameterTypes": [
-            "const char *",
-            "double"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
@@ -42181,74 +41545,6 @@
             "\u0022\u0022"
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setFloatForKey",
-          "luaName": "setFloatForKey",
-          "declaringType": "ax::UserDefault",
-          "returnType": "void",
-          "parameterTypes": [
-            "const char *",
-            "float"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setIntegerForKey",
-          "luaName": "setIntegerForKey",
-          "declaringType": "ax::UserDefault",
-          "returnType": "void",
-          "parameterTypes": [
-            "const char *",
-            "int"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setLargeIntForKey",
-          "luaName": "setLargeIntForKey",
-          "declaringType": "ax::UserDefault",
-          "returnType": "void",
-          "parameterTypes": [
-            "const char *",
-            "int64_t"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setStringForKey",
-          "luaName": "setStringForKey",
-          "declaringType": "ax::UserDefault",
-          "returnType": "void",
-          "parameterTypes": [
-            "const char *",
-            "std::string_view"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }

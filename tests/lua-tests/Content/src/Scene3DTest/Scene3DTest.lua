@@ -317,7 +317,7 @@ function Scene3DTest:create3DWorld()
                                        "MeshRendererTest/skybox/front.jpg", "MeshRendererTest/skybox/back.jpg")
 
     --set texture parameters
-    local tRepeatParams = { magFilter = ccb.SamplerFilter.LINEAR , minFilter = ccb.SamplerFilter.LINEAR , sAddressMode = ccb.SamplerAddressMode.MIRRORED_REPEAT  , tAddressMode = ccb.SamplerAddressMode.MIRRORED_REPEAT }
+    local tRepeatParams = { magFilter = axr.SamplerFilter.LINEAR , minFilter = axr.SamplerFilter.LINEAR , sAddressMode = axr.SamplerAddressMode.MIRRORED_REPEAT  , tAddressMode = axr.SamplerAddressMode.MIRRORED_REPEAT }
     self._textureCube:setTexParameters(tRepeatParams)
 
     --add skybox
@@ -364,7 +364,7 @@ function Scene3DTest:createPlayerDlg()
     local margin = 10
 
     --first, create dialog ui part, include background, title and buttons
-    self._playerDlg = ccui.Scale9Sprite:createWithSpriteFrameName("button_actived.png")
+    self._playerDlg = axui.Scale9Sprite:createWithSpriteFrameName("button_actived.png")
     self._playerDlg:setContentSize(dlgSize)
     self._playerDlg:setAnchorPoint(ax.p(1, 0.5))
     pos.y = pos.y - margin
@@ -379,7 +379,7 @@ function Scene3DTest:createPlayerDlg()
     --player background
     local bgSize = ax.size(110, 180)
     local bgPos  = ax.p(margin, dlgSize.height / 2 - margin)
-    local playerBg = ccui.Scale9Sprite:createWithSpriteFrameName("item_bg.png")
+    local playerBg = axui.Scale9Sprite:createWithSpriteFrameName("item_bg.png")
     playerBg:setContentSize(bgSize)
     playerBg:setAnchorPoint(ax.p(0, 0.5))
     playerBg:setPosition(bgPos)
@@ -389,13 +389,13 @@ function Scene3DTest:createPlayerDlg()
     local itemSize   = ax.size(48, 48)
     local itemAnchor = ax.p(0, 1)
     local itemPos    = ax.p(bgPos.x + bgSize.width + margin, bgPos.y + bgSize.height / 2)
-    local itemBg = ccui.Scale9Sprite:createWithSpriteFrameName("item_bg.png")
+    local itemBg = axui.Scale9Sprite:createWithSpriteFrameName("item_bg.png")
     itemBg:setContentSize(itemSize)
     itemBg:setAnchorPoint(itemAnchor)
     itemBg:setPosition(itemPos)
     self._playerDlg:addChild(itemBg)
 
-    local item = ccui.Button:create("crystal.png", "", "", ccui.TextureResType.plistType)
+    local item = axui.Button:create("crystal.png", "", "", axui.TextureResType.plistType)
     item:setScale(1.5)
     item:setAnchorPoint(itemAnchor)
     item:setPosition(itemPos)
@@ -418,7 +418,7 @@ function Scene3DTest:createPlayerDlg()
     playerBg:addChild(girl)
 
     --third, add zoom in/out button, which is 2d ui element and over 3d actor
-    local zoomIn = ccui.Button:create("cocosui/animationbuttonnormal.png","cocosui/animationbuttonpressed.png")
+    local zoomIn = axui.Button:create("cocosui/animationbuttonnormal.png","cocosui/animationbuttonpressed.png")
     zoomIn:setScale(0.5)
     zoomIn:setAnchorPoint(ax.p(1, 1))
     zoomIn:setPosition(ax.p(bgSize.width / 2 - margin / 2, bgSize.height - margin))
@@ -429,7 +429,7 @@ function Scene3DTest:createPlayerDlg()
     zoomIn:setCameraMask(s_CM[GAME_LAYER.LAYER_ZOOM])
     playerBg:addChild(zoomIn)
 
-    local zoomOut = ccui.Button:create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png")
+    local zoomOut = axui.Button:create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png")
     zoomOut:setScale(0.5)
     zoomOut:setAnchorPoint(ax.p(0, 1))
     zoomOut:setPosition(ax.p(bgSize.width / 2 + margin / 2, bgSize.height - margin))
@@ -449,7 +449,7 @@ function Scene3DTest:createDetailDlg()
     local margin = 10
 
     --create dialog
-    self._detailDlg = ccui.Scale9Sprite:createWithSpriteFrameName("button_actived.png")
+    self._detailDlg = axui.Scale9Sprite:createWithSpriteFrameName("button_actived.png")
     self._detailDlg:setContentSize(dlgSize)
     self._detailDlg:setAnchorPoint(ax.p(0, 0.5))
     self._detailDlg:setOpacity(224)
@@ -503,7 +503,7 @@ function Scene3DTest:createDescDlg()
     local margin = 10
 
     --create dialog
-    self._descDlg = ccui.Scale9Sprite:createWithSpriteFrameName("button_actived.png")
+    self._descDlg = axui.Scale9Sprite:createWithSpriteFrameName("button_actived.png")
     self._descDlg:setContentSize(dlgSize)
     self._descDlg:setOpacity(224)
     self._descDlg:setPosition(pos)

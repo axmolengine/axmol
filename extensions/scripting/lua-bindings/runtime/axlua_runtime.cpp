@@ -29,6 +29,47 @@ struct DynamicObjectPushers
     std::unordered_map<std::string, axlua::AdapterObjectPusher> byName;
 };
 
+struct NativeObjectRecord
+{
+    ax::WeakPtr<ax::Object> object;
+    // One native object may be seen by several independent Lua VMs. Lua APIs
+    // remain thread-confined, so keep the VM owner thread alongside each
+    // exposure and only invalidate handles that are safe to access here.
+    std::unordered_map<lua_State*, std::thread::id> vmThreads;
+};
+
+// Lua's registry is shared by the main thread and every coroutine.  Binding
+// registrations and shutdown bookkeeping must use the VM identity rather
+// than a transient coroutine pointer.  `install()` records the main thread
+// before any generated binding can create callbacks or userdata.
+constexpr char kAxluaMainThreadRegistryKey[] = "axlua.runtime.main_thread";
+
+lua_State* vm_state(lua_State* state)
+{
+    if (state == nullptr)
+        return nullptr;
+
+    lua_getfield(state, LUA_REGISTRYINDEX, kAxluaMainThreadRegistryKey);
+    auto* mainState = lua_tothread(state, -1);
+    lua_pop(state, 1);
+    return mainState != nullptr ? mainState : state;
+}
+
+void remember_vm_state(lua_State* state)
+{
+    if (state == nullptr)
+        return;
+
+    lua_getfield(state, LUA_REGISTRYINDEX, kAxluaMainThreadRegistryKey);
+    const bool alreadyRegistered = lua_isthread(state, -1);
+    lua_pop(state, 1);
+    if (alreadyRegistered)
+        return;
+
+    lua_pushthread(state);
+    lua_setfield(state, LUA_REGISTRYINDEX, kAxluaMainThreadRegistryKey);
+}
+
 class AxluaRuntimeState
 {
 public:
@@ -50,10 +91,10 @@ public:
         delete state;
     }
 
-    std::unordered_map<ax::Object*, ax::WeakPtr<ax::Object>> nativeObjects;
+    std::unordered_map<ax::Object*, NativeObjectRecord> nativeObjects;
     std::mutex nativeObjectsMutex;
-    std::unordered_map<ax::Object*, std::thread::id> nativeObjectThreads;
     std::unordered_map<lua_State*, std::vector<std::weak_ptr<axlua::detail::LuaCallbackState>>> luaCallbacks;
+    std::mutex luaCallbacksMutex;
     std::unordered_map<lua_State*, std::unordered_map<std::string, axlua::AdapterObjectPusher>> objectPushers;
     std::unordered_map<lua_State*, DynamicObjectPushers> dynamicObjectPushers;
     std::unordered_map<const std::type_info*, std::string> nativeTypeNamesByAddress;
@@ -72,21 +113,23 @@ private:
         if (_dispatcher != nullptr && _disposingListener != nullptr)
             _dispatcher->removeEventListener(_disposingListener);
         _disposingListener = nullptr;
-        for (auto& entry : luaCallbacks)
+        std::vector<std::weak_ptr<axlua::detail::LuaCallbackState>> callbacks;
         {
-            for (auto& weakCallback : entry.second)
-            {
-                if (auto callback = weakCallback.lock())
-                    callback->invalidate();
-            }
+            std::lock_guard lock(luaCallbacksMutex);
+            for (auto& entry : luaCallbacks)
+                callbacks.insert(callbacks.end(), entry.second.begin(), entry.second.end());
+            luaCallbacks.clear();
         }
-        luaCallbacks.clear();
+        for (auto& weakCallback : callbacks)
+        {
+            if (auto callback = weakCallback.lock())
+                callback->invalidate();
+        }
         objectPushers.clear();
         dynamicObjectPushers.clear();
         nativeTypeNamesByAddress.clear();
         nativeTypeNamesByName.clear();
         nativeObjects.clear();
-        nativeObjectThreads.clear();
     }
 
     static AxluaRuntimeState* _instance;
@@ -534,8 +577,9 @@ void register_object_pusher(lua_State* state,
 {
     if (state == nullptr || typeName.empty() || pusher == nullptr)
         return;
-    runtime_state().objectPushers[state][std::string(typeName)] = pusher;
-    auto& dynamicPushers                                        = runtime_state().dynamicObjectPushers[state];
+    auto* vmState = vm_state(state);
+    runtime_state().objectPushers[vmState][std::string(typeName)] = pusher;
+    auto& dynamicPushers                                          = runtime_state().dynamicObjectPushers[vmState];
     dynamicPushers.byAddress[&nativeType]                       = pusher;
     dynamicPushers.byName[nativeType.name()]                    = pusher;
     register_native_type_name(nativeType, typeName);
@@ -545,7 +589,7 @@ bool push_registered_object(lua_State* state, void* object, std::string_view typ
 {
     if (state == nullptr || object == nullptr || typeName.empty())
         return false;
-    const auto stateEntry = runtime_state().objectPushers.find(state);
+    const auto stateEntry = runtime_state().objectPushers.find(vm_state(state));
     if (stateEntry == runtime_state().objectPushers.end())
         return false;
     const auto pusherEntry = stateEntry->second.find(std::string(typeName));
@@ -585,7 +629,7 @@ bool push_registered_dynamic_object(lua_State* state, ax::Object* object, const 
     if (dynamicType == staticType)
         return false;
 
-    const auto stateEntry = runtime_state().dynamicObjectPushers.find(state);
+    const auto stateEntry = runtime_state().dynamicObjectPushers.find(vm_state(state));
     if (stateEntry == runtime_state().dynamicObjectPushers.end())
         return false;
 
@@ -640,12 +684,20 @@ std::shared_ptr<LuaCallbackState> LuaCallbackState::create(lua_State* state, int
     if (state == nullptr || !lua_isfunction(state, index))
         return {};
 
-    auto callback = std::shared_ptr<LuaCallbackState>(new LuaCallbackState(state));
+    auto* vmState = vm_state(state);
+    // The function reference is VM-wide. Invoke it through the main Lua
+    // thread even when the function was supplied by a coroutine: native
+    // callbacks are delivered on the engine thread, not on that coroutine's
+    // transient stack.
+    auto callback = std::shared_ptr<LuaCallbackState>(new LuaCallbackState(vmState, vmState));
     lua_pushvalue(state, index);
     callback->_ref    = luaL_ref(state, LUA_REGISTRYINDEX);
-    callback->_active = callback->_ref != LUA_NOREF && callback->_ref != LUA_REFNIL;
-    if (callback->_active)
-        runtime_state().luaCallbacks[state].emplace_back(callback);
+    callback->_active.store(callback->_ref != LUA_NOREF && callback->_ref != LUA_REFNIL, std::memory_order_release);
+    if (callback->_active.load(std::memory_order_acquire))
+    {
+        std::lock_guard lock(runtime_state().luaCallbacksMutex);
+        runtime_state().luaCallbacks[callback->_vmState].emplace_back(callback);
+    }
     return callback;
 }
 
@@ -656,11 +708,18 @@ LuaCallbackState::~LuaCallbackState()
 
 void LuaCallbackState::invalidate() noexcept
 {
-    if (_active && _state != nullptr && _ref != LUA_NOREF && _ref != LUA_REFNIL)
+    if (!_active.exchange(false, std::memory_order_acq_rel))
+        return;
+
+    // Lua states are thread-confined.  A native owner may release a callback
+    // from a worker thread, but that must never perform a Lua API call.  Lua
+    // close reclaims the registry reference; normal owner-thread shutdown
+    // releases it eagerly below.
+    if (std::this_thread::get_id() != _ownerThread)
+        return;
+
+    if (_state != nullptr && _ref != LUA_NOREF && _ref != LUA_REFNIL)
         luaL_unref(_state, LUA_REGISTRYINDEX, _ref);
-    _state  = nullptr;
-    _ref    = LUA_NOREF;
-    _active = false;
 }
 
 void LuaCallbackState::report_callback_error(const char* message)
@@ -674,16 +733,20 @@ void shutdown_callbacks(lua_State* state)
     if (state == nullptr || AxluaRuntimeState::existing() == nullptr)
         return;
 
-    auto found = runtime_state().luaCallbacks.find(state);
-    if (found == runtime_state().luaCallbacks.end())
-        return;
-
-    for (auto& weakCallback : found->second)
+    std::vector<std::weak_ptr<detail::LuaCallbackState>> callbacks;
+    {
+        std::lock_guard lock(runtime_state().luaCallbacksMutex);
+        auto found = runtime_state().luaCallbacks.find(vm_state(state));
+        if (found == runtime_state().luaCallbacks.end())
+            return;
+        callbacks = std::move(found->second);
+        runtime_state().luaCallbacks.erase(found);
+    }
+    for (auto& weakCallback : callbacks)
     {
         if (auto callback = weakCallback.lock())
             callback->invalidate();
     }
-    runtime_state().luaCallbacks.erase(found);
 }
 
 int class_static_index(lua_State* state)
@@ -746,25 +809,27 @@ bool is_invalid_userdata(lua_State* state, int index)
     return invalid;
 }
 
-void remember_object(ax::Object* object)
+void remember_object(lua_State* state, ax::Object* object)
 {
-    if (object == nullptr)
+    if (state == nullptr || object == nullptr)
         return;
 
     object->markScriptBindingExposed();
 
-    auto* state = AxluaRuntimeState::existing();
-    if (state == nullptr)
+    auto* runtime = AxluaRuntimeState::existing();
+    if (runtime == nullptr)
         return;
 
-    std::lock_guard lock(state->nativeObjectsMutex);
+    std::lock_guard lock(runtime->nativeObjectsMutex);
 
-    auto found = state->nativeObjects.find(object);
-    if (found == state->nativeObjects.end() || found->second.expired())
+    const auto key = vm_state(state);
+    auto [found, inserted] = runtime->nativeObjects.try_emplace(object);
+    if (inserted || found->second.object.expired())
     {
-        state->nativeObjects[object]       = ax::WeakPtr<ax::Object>(object);
-        state->nativeObjectThreads[object] = std::this_thread::get_id();
+        found->second.object = ax::WeakPtr<ax::Object>(object);
+        found->second.vmThreads.clear();
     }
+    found->second.vmThreads[key] = std::this_thread::get_id();
 }
 
 bool object_expired(ax::Object* object)
@@ -775,12 +840,9 @@ bool object_expired(ax::Object* object)
 
     std::lock_guard lock(state->nativeObjectsMutex);
     auto found         = state->nativeObjects.find(object);
-    const bool expired = found != state->nativeObjects.end() && found->second.expired();
+    const bool expired = found != state->nativeObjects.end() && found->second.object.expired();
     if (expired)
-    {
         state->nativeObjects.erase(object);
-        state->nativeObjectThreads.erase(object);
-    }
     return expired;
 }
 
@@ -996,6 +1058,7 @@ Module Module::from(lua_State* state, std::string_view namespaceName, std::strin
 
 void install(lua_State* state)
 {
+    remember_vm_state(state);
     sol::state_view view(state);
     sol::object existing = view["axlua"];
     sol::table module =
@@ -1022,13 +1085,20 @@ void shutdown(lua_State* state)
         lua_setfield(state, LUA_REGISTRYINDEX, "axlua.class.tables");
         lua_pushnil(state);
         lua_setfield(state, LUA_REGISTRYINDEX, "axlua.class.pointer_tables");
-        runtime_state().objectPushers.erase(state);
-        runtime_state().dynamicObjectPushers.erase(state);
-    }
-    {
-        std::lock_guard lock(runtime_state().nativeObjectsMutex);
-        runtime_state().nativeObjects.clear();
-        runtime_state().nativeObjectThreads.clear();
+        auto* vmState = vm_state(state);
+        runtime_state().objectPushers.erase(vmState);
+        runtime_state().dynamicObjectPushers.erase(vmState);
+        {
+            std::lock_guard lock(runtime_state().nativeObjectsMutex);
+            for (auto iterator = runtime_state().nativeObjects.begin(); iterator != runtime_state().nativeObjects.end();)
+            {
+                iterator->second.vmThreads.erase(vmState);
+                if (iterator->second.vmThreads.empty())
+                    iterator = runtime_state().nativeObjects.erase(iterator);
+                else
+                    ++iterator;
+            }
+        }
     }
 }
 
@@ -1056,7 +1126,7 @@ void set_peer(lua_State* state, int userdataIndex, int peerIndex)
 #endif
 }
 
-void invalidate_object(lua_State* state, void* object)
+void invalidate_object(lua_State*, void* object)
 {
     auto* nativeObject = static_cast<ax::Object*>(object);
     if (nativeObject == nullptr)
@@ -1069,30 +1139,41 @@ void invalidate_object(lua_State* state, void* object)
     if (runtime == nullptr || !nativeObject->hasScriptBindingExposure())
         return;
 
+    std::vector<lua_State*> statesToInvalidate;
     // Avoid touching Lua for objects that were never exposed to this binding,
     // including objects destroyed from worker threads.
     {
         std::lock_guard lock(runtime->nativeObjectsMutex);
-        if (runtime->nativeObjects.find(nativeObject) == runtime->nativeObjects.end())
+        const auto found = runtime->nativeObjects.find(nativeObject);
+        if (found == runtime->nativeObjects.end())
             return;
-        if (runtime->nativeObjectThreads[nativeObject] != std::this_thread::get_id())
-        {
-            // Lua is thread-confined.  Keep the weak entry so subsequent Lua
-            // reads reject the expired userdata without touching the VM.
-            return;
-        }
+        for (const auto& [vmState, ownerThread] : found->second.vmThreads)
+            if (ownerThread == std::this_thread::get_id())
+                statesToInvalidate.push_back(vmState);
     }
-    if (state != nullptr)
+    if (statesToInvalidate.empty())
     {
-        invalidate_pointer_registry_entry(state, "axlua.object.identity", nativeObject);
-        invalidate_pointer_registry_entry(state, axlua::adapter::kObjectBoxRegistry, nativeObject);
-        invalidate_pointer_registry_entry(state, axlua::adapter::kValueRootRegistry, nativeObject);
-        remove_pointer_registry_entry(state, axlua::adapter::kOwnedObjectRegistry, nativeObject);
+        // Lua is thread-confined. Keep the weak entry so subsequent Lua reads
+        // reject the expired userdata without touching a foreign VM.
+        return;
+    }
+    for (auto* vmState : statesToInvalidate)
+    {
+        invalidate_pointer_registry_entry(vmState, "axlua.object.identity", nativeObject);
+        invalidate_pointer_registry_entry(vmState, axlua::adapter::kObjectBoxRegistry, nativeObject);
+        invalidate_pointer_registry_entry(vmState, axlua::adapter::kValueRootRegistry, nativeObject);
+        remove_pointer_registry_entry(vmState, axlua::adapter::kOwnedObjectRegistry, nativeObject);
     }
     {
         std::lock_guard lock(runtime->nativeObjectsMutex);
-        runtime->nativeObjects.erase(nativeObject);
-        runtime->nativeObjectThreads.erase(nativeObject);
+        auto found = runtime->nativeObjects.find(nativeObject);
+        if (found != runtime->nativeObjects.end())
+        {
+            for (auto* vmState : statesToInvalidate)
+                found->second.vmThreads.erase(vmState);
+            if (found->second.vmThreads.empty())
+                runtime->nativeObjects.erase(found);
+        }
     }
 }
 

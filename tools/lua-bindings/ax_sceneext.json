@@ -1,7 +1,10 @@
 {
   "module": "ax_sceneext",
   "target_namespace": "ax",
-  "cpp_namespace": ["ax::ext", "ax::ext::timeline"],
+  "cpp_namespace": [
+    "ax::ext",
+    "ax::ext::timeline"
+  ],
   "macro_judgement": null,
   "headers": [
     "%(axdir)s/extensions/sceneext/src/sceneext/sceneext.h",
@@ -54,31 +57,16 @@
       "class": "*",
       "methods": [
         "^visit$",
-        "copyWith.*",
         "onEnter.*",
         "onExit.*",
-        "^description$",
-        "getObjectType",
-        ".*HSV",
-        "onTouch.*",
-        "(s|g)etUserObject",
-        "add\\w*EventListener"
-      ]
-    },
-    {
-      "class": "ArmatureDataManager",
-      "methods": [
-        "CCArmatureDataManager",
-        "~CCArmatureDataManager"
+        "(s|g)etUserObject"
       ]
     },
     {
       "class": "Armature",
       "methods": [
         "createBone",
-        "updateBlendType",
         "setBody",
-        "getShapeList",
         "^getBody$"
       ]
     },
@@ -96,12 +84,6 @@
         "frameEvent",
         "setMovementEventCallFunc",
         "setFrameEventCallFunc"
-      ]
-    },
-    {
-      "class": "Bone",
-      "methods": [
-        "getIgnoreMovementBoneData"
       ]
     },
     {

@@ -17,13 +17,8 @@
     {
       "class": "CSLoader",
       "methods": [
-        "nodeFromXML",
-        "nodeFromProtocolBuffers",
         "createTimeline",
         "nodeWithFlatBuffers",
-        "createActionTimelineNode",
-        "createNodeWithDataBuffer",
-        "createTimelineWithDataBuffer",
         "^createNode$"
       ]
     }

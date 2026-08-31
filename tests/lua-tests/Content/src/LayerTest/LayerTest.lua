@@ -386,11 +386,11 @@ local function LayerTestBlend()
         local dst = 0
 
         if  blend  then
-            src = ccb.BlendFactor.SRC_ALPHA
-            dst = ccb.BlendFactor.ONE_MINUS_SRC_ALPHA
+            src = axr.BlendFactor.SRC_ALPHA
+            dst = axr.BlendFactor.ONE_MINUS_SRC_ALPHA
         else
-            src = ccb.BlendFactor.ONE_MINUS_DST_COLOR
-            dst = ccb.BlendFactor.ZERO
+            src = axr.BlendFactor.ONE_MINUS_DST_COLOR
+            dst = axr.BlendFactor.ZERO
         end
 
         layer:setBlendFunc(ax.blendFunc(src, dst))
@@ -605,7 +605,7 @@ local function LayerExtendedBlendOpacityTest()
     layer3:setEndColor(ax.color32(255, 0, 255))
     layer3:setStartOpacity(255)
     layer3:setEndOpacity(255)
-    layer3:setBlendFunc(ax.blendFunc(ccb.BlendFactor.SRC_ALPHA, ccb.BlendFactor.ONE_MINUS_SRC_ALPHA))
+    layer3:setBlendFunc(ax.blendFunc(axr.BlendFactor.SRC_ALPHA, axr.BlendFactor.ONE_MINUS_SRC_ALPHA))
     ret:addChild(layer3)
     return ret
 end

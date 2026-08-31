@@ -56,6 +56,7 @@ add_subdirectory(${_AX_ROOT}/axmol ${ENGINE_BINARY_PATH}/axmol)
 set(BUILD_ENGINE_DONE ON)
 
 if(AX_BUILD_TESTS)
+  enable_testing()
   message(STATUS "CMAKE_BINARY_DIR=${CMAKE_BINARY_DIR}")
 
   macro(add_test_target target_name dir)
@@ -68,11 +69,6 @@ if(AX_BUILD_TESTS)
 
   if(LINUX OR MACOSX OR WINDOWS)
     add_test_target(unit-tests ${_AX_ROOT}/tests/unit-tests)
-  endif()
-
-  # Headless Lua binding regression tests (no render context required).
-  if(AX_ENABLE_EXT_LUA)
-    add_test_target(lua-binding-runtime ${_AX_ROOT}/tests/lua-binding-runtime)
   endif()
 
   # add fairygui tests when fairygui extension is enabled

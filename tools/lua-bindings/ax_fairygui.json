@@ -108,12 +108,6 @@
       ]
     },
     {
-      "class": "GRoot",
-      "methods": [
-        "addPlaySoundListener"
-      ]
-    },
-    {
       "class": "Transition",
       "methods": [
         "^play$",
@@ -130,12 +124,6 @@
       "class": "UIPackage",
       "methods": [
         "getItemAsset"
-      ]
-    },
-    {
-      "class": "Window",
-      "methods": [
-        "addAnimationListener"
       ]
     }
   ],

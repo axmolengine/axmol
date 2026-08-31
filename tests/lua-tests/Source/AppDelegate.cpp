@@ -29,8 +29,33 @@
 #include "lua_assetsmanager_test_sample.h"
 #include "lua-bindings/runtime/lua_module_register.h"
 #include "lua_test_bindings.h"
+#include "LuaBindingSmoke.h"
+
+#include <stdlib.h>
+
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WASM
+#    include <emscripten/emscripten.h>
+#endif
 
 using namespace ax;
+
+namespace
+{
+bool luaBindingSmokeRequested()
+{
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WASM
+    // Emscripten does not import the host process environment into libc by
+    // default. Read the flag directly from Node's process.env for the CTest
+    // launcher while retaining getenv for native runners.
+    return EM_ASM_INT({
+        return typeof process !== 'undefined' && process.env && process.env.AXMOL_LUA_BINDING_SMOKE === '1';
+    });
+#else
+    const char* smoke = getenv("AXMOL_LUA_BINDING_SMOKE");
+    return smoke != nullptr && smoke[0] == '1';
+#endif
+}
+}  // namespace
 
 AppDelegate::AppDelegate() {}
 
@@ -68,9 +93,29 @@ bool AppDelegate::applicationDidFinishLaunching()
     if (lua_gettop(L) > 0)
         lua_pop(L, 1);
 
+    // Keep the binding ABI regression in the same application target while
+    // allowing CI to run it without entering the render loop or controller
+    // scene. `std::exit` propagates the smoke result on every platform whose
+    // Application::run() otherwise maps a failed launch to zero.
+    if (luaBindingSmokeRequested())
+        std::exit(runLuaBindingSmoke(L));
+
     FileUtils::getInstance()->addSearchPath("src");
     FileUtils::getInstance()->addSearchPath("res");
     pEngine->executeScriptFile("controller.lua");
+
+#if defined(AX_ENABLE_NAVMESH) && defined(AX_ENABLE_PHYSICS_3D)
+#    if AX_TARGET_PLATFORM == AX_PLATFORM_WASM
+    const bool navMeshSmoke = EM_ASM_INT({
+        return typeof location !== 'undefined' && new URLSearchParams(location.search).has('navmesh-smoke');
+    });
+#    else
+    const char* navMeshSmokeFlag = getenv("AXMOL_NAVMESH_SMOKE");
+    const bool navMeshSmoke = navMeshSmokeFlag != nullptr && navMeshSmokeFlag[0] == '1';
+#    endif
+    if (navMeshSmoke)
+        pEngine->executeScriptFile("NavMeshTest/NavMeshSmoke.lua");
+#endif
 
     return true;
 }

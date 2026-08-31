@@ -110,6 +110,26 @@ void* ComponentLua::getScriptObject() const
     return nullptr;
 }
 
+int ComponentLua::pushScriptObject(lua_State* state) const
+{
+    if (state == nullptr)
+        return 0;
+
+    lua_pushstring(state, KEY_COMPONENT);
+    lua_rawget(state, LUA_REGISTRYINDEX);
+    if (!lua_istable(state, -1))
+    {
+        lua_pop(state, 1);
+        lua_pushnil(state);
+        return 1;
+    }
+
+    lua_pushlstring(state, _strIndex.data(), _strIndex.size());
+    lua_rawget(state, -2);
+    lua_remove(state, -2);  // component table; retain only the script table
+    return 1;
+}
+
 void ComponentLua::update(float delta)
 {
     if (_succeedLoadingScript && getLuaFunction(ComponentLua::UPDATE))

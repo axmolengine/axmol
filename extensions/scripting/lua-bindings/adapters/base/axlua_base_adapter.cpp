@@ -26,6 +26,7 @@
 #include "lua-bindings/adapters/base/axlua_base_adapter.h"
 #include "lua-bindings/runtime/axlua_adapter.h"
 #include "lua-bindings/runtime/axlua_conversions.h"
+#include "lua-bindings/runtime/ComponentLua.h"
 #include "lua-bindings/runtime/LuaValue.h"
 #include "lua-bindings/runtime/LuaEngine.h"
 #if defined(_MSC_VER) || defined(__MINGW32__)
@@ -168,6 +169,34 @@ argumentError:
     axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_MenuItemImage_create'.\n", &conversionError);
 #endif
     return 0;
+}
+
+// ComponentLua historically returns the table produced by its script module.
+// The native helper communicates that value through the Lua stack and returns
+// `void*`, which must never be exposed as a generic sol2 pointer userdata.
+static int axlua_ComponentLua_getScriptObject(lua_State* luaState)
+{
+    if (luaState == nullptr)
+        return 0;
+
+    axlua::adapter::Error conversionError;
+    if (lua_gettop(luaState) != 1 || !axlua::adapter::is_usertype(luaState, 1, "ax.ComponentLua", 0, &conversionError))
+    {
+        axlua::adapter::raise_error(luaState, "invalid arguments in function 'ax.ComponentLua:getScriptObject'", &conversionError);
+        return 0;
+    }
+
+    auto* self = static_cast<ax::ComponentLua*>(axlua::adapter::to_usertype(luaState, 1, nullptr));
+    return self != nullptr ? self->pushScriptObject(luaState) : 0;
+}
+
+static void extendComponentLua(lua_State* luaState)
+{
+    lua_pushstring(luaState, "ax.ComponentLua");
+    lua_rawget(luaState, LUA_REGISTRYINDEX);
+    if (lua_istable(luaState, -1))
+        axlua::adapter::set_function(luaState, "getScriptObject", axlua_ComponentLua_getScriptObject);
+    lua_pop(luaState, 1);
 }
 
 static int axlua_MenuItemLabel_create(lua_State* luaState)
@@ -917,224 +946,62 @@ argumentError:
 #endif
 }
 
-static int axlua_Node_unscheduleUpdate(lua_State* luaState)
-{
-    if (NULL == luaState)
-        return 0;
-
-    int argc   = 0;
-    Node* self = nullptr;
-
-#if _AX_DEBUG >= 1
-    axlua::adapter::Error conversionError;
-    if (!axlua::adapter::is_usertype(luaState, 1, "ax.Node", 0, &conversionError))
-        goto argumentError;
-#endif
-
-    self = static_cast<ax::Node*>(axlua::adapter::to_usertype(luaState, 1, 0));
-#if _AX_DEBUG >= 1
-    if (nullptr == self)
-    {
-        axlua::adapter::raise_error(luaState, "invalid 'self' in function 'axlua_Node_unscheduleUpdate'\n", NULL);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(luaState) - 1;
-
-    if (0 == argc)
-    {
-        self->unscheduleUpdate();
-        return 0;
-    }
-
-    luaL_error(luaState, "%s has wrong number of arguments: %d, was expecting %d\n", "ax.Node:unscheduleUpdate", argc,
-               0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_Node_unscheduleUpdate'.", &conversionError);
-    return 0;
-#endif
-}
-
-int axlua_Node_setContentSize(lua_State* luaState)
-{
-    int argc      = 0;
-    ax::Node* obj = NULL;
-    bool ok       = true;
-#if _AX_DEBUG >= 1
-    axlua::adapter::Error conversionError;
-#endif
-#if _AX_DEBUG >= 1
-    if (!axlua::adapter::is_usertype(luaState, 1, "ax.Node", 0, &conversionError))
-        goto argumentError;
-#endif
-    obj = (ax::Node*)axlua::adapter::to_usertype(luaState, 1, 0);
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'axlua_Node_setContentSize'", NULL);
-        return 0;
-    }
-#endif
-    argc = lua_gettop(luaState) - 1;
-
-    if (1 == argc)
-    {
-        ax::Size size;
-        ok &= luaval_to_size(luaState, 2, &size, "ax.Node:setContentSize");
-        if (!ok)
-            return 0;
-
-        obj->setContentSize(size);
-        lua_settop(luaState, 1);
-        return 1;
-    }
-    else if (2 == argc)
-    {
-        double width;
-        ok &= luaval_to_number(luaState, 2, &width, "ax.Node:setContentSize");
-
-        if (!ok)
-            return 0;
-
-        double height;
-        ok &= luaval_to_number(luaState, 3, &height, "ax.Node:setContentSize");
-
-        if (!ok)
-            return 0;
-
-        obj->setContentSize(Size(width, height));
-        lua_settop(luaState, 1);
-        return 1;
-    }
-
-    luaL_error(luaState, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Node:setContentSize", argc,
-               1);
-    return 0;
-#if _AX_DEBUG >= 1
-argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_Node_setContentSize'.", &conversionError);
-#endif
-    return 0;
-}
-
-int axlua_Node_setAnchorPoint(lua_State* luaState)
-{
-    int argc      = 0;
-    ax::Node* obj = NULL;
-    bool ok       = true;
-#if _AX_DEBUG >= 1
-    axlua::adapter::Error conversionError;
-#endif
-#if _AX_DEBUG >= 1
-    if (!axlua::adapter::is_usertype(luaState, 1, "ax.Node", 0, &conversionError))
-        goto argumentError;
-#endif
-    obj = (ax::Node*)axlua::adapter::to_usertype(luaState, 1, 0);
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'axlua_Node_setAnchorPoint'", NULL);
-        return 0;
-    }
-#endif
-    argc = lua_gettop(luaState) - 1;
-
-    if (1 == argc)
-    {
-        ax::Vec2 pt;
-        ok &= luaval_to_vec2(luaState, 2, &pt, "ax.Node:setAnchorPoint");
-        if (!ok)
-            return 0;
-
-        obj->setAnchorPoint(pt);
-        lua_settop(luaState, 1);
-        return 1;
-    }
-    else if (2 == argc)
-    {
-        double x;
-        ok &= luaval_to_number(luaState, 2, &x, "ax.Node:setAnchorPoint");
-
-        if (!ok)
-            return 0;
-
-        double y;
-        ok &= luaval_to_number(luaState, 3, &y, "ax.Node:setAnchorPoint");
-
-        if (!ok)
-            return 0;
-
-        obj->setAnchorPoint(ax::Vec2((float)x, (float)y));
-        lua_settop(luaState, 1);
-        return 1;
-    }
-
-    luaL_error(luaState, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Node:setAnchorPoint", argc,
-               1);
-    return 0;
-#if _AX_DEBUG >= 1
-argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_Node_setAnchorPoint'.", &conversionError);
-#endif
-    return 0;
-}
-
+// Keep the historical two-number Node:getPosition() result while the
+// generator exposes modern Vec2 returns for other APIs. The C++ overload
+// taking float* is intentionally not generated because Lua cannot provide
+// addressable scalar pointers.
 static int axlua_Node_getPosition(lua_State* luaState)
 {
-    if (NULL == luaState)
+    if (luaState == nullptr)
         return 0;
+    if (!axlua::adapter::is_usertype(luaState, 1, "ax.Node", 0, nullptr))
+        return luaL_error(luaState, "invalid 'self' in function 'ax.Node:setAnchorPoint'");
+    auto* node = static_cast<ax::Node*>(axlua::adapter::to_usertype(luaState, 1, nullptr));
+    if (node == nullptr)
+        return luaL_error(luaState, "invalid 'self' in function 'ax.Node:getPosition'");
+    if (lua_gettop(luaState) != 1)
+        return luaL_error(luaState, "ax.Node:getPosition expects no arguments");
+    const auto& position = node->getPosition();
+    lua_pushnumber(luaState, position.x);
+    lua_pushnumber(luaState, position.y);
+    return 2;
+}
 
-    int argc   = 0;
-    Node* self = nullptr;
-
-#if _AX_DEBUG >= 1
-    axlua::adapter::Error conversionError;
-    if (!axlua::adapter::is_usertype(luaState, 1, "ax.Node", 0, &conversionError))
-        goto argumentError;
-#endif
-
-    self = static_cast<ax::Node*>(axlua::adapter::to_usertype(luaState, 1, 0));
-#if _AX_DEBUG >= 1
-    if (nullptr == self)
-    {
-        axlua::adapter::raise_error(luaState, "invalid 'self' in function 'axlua_Node_getPosition'\n", NULL);
+// setAnchorPoint historically accepted either a Vec2 table or two scalar
+// coordinates. Keep that small Lua convenience overload without changing the
+// public C++ API or reintroducing the old general-purpose wrappers.
+static int axlua_Node_setAnchorPoint(lua_State* luaState)
+{
+    if (luaState == nullptr)
         return 0;
-    }
-#endif
+    auto* node = static_cast<ax::Node*>(axlua::adapter::to_usertype(luaState, 1, nullptr));
+    if (node == nullptr)
+        return luaL_error(luaState, "invalid 'self' in function 'ax.Node:setAnchorPoint'");
 
-    argc = lua_gettop(luaState) - 1;
-
-    if (argc >= 0 && argc <= 2)
+    const int argc = lua_gettop(luaState) - 1;
+    if (argc == 1)
     {
-#if _AX_DEBUG >= 1
-        if (!axlua::adapter::is_number(luaState, 2, 1, &conversionError) ||
-            !axlua::adapter::is_number(luaState, 3, 1, &conversionError))
-            goto argumentError;
-#endif
-        float x = (float)axlua::adapter::to_number(luaState, 2, 0);
-        float y = (float)axlua::adapter::to_number(luaState, 3, 0);
-
-        self->getPosition(&x, &y);
-
-        axlua::adapter::push_number(luaState, (lua_Number)x);
-        axlua::adapter::push_number(luaState, (lua_Number)y);
-
-        return 2;
+        if (!lua_istable(luaState, 2))
+            return luaL_error(luaState, "ax.Node:setAnchorPoint expects a Vec2 table or two numbers");
+        ax::Vec2 point;
+        if (!luaval_to_vec2(luaState, 2, &point, "ax.Node:setAnchorPoint"))
+            return luaL_error(luaState, "invalid Vec2 table in function 'ax.Node:setAnchorPoint'");
+        node->setAnchorPoint(point);
+    }
+    else if (argc == 2)
+    {
+        if (!lua_isnumber(luaState, 2) || !lua_isnumber(luaState, 3))
+            return luaL_error(luaState, "ax.Node:setAnchorPoint expects two numbers");
+        node->setAnchorPoint(ax::Vec2(static_cast<float>(lua_tonumber(luaState, 2)),
+                                      static_cast<float>(lua_tonumber(luaState, 3))));
+    }
+    else
+    {
+        return luaL_error(luaState, "ax.Node:setAnchorPoint expects a Vec2 table or two numbers");
     }
 
-    luaL_error(luaState, "%s function in Node has wrong number of arguments: %d, was expecting %d\n",
-               "ax.Node:getPosition", argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_Node_getPosition'.", &conversionError);
-    return 0;
-#endif
+    lua_settop(luaState, 1);
+    return 1;
 }
 
 static int axlua_Node_enumerateChildren(lua_State* luaState)
@@ -1259,57 +1126,6 @@ int axlua_Node_setAdditionalTransform(lua_State* luaState)
 #if _AX_DEBUG >= 1
 argumentError:
     axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_Node_setAdditionalTransform'.", &conversionError);
-#endif
-
-    return 0;
-}
-
-int axlua_Node_setRotationQuat(lua_State* luaState)
-{
-    int argc      = 0;
-    ax::Node* obj = nullptr;
-    bool ok       = true;
-#if _AX_DEBUG >= 1
-    axlua::adapter::Error conversionError;
-#endif
-
-#if _AX_DEBUG >= 1
-    if (!axlua::adapter::is_usertype(luaState, 1, "ax.Node", 0, &conversionError))
-        goto argumentError;
-#endif
-    obj = (ax::Node*)axlua::adapter::to_usertype(luaState, 1, 0);
-#if _AX_DEBUG >= 1
-    if (!obj)
-    {
-        axlua::adapter::raise_error(luaState, "invalid 'obj' in function 'axlua_Node_setRotationQuat'", nullptr);
-        return 0;
-    }
-#endif
-    argc = lua_gettop(luaState) - 1;
-    do
-    {
-        if (argc == 1)
-        {
-            ax::Quat arg0;
-            ok &= luaval_to_quaternion(luaState, 2, &arg0, "ax.Node:setRotationQuat");
-
-            if (!ok)
-            {
-                break;
-            }
-            obj->setRotationQuat(arg0);
-            lua_settop(luaState, 1);
-            return 1;
-        }
-    } while (0);
-
-    luaL_error(luaState, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Node:setRotationQuat", argc,
-               1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-argumentError:
-    axlua::adapter::raise_error(luaState, "#ferror in function 'axlua_Node_setRotationQuat'.", &conversionError);
 #endif
 
     return 0;
@@ -2928,27 +2744,10 @@ static void extendNode(lua_State* luaState)
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
-        lua_pushstring(luaState, "unscheduleUpdate");
-        lua_pushcfunction(luaState, axlua_Node_unscheduleUpdate);
-        lua_rawset(luaState, -3);
-        lua_pushstring(luaState, "getPosition");
-        lua_pushcfunction(luaState, axlua_Node_getPosition);
-        lua_rawset(luaState, -3);
-        lua_pushstring(luaState, "setContentSize");
-        lua_pushcfunction(luaState, axlua_Node_setContentSize);
-        lua_rawset(luaState, -3);
-        lua_pushstring(luaState, "setAnchorPoint");
-        lua_pushcfunction(luaState, axlua_Node_setAnchorPoint);
-        lua_rawset(luaState, -3);
-        lua_pushstring(luaState, "enumerateChildren");
-        lua_pushcfunction(luaState, axlua_Node_enumerateChildren);
-        lua_rawset(luaState, -3);
-        lua_pushstring(luaState, "setAdditionalTransform");
-        lua_pushcfunction(luaState, axlua_Node_setAdditionalTransform);
-        lua_rawset(luaState, -3);
-        lua_pushstring(luaState, "setRotationQuat");
-        lua_pushcfunction(luaState, axlua_Node_setRotationQuat);
-        lua_rawset(luaState, -3);
+        axlua::adapter::set_function(luaState, "getPosition", axlua_Node_getPosition);
+        axlua::adapter::set_function(luaState, "setAnchorPoint", axlua_Node_setAnchorPoint);
+        axlua::adapter::set_function(luaState, "enumerateChildren", axlua_Node_enumerateChildren);
+        axlua::adapter::set_function(luaState, "setAdditionalTransform", axlua_Node_setAdditionalTransform);
     }
     lua_pop(luaState, 1);
 }
@@ -5083,6 +4882,7 @@ int register_all_ax_adapter(lua_State* luaState)
         return 0;
 
     extendRenderTexturePass(luaState);
+    extendComponentLua(luaState);
     extendNode(luaState);
     extendScene(luaState);
     extendMenuItem(luaState);

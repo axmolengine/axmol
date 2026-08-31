@@ -42,7 +42,6 @@ void register_ax_base_types_5(lua_State* L)
     module.class_<ax::ScriptEvent>("ScriptEvent");
     module.class_<ax::Sequence>("Sequence");
     module.class_<ax::Shaky3D>("Shaky3D");
-    module.class_<ax::ShakyTiles3D>("ShakyTiles3D");
 }
 
 void register_ax_base_members_5(lua_State* L)
@@ -217,7 +216,6 @@ void register_ax_base_members_5(lua_State* L)
     class_12_RenderView.static_method("createWithFullscreen", static_cast<ax::RenderView * (*)(std::string_view)>(&ax::RenderView::createWithFullscreen));
     class_12_RenderView.static_method("createWithRect", axlua::overload(axlua::overload_candidate<std::string_view, const ax::Rect &, float, bool>(static_cast<ax::RenderView * (*)(std::string_view, const ax::Rect &, float, bool)>(&ax::RenderView::createWithRect)), axlua::overload_candidate<std::string_view, const ax::Rect &>([](std::string_view arg0, const ax::Rect & arg1) -> ax::RenderView * { return ax::RenderView::createWithRect(arg0, arg1, 1.0f, false); }), axlua::overload_candidate<std::string_view, const ax::Rect &, float>([](std::string_view arg0, const ax::Rect & arg1, float arg2) -> ax::RenderView * { return ax::RenderView::createWithRect(arg0, arg1, arg2, false); })));
     class_12_RenderView.method("getNativeDisplay", static_cast<ax::SurfaceHandle (ax::RenderView::*)() const>(&ax::RenderView::getNativeDisplay));
-    class_12_RenderView.method("getNativeWindow", static_cast<void * (ax::RenderView::*)() const>(&ax::RenderView::getNativeWindow));
     class_12_RenderView.method("getSafeAreaRect", static_cast<ax::Rect (ax::RenderView::*)() const>(&ax::RenderView::getSafeAreaRect));
     class_12_RenderView.method("getWindowPlatform", static_cast<ax::WindowPlatform (ax::RenderView::*)() const>(&ax::RenderView::getWindowPlatform));
     class_12_RenderView.method("isGfxContextReady", static_cast<bool (ax::RenderView::*)()>(&ax::RenderView::isGfxContextReady));
@@ -227,7 +225,6 @@ void register_ax_base_members_5(lua_State* L)
     class_13_RenderViewCore.method("endToLua", static_cast<void (ax::RenderViewCore::*)()>(&ax::RenderViewCore::end));
     class_13_RenderViewCore.method("getDesignResolutionSize", static_cast<const ax::Vec2 & (ax::RenderViewCore::*)() const>(&ax::RenderViewCore::getDesignResolutionSize));
     class_13_RenderViewCore.method("getNativeDisplay", static_cast<ax::SurfaceHandle (ax::RenderViewCore::*)() const>(&ax::RenderViewCore::getNativeDisplay));
-    class_13_RenderViewCore.method("getNativeWindow", static_cast<void * (ax::RenderViewCore::*)() const>(&ax::RenderViewCore::getNativeWindow));
     class_13_RenderViewCore.method("getNativeWindowSize", static_cast<ax::Vec2 (ax::RenderViewCore::*)() const>(&ax::RenderViewCore::getNativeWindowSize));
     class_13_RenderViewCore.method("getRenderScale", static_cast<float (ax::RenderViewCore::*)() const>(&ax::RenderViewCore::getRenderScale));
     class_13_RenderViewCore.method("getRenderSize", static_cast<const ax::Vec2 & (ax::RenderViewCore::*)() const>(&ax::RenderViewCore::getRenderSize));
@@ -438,7 +435,6 @@ void register_ax_base_members_5(lua_State* L)
     class_24_Scheduler.method("getTimeScale", static_cast<float (ax::Scheduler::*)()>(&ax::Scheduler::getTimeScale));
     class_24_Scheduler.method("setTimeScale", static_cast<void (ax::Scheduler::*)(float)>(&ax::Scheduler::setTimeScale));
     auto class_25_ScriptEvent = module.class_<ax::ScriptEvent>("ScriptEvent");
-    class_25_ScriptEvent.constructors<ax::ScriptEvent(ax::ScriptEventType, void *)>();
     auto class_26_Sequence = module.class_<ax::Sequence>("Sequence");
     class_26_Sequence.bases<ax::ActionInterval, ax::FiniteTimeAction, ax::Action, ax::Object>();
     class_26_Sequence.constructors<ax::Sequence()>();
@@ -457,13 +453,6 @@ void register_ax_base_members_5(lua_State* L)
     class_27_Shaky3D.static_method("create", static_cast<ax::Shaky3D * (*)(float, const ax::Vec2 &, int, bool)>(&ax::Shaky3D::create));
     class_27_Shaky3D.method("initWithDuration", static_cast<bool (ax::Shaky3D::*)(float, const ax::Vec2 &, int, bool)>(&ax::Shaky3D::initWithDuration));
     class_27_Shaky3D.method("update", static_cast<void (ax::Shaky3D::*)(float)>(&ax::Shaky3D::update));
-    auto class_28_ShakyTiles3D = module.class_<ax::ShakyTiles3D>("ShakyTiles3D");
-    class_28_ShakyTiles3D.bases<ax::TiledGrid3DAction, ax::GridAction, ax::ActionInterval, ax::FiniteTimeAction, ax::Action, ax::Object>();
-    class_28_ShakyTiles3D.constructors<ax::ShakyTiles3D()>();
-    class_28_ShakyTiles3D.method("clone", static_cast<ax::ShakyTiles3D * (ax::ShakyTiles3D::*)() const>(&ax::ShakyTiles3D::clone));
-    class_28_ShakyTiles3D.static_method("create", static_cast<ax::ShakyTiles3D * (*)(float, const ax::Vec2 &, int, bool)>(&ax::ShakyTiles3D::create));
-    class_28_ShakyTiles3D.method("initWithDuration", static_cast<bool (ax::ShakyTiles3D::*)(float, const ax::Vec2 &, int, bool)>(&ax::ShakyTiles3D::initWithDuration));
-    class_28_ShakyTiles3D.method("update", static_cast<void (ax::ShakyTiles3D::*)(float)>(&ax::ShakyTiles3D::update));
 }
 
 void register_ax_base_enums_5(lua_State* L)

@@ -4,7 +4,7 @@
   "registrationName": "ax_sceneext",
   "luaNamespace": "ax",
   "luaTypeNamespace": "ax",
-  "conditionalExpression": "",
+  "conditionalExpression": null,
   "classes": [
     {
       "nativeName": "ActionFadeFrame",
@@ -3340,21 +3340,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "serialize",
-          "luaName": "serialize",
-          "declaringType": "ax::ext::ComAttribute",
-          "returnType": "bool",
-          "parameterTypes": [
-            "void *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setBool",
           "luaName": "setBool",
           "declaringType": "ax::ext::ComAttribute",
@@ -3494,17 +3479,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getFile",
-          "luaName": "getFile",
-          "declaringType": "ax::ext::ComAudio",
-          "returnType": "const char *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "init",
           "luaName": "init",
           "declaringType": "ax::ext::ComAudio",
@@ -3608,106 +3582,12 @@
           "isVariadic": false
         },
         {
-          "nativeName": "playBackgroundMusic",
-          "luaName": "playBackgroundMusic",
-          "declaringType": "ax::ext::ComAudio",
-          "returnType": "void",
-          "parameterTypes": [
-            "const char *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "playBackgroundMusic",
-          "luaName": "playBackgroundMusic",
-          "declaringType": "ax::ext::ComAudio",
-          "returnType": "void",
-          "parameterTypes": [
-            "const char *",
-            "bool"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "playEffect",
           "luaName": "playEffect",
           "declaringType": "ax::ext::ComAudio",
           "returnType": "unsigned int",
           "parameterTypes": [],
           "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "playEffect",
-          "luaName": "playEffect",
-          "declaringType": "ax::ext::ComAudio",
-          "returnType": "unsigned int",
-          "parameterTypes": [
-            "const char *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "playEffect",
-          "luaName": "playEffect",
-          "declaringType": "ax::ext::ComAudio",
-          "returnType": "unsigned int",
-          "parameterTypes": [
-            "const char *",
-            "bool"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "preloadBackgroundMusic",
-          "luaName": "preloadBackgroundMusic",
-          "declaringType": "ax::ext::ComAudio",
-          "returnType": "void",
-          "parameterTypes": [
-            "const char *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "preloadEffect",
-          "luaName": "preloadEffect",
-          "declaringType": "ax::ext::ComAudio",
-          "returnType": "void",
-          "parameterTypes": [
-            "const char *"
-          ],
-          "defaultValues": [
-            null
-          ],
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
@@ -3761,21 +3641,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "serialize",
-          "luaName": "serialize",
-          "declaringType": "ax::ext::ComAudio",
-          "returnType": "bool",
-          "parameterTypes": [
-            "void *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setBackgroundMusicVolume",
           "luaName": "setBackgroundMusicVolume",
           "declaringType": "ax::ext::ComAudio",
@@ -3797,21 +3662,6 @@
           "returnType": "void",
           "parameterTypes": [
             "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setFile",
-          "luaName": "setFile",
-          "declaringType": "ax::ext::ComAudio",
-          "returnType": "void",
-          "parameterTypes": [
-            "const char *"
           ],
           "defaultValues": [
             null
@@ -3901,21 +3751,6 @@
           "returnType": "void",
           "parameterTypes": [
             "unsigned int"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "unloadEffect",
-          "luaName": "unloadEffect",
-          "declaringType": "ax::ext::ComAudio",
-          "returnType": "void",
-          "parameterTypes": [
-            "const char *"
           ],
           "defaultValues": [
             null
@@ -4283,23 +4118,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "create",
-          "luaName": "create",
-          "declaringType": "ax::ext::ComRender",
-          "returnType": "ax::ext::ComRender *",
-          "parameterTypes": [
-            "ax::Node *",
-            "const char *"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "createInstance",
           "luaName": "createInstance",
           "declaringType": "ax::ext::ComRender",
@@ -4339,21 +4157,6 @@
           "returnType": "void",
           "parameterTypes": [],
           "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "serialize",
-          "luaName": "serialize",
-          "declaringType": "ax::ext::ComRender",
-          "returnType": "bool",
-          "parameterTypes": [
-            "void *"
-          ],
-          "defaultValues": [
-            null
-          ],
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
@@ -4887,57 +4690,12 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getVersionInteger",
-          "luaName": "getVersionInteger",
-          "declaringType": "ax::ext::GUIReader",
-          "returnType": "int",
-          "parameterTypes": [
-            "const char *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setFilePath",
           "luaName": "setFilePath",
           "declaringType": "ax::ext::GUIReader",
           "returnType": "void",
           "parameterTypes": [
             "std::string_view"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "widgetFromBinaryFile",
-          "luaName": "widgetFromBinaryFile",
-          "declaringType": "ax::ext::GUIReader",
-          "returnType": "ax::ui::Widget *",
-          "parameterTypes": [
-            "const char *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "widgetFromJsonFile",
-          "luaName": "widgetFromJsonFile",
-          "declaringType": "ax::ext::GUIReader",
-          "returnType": "ax::ui::Widget *",
-          "parameterTypes": [
-            "const char *"
           ],
           "defaultValues": [
             null
@@ -5188,32 +4946,6 @@
           "returnType": "ax::Node *",
           "parameterTypes": [
             "int"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "sceneReaderVersion",
-          "luaName": "sceneReaderVersion",
-          "declaringType": "ax::ext::SceneReader",
-          "returnType": "const char *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setTarget",
-          "luaName": "setTarget",
-          "declaringType": "ax::ext::SceneReader",
-          "returnType": "void",
-          "parameterTypes": [
-            "const std::function\u003Cvoid (ax::Object *, void *)\u003E \u0026"
           ],
           "defaultValues": [
             null

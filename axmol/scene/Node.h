@@ -71,15 +71,6 @@ class VertexLayout;
  * @{
  */
 
-enum
-{
-    kNodeOnEnter,
-    kNodeOnExit,
-    kNodeOnEnterTransitionDidFinish,
-    kNodeOnExitTransitionDidStart,
-    kNodeOnCleanup
-};
-
 class EventListener;
 class EventDispatcher;
 

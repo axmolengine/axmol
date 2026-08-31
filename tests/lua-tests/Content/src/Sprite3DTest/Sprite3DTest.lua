@@ -931,7 +931,7 @@ function Sprite3DMirrorTest.create()
     sprite = ax.Sprite3D:create(fileName)
     sprite:setScale(5)
     sprite:setScaleX(-5)
-    sprite:setCullFace(ccb.CullMode.FRONT)
+    sprite:setCullFace(axr.CullMode.FRONT)
     sprite:setRotation3D({x = 0, y = 180,z = 0})
     layer:addChild(sprite)
     sprite:setPosition( ax.p( size.width/2 + 80, size.height/2))
@@ -1107,15 +1107,15 @@ function Sprite3DCubeMapTest:addNewSpriteWithCoords(pos)
     --create a teapot
     self._teapot = ax.Sprite3D:create("MeshRendererTest/teapot.c3b")
 
-    local program = axr.ProgramManager:getInstance():loadProgram('custom/cube_map_vs', 'custom/cube_map_fs')
-    local programState = ccb.ProgramState:new(program)
+    local program = ax.ProgramManager:getInstance():loadProgram('custom/cube_map_vs', 'custom/cube_map_fs')
+    local programState = axr.ProgramState:new(program)
 
     self._textureCube = ax.TextureCube:create("MeshRendererTest/skybox/left.jpg", "MeshRendererTest/skybox/right.jpg",
         "MeshRendererTest/skybox/top.jpg", "MeshRendererTest/skybox/bottom.jpg",
         "MeshRendererTest/skybox/front.jpg", "MeshRendererTest/skybox/back.jpg")
 
     --set texture parameters
-    local tRepeatParams = { magFilter=ccb.SamplerFilter.LINEAR , minFilter=ccb.SamplerFilter.LINEAR , sAddressMode=ccb.SamplerAddressMode.MIRROR_REPEAT  , tAddressMode=ccb.SamplerAddressMode.MIRROR_REPEAT }
+    local tRepeatParams = { magFilter=axr.SamplerFilter.LINEAR , minFilter=axr.SamplerFilter.LINEAR , sAddressMode=axr.SamplerAddressMode.MIRROR_REPEAT  , tAddressMode=axr.SamplerAddressMode.MIRROR_REPEAT }
     self._textureCube:setTexParameters(tRepeatParams)
 
     --pass the texture sampler to our custom shader

@@ -183,7 +183,6 @@ void register_ax_base_members_2(lua_State* L)
     class_8_FileUtils.method("setDefaultResourceRootPath", static_cast<void (ax::FileUtils::*)(std::string_view)>(&ax::FileUtils::setDefaultResourceRootPath));
     class_8_FileUtils.method("setPopupNotify", static_cast<void (ax::FileUtils::*)(bool)>(&ax::FileUtils::setPopupNotify));
     class_8_FileUtils.method("setWritablePath", static_cast<void (ax::FileUtils::*)(std::string_view)>(&ax::FileUtils::setWritablePath));
-    class_8_FileUtils.static_method("writeBinaryToFile", static_cast<bool (*)(const void *, size_t, std::string_view)>(&ax::FileUtils::writeBinaryToFile));
     class_8_FileUtils.method("writeStringToFile", static_cast<bool (ax::FileUtils::*)(std::string_view, std::string_view) const>(&ax::FileUtils::writeStringToFile));
     class_8_FileUtils.method("writeValueVectorToFile", static_cast<bool (ax::FileUtils::*)(const ax::ValueVector &, std::string_view) const>(&ax::FileUtils::writeValueVectorToFile));
     auto class_9_FiniteTimeAction = module.class_<ax::FiniteTimeAction>("FiniteTimeAction");

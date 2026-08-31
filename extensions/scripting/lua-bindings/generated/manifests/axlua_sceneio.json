@@ -4,7 +4,7 @@
   "registrationName": "ax_sceneio",
   "luaNamespace": "ax",
   "luaTypeNamespace": "ax",
-  "conditionalExpression": "",
+  "conditionalExpression": null,
   "classes": [
     {
       "nativeName": "CSLoader",

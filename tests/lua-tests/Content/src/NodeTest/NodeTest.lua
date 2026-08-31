@@ -599,7 +599,7 @@ local function NodeOpaqueTest()
 
     for i = 0, 49 do
         local background = ax.Sprite:create("Images/background1.png")
-        background:setBlendFunc(ax.blendFunc(ccb.BlendFactor.ONE, ccb.BlendFactor.ONE_MINUS_SRC_ALPHA))
+        background:setBlendFunc(ax.blendFunc(axr.BlendFactor.ONE, axr.BlendFactor.ONE_MINUS_SRC_ALPHA))
         background:setAnchorPoint(ax.p(0, 0))
         layer:addChild(background)
     end
@@ -617,7 +617,7 @@ local function NodeNonOpaqueTest()
 
     for i = 0, 49 do
         background = ax.Sprite:create("Images/background1.jpg")
-        background:setBlendFunc(ax.blendFunc(ccb.BlendFactor.ONE, ccb.BlendFactor.ZERO))
+        background:setBlendFunc(ax.blendFunc(axr.BlendFactor.ONE, axr.BlendFactor.ZERO))
         background:setAnchorPoint(ax.p(0, 0))
         layer:addChild(background)
     end

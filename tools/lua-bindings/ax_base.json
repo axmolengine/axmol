@@ -193,13 +193,10 @@
       "methods": [
         "_setLocalZOrder",
         "getUserObject",
-        "getGLServerState",
         "scheduleUpdate",
         "scheduleUpdateWithPriority",
-        "unscheduleUpdate",
         "unscheduleAllCallbacks",
         "getPosition$",
-        "setContentSize",
         "setAnchorPoint",
         "enumerateChildren",
         "getOnEnterTransitionDidFinishCallback",
@@ -208,9 +205,7 @@
         "getOnExitTransitionDidStartCallback",
         "getOnCleanupCallback",
         "setAdditionalTransform",
-        "setRotationQuat",
-        "getRotationQuat",
-        "sortNodes"
+        "getRotationQuat"
       ]
     },
     {
@@ -245,13 +240,6 @@
       ]
     },
     {
-      "class": "ParticleSystem",
-      "methods": [
-        "updateQuadWithParticle",
-        "initParticle"
-      ]
-    },
-    {
       "class": "DrawNode",
       "methods": [
         "drawPolygon",
@@ -259,43 +247,22 @@
         "drawPoly",
         "drawCardinalSpline",
         "drawCatmullRom",
-        "drawPoints",
-        "listenBackToForeground"
+        "drawPoints"
       ]
     },
     {
       "class": "Director",
       "methods": [
-        "getAccelerometer",
-        "getProjection",
-        "getFrustum",
         "getCocos2dThreadId",
         "getJobSystem",
-        "runAsync",
-        "pushMatrix",
-        "popMatrix",
-        "loadIdentityMatrix",
-        "loadMatrix",
-        "multiplyMatrix",
-        "getMatrix",
-        "resetMatrixStack"
-      ]
-    },
-    {
-      "class": "Layer.*",
-      "methods": [
-        "didAccelerate",
-        "keyPressed",
-        "keyReleased"
+        "runAsync"
       ]
     },
     {
       "class": "Menu.*",
       "methods": [
-        ".*Target",
         "getSubItems",
         "create",
-        "initWithItems",
         "alignItemsInRows",
         "alignItemsInColumns"
       ]
@@ -347,7 +314,6 @@
       "methods": [
         "setTexParameters",
         "initWithData",
-        "getPixelFormatInfoMap",
         "updateData",
         "initWithMipmaps",
         "initWithSpec",
@@ -515,12 +481,6 @@
       ]
     },
     {
-      "class": "EventListener.*",
-      "methods": [
-        "create"
-      ]
-    },
-    {
       "class": "NotificationObserver",
       "methods": [
         "*"
@@ -529,7 +489,6 @@
     {
       "class": "Image",
       "methods": [
-        "initWithString",
         "initWithImageData",
         "initWithRawData",
         "getData",
@@ -551,10 +510,6 @@
     {
       "class": "Grid3DAction",
       "methods": [
-        "create",
-        "actionWith.*",
-        "vertex",
-        "originalVertex",
         "(g|s)etVertex",
         "getOriginalVertex"
       ]
@@ -562,8 +517,6 @@
     {
       "class": "Grid3D",
       "methods": [
-        "vertex",
-        "originalVertex",
         "(g|s)etVertex",
         "getOriginalVertex"
       ]
@@ -572,9 +525,6 @@
       "class": "TiledGrid3DAction",
       "methods": [
         "create",
-        "actionWith.*",
-        "tile",
-        "originalTile",
         "getOriginalTile",
         "(g|s)etTile"
       ]
@@ -582,8 +532,6 @@
     {
       "class": "TiledGrid3D",
       "methods": [
-        "tile",
-        "originalTile",
         "getOriginalTile",
         "(g|s)etTile"
       ]
@@ -617,46 +565,36 @@
     {
       "class": "ParticleSystemQuad",
       "methods": [
-        "postStep",
         "setBatchNode",
         "draw",
         "setTexture$",
         "setTotalParticles",
-        "updateQuadWithParticle",
-        "setupIndices",
-        "listenBackToForeground",
-        "initWithTotalParticles",
-        "particleWithFile",
-        "node"
+        "initWithTotalParticles"
       ]
     },
     {
       "class": "LayerMultiplex",
       "methods": [
         "create",
-        "layerWith.*",
         "initWithLayers"
       ]
     },
     {
       "class": "CatmullRom.*",
       "methods": [
-        "create",
-        "actionWithDuration"
+        "create"
       ]
     },
     {
       "class": "Bezier.*",
       "methods": [
-        "create",
-        "actionWithDuration"
+        "create"
       ]
     },
     {
       "class": "CardinalSpline.*",
       "methods": [
         "create",
-        "actionWithDuration",
         "setPoints"
       ]
     },
@@ -669,65 +607,44 @@
         "schedule",
         "update",
         "isTargetPaused",
-        "isScheduled",
-        "performFunctionInCocosThread"
+        "isScheduled"
       ]
     },
     {
       "class": "TextureCache",
       "methods": [
-        "addPVRTCImage",
         "addImageAsync"
-      ]
-    },
-    {
-      "class": "Timer",
-      "methods": [
-        "getSelector",
-        "createWithScriptHandler"
       ]
     },
     {
       "class": "*",
       "methods": [
-        "copyWith.*",
         "onEnter.*",
         "onExit.*",
         "^description$",
-        "getObjectType",
-        "(g|s)etDelegate",
-        "onTouch.*",
-        "onAcc.*",
-        "onKey.*",
-        "onRegisterTouchListener"
+        "(g|s)etDelegate"
       ]
     },
     {
       "class": "FileUtils",
       "methods": [
-        "getFileData",
         "getDataFromFile",
         "writeDataToFile",
         "writeXmlDocToFile",
         "getFullPathCache",
         "getContents",
-        "openFileStream",
-        "setSearchPaths"
+        "openFileStream"
       ]
     },
     {
       "class": "Application",
       "methods": [
-        "^application.*",
         "^run$"
       ]
     },
     {
       "class": "Camera",
       "methods": [
-        "getEyeXYZ",
-        "getCenterXYZ",
-        "getUpXYZ",
         "screenToRay"
       ]
     },
@@ -741,9 +658,6 @@
       "class": "Object",
       "methods": [
         "autorelease",
-        "isEqual",
-        "acceptVisitor",
-        "update",
         "getObjectID",
         "markScriptBindingExposed",
         "hasScriptBindingExposure"
@@ -753,16 +667,12 @@
       "class": "UserDefault",
       "methods": [
         "getInstance",
-        "(s|g)etDataForKey",
         "encrypt"
       ]
     },
     {
       "class": "RenderViewCore",
       "methods": [
-        "setTouchDelegate",
-        "getAllTouches",
-        "setInteractive",
         "renderScene"
       ]
     },
@@ -770,8 +680,7 @@
       "class": "RenderView",
       "methods": [
         "end",
-        "swapBuffers",
-        "loadGLES2"
+        "swapBuffers"
       ]
     },
     {
@@ -792,11 +701,7 @@
     {
       "class": "RenderTexture",
       "methods": [
-        "listenToBackground",
-        "listenToForeground",
-        "newImage",
-        "^begin$",
-        "isSharedRenderTarget"
+        "newImage"
       ]
     },
     {
@@ -903,9 +808,7 @@
       "class": "Scene",
       "methods": [
         "getCameras",
-        "getLights",
-        ".*(Physics3D).*",
-        ".*(NavMesh).*"
+        "getLights"
       ]
     },
     {
@@ -969,13 +872,6 @@
       ]
     },
     {
-      "class": "Renderer",
-      "methods": [
-        "getCommandBuffer",
-        "getOffscreenRenderTarget"
-      ]
-    },
-    {
       "class": "Bone3D",
       "methods": [
         "*"
@@ -991,12 +887,6 @@
       "class": "BillBoard",
       "methods": [
         "*"
-      ]
-    },
-    {
-      "class": "Camera",
-      "methods": [
-        "unproject"
       ]
     },
     {
@@ -1020,8 +910,6 @@
     {
       "class": "RenderState",
       "methods": [
-        "finalize",
-        "setStateBlock",
         "getStateBlock"
       ]
     },

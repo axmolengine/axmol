@@ -46,7 +46,6 @@ void register_ax_physics3d_members_0(lua_State* L)
     class_2_Collider3D.method("setEnabled", static_cast<void (ax::Collider3D::*)(bool)>(&ax::Collider3D::setEnabled));
     class_2_Collider3D.method("setMaterial", static_cast<void (ax::Collider3D::*)(const ax::PhysicsMaterial &)>(&ax::Collider3D::setMaterial));
     class_2_Collider3D.method("setSensor", static_cast<void (ax::Collider3D::*)(bool)>(&ax::Collider3D::setSensor));
-    class_2_Collider3D.method("setUserData", static_cast<void (ax::Collider3D::*)(void *)>(&ax::Collider3D::setUserData));
     class_2_Collider3D.method("syncNodeToPhysics", static_cast<void (ax::Collider3D::*)()>(&ax::Collider3D::syncNodeToPhysics));
     class_2_Collider3D.method("syncPhysicsToNode", static_cast<void (ax::Collider3D::*)()>(&ax::Collider3D::syncPhysicsToNode));
     auto class_3_ConeTwistJoint3D = module.class_<ax::ConeTwistJoint3D>("ConeTwistJoint3D");
@@ -135,7 +134,6 @@ void register_ax_physics3d_members_0(lua_State* L)
     class_10_Joint3D.method("setConnectedAxis", static_cast<void (ax::Joint3D::*)(const ax::Vec3 &)>(&ax::Joint3D::setConnectedAxis));
     class_10_Joint3D.method("setConnectedBody", static_cast<void (ax::Joint3D::*)(ax::Rigidbody3D *)>(&ax::Joint3D::setConnectedBody));
     class_10_Joint3D.method("setCoordinateSpace", static_cast<void (ax::Joint3D::*)(ax::Joint3D::CoordinateSpace)>(&ax::Joint3D::setCoordinateSpace));
-    class_10_Joint3D.method("setUserData", static_cast<void (ax::Joint3D::*)(void *)>(&ax::Joint3D::setUserData));
 }
 
 void register_ax_physics3d_enums_0(lua_State* L)

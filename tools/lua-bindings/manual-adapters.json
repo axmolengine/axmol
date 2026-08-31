@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "adapters": [
+    {
+      "path": "extensions/scripting/lua-bindings/adapters/3d/axlua_3d_adapter.cpp",
+      "reason": "3D resource factories, async callbacks and result shaping not expressible in the generated signature model."
+    },
+    {
+      "path": "extensions/scripting/lua-bindings/adapters/base/axlua_base_adapter.cpp",
+      "reason": "Legacy utility functions, unsupported value conversions, ownership-sensitive factories and callback protocols."
+    },
+    {
+      "path": "extensions/scripting/lua-bindings/adapters/extension/axlua_extension_adapter.cpp",
+      "reason": "Extension callback protocols and dynamic Lua table/value conversions."
+    },
+    {
+      "path": "extensions/scripting/lua-bindings/adapters/fairygui/axlua_fairygui_adapter.cpp",
+      "reason": "FairyGUI event dispatch and dynamic value conversion."
+    },
+    {
+      "path": "extensions/scripting/lua-bindings/adapters/fairygui/axlua_fairygui_conversions.cpp",
+      "reason": "FairyGUI value/table conversion helpers used by generated bindings."
+    },
+    {
+      "path": "extensions/scripting/lua-bindings/adapters/navmesh/axlua_navmesh_adapter.cpp",
+      "reason": "NavMesh parameter table conversion and callback-based agent movement."
+    },
+    {
+      "path": "extensions/scripting/lua-bindings/adapters/navmesh/axlua_navmesh_conversions.cpp",
+      "reason": "NavMesh parameter and result table conversion helpers."
+    },
+    {
+      "path": "extensions/scripting/lua-bindings/adapters/network/axlua_network_adapter.cpp",
+      "reason": "Network platform and callback bridges."
+    },
+    {
+      "path": "extensions/scripting/lua-bindings/adapters/network/lua_downloader.cpp",
+      "reason": "Downloader callback and stream ownership bridge."
+    },
+    {
+      "path": "extensions/scripting/lua-bindings/adapters/network/lua_websocket.cpp",
+      "reason": "WebSocket event protocol and callback lifetime bridge."
+    },
+    {
+      "path": "extensions/scripting/lua-bindings/adapters/network/lua_xml_http_request.cpp",
+      "reason": "XMLHttpRequest event protocol and platform bridge."
+    },
+    {
+      "path": "extensions/scripting/lua-bindings/adapters/physics2d/axlua_physics2d_adapter.cpp",
+      "reason": "Box2D value conversion and contact/query callback protocols."
+    },
+    {
+      "path": "extensions/scripting/lua-bindings/adapters/physics3d/axlua_physics3d_adapter.cpp",
+      "reason": "Physics result shaping, table parameters and ownership-sensitive collider factories."
+    },
+    {
+      "path": "extensions/scripting/lua-bindings/adapters/sceneext/CustomGUIReader.cpp",
+      "reason": "GUI reader callback bridge."
+    },
+    {
+      "path": "extensions/scripting/lua-bindings/adapters/sceneext/axlua_sceneext_adapter.cpp",
+      "reason": "Scene extension callback and dynamic data bridge."
+    },
+    {
+      "path": "extensions/scripting/lua-bindings/adapters/sceneext/lua-sceneext-conversions.cpp",
+      "reason": "Scene extension value/table conversion helpers."
+    },
+    {
+      "path": "extensions/scripting/lua-bindings/adapters/sceneio/axlua_sceneio_adapter.cpp",
+      "reason": "Scene I/O callback and ownership bridge."
+    },
+    {
+      "path": "extensions/scripting/lua-bindings/adapters/spine/LuaSkeletonAnimation.cpp",
+      "reason": "Spine runtime callback and userdata bridge."
+    },
+    {
+      "path": "extensions/scripting/lua-bindings/adapters/spine/axlua_spine_adapter.cpp",
+      "reason": "Spine event protocol and callback bridge."
+    },
+    {
+      "path": "extensions/scripting/lua-bindings/adapters/ui/axlua_ui_adapter.cpp",
+      "reason": "UI event callback and dynamic data bridge."
+    }
+  ]
+}

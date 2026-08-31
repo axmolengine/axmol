@@ -37,7 +37,6 @@ void register_ax_base_types_3(lua_State* L)
     module.class_<ax::MoveTo>("MoveTo");
     module.class_<ax::Node>("Node");
     module.class_<ax::NodeData>("NodeData");
-    module.class_<ax::NodeGrid>("NodeGrid");
 }
 
 void register_ax_base_members_3(lua_State* L)
@@ -268,7 +267,7 @@ void register_ax_base_members_3(lua_State* L)
     class_18_MotionStreak.static_method("create", axlua::overload(axlua::overload_candidate<float, float, float, const ax::Color32 &, std::string_view>(static_cast<ax::MotionStreak * (*)(float, float, float, const ax::Color32 &, std::string_view)>(&ax::MotionStreak::create)), axlua::overload_candidate<float, float, float, const ax::Color32 &, ax::Texture2D *>(static_cast<ax::MotionStreak * (*)(float, float, float, const ax::Color32 &, ax::Texture2D *)>(&ax::MotionStreak::create))));
     class_18_MotionStreak.method("getBlendFunc", static_cast<const ax::BlendFunc & (ax::MotionStreak::*)() const>(&ax::MotionStreak::getBlendFunc));
     class_18_MotionStreak.method("getOpacity", static_cast<uint8_t (ax::MotionStreak::*)() const>(&ax::MotionStreak::getOpacity));
-    class_18_MotionStreak.method("getPosition", axlua::overload(axlua::overload_candidate<>(static_cast<const ax::Vec2 & (ax::MotionStreak::*)() const>(&ax::MotionStreak::getPosition)), axlua::overload_candidate<float *, float *>(static_cast<void (ax::MotionStreak::*)(float *, float *) const>(&ax::MotionStreak::getPosition))));
+    class_18_MotionStreak.method("getPosition", static_cast<const ax::Vec2 & (ax::MotionStreak::*)() const>(&ax::MotionStreak::getPosition));
     class_18_MotionStreak.method("getPosition3D", static_cast<ax::Vec3 (ax::MotionStreak::*)() const>(&ax::MotionStreak::getPosition3D));
     class_18_MotionStreak.method("getPositionX", static_cast<float (ax::MotionStreak::*)() const>(&ax::MotionStreak::getPositionX));
     class_18_MotionStreak.method("getPositionY", static_cast<float (ax::MotionStreak::*)() const>(&ax::MotionStreak::getPositionY));
@@ -376,7 +375,6 @@ void register_ax_base_members_3(lua_State* L)
     class_21_Node.method("getSkewX", static_cast<float (ax::Node::*)() const>(&ax::Node::getSkewX));
     class_21_Node.method("getSkewY", static_cast<float (ax::Node::*)() const>(&ax::Node::getSkewY));
     class_21_Node.method("getTag", static_cast<int (ax::Node::*)() const>(&ax::Node::getTag));
-    class_21_Node.method("getUserData", axlua::overload(axlua::overload_candidate<>(static_cast<void * (ax::Node::*)()>(&ax::Node::getUserData)), axlua::overload_candidate<>(static_cast<const void * (ax::Node::*)() const>(&ax::Node::getUserData))));
     class_21_Node.method("getWorldBoundingBox", static_cast<ax::Rect (ax::Node::*)() const>(&ax::Node::getWorldBoundingBox));
     class_21_Node.method("getWorldPosition", static_cast<ax::Vec2 (ax::Node::*)() const>(&ax::Node::getWorldPosition));
     class_21_Node.method("getWorldToNodeAffineTransform", static_cast<ax::AffineTransform (ax::Node::*)() const>(&ax::Node::getWorldToNodeAffineTransform));
@@ -411,6 +409,7 @@ void register_ax_base_members_3(lua_State* L)
     class_21_Node.method("setCascadeColorEnabled", static_cast<void (ax::Node::*)(bool)>(&ax::Node::setCascadeColorEnabled));
     class_21_Node.method("setCascadeOpacityEnabled", static_cast<void (ax::Node::*)(bool)>(&ax::Node::setCascadeOpacityEnabled));
     class_21_Node.method("setColor", static_cast<void (ax::Node::*)(const ax::Color32 &)>(&ax::Node::setColor));
+    class_21_Node.method("setContentSize", static_cast<void (ax::Node::*)(const ax::Vec2 &)>(&ax::Node::setContentSize));
     class_21_Node.method("setEventDispatcher", static_cast<void (ax::Node::*)(ax::EventDispatcher *)>(&ax::Node::setEventDispatcher));
     class_21_Node.method("setGlobalZOrder", static_cast<void (ax::Node::*)(float)>(&ax::Node::setGlobalZOrder));
     class_21_Node.method("setIgnoreAnchorPointForPosition", static_cast<void (ax::Node::*)(bool)>(&ax::Node::setIgnoreAnchorPointForPosition));
@@ -437,6 +436,7 @@ void register_ax_base_members_3(lua_State* L)
     class_21_Node.method("setProgramStateWithRegistry", static_cast<void (ax::Node::*)(uint32_t, ax::Texture2D *)>(&ax::Node::setProgramStateWithRegistry));
     class_21_Node.method("setRotation", static_cast<void (ax::Node::*)(float)>(&ax::Node::setRotation));
     class_21_Node.method("setRotation3D", static_cast<void (ax::Node::*)(const ax::Vec3 &)>(&ax::Node::setRotation3D));
+    class_21_Node.method("setRotationQuat", static_cast<void (ax::Node::*)(const ax::Quat &)>(&ax::Node::setRotationQuat));
     class_21_Node.method("setRotationSkewX", static_cast<void (ax::Node::*)(float)>(&ax::Node::setRotationSkewX));
     class_21_Node.method("setRotationSkewY", static_cast<void (ax::Node::*)(float)>(&ax::Node::setRotationSkewY));
     class_21_Node.method("setScale", axlua::overload(axlua::overload_candidate<float>(static_cast<void (ax::Node::*)(float)>(&ax::Node::setScale)), axlua::overload_candidate<float, float>(static_cast<void (ax::Node::*)(float, float)>(&ax::Node::setScale))));
@@ -447,7 +447,6 @@ void register_ax_base_members_3(lua_State* L)
     class_21_Node.method("setSkewX", static_cast<void (ax::Node::*)(float)>(&ax::Node::setSkewX));
     class_21_Node.method("setSkewY", static_cast<void (ax::Node::*)(float)>(&ax::Node::setSkewY));
     class_21_Node.method("setTag", static_cast<void (ax::Node::*)(int)>(&ax::Node::setTag));
-    class_21_Node.method("setUserData", static_cast<void (ax::Node::*)(void *)>(&ax::Node::setUserData));
     class_21_Node.method("setUserObject", static_cast<void (ax::Node::*)(ax::Object *)>(&ax::Node::setUserObject));
     class_21_Node.method("setVisible", static_cast<void (ax::Node::*)(bool)>(&ax::Node::setVisible));
     class_21_Node.method("setWorldPosition", static_cast<void (ax::Node::*)(const ax::Vec2 &)>(&ax::Node::setWorldPosition));
@@ -458,6 +457,7 @@ void register_ax_base_members_3(lua_State* L)
     class_21_Node.method("stopAllActions", static_cast<void (ax::Node::*)()>(&ax::Node::stopAllActions));
     class_21_Node.method("stopAllActionsByTag", static_cast<void (ax::Node::*)(int)>(&ax::Node::stopAllActionsByTag));
     class_21_Node.method("unschedule", static_cast<void (ax::Node::*)(std::string_view)>(&ax::Node::unschedule));
+    class_21_Node.method("unscheduleUpdate", static_cast<void (ax::Node::*)()>(&ax::Node::unscheduleUpdate));
     class_21_Node.method("update", static_cast<void (ax::Node::*)(float)>(&ax::Node::update));
     class_21_Node.method("updateDisplayedColor", static_cast<void (ax::Node::*)(const ax::Color32 &)>(&ax::Node::updateDisplayedColor));
     class_21_Node.method("updateDisplayedOpacity", static_cast<void (ax::Node::*)(uint8_t)>(&ax::Node::updateDisplayedOpacity));
@@ -467,15 +467,6 @@ void register_ax_base_members_3(lua_State* L)
     class_21_Node.method("visit", static_cast<void (ax::Node::*)()>(&ax::Node::visit));
     auto class_22_NodeData = module.class_<ax::NodeData>("NodeData");
     class_22_NodeData.method("resetData", static_cast<void (ax::NodeData::*)()>(&ax::NodeData::resetData));
-    auto class_23_NodeGrid = module.class_<ax::NodeGrid>("NodeGrid");
-    class_23_NodeGrid.bases<ax::Node, ax::Object>();
-    class_23_NodeGrid.constructors<ax::NodeGrid()>();
-    class_23_NodeGrid.static_method("create", axlua::overload(axlua::overload_candidate<>(static_cast<ax::NodeGrid * (*)()>(&ax::NodeGrid::create)), axlua::overload_candidate<const ax::Rect &>(static_cast<ax::NodeGrid * (*)(const ax::Rect &)>(&ax::NodeGrid::create))));
-    class_23_NodeGrid.method("getGrid", axlua::overload(axlua::overload_candidate<>(static_cast<ax::GridBase * (ax::NodeGrid::*)()>(&ax::NodeGrid::getGrid)), axlua::overload_candidate<>(static_cast<const ax::GridBase * (ax::NodeGrid::*)() const>(&ax::NodeGrid::getGrid))));
-    class_23_NodeGrid.method("getGridRect", static_cast<const ax::Rect & (ax::NodeGrid::*)() const>(&ax::NodeGrid::getGridRect));
-    class_23_NodeGrid.method("setGrid", static_cast<void (ax::NodeGrid::*)(ax::GridBase *)>(&ax::NodeGrid::setGrid));
-    class_23_NodeGrid.method("setGridRect", static_cast<void (ax::NodeGrid::*)(const ax::Rect &)>(&ax::NodeGrid::setGridRect));
-    class_23_NodeGrid.method("setTarget", static_cast<void (ax::NodeGrid::*)(ax::Node *)>(&ax::NodeGrid::setTarget));
 }
 
 void register_ax_base_enums_3(lua_State* L)

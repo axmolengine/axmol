@@ -231,6 +231,28 @@ endif()
 
 target_include_directories(${APP_NAME} PRIVATE ${GAME_INC_DIRS})
 
+target_compile_definitions(${APP_NAME} PRIVATE
+    SOL_NO_CHECK_NUMBER_PRECISION=1
+    AXMOL_LUA_BINDINGS=1)
+
+if(WASM)
+    # Keep the framework tree in sync immediately before Emscripten packages
+    # Content.  The configure-time copy above fixes fresh trees, while this
+    # pre-link sync also repairs existing build directories whose resource
+    # archive predates the copied axmol/init.lua files.
+    # --preload-file packages Lua at link time. Lua-only changes must also
+    # relink; PRE_LINK alone otherwise leaves stale scripts in lua-tests.data.
+    file(GLOB_RECURSE _lua_preload_sources CONFIGURE_DEPENDS
+        "${content_folder}/src/*.lua"
+        "${_AX_ROOT}/extensions/scripting/lua-bindings/script/*.lua")
+    set_property(TARGET ${APP_NAME} APPEND PROPERTY LINK_DEPENDS ${_lua_preload_sources})
+    add_custom_command(TARGET ${APP_NAME} PRE_LINK
+        COMMAND ${PWSH_EXECUTABLE} ARGS ${_AX_ROOT}/1k/fsync.ps1
+            -s ${_AX_ROOT}/extensions/scripting/lua-bindings/script
+            -d ${CMAKE_CURRENT_SOURCE_DIR}/Content/src/axmol -l 0
+        VERBATIM)
+endif()
+
 # mark app resources, resource will be copy auto after mark
 ax_setup_app_config(${APP_NAME} CONSOLE)
 
@@ -285,3 +307,13 @@ if (_AX_USE_PREBUILT) # support windows and linux
 endif()
 
 ax_setup_app_props(${APP_NAME})
+
+# Reuse the Lua test application for the headless binding ABI check. The
+# AppDelegate exits before loading controller.lua when this flag is present.
+if(WASM)
+    add_test(NAME lua-binding-smoke
+        COMMAND ${CMAKE_CROSSCOMPILING_EMULATOR} "${CMAKE_BINARY_DIR}/bin/lua-tests/lua-tests.js")
+    set_tests_properties(lua-binding-smoke PROPERTIES
+        ENVIRONMENT "AXMOL_LUA_BINDING_SMOKE=1"
+        WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/bin/lua-tests")
+endif()

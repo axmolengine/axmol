@@ -345,7 +345,7 @@ function display.newSprite(source, x, y, params)
 
     local params = params or PARAMS_EMPTY
     if params.scale9 or params.capInsets then
-        spriteClass = ccui.Scale9Sprite
+        spriteClass = axui.Scale9Sprite
         scale9 = true
         params.capInsets = params.capInsets or RECT_ZERO
         params.rect = params.rect or RECT_ZERO

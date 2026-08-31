@@ -226,9 +226,12 @@ void LuaMinXmlHttpRequest::_sendRequest()
                 _errorFlag = true;
                 _status    = 0;
             }
-            // TODO: call back lua function
-            int handler = ax::AxluaCallbackRegistry::getInstance()->getObjectHandler(
-                (void*)this, ax::AxluaCallbackRegistry::HandlerType::XMLHTTPREQUEST_READY_STATE_CHANGE);
+            // Deliver the ready-state notification through the legacy handler bridge.
+            auto* callbackRegistry = ax::AxluaCallbackRegistry::getInstanceIfExists();
+            int handler = callbackRegistry != nullptr
+                              ? callbackRegistry->getObjectHandler(
+                                    (void*)this, ax::AxluaCallbackRegistry::HandlerType::XMLHTTPREQUEST_READY_STATE_CHANGE)
+                              : 0;
 
             if (0 != handler)
             {
@@ -258,9 +261,12 @@ void LuaMinXmlHttpRequest::_sendRequest()
             _status = 0;
         }
 
-        // TODO: call back lua function
-        int handler = ax::AxluaCallbackRegistry::getInstance()->getObjectHandler(
-            (void*)this, ax::AxluaCallbackRegistry::HandlerType::XMLHTTPREQUEST_READY_STATE_CHANGE);
+        // Deliver the ready-state notification through the legacy handler bridge.
+        auto* callbackRegistry = ax::AxluaCallbackRegistry::getInstanceIfExists();
+        int handler = callbackRegistry != nullptr
+                          ? callbackRegistry->getObjectHandler(
+                                (void*)this, ax::AxluaCallbackRegistry::HandlerType::XMLHTTPREQUEST_READY_STATE_CHANGE)
+                          : 0;
 
         if (0 != handler)
         {

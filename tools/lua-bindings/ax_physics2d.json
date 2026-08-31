@@ -44,18 +44,6 @@
       ]
     },
     {
-      "class": "BoxCollider2D",
-      "methods": [
-        "^getPoints$"
-      ]
-    },
-    {
-      "class": "EdgeBoxCollider2D",
-      "methods": [
-        "^getPoints$"
-      ]
-    },
-    {
       "class": "PolygonCollider2D",
       "methods": [
         "^getPoints$"

@@ -49,6 +49,20 @@ subdirectory and add a short comment naming the unsupported signature or
 compatibility contract. Do not add a new generic `*_gen`/template layer outside
 the generator.
 
+An adapter must never overwrite a generated method.  Put every overridden
+method in that module's `skip` list first; generation fails when a configured
+skip no longer matches the selected C++ declaration.  This makes the JSON
+policy the reviewable allowlist for the small number of compatibility adapters
+that remain.
+
+The repository-wide file allowlist is
+`tools/lua-bindings/manual-adapters.json`.  Every adapter translation unit must
+be listed there with a concrete reason, and `genbindings` rejects both
+unlisted files and duplicate entries.  This is intentionally a file-level
+guardrail: individual methods still require a matching `skip` rule when they
+override generated output.  If a bridge becomes expressible by the generator,
+remove its manual implementation and its allowlist entry in the same change.
+
 ## Verification
 
 From the repository root:

@@ -93,5 +93,5 @@
       }
     }
   },
-  "additionalProperties": true
+  "additionalProperties": false
 }

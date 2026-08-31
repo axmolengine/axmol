@@ -37,9 +37,36 @@
 
 using namespace ax;
 
+namespace
+{
+int getWebSocketHandler(LuaWebSocket* socket, AxluaCallbackRegistry::HandlerType type)
+{
+    auto* registry = AxluaCallbackRegistry::getInstanceIfExists();
+    return registry != nullptr ? registry->getObjectHandler(socket, type) : 0;
+}
+
+LuaEngine* getLuaEngineIfExists()
+{
+    return dynamic_cast<LuaEngine*>(ScriptEngineManager::getScriptEngineIfExists());
+}
+
+void dispatchCommonEvent(int handler)
+{
+    if (handler == 0)
+        return;
+    if (auto* engine = ScriptEngineManager::getScriptEngineIfExists())
+    {
+        CommonScriptData data(handler, ""sv);
+        ScriptEvent event(kCommonEvent, (void*)&data);
+        engine->sendEvent(event);
+    }
+}
+}  // namespace
+
 LuaWebSocket::~LuaWebSocket()
 {
-    AxluaCallbackRegistry::getInstance()->removeObjectAllHandlers((void*)this);
+    if (auto* registry = AxluaCallbackRegistry::getInstanceIfExists())
+        registry->removeObjectAllHandlers(this);
 }
 
 void LuaWebSocket::onOpen(WebSocket* ws)
@@ -47,14 +74,7 @@ void LuaWebSocket::onOpen(WebSocket* ws)
     LuaWebSocket* luaWs = dynamic_cast<LuaWebSocket*>(ws);
     if (luaWs)
     {
-        int nHandler = AxluaCallbackRegistry::getInstance()->getObjectHandler(
-            (void*)this, AxluaCallbackRegistry::HandlerType::WEBSOCKET_OPEN);
-        if (0 != nHandler)
-        {
-            CommonScriptData data(nHandler, ""sv);
-            ScriptEvent event(kCommonEvent, (void*)&data);
-            ScriptEngineManager::getInstance()->getScriptEngine()->sendEvent(event);
-        }
+        dispatchCommonEvent(getWebSocketHandler(this, AxluaCallbackRegistry::HandlerType::WEBSOCKET_OPEN));
     }
 }
 
@@ -63,11 +83,11 @@ void LuaWebSocket::onMessage(WebSocket* ws, const WebSocket::Data& data)
     LuaWebSocket* luaWs = dynamic_cast<LuaWebSocket*>(ws);
     if (luaWs)
     {
-        int handler = AxluaCallbackRegistry::getInstance()->getObjectHandler(
-            (void*)this, AxluaCallbackRegistry::HandlerType::WEBSOCKET_MESSAGE);
-        if (0 != handler)
+        const int handler = getWebSocketHandler(this, AxluaCallbackRegistry::HandlerType::WEBSOCKET_MESSAGE);
+        if (handler != 0)
         {
-            LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
+            auto* luaEngine = getLuaEngineIfExists();
+            LuaStack* stack = luaEngine != nullptr ? luaEngine->getLuaStack() : nullptr;
             if (nullptr != stack)
             {
                 stack->pushString(data.bytes, (int)data.len);
@@ -83,14 +103,7 @@ void LuaWebSocket::onClose(WebSocket* ws, uint16_t code, std::string_view reason
     LuaWebSocket* luaWs = dynamic_cast<LuaWebSocket*>(ws);
     if (luaWs)
     {
-        int nHandler = AxluaCallbackRegistry::getInstance()->getObjectHandler(
-            (void*)this, AxluaCallbackRegistry::HandlerType::WEBSOCKET_CLOSE);
-        if (0 != nHandler)
-        {
-            CommonScriptData data(nHandler, ""sv);
-            ScriptEvent event(kCommonEvent, (void*)&data);
-            ScriptEngineManager::getInstance()->getScriptEngine()->sendEvent(event);
-        }
+        dispatchCommonEvent(getWebSocketHandler(this, AxluaCallbackRegistry::HandlerType::WEBSOCKET_CLOSE));
     }
 }
 
@@ -99,14 +112,7 @@ void LuaWebSocket::onError(WebSocket* ws, const WebSocket::ErrorCode& error)
     LuaWebSocket* luaWs = dynamic_cast<LuaWebSocket*>(ws);
     if (luaWs)
     {
-        int nHandler = AxluaCallbackRegistry::getInstance()->getObjectHandler(
-            (void*)this, AxluaCallbackRegistry::HandlerType::WEBSOCKET_ERROR);
-        if (0 != nHandler)
-        {
-            CommonScriptData data(nHandler, ""sv);
-            ScriptEvent event(kCommonEvent, (void*)&data);
-            ScriptEngineManager::getInstance()->getScriptEngine()->sendEvent(event);
-        }
+        dispatchCommonEvent(getWebSocketHandler(this, AxluaCallbackRegistry::HandlerType::WEBSOCKET_ERROR));
     }
 }
 

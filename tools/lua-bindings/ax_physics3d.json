@@ -64,7 +64,6 @@
     {
       "class": "Rigidbody3D",
       "methods": [
-        "getRigidBody",
         "getUserData",
         "setTransformInPhysics",
         "internalHandle"
@@ -73,10 +72,8 @@
     {
       "class": "Collider3D",
       "methods": [
-        "getGhostObject",
         "getUserData",
-        "setTransformInPhysics",
-        "internalHandle"
+        "setTransformInPhysics"
       ]
     },
     {

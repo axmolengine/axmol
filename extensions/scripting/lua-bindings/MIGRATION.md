@@ -8,6 +8,20 @@ Most existing Lua code keeps the same module and class names. The exceptions
 below are intentional: they either expose the current native API accurately or
 reflect a feature that is no longer present in Axmol.
 
+Axmol v3 no longer creates the historical global `cc`, `ccui`, `ccb`, or
+`ccexp` aliases. Use `ax`, `axui`, `axr`, and `axexp` directly. The bundled
+framework and test scripts have already been migrated; applications must make
+the same namespace change.
+
+The v3 generator now owns ordinary `Node` value-type methods such as
+`setContentSize` and `setRotationQuat`; pass the native table forms
+(`ax.size(...)`, `ax.p(...)`, or `{x=..., y=..., z=..., w=...}`).
+`setAnchorPoint` additionally keeps the compatibility forms
+`setAnchorPoint(ax.p(x, y))` and `setAnchorPoint(x, y)`. The historical
+two-number `Node:getPosition()` result is retained temporarily for existing
+test/framework scripts. New code should prefer the native `Vec2` accessors
+where available.
+
 ## Regenerating bindings
 
 Run the generator from the repository root:

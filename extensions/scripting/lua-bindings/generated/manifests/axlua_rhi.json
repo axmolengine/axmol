@@ -4,7 +4,7 @@
   "registrationName": "ax_rhi",
   "luaNamespace": "axr",
   "luaTypeNamespace": "axr",
-  "conditionalExpression": "",
+  "conditionalExpression": null,
   "classes": [
     {
       "nativeName": "GraphicsCore",
@@ -852,100 +852,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "updateCompressedData",
-          "luaName": "updateCompressedData",
-          "declaringType": "ax::rhi::Texture",
-          "returnType": "void",
-          "parameterTypes": [
-            "const void *",
-            "int",
-            "int",
-            "size_t",
-            "int",
-            "int"
-          ],
-          "defaultValues": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "updateCompressedSubData",
-          "luaName": "updateCompressedSubData",
-          "declaringType": "ax::rhi::Texture",
-          "returnType": "void",
-          "parameterTypes": [
-            "int",
-            "int",
-            "int",
-            "int",
-            "size_t",
-            "int",
-            "const void *",
-            "int"
-          ],
-          "defaultValues": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "updateData",
-          "luaName": "updateData",
-          "declaringType": "ax::rhi::Texture",
-          "returnType": "void",
-          "parameterTypes": [
-            "const void *",
-            "int",
-            "int",
-            "int",
-            "int"
-          ],
-          "defaultValues": [
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "updateFaceData",
-          "luaName": "updateFaceData",
-          "declaringType": "ax::rhi::Texture",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::rhi::TextureCubeFace",
-            "const void *"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "updateSamplerDesc",
           "luaName": "updateSamplerDesc",
           "declaringType": "ax::rhi::Texture",
@@ -954,33 +860,6 @@
             "const ax::rhi::SamplerDesc \u0026"
           ],
           "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "updateSubData",
-          "luaName": "updateSubData",
-          "declaringType": "ax::rhi::Texture",
-          "returnType": "void",
-          "parameterTypes": [
-            "int",
-            "int",
-            "int",
-            "int",
-            "int",
-            "const void *",
-            "int"
-          ],
-          "defaultValues": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
             null
           ],
           "isStatic": false,

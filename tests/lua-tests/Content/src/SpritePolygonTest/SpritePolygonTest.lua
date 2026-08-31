@@ -182,7 +182,7 @@ function SpritePolygonTest3:ctor()
 
     local vsize = ax.Director:getInstance():getVisibleSize()
 
-    local slider = ccui.Slider:create()
+    local slider = axui.Slider:create()
     slider:loadBarTexture("cocosui/sliderTrack.png")
     slider:loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "")
     slider:loadProgressBarTexture("cocosui/sliderProgress.png")
@@ -193,7 +193,7 @@ function SpritePolygonTest3:ctor()
     self._epsilonLabel:setPosition(ax.p(vsize.width/2, vsize.height/4 + 15))
 
     local function percentChangedEvent(sender,eventType)
-        if eventType == ccui.SliderEventType.percentChanged then
+        if eventType == axui.SliderEventType.percentChanged then
             local slider = sender
             local percent = "Percent " .. slider:getPercent()
             self._displayValueLabel:setString(percent)
@@ -264,7 +264,7 @@ function SpritePolygonTest4:ctor()
 
     local vsize = ax.Director:getInstance():getVisibleSize()
 
-    local slider = ccui.Slider:create()
+    local slider = axui.Slider:create()
     slider:loadBarTexture("cocosui/sliderTrack.png")
     slider:loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "")
     slider:loadProgressBarTexture("cocosui/sliderProgress.png")
@@ -278,7 +278,7 @@ function SpritePolygonTest4:ctor()
     self._epsilonLabel:setPosition(ax.p(vsize.width/2, vsize.height/4 + 15))
 
     local function percentChangedEvent(sender,eventType)
-        if eventType == ccui.SliderEventType.percentChanged then
+        if eventType == axui.SliderEventType.percentChanged then
             local slider = sender
             local percent = "Percent " .. slider:getPercent()
             self._displayValueLabel:setString(percent)

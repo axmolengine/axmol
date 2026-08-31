@@ -54,15 +54,8 @@
       "class": "*",
       "methods": [
         "^visit$",
-        "copyWith.*",
         "onEnter.*",
         "onExit.*",
-        "^description$",
-        "getObjectType",
-        ".*HSV",
-        "onAcc.*",
-        "onKey.*",
-        "onRegisterTouchListener",
         "(g|s)etDelegate"
       ]
     },
@@ -90,10 +83,6 @@
       "methods": [
         "get*"
       ]
-    },
-    {
-      "class": "InputField",
-      "methods": []
     }
   ],
   "rename_functions": [],

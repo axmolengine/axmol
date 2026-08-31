@@ -179,8 +179,8 @@ public:
      * events.
      *
      * @param message the ScriptEvent object that has ScriptEventType and the pointer to information data.
-     * @return default return 0 otherwise return values the same as handleNodeEvent, handleMenuClickedEvent or
-     * handleCallFuncActionEvent,etc.
+     * @return default return 0 otherwise return values from the active legacy
+     * event adapters such as menu, action, scheduler, or input callbacks.
      */
     int sendEvent(const ScriptEvent& message) override;
 
@@ -214,7 +214,6 @@ public:
 private:
     LuaEngine(void) : _stack(nullptr) {}
     bool init(void);
-    int handleNodeEvent(void* data);
     int handleMenuClickedEvent(void* data);
     int handleCallFuncActionEvent(void* data);
     int handleScheduler(void* data);

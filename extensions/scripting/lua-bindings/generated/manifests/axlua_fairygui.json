@@ -4,7 +4,7 @@
   "registrationName": "ax_fairygui",
   "luaNamespace": "fgui",
   "luaTypeNamespace": "fgui",
-  "conditionalExpression": "",
+  "conditionalExpression": null,
   "classes": [
     {
       "nativeName": "DragDropManager",
@@ -2124,33 +2124,6 @@
             null,
             null,
             null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "drawRegularPolygon",
-          "luaName": "drawRegularPolygon",
-          "declaringType": "fairygui::GGraph",
-          "returnType": "void",
-          "parameterTypes": [
-            "int",
-            "const ax::Color \u0026",
-            "const ax::Color \u0026",
-            "int",
-            "float",
-            "const float *",
-            "int"
-          ],
-          "defaultValues": [
-            null,
-            null,
-            null,
-            null,
-            "0",
-            "nullptr",
-            "0"
           ],
           "isStatic": false,
           "isConst": false,
@@ -4946,21 +4919,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "setData",
-          "luaName": "setData",
-          "declaringType": "fairygui::GObject",
-          "returnType": "void",
-          "parameterTypes": [
-            "void *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setDragBounds",
           "luaName": "setDragBounds",
           "declaringType": "fairygui::GObject",
@@ -7272,17 +7230,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getTarget",
-          "luaName": "getTarget",
-          "declaringType": "fairygui::GTweener",
-          "returnType": "void *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getUserData",
           "luaName": "getUserData",
           "declaringType": "fairygui::GTweener",
@@ -7483,21 +7430,6 @@
           "defaultValues": [
             null,
             "fairygui::TweenPropType::None"
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setTargetAny",
-          "luaName": "setTargetAny",
-          "declaringType": "fairygui::GTweener",
-          "returnType": "fairygui::GTweener *",
-          "parameterTypes": [
-            "void *"
-          ],
-          "defaultValues": [
-            null
           ],
           "isStatic": false,
           "isConst": false,
@@ -9114,44 +9046,6 @@
             null,
             null,
             null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "bubbleEvent",
-          "luaName": "bubbleEvent",
-          "declaringType": "fairygui::UIEventDispatcher",
-          "returnType": "bool",
-          "parameterTypes": [
-            "int",
-            "void *",
-            "const ax::Value \u0026"
-          ],
-          "defaultValues": [
-            null,
-            "nullptr",
-            "ax::Value::Null"
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "dispatchEvent",
-          "luaName": "dispatchEvent",
-          "declaringType": "fairygui::UIEventDispatcher",
-          "returnType": "bool",
-          "parameterTypes": [
-            "int",
-            "void *",
-            "const ax::Value \u0026"
-          ],
-          "defaultValues": [
-            null,
-            "nullptr",
-            "ax::Value::Null"
           ],
           "isStatic": false,
           "isConst": false,

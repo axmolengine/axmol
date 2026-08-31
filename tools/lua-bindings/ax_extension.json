@@ -1,7 +1,10 @@
 {
   "module": "ax_extension",
   "target_namespace": "ax",
-  "cpp_namespace": ["ax", "ax::ext"],
+  "cpp_namespace": [
+    "ax",
+    "ax::ext"
+  ],
   "macro_judgement": null,
   "headers": [
     "%(axdir)s/extensions/axmol-ext.h"
@@ -43,13 +46,7 @@
       "class": "*",
       "methods": [
         "^visit$",
-        "copyWith.*",
-        "onEnter.*",
-        "onExit.*",
-        "^description$",
-        "getObjectType",
-        "(g|s)etDelegate",
-        ".*HSV"
+        "(g|s)etDelegate"
       ]
     },
     {

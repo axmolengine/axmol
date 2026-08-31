@@ -234,21 +234,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "setUserData",
-          "luaName": "setUserData",
-          "declaringType": "ax::Collider3D",
-          "returnType": "void",
-          "parameterTypes": [
-            "void *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "syncNodeToPhysics",
           "luaName": "syncNodeToPhysics",
           "declaringType": "ax::Collider3D",
@@ -1259,21 +1244,6 @@
           "returnType": "void",
           "parameterTypes": [
             "ax::Joint3D::CoordinateSpace"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setUserData",
-          "luaName": "setUserData",
-          "declaringType": "ax::Joint3D",
-          "returnType": "void",
-          "parameterTypes": [
-            "void *"
           ],
           "defaultValues": [
             null
@@ -2350,21 +2320,6 @@
           "returnType": "void",
           "parameterTypes": [
             "ax::bvec3"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setUserData",
-          "luaName": "setUserData",
-          "declaringType": "ax::Rigidbody3D",
-          "returnType": "void",
-          "parameterTypes": [
-            "void *"
           ],
           "defaultValues": [
             null
