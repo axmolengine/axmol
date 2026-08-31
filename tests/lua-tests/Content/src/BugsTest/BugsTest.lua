@@ -619,9 +619,13 @@ local function BugsTestMainLayer()
     -- handling touch events
     local ptBeginPos = {x = 0, y = 0}
     local ptCurPos  = {x = 0, y = 0}
+    local dragging = false
 
     -- handling touch events
     local function onPointerMove(event)
+        if not dragging then
+            return
+        end
         local touchLocation = event:getWorldPoint()
         local nMoveY = touchLocation.y - ptBeginPos.y
         local curPosx, curPosy = pItemMenu:getPosition()
@@ -642,10 +646,17 @@ local function BugsTestMainLayer()
     end
     local function onTouchBegan(event)
         ptBeginPos = event:getWorldPoint()
+        dragging = true
+        return true
+    end
+    local function onTouchEnded()
+        dragging = false
     end
     local listener = ax.PointerEventListener:create()
     listener.onPointerDown = onTouchBegan
     listener.onPointerMove = onPointerMove
+    listener.onPointerUp = onTouchEnded
+    listener.onPointerCancel = onTouchEnded
 
     local eventDispatcher = ret:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, ret)
