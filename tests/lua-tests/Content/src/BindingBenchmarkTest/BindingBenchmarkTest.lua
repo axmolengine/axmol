@@ -1,6 +1,6 @@
 local DEFAULT_SPRITE_COUNT = 1000
 local SPRITE_STEP = 500
-local MAX_SPRITE_COUNT = 10000
+local MAX_SPRITE_COUNT = 50000
 local SPRITE_TEXTURE = "Images/stars.png"
 
 function BindingBenchmarkTest()
