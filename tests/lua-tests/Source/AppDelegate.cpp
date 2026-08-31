@@ -47,8 +47,9 @@ bool luaBindingSmokeRequested()
     // Emscripten does not import the host process environment into libc by
     // default. Read the flag directly from Node's process.env for the CTest
     // launcher while retaining getenv for native runners.
-    return EM_ASM_INT(
-        { return typeof process != = 'undefined' && process.env && process.env.AXMOL_LUA_BINDING_SMOKE == = '1'; });
+    return EM_ASM_INT({
+        return typeof process !== 'undefined' && process.env && process.env.AXMOL_LUA_BINDING_SMOKE === '1';
+    });
 #else
     const char* smoke = getenv("AXMOL_LUA_BINDING_SMOKE");
     return smoke != nullptr && smoke[0] == '1';
@@ -109,8 +110,9 @@ bool AppDelegate::applicationDidFinishLaunching()
 
 #if defined(AX_ENABLE_NAVMESH) && defined(AX_ENABLE_PHYSICS_3D)
 #    if AX_TARGET_PLATFORM == AX_PLATFORM_WASM
-    const bool navMeshSmoke = EM_ASM_INT(
-        { return typeof location != = 'undefined' && new URLSearchParams(location.search).has('navmesh-smoke'); });
+    const bool navMeshSmoke = EM_ASM_INT({
+        return typeof location !== 'undefined' && new URLSearchParams(location.search).has('navmesh-smoke');
+    });
 #    else
     const char* navMeshSmokeFlag = getenv("AXMOL_NAVMESH_SMOKE");
     const bool navMeshSmoke      = navMeshSmokeFlag != nullptr && navMeshSmokeFlag[0] == '1';
