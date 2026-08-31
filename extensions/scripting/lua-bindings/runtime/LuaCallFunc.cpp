@@ -35,4 +35,4 @@ LuaCallFunc* LuaCallFunc::clone() const
     ret->autorelease();
     return ret;
 }
-}
+}  // namespace ax

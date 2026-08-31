@@ -78,20 +78,11 @@ public:
     axlua::Callback<void()> successCallback;
     axlua::Callback<void(int)> errorCallback;
 
-    void onProgress(int percent) override
-    {
-        progressCallback(percent);
-    }
+    void onProgress(int percent) override { progressCallback(percent); }
 
-    void onSuccess() override
-    {
-        successCallback();
-    }
+    void onSuccess() override { successCallback(); }
 
-    void onError(AssetsManager::ErrorCode errorCode) override
-    {
-        errorCallback(static_cast<int>(errorCode));
-    }
+    void onError(AssetsManager::ErrorCode errorCode) override { errorCallback(static_cast<int>(errorCode)); }
 };
 
 static int axlua_AssetsManager_setDelegate(lua_State* L)
@@ -142,10 +133,17 @@ static int axlua_AssetsManager_setDelegate(lua_State* L)
         const int handlerType = static_cast<int>(axlua::adapter::to_number(L, 3, 0));
         switch (handlerType)
         {
-        case 0: delegate->progressCallback = axlua::Callback<void(int)>(L, 2); break;
-        case 1: delegate->successCallback = axlua::Callback<void()>(L, 2); break;
-        case 2: delegate->errorCallback = axlua::Callback<void(int)>(L, 2); break;
-        default: return luaL_error(L, "AssetsManager delegate type out of range: %d", handlerType);
+        case 0:
+            delegate->progressCallback = axlua::Callback<void(int)>(L, 2);
+            break;
+        case 1:
+            delegate->successCallback = axlua::Callback<void()>(L, 2);
+            break;
+        case 2:
+            delegate->errorCallback = axlua::Callback<void(int)>(L, 2);
+            break;
+        default:
+            return luaL_error(L, "AssetsManager delegate type out of range: %d", handlerType);
         }
         return 0;
     }
@@ -206,11 +204,8 @@ static int axlua_Extension_EventListenerAssetsManagerEx_create(lua_State* L)
 
         auto callback = axlua::Callback<void(EventAssetsManagerEx*)>(L, 3);
 
-        ax::extension::EventListenerAssetsManagerEx* ret =
-            ax::extension::EventListenerAssetsManagerEx::create(assetManager,
-                                                                [callback = std::move(callback)](EventAssetsManagerEx* event) mutable {
-                                                                    callback(event);
-                                                                });
+        ax::extension::EventListenerAssetsManagerEx* ret = ax::extension::EventListenerAssetsManagerEx::create(
+            assetManager, [callback = std::move(callback)](EventAssetsManagerEx* event) mutable { callback(event); });
 
         axlua::adapter::push_object(L, (void*)ret, "ax.EventListenerAssetsManagerEx");
         return 1;
@@ -499,9 +494,14 @@ static int axlua_extension_ScrollView_registerScriptHandler(lua_State* luaState)
         }
         switch (static_cast<int>(axlua::adapter::to_number(luaState, 3, 0)))
         {
-        case 0: delegate->scrollCallback = axlua::Callback<void(ScrollView*)>(luaState, 2); break;
-        case 1: delegate->zoomCallback = axlua::Callback<void(ScrollView*)>(luaState, 2); break;
-        default: return luaL_error(luaState, "ScrollView handler type out of range");
+        case 0:
+            delegate->scrollCallback = axlua::Callback<void(ScrollView*)>(luaState, 2);
+            break;
+        case 1:
+            delegate->zoomCallback = axlua::Callback<void(ScrollView*)>(luaState, 2);
+            break;
+        default:
+            return luaL_error(luaState, "ScrollView handler type out of range");
         }
         return 0;
     }
@@ -556,9 +556,14 @@ static int axlua_extension_ScrollView_unregisterScriptHandler(lua_State* luaStat
         {
             switch (static_cast<int>(axlua::adapter::to_number(luaState, 2, 0)))
             {
-            case 0: delegate->scrollCallback.reset(); break;
-            case 1: delegate->zoomCallback.reset(); break;
-            default: return luaL_error(luaState, "ScrollView handler type out of range");
+            case 0:
+                delegate->scrollCallback.reset();
+                break;
+            case 1:
+                delegate->zoomCallback.reset();
+                break;
+            default:
+                return luaL_error(luaState, "ScrollView handler type out of range");
             }
         }
         return 0;
@@ -605,35 +610,17 @@ public:
 
     virtual ~LUA_TableViewDelegate() {}
 
-    void scrollViewDidScroll(ScrollView* view) override
-    {
-        scrollCallback(view);
-    }
+    void scrollViewDidScroll(ScrollView* view) override { scrollCallback(view); }
 
-    void scrollViewDidZoom(ScrollView* view) override
-    {
-        zoomCallback(view);
-    }
+    void scrollViewDidZoom(ScrollView* view) override { zoomCallback(view); }
 
-    void tableCellTouched(TableView* table, TableViewCell* cell) override
-    {
-        touchedCallback(table, cell);
-    }
+    void tableCellTouched(TableView* table, TableViewCell* cell) override { touchedCallback(table, cell); }
 
-    void tableCellHighlight(TableView* table, TableViewCell* cell) override
-    {
-        highlightCallback(table, cell);
-    }
+    void tableCellHighlight(TableView* table, TableViewCell* cell) override { highlightCallback(table, cell); }
 
-    void tableCellUnhighlight(TableView* table, TableViewCell* cell) override
-    {
-        unhighlightCallback(table, cell);
-    }
+    void tableCellUnhighlight(TableView* table, TableViewCell* cell) override { unhighlightCallback(table, cell); }
 
-    void tableCellWillRecycle(TableView* table, TableViewCell* cell) override
-    {
-        recycleCallback(table, cell);
-    }
+    void tableCellWillRecycle(TableView* table, TableViewCell* cell) override { recycleCallback(table, cell); }
 
     axlua::Callback<void(ScrollView*)> scrollCallback;
     axlua::Callback<void(ScrollView*)> zoomCallback;
@@ -713,20 +700,11 @@ public:
     axlua::Callback<TableViewCell*(TableView*, ssize_t)> cellCallback;
     axlua::Callback<ssize_t(TableView*)> countCallback;
 
-    Size tableCellSizeForIndex(TableView* table, ssize_t idx) override
-    {
-        return sizeCallback(table, idx);
-    }
+    Size tableCellSizeForIndex(TableView* table, ssize_t idx) override { return sizeCallback(table, idx); }
 
-    TableViewCell* tableCellAtIndex(TableView* table, ssize_t idx) override
-    {
-        return cellCallback(table, idx);
-    }
+    TableViewCell* tableCellAtIndex(TableView* table, ssize_t idx) override { return cellCallback(table, idx); }
 
-    ssize_t numberOfCellsInTableView(TableView* table) override
-    {
-        return countCallback(table);
-    }
+    ssize_t numberOfCellsInTableView(TableView* table) override { return countCallback(table); }
 };
 
 static int axlua_extension_TableView_setDataSource(lua_State* L)
@@ -890,23 +868,51 @@ static int axlua_extension_TableView_registerScriptHandler(lua_State* L)
         }
 #endif
         auto* userDict = static_cast<LuaRefMap*>(self->getUserObject());
-        auto* delegate = userDict ? static_cast<LUA_TableViewDelegate*>(userDict->objectForKey(KEY_TABLEVIEW_DELEGATE)) : nullptr;
-        auto* dataSource = userDict ? static_cast<LUA_TableViewDataSource*>(userDict->objectForKey(KEY_TABLEVIEW_DATA_SOURCE)) : nullptr;
+        auto* delegate =
+            userDict ? static_cast<LUA_TableViewDelegate*>(userDict->objectForKey(KEY_TABLEVIEW_DELEGATE)) : nullptr;
+        auto* dataSource =
+            userDict ? static_cast<LUA_TableViewDataSource*>(userDict->objectForKey(KEY_TABLEVIEW_DATA_SOURCE))
+                     : nullptr;
         const int type = static_cast<int>(axlua::adapter::to_number(L, 3, 0));
         if (type < 6 && !delegate)
             return luaL_error(L, "TableView delegate is not initialized");
         switch (type)
         {
-        case 0: delegate->scrollCallback = axlua::Callback<void(ScrollView*)>(L, 2); break;
-        case 1: delegate->zoomCallback = axlua::Callback<void(ScrollView*)>(L, 2); break;
-        case 2: delegate->touchedCallback = axlua::Callback<void(TableView*, TableViewCell*)>(L, 2); break;
-        case 3: delegate->highlightCallback = axlua::Callback<void(TableView*, TableViewCell*)>(L, 2); break;
-        case 4: delegate->unhighlightCallback = axlua::Callback<void(TableView*, TableViewCell*)>(L, 2); break;
-        case 5: delegate->recycleCallback = axlua::Callback<void(TableView*, TableViewCell*)>(L, 2); break;
-        case 6: if (!dataSource) return luaL_error(L, "TableView data source is not initialized"); dataSource->sizeCallback = axlua::Callback<Size(TableView*, ssize_t)>(L, 2); break;
-        case 7: if (!dataSource) return luaL_error(L, "TableView data source is not initialized"); dataSource->cellCallback = axlua::Callback<TableViewCell*(TableView*, ssize_t)>(L, 2); break;
-        case 8: if (!dataSource) return luaL_error(L, "TableView data source is not initialized"); dataSource->countCallback = axlua::Callback<ssize_t(TableView*)>(L, 2); break;
-        default: return luaL_error(L, "TableView handler type out of range");
+        case 0:
+            delegate->scrollCallback = axlua::Callback<void(ScrollView*)>(L, 2);
+            break;
+        case 1:
+            delegate->zoomCallback = axlua::Callback<void(ScrollView*)>(L, 2);
+            break;
+        case 2:
+            delegate->touchedCallback = axlua::Callback<void(TableView*, TableViewCell*)>(L, 2);
+            break;
+        case 3:
+            delegate->highlightCallback = axlua::Callback<void(TableView*, TableViewCell*)>(L, 2);
+            break;
+        case 4:
+            delegate->unhighlightCallback = axlua::Callback<void(TableView*, TableViewCell*)>(L, 2);
+            break;
+        case 5:
+            delegate->recycleCallback = axlua::Callback<void(TableView*, TableViewCell*)>(L, 2);
+            break;
+        case 6:
+            if (!dataSource)
+                return luaL_error(L, "TableView data source is not initialized");
+            dataSource->sizeCallback = axlua::Callback<Size(TableView*, ssize_t)>(L, 2);
+            break;
+        case 7:
+            if (!dataSource)
+                return luaL_error(L, "TableView data source is not initialized");
+            dataSource->cellCallback = axlua::Callback<TableViewCell*(TableView*, ssize_t)>(L, 2);
+            break;
+        case 8:
+            if (!dataSource)
+                return luaL_error(L, "TableView data source is not initialized");
+            dataSource->countCallback = axlua::Callback<ssize_t(TableView*)>(L, 2);
+            break;
+        default:
+            return luaL_error(L, "TableView handler type out of range");
         }
         return 0;
     }
@@ -957,23 +963,48 @@ static int axlua_extension_TableView_unregisterScriptHandler(lua_State* L)
             goto argumentError;
 #endif
         auto* userDict = static_cast<LuaRefMap*>(self->getUserObject());
-        auto* delegate = userDict ? static_cast<LUA_TableViewDelegate*>(userDict->objectForKey(KEY_TABLEVIEW_DELEGATE)) : nullptr;
-        auto* dataSource = userDict ? static_cast<LUA_TableViewDataSource*>(userDict->objectForKey(KEY_TABLEVIEW_DATA_SOURCE)) : nullptr;
+        auto* delegate =
+            userDict ? static_cast<LUA_TableViewDelegate*>(userDict->objectForKey(KEY_TABLEVIEW_DELEGATE)) : nullptr;
+        auto* dataSource =
+            userDict ? static_cast<LUA_TableViewDataSource*>(userDict->objectForKey(KEY_TABLEVIEW_DATA_SOURCE))
+                     : nullptr;
         const int type = static_cast<int>(axlua::adapter::to_number(L, 2, 0));
         if (type < 6 && !delegate)
             return 0;
         switch (type)
         {
-        case 0: delegate->scrollCallback.reset(); break;
-        case 1: delegate->zoomCallback.reset(); break;
-        case 2: delegate->touchedCallback.reset(); break;
-        case 3: delegate->highlightCallback.reset(); break;
-        case 4: delegate->unhighlightCallback.reset(); break;
-        case 5: delegate->recycleCallback.reset(); break;
-        case 6: if (dataSource) dataSource->sizeCallback.reset(); break;
-        case 7: if (dataSource) dataSource->cellCallback.reset(); break;
-        case 8: if (dataSource) dataSource->countCallback.reset(); break;
-        default: return luaL_error(L, "TableView handler type out of range");
+        case 0:
+            delegate->scrollCallback.reset();
+            break;
+        case 1:
+            delegate->zoomCallback.reset();
+            break;
+        case 2:
+            delegate->touchedCallback.reset();
+            break;
+        case 3:
+            delegate->highlightCallback.reset();
+            break;
+        case 4:
+            delegate->unhighlightCallback.reset();
+            break;
+        case 5:
+            delegate->recycleCallback.reset();
+            break;
+        case 6:
+            if (dataSource)
+                dataSource->sizeCallback.reset();
+            break;
+        case 7:
+            if (dataSource)
+                dataSource->cellCallback.reset();
+            break;
+        case 8:
+            if (dataSource)
+                dataSource->countCallback.reset();
+            break;
+        default:
+            return luaL_error(L, "TableView handler type out of range");
         }
         return 0;
     }

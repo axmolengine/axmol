@@ -92,7 +92,8 @@ static int axlua_ListView_addScrollViewEventListener(lua_State* L)
         }
 #endif
         axlua::Callback<void(ax::Object*, ui::ScrollView::EventType)> callback(L, 2);
-        auto scrollViewCallback = [callback = std::move(callback)](ax::Object* ref, ui::ScrollView::EventType eventType) mutable {
+        auto scrollViewCallback = [callback = std::move(callback)](ax::Object* ref,
+                                                                   ui::ScrollView::EventType eventType) mutable {
             callback(ref, eventType);
         };
         self->addEventListener((ui::ScrollView::ScrollViewCallback)scrollViewCallback);

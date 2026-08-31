@@ -211,7 +211,7 @@ private:
     // The shared registry outlives lua_close when native callbacks survive
     // their VM. A new VM at the same address gets a different registry.
     std::shared_ptr<LuaCallbackRegistry> _registry;
-    int _ref          = LUA_NOREF;
+    int _ref = LUA_NOREF;
     std::atomic_bool _active{false};
     std::thread::id _ownerThread;
 
@@ -901,8 +901,8 @@ namespace ax
     {                                                                                                                  \
         tracking.use(1);                                                                                               \
         Type value{};                                                                                                  \
-        if (!::GetFunction(state, index, &value, "Axmol Lua binding"))                                                  \
-            luaL_error(state, "invalid Axmol value table for argument #%d", index);                                  \
+        if (!::GetFunction(state, index, &value, "Axmol Lua binding"))                                                 \
+            luaL_error(state, "invalid Axmol value table for argument #%d", index);                                    \
         return value;                                                                                                  \
     }                                                                                                                  \
                                                                                                                        \

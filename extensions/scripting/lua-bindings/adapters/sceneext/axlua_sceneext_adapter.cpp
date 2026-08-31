@@ -119,7 +119,7 @@ static int axlua_ArmatureController_setMovementEventCallFunc(lua_State* L)
 
         axlua::Callback<void(Armature*, MovementEventType, std::string_view)> callback(L, 2);
         self->setMovementEventCallFunc([callback = std::move(callback)](Armature* armature, MovementEventType type,
-                                                                         std::string_view movementID) mutable {
+                                                                        std::string_view movementID) mutable {
             callback(armature, type, movementID);
         });
         return 0;
@@ -175,10 +175,9 @@ static int axlua_ArmatureController_setFrameEventCallFunc(lua_State* L)
 #endif
 
         axlua::Callback<void(ax::ext::Bone*, std::string_view, int, int)> callback(L, 2);
-        self->setFrameEventCallFunc([callback = std::move(callback)](ax::ext::Bone* bone, std::string_view name,
-                                                                      int origin, int current) mutable {
-            callback(bone, name, origin, current);
-        });
+        self->setFrameEventCallFunc(
+            [callback = std::move(callback)](ax::ext::Bone* bone, std::string_view name, int origin,
+                                             int current) mutable { callback(bone, name, origin, current); });
 
         return 0;
     }
@@ -446,9 +445,8 @@ static int axlua_ActionTimeline_setFrameEventCallFunc(lua_State* L)
 #endif
 
         axlua::Callback<void(ext::timeline::Frame*)> callback(L, 2);
-        self->setFrameEventCallFunc([callback = std::move(callback)](ext::timeline::Frame* frame) mutable {
-            callback(frame);
-        });
+        self->setFrameEventCallFunc(
+            [callback = std::move(callback)](ext::timeline::Frame* frame) mutable { callback(frame); });
 
         return 0;
     }

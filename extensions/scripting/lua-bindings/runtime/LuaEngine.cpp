@@ -24,7 +24,7 @@ LuaEngine* LuaEngine::getInstance(void)
 LuaEngine::~LuaEngine(void)
 {
     LuaStack* stack = _stack;
-    _stack = nullptr;
+    _stack          = nullptr;
     AX_SAFE_RELEASE(stack);
     _defaultEngine = nullptr;
 }
@@ -36,8 +36,14 @@ bool LuaEngine::init(void)
     return true;
 }
 
-void LuaEngine::addSearchPath(const char* path) { _stack->addSearchPath(path); }
-void LuaEngine::addLuaLoader(lua_CFunction func) { _stack->addLuaLoader(func); }
+void LuaEngine::addSearchPath(const char* path)
+{
+    _stack->addSearchPath(path);
+}
+void LuaEngine::addLuaLoader(lua_CFunction func)
+{
+    _stack->addLuaLoader(func);
+}
 
 void LuaEngine::removeScriptObjectByObject(Object* object)
 {
@@ -45,7 +51,10 @@ void LuaEngine::removeScriptObjectByObject(Object* object)
         _stack->removeScriptObjectByObject(object);
 }
 
-void LuaEngine::removeScriptHandler(int handler) { _stack->removeScriptHandler(handler); }
+void LuaEngine::removeScriptHandler(int handler)
+{
+    _stack->removeScriptHandler(handler);
+}
 
 int LuaEngine::executeString(const char* code)
 {
@@ -105,5 +114,8 @@ int LuaEngine::sendEvent(const ScriptEvent& event)
     return 0;
 }
 
-int LuaEngine::reload(const char* moduleFileName) { return _stack->reload(moduleFileName); }
+int LuaEngine::reload(const char* moduleFileName)
+{
+    return _stack->reload(moduleFileName);
+}
 }  // namespace ax

@@ -16,4 +16,4 @@ public:
 private:
     std::function<void(void*, Node*)> _functionLua;
 };
-}
+}  // namespace ax

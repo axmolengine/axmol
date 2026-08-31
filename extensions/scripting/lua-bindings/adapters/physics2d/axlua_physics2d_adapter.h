@@ -29,7 +29,6 @@
 
 #    include "lua-bindings/runtime/axlua_adapter.h"
 
-
 int register_all_ax_physics2d_adapter(lua_State* luaState);
 
 #endif  // defined(AX_ENABLE_PHYSICS)

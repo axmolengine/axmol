@@ -72,11 +72,9 @@ int axlua_3d_MeshRenderer_createAsync(lua_State* L)
             }
 #endif
             axlua::Callback<void(ax::MeshRenderer*)> callback(L, 4);
-            ax::MeshRenderer::createAsync(modelPath, texturePath,
-                                          [callback = std::move(callback)](ax::MeshRenderer* mesh, void*) mutable {
-                                              callback(mesh);
-                                          },
-                                          nullptr);
+            ax::MeshRenderer::createAsync(
+                modelPath, texturePath,
+                [callback = std::move(callback)](ax::MeshRenderer* mesh, void*) mutable { callback(mesh); }, nullptr);
 
             lua_settop(L, 1);
             return 1;
@@ -99,11 +97,9 @@ int axlua_3d_MeshRenderer_createAsync(lua_State* L)
             }
 #endif
             axlua::Callback<void(ax::MeshRenderer*)> callback(L, 3);
-            ax::MeshRenderer::createAsync(modelPath,
-                                          [callback = std::move(callback)](ax::MeshRenderer* mesh, void*) mutable {
-                                              callback(mesh);
-                                          },
-                                          nullptr);
+            ax::MeshRenderer::createAsync(
+                modelPath, [callback = std::move(callback)](ax::MeshRenderer* mesh, void*) mutable { callback(mesh); },
+                nullptr);
 
             lua_settop(L, 1);
             return 1;

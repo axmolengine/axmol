@@ -183,7 +183,8 @@ static int axlua_ComponentLua_getScriptObject(lua_State* luaState)
     axlua::adapter::Error conversionError;
     if (lua_gettop(luaState) != 1 || !axlua::adapter::is_usertype(luaState, 1, "ax.ComponentLua", 0, &conversionError))
     {
-        axlua::adapter::raise_error(luaState, "invalid arguments in function 'ax.ComponentLua:getScriptObject'", &conversionError);
+        axlua::adapter::raise_error(luaState, "invalid arguments in function 'ax.ComponentLua:getScriptObject'",
+                                    &conversionError);
         return 0;
     }
 
@@ -889,16 +890,14 @@ static int axlua_CallFunc_create(lua_State* luaState)
         {
             sol::table extra(luaState, 3);
             axlua::Callback<void(Node*, sol::table)> callback(luaState, 2);
-            returnValue->initWithFunction([callback = std::move(callback), extra = std::move(extra)](void*, Node* target) mutable {
-                callback(target, extra);
-            });
+            returnValue->initWithFunction([callback = std::move(callback), extra = std::move(extra)](
+                                              void*, Node* target) mutable { callback(target, extra); });
         }
         else
         {
             axlua::Callback<void(Node*)> callback(luaState, 2);
-            returnValue->initWithFunction([callback = std::move(callback)](void*, Node* target) mutable {
-                callback(target);
-            });
+            returnValue->initWithFunction(
+                [callback = std::move(callback)](void*, Node* target) mutable { callback(target); });
         }
         returnValue->autorelease();
 
@@ -962,8 +961,8 @@ static int axlua_Node_setAnchorPoint(lua_State* luaState)
     {
         if (!lua_isnumber(luaState, 2) || !lua_isnumber(luaState, 3))
             return luaL_error(luaState, "ax.Node:setAnchorPoint expects two numbers");
-        node->setAnchorPoint(ax::Vec2(static_cast<float>(lua_tonumber(luaState, 2)),
-                                      static_cast<float>(lua_tonumber(luaState, 3))));
+        node->setAnchorPoint(
+            ax::Vec2(static_cast<float>(lua_tonumber(luaState, 2)), static_cast<float>(lua_tonumber(luaState, 3))));
     }
     else
     {
@@ -1009,7 +1008,7 @@ static int axlua_Node_enumerateChildren(lua_State* luaState)
         }
 #endif
 
-        auto name            = axlua_tosv(luaState, 2);
+        auto name = axlua_tosv(luaState, 2);
         axlua::Callback<bool(Node*)> callback(luaState, 3);
         obj->enumerateChildren(name, [callback = std::move(callback)](Node* node) mutable { return callback(node); });
         lua_settop(luaState, 1);
@@ -3176,7 +3175,7 @@ AccelerationEventListener* LuaAccelerationEventListener::create(axlua::Callback<
 }
 
 CustomEventListener* LuaCustomEventListener::create(std::string_view eventName,
-                                                     axlua::Callback<void(CustomEvent*)> callback)
+                                                    axlua::Callback<void(CustomEvent*)> callback)
 {
     CustomEventListener* eventCustom = new CustomEventListener();
     if (eventCustom->init(eventName, [callback = std::move(callback)](CustomEvent* event) mutable { callback(event); }))
@@ -3255,7 +3254,7 @@ static int axlua_LuaCustomEventListener_create(lua_State* luaState)
             goto argumentError;
         }
 #endif
-        auto eventName                       = axlua_tosv(luaState, 2);
+        auto eventName = axlua_tosv(luaState, 2);
         axlua::Callback<void(ax::CustomEvent*)> callback(luaState, 3);
         ax::CustomEventListener* returnValue = LuaCustomEventListener::create(eventName, std::move(callback));
 
@@ -4051,11 +4050,10 @@ static int axlua_TextureCache_addImageAsync(lua_State* luaState)
             goto argumentError;
         }
 #endif
-        auto configFilePath  = axlua_tosv(luaState, 2);
+        auto configFilePath = axlua_tosv(luaState, 2);
         axlua::Callback<void(Texture2D*)> callback(luaState, 3);
-        self->addImageAsync(configFilePath, [callback = std::move(callback)](Texture2D* tex) mutable {
-            callback(tex);
-        });
+        self->addImageAsync(configFilePath,
+                            [callback = std::move(callback)](Texture2D* tex) mutable { callback(tex); });
 
         return 0;
     }
@@ -4890,7 +4888,7 @@ static int axlua_utils_captureNode(lua_State* luaState)
     else
 #endif
     {
-        ax::Node* node       = static_cast<Node*>(axlua::adapter::to_usertype(luaState, 2, nullptr));
+        ax::Node* node = static_cast<Node*>(axlua::adapter::to_usertype(luaState, 2, nullptr));
         axlua::Callback<void(ax::Image*)> callback(luaState, 3);
 
         float scale = 1.0f;
@@ -4900,9 +4898,8 @@ static int axlua_utils_captureNode(lua_State* luaState)
             scale = axlua::adapter::to_number(luaState, 4, 1.0);
         }
 
-        ax::utils::captureNode(node, [callback = std::move(callback)](RefPtr<Image> image) mutable {
-            callback(image.get());
-        }, scale);
+        ax::utils::captureNode(
+            node, [callback = std::move(callback)](RefPtr<Image> image) mutable { callback(image.get()); }, scale);
 
         return 0;
     }
@@ -4925,7 +4922,7 @@ static int axlua_utils_captureScreen(lua_State* luaState)
 #endif
     {
         axlua::Callback<void(bool, std::string_view)> callback(luaState, 2);
-        auto fileName        = axlua_tosv(luaState, 3);
+        auto fileName = axlua_tosv(luaState, 3);
         ax::utils::captureScreen([callback = std::move(callback)](bool succeed, std::string_view name) mutable {
             callback(succeed, name);
         }, fileName);

@@ -35,8 +35,7 @@
 using namespace ax;
 
 namespace
-{
-}  // namespace
+{}  // namespace
 
 LuaWebSocket::~LuaWebSocket() = default;
 
@@ -309,11 +308,20 @@ int axlua_WebSocket_unregisterScriptHandler00(lua_State* luaState)
         {
             switch (static_cast<int>(axlua::adapter::to_number(luaState, 2, 0)))
             {
-            case LuaWebSocket::kWebSocketScriptHandlerOpen: self->onOpenCallback.reset(); break;
-            case LuaWebSocket::kWebSocketScriptHandlerMessage: self->onMessageCallback.reset(); break;
-            case LuaWebSocket::kWebSocketScriptHandlerClose: self->onCloseCallback.reset(); break;
-            case LuaWebSocket::kWebSocketScriptHandlerError: self->onErrorCallback.reset(); break;
-            default: return luaL_error(luaState, "WebSocket handler type out of range");
+            case LuaWebSocket::kWebSocketScriptHandlerOpen:
+                self->onOpenCallback.reset();
+                break;
+            case LuaWebSocket::kWebSocketScriptHandlerMessage:
+                self->onMessageCallback.reset();
+                break;
+            case LuaWebSocket::kWebSocketScriptHandlerClose:
+                self->onCloseCallback.reset();
+                break;
+            case LuaWebSocket::kWebSocketScriptHandlerError:
+                self->onErrorCallback.reset();
+                break;
+            default:
+                return luaL_error(luaState, "WebSocket handler type out of range");
             }
         }
     }

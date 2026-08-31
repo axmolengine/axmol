@@ -413,7 +413,7 @@ bool luaval_to_vec3(lua_State* L, int lo, ax::Vec3* outValue, const char* funcNa
 
     // Callers converting array elements pass -1. Resolve it before pushing
     // field names, otherwise lua_gettable indexes the string instead of Vec3.
-    lo = lua_table_abs_index(L, lo);
+    lo      = lua_table_abs_index(L, lo);
     bool ok = true;
 
     axlua::adapter::Error conversionError;
@@ -1056,7 +1056,7 @@ bool luaval_to_size(lua_State* L, int lo, Size* outValue, const char* funcName)
     if (ok)
     {
         axlua::adapter::push_literal(L, "width"); /* L: paramStack key */
-        lua_gettable(L, lo);        /* L: paramStack paramStack[lo][key] */
+        lua_gettable(L, lo);                      /* L: paramStack paramStack[lo][key] */
         outValue->width = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1); /* L: paramStack*/
 
@@ -1345,7 +1345,7 @@ bool luaval_to_ttfconfig(lua_State* L, int lo, ax::TTFConfig* outValue, const ch
     if (ok)
     {
         axlua::adapter::push_literal(L, "fontFilePath"); /* L: paramStack key */
-        lua_gettable(L, lo);               /* L: paramStack paramStack[lo][key] */
+        lua_gettable(L, lo);                             /* L: paramStack paramStack[lo][key] */
         outValue->fontFilePath = lua_isstring(L, -1) ? lua_tostring(L, -1) : "";
         lua_pop(L, 1); /* L: paramStack*/
 
@@ -2159,7 +2159,7 @@ void physics_raycastinfo_to_luaval(lua_State* L, const RayCastHit2D& info)
     vec2_to_luaval(L, info.normal);
     lua_rawset(L, -3); /* table[key] = value, L: table */
 
-    axlua::adapter::push_literal(L, "fraction");                /* L: table key */
+    axlua::adapter::push_literal(L, "fraction");  /* L: table key */
     lua_pushnumber(L, (lua_Number)info.fraction); /* L: table key value*/
     lua_rawset(L, -3);                            /* table[key] = value, L: table */
 }
@@ -2174,13 +2174,13 @@ void size_to_luaval(lua_State* L, const Size& sz)
 {
     if (NULL == L)
         return;
-    lua_newtable(L);                          /* L: table */
-    axlua::adapter::push_literal(L, "width");               /* L: table key */
-    lua_pushnumber(L, (lua_Number)sz.width);  /* L: table key value*/
-    lua_rawset(L, -3);                        /* table[key] = value, L: table */
-    axlua::adapter::push_literal(L, "height");              /* L: table key */
-    lua_pushnumber(L, (lua_Number)sz.height); /* L: table key value*/
-    lua_rawset(L, -3);                        /* table[key] = value, L: table */
+    lua_newtable(L);                           /* L: table */
+    axlua::adapter::push_literal(L, "width");  /* L: table key */
+    lua_pushnumber(L, (lua_Number)sz.width);   /* L: table key value*/
+    lua_rawset(L, -3);                         /* table[key] = value, L: table */
+    axlua::adapter::push_literal(L, "height"); /* L: table key */
+    lua_pushnumber(L, (lua_Number)sz.height);  /* L: table key value*/
+    lua_rawset(L, -3);                         /* table[key] = value, L: table */
 }
 
 void rect_to_luaval(lua_State* L, const Rect& rt)
@@ -2188,16 +2188,16 @@ void rect_to_luaval(lua_State* L, const Rect& rt)
     if (NULL == L)
         return;
     lua_newtable(L);                               /* L: table */
-    axlua::adapter::push_literal(L, "x");                        /* L: table key */
+    axlua::adapter::push_literal(L, "x");          /* L: table key */
     lua_pushnumber(L, (lua_Number)rt.origin.x);    /* L: table key value*/
     lua_rawset(L, -3);                             /* table[key] = value, L: table */
-    axlua::adapter::push_literal(L, "y");                        /* L: table key */
+    axlua::adapter::push_literal(L, "y");          /* L: table key */
     lua_pushnumber(L, (lua_Number)rt.origin.y);    /* L: table key value*/
     lua_rawset(L, -3);                             /* table[key] = value, L: table */
-    axlua::adapter::push_literal(L, "width");                    /* L: table key */
+    axlua::adapter::push_literal(L, "width");      /* L: table key */
     lua_pushnumber(L, (lua_Number)rt.size.width);  /* L: table key value*/
     lua_rawset(L, -3);                             /* table[key] = value, L: table */
-    axlua::adapter::push_literal(L, "height");                   /* L: table key */
+    axlua::adapter::push_literal(L, "height");     /* L: table key */
     lua_pushnumber(L, (lua_Number)rt.size.height); /* L: table key value*/
     lua_rawset(L, -3);                             /* table[key] = value, L: table */
 }
@@ -2207,16 +2207,16 @@ void color32_to_luaval(lua_State* L, const Color32& color)
     if (NULL == L)
         return;
     lua_newtable(L);                        /* L: table */
-    axlua::adapter::push_literal(L, "r");                 /* L: table key */
+    axlua::adapter::push_literal(L, "r");   /* L: table key */
     lua_pushnumber(L, (lua_Number)color.r); /* L: table key value*/
     lua_rawset(L, -3);                      /* table[key] = value, L: table */
-    axlua::adapter::push_literal(L, "g");                 /* L: table key */
+    axlua::adapter::push_literal(L, "g");   /* L: table key */
     lua_pushnumber(L, (lua_Number)color.g); /* L: table key value*/
     lua_rawset(L, -3);                      /* table[key] = value, L: table */
-    axlua::adapter::push_literal(L, "b");                 /* L: table key */
+    axlua::adapter::push_literal(L, "b");   /* L: table key */
     lua_pushnumber(L, (lua_Number)color.b); /* L: table key value*/
     lua_rawset(L, -3);                      /* table[key] = value, L: table */
-    axlua::adapter::push_literal(L, "a");                 /* L: table key */
+    axlua::adapter::push_literal(L, "a");   /* L: table key */
     lua_pushnumber(L, (lua_Number)color.a); /* L: table key value*/
     lua_rawset(L, -3);                      /* table[key] = value, L: table */
 }
@@ -2226,16 +2226,16 @@ void color_to_luaval(lua_State* L, const ax::Color& color)
     if (NULL == L)
         return;
     lua_newtable(L);                        /* L: table */
-    axlua::adapter::push_literal(L, "r");                 /* L: table key */
+    axlua::adapter::push_literal(L, "r");   /* L: table key */
     lua_pushnumber(L, (lua_Number)color.r); /* L: table key value*/
     lua_rawset(L, -3);                      /* table[key] = value, L: table */
-    axlua::adapter::push_literal(L, "g");                 /* L: table key */
+    axlua::adapter::push_literal(L, "g");   /* L: table key */
     lua_pushnumber(L, (lua_Number)color.g); /* L: table key value*/
     lua_rawset(L, -3);                      /* table[key] = value, L: table */
-    axlua::adapter::push_literal(L, "b");                 /* L: table key */
+    axlua::adapter::push_literal(L, "b");   /* L: table key */
     lua_pushnumber(L, (lua_Number)color.b); /* L: table key value*/
     lua_rawset(L, -3);                      /* table[key] = value, L: table */
-    axlua::adapter::push_literal(L, "a");                 /* L: table key */
+    axlua::adapter::push_literal(L, "a");   /* L: table key */
     lua_pushnumber(L, (lua_Number)color.a); /* L: table key value*/
     lua_rawset(L, -3);                      /* table[key] = value, L: table */
 }
@@ -2516,10 +2516,10 @@ void blendfunc_to_luaval(lua_State* L, const ax::BlendFunc& func)
 
     lua_newtable(L); /* L: table */
 
-    axlua::adapter::push_literal(L, "src");                /* L: table key */
+    axlua::adapter::push_literal(L, "src");  /* L: table key */
     lua_pushnumber(L, (lua_Number)func.src); /* L: table key value*/
     lua_rawset(L, -3);                       /* table[key] = value, L: table */
-    axlua::adapter::push_literal(L, "dst");                /* L: table key */
+    axlua::adapter::push_literal(L, "dst");  /* L: table key */
     lua_pushnumber(L, (lua_Number)func.dst); /* L: table key value*/
     lua_rawset(L, -3);
 }
@@ -2600,16 +2600,16 @@ void quaternion_to_luaval(lua_State* L, const ax::Quat& inValue)
         return;
 
     lua_newtable(L);                          /* L: table */
-    axlua::adapter::push_literal(L, "x");                   /* L: table key */
+    axlua::adapter::push_literal(L, "x");     /* L: table key */
     lua_pushnumber(L, (lua_Number)inValue.x); /* L: table key value*/
     lua_rawset(L, -3);                        /* table[key] = value, L: table */
-    axlua::adapter::push_literal(L, "y");                   /* L: table key */
+    axlua::adapter::push_literal(L, "y");     /* L: table key */
     lua_pushnumber(L, (lua_Number)inValue.y); /* L: table key value*/
     lua_rawset(L, -3);
-    axlua::adapter::push_literal(L, "z");                   /* L: table key */
+    axlua::adapter::push_literal(L, "z");     /* L: table key */
     lua_pushnumber(L, (lua_Number)inValue.z); /* L: table key value*/
     lua_rawset(L, -3);
-    axlua::adapter::push_literal(L, "w");                   /* L: table key */
+    axlua::adapter::push_literal(L, "w");     /* L: table key */
     lua_pushnumber(L, (lua_Number)inValue.w); /* L: table key value*/
     lua_rawset(L, -3);
 }

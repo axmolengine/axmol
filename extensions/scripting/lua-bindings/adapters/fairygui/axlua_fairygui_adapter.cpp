@@ -294,7 +294,7 @@ static int lua_ax_fairygui_play(lua_State* L)
         }
 #    endif
         auto callback = axlua::Callback<void()>(L, 4);
-        bool ok              = true;
+        bool ok       = true;
         int times;
         ok &= luaval_to_int(L, 2, (int*)&times, "lua_ax_fairygui_play");
         if (!ok)
@@ -343,7 +343,7 @@ static int lua_ax_fairygui_UIObjectFactory_setPackageItemExtension(lua_State* lu
         }
 #    endif
         auto callback = axlua::Callback<void(fairygui::GComponent*)>(luaState, 3);
-        bool ok              = true;
+        bool ok       = true;
         std::string url;
         ok &= luaval_to_std_string(luaState, 2, &url, "lua_ax_fairygui_UIObjectFactory_setPackageItemExtension");
         if (!ok)
@@ -362,7 +362,8 @@ static int lua_ax_fairygui_UIObjectFactory_setPackageItemExtension(lua_State* lu
                 nullptr);
             return 0;
         }
-        fairygui::UIObjectFactory::setPackageItemExtension(url, [retType, callback = std::move(callback)]() mutable -> fairygui::GComponent* {
+        fairygui::UIObjectFactory::setPackageItemExtension(
+            url, [retType, callback = std::move(callback)]() mutable -> fairygui::GComponent* {
             fairygui::GComponent* ret = nullptr;
             if (retType == "GButton")
                 ret = fairygui::GButton::create();
@@ -422,8 +423,8 @@ static int lua_ax_fairygui_GList_setItemRenderer(lua_State* L)
             goto argumentError;
         }
 #    endif
-        auto callback = axlua::Callback<void(int, fairygui::GObject*)>(L, 2);
-        self->itemRenderer   = [callback = std::move(callback)](int index, fairygui::GObject* obj) mutable {
+        auto callback      = axlua::Callback<void(int, fairygui::GObject*)>(L, 2);
+        self->itemRenderer = [callback = std::move(callback)](int index, fairygui::GObject* obj) mutable {
             callback(index, obj);
         };
         return 0;
@@ -778,9 +779,8 @@ int lua_ax_fairygui_GTweener_onUpdate(lua_State* luaState)
         }
 #    endif
         auto callback = axlua::Callback<void(fairygui::GTweener*)>(luaState, 2);
-        auto&& ret           = obj->onUpdate([callback = std::move(callback)](fairygui::GTweener* sender) mutable {
-            callback(sender);
-        });
+        auto&& ret =
+            obj->onUpdate([callback = std::move(callback)](fairygui::GTweener* sender) mutable { callback(sender); });
         object_to_luaval<fairygui::GTweener>(luaState, "fgui.GTweener", (fairygui::GTweener*)ret);
         return 1;
     }
@@ -824,9 +824,8 @@ int lua_ax_fairygui_GTweener_onStart(lua_State* luaState)
         }
 #    endif
         auto callback = axlua::Callback<void(fairygui::GTweener*)>(luaState, 2);
-        auto&& ret           = obj->onStart([callback = std::move(callback)](fairygui::GTweener* sender) mutable {
-            callback(sender);
-        });
+        auto&& ret =
+            obj->onStart([callback = std::move(callback)](fairygui::GTweener* sender) mutable { callback(sender); });
         object_to_luaval<fairygui::GTweener>(luaState, "fgui.GTweener", (fairygui::GTweener*)ret);
         return 1;
     }
@@ -870,7 +869,7 @@ int lua_ax_fairygui_GTweener_onComplete(lua_State* luaState)
         }
 #    endif
         auto callback = axlua::Callback<void()>(luaState, 2);
-        auto&& ret           = obj->onComplete([callback = std::move(callback)]() mutable { callback(); });
+        auto&& ret    = obj->onComplete([callback = std::move(callback)]() mutable { callback(); });
         object_to_luaval<fairygui::GTweener>(luaState, "fgui.GTweener", (fairygui::GTweener*)ret);
         return 1;
     }
@@ -916,9 +915,8 @@ int lua_ax_fairygui_GTweener_onComplete1(lua_State* luaState)
         }
 #    endif
         auto callback = axlua::Callback<void(fairygui::GTweener*)>(luaState, 2);
-        auto&& ret           = obj->onComplete1([callback = std::move(callback)](fairygui::GTweener* sender) mutable {
-            callback(sender);
-        });
+        auto&& ret    = obj->onComplete1(
+            [callback = std::move(callback)](fairygui::GTweener* sender) mutable { callback(sender); });
         object_to_luaval<fairygui::GTweener>(luaState, "fgui.GTweener", (fairygui::GTweener*)ret);
         return 1;
     }

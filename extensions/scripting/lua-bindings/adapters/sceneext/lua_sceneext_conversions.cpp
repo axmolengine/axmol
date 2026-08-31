@@ -49,7 +49,7 @@ bool luaval_to_animationInfo(lua_State* L, int lo, ax::ext::timeline::AnimationI
     if (ok)
     {
         axlua::adapter::push_literal(L, "name"); /* L: paramStack key */
-        lua_gettable(L, lo);       /* L: paramStack paramStack[lo][key] */
+        lua_gettable(L, lo);                     /* L: paramStack paramStack[lo][key] */
         outValue->name = lua_isstring(L, -1) ? lua_tostring(L, -1) : "";
         lua_pop(L, 1); /* L: paramStack*/
 

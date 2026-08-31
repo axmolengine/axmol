@@ -120,7 +120,6 @@ public:
      */
     void removeScriptHandler(int nHandler) override;
 
-
     /**
      * Execute script code contained in the given string.
      *

@@ -113,7 +113,7 @@ struct NativeObjectRecord
 // registrations and shutdown bookkeeping must use the VM identity rather
 // than a transient coroutine pointer.  `install()` records the main thread
 // before any generated binding can create callbacks or userdata.
-constexpr char kAxluaMainThreadRegistryKey[] = "axlua.runtime.main_thread";
+constexpr char kAxluaMainThreadRegistryKey[]     = "axlua.runtime.main_thread";
 constexpr char kAxluaObjectLifetimeRegistryKey[] = "axlua.object.lifetimes";
 
 lua_State* vm_state(lua_State* state)
@@ -674,11 +674,11 @@ void register_object_pusher(lua_State* state,
 {
     if (state == nullptr || typeName.empty() || pusher == nullptr)
         return;
-    auto* vmState = vm_state(state);
+    auto* vmState                                                 = vm_state(state);
     runtime_state().objectPushers[vmState][std::string(typeName)] = pusher;
     auto& dynamicPushers                                          = runtime_state().dynamicObjectPushers[vmState];
-    dynamicPushers.byAddress[&nativeType]                       = pusher;
-    dynamicPushers.byName[nativeType.name()]                    = pusher;
+    dynamicPushers.byAddress[&nativeType]                         = pusher;
+    dynamicPushers.byName[nativeType.name()]                      = pusher;
     register_native_type_name(nativeType, typeName);
 }
 
@@ -797,7 +797,7 @@ std::shared_ptr<LuaCallbackState> LuaCallbackState::create(lua_State* state, int
     }
     auto callback = std::shared_ptr<LuaCallbackState>(new LuaCallbackState(vmState, registry));
     lua_pushvalue(state, index);
-    callback->_ref    = luaL_ref(state, LUA_REGISTRYINDEX);
+    callback->_ref = luaL_ref(state, LUA_REGISTRYINDEX);
     callback->_active.store(callback->_ref != LUA_NOREF && callback->_ref != LUA_REFNIL, std::memory_order_release);
     if (callback->_active.load(std::memory_order_acquire))
     {
@@ -943,7 +943,7 @@ void remember_object(lua_State* state, ax::Object* object)
 
     std::lock_guard lock(runtime->nativeObjectsMutex);
 
-    const auto key = vm_state(state);
+    const auto key         = vm_state(state);
     auto [found, inserted] = runtime->nativeObjects.try_emplace(object);
     if (inserted || found->second.object.expired())
     {
@@ -1252,7 +1252,8 @@ void shutdown(lua_State* state)
         runtime_state().dynamicObjectPushers.erase(vmState);
         {
             std::lock_guard lock(runtime_state().nativeObjectsMutex);
-            for (auto iterator = runtime_state().nativeObjects.begin(); iterator != runtime_state().nativeObjects.end();)
+            for (auto iterator = runtime_state().nativeObjects.begin();
+                 iterator != runtime_state().nativeObjects.end();)
             {
                 iterator->second.vmThreads.erase(vmState);
                 if (iterator->second.vmThreads.empty())

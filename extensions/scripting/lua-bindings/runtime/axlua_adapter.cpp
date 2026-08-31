@@ -864,7 +864,7 @@ int axlua::adapter::is_usertype(lua_State* state,
                                 axlua::adapter::Error* error)
 {
     const bool missing = hasDefault && lua_gettop(state) < std::abs(index);
-    const bool valid = is_registered_class(state, index, type) && !axlua::is_invalid_userdata(state, index) &&
+    const bool valid   = is_registered_class(state, index, type) && !axlua::is_invalid_userdata(state, index) &&
                        axlua::adapter::to_usertype(state, index, nullptr) != nullptr;
     if (missing || valid)
         return 1;

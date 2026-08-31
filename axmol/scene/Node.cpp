@@ -1416,7 +1416,6 @@ void Node::onEnter()
     this->resume();
 
     _running = true;
-
 }
 
 void Node::onEnterTransitionDidFinish()
@@ -1427,7 +1426,6 @@ void Node::onEnterTransitionDidFinish()
     _isTransitionFinished = true;
     for (const auto& child : _children)
         child->onEnterTransitionDidFinish();
-
 }
 
 void Node::onExitTransitionDidStart()
@@ -1437,7 +1435,6 @@ void Node::onExitTransitionDidStart()
 
     for (const auto& child : _children)
         child->onExitTransitionDidStart();
-
 }
 
 void Node::onExit()
@@ -1461,7 +1458,6 @@ void Node::onExit()
 
     for (const auto& child : _children)
         child->onExit();
-
 }
 
 void Node::setEventDispatcher(EventDispatcher* dispatcher)
