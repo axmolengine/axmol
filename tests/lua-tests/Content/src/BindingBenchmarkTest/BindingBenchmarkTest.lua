@@ -74,5 +74,8 @@ function BindingBenchmarkTest()
     end)
 
     setSpriteCount(spriteCount)
-    return layer
+    local scene = ax.Scene:create()
+    scene:addChild(layer)
+    scene:addChild(CreateBackMenuItem())
+    return scene
 end
