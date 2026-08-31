@@ -9,6 +9,7 @@ require "ActionsProgressTest/ActionsProgressTest"
 require "ActionsTest/ActionsTest"
 require "AssetsManagerTest/AssetsManagerTest"
 require "AssetsManagerExTest/AssetsManagerExTest"
+require "BindingBenchmarkTest/BindingBenchmarkTest"
 require "BillBoardTest/BillBoardTest"
 require "BugsTest/BugsTest"
 require "Camera3DTest/Camera3DTest"
@@ -78,6 +79,7 @@ local _allTests = {
     { isSupported = true,  name = "AssetsManagerTest"      , create_func   =         AssetsManagerTestMain      },
     { isSupported = true,  name = "AssetsManagerExTest"      , create_func   =         AssetsManagerExTestMain  },
     { isSupported = true, name = "AudioEngineTest", create_func = AudioEngineTest},
+    { isSupported = true,  name = "BindingBenchmarkTest"   ,  create_func=       BindingBenchmarkTest      },
     { isSupported = true,  name = "BillBoardTest"           , create_func=              BillBoardTestMain},
     { isSupported = true,  name = "BugsTest"               , create_func=              BugsTestMain      },
     { isSupported = true,  name = "Camera3DTest"     ,        create_func=       Camera3DTestMain  },
