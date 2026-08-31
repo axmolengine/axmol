@@ -1038,5 +1038,12 @@
       "luaName": "endToLua"
     }
   ],
-  "rename_classes": []
+  "rename_classes": [],
+  "fast_bindings": [
+    "Node::setPosition",
+    "Node::setScale",
+    "Node::setRotation",
+    "Node::setOpacity",
+    "Node::setVisible"
+  ]
 }

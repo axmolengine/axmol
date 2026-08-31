@@ -22,6 +22,7 @@ public sealed class GenerationRequest
     public IReadOnlyList<BindingFieldRule> FieldRules { get; init; } = Array.Empty<BindingFieldRule>();
     public IReadOnlyList<BindingRenameRule> RenameRules { get; init; } = Array.Empty<BindingRenameRule>();
     public IReadOnlyList<BindingClassRename> ClassRenames { get; init; } = Array.Empty<BindingClassRename>();
+    public IReadOnlyList<string> FastBindings { get; init; } = Array.Empty<string>();
     public string LuaNamespace { get; init; } = "ax";
     public string LuaTypeNamespace { get; init; } = "ax";
     public string? ConditionalExpression { get; init; }
@@ -97,6 +98,20 @@ public sealed class BindingField
     public required string NativeName { get; init; }
     public required string LuaName { get; init; }
     public required string FieldType { get; init; }
+}
+
+/// <summary>
+/// A resolved hot-path method emitted as a direct Lua C wrapper. The generic
+/// overload set is retained as the fallback for arguments the fast wrapper does
+/// not handle, so the Lua-facing API and its error behavior stay unchanged.
+/// </summary>
+public sealed class BindingFastMethod
+{
+    public required string ClassQualifiedName { get; init; }
+    public required string ClassLuaName { get; init; }
+    public required string LuaName { get; init; }
+    public required IReadOnlyList<BindingMethod> FastOverloads { get; init; }
+    public required IReadOnlyList<BindingMethod> AllOverloads { get; init; }
 }
 
 public sealed class BindingSkipRule

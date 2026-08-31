@@ -40,7 +40,7 @@ public static class BatchBindingGenerator
     {
         "module", "target_namespace", "cpp_namespace", "macro_judgement", "headers", "clang_flags",
         "cpp_chunks", "classes", "abstract_classes", "no_constructors", "classes_have_no_parents",
-        "base_classes_to_skip", "fields", "skip", "rename_functions", "rename_classes"
+        "base_classes_to_skip", "fields", "skip", "rename_functions", "rename_classes", "fast_bindings"
     };
 
     public static BatchGenerationResult Generate(BatchGenerationRequest request)
@@ -191,6 +191,7 @@ public static class BatchBindingGenerator
             FieldRules = ReadFieldRules(root),
             RenameRules = ReadRenameRules(root),
             ClassRenames = ReadClassRenames(root),
+            FastBindings = OptionalStrings(root, "fast_bindings"),
             ConditionalExpression = conditional,
             CppChunkCount = chunks
         };
@@ -403,6 +404,7 @@ public static class BatchBindingGenerator
         public required IReadOnlyList<BindingFieldRule> FieldRules { get; init; }
         public required IReadOnlyList<BindingRenameRule> RenameRules { get; init; }
         public required IReadOnlyList<BindingClassRename> ClassRenames { get; init; }
+        public required IReadOnlyList<string> FastBindings { get; init; }
         public string? ConditionalExpression { get; init; }
         public int CppChunkCount { get; init; }
 
@@ -426,6 +428,7 @@ public static class BatchBindingGenerator
                 FieldRules = FieldRules,
                 RenameRules = RenameRules,
                 ClassRenames = ClassRenames,
+                FastBindings = FastBindings,
                 LuaNamespace = LuaNamespace,
                 LuaTypeNamespace = LuaTypeNamespace,
                 ConditionalExpression = ConditionalExpression,

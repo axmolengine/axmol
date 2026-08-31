@@ -11,6 +11,71 @@
 
 namespace ax::lua::detail {
 
+static int fast_ax__Node_setOpacity(lua_State* L)
+{
+    if (lua_gettop(L) == 2)
+    {
+        auto* self = axlua::fast_object<ax::Node>(L, 1);
+        self->setOpacity(axlua::detail::fast_number<uint8_t>(L, 2));
+        return 0;
+    }
+    return axlua::dispatch_overload_callable(L, 2, 2);
+}
+
+static int fast_ax__Node_setPosition(lua_State* L)
+{
+    if (lua_gettop(L) == 3)
+    {
+        auto* self = axlua::fast_object<ax::Node>(L, 1);
+        self->setPosition(axlua::detail::fast_number<float>(L, 2), axlua::detail::fast_number<float>(L, 3));
+        return 0;
+    }
+    return axlua::dispatch_overload_callable(L, 2, 2);
+}
+
+static int fast_ax__Node_setRotation(lua_State* L)
+{
+    if (lua_gettop(L) == 2)
+    {
+        auto* self = axlua::fast_object<ax::Node>(L, 1);
+        self->setRotation(axlua::detail::fast_number<float>(L, 2));
+        return 0;
+    }
+    return axlua::dispatch_overload_callable(L, 2, 2);
+}
+
+static int fast_ax__Node_setScale(lua_State* L)
+{
+    switch (lua_gettop(L))
+    {
+    case 2:
+    {
+        auto* self = axlua::fast_object<ax::Node>(L, 1);
+        self->setScale(axlua::detail::fast_number<float>(L, 2));
+        return 0;
+    }
+    case 3:
+    {
+        auto* self = axlua::fast_object<ax::Node>(L, 1);
+        self->setScale(axlua::detail::fast_number<float>(L, 2), axlua::detail::fast_number<float>(L, 3));
+        return 0;
+    }
+    default:
+        return axlua::dispatch_overload_callable(L, 2, 2);
+    }
+}
+
+static int fast_ax__Node_setVisible(lua_State* L)
+{
+    if (lua_gettop(L) == 2)
+    {
+        auto* self = axlua::fast_object<ax::Node>(L, 1);
+        self->setVisible(axlua::detail::fast_boolean(L, 2));
+        return 0;
+    }
+    return axlua::dispatch_overload_callable(L, 2, 2);
+}
+
 void register_ax_base_types_3(lua_State* L)
 {
     auto module = axlua::Module::from(L, "ax", "ax");
@@ -422,10 +487,10 @@ void register_ax_base_members_3(lua_State* L)
     class_21_Node.method("setOnEnterTransitionDidFinishCallback", static_cast<void (ax::Node::*)(const std::function<void ()> &)>(&ax::Node::setOnEnterTransitionDidFinishCallback));
     class_21_Node.method("setOnExitCallback", static_cast<void (ax::Node::*)(const std::function<void ()> &)>(&ax::Node::setOnExitCallback));
     class_21_Node.method("setOnExitTransitionDidStartCallback", static_cast<void (ax::Node::*)(const std::function<void ()> &)>(&ax::Node::setOnExitTransitionDidStartCallback));
-    class_21_Node.method("setOpacity", static_cast<void (ax::Node::*)(uint8_t)>(&ax::Node::setOpacity));
+    class_21_Node.fast_method("setOpacity", &fast_ax__Node_setOpacity, axlua::overload(axlua::overload_candidate<uint8_t>(static_cast<void (ax::Node::*)(uint8_t)>(&ax::Node::setOpacity))));
     class_21_Node.method("setOpacityModifyRGB", static_cast<void (ax::Node::*)(bool)>(&ax::Node::setOpacityModifyRGB));
     class_21_Node.method("setParent", static_cast<void (ax::Node::*)(ax::Node *)>(&ax::Node::setParent));
-    class_21_Node.method("setPosition", axlua::overload(axlua::overload_candidate<const ax::Vec2 &>(static_cast<void (ax::Node::*)(const ax::Vec2 &)>(&ax::Node::setPosition)), axlua::overload_candidate<float, float>(static_cast<void (ax::Node::*)(float, float)>(&ax::Node::setPosition))));
+    class_21_Node.fast_method("setPosition", &fast_ax__Node_setPosition, axlua::overload(axlua::overload_candidate<const ax::Vec2 &>(static_cast<void (ax::Node::*)(const ax::Vec2 &)>(&ax::Node::setPosition)), axlua::overload_candidate<float, float>(static_cast<void (ax::Node::*)(float, float)>(&ax::Node::setPosition))));
     class_21_Node.method("setPosition3D", static_cast<void (ax::Node::*)(const ax::Vec3 &)>(&ax::Node::setPosition3D));
     class_21_Node.method("setPositionNormalized", static_cast<void (ax::Node::*)(const ax::Vec2 &)>(&ax::Node::setPositionNormalized));
     class_21_Node.method("setPositionX", static_cast<void (ax::Node::*)(float)>(&ax::Node::setPositionX));
@@ -434,12 +499,12 @@ void register_ax_base_members_3(lua_State* L)
     class_21_Node.method("setProgramState", axlua::overload(axlua::overload_candidate<uint32_t>(static_cast<void (ax::Node::*)(uint32_t)>(&ax::Node::setProgramState)), axlua::overload_candidate<rhi::ProgramState *, bool>(static_cast<bool (ax::Node::*)(rhi::ProgramState *, bool)>(&ax::Node::setProgramState)), axlua::overload_candidate<rhi::ProgramState *>([](ax::Node& self, rhi::ProgramState * arg0) -> bool { return static_cast<ax::Node&>(self).setProgramState(arg0, false); })));
     class_21_Node.method("setProgramStateByProgramId", static_cast<rhi::ProgramState * (ax::Node::*)(uint64_t)>(&ax::Node::setProgramStateByProgramId));
     class_21_Node.method("setProgramStateWithRegistry", static_cast<void (ax::Node::*)(uint32_t, ax::Texture2D *)>(&ax::Node::setProgramStateWithRegistry));
-    class_21_Node.method("setRotation", static_cast<void (ax::Node::*)(float)>(&ax::Node::setRotation));
+    class_21_Node.fast_method("setRotation", &fast_ax__Node_setRotation, axlua::overload(axlua::overload_candidate<float>(static_cast<void (ax::Node::*)(float)>(&ax::Node::setRotation))));
     class_21_Node.method("setRotation3D", static_cast<void (ax::Node::*)(const ax::Vec3 &)>(&ax::Node::setRotation3D));
     class_21_Node.method("setRotationQuat", static_cast<void (ax::Node::*)(const ax::Quat &)>(&ax::Node::setRotationQuat));
     class_21_Node.method("setRotationSkewX", static_cast<void (ax::Node::*)(float)>(&ax::Node::setRotationSkewX));
     class_21_Node.method("setRotationSkewY", static_cast<void (ax::Node::*)(float)>(&ax::Node::setRotationSkewY));
-    class_21_Node.method("setScale", axlua::overload(axlua::overload_candidate<float>(static_cast<void (ax::Node::*)(float)>(&ax::Node::setScale)), axlua::overload_candidate<float, float>(static_cast<void (ax::Node::*)(float, float)>(&ax::Node::setScale))));
+    class_21_Node.fast_method("setScale", &fast_ax__Node_setScale, axlua::overload(axlua::overload_candidate<float>(static_cast<void (ax::Node::*)(float)>(&ax::Node::setScale)), axlua::overload_candidate<float, float>(static_cast<void (ax::Node::*)(float, float)>(&ax::Node::setScale))));
     class_21_Node.method("setScaleX", static_cast<void (ax::Node::*)(float)>(&ax::Node::setScaleX));
     class_21_Node.method("setScaleY", static_cast<void (ax::Node::*)(float)>(&ax::Node::setScaleY));
     class_21_Node.method("setScaleZ", static_cast<void (ax::Node::*)(float)>(&ax::Node::setScaleZ));
@@ -448,7 +513,7 @@ void register_ax_base_members_3(lua_State* L)
     class_21_Node.method("setSkewY", static_cast<void (ax::Node::*)(float)>(&ax::Node::setSkewY));
     class_21_Node.method("setTag", static_cast<void (ax::Node::*)(int)>(&ax::Node::setTag));
     class_21_Node.method("setUserObject", static_cast<void (ax::Node::*)(ax::Object *)>(&ax::Node::setUserObject));
-    class_21_Node.method("setVisible", static_cast<void (ax::Node::*)(bool)>(&ax::Node::setVisible));
+    class_21_Node.fast_method("setVisible", &fast_ax__Node_setVisible, axlua::overload(axlua::overload_candidate<bool>(static_cast<void (ax::Node::*)(bool)>(&ax::Node::setVisible))));
     class_21_Node.method("setWorldPosition", static_cast<void (ax::Node::*)(const ax::Vec2 &)>(&ax::Node::setWorldPosition));
     class_21_Node.method("sortAllChildren", static_cast<void (ax::Node::*)()>(&ax::Node::sortAllChildren));
     class_21_Node.method("stopAction", static_cast<void (ax::Node::*)(ax::Action *)>(&ax::Node::stopAction));

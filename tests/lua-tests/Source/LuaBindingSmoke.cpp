@@ -25,6 +25,176 @@ bool checkLua(lua_State* state, const char* script)
     return false;
 }
 
+bool checkMethodDispatch(lua_State* state)
+{
+    return checkLua(state, R"lua(
+        local node = ax.Node:create()
+        local child = ax.Node.create()
+        local setPosition = node.setPosition
+        assert(select('#', setPosition(node, 12, 34)) == 0)
+        local x, y = node:getPosition()
+        assert(x == 12 and y == 34)
+        node:setPosition({x = 56, y = 78})
+        x, y = node:getPosition()
+        assert(x == 56 and y == 78)
+        assert(not pcall(setPosition, node))
+        assert(not pcall(setPosition, node, 1, 2, 3))
+        assert(not pcall(setPosition, node, false, {}))
+
+        -- Equal-arity candidates still need type matching, including object
+        -- arguments. Object returns must retain canonical userdata identity.
+        node:addChild(child, 0, 'dispatch-child')
+        assert(rawequal(node:getChildByName('dispatch-child'), child))
+        child:removeFromParent()
+        node:addChild(child, 0, 17)
+        assert(rawequal(node:getChildByTag(17), child))
+        assert(node:getReferenceCount() >= 1) -- inherited Object method
+
+        axlua.setpeer(node, {dispatchValue = 9})
+        assert(node.dispatchValue == 9)
+        axlua.setpeer(node, nil)
+        assert(node.dispatchValue == nil)
+        assert(node.setPosition == setPosition)
+
+        -- Peer fields, peer metatables, and later class edits must all remain
+        -- visible; method lookup must not cache stale inherited functions.
+        node.dispatchValue = false
+        assert(node.dispatchValue == false)
+        node.setPosition = function(self) self.dispatchValue = 1 end
+        node:setPosition()
+        assert(node.dispatchValue == 1)
+        node.setPosition = nil
+        setmetatable(axlua.getpeer(node), {
+            __index = {setPosition = function(self) self.dispatchValue = 2 end}
+        })
+        node:setPosition()
+        assert(node.dispatchValue == 2)
+        setmetatable(axlua.getpeer(node), nil)
+        assert(node.setPosition == setPosition)
+
+        local original = ax.Object.getReferenceCount
+        ax.Object.getReferenceCount = function() return 12345 end
+        local ok, result = pcall(function() return node:getReferenceCount() end)
+        ax.Object.getReferenceCount = original
+        assert(ok and result == 12345)
+        assert(node:getReferenceCount() ~= 12345)
+        assert(node.__missing_dispatch_member == nil)
+        local co = coroutine.create(function()
+            node:setPosition(90, 12)
+            local x, y = node:getPosition()
+            assert(x == 90 and y == 12)
+        end)
+        assert(coroutine.resume(co))
+        child:removeFromParent()
+    )lua");
+}
+
+bool checkExpiredLookup(lua_State* state)
+{
+    auto* object = new ax::Node();
+    axlua::push_object(state, object);
+    lua_setglobal(state, "__expired_lookup_node");
+    // Expire on a worker so the WeakPtr, rather than a Lua invalidation marker,
+    // must reject access through the lifetime table. Join before Lua.
+    std::thread([object] { object->release(); }).join();
+    const bool ok = checkLua(state, R"lua(
+        local node = __expired_lookup_node
+        assert(axlua.isnull(node))
+        assert(not pcall(function() return node.setPosition end))
+        assert(not pcall(function() node.value = 1 end))
+        axlua.setpeer(node, {})
+        assert(axlua.isnull(node))
+        assert(not pcall(function() return node.getReferenceCount end))
+        axlua.setpeer(node, nil)
+        assert(not pcall(function() return node.setPosition end))
+        __expired_lookup_node = nil
+    )lua");
+    return ok;
+}
+
+bool checkFastBindings(lua_State* state)
+{
+    bool ok = checkLua(state, R"lua(
+        local node = ax.Node:create()
+
+        -- Fast scalar setters preserve their public Lua API.
+        node:setPosition(10, 20)
+        assert(node:getPositionX() == 10 and node:getPositionY() == 20)
+        node:setPosition({x = 30, y = 40})
+        assert(node:getPositionX() == 30 and node:getPositionY() == 40)
+
+        node:setScale(2.5)
+        assert(node:getScaleX() == 2.5 and node:getScaleY() == 2.5)
+        node:setScale(1, 2)
+        assert(node:getScaleX() == 1 and node:getScaleY() == 2)
+
+        node:setRotation(45)
+        assert(node:getRotation() == 45)
+
+        node:setOpacity(128)
+        assert(node:getOpacity() == 128)
+
+        node:setVisible(false)
+        assert(node:isVisible() == false)
+        node:setVisible(true)
+        assert(node:isVisible() == true)
+
+        -- A cached method resolves to the fast wrapper directly.
+        local setPosition = ax.Node.setPosition
+        setPosition(node, 50, 60)
+        assert(node:getPositionX() == 50 and node:getPositionY() == 60)
+
+        -- Wrong argument count and type still raise Lua errors.
+        assert(not pcall(node.setPosition, node))
+        assert(not pcall(node.setPosition, node, 1))
+        assert(not pcall(node.setPosition, node, 1, 2, 3))
+        assert(not pcall(node.setPosition, node, false, {}))
+        assert(not pcall(node.setScale, node))
+        assert(not pcall(node.setScale, node, 1, 2, 3))
+
+        -- Fast and generic methods coexist on the same class.
+        assert(select('#', node:getPosition()) == 2)
+
+        -- Inherited fast method through a derived userdata.
+        local scene = ax.Scene:create()
+        scene:setPosition(7, 8)
+        assert(scene:getPositionX() == 7 and scene:getPositionY() == 8)
+    )lua");
+    if (!ok)
+        return false;
+
+    // A non-Node Axmol object must be rejected by the fast wrapper's type
+    // check rather than invoking Node code on an unrelated pointer.
+    auto* scheduler = new ax::Scheduler();
+    axlua::push_object(state, scheduler);
+    lua_setglobal(state, "__fast_non_node");
+    ok = checkLua(state, R"lua(
+        local setOpacity = ax.Node.setOpacity
+        assert(not pcall(setOpacity, __fast_non_node, 128))
+        assert(not pcall(setOpacity, {}, 128))
+        assert(not pcall(setOpacity, 42, 128))
+    )lua");
+    lua_pushnil(state);
+    lua_setglobal(state, "__fast_non_node");
+    scheduler->release();
+
+    // The fast wrapper must keep stale-userdata protection intact.
+    auto* expired = new ax::Node();
+    axlua::push_object(state, expired);
+    lua_setglobal(state, "__fast_expired");
+    std::thread([expired] { expired->release(); }).join();
+    ok = checkLua(state, R"lua(
+        assert(axlua.isnull(__fast_expired))
+        local setPosition = ax.Node.setPosition
+        assert(not pcall(setPosition, __fast_expired, 1, 2))
+        assert(not pcall(setPosition, __fast_expired, {x = 1, y = 2}))
+    )lua") &&
+         ok;
+    lua_pushnil(state);
+    lua_setglobal(state, "__fast_expired");
+    return ok;
+}
+
 // Force address reuse while still destroying through Object::release(), as
 // required by WeakPtr. Worker destruction is joined before any object access:
 // Axmol's native reference counting is intentionally not thread-safe.
@@ -262,6 +432,10 @@ int runLuaBindingSmoke(lua_State* state)
 {
     if (state == nullptr)
         return 1;
+
+    if (!checkMethodDispatch(state) || !checkExpiredLookup(state) || !checkFastBindings(state))
+        return 1;
+    fprintf(stderr, "lua-binding-smoke: dispatch, expired lookup, and fast bindings passed\n");
 
     if (!checkObjectLifetimes(state) || !checkCallbackLifetimes(state) || !checkScheduler(state))
     {

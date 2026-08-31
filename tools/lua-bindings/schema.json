@@ -45,7 +45,12 @@
       }
     },
     "rename_functions": { "$ref": "#/$defs/renameList" },
-    "rename_classes": { "$ref": "#/$defs/classRenameList" }
+    "rename_classes": { "$ref": "#/$defs/classRenameList" },
+    "fast_bindings": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Hot-path 'Class::method' entries emitted as direct Lua C wrappers."
+    }
   },
   "$defs": {
     "stringList": {

@@ -264,6 +264,75 @@ inline int absolute_index(lua_State* state, int index)
     return index > 0 || index <= LUA_REGISTRYINDEX ? index : lua_gettop(state) + index + 1;
 }
 
+// Direct extraction from the canonical Axmol userdata for generated fast
+// bindings.  This is the same native pointer convention the rest of the
+// runtime relies on (first machine word), never a raw lightuserdata exposed
+// to Lua.  It preserves stale-object detection and validates the expected
+// native type without going through sol2's generic conversion machinery.
+template <class T>
+T* fast_object(lua_State* state, int index)
+{
+    if (lua_type(state, index) != LUA_TUSERDATA)
+    {
+        luaL_typeerror(state, index, "userdata");
+        return nullptr;
+    }
+    if (is_invalid_userdata(state, index))
+    {
+        luaL_error(state, "attempt to access an expired Axmol object");
+        return nullptr;
+    }
+
+    void** storage = static_cast<void**>(lua_touserdata(state, index));
+    if (storage == nullptr || *storage == nullptr)
+    {
+        luaL_error(state, "attempt to access an expired Axmol object");
+        return nullptr;
+    }
+
+    using NativeT = std::remove_cv_t<T>;
+    if constexpr (std::is_base_of_v<ax::Object, NativeT>)
+    {
+        auto* typed = dynamic_cast<NativeT*>(static_cast<ax::Object*>(*storage));
+        if (typed == nullptr)
+        {
+            luaL_error(state, "argument #%d is not an Axmol object of the expected type", index);
+            return nullptr;
+        }
+        return typed;
+    }
+
+    return static_cast<NativeT*>(*storage);
+}
+
+namespace detail
+{
+// Scalar extraction for generated fast bindings. These mirror sol2's checked
+// conversion semantics (with number precision checks disabled): numeric
+// parameters must be Lua numbers and integral parameters truncate rather than
+// rejecting fractional values.
+template <class T>
+inline T fast_number(lua_State* state, int index)
+{
+    if (lua_type(state, index) != LUA_TNUMBER)
+    {
+        luaL_typeerror(state, index, "number");
+        return T{};
+    }
+    return static_cast<T>(lua_tonumber(state, index));
+}
+
+inline bool fast_boolean(lua_State* state, int index)
+{
+    if (lua_type(state, index) != LUA_TBOOLEAN)
+    {
+        luaL_typeerror(state, index, "boolean");
+        return false;
+    }
+    return lua_toboolean(state, index) != 0;
+}
+}  // namespace detail
+
 inline void make_weak_value_table(lua_State* state, int tableIndex)
 {
     tableIndex = absolute_index(state, tableIndex);
@@ -365,6 +434,7 @@ int method_dispatch(lua_State* state);
 int static_method_dispatch(lua_State* state);
 int overload_method_dispatch(lua_State* state);
 int overload_static_method_dispatch(lua_State* state);
+int dispatch_overload_callable(lua_State* state, int argumentStart, int contextUpvalue);
 void install_class_static_index(lua_State* state, int classTableIndex);
 
 // sol::overload resolves candidates through its own usertype graph.  Axmol
@@ -396,13 +466,16 @@ auto overload(Candidates&&... candidates)
         std::tuple<std::decay_t<Candidates>...>(std::forward<Candidates>(candidates)...)};
 }
 
-template <class... Arguments>
-int overload_signature_matches(lua_State* state)
+struct OverloadSignature
 {
-    const auto count   = static_cast<int>(sizeof...(Arguments));
-    const bool matches = lua_gettop(state) == count && sol::stack::multi_check<Arguments...>(state, 1, &sol::no_panic);
-    lua_pushboolean(state, matches ? 1 : 0);
-    return 1;
+    int argumentCount;
+    bool (*matches)(lua_State* state, int argumentStart);
+};
+
+template <class... Arguments>
+bool overload_signature_matches(lua_State* state, int argumentStart)
+{
+    return sol::stack::multi_check<Arguments...>(state, argumentStart, &sol::no_panic);
 }
 
 template <class Function, class... Arguments>
@@ -416,7 +489,10 @@ void append_overload_candidate(lua_State* state,
     const int candidateTable = absolute_index(state, -1);
     sol::stack::push(state, candidate.function);
     lua_rawseti(state, candidateTable, 1);
-    lua_pushcfunction(state, &overload_signature_matches<Arguments...>);
+    // Match on the caller's stack without copying arguments into a separate
+    // Lua call frame for every candidate (including candidates of wrong arity).
+    new (lua_newuserdata(state, sizeof(OverloadSignature)))
+        OverloadSignature{static_cast<int>(sizeof...(Arguments)), &overload_signature_matches<Arguments...>};
     lua_rawseti(state, candidateTable, 2);
     lua_rawseti(state, candidatesIndex, candidateIndex);
 }
@@ -467,10 +543,13 @@ public:
         const auto qualifiedMethod = _namespace + "." + _name + ":" + methodName;
         _table.push();
         const int classTable = absolute_index(state, -1);
+        lua_pushlstring(state, methodName.data(), methodName.size());
         sol::stack::push(state, callable);
         lua_pushlstring(state, qualifiedMethod.data(), qualifiedMethod.size());
         lua_pushcclosure(state, &method_dispatch, 2);
-        lua_setfield(state, classTable, methodName.c_str());
+        // Axmol owns method lookup. Keep methods directly on the public table
+        // instead of routing every lookup through sol2's usertype storage.
+        lua_rawset(state, classTable);
         lua_pop(state, 1);
         return *this;
     }
@@ -495,11 +574,12 @@ public:
         const auto qualifiedMethod = _namespace + "." + _name + ":" + className;
         _table.push();
         const int classTable = absolute_index(state, -1);
+        lua_pushlstring(state, className.data(), className.size());
         sol::stack::push(state, callable);
         lua_pushvalue(state, classTable);
         lua_pushlstring(state, qualifiedMethod.data(), qualifiedMethod.size());
         lua_pushcclosure(state, &static_method_dispatch, 3);
-        lua_setfield(state, classTable, className.c_str());
+        lua_rawset(state, classTable);
         lua_pop(state, 1);
         return *this;
     }
@@ -508,6 +588,32 @@ public:
     Class& static_method(std::string_view name, OverloadSet<Candidates...> overloads)
     {
         return set_overload(name, std::move(overloads), true);
+    }
+
+    // Registers a generated fast wrapper for a hot path.  The wrapper is
+    // stored as a Lua C closure whose first two upvalues are the generic
+    // overload candidates table and the qualified method name; unsupported
+    // argument shapes fall back through dispatch_overload_callable.
+    template <class... Candidates>
+    Class& fast_method(std::string_view name, lua_CFunction fast, OverloadSet<Candidates...> fallback)
+    {
+        auto* state                = _module.lua_state();
+        const auto methodName      = std::string(name);
+        const auto qualifiedMethod = _namespace + "." + _name + ":" + methodName;
+        _table.push();
+        const int classTable = absolute_index(state, -1);
+        lua_pushlstring(state, methodName.data(), methodName.size());
+        lua_newtable(state);
+        const int candidatesTable = absolute_index(state, -1);
+        int candidateIndex        = 1;
+        std::apply([&](const auto&... candidate) {
+            (append_overload_candidate(state, candidatesTable, candidateIndex++, candidate), ...);
+        }, fallback.candidates);
+        lua_pushlstring(state, qualifiedMethod.data(), qualifiedMethod.size());
+        lua_pushcclosure(state, fast, 2);
+        lua_rawset(state, classTable);
+        lua_pop(state, 1);
+        return *this;
     }
 
     template <class... Constructors>
@@ -564,6 +670,7 @@ private:
         const auto qualifiedMethod = _namespace + "." + _name + ":" + methodName;
         _table.push();
         const int classTable = absolute_index(state, -1);
+        lua_pushlstring(state, methodName.data(), methodName.size());
         lua_newtable(state);
         const int candidatesTable = absolute_index(state, -1);
         int candidateIndex        = 1;
@@ -575,7 +682,7 @@ private:
         lua_pushlstring(state, qualifiedMethod.data(), qualifiedMethod.size());
         lua_pushcclosure(state, isStatic ? &overload_static_method_dispatch : &overload_method_dispatch,
                          isStatic ? 3 : 2);
-        lua_setfield(state, classTable, methodName.c_str());
+        lua_rawset(state, classTable);
         lua_pop(state, 1);
         return *this;
     }

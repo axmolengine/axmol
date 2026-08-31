@@ -1027,20 +1027,11 @@ int class_index(lua_State* state)
         return luaL_error(state, "attempt to access an expired Axmol object");
 
     push_user_environment(state, 1);
-    lua_pushvalue(state, 2);
-    lua_rawget(state, -2);
-    if (!lua_isnil(state, -1))
-    {
-        lua_remove(state, -2);
-        return 1;
-    }
-    lua_pop(state, 1);
-
     // Legacy Lua classes attach their methods to the peer table's metatable
     // (`__index = cls`).  Sol2 userdata reaches this dispatcher first, so a
     // raw lookup alone would hide ctor and every other Lua-side class method.
-    // Preserve raw peer fields as the first priority, then honor that
-    // metatable lookup before consulting the native generated class table.
+    // lua_gettable already checks raw peer fields before the metatable; avoid
+    // a redundant raw lookup on every native method access.
     lua_pushvalue(state, 2);
     lua_gettable(state, -2);
     if (!lua_isnil(state, -1))
@@ -1155,15 +1146,9 @@ int dispatch_overload_callable(lua_State* state, int argumentStart, int contextU
 
         const int candidateTable = absolute_index(state, -1);
         lua_rawgeti(state, candidateTable, 2);
-        for (int argument = argumentStart; argument <= callArgumentCount; ++argument)
-            lua_pushvalue(state, argument);
-        if (lua_pcall(state, signatureArgumentCount, 1, 0) != LUA_OK)
-        {
-            const char* message = lua_tostring(state, -1);
-            return luaL_error(state, "generated Lua overload matcher failed: %s",
-                              message != nullptr ? message : "unknown error");
-        }
-        const bool matches = lua_toboolean(state, -1) != 0;
+        const auto* signature = static_cast<const OverloadSignature*>(lua_touserdata(state, -1));
+        const bool matches = signature->argumentCount == signatureArgumentCount &&
+                             signature->matches(state, argumentStart);
         lua_pop(state, 2);
         if (matches)
         {

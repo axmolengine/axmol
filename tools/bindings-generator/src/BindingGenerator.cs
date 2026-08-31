@@ -336,6 +336,8 @@ public static unsafe class BindingGenerator
             });
         }
 
+        var fastMethods = ResolveFastMethods(request, uniqueClasses, diagnostics);
+
         // Keep generation transactional at the module level.  A translation
         // unit may still yield partial cursors after a Clang error, but those
         // cursors must never replace a previously valid generated module.
@@ -358,7 +360,7 @@ public static unsafe class BindingGenerator
         {
             outputFiles.Add((Path.Combine(request.OutputDirectory, $"axlua_{request.Module}_gen.h"),
                              CppEmitter.EmitHeader(request)));
-            outputFiles.AddRange(CppEmitter.EmitSources(request, uniqueClasses, uniqueEnums)
+            outputFiles.AddRange(CppEmitter.EmitSources(request, uniqueClasses, uniqueEnums, fastMethods)
                 .Select(source => (Path.Combine(request.OutputDirectory, source.FileName), source.Contents)));
         }
         if (request.EmitManifest)
@@ -401,6 +403,126 @@ public static unsafe class BindingGenerator
             if (!retained.Contains(Path.GetFullPath(path)))
                 File.Delete(path);
         }
+    }
+
+    private static IReadOnlyList<BindingFastMethod> ResolveFastMethods(
+        GenerationRequest request,
+        IReadOnlyList<BindingClass> classes,
+        ICollection<GenerationDiagnostic> diagnostics)
+    {
+        var result = new List<BindingFastMethod>();
+        foreach (var entry in request.FastBindings)
+        {
+            if (string.IsNullOrWhiteSpace(entry))
+                continue;
+
+            var separator = entry.IndexOf("::", StringComparison.Ordinal);
+            if (separator <= 0 || separator + 2 >= entry.Length)
+            {
+                diagnostics.Add(new GenerationDiagnostic
+                {
+                    Severity = "error",
+                    Code = "AXLUA012",
+                    Message = $"fast_bindings entry '{entry}' must use the 'Class::method' form."
+                });
+                continue;
+            }
+
+            var className = entry[..separator];
+            var methodName = entry[(separator + 2)..];
+
+            var bindingClass = classes.FirstOrDefault(x =>
+                string.Equals(x.NativeName, className, StringComparison.Ordinal) ||
+                string.Equals(x.LuaClassName, className, StringComparison.Ordinal));
+            if (bindingClass is null)
+            {
+                diagnostics.Add(new GenerationDiagnostic
+                {
+                    Severity = "error",
+                    Code = "AXLUA013",
+                    Message = $"fast_bindings class '{className}' did not match a selected class."
+                });
+                continue;
+            }
+
+            var overloads = bindingClass.Methods
+                .Where(x => string.Equals(x.NativeName, methodName, StringComparison.Ordinal))
+                .ToArray();
+            if (overloads.Length == 0)
+            {
+                diagnostics.Add(new GenerationDiagnostic
+                {
+                    Severity = "error",
+                    Code = "AXLUA014",
+                    Message = $"fast_bindings method '{entry}' did not match a selected method on '{bindingClass.QualifiedName}'."
+                });
+                continue;
+            }
+
+            var fastOverloads = overloads.Where(IsFastSupported).ToArray();
+            if (fastOverloads.Length == 0)
+            {
+                diagnostics.Add(new GenerationDiagnostic
+                {
+                    Severity = "warning",
+                    Code = "AXLUA015",
+                    Message = $"fast_bindings '{entry}' has no fast-supported signature; keeping the generic binding."
+                });
+                continue;
+            }
+
+            // The fast wrapper dispatches on argument count only. Equal-arity
+            // overloads would need full type matching, which belongs to the
+            // generic overload resolver rather than a duplicated fast copy.
+            var ambiguousArity = fastOverloads
+                .GroupBy(x => x.ParameterTypes.Count)
+                .Any(x => x.Count() > 1);
+            if (ambiguousArity)
+            {
+                diagnostics.Add(new GenerationDiagnostic
+                {
+                    Severity = "warning",
+                    Code = "AXLUA016",
+                    Message = $"fast_bindings '{entry}' has ambiguous equal-arity overloads; keeping the generic binding."
+                });
+                continue;
+            }
+
+            result.Add(new BindingFastMethod
+            {
+                ClassQualifiedName = bindingClass.QualifiedName,
+                ClassLuaName = bindingClass.LuaClassName,
+                LuaName = overloads[0].LuaName,
+                FastOverloads = fastOverloads,
+                AllOverloads = overloads
+            });
+        }
+
+        return result;
+    }
+
+    private static bool IsFastSupported(BindingMethod method)
+    {
+        if (method.IsStatic || method.IsVariadic || method.DefaultValues.Any(value => value is not null))
+            return false;
+        return IsFastScalarType(method.ReturnType) &&
+               method.ParameterTypes.All(IsFastScalarType);
+    }
+
+    private static bool IsFastScalarType(string type)
+    {
+        var trimmed = type.Trim();
+        return trimmed switch
+        {
+            "void" or "bool" or "float" or "double" or
+            "int" or "unsigned int" or "short" or "unsigned short" or
+            "long" or "unsigned long" or "long long" or "unsigned long long" or
+            "char" or "signed char" or "unsigned char" or
+            "int8_t" or "uint8_t" or "int16_t" or "uint16_t" or
+            "int32_t" or "uint32_t" or "int64_t" or "uint64_t" or
+            "size_t" or "ssize_t" or "ptrdiff_t" => true,
+            _ => false
+        };
     }
 
     private static void CommitGeneratedFiles(

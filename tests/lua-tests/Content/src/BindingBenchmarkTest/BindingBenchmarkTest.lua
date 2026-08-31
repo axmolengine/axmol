@@ -27,6 +27,12 @@ function BindingBenchmarkTest()
         while #sprites < count do
             createSprite(#sprites + 1)
         end
+        -- Keep the rendered count equal to the displayed count when reducing
+        -- or resetting the benchmark, independent of its previous peak.
+        while #sprites > count do
+            sprites[#sprites]:removeFromParent()
+            sprites[#sprites] = nil
+        end
     end
 
     local function setSpriteCount(count)
