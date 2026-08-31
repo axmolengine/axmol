@@ -315,7 +315,33 @@ function Find-LlvmInclude([string]$Ndk) {
     return @{ Root = $prebuilt.FullName; Builtin = $stdarg.DirectoryName }
 }
 
+function Ensure-AxmolConfiguration {
+    $versionHeader = Join-Path $axmolRoot 'axmol/axmolver.h'
+    if (Test-Path $versionHeader -PathType Leaf) { return }
+
+    $axmolScript = Join-Path $axmolRoot 'tools/cmdline/axmol.ps1'
+    if (-not (Test-Path $axmolScript -PathType Leaf)) {
+        throw "Axmol command script was not found: $axmolScript"
+    }
+
+    Write-Host 'Axmol Lua binding generator: configuring Axmol to generate axmolver.h'
+    Push-Location $axmolRoot
+    try {
+        & pwsh -NoProfile -File $axmolScript -c
+        if ($LASTEXITCODE -ne 0) {
+            throw "Axmol CMake configuration failed with exit code $LASTEXITCODE."
+        }
+    }
+    finally {
+        Pop-Location
+    }
+    if (-not (Test-Path $versionHeader -PathType Leaf)) {
+        throw "Axmol configuration completed but did not generate $versionHeader."
+    }
+}
+
     $ndk = Ensure-Ndk
+    Ensure-AxmolConfiguration
     $llvm = Find-LlvmInclude $ndk
     $includeRoots = @(
         $axmolRoot,

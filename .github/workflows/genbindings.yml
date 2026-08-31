@@ -30,9 +30,6 @@ jobs:
     steps:
     - uses: actions/checkout@v6
 
-    - name: Configure Axmol
-      run: cmake -S . -B build -DAX_BUILD_TESTS=OFF
-
     - name: Regenerate bindings
       run: tools\cmdline\plugins\genbindings.ps1
 
@@ -53,9 +50,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v6
-
-    - name: Configure Axmol
-      run: cmake -S . -B build -DAX_BUILD_TESTS=OFF
 
     - name: Genbindings
       run: tools\cmdline\plugins\genbindings.ps1
