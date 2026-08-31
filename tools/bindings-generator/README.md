@@ -30,10 +30,27 @@ callable adaptation, not as the owner of Axmol userdata identity.
 
 Every `ax::Object` has a process-local `uint64_t` diagnostic ID exposed through
 `getObjectID()`.  The ID is not exported to Lua and is never used as a registry
-key.  The Lua registry uses native pointers together with
-`ax::WeakPtr<ax::Object>` as its invalidation oracle, so a Lua userdata cannot
-resurrect or call through a destroyed object.  `WeakPtr` remains in the runtime
-layer; the core ScriptEngine interface remains Lua-agnostic.
+key. Native pointers index the identity cache, while each persistent userdata
+has its own `ax::WeakPtr<ax::Object>` in a weak-key side table. The WeakPtr's
+slot generation prevents address reuse from reviving an old userdata, even
+after the address-indexed exposure record is replaced or removed. Generated
+and adapter access share this lifetime check. Borrowed callback Events instead
+expire at the end of their callback scope. `WeakPtr` remains in the runtime
+layer; the core ScriptEngine interface remains Lua-agnostic. Native Object
+reference counting and WeakPtr access still require external synchronization
+when ownership is handed between threads.
+
+Callbacks share a registry for each VM lifetime. Worker destruction only marks
+references for release; the VM owner drains them before updates, at LuaStack
+cleanup, or before a callback. Shutdown closes this registry under the same
+lock, so late releases cannot touch a closed or reused Lua state. Callback
+bookkeeping is removed on release rather than accumulated as weak entries.
+
+Lua Scheduler callbacks use owning functions directly. The public native
+integer-handler overload remains supported through the schedule-event bridge.
+The headless `lua-binding-smoke` test covers both paths, object identity/address
+reuse, worker callback release, borrowed Events, VM reopening, and the primary
+LuaStack destructor with a `lua_close` finalizer sentinel.
 
 The runtime keeps sol2's usertype metatables intact. Class inheritance is
 stored in a separate Axmol registry, which preserves sol2 constructors and

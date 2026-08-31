@@ -193,7 +193,7 @@ static int axlua_ComponentLua_getScriptObject(lua_State* luaState)
 
 static void extendComponentLua(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.ComponentLua");
+    axlua::adapter::push_literal(luaState, "ax.ComponentLua");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
         axlua::adapter::set_function(luaState, "getScriptObject", axlua_ComponentLua_getScriptObject);
@@ -667,11 +667,11 @@ static int axlua_Scheduler_scheduleScriptFunc(lua_State* luaState)
             goto argumentError;
         }
 #endif
-        LUA_FUNCTION handler     = axlua::adapter::ref_function(luaState, 2, 0);
+        axlua::Callback<void(float)> callback(luaState, 2);
         float interval           = (float)axlua::adapter::to_number(luaState, 3, 0);
         bool paused              = (bool)axlua::adapter::to_boolean(luaState, 4, 0);
-        unsigned int returnValue = (unsigned int)self->scheduleScriptFunc(handler, interval, paused);
-        axlua::adapter::push_number(luaState, (lua_Number)returnValue);
+        unsigned int returnValue = (unsigned int)self->scheduleScriptFunc(callback.function(), interval, paused);
+        lua_pushnumber(luaState, (lua_Number)returnValue);
         return 1;
     }
 
@@ -2204,7 +2204,7 @@ static int toaxlua_FileUtils_getStringFromFile(lua_State* luaState)
             LuaStringBufferAdapter adapter(luaState);
             FileUtils::getInstance()->getContents(arg0, &adapter);
             if (!adapter.is_filled()) [[unlikely]]
-                lua_pushliteral(luaState, "");
+                axlua::adapter::push_literal(luaState, "");
 #else
             std::string content = FileUtils::getInstance()->getStringFromFile(arg0);
 
@@ -2572,7 +2572,7 @@ argumentError:
 
 static void extendScene(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.Scene");
+    axlua::adapter::push_literal(luaState, "ax.Scene");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
@@ -2590,11 +2590,11 @@ static void extendScene(lua_State* luaState)
 
 static void extendTexture2D(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.Texture2D");
+    axlua::adapter::push_literal(luaState, "ax.Texture2D");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
-        lua_pushstring(luaState, "setTexParameters");
+        axlua::adapter::push_literal(luaState, "setTexParameters");
         lua_pushcfunction(luaState, toaxlua_Texture2D_setTexParameters);
         lua_rawset(luaState, -3);
     }
@@ -2603,14 +2603,14 @@ static void extendTexture2D(lua_State* luaState)
 
 static void extendMenuItem(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.MenuItem");
+    axlua::adapter::push_literal(luaState, "ax.MenuItem");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
-        lua_pushstring(luaState, "registerScriptTapHandler");
+        axlua::adapter::push_literal(luaState, "registerScriptTapHandler");
         lua_pushcfunction(luaState, axlua_MenuItem_registerScriptTapHandler);
         lua_rawset(luaState, -3);
-        lua_pushstring(luaState, "unregisterScriptTapHandler");
+        axlua::adapter::push_literal(luaState, "unregisterScriptTapHandler");
         lua_pushcfunction(luaState, axlua_MenuItem_unregisterScriptTapHandler);
         lua_rawset(luaState, -3);
     }
@@ -2619,11 +2619,11 @@ static void extendMenuItem(lua_State* luaState)
 
 static void extendMenuItemImage(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.MenuItemImage");
+    axlua::adapter::push_literal(luaState, "ax.MenuItemImage");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
-        lua_pushstring(luaState, "create");
+        axlua::adapter::push_literal(luaState, "create");
         lua_pushcfunction(luaState, axlua_MenuItemImage_create);
         lua_rawset(luaState, -3);
     }
@@ -2632,11 +2632,11 @@ static void extendMenuItemImage(lua_State* luaState)
 
 static void extendMenuItemLabel(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.MenuItemLabel");
+    axlua::adapter::push_literal(luaState, "ax.MenuItemLabel");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
-        lua_pushstring(luaState, "create");
+        axlua::adapter::push_literal(luaState, "create");
         lua_pushcfunction(luaState, axlua_MenuItemLabel_create);
         lua_rawset(luaState, -3);
     }
@@ -2645,11 +2645,11 @@ static void extendMenuItemLabel(lua_State* luaState)
 
 static void extendMenuItemFont(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.MenuItemFont");
+    axlua::adapter::push_literal(luaState, "ax.MenuItemFont");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
-        lua_pushstring(luaState, "create");
+        axlua::adapter::push_literal(luaState, "create");
         lua_pushcfunction(luaState, axlua_MenuItemFont_create);
         lua_rawset(luaState, -3);
     }
@@ -2658,11 +2658,11 @@ static void extendMenuItemFont(lua_State* luaState)
 
 static void extendMenuItemSprite(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.MenuItemSprite");
+    axlua::adapter::push_literal(luaState, "ax.MenuItemSprite");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
-        lua_pushstring(luaState, "create");
+        axlua::adapter::push_literal(luaState, "create");
         lua_pushcfunction(luaState, axlua_MenuItemSprite_create);
         lua_rawset(luaState, -3);
     }
@@ -2671,11 +2671,11 @@ static void extendMenuItemSprite(lua_State* luaState)
 
 static void extendMenuItemToggle(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.MenuItemToggle");
+    axlua::adapter::push_literal(luaState, "ax.MenuItemToggle");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
-        lua_pushstring(luaState, "create");
+        axlua::adapter::push_literal(luaState, "create");
         lua_pushcfunction(luaState, axlua_MenuItemToggle_create);
         lua_rawset(luaState, -3);
     }
@@ -2684,17 +2684,17 @@ static void extendMenuItemToggle(lua_State* luaState)
 
 static void extendMenu(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.Menu");
+    axlua::adapter::push_literal(luaState, "ax.Menu");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
-        lua_pushstring(luaState, "create");
+        axlua::adapter::push_literal(luaState, "create");
         lua_pushcfunction(luaState, axlua_Menu_create);
         lua_rawset(luaState, -3);
-        lua_pushstring(luaState, "alignItemsInRows");
+        axlua::adapter::push_literal(luaState, "alignItemsInRows");
         lua_pushcfunction(luaState, toaxlua_Menu_alignItemsInRows);
         lua_rawset(luaState, -3);
-        lua_pushstring(luaState, "alignItemsInColumns");
+        axlua::adapter::push_literal(luaState, "alignItemsInColumns");
         lua_pushcfunction(luaState, toaxlua_Menu_alignItemsInColumns);
         lua_rawset(luaState, -3);
     }
@@ -2703,7 +2703,7 @@ static void extendMenu(lua_State* luaState)
 
 static void extendNode(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.Node");
+    axlua::adapter::push_literal(luaState, "ax.Node");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
@@ -2717,14 +2717,14 @@ static void extendNode(lua_State* luaState)
 
 static void extendScheduler(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.Scheduler");
+    axlua::adapter::push_literal(luaState, "ax.Scheduler");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
-        lua_pushstring(luaState, "scheduleScriptFunc");
+        axlua::adapter::push_literal(luaState, "scheduleScriptFunc");
         lua_pushcfunction(luaState, axlua_Scheduler_scheduleScriptFunc);
         lua_rawset(luaState, -3);
-        lua_pushstring(luaState, "unscheduleScriptEntry");
+        axlua::adapter::push_literal(luaState, "unscheduleScriptEntry");
         lua_pushcfunction(luaState, axlua_Scheduler_unscheduleScriptEntry);
         lua_rawset(luaState, -3);
     }
@@ -2733,11 +2733,11 @@ static void extendScheduler(lua_State* luaState)
 
 static void extendRenderTexture(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.RenderTexture");
+    axlua::adapter::push_literal(luaState, "ax.RenderTexture");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
-        lua_pushstring(luaState, "newImage");
+        axlua::adapter::push_literal(luaState, "newImage");
         lua_pushcfunction(luaState, axlua_RenderTexture_newImage);
         lua_rawset(luaState, -3);
     }
@@ -2746,11 +2746,11 @@ static void extendRenderTexture(lua_State* luaState)
 
 static void extendSequence(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.Sequence");
+    axlua::adapter::push_literal(luaState, "ax.Sequence");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
-        lua_pushstring(luaState, "create");
+        axlua::adapter::push_literal(luaState, "create");
         lua_pushcfunction(luaState, axlua_Sequence_create);
         lua_rawset(luaState, -3);
     }
@@ -2759,11 +2759,11 @@ static void extendSequence(lua_State* luaState)
 
 static void extendCallFunc(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.CallFunc");
+    axlua::adapter::push_literal(luaState, "ax.CallFunc");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
-        lua_pushstring(luaState, "create");
+        axlua::adapter::push_literal(luaState, "create");
         lua_pushcfunction(luaState, axlua_CallFunc_create);
         lua_rawset(luaState, -3);
     }
@@ -2772,11 +2772,11 @@ static void extendCallFunc(lua_State* luaState)
 
 static void extendSpawn(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.Spawn");
+    axlua::adapter::push_literal(luaState, "ax.Spawn");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
-        lua_pushstring(luaState, "create");
+        axlua::adapter::push_literal(luaState, "create");
         lua_pushcfunction(luaState, axlua_Spawn_create);
         lua_rawset(luaState, -3);
     }
@@ -2785,11 +2785,11 @@ static void extendSpawn(lua_State* luaState)
 
 static void extendCardinalSplineBy(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.CardinalSplineBy");
+    axlua::adapter::push_literal(luaState, "ax.CardinalSplineBy");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
-        lua_pushstring(luaState, "create");
+        axlua::adapter::push_literal(luaState, "create");
         lua_pushcfunction(luaState, lua_cocos2d_CardinalSplineBy_create);
         lua_rawset(luaState, -3);
     }
@@ -2798,11 +2798,11 @@ static void extendCardinalSplineBy(lua_State* luaState)
 
 static void extendCatmullRomBy(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.CatmullRomBy");
+    axlua::adapter::push_literal(luaState, "ax.CatmullRomBy");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
-        lua_pushstring(luaState, "create");
+        axlua::adapter::push_literal(luaState, "create");
         lua_pushcfunction(luaState, axlua_CatmullRomBy_create);
         lua_rawset(luaState, -3);
     }
@@ -2811,11 +2811,11 @@ static void extendCatmullRomBy(lua_State* luaState)
 
 static void extendCatmullRomTo(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.CatmullRomTo");
+    axlua::adapter::push_literal(luaState, "ax.CatmullRomTo");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
-        lua_pushstring(luaState, "create");
+        axlua::adapter::push_literal(luaState, "create");
         lua_pushcfunction(luaState, axlua_CatmullRomTo_create);
         lua_rawset(luaState, -3);
     }
@@ -2824,11 +2824,11 @@ static void extendCatmullRomTo(lua_State* luaState)
 
 static void extendBezierBy(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.BezierBy");
+    axlua::adapter::push_literal(luaState, "ax.BezierBy");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
-        lua_pushstring(luaState, "create");
+        axlua::adapter::push_literal(luaState, "create");
         lua_pushcfunction(luaState, axlua_BezierBy_create);
         lua_rawset(luaState, -3);
     }
@@ -2837,11 +2837,11 @@ static void extendBezierBy(lua_State* luaState)
 
 static void extendBezierTo(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.BezierTo");
+    axlua::adapter::push_literal(luaState, "ax.BezierTo");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
-        lua_pushstring(luaState, "create");
+        axlua::adapter::push_literal(luaState, "create");
         lua_pushcfunction(luaState, axlua_BezierTo_create);
         lua_rawset(luaState, -3);
     }
@@ -2850,31 +2850,31 @@ static void extendBezierTo(lua_State* luaState)
 
 static void extendDrawNode(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.DrawNode");
+    axlua::adapter::push_literal(luaState, "ax.DrawNode");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
-        lua_pushstring(luaState, "drawPolygon");
+        axlua::adapter::push_literal(luaState, "drawPolygon");
         lua_pushcfunction(luaState, toaxlua_DrawNode_drawPolygon);
         lua_rawset(luaState, -3);
 
-        lua_pushstring(luaState, "drawSolidPoly");
+        axlua::adapter::push_literal(luaState, "drawSolidPoly");
         lua_pushcfunction(luaState, toaxlua_DrawNode_drawSolidPoly);
         lua_rawset(luaState, -3);
 
-        lua_pushstring(luaState, "drawPoly");
+        axlua::adapter::push_literal(luaState, "drawPoly");
         lua_pushcfunction(luaState, toaxlua_DrawNode_drawPoly);
         lua_rawset(luaState, -3);
 
-        lua_pushstring(luaState, "drawCardinalSpline");
+        axlua::adapter::push_literal(luaState, "drawCardinalSpline");
         lua_pushcfunction(luaState, toaxlua_DrawNode_drawCardinalSpline);
         lua_rawset(luaState, -3);
 
-        lua_pushstring(luaState, "drawCatmullRom");
+        axlua::adapter::push_literal(luaState, "drawCatmullRom");
         lua_pushcfunction(luaState, toaxlua_DrawNode_drawCatmullRom);
         lua_rawset(luaState, -3);
 
-        lua_pushstring(luaState, "drawPoints");
+        axlua::adapter::push_literal(luaState, "drawPoints");
         lua_pushcfunction(luaState, toaxlua_DrawNode_drawPoints);
         lua_rawset(luaState, -3);
     }
@@ -2883,11 +2883,11 @@ static void extendDrawNode(lua_State* luaState)
 
 static void extendRenderTexturePass(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.RenderTexturePass");
+    axlua::adapter::push_literal(luaState, "ax.RenderTexturePass");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
-        lua_pushstring(luaState, "setViewport");
+        axlua::adapter::push_literal(luaState, "setViewport");
         lua_pushcfunction(luaState, axlua_RenderTexturePass_setViewport);
         lua_rawset(luaState, -3);
     }
@@ -2932,7 +2932,7 @@ int axlua_Sprite_initWithPolygon(lua_State* luaState)
             return 0;
         }
         bool ret = obj->initWithPolygon(*arg0);
-        axlua::adapter::push_boolean(luaState, (bool)ret);
+        lua_pushboolean(luaState, (bool)ret);
         return 1;
     }
     luaL_error(luaState, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Sprite:initWithPolygon", argc,
@@ -3088,7 +3088,7 @@ argumentError:
 
 static void extendSprite(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.Sprite");
+    axlua::adapter::push_literal(luaState, "ax.Sprite");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
@@ -3101,11 +3101,11 @@ static void extendSprite(lua_State* luaState)
 
 static void extendLayerMultiplex(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.LayerMultiplex");
+    axlua::adapter::push_literal(luaState, "ax.LayerMultiplex");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
-        lua_pushstring(luaState, "create");
+        axlua::adapter::push_literal(luaState, "create");
         lua_pushcfunction(luaState, toaxlua_LayerMultiplex_create);
         lua_rawset(luaState, -3);
     }
@@ -3114,19 +3114,19 @@ static void extendLayerMultiplex(lua_State* luaState)
 
 static void extendFileUtils(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.FileUtils");
+    axlua::adapter::push_literal(luaState, "ax.FileUtils");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
-        lua_pushstring(luaState, "getStringFromFile");
+        axlua::adapter::push_literal(luaState, "getStringFromFile");
         lua_pushcfunction(luaState, toaxlua_FileUtils_getStringFromFile);
         lua_rawset(luaState, -3);
 
-        lua_pushstring(luaState, "getDataFromFile");
+        axlua::adapter::push_literal(luaState, "getDataFromFile");
         lua_pushcfunction(luaState, toaxlua_FileUtils_getDataFromFile);
         lua_rawset(luaState, -3);
 
-        lua_pushstring(luaState, "setSearchPaths");
+        axlua::adapter::push_literal(luaState, "setSearchPaths");
         lua_pushcfunction(luaState, lua_ax_base_FileUtils_setSearchPaths);
         lua_rawset(luaState, -3);
     }
@@ -3135,11 +3135,11 @@ static void extendFileUtils(lua_State* luaState)
 
 static void extendUserDefault(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.UserDefault");
+    axlua::adapter::push_literal(luaState, "ax.UserDefault");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
-        lua_pushstring(luaState, "getInstance");
+        axlua::adapter::push_literal(luaState, "getInstance");
         lua_pushcfunction(luaState, toaxlua_UserDefault_getInstance);
         lua_rawset(luaState, -3);
     }
@@ -3148,11 +3148,11 @@ static void extendUserDefault(lua_State* luaState)
 
 static void extendSpriteBatchNode(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.SpriteBatchNode");
+    axlua::adapter::push_literal(luaState, "ax.SpriteBatchNode");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
-        lua_pushstring(luaState, "getDescendants");
+        axlua::adapter::push_literal(luaState, "getDescendants");
         lua_pushcfunction(luaState, toaxlua_SpriteBatchNode_getDescendants);
         lua_rawset(luaState, -3);
     }
@@ -3278,7 +3278,7 @@ argumentError:
 
 static void extendCustomEventListener(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.CustomEventListener");
+    axlua::adapter::push_literal(luaState, "ax.CustomEventListener");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
@@ -3289,7 +3289,7 @@ static void extendCustomEventListener(lua_State* luaState)
 
 static void extendAccelerationEventListener(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.AccelerationEventListener");
+    axlua::adapter::push_literal(luaState, "ax.AccelerationEventListener");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
@@ -3344,7 +3344,7 @@ argumentError:
 
 static void extendActionCamera(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.ActionCamera");
+    axlua::adapter::push_literal(luaState, "ax.ActionCamera");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
@@ -3398,7 +3398,7 @@ argumentError:
 
 static void extendGridAction(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.GridAction");
+    axlua::adapter::push_literal(luaState, "ax.GridAction");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
@@ -3511,7 +3511,7 @@ argumentError:
 
 static void extendLabel(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.Label");
+    axlua::adapter::push_literal(luaState, "ax.Label");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
@@ -3570,7 +3570,7 @@ argumentError:
 
 static void extendTMXTiledMap(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.TMXTiledMap");
+    axlua::adapter::push_literal(luaState, "ax.TMXTiledMap");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
@@ -3621,9 +3621,9 @@ static int axlua_OrbitCamera_sphericalRadius(lua_State* luaState)
 
         self->sphericalRadius(&newRadius, &zenith, &azimuth);
 
-        axlua::adapter::push_number(luaState, (lua_Number)newRadius);
-        axlua::adapter::push_number(luaState, (lua_Number)zenith);
-        axlua::adapter::push_number(luaState, (lua_Number)azimuth);
+        lua_pushnumber(luaState, (lua_Number)newRadius);
+        lua_pushnumber(luaState, (lua_Number)zenith);
+        lua_pushnumber(luaState, (lua_Number)azimuth);
 
         return 3;
     }
@@ -3641,7 +3641,7 @@ argumentError:
 
 static void extendOrbitCamera(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.OrbitCamera");
+    axlua::adapter::push_literal(luaState, "ax.OrbitCamera");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
@@ -3684,8 +3684,8 @@ int axlua_TMXLayer_getTileGIDAt(lua_State* luaState)
         if (!ok)
             return 0;
         unsigned int ret = obj->getTileGIDAt(arg0);
-        axlua::adapter::push_number(luaState, (lua_Number)ret);
-        axlua::adapter::push_number(luaState, (lua_Number)0);
+        lua_pushnumber(luaState, (lua_Number)ret);
+        lua_pushnumber(luaState, (lua_Number)0);
         return 2;
     }
     if (argc == 2)
@@ -3700,8 +3700,8 @@ int axlua_TMXLayer_getTileGIDAt(lua_State* luaState)
             return 0;
 
         unsigned int ret = obj->getTileGIDAt(arg0, (ax::TMXTileFlags*)&arg1);
-        axlua::adapter::push_number(luaState, (lua_Number)ret);
-        axlua::adapter::push_number(luaState, (lua_Number)arg1);
+        lua_pushnumber(luaState, (lua_Number)ret);
+        lua_pushnumber(luaState, (lua_Number)arg1);
         return 2;
     }
     luaL_error(luaState, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TMXLayer:getTileGIDAt", argc,
@@ -3780,7 +3780,7 @@ argumentError:
 
 static void extendTMXLayer(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.TMXLayer");
+    axlua::adapter::push_literal(luaState, "ax.TMXLayer");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
@@ -3824,8 +3824,8 @@ static int axlua_FastTMXLayer_getTileGIDAt(lua_State* luaState)
         if (!ok)
             return 0;
         int ret = obj->getTileGIDAt(arg0);
-        axlua::adapter::push_number(luaState, (lua_Number)ret);
-        axlua::adapter::push_number(luaState, (lua_Number)0);
+        lua_pushnumber(luaState, (lua_Number)ret);
+        lua_pushnumber(luaState, (lua_Number)0);
         return 2;
     }
     if (argc == 2)
@@ -3840,8 +3840,8 @@ static int axlua_FastTMXLayer_getTileGIDAt(lua_State* luaState)
             return 0;
 
         unsigned int ret = obj->getTileGIDAt(arg0, (ax::TMXTileFlags*)&arg1);
-        axlua::adapter::push_number(luaState, (lua_Number)ret);
-        axlua::adapter::push_number(luaState, (lua_Number)arg1);
+        lua_pushnumber(luaState, (lua_Number)ret);
+        lua_pushnumber(luaState, (lua_Number)arg1);
         return 2;
     }
     luaL_error(luaState, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FastTMXLayer:getTileGIDAt",
@@ -3858,7 +3858,7 @@ argumentError:
 
 static void extendFastTMXLayer(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.FastTMXLayer");
+    axlua::adapter::push_literal(luaState, "ax.FastTMXLayer");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
@@ -3936,7 +3936,7 @@ int axlua_Application_isIOS64bit(lua_State* luaState)
 #endif
         }
 
-        axlua::adapter::push_boolean(luaState, isIOS64bit);
+        lua_pushboolean(luaState, isIOS64bit);
         return 1;
     }
     luaL_error(luaState, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Application:isIOS64bit", argc,
@@ -3988,7 +3988,7 @@ int axlua_Application_is64BitMobileDevice(lua_State* luaState)
 #endif
         }
 
-        axlua::adapter::push_boolean(luaState, is64BitMobileDevice);
+        lua_pushboolean(luaState, is64BitMobileDevice);
         return 1;
     }
     luaL_error(luaState, "%s has wrong number of arguments: %d, was expecting %d \n",
@@ -4006,7 +4006,7 @@ argumentError:
 
 static void extendApplication(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.Application");
+    axlua::adapter::push_literal(luaState, "ax.Application");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
@@ -4072,7 +4072,7 @@ argumentError:
 
 static void extendTextureCache(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.TextureCache");
+    axlua::adapter::push_literal(luaState, "ax.TextureCache");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
@@ -4146,7 +4146,7 @@ argumentError:
 
 static void extendRenderView(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.RenderView");
+    axlua::adapter::push_literal(luaState, "ax.RenderView");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
@@ -4209,7 +4209,7 @@ argumentError:
 
 static void extendCamera(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.Camera");
+    axlua::adapter::push_literal(luaState, "ax.Camera");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
@@ -4269,7 +4269,7 @@ static int lua_collect_Properties(lua_State* luaState)
 
 static void extendProperties(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.Properties");
+    axlua::adapter::push_literal(luaState, "ax.Properties");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
@@ -4374,7 +4374,7 @@ int axlua_get_PolygonInfo_filename(lua_State* luaState)
         return 0;
     }
 #endif
-    axlua::adapter::push_string(luaState, obj->getFilename().data());
+    axlua::adapter::push_string_view(luaState, obj->getFilename());
     return 1;
 
 #if _AX_DEBUG >= 1
@@ -4504,7 +4504,7 @@ argumentError:
 
 static void extendPolygonInfo(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.PolygonInfo");
+    axlua::adapter::push_literal(luaState, "ax.PolygonInfo");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
@@ -4524,7 +4524,7 @@ static void extendPolygonInfo(lua_State* luaState)
 
 static void extendPipelineDescriptor(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.PipelineDesc");
+    axlua::adapter::push_literal(luaState, "ax.PipelineDesc");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
@@ -4795,7 +4795,7 @@ static int lua_collect_AutoPolygon(lua_State* luaState)
 
 static void extendAutoPolygon(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.AutoPolygon");
+    axlua::adapter::push_literal(luaState, "ax.AutoPolygon");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
@@ -5316,15 +5316,15 @@ static int axlua_Mat4_decompose(lua_State* luaState)
 
             lua_newtable(luaState);
 
-            lua_pushstring(luaState, "scale");
+            axlua::adapter::push_literal(luaState, "scale");
             lua_pushnil(luaState);
             lua_rawset(luaState, -3);
 
-            lua_pushstring(luaState, "rotation");
+            axlua::adapter::push_literal(luaState, "rotation");
             quaternion_to_luaval(luaState, rotation);
             lua_rawset(luaState, -3);
 
-            lua_pushstring(luaState, "translation");
+            axlua::adapter::push_literal(luaState, "translation");
             vec3_to_luaval(luaState, translation);
             lua_rawset(luaState, -3);
 
@@ -5341,15 +5341,15 @@ static int axlua_Mat4_decompose(lua_State* luaState)
 
             lua_newtable(luaState);
 
-            lua_pushstring(luaState, "scale");
+            axlua::adapter::push_literal(luaState, "scale");
             lua_pushnil(luaState);
             lua_rawset(luaState, -3);
 
-            lua_pushstring(luaState, "rotation");
+            axlua::adapter::push_literal(luaState, "rotation");
             lua_pushnil(luaState);
             lua_rawset(luaState, -3);
 
-            lua_pushstring(luaState, "translation");
+            axlua::adapter::push_literal(luaState, "translation");
             vec3_to_luaval(luaState, translation);
             lua_rawset(luaState, -3);
 
@@ -5370,15 +5370,15 @@ static int axlua_Mat4_decompose(lua_State* luaState)
 
             lua_newtable(luaState);
 
-            lua_pushstring(luaState, "scale");
+            axlua::adapter::push_literal(luaState, "scale");
             vec3_to_luaval(luaState, scale);
             lua_rawset(luaState, -3);
 
-            lua_pushstring(luaState, "rotation");
+            axlua::adapter::push_literal(luaState, "rotation");
             lua_pushnil(luaState);
             lua_rawset(luaState, -3);
 
-            lua_pushstring(luaState, "translation");
+            axlua::adapter::push_literal(luaState, "translation");
             vec3_to_luaval(luaState, translation);
             lua_rawset(luaState, -3);
 
@@ -5395,15 +5395,15 @@ static int axlua_Mat4_decompose(lua_State* luaState)
 
             lua_newtable(luaState);
 
-            lua_pushstring(luaState, "scale");
+            axlua::adapter::push_literal(luaState, "scale");
             vec3_to_luaval(luaState, scale);
             lua_rawset(luaState, -3);
 
-            lua_pushstring(luaState, "rotation");
+            axlua::adapter::push_literal(luaState, "rotation");
             lua_pushnil(luaState);
             lua_rawset(luaState, -3);
 
-            lua_pushstring(luaState, "translation");
+            axlua::adapter::push_literal(luaState, "translation");
             lua_pushnil(luaState);
             lua_rawset(luaState, -3);
 
@@ -5424,15 +5424,15 @@ static int axlua_Mat4_decompose(lua_State* luaState)
 
             lua_newtable(luaState);
 
-            lua_pushstring(luaState, "scale");
+            axlua::adapter::push_literal(luaState, "scale");
             vec3_to_luaval(luaState, scale);
             lua_rawset(luaState, -3);
 
-            lua_pushstring(luaState, "rotation");
+            axlua::adapter::push_literal(luaState, "rotation");
             quaternion_to_luaval(luaState, rotation);
             lua_rawset(luaState, -3);
 
-            lua_pushstring(luaState, "translation");
+            axlua::adapter::push_literal(luaState, "translation");
             lua_pushnil(luaState);
             lua_rawset(luaState, -3);
 
@@ -5449,15 +5449,15 @@ static int axlua_Mat4_decompose(lua_State* luaState)
 
             lua_newtable(luaState);
 
-            lua_pushstring(luaState, "scale");
+            axlua::adapter::push_literal(luaState, "scale");
             lua_pushnil(luaState);
             lua_rawset(luaState, -3);
 
-            lua_pushstring(luaState, "rotation");
+            axlua::adapter::push_literal(luaState, "rotation");
             quaternion_to_luaval(luaState, rotation);
             lua_rawset(luaState, -3);
 
-            lua_pushstring(luaState, "translation");
+            axlua::adapter::push_literal(luaState, "translation");
             lua_pushnil(luaState);
             lua_rawset(luaState, -3);
         }
@@ -5480,15 +5480,15 @@ static int axlua_Mat4_decompose(lua_State* luaState)
 
             lua_newtable(luaState);
 
-            lua_pushstring(luaState, "scale");
+            axlua::adapter::push_literal(luaState, "scale");
             vec3_to_luaval(luaState, scale);
             lua_rawset(luaState, -3);
 
-            lua_pushstring(luaState, "rotation");
+            axlua::adapter::push_literal(luaState, "rotation");
             quaternion_to_luaval(luaState, rotation);
             lua_rawset(luaState, -3);
 
-            lua_pushstring(luaState, "translation");
+            axlua::adapter::push_literal(luaState, "translation");
             vec3_to_luaval(luaState, translation);
             lua_rawset(luaState, -3);
 

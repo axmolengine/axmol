@@ -152,7 +152,7 @@ static int axlua_WebSocket_getReadyState00(lua_State* luaState)
         {
             returnValue = (int)self->getReadyState();
         }
-        axlua::adapter::push_number(luaState, (lua_Number)returnValue);
+        lua_pushnumber(luaState, (lua_Number)returnValue);
     }
     return 1;
 argumentError:
@@ -213,7 +213,7 @@ static int websocket_url_getter(lua_State* L)
     else
     {
         LuaWebSocket* self = (LuaWebSocket*)axlua::adapter::to_usertype(L, 1, 0);
-        axlua::adapter::push_string(L, self->getUrl());
+        axlua::adapter::push_string_view(L, self->getUrl());
         return 1;
     }
 argumentError:
@@ -229,7 +229,7 @@ static int websocket_protocol_getter(lua_State* L)
     else
     {
         LuaWebSocket* self = (LuaWebSocket*)axlua::adapter::to_usertype(L, 1, 0);
-        axlua::adapter::push_string(L, self->getProtocol());
+        axlua::adapter::push_string_view(L, self->getProtocol());
         return 1;
     }
 argumentError:
@@ -328,14 +328,14 @@ int register_web_socket_adapter(lua_State* luaState)
     if (nullptr == luaState)
         return 0;
 
-    lua_pushstring(luaState, "ax.WebSocket");
+    axlua::adapter::push_literal(luaState, "ax.WebSocket");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
-        lua_pushstring(luaState, "registerScriptHandler");
+        axlua::adapter::push_literal(luaState, "registerScriptHandler");
         lua_pushcfunction(luaState, axlua_WebSocket_registerScriptHandler00);
         lua_rawset(luaState, -3);
-        lua_pushstring(luaState, "unregisterScriptHandler");
+        axlua::adapter::push_literal(luaState, "unregisterScriptHandler");
         lua_pushcfunction(luaState, axlua_WebSocket_unregisterScriptHandler00);
         lua_rawset(luaState, -3);
     }

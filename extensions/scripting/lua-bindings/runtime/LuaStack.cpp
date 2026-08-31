@@ -381,6 +381,7 @@ int LuaStack::executeGlobalFunction(const char* functionName)
 
 void LuaStack::clean()
 {
+    axlua::drain_pending_callback_unrefs(_state);
     lua_settop(_state, 0);
 }
 

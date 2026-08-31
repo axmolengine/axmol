@@ -35,6 +35,7 @@
 #include <map>
 #include <string>
 #include <list>
+#include <functional>
 
 /**
  * @addtogroup base
@@ -131,6 +132,7 @@ public:
      * @lua NA
      */
     static SchedulerScriptHandlerEntry* create(int handler, float interval, bool paused);
+    static SchedulerScriptHandlerEntry* create(const std::function<void(float)>& callback, float interval, bool paused);
 
     /**
      * Destructor of SchedulerScriptHandlerEntry.
@@ -171,6 +173,7 @@ private:
         : ScriptHandlerEntry(handler), _timer(nullptr), _paused(false), _markedForDeletion(false)
     {}
     bool init(float interval, bool paused);
+    bool init(const std::function<void(float)>& callback, float interval, bool paused);
 
     TimerScriptHandler* _timer;
     bool _paused;

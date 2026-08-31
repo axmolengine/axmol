@@ -109,7 +109,7 @@ bool luaval_to_PhysicsWorld3D_HitResult(lua_State* L,
 
     if (ok)
     {
-        lua_pushstring(L, "hitPosition");
+        axlua::adapter::push_literal(L, "hitPosition");
         lua_gettable(L, lo);
         if (!lua_istable(L, -1))
         {
@@ -121,7 +121,7 @@ bool luaval_to_PhysicsWorld3D_HitResult(lua_State* L,
         }
         lua_pop(L, 1);
 
-        lua_pushstring(L, "hitNormal");
+        axlua::adapter::push_literal(L, "hitNormal");
         lua_gettable(L, lo);
         if (!lua_istable(L, -1))
         {
@@ -147,13 +147,13 @@ void PhysicsWorld3D_HitResult_to_luaval(lua_State* L, const ax::PhysicsWorld3D::
         return;
 
     lua_newtable(L);
-    lua_pushstring(L, "hitPosition");
+    axlua::adapter::push_literal(L, "hitPosition");
     vec3_to_luaval(L, hitResult.hitPosition);
     lua_rawset(L, -3);
-    lua_pushstring(L, "hitNormal");
+    axlua::adapter::push_literal(L, "hitNormal");
     vec3_to_luaval(L, hitResult.hitNormal);
     lua_rawset(L, -3);
-    lua_pushstring(L, "hitActor");
+    axlua::adapter::push_literal(L, "hitActor");
     if (nullptr == hitResult.hitActor)
     {
         lua_pushnil(L);
@@ -163,7 +163,7 @@ void PhysicsWorld3D_HitResult_to_luaval(lua_State* L, const ax::PhysicsWorld3D::
         object_to_luaval<ax::Component>(L, "ax.Component", hitResult.hitActor);
     }
     lua_rawset(L, -3);
-    lua_pushstring(L, "rigidBody");
+    axlua::adapter::push_literal(L, "rigidBody");
     if (nullptr == hitResult.rigidbody)
     {
         lua_pushnil(L);
@@ -173,7 +173,7 @@ void PhysicsWorld3D_HitResult_to_luaval(lua_State* L, const ax::PhysicsWorld3D::
         object_to_luaval<ax::Rigidbody3D>(L, "ax.Rigidbody3D", hitResult.rigidbody);
     }
     lua_rawset(L, -3);
-    lua_pushstring(L, "collider");
+    axlua::adapter::push_literal(L, "collider");
     if (nullptr == hitResult.collider)
     {
         lua_pushnil(L);
@@ -240,7 +240,7 @@ argumentError:
 
 void extendRigidbody3D(lua_State* L)
 {
-    lua_pushstring(L, "ax.Rigidbody3D");
+    axlua::adapter::push_literal(L, "ax.Rigidbody3D");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {
@@ -295,7 +295,7 @@ int axlua_physics3d_MeshCollider3D_create(lua_State* L)
 
 void extendMeshCollider3D(lua_State* L)
 {
-    lua_pushstring(L, "ax.MeshCollider3D");
+    axlua::adapter::push_literal(L, "ax.MeshCollider3D");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
         axlua::adapter::set_function(L, "create", axlua_physics3d_MeshCollider3D_create);
@@ -344,7 +344,7 @@ int axlua_physics3d_ConvexCollider3D_create(lua_State* L)
 
 void extendConvexCollider3D(lua_State* L)
 {
-    lua_pushstring(L, "ax.ConvexCollider3D");
+    axlua::adapter::push_literal(L, "ax.ConvexCollider3D");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
         axlua::adapter::set_function(L, "create", axlua_physics3d_ConvexCollider3D_create);
@@ -411,7 +411,7 @@ int axlua_physics3d_HeightFieldCollider3D_create(lua_State* L)
 
 void extendHeightFieldCollider3D(lua_State* L)
 {
-    lua_pushstring(L, "ax.HeightFieldCollider3D");
+    axlua::adapter::push_literal(L, "ax.HeightFieldCollider3D");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
         axlua::adapter::set_function(L, "create", axlua_physics3d_HeightFieldCollider3D_create);
@@ -473,7 +473,7 @@ argumentError:
 
 void extendCollider3D(lua_State* L)
 {
-    lua_pushstring(L, "ax.Collider3D");
+    axlua::adapter::push_literal(L, "ax.Collider3D");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {
@@ -527,7 +527,7 @@ int axlua_physics3d_PhysicsWorld3D_rayCast(lua_State* L)
             return 0;
         }
         bool ret = obj->rayCast(arg0, arg1, &arg2);
-        axlua::adapter::push_boolean(L, (bool)ret);
+        lua_pushboolean(L, (bool)ret);
         PhysicsWorld3D_HitResult_to_luaval(L, arg2);
         return 2;
     }
@@ -544,7 +544,7 @@ argumentError:
 
 void extendPhysicsWorld3D(lua_State* L)
 {
-    lua_pushstring(L, "ax.PhysicsWorld3D");
+    axlua::adapter::push_literal(L, "ax.PhysicsWorld3D");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {

@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "lua-bindings/adapters/sceneext/lua-sceneext-conversions.h"
+#include "lua-bindings/adapters/sceneext/lua_sceneext_conversions.h"
 #include "sceneext/ActionTimeline/ActionTimeline.h"
 
 #if _AX_DEBUG >= 1
@@ -48,17 +48,17 @@ bool luaval_to_animationInfo(lua_State* L, int lo, ax::ext::timeline::AnimationI
 
     if (ok)
     {
-        lua_pushstring(L, "name"); /* L: paramStack key */
+        axlua::adapter::push_literal(L, "name"); /* L: paramStack key */
         lua_gettable(L, lo);       /* L: paramStack paramStack[lo][key] */
         outValue->name = lua_isstring(L, -1) ? lua_tostring(L, -1) : "";
         lua_pop(L, 1); /* L: paramStack*/
 
-        lua_pushstring(L, "startIndex");
+        axlua::adapter::push_literal(L, "startIndex");
         lua_gettable(L, lo);
         outValue->startIndex = lua_isnumber(L, -1) ? (int)lua_tonumber(L, -1) : 0;
         lua_pop(L, 1);
 
-        lua_pushstring(L, "endIndex");
+        axlua::adapter::push_literal(L, "endIndex");
         lua_gettable(L, lo);
         outValue->endIndex = lua_isnumber(L, -1) ? (int)lua_tonumber(L, -1) : 0;
         lua_pop(L, 1);
@@ -76,15 +76,15 @@ void animationInfo_to_luaval(lua_State* L, const ax::ext::timeline::AnimationInf
 
     lua_newtable(L);
 
-    lua_pushstring(L, "name");
-    lua_pushstring(L, inValue.name.c_str());
+    axlua::adapter::push_literal(L, "name");
+    lua_pushlstring(L, inValue.name.data(), inValue.name.size());
     lua_rawset(L, -3);
 
-    lua_pushstring(L, "startIndex");
+    axlua::adapter::push_literal(L, "startIndex");
     lua_pushnumber(L, (lua_Number)inValue.startIndex);
     lua_rawset(L, -3);
 
-    lua_pushstring(L, "endIndex");
+    axlua::adapter::push_literal(L, "endIndex");
     lua_pushnumber(L, (lua_Number)inValue.endIndex);
     lua_rawset(L, -3);
 }

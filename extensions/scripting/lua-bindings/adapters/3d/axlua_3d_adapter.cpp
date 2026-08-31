@@ -121,7 +121,7 @@ argumentError:
 
 static void extendMeshRenderer(lua_State* L)
 {
-    lua_pushstring(L, "ax.MeshRenderer");
+    axlua::adapter::push_literal(L, "ax.MeshRenderer");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {
@@ -147,7 +147,7 @@ bool luaval_to_terraindata(lua_State* L, int lo, ax::Terrain::TerrainData* outVa
 
     if (ok)
     {
-        lua_pushstring(L, "_chunkSize");
+        axlua::adapter::push_literal(L, "_chunkSize");
         lua_gettable(L, lo);
         if (!lua_isnil(L, lua_gettop(L)))
         {
@@ -159,17 +159,17 @@ bool luaval_to_terraindata(lua_State* L, int lo, ax::Terrain::TerrainData* outVa
         }
         lua_pop(L, 1);
 
-        lua_pushstring(L, "_heightMapSrc");
+        axlua::adapter::push_literal(L, "_heightMapSrc");
         lua_gettable(L, lo);
         outValue->_heightMapSrc = axlua::adapter::to_string(L, -1, "");
         lua_pop(L, 1);
 
-        lua_pushstring(L, "_alphaMapSrc");
+        axlua::adapter::push_literal(L, "_alphaMapSrc");
         lua_gettable(L, lo);
         outValue->_alphaMapSrc = const_cast<char*>(axlua::adapter::to_string(L, -1, ""));
         lua_pop(L, 1);
 
-        lua_pushstring(L, "_detailMaps");
+        axlua::adapter::push_literal(L, "_detailMaps");
         lua_gettable(L, lo);
         if (lua_istable(L, -1))
         {
@@ -180,12 +180,12 @@ bool luaval_to_terraindata(lua_State* L, int lo, ax::Terrain::TerrainData* outVa
                 lua_gettable(L, -2);
                 if (lua_istable(L, -1))
                 {
-                    lua_pushstring(L, "_detailMapSrc");
+                    axlua::adapter::push_literal(L, "_detailMapSrc");
                     lua_gettable(L, -2);
                     outValue->_detailMaps[i]._detailMapSrc = axlua::adapter::to_string(L, -1, "");
                     lua_pop(L, 1);
 
-                    lua_pushstring(L, "_detailMapSize");
+                    axlua::adapter::push_literal(L, "_detailMapSize");
                     lua_gettable(L, -2);
                     outValue->_detailMaps[i]._detailMapSize = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
                     lua_pop(L, 1);
@@ -195,22 +195,22 @@ bool luaval_to_terraindata(lua_State* L, int lo, ax::Terrain::TerrainData* outVa
         }
         lua_pop(L, 1);
 
-        lua_pushstring(L, "_mapHeight");
+        axlua::adapter::push_literal(L, "_mapHeight");
         lua_gettable(L, lo);
         outValue->_mapHeight = lua_isnil(L, -1) ? 2.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
 
-        lua_pushstring(L, "_mapScale");
+        axlua::adapter::push_literal(L, "_mapScale");
         lua_gettable(L, lo);
         outValue->_mapScale = lua_isnil(L, -1) ? 0.1f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
 
-        lua_pushstring(L, "_detailMapAmount");
+        axlua::adapter::push_literal(L, "_detailMapAmount");
         lua_gettable(L, lo);
         outValue->_detailMapAmount = lua_isnil(L, -1) ? 0 : (int)lua_tonumber(L, -1);
         lua_pop(L, 1);
 
-        lua_pushstring(L, "_skirtHeightRatio");
+        axlua::adapter::push_literal(L, "_skirtHeightRatio");
         lua_gettable(L, lo);
         outValue->_skirtHeightRatio = lua_isnil(L, -1) ? 1.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
@@ -225,25 +225,25 @@ void terraindata_to_luaval(lua_State* L, const ax::Terrain::TerrainData& inValue
         return;
 
     lua_newtable(L);
-    lua_pushstring(L, "_chunkSize");
+    axlua::adapter::push_literal(L, "_chunkSize");
     size_to_luaval(L, inValue._chunkSize);
     lua_rawset(L, -3);
 
     if (inValue._heightMapSrc.length() > 0)
     {
-        lua_pushstring(L, "_heightMapSrc");
-        lua_pushstring(L, inValue._heightMapSrc.c_str());
+        axlua::adapter::push_literal(L, "_heightMapSrc");
+        lua_pushlstring(L, inValue._heightMapSrc.data(), inValue._heightMapSrc.size());
         lua_rawset(L, -3);
     }
 
     if (!inValue._alphaMapSrc.empty())
     {
-        lua_pushstring(L, "_alphaMapSrc");
-        lua_pushstring(L, inValue._alphaMapSrc.c_str());
+        axlua::adapter::push_literal(L, "_alphaMapSrc");
+        lua_pushlstring(L, inValue._alphaMapSrc.data(), inValue._alphaMapSrc.size());
         lua_rawset(L, -3);
     }
 
-    lua_pushstring(L, "_detailMaps");
+    axlua::adapter::push_literal(L, "_detailMaps");
     lua_newtable(L);
     for (int i = 0; i < 4; i++)
     {
@@ -251,11 +251,11 @@ void terraindata_to_luaval(lua_State* L, const ax::Terrain::TerrainData& inValue
         lua_pushnumber(L, (lua_Number)i + 1);
         lua_newtable(L);
 
-        lua_pushstring(L, "_detailMapSrc");
-        lua_pushstring(L, inValue._detailMaps[i]._detailMapSrc.c_str());
+        axlua::adapter::push_literal(L, "_detailMapSrc");
+        lua_pushlstring(L, inValue._detailMaps[i]._detailMapSrc.data(), inValue._detailMaps[i]._detailMapSrc.size());
         lua_rawset(L, -3);
 
-        lua_pushstring(L, "_detailMapSize");
+        axlua::adapter::push_literal(L, "_detailMapSize");
         lua_pushnumber(L, (lua_Number)inValue._detailMaps[i]._detailMapSize);
         lua_rawset(L, -3);
 
@@ -263,19 +263,19 @@ void terraindata_to_luaval(lua_State* L, const ax::Terrain::TerrainData& inValue
     }
     lua_rawset(L, -3);
 
-    lua_pushstring(L, "_mapHeight");
+    axlua::adapter::push_literal(L, "_mapHeight");
     lua_pushnumber(L, (lua_Number)inValue._mapHeight);
     lua_rawset(L, -3);
 
-    lua_pushstring(L, "_mapScale");
+    axlua::adapter::push_literal(L, "_mapScale");
     lua_pushnumber(L, (lua_Number)inValue._mapScale);
     lua_rawset(L, -3);
 
-    lua_pushstring(L, "_detailMapAmount");
+    axlua::adapter::push_literal(L, "_detailMapAmount");
     lua_pushnumber(L, (lua_Number)inValue._detailMapAmount);
     lua_rawset(L, -3);
 
-    lua_pushstring(L, "_skirtHeightRatio");
+    axlua::adapter::push_literal(L, "_skirtHeightRatio");
     lua_pushnumber(L, (lua_Number)inValue._skirtHeightRatio);
     lua_rawset(L, -3);
 }
@@ -368,7 +368,7 @@ int axlua_3d_Terrain_getHeight(lua_State* L)
                 break;
             }
             double ret = obj->getHeight(arg0);
-            axlua::adapter::push_number(L, (lua_Number)ret);
+            lua_pushnumber(L, (lua_Number)ret);
             return 1;
         }
     } while (0);
@@ -392,7 +392,7 @@ int axlua_3d_Terrain_getHeight(lua_State* L)
                 break;
             }
             double ret = obj->getHeight(arg0, arg1);
-            axlua::adapter::push_number(L, (lua_Number)ret);
+            lua_pushnumber(L, (lua_Number)ret);
             vec3_to_luaval(L, *arg1);
             return 2;
         }
@@ -417,7 +417,7 @@ int axlua_3d_Terrain_getHeight(lua_State* L)
                 break;
             }
             double ret = obj->getHeight(arg0, arg1);
-            axlua::adapter::push_number(L, (lua_Number)ret);
+            lua_pushnumber(L, (lua_Number)ret);
             return 1;
         }
     } while (0);
@@ -448,7 +448,7 @@ int axlua_3d_Terrain_getHeight(lua_State* L)
                 break;
             }
             double ret = obj->getHeight(arg0, arg1, &arg2);
-            axlua::adapter::push_number(L, (lua_Number)ret);
+            lua_pushnumber(L, (lua_Number)ret);
             vec3_to_luaval(L, arg2);
             return 2;
         }
@@ -507,7 +507,7 @@ int axlua_3d_Terrain_getIntersectionPoint(lua_State* luaState)
                 break;
             }
             bool ret = obj->getIntersectionPoint(*arg0, arg1);
-            axlua::adapter::push_boolean(luaState, (bool)ret);
+            lua_pushboolean(luaState, (bool)ret);
             vec3_to_luaval(luaState, arg1);
             return 2;
         }
@@ -545,7 +545,7 @@ argumentError:
 
 static void extendTerrain(lua_State* L)
 {
-    lua_pushstring(L, "ax.Terrain");
+    axlua::adapter::push_literal(L, "ax.Terrain");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {
@@ -598,7 +598,7 @@ argumentError:
 
 void extendBundle3D(lua_State* L)
 {
-    lua_pushstring(L, "ax.Bundle3D");
+    axlua::adapter::push_literal(L, "ax.Bundle3D");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {
@@ -609,7 +609,7 @@ void extendBundle3D(lua_State* L)
 
 void extendAABB(lua_State* L)
 {
-    lua_pushstring(L, "ax.AABB");
+    axlua::adapter::push_literal(L, "ax.AABB");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {
@@ -621,7 +621,7 @@ void extendAABB(lua_State* L)
 
 void extendOBB(lua_State* L)
 {
-    lua_pushstring(L, "ax.OBB");
+    axlua::adapter::push_literal(L, "ax.OBB");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
         axlua::adapter::set_function(L, "getCorners", axlua_3d_OBB_getCorners);
@@ -630,7 +630,7 @@ void extendOBB(lua_State* L)
 
 void extendRay(lua_State* L)
 {
-    lua_pushstring(L, "ax.Ray");
+    axlua::adapter::push_literal(L, "ax.Ray");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
         axlua::adapter::set_function(L, "intersects", axlua_3d_Ray_intersects);
@@ -858,8 +858,8 @@ int axlua_3d_Ray_intersects(lua_State* L)
 
         float distance;
         bool ret = self->intersects(*arg0, &distance);
-        axlua::adapter::push_boolean(L, ret);
-        axlua::adapter::push_number(L, (lua_Number)distance);
+        lua_pushboolean(L, ret);
+        lua_pushnumber(L, (lua_Number)distance);
         return 2;
     }
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Ray:intersects", argc, 1);

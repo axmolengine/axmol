@@ -94,7 +94,14 @@ bool LuaEngine::parseConfig(ConfigType type, std::string_view value)
 
 int LuaEngine::sendEvent(const ScriptEvent& event)
 {
-    (void)event;
+    // Retain the public integer-handler Scheduler API for native integrations.
+    // Lua's scheduleScriptFunc adapter uses an owning callback directly.
+    if (event.type == kScheduleEvent && event.data != nullptr && _stack != nullptr)
+    {
+        const auto* data = static_cast<const SchedulerScriptData*>(event.data);
+        _stack->pushFloat(data->elapse);
+        return _stack->executeFunctionByHandler(data->handler, 1);
+    }
     return 0;
 }
 

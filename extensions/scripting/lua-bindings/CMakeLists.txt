@@ -42,7 +42,7 @@ set(lua_bindings_adapter_headers
   adapters/base/axlua_base_adapter.h
   adapters/physics2d/axlua_physics2d_adapter.h
   adapters/physics3d/axlua_physics3d_adapter.h
-  adapters/sceneext/lua-sceneext-conversions.h
+  adapters/sceneext/lua_sceneext_conversions.h
   adapters/sceneext/CustomGUIReader.h
   adapters/ui/axlua_ui_adapter.hpp
   adapters/fairygui/axlua_fairygui_adapter.hpp
@@ -55,7 +55,7 @@ set(lua_bindings_adapter_files
   adapters/3d/axlua_3d_adapter.cpp
   adapters/sceneext/CustomGUIReader.cpp
   adapters/sceneext/axlua_sceneext_adapter.cpp
-  adapters/sceneext/lua-sceneext-conversions.cpp
+  adapters/sceneext/lua_sceneext_conversions.cpp
   adapters/sceneio/axlua_sceneio_adapter.cpp
   adapters/extension/axlua_extension_adapter.cpp
   adapters/network/axlua_network_adapter.cpp

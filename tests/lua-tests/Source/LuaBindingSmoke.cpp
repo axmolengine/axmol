@@ -2,13 +2,272 @@
 #include "lua-bindings/runtime/axlua_runtime.h"
 #include "lua-bindings/runtime/axlua_conversions.h"
 #include "axmol/scene/Node.h"
+#include "axmol/base/AutoreleasePool.h"
+#include "axmol/base/Director.h"
+#include "axmol/base/EventDispatcher.h"
+#include "axmol/base/Scheduler.h"
+#include "axmol/base/WeakPtr.h"
+#include "lua-bindings/runtime/LuaEngine.h"
 
 #include <stdio.h>
+#include <atomic>
+#include <new>
+#include <thread>
+
+namespace
+{
+bool checkLua(lua_State* state, const char* script)
+{
+    if (luaL_dostring(state, script) == LUA_OK)
+        return true;
+    fprintf(stderr, "lua-binding-smoke failed: %s\n", lua_tostring(state, -1));
+    lua_pop(state, 1);
+    return false;
+}
+
+// Force address reuse while still destroying through Object::release(), as
+// required by WeakPtr. Worker destruction is joined before any object access:
+// Axmol's native reference counting is intentionally not thread-safe.
+class ReusedObject final : public ax::Object
+{
+public:
+    static void operator delete(void*) noexcept {}
+};
+
+bool checkObjectLifetimes(lua_State* state)
+{
+    alignas(ReusedObject) unsigned char storage[sizeof(ReusedObject)];
+    auto* object = ::new (static_cast<void*>(storage)) ReusedObject();
+    // Exercise adapter creation (including its -1 stack index), then require
+    // the typed/generated pusher to return that same userdata.
+    axlua::adapter::push_object(state, object, "ax.Object");
+    lua_setglobal(state, "__old_object");
+    axlua::push_object(state, static_cast<ax::Object*>(object));
+    lua_setglobal(state, "__same_object");
+    axlua::adapter::push_object(state, object, "ax.Object");
+    lua_setglobal(state, "__adapter_object");
+    lua_pushcfunction(state, [](lua_State* L) {
+        auto* value = static_cast<ax::Object*>(axlua::adapter::to_usertype(L, 1, nullptr));
+        lua_pushinteger(L, value->getReferenceCount());
+        return 1;
+    });
+    lua_setglobal(state, "__adapter_get_count");
+    bool ok = checkLua(state, R"lua(
+        assert(rawequal(__old_object, __same_object))
+        assert(rawequal(__old_object, __adapter_object))
+        __old_object.peer_value = 17
+        assert(__same_object.peer_value == 17)
+        __cached_get_count = __old_object.getReferenceCount
+        assert(__cached_get_count(__old_object) == 1)
+        assert(__adapter_get_count(__old_object) == 1)
+    )lua");
+
+    auto* secondary = luaL_newstate();
+    if (secondary == nullptr)
+    {
+        object->release();
+        return false;
+    }
+    luaL_openlibs(secondary);
+    axlua::install(secondary);
+    {
+        auto module = axlua::Module::from(secondary, "ax");
+        module.class_<ax::Object>("Object").method("getReferenceCount", &ax::Object::getReferenceCount);
+    }
+    axlua::push_object(secondary, static_cast<ax::Object*>(object));
+    lua_setglobal(secondary, "old");
+
+    std::thread([object] { object->release(); }).join();
+    // Repeated reads must stay invalid, including cached generated/adapter
+    // methods that bypass __index. Neither reading nor address reuse revives it.
+    const char* expiredChecks = R"lua(
+        for i = 1, 3 do
+            assert(axlua.isnull(__old_object))
+            assert(not pcall(__cached_get_count, __old_object))
+            assert(not pcall(__adapter_get_count, __old_object))
+        end
+    )lua";
+    ok                        = checkLua(state, expiredChecks) && ok;
+    for (int iteration = 0; iteration < 2; ++iteration)
+    {
+        object = ::new (static_cast<void*>(storage)) ReusedObject();
+        axlua::push_object(state, static_cast<ax::Object*>(object));
+        lua_setglobal(state, "__new_object");
+        ok = checkLua(state, expiredChecks) && ok;
+        ok = checkLua(state, R"lua(
+            assert(not rawequal(__old_object, __new_object))
+            assert(__new_object.peer_value == nil)
+            assert(__new_object:getReferenceCount() == 1)
+        )lua") &&
+             ok;
+        ok = checkLua(secondary,
+                      "assert(axlua.isnull(old)); assert(not pcall(function() old:getReferenceCount() end))") &&
+             ok;
+        object->release();
+    }
+    axlua::shutdown(secondary);
+    lua_close(secondary);
+
+    // Non-Object adapter values must retain identity without being cast to
+    // Object, while borrowed Event userdata remains usable only in its scope.
+    int nativeValue = 0;
+    axlua::adapter::push_usertype(state, &nativeValue, nullptr);
+    axlua::adapter::push_usertype(state, &nativeValue, nullptr);
+    ok = lua_rawequal(state, -1, -2) && ok;
+    lua_pop(state, 2);
+    if (!checkLua(state, R"lua(
+        function __borrowed_event(event)
+            assert(not event:isStopped())
+            event:stopPropagation()
+            __saved_event = event
+        end
+    )lua"))
+        return false;
+    lua_getglobal(state, "__borrowed_event");
+    axlua::Callback<void(ax::Event*)> callback(state, -1);
+    lua_pop(state, 1);
+    ax::Event event(ax::Event::Type::CUSTOM);
+    callback(&event);
+    ok = event.isStopped() && ok;
+    return checkLua(
+               state,
+               "assert(axlua.isnull(__saved_event)); assert(not pcall(function() __saved_event:isStopped() end))") &&
+           ok;
+}
+
+bool checkCallbackLifetimes(lua_State* state)
+{
+    if (!checkLua(state, "__weak_callbacks = setmetatable({}, {__mode='v'})"))
+        return false;
+    std::vector<axlua::Callback<int()>> callbacks;
+    for (int index = 1; index <= 256; ++index)
+    {
+        lua_pushinteger(state, index);
+        lua_pushcclosure(state, [](lua_State* L) {
+            lua_pushvalue(L, lua_upvalueindex(1));
+            return 1;
+        }, 1);
+        callbacks.emplace_back(state, -1);
+        lua_getglobal(state, "__weak_callbacks");
+        lua_pushvalue(state, -2);
+        lua_rawseti(state, -2, index);
+        lua_pop(state, 2);
+    }
+    const int top     = lua_gettop(state);
+    int foreignResult = -1;
+    std::thread([&] { foreignResult = callbacks.front()(); }).join();
+    bool ok = foreignResult == 0 && lua_gettop(state) == top && callbacks.front()() == 1;
+    std::thread([owned = std::move(callbacks)]() mutable { owned.clear(); }).join();
+    // No subsequent callback invocation: the normal frame boundary must
+    // collect references dropped on a worker, without waiting for VM close.
+    auto* dispatcher      = ax::Director::getInstance()->getEventDispatcher();
+    const bool wasEnabled = dispatcher->isEnabled();
+    // Smoke mode deliberately never creates a render view, which normally
+    // enables the dispatcher. Enable it just for this simulated frame.
+    dispatcher->setEnabled(true);
+    dispatcher->dispatchCustomEvent(ax::Director::EVENT_BEFORE_UPDATE);
+    dispatcher->setEnabled(wasEnabled);
+    lua_gc(state, LUA_GCCOLLECT, 0);
+    ok = checkLua(state, "assert(next(__weak_callbacks) == nil)") && ok;
+
+    for (int iteration = 0; iteration < 16; ++iteration)
+    {
+        auto* vm = luaL_newstate();
+        if (vm == nullptr)
+            return false;
+        axlua::install(vm);
+        lua_pushcfunction(vm, [](lua_State* L) {
+            lua_pushinteger(L, 42);
+            return 1;
+        });
+        axlua::Callback<int()> surviving(vm, -1);
+        std::vector<axlua::Callback<int()>> released;
+        for (int index = 0; index < 32; ++index)
+            released.emplace_back(vm, -1);
+        lua_pop(vm, 1);
+        ok = surviving() == 42 && ok;
+        std::atomic_bool start{false};
+        std::thread worker([owned = std::move(released), &start]() mutable {
+            while (!start.load(std::memory_order_acquire))
+                std::this_thread::yield();
+            owned.clear();
+        });
+        start.store(true, std::memory_order_release);
+        axlua::shutdown(vm);
+        lua_close(vm);
+        worker.join();
+        ok = surviving() == 0 && ok;
+        // Reopen while the old callback is retained. Pending releases from
+        // the closed VM must not unref callbacks belonging to this VM.
+        auto* reopened = luaL_newstate();
+        if (reopened == nullptr)
+            return false;
+        axlua::install(reopened);
+        lua_pushcfunction(reopened, [](lua_State* L) {
+            lua_pushinteger(L, 7);
+            return 1;
+        });
+        axlua::Callback<int()> fresh(reopened, -1);
+        lua_pop(reopened, 1);
+        std::thread([old = std::move(surviving)]() mutable { old.reset(); }).join();
+        axlua::drain_pending_callback_unrefs(reopened);
+        ok = fresh() == 7 && ok;
+        axlua::shutdown(reopened);
+        lua_close(reopened);
+    }
+    return ok;
+}
+
+bool checkScheduler(lua_State* state)
+{
+    auto* scheduler = new ax::Scheduler();
+    axlua::push_object(state, scheduler);
+    lua_setglobal(state, "__scheduler");
+    bool ok = checkLua(state, R"lua(
+        __scheduled_calls = 0
+        __schedule_id = __scheduler:scheduleScriptFunc(function(dt)
+            assert(dt > 0)
+            __scheduled_calls = __scheduled_calls + 1
+            if __scheduled_calls == 2 then __scheduler:unscheduleScriptEntry(__schedule_id) end
+        end, 0, false)
+        assert(type(__schedule_id) == 'number')
+        __paused_id = __scheduler:scheduleScriptFunc(function() error('paused timer ran') end, 0, true)
+    )lua");
+    for (int index = 0; index < 6; ++index)
+        scheduler->update(0.1f);
+    ok = checkLua(state, "assert(__scheduled_calls == 2); __scheduler:unscheduleScriptEntry(__paused_id)") && ok;
+
+    // Preserve the native integer-handler API as well as Lua's callback API.
+    ok =
+        checkLua(
+            state,
+            "__legacy_calls = 0; function __legacy_tick(dt) assert(dt > 0); __legacy_calls = __legacy_calls + 1 end") &&
+        ok;
+    lua_getglobal(state, "__legacy_tick");
+    const auto handler = axlua::adapter::ref_function(state, -1, 0);
+    lua_pop(state, 1);
+    const auto entry = scheduler->scheduleScriptFunc(static_cast<unsigned int>(handler), 0, false);
+    scheduler->update(0.1f);
+    scheduler->update(0.1f);
+    scheduler->update(0.1f);
+    scheduler->unscheduleScriptEntry(entry);
+    scheduler->update(0.1f);
+    ok = checkLua(state, "assert(__legacy_calls == 2)") && ok;
+    scheduler->release();
+    return ok;
+}
+}  // namespace
 
 int runLuaBindingSmoke(lua_State* state)
 {
     if (state == nullptr)
         return 1;
+
+    if (!checkObjectLifetimes(state) || !checkCallbackLifetimes(state) || !checkScheduler(state))
+    {
+        fprintf(stderr, "lua-binding-smoke failed: lifecycle/scheduler regression\n");
+        return 1;
+    }
 
     // MeshCollider3D's vertex-array adapter passes the element at -1. A
     // relative-index regression silently collapsed all vertices to zero.
@@ -131,6 +390,7 @@ int runLuaBindingSmoke(lua_State* state)
     )lua") != LUA_OK)
     {
         fprintf(stderr, "lua-binding-smoke failed while assigning coroutine callback: %s\n", lua_tostring(state, -1));
+        lifecycleNode->onExit();
         lifecycleNode->release();
         return 1;
     }
@@ -141,9 +401,47 @@ int runLuaBindingSmoke(lua_State* state)
     )lua") != LUA_OK)
     {
         fprintf(stderr, "lua-binding-smoke failed while verifying coroutine callback: %s\n", lua_tostring(state, -1));
+        lifecycleNode->onExit();
         lifecycleNode->release();
         return 1;
     }
+    lifecycleNode->onExit();
     lifecycleNode->release();
+    return 0;
+}
+
+int finishLuaBindingSmoke(lua_State* state)
+{
+    bool finalized = false;
+    lua_newuserdata(state, 1);
+    lua_newtable(state);
+    lua_pushlightuserdata(state, &finalized);
+    lua_pushcclosure(state, [](lua_State* L) {
+        *static_cast<bool*>(lua_touserdata(L, lua_upvalueindex(1))) = true;
+        return 0;
+    }, 1);
+    lua_setfield(state, -2, "__gc");
+    lua_setmetatable(state, -2);
+    lua_setfield(state, LUA_REGISTRYINDEX, "axlua.smoke.close_sentinel");
+    lua_pushcfunction(state, [](lua_State* L) {
+        lua_pushinteger(L, 42);
+        return 1;
+    });
+    axlua::Callback<int()> surviving(state, -1);
+    lua_pop(state, 1);
+    const bool callableBeforeClose = surviving() == 42;
+    ax::WeakPtr<ax::LuaStack> stack(ax::LuaEngine::getInstance()->getLuaStack());
+
+    // Release the initial autorelease ownership before the engine's retain.
+    // LuaStack's real destructor must perform shutdown and lua_close itself.
+    ax::PoolManager::getInstance()->getCurrentPool()->clear();
+    ax::ScriptEngineManager::getInstance()->removeScriptEngine();
+    const bool closed = finalized && stack.expired();
+    if (!closed || !callableBeforeClose || surviving() != 0)
+    {
+        fprintf(stderr, "lua-binding-smoke failed: main VM did not close safely\n");
+        return 1;
+    }
+    fprintf(stdout, "lua-binding-smoke: main VM close passed\n");
     return 0;
 }

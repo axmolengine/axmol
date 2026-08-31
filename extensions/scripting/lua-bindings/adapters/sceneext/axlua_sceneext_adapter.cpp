@@ -56,7 +56,7 @@ static int axlua_GUIReader_widgetFromJsonFile(lua_State* L)
 
 static void extendGUIReader(lua_State* L)
 {
-    lua_pushstring(L, "ax.GUIReader");
+    axlua::adapter::push_literal(L, "ax.GUIReader");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
         axlua::adapter::set_function(L, "widgetFromJsonFile", axlua_GUIReader_widgetFromJsonFile);
@@ -197,7 +197,7 @@ argumentError:
 
 static void extendArmatureController(lua_State* L)
 {
-    lua_pushstring(L, "axext.ArmatureController");
+    axlua::adapter::push_literal(L, "axext.ArmatureController");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {
@@ -294,7 +294,7 @@ argumentError:
 
 static void extendArmatureDataManager(lua_State* L)
 {
-    lua_pushstring(L, "axext.ArmatureDataManager");
+    axlua::adapter::push_literal(L, "axext.ArmatureDataManager");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {
@@ -355,7 +355,7 @@ argumentError:
 
 static void extendBone(lua_State* L)
 {
-    lua_pushstring(L, "axext.Bone");
+    axlua::adapter::push_literal(L, "axext.Bone");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {
@@ -401,7 +401,7 @@ argumentError:
 
 static void extendActionTimelineCache(lua_State* L)
 {
-    lua_pushstring(L, "axext.ActionTimelineCache");
+    axlua::adapter::push_literal(L, "axext.ActionTimelineCache");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {
@@ -466,7 +466,7 @@ argumentError:
 
 static void extendActionTimeline(lua_State* L)
 {
-    lua_pushstring(L, "axext.ActionTimeline");
+    axlua::adapter::push_literal(L, "axext.ActionTimeline");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {

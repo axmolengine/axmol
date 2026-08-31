@@ -114,7 +114,7 @@ argumentError:
 
 static void extendListView(lua_State* L)
 {
-    lua_pushstring(L, "axui.ListView");
+    axlua::adapter::push_literal(L, "axui.ListView");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {
@@ -158,22 +158,22 @@ static int axlua_LayoutParameter_setMargin(lua_State* L)
 #endif
 
         Margin margin;
-        lua_pushstring(L, "left");
+        axlua::adapter::push_literal(L, "left");
         lua_gettable(L, 2);
         margin.left = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
 
-        lua_pushstring(L, "top");
+        axlua::adapter::push_literal(L, "top");
         lua_gettable(L, 2);
         margin.top = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
 
-        lua_pushstring(L, "right");
+        axlua::adapter::push_literal(L, "right");
         lua_gettable(L, 2);
         margin.right = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
 
-        lua_pushstring(L, "bottom");
+        axlua::adapter::push_literal(L, "bottom");
         lua_gettable(L, 2);
         margin.bottom = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
@@ -225,19 +225,19 @@ static int axlua_LayoutParameter_getMargin(lua_State* L)
 
         lua_newtable(L);
 
-        lua_pushstring(L, "left");
+        axlua::adapter::push_literal(L, "left");
         lua_pushnumber(L, (lua_Number)margin.left);
         lua_rawset(L, -3);
 
-        lua_pushstring(L, "top");
+        axlua::adapter::push_literal(L, "top");
         lua_pushnumber(L, (lua_Number)margin.top);
         lua_rawset(L, -3);
 
-        lua_pushstring(L, "right");
+        axlua::adapter::push_literal(L, "right");
         lua_pushnumber(L, (lua_Number)margin.right);
         lua_rawset(L, -3);
 
-        lua_pushstring(L, "bottom");
+        axlua::adapter::push_literal(L, "bottom");
         lua_pushnumber(L, (lua_Number)margin.bottom);
         lua_rawset(L, -3);
 
@@ -258,7 +258,7 @@ argumentError:
 
 static void extendLayoutParameter(lua_State* L)
 {
-    lua_pushstring(L, "axui.LayoutParameter");
+    axlua::adapter::push_literal(L, "axui.LayoutParameter");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {
@@ -368,14 +368,14 @@ argumentError:
 
 static void extendEditBox(lua_State* L)
 {
-    lua_pushstring(L, "axui.EditBox");
+    axlua::adapter::push_literal(L, "axui.EditBox");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {
-        lua_pushstring(L, "registerScriptEditBoxHandler");
+        axlua::adapter::push_literal(L, "registerScriptEditBoxHandler");
         lua_pushcfunction(L, axlua_EditBox_registerScriptEditBoxHandler);
         lua_rawset(L, -3);
-        lua_pushstring(L, "unregisterScriptEditBoxHandler");
+        axlua::adapter::push_literal(L, "unregisterScriptEditBoxHandler");
         lua_pushcfunction(L, axlua_EditBox_unregisterScriptEditBoxHandler);
         lua_rawset(L, -3);
     }
@@ -538,7 +538,7 @@ argumentError:
 
 static void extendFocusEventListenerEvent(lua_State* L)
 {
-    lua_pushstring(L, "ax.FocusEventListener");
+    axlua::adapter::push_literal(L, "ax.FocusEventListener");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {

@@ -101,7 +101,7 @@ jobs:
     - uses: actions/checkout@v6
     - name: Build
       shell: pwsh
-      run: .\tools\cmdline\axmol -p win32 -a x64 -dll -xc '-DAX_RENDER_API=d3d11;d3d12;gl;vk' -t lua-tests
+      run: .\tools\cmdline\axmol -p win32 -a x64 -dll -xc '-DAX_RENDER_API=d3d11;d3d12;gl;vk' -t 'cpp-tests'
   linux:
     needs: [source-check]
     runs-on: ubuntu-latest

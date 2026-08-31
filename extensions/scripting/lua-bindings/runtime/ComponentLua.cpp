@@ -100,7 +100,7 @@ void ComponentLua::getScriptObjectInternal() const
     lua_State* l = LuaEngine::getInstance()->getLuaStack()->getLuaState();
     lua_pushstring(l, KEY_COMPONENT);      // stack: "component"
     lua_rawget(l, LUA_REGISTRYINDEX);      // stack: LUA_REGISTRYINDEX["component"]
-    lua_pushstring(l, _strIndex.c_str());  // stack: LUA_REGISTRYINDEX["component"] strIndex
+    lua_pushlstring(l, _strIndex.data(), _strIndex.size());  // stack: LUA_REGISTRYINDEX["component"] strIndex
     lua_rawget(l, -2);                     // stack: LUA_REGISTRYINDEX["component"]
 }
 
@@ -165,7 +165,7 @@ bool ComponentLua::getLuaFunction(std::string_view functionName)
 
     lua_pushstring(l, KEY_COMPONENT);                                // stack: "component"
     lua_rawget(l, LUA_REGISTRYINDEX);                                // stack: table_of_component
-    lua_pushstring(l, _strIndex.c_str());                            // stack: table_of_component strIndex
+    lua_pushlstring(l, _strIndex.data(), _strIndex.size());          // stack: table_of_component strIndex
     lua_rawget(l, -2);                                               // stack: table_of_component table_of_this
     lua_pushlstring(l, functionName.data(), functionName.length());  // stack: table_of_component table_of_this "update"
     lua_rawget(l, -2);  // stack: table_of_component table_of_this table_of_this["update"]
@@ -251,7 +251,7 @@ void ComponentLua::storeLuaTable()
     // LUA_REGISTRYINDEX["component"][strIndex] = table return from lua
     lua_pushstring(l, KEY_COMPONENT);      // stack: table_return_from_lua "component"
     lua_rawget(l, LUA_REGISTRYINDEX);      // stack: table_return_from_lua table_of_component
-    lua_pushstring(l, _strIndex.c_str());  // stack: table_return_from_lua table_of_component strIndex
+    lua_pushlstring(l, _strIndex.data(), _strIndex.size());  // stack: table_return_from_lua table_of_component strIndex
     lua_pushvalue(l, -3);  // stack: table_return_from_lua table_of_component strIndex table_return_from_lua
     lua_rawset(l, -3);     // stack: table_return_from_lua table_of_component
     lua_pop(l, 1);         // stack: table_return_from_lua
@@ -280,7 +280,7 @@ void ComponentLua::removeLuaTable()
 
         lua_pushstring(l, KEY_COMPONENT);      // stack: "component"
         lua_rawget(l, LUA_REGISTRYINDEX);      // stack: LUA_REGISTRYINDEX["component"]
-        lua_pushstring(l, _strIndex.c_str());  // stack: LUA_REGISTRYINDEX["component"] strIndex
+        lua_pushlstring(l, _strIndex.data(), _strIndex.size());  // stack: LUA_REGISTRYINDEX["component"] strIndex
         lua_pushnil(l);                        // stack: LUA_REGISTRYINDEX["component"] strIndex nil
         lua_rawset(l, -3);                     // stack: LUA_REGISTRYINDEX["component"]
     }

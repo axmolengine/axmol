@@ -303,7 +303,7 @@ void LuaJavaBridge::luaopen_luaj(lua_State* L)
 {
     s_luaState = L;
     lua_newtable(L);
-    lua_pushstring(L, "callStaticMethod");
+    axlua::adapter::push_literal(L, "callStaticMethod");
     lua_pushcfunction(L, LuaJavaBridge::callJavaStaticMethod);
     lua_rawset(L, -3);
     lua_setglobal(L, "LuaJavaBridge");

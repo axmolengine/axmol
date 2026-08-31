@@ -172,7 +172,7 @@ argumentError:
 
 static void extendNavMeshAgent(lua_State* L)
 {
-    lua_pushstring(L, "ax.NavMeshAgent");
+    axlua::adapter::push_literal(L, "ax.NavMeshAgent");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {

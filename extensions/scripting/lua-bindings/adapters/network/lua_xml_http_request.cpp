@@ -325,7 +325,7 @@ static int lua_get_XMLHttpRequest_responseType(lua_State* L)
     }
 #endif
 
-    axlua::adapter::push_number(L, (lua_Number)self->getResponseType());
+    lua_pushnumber(L, (lua_Number)self->getResponseType());
     return 1;
 
 #if _AX_DEBUG >= 1
@@ -401,7 +401,7 @@ static int lua_get_XMLHttpRequest_withCredentials(lua_State* L)
     }
 #endif
 
-    axlua::adapter::push_boolean(L, self->getWithCredentialsValue());
+    lua_pushboolean(L, self->getWithCredentialsValue());
     return 1;
 
 #if _AX_DEBUG >= 1
@@ -474,7 +474,7 @@ static int lua_get_XMLHttpRequest_timeout(lua_State* L)
     }
 #endif
 
-    axlua::adapter::push_number(L, (lua_Number)self->getTimeout());
+    lua_pushnumber(L, (lua_Number)self->getTimeout());
     return 1;
 
 #if _AX_DEBUG >= 1
@@ -605,7 +605,7 @@ static int lua_get_XMLHttpRequest_statusText(lua_State* L)
     }
 #endif
 
-    axlua::adapter::push_string(L, self->getStatusText());
+    axlua::adapter::push_string_view(L, self->getStatusText());
 
     return 1;
 
@@ -994,7 +994,7 @@ static int axlua_XMLHttpRequest_getAllResponseHeaders(lua_State* L)
         }
 
         responseheader = responseheaders.str();
-        axlua::adapter::push_string(L, responseheader.c_str());
+        lua_pushlstring(L, responseheader.data(), responseheader.size());
         return 1;
     }
 
@@ -1047,7 +1047,7 @@ static int axlua_XMLHttpRequest_getResponseHeader(lua_State* L)
         auto iter           = headers.find(responseheader);
         if (iter != headers.end())
         {
-            axlua::adapter::push_string(L, (iter->second).c_str());
+            lua_pushlstring(L, (iter->second).data(), (iter->second).size());
         }
         else
         {

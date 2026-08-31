@@ -422,75 +422,75 @@ argumentError:
 
 int register_all_ax_physics2d_adapter(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.Collider2D");
+    axlua::adapter::push_literal(luaState, "ax.Collider2D");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
-        lua_pushstring(luaState, "recenterPoints");
+        axlua::adapter::push_literal(luaState, "recenterPoints");
         lua_pushcfunction(luaState, axlua_physics2d_Collider2D_recenterPoints);
         lua_rawset(luaState, -3);
-        lua_pushstring(luaState, "getPolygonCenter");
+        axlua::adapter::push_literal(luaState, "getPolygonCenter");
         lua_pushcfunction(luaState, axlua_physics2d_Collider2D_getPolygonCenter);
         lua_rawset(luaState, -3);
-        lua_pushstring(luaState, "getPolyonCenter");
+        axlua::adapter::push_literal(luaState, "getPolyonCenter");
         lua_pushcfunction(luaState, axlua_physics2d_Collider2D_getPolygonCenter);
         lua_rawset(luaState, -3);
     }
     lua_pop(luaState, 1);
 
-    lua_pushstring(luaState, "ax.PolygonCollider2D");
+    axlua::adapter::push_literal(luaState, "ax.PolygonCollider2D");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
-        lua_pushstring(luaState, "getPoints");
+        axlua::adapter::push_literal(luaState, "getPoints");
         lua_pushcfunction(luaState, axlua_physics2d_PolygonCollider2D_getPoints);
         lua_rawset(luaState, -3);
     }
     lua_pop(luaState, 1);
 
-    lua_pushstring(luaState, "ax.EdgePolygonCollider2D");
+    axlua::adapter::push_literal(luaState, "ax.EdgePolygonCollider2D");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
-        lua_pushstring(luaState, "getPoints");
+        axlua::adapter::push_literal(luaState, "getPoints");
         lua_pushcfunction(luaState, axlua_physics2d_EdgePolygonCollider2D_getPoints);
         lua_rawset(luaState, -3);
     }
     lua_pop(luaState, 1);
 
-    lua_pushstring(luaState, "ax.EdgeChainCollider2D");
+    axlua::adapter::push_literal(luaState, "ax.EdgeChainCollider2D");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
-        lua_pushstring(luaState, "getPoints");
+        axlua::adapter::push_literal(luaState, "getPoints");
         lua_pushcfunction(luaState, axlua_physics2d_EdgeChainCollider2D_getPoints);
         lua_rawset(luaState, -3);
     }
     lua_pop(luaState, 1);
 
-    lua_pushstring(luaState, "ax.PhysicsWorld2D");
+    axlua::adapter::push_literal(luaState, "ax.PhysicsWorld2D");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
-        lua_pushstring(luaState, "getScene");
+        axlua::adapter::push_literal(luaState, "getScene");
         lua_pushcfunction(luaState, axlua_physics2d_PhysicsWorld2D_getScene);
         lua_rawset(luaState, -3);
-        lua_pushstring(luaState, "rayCast");
+        axlua::adapter::push_literal(luaState, "rayCast");
         lua_pushcfunction(luaState, axlua_physics2d_PhysicsWorld2D_rayCast);
         lua_rawset(luaState, -3);
-        lua_pushstring(luaState, "DEBUGDRAW_NONE");
+        axlua::adapter::push_literal(luaState, "DEBUGDRAW_NONE");
         lua_pushnumber(luaState, PhysicsWorld2D::DEBUGDRAW_NONE);
         lua_rawset(luaState, -3);
-        lua_pushstring(luaState, "DEBUGDRAW_SHAPE");
+        axlua::adapter::push_literal(luaState, "DEBUGDRAW_SHAPE");
         lua_pushnumber(luaState, PhysicsWorld2D::DEBUGDRAW_SHAPE);
         lua_rawset(luaState, -3);
-        lua_pushstring(luaState, "DEBUGDRAW_JOINT");
+        axlua::adapter::push_literal(luaState, "DEBUGDRAW_JOINT");
         lua_pushnumber(luaState, PhysicsWorld2D::DEBUGDRAW_JOINT);
         lua_rawset(luaState, -3);
-        lua_pushstring(luaState, "DEBUGDRAW_CONTACT");
+        axlua::adapter::push_literal(luaState, "DEBUGDRAW_CONTACT");
         lua_pushnumber(luaState, PhysicsWorld2D::DEBUGDRAW_CONTACT);
         lua_rawset(luaState, -3);
-        lua_pushstring(luaState, "DEBUGDRAW_ALL");
+        axlua::adapter::push_literal(luaState, "DEBUGDRAW_ALL");
         lua_pushnumber(luaState, PhysicsWorld2D::DEBUGDRAW_ALL);
         lua_rawset(luaState, -3);
     }

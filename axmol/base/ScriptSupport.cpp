@@ -58,7 +58,8 @@ ScriptHandlerEntry::~ScriptHandlerEntry()
 {
     if (_handler != 0)
     {
-        ScriptEngineManager::getInstance()->getScriptEngine()->removeScriptHandler(_handler);
+        if (auto* engine = ScriptEngineManager::getScriptEngineIfExists())
+            engine->removeScriptHandler(_handler);
         AXLOGD("[LUA] Remove event handler: {}", _handler);
         _handler = 0;
     }
@@ -75,12 +76,30 @@ SchedulerScriptHandlerEntry* SchedulerScriptHandlerEntry::create(int handler, fl
     return entry;
 }
 
+SchedulerScriptHandlerEntry* SchedulerScriptHandlerEntry::create(const std::function<void(float)>& callback,
+                                                                 float interval,
+                                                                 bool paused)
+{
+    SchedulerScriptHandlerEntry* entry = new SchedulerScriptHandlerEntry(0);
+    entry->init(callback, interval, paused);
+    entry->autorelease();
+    return entry;
+}
+
 bool SchedulerScriptHandlerEntry::init(float interval, bool paused)
 {
     _timer = new TimerScriptHandler();
     _timer->initWithScriptHandler(_handler, interval);
     _paused = paused;
     AXLOGD("[LUA] ADD script schedule: {}, entryID: {}", _handler, _entryId);
+    return true;
+}
+
+bool SchedulerScriptHandlerEntry::init(const std::function<void(float)>& callback, float interval, bool paused)
+{
+    _timer = new TimerScriptHandler();
+    _timer->initWithCallback(callback, interval);
+    _paused = paused;
     return true;
 }
 

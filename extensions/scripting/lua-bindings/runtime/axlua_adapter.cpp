@@ -223,7 +223,7 @@ void ensure_identity_table(lua_State* state)
         lua_pop(state, 1);
         lua_newtable(state);
         lua_newtable(state);
-        lua_pushliteral(state, "v");
+        axlua::adapter::push_literal(state, "v");
         lua_setfield(state, -2, "__mode");
         lua_setmetatable(state, -2);
         lua_pushvalue(state, -1);
@@ -469,24 +469,36 @@ void push_user_type(lua_State* state, void* value, const char* type, bool root)
 
     ensure_identity_table(state);
     const int identity = absolute_index(state, -1);
+    auto* nativeObject = static_cast<ax::Object*>(value);
     lua_pushlightuserdata(state, value);
     lua_rawget(state, identity);
     if (lua_isuserdata(state, -1))
     {
-        const int userdata = absolute_index(state, -1);
-        ensure_ubox(state);
-        lua_getfield(state, LUA_REGISTRYINDEX, OBJECT_BOX_REGISTRY);
-        const int ubox = absolute_index(state, -1);
-        lua_pushlightuserdata(state, value);
-        lua_pushvalue(state, userdata);
-        lua_rawset(state, ubox);
-        lua_pop(state, 1);
-        lua_remove(state, identity);
-        if (root)
-            root_userdata(state, value, -1);
-        return;
+        if (axlua::is_invalid_userdata(state, -1))
+        {
+            lua_pop(state, 1);
+            lua_pushlightuserdata(state, value);
+            lua_pushnil(state);
+            lua_rawset(state, identity);
+        }
+        else
+        {
+            const int userdata = absolute_index(state, -1);
+            ensure_ubox(state);
+            lua_getfield(state, LUA_REGISTRYINDEX, OBJECT_BOX_REGISTRY);
+            const int ubox = absolute_index(state, -1);
+            lua_pushlightuserdata(state, value);
+            lua_pushvalue(state, userdata);
+            lua_rawset(state, ubox);
+            lua_pop(state, 1);
+            lua_remove(state, identity);
+            if (root)
+                root_userdata(state, value, -1);
+            return;
+        }
     }
-    lua_pop(state, 1);
+    else
+        lua_pop(state, 1);
 
     ensure_ubox(state);
     lua_getfield(state, LUA_REGISTRYINDEX, OBJECT_BOX_REGISTRY);
@@ -495,17 +507,28 @@ void push_user_type(lua_State* state, void* value, const char* type, bool root)
     lua_rawget(state, ubox);
     if (lua_isuserdata(state, -1))
     {
-        const int userdata = absolute_index(state, -1);
-        lua_pushlightuserdata(state, value);
-        lua_pushvalue(state, userdata);
-        lua_rawset(state, identity);
-        lua_remove(state, ubox);
-        lua_remove(state, identity);
-        if (root)
-            root_userdata(state, value, -1);
-        return;
+        if (axlua::is_invalid_userdata(state, -1))
+        {
+            lua_pop(state, 1);
+            lua_pushlightuserdata(state, value);
+            lua_pushnil(state);
+            lua_rawset(state, ubox);
+        }
+        else
+        {
+            const int userdata = absolute_index(state, -1);
+            lua_pushlightuserdata(state, value);
+            lua_pushvalue(state, userdata);
+            lua_rawset(state, identity);
+            lua_remove(state, ubox);
+            lua_remove(state, identity);
+            if (root)
+                root_userdata(state, value, -1);
+            return;
+        }
     }
-    lua_pop(state, 1);
+    else
+        lua_pop(state, 1);
 
     const bool generated = type != nullptr && axlua::push_registered_object(state, value, type);
     if (!generated)
@@ -527,6 +550,7 @@ void push_user_type(lua_State* state, void* value, const char* type, bool root)
     lua_pushlightuserdata(state, value);
     lua_pushvalue(state, -2);
     lua_rawset(state, identity);
+    axlua::remember_userdata_object(state, -1, nativeObject);
     lua_remove(state, ubox);
     lua_remove(state, identity);
 
@@ -777,7 +801,7 @@ const char* axlua::adapter::type_name(lua_State* state, int index)
 {
     if (lua_isnone(state, index))
     {
-        lua_pushliteral(state, "[no object]");
+        axlua::adapter::push_literal(state, "[no object]");
         return lua_tostring(state, -1);
     }
     if (!lua_getmetatable(state, index))
@@ -885,6 +909,11 @@ void* axlua::adapter::to_usertype(lua_State* state, int index, void* defaultValu
         return lua_touserdata(state, index);
     if (!lua_isuserdata(state, index))
         return defaultValue;
+    if (axlua::is_invalid_userdata(state, index))
+    {
+        luaL_error(state, "attempt to access an expired Axmol object");
+        return nullptr;
+    }
     void** value = static_cast<void**>(lua_touserdata(state, index));
     return value != nullptr ? *value : nullptr;
 }
@@ -903,21 +932,6 @@ lua_Number axlua::adapter::to_field_number(lua_State* state, int tableIndex, int
     return value;
 }
 
-void axlua::adapter::push_boolean(lua_State* state, int value)
-{
-    lua_pushboolean(state, value);
-}
-void axlua::adapter::push_number(lua_State* state, lua_Number value)
-{
-    lua_pushnumber(state, value);
-}
-void axlua::adapter::push_string(lua_State* state, const char* value)
-{
-    if (value == nullptr)
-        lua_pushnil(state);
-    else
-        lua_pushstring(state, value);
-}
 void axlua::adapter::push_usertype(lua_State* state, void* value, const char* type)
 {
     push_user_type(state, value, type, false);
@@ -959,6 +973,7 @@ int axlua::adapter::ref_function(lua_State* L, int lo, int def)
     if (!lua_isfunction(L, lo))
         return 0;
 
+    lo = absolute_index(L, lo);
     lua_pushstring(L, axlua::adapter::kFunctionRegistry);
     lua_rawget(L, LUA_REGISTRYINDEX);
     lua_pushvalue(L, lo);
@@ -994,9 +1009,4 @@ int axlua::adapter::is_function(lua_State* L, int lo, const char* type, int def,
     err->array = 0;
     err->type  = "[not function]";
     return 0;
-}
-
-int axlua::adapter::is_table(lua_State* L, int lo, const char* type, int def, axlua::adapter::Error* err)
-{
-    return axlua::adapter::is_table(L, lo, def, err);
 }

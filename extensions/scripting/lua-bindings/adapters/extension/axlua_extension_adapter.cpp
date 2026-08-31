@@ -162,7 +162,7 @@ argumentError:
 
 static void extendAssetsManager(lua_State* L)
 {
-    lua_pushstring(L, "ax.AssetsManager");
+    axlua::adapter::push_literal(L, "ax.AssetsManager");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {
@@ -173,7 +173,7 @@ static void extendAssetsManager(lua_State* L)
 
 static void extendManifest(lua_State* L)
 {
-    lua_pushstring(L, "ax.Manifest");
+    axlua::adapter::push_literal(L, "ax.Manifest");
     lua_rawget(L, LUA_REGISTRYINDEX);
     lua_pop(L, 1);
 }
@@ -229,7 +229,7 @@ argumentError:
 
 static void extendEventListenerAssetsManagerEx(lua_State* L)
 {
-    lua_pushstring(L, "ax.EventListenerAssetsManagerEx");
+    axlua::adapter::push_literal(L, "ax.EventListenerAssetsManagerEx");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {
@@ -292,7 +292,7 @@ argumentError:
 
 static void extendParticleSystem3D(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.ParticleSystem3D");
+    axlua::adapter::push_literal(luaState, "ax.ParticleSystem3D");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
@@ -371,7 +371,7 @@ argumentError:
 
 static void extendParticlePool(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.ParticlePool");
+    axlua::adapter::push_literal(luaState, "ax.ParticlePool");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
@@ -578,17 +578,17 @@ argumentError:
 
 static void extendScrollView(lua_State* luaState)
 {
-    lua_pushstring(luaState, "ax.ScrollView");
+    axlua::adapter::push_literal(luaState, "ax.ScrollView");
     lua_rawget(luaState, LUA_REGISTRYINDEX);
     if (lua_istable(luaState, -1))
     {
-        lua_pushstring(luaState, "setDelegate");
+        axlua::adapter::push_literal(luaState, "setDelegate");
         lua_pushcfunction(luaState, axlua_extension_ScrollView_setDelegate);
         lua_rawset(luaState, -3);
-        lua_pushstring(luaState, "registerScriptHandler");
+        axlua::adapter::push_literal(luaState, "registerScriptHandler");
         lua_pushcfunction(luaState, axlua_extension_ScrollView_registerScriptHandler);
         lua_rawset(luaState, -3);
-        lua_pushstring(luaState, "unregisterScriptHandler");
+        axlua::adapter::push_literal(luaState, "unregisterScriptHandler");
         lua_pushcfunction(luaState, axlua_extension_ScrollView_unregisterScriptHandler);
         lua_rawset(luaState, -3);
     }
@@ -992,7 +992,7 @@ argumentError:
 
 static void extendTableView(lua_State* L)
 {
-    lua_pushstring(L, "ax.TableView");
+    axlua::adapter::push_literal(L, "ax.TableView");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {

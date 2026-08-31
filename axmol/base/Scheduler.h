@@ -132,6 +132,7 @@ class AX_DLL TimerScriptHandler : public Timer
 {
 public:
     bool initWithScriptHandler(int handler, float seconds);
+    bool initWithCallback(const ccSchedulerFunc& callback, float seconds);
     int getScriptHandler() const { return _scriptHandler; }
 
     void trigger(float dt) override;
@@ -139,6 +140,7 @@ public:
 
 private:
     int _scriptHandler;
+    ccSchedulerFunc _callback;
 };
 
 #endif
@@ -334,6 +336,7 @@ public:
      @lua NA
      */
     unsigned int scheduleScriptFunc(unsigned int handler, float interval, bool paused);
+    unsigned int scheduleScriptFunc(const ccSchedulerFunc& callback, float interval, bool paused);
 #endif
     /////////////////////////////////////
 

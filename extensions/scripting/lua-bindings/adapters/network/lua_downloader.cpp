@@ -334,7 +334,7 @@ static int lua_downloader_cleanup(lua_State* L)
 
 static int lua_downloader_tostring(lua_State* L)
 {
-    lua_pushstring(L, "[ax.Downloader]");
+    axlua::adapter::push_literal(L, "[ax.Downloader]");
     return 1;
 }
 
@@ -358,7 +358,7 @@ static const struct luaL_Reg downloaderMemberFns[] = {{"createDownloadDataTask",
 int register_downloader(lua_State* L)
 {
     luaL_newmetatable(L, "ax.Downloader");
-    lua_pushstring(L, "__index");
+    axlua::adapter::push_literal(L, "__index");
     lua_pushvalue(L, -2); /* pushes the metatable */
     lua_settable(L, -3);  /* metatable.__index = metatable */
 

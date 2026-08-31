@@ -187,6 +187,7 @@ void TimerTargetCallback::cancel()
 
 bool TimerScriptHandler::initWithScriptHandler(int handler, float seconds)
 {
+    _callback      = {};
     _scriptHandler = handler;
     _elapsed       = -1;
     _interval      = seconds;
@@ -194,9 +195,22 @@ bool TimerScriptHandler::initWithScriptHandler(int handler, float seconds)
     return true;
 }
 
+bool TimerScriptHandler::initWithCallback(const ccSchedulerFunc& callback, float seconds)
+{
+    _scriptHandler = 0;
+    _callback      = callback;
+    _elapsed       = -1;
+    _interval      = seconds;
+    return true;
+}
+
 void TimerScriptHandler::trigger(float dt)
 {
-    if (0 != _scriptHandler)
+    if (_callback)
+    {
+        _callback(dt);
+    }
+    else if (0 != _scriptHandler)
     {
         SchedulerScriptData data(_scriptHandler, dt);
         ScriptEvent event(kScheduleEvent, &data);
@@ -584,6 +598,13 @@ void Scheduler::unscheduleAllForTarget(std::unordered_map<void*, TimerHandle>::i
 unsigned int Scheduler::scheduleScriptFunc(unsigned int handler, float interval, bool paused)
 {
     SchedulerScriptHandlerEntry* entry = SchedulerScriptHandlerEntry::create(handler, interval, paused);
+    _scriptHandlerEntries.pushBack(entry);
+    return entry->getEntryId();
+}
+
+unsigned int Scheduler::scheduleScriptFunc(const ccSchedulerFunc& callback, float interval, bool paused)
+{
+    SchedulerScriptHandlerEntry* entry = SchedulerScriptHandlerEntry::create(callback, interval, paused);
     _scriptHandlerEntries.pushBack(entry);
     return entry->getEntryId();
 }

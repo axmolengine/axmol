@@ -138,7 +138,7 @@ argumentError:
 
 int register_all_ax_sceneio_adapter(lua_State* L)
 {
-    lua_pushstring(L, "axext.CSLoader");
+    axlua::adapter::push_literal(L, "axext.CSLoader");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {

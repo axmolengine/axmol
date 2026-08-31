@@ -63,7 +63,7 @@ static int lua_ax_createDownloadDir(lua_State* L)
             CreateDirectoryA(pathToSave.c_str(), 0);
         }
 #endif
-        axlua::adapter::push_string(L, pathToSave.c_str());
+        lua_pushlstring(L, pathToSave.data(), pathToSave.size());
         return 1;
     }
 

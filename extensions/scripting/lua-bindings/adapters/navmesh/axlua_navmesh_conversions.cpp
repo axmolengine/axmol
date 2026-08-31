@@ -53,54 +53,54 @@ bool luaval_to_navmeshagentparam(lua_State* L, int lo, ax::NavMeshAgentParam* ou
 
     if (ok)
     {
-        lua_pushstring(L, "radius");
+        axlua::adapter::push_literal(L, "radius");
         lua_gettable(L, lo);
         outValue->radius = lua_isnumber(L, -1) ? (float)lua_tonumber(L, -1) : 0.6f;
         lua_pop(L, 1);
 
-        lua_pushstring(L, "height");
+        axlua::adapter::push_literal(L, "height");
         lua_gettable(L, lo);
         outValue->height = lua_isnumber(L, -1) ? (float)lua_tonumber(L, -1) : 2.0f;
         lua_pop(L, 1);
 
-        lua_pushstring(L, "maxAcceleration");
+        axlua::adapter::push_literal(L, "maxAcceleration");
         lua_gettable(L, lo);
         outValue->maxAcceleration = lua_isnumber(L, -1) ? (float)lua_tonumber(L, -1) : 8.0f;
         lua_pop(L, 1);
 
-        lua_pushstring(L, "maxSpeed");
+        axlua::adapter::push_literal(L, "maxSpeed");
         lua_gettable(L, lo);
         outValue->maxSpeed = lua_isnumber(L, -1) ? (float)lua_tonumber(L, -1) : 3.5f;
         lua_pop(L, 1);
 
-        lua_pushstring(L, "collisionQueryRange");
+        axlua::adapter::push_literal(L, "collisionQueryRange");
         lua_gettable(L, lo);
         outValue->collisionQueryRange = lua_isnumber(L, -1) ? (float)lua_tonumber(L, -1) : outValue->radius * 12.0f;
         lua_pop(L, 1);
 
-        lua_pushstring(L, "pathOptimizationRange");
+        axlua::adapter::push_literal(L, "pathOptimizationRange");
         lua_gettable(L, lo);
         outValue->pathOptimizationRange = lua_isnumber(L, -1) ? (float)lua_tonumber(L, -1) : outValue->radius * 30.0f;
         lua_pop(L, 1);
 
-        lua_pushstring(L, "separationWeight");
+        axlua::adapter::push_literal(L, "separationWeight");
         lua_gettable(L, lo);
         outValue->separationWeight = lua_isnumber(L, -1) ? (float)lua_tonumber(L, -1) : 2.0f;
         lua_pop(L, 1);
 
-        lua_pushstring(L, "updateFlags");
+        axlua::adapter::push_literal(L, "updateFlags");
         lua_gettable(L, lo);
         outValue->updateFlags = lua_isnumber(L, -1) ? (unsigned char)lua_tonumber(L, -1)
                                                     : DT_CROWD_ANTICIPATE_TURNS | DT_CROWD_OPTIMIZE_VIS |
                                                           DT_CROWD_OPTIMIZE_TOPO | DT_CROWD_OBSTACLE_AVOIDANCE;
         lua_pop(L, 1);
 
-        lua_pushstring(L, "obstacleAvoidanceType");
+        axlua::adapter::push_literal(L, "obstacleAvoidanceType");
         lua_gettable(L, lo);
         outValue->obstacleAvoidanceType = lua_isnumber(L, -1) ? (unsigned char)lua_tonumber(L, -1) : 3;
         lua_pop(L, 1);
 
-        lua_pushstring(L, "queryFilterType");
+        axlua::adapter::push_literal(L, "queryFilterType");
         lua_gettable(L, lo);
         outValue->queryFilterType = lua_isnumber(L, -1) ? (unsigned char)lua_tonumber(L, -1) : 0;
         lua_pop(L, 1);
@@ -129,7 +129,7 @@ bool luaval_to_offmeshlinkdata(lua_State* L, int lo, ax::OffMeshLinkData* outVal
 
     if (ok)
     {
-        lua_pushstring(L, "startPosition");
+        axlua::adapter::push_literal(L, "startPosition");
         lua_gettable(L, lo);
         ok &= luaval_to_vec3(L, lua_gettop(L), &outValue->startPosition);
         if (!ok)
@@ -139,7 +139,7 @@ bool luaval_to_offmeshlinkdata(lua_State* L, int lo, ax::OffMeshLinkData* outVal
         }
         lua_pop(L, 1);
 
-        lua_pushstring(L, "endPosition");
+        axlua::adapter::push_literal(L, "endPosition");
         ok &= luaval_to_vec3(L, lua_gettop(L), &outValue->endPosition);
         if (!ok)
         {
@@ -160,43 +160,43 @@ void navmeshagentparam_to_luaval(lua_State* L, const ax::NavMeshAgentParam& inVa
 
     lua_newtable(L);
 
-    lua_pushstring(L, "radius");
+    axlua::adapter::push_literal(L, "radius");
     lua_pushnumber(L, (lua_Number)inValue.radius);
     lua_rawset(L, -3);
 
-    lua_pushstring(L, "height");
+    axlua::adapter::push_literal(L, "height");
     lua_pushnumber(L, (lua_Number)inValue.height);
     lua_rawset(L, -3);
 
-    lua_pushstring(L, "maxAcceleration");
+    axlua::adapter::push_literal(L, "maxAcceleration");
     lua_pushnumber(L, (lua_Number)inValue.maxAcceleration);
     lua_rawset(L, -3);
 
-    lua_pushstring(L, "maxSpeed");
+    axlua::adapter::push_literal(L, "maxSpeed");
     lua_pushnumber(L, (lua_Number)inValue.maxSpeed);
     lua_rawset(L, -3);
 
-    lua_pushstring(L, "collisionQueryRange");
+    axlua::adapter::push_literal(L, "collisionQueryRange");
     lua_pushnumber(L, (lua_Number)inValue.collisionQueryRange);
     lua_rawset(L, -3);
 
-    lua_pushstring(L, "pathOptimizationRange");
+    axlua::adapter::push_literal(L, "pathOptimizationRange");
     lua_pushnumber(L, (lua_Number)inValue.pathOptimizationRange);
     lua_rawset(L, -3);
 
-    lua_pushstring(L, "separationWeight");
+    axlua::adapter::push_literal(L, "separationWeight");
     lua_pushnumber(L, (lua_Number)inValue.separationWeight);
     lua_rawset(L, -3);
 
-    lua_pushstring(L, "updateFlags");
+    axlua::adapter::push_literal(L, "updateFlags");
     lua_pushnumber(L, (lua_Number)inValue.updateFlags);
     lua_rawset(L, -3);
 
-    lua_pushstring(L, "obstacleAvoidanceType");
+    axlua::adapter::push_literal(L, "obstacleAvoidanceType");
     lua_pushnumber(L, (lua_Number)inValue.obstacleAvoidanceType);
     lua_rawset(L, -3);
 
-    lua_pushstring(L, "queryFilterType");
+    axlua::adapter::push_literal(L, "queryFilterType");
     lua_pushnumber(L, (lua_Number)inValue.queryFilterType);
     lua_rawset(L, -3);
 }
@@ -207,11 +207,11 @@ void offmeshlinkdata_to_luaval(lua_State* L, const ax::OffMeshLinkData& inValue)
         return;
 
     lua_newtable(L);
-    lua_pushstring(L, "startPosition");
+    axlua::adapter::push_literal(L, "startPosition");
     vec3_to_luaval(L, inValue.startPosition);
     lua_rawset(L, -3);
 
-    lua_pushstring(L, "endPosition");
+    axlua::adapter::push_literal(L, "endPosition");
     vec3_to_luaval(L, inValue.endPosition);
     lua_rawset(L, -3);
 }

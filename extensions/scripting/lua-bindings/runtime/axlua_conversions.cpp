@@ -249,24 +249,24 @@ bool luaval_to_vec2(lua_State* L, int lo, ax::Vec2* outValue, const char* funcNa
 
     if (ok)
     {
-        lua_pushstring(L, "x");
+        axlua::adapter::push_literal(L, "x");
         lua_gettable(L, lo);
         if (lua_isnil(L, -1))
         {
             lua_pop(L, 1);
-            lua_pushstring(L, "width");
+            axlua::adapter::push_literal(L, "width");
             lua_gettable(L, lo);
         }
 
         outValue->x = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
 
-        lua_pushstring(L, "y");
+        axlua::adapter::push_literal(L, "y");
         lua_gettable(L, lo);
         if (lua_isnil(L, -1))
         {
             lua_pop(L, 1);
-            lua_pushstring(L, "height");
+            axlua::adapter::push_literal(L, "height");
             lua_gettable(L, lo);
         }
 
@@ -427,17 +427,17 @@ bool luaval_to_vec3(lua_State* L, int lo, ax::Vec3* outValue, const char* funcNa
 
     if (ok)
     {
-        lua_pushstring(L, "x");
+        axlua::adapter::push_literal(L, "x");
         lua_gettable(L, lo);
         outValue->x = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
 
-        lua_pushstring(L, "y");
+        axlua::adapter::push_literal(L, "y");
         lua_gettable(L, lo);
         outValue->y = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
 
-        lua_pushstring(L, "z");
+        axlua::adapter::push_literal(L, "z");
         lua_gettable(L, lo);
         outValue->z = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
@@ -543,13 +543,13 @@ void mesh_vertex_attrib_to_luaval(lua_State* L, const ax::MeshVertexAttrib& valu
     if (L == nullptr)
         return;
     lua_newtable(L);
-    lua_pushstring(L, "type");
+    axlua::adapter::push_literal(L, "type");
     lua_pushinteger(L, static_cast<int>(value.type));
     lua_rawset(L, -3);
-    lua_pushstring(L, "vertexAttrib");
+    axlua::adapter::push_literal(L, "vertexAttrib");
     lua_pushinteger(L, static_cast<int>(value.vertexAttrib));
     lua_rawset(L, -3);
-    lua_pushstring(L, "attribSizeBytes");
+    axlua::adapter::push_literal(L, "attribSizeBytes");
     lua_pushinteger(L, value.getAttribSizeBytes());
     lua_rawset(L, -3);
 }
@@ -572,22 +572,22 @@ bool luaval_to_vec4(lua_State* L, int lo, ax::Vec4* outValue, const char* funcNa
 
     if (ok)
     {
-        lua_pushstring(L, "x");
+        axlua::adapter::push_literal(L, "x");
         lua_gettable(L, lo);
         outValue->x = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
 
-        lua_pushstring(L, "y");
+        axlua::adapter::push_literal(L, "y");
         lua_gettable(L, lo);
         outValue->y = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
 
-        lua_pushstring(L, "z");
+        axlua::adapter::push_literal(L, "z");
         lua_gettable(L, lo);
         outValue->z = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
 
-        lua_pushstring(L, "w");
+        axlua::adapter::push_literal(L, "w");
         lua_gettable(L, lo);
         outValue->w = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
@@ -613,22 +613,22 @@ bool luaval_to_quat(lua_State* L, int lo, ax::Quat* outValue, const char* funcNa
 
     if (ok)
     {
-        lua_pushstring(L, "x");
+        axlua::adapter::push_literal(L, "x");
         lua_gettable(L, lo);
         outValue->x = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
 
-        lua_pushstring(L, "y");
+        axlua::adapter::push_literal(L, "y");
         lua_gettable(L, lo);
         outValue->y = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
 
-        lua_pushstring(L, "z");
+        axlua::adapter::push_literal(L, "z");
         lua_gettable(L, lo);
         outValue->z = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
 
-        lua_pushstring(L, "w");
+        axlua::adapter::push_literal(L, "w");
         lua_gettable(L, lo);
         outValue->w = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
@@ -654,7 +654,7 @@ bool luaval_to_blendfunc(lua_State* L, int lo, ax::BlendFunc* outValue, const ch
 
     if (ok)
     {
-        lua_pushstring(L, "src");
+        axlua::adapter::push_literal(L, "src");
         lua_gettable(L, lo);
         if (!lua_isnil(L, -1))
         {
@@ -662,7 +662,7 @@ bool luaval_to_blendfunc(lua_State* L, int lo, ax::BlendFunc* outValue, const ch
         }
         lua_pop(L, 1);
 
-        lua_pushstring(L, "dst");
+        axlua::adapter::push_literal(L, "dst");
         lua_gettable(L, lo);
         if (!lua_isnil(L, -1))
         {
@@ -772,7 +772,7 @@ bool luaval_to_contact_point_3d(lua_State* L, int lo, ContactInfo3D::ContactPoin
 
 bool luaval_to_contact_points_3d(lua_State* L, int tableIndex, ContactInfo3D* outValue, const char* funcName)
 {
-    lua_pushstring(L, "points");
+    axlua::adapter::push_literal(L, "points");
     lua_gettable(L, tableIndex);
     if (lua_isnil(L, -1))
     {
@@ -970,7 +970,7 @@ void contact_info_3d_to_luaval(lua_State* L, const ContactInfo3D& info)
     push_physics_actor_field(L, "actorA", info.actorA);
     push_physics_actor_field(L, "actorB", info.actorB);
     push_vec3_field(L, "normal", info.normal);
-    lua_pushstring(L, "points");
+    axlua::adapter::push_literal(L, "points");
     lua_newtable(L);
     int index = 1;
     for (const auto& point : info.points)
@@ -1055,12 +1055,12 @@ bool luaval_to_size(lua_State* L, int lo, Size* outValue, const char* funcName)
 
     if (ok)
     {
-        lua_pushstring(L, "width"); /* L: paramStack key */
+        axlua::adapter::push_literal(L, "width"); /* L: paramStack key */
         lua_gettable(L, lo);        /* L: paramStack paramStack[lo][key] */
         outValue->width = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1); /* L: paramStack*/
 
-        lua_pushstring(L, "height");
+        axlua::adapter::push_literal(L, "height");
         lua_gettable(L, lo);
         outValue->height = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
@@ -1087,22 +1087,22 @@ bool luaval_to_rect(lua_State* L, int lo, Rect* outValue, const char* funcName)
 
     if (ok)
     {
-        lua_pushstring(L, "x");
+        axlua::adapter::push_literal(L, "x");
         lua_gettable(L, lo);
         outValue->origin.x = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
 
-        lua_pushstring(L, "y");
+        axlua::adapter::push_literal(L, "y");
         lua_gettable(L, lo);
         outValue->origin.y = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
 
-        lua_pushstring(L, "width");
+        axlua::adapter::push_literal(L, "width");
         lua_gettable(L, lo);
         outValue->size.width = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
 
-        lua_pushstring(L, "height");
+        axlua::adapter::push_literal(L, "height");
         lua_gettable(L, lo);
         outValue->size.height = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
@@ -1129,22 +1129,22 @@ bool luaval_to_recti(lua_State* L, int lo, rhi::RectI* outValue, const char* fun
 
     if (ok)
     {
-        lua_pushstring(L, "x");
+        axlua::adapter::push_literal(L, "x");
         lua_gettable(L, lo);
         outValue->x = lua_isnil(L, -1) ? 0 : static_cast<int>(lua_tointeger(L, -1));
         lua_pop(L, 1);
 
-        lua_pushstring(L, "y");
+        axlua::adapter::push_literal(L, "y");
         lua_gettable(L, lo);
         outValue->y = lua_isnil(L, -1) ? 0 : static_cast<int>(lua_tointeger(L, -1));
         lua_pop(L, 1);
 
-        lua_pushstring(L, "width");
+        axlua::adapter::push_literal(L, "width");
         lua_gettable(L, lo);
         outValue->width = lua_isnil(L, -1) ? 0 : static_cast<int>(lua_tointeger(L, -1));
         lua_pop(L, 1);
 
-        lua_pushstring(L, "height");
+        axlua::adapter::push_literal(L, "height");
         lua_gettable(L, lo);
         outValue->height = lua_isnil(L, -1) ? 0 : static_cast<int>(lua_tointeger(L, -1));
         lua_pop(L, 1);
@@ -1171,22 +1171,22 @@ bool luaval_to_color32(lua_State* L, int lo, Color32* outValue, const char* func
 
     if (ok)
     {
-        lua_pushstring(L, "r");
+        axlua::adapter::push_literal(L, "r");
         lua_gettable(L, lo);
         outValue->r = lua_isnil(L, -1) ? 0 : static_cast<uint8_t>(lua_tonumber(L, -1));
         lua_pop(L, 1);
 
-        lua_pushstring(L, "g");
+        axlua::adapter::push_literal(L, "g");
         lua_gettable(L, lo);
         outValue->g = lua_isnil(L, -1) ? 0 : static_cast<uint8_t>(lua_tonumber(L, -1));
         lua_pop(L, 1);
 
-        lua_pushstring(L, "b");
+        axlua::adapter::push_literal(L, "b");
         lua_gettable(L, lo);
         outValue->b = lua_isnil(L, -1) ? 0 : static_cast<uint8_t>(lua_tonumber(L, -1));
         lua_pop(L, 1);
 
-        lua_pushstring(L, "a");
+        axlua::adapter::push_literal(L, "a");
         lua_gettable(L, lo);
         outValue->a = lua_isnil(L, -1) ? 255 : static_cast<uint8_t>(lua_tonumber(L, -1));
         lua_pop(L, 1);
@@ -1213,22 +1213,22 @@ bool luaval_to_color(lua_State* L, int lo, ax::Color* outValue, const char* func
 
     if (ok)
     {
-        lua_pushstring(L, "r");
+        axlua::adapter::push_literal(L, "r");
         lua_gettable(L, lo);
         outValue->r = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
 
-        lua_pushstring(L, "g");
+        axlua::adapter::push_literal(L, "g");
         lua_gettable(L, lo);
         outValue->g = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
 
-        lua_pushstring(L, "b");
+        axlua::adapter::push_literal(L, "b");
         lua_gettable(L, lo);
         outValue->b = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
 
-        lua_pushstring(L, "a");
+        axlua::adapter::push_literal(L, "a");
         lua_gettable(L, lo);
         outValue->a = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
@@ -1257,7 +1257,7 @@ bool luaval_to_affinetransform(lua_State* L, int lo, AffineTransform* outValue, 
     {
         do
         {
-            lua_pushstring(L, "a");
+            axlua::adapter::push_literal(L, "a");
             lua_gettable(L, lo);
             if (lua_isnil(L, -1))
             {
@@ -1267,7 +1267,7 @@ bool luaval_to_affinetransform(lua_State* L, int lo, AffineTransform* outValue, 
             }
             outValue->a = (float)lua_tonumber(L, -1);
 
-            lua_pushstring(L, "b");
+            axlua::adapter::push_literal(L, "b");
             lua_gettable(L, lo);
             if (lua_isnil(L, -1))
             {
@@ -1278,7 +1278,7 @@ bool luaval_to_affinetransform(lua_State* L, int lo, AffineTransform* outValue, 
             outValue->b = (float)lua_tonumber(L, -1);
             lua_pop(L, 1);
 
-            lua_pushstring(L, "c");
+            axlua::adapter::push_literal(L, "c");
             lua_gettable(L, lo);
             if (lua_isnil(L, -1))
             {
@@ -1289,7 +1289,7 @@ bool luaval_to_affinetransform(lua_State* L, int lo, AffineTransform* outValue, 
             outValue->c = (float)lua_tonumber(L, -1);
             lua_pop(L, 1);
 
-            lua_pushstring(L, "d");
+            axlua::adapter::push_literal(L, "d");
             lua_gettable(L, lo);
             if (lua_isnil(L, -1))
             {
@@ -1300,7 +1300,7 @@ bool luaval_to_affinetransform(lua_State* L, int lo, AffineTransform* outValue, 
             outValue->d = (float)lua_tonumber(L, -1);
             lua_pop(L, 1);
 
-            lua_pushstring(L, "tx");
+            axlua::adapter::push_literal(L, "tx");
             lua_gettable(L, lo);
             if (lua_isnil(L, -1))
             {
@@ -1311,7 +1311,7 @@ bool luaval_to_affinetransform(lua_State* L, int lo, AffineTransform* outValue, 
             outValue->tx = lua_isnil(L, -1) ? 0 : (float)lua_tonumber(L, -1);
             lua_pop(L, 1);
 
-            lua_pushstring(L, "ty");
+            axlua::adapter::push_literal(L, "ty");
             lua_gettable(L, lo);
             if (lua_isnil(L, -1))
             {
@@ -1344,33 +1344,33 @@ bool luaval_to_ttfconfig(lua_State* L, int lo, ax::TTFConfig* outValue, const ch
 
     if (ok)
     {
-        lua_pushstring(L, "fontFilePath"); /* L: paramStack key */
+        axlua::adapter::push_literal(L, "fontFilePath"); /* L: paramStack key */
         lua_gettable(L, lo);               /* L: paramStack paramStack[lo][key] */
         outValue->fontFilePath = lua_isstring(L, -1) ? lua_tostring(L, -1) : "";
         lua_pop(L, 1); /* L: paramStack*/
 
-        lua_pushstring(L, "fontSize");
+        axlua::adapter::push_literal(L, "fontSize");
         lua_gettable(L, lo);
         outValue->fontSize = lua_isnumber(L, -1) ? (float)lua_tointeger(L, -1) : 0.0f;
         lua_pop(L, 1);
 
-        lua_pushstring(L, "glyphs");
+        axlua::adapter::push_literal(L, "glyphs");
         lua_gettable(L, lo);
         outValue->glyphs =
             lua_isnumber(L, -1) ? static_cast<GlyphCollection>(lua_tointeger(L, -1)) : GlyphCollection::NEHE;
         lua_pop(L, 1);
 
-        lua_pushstring(L, "customGlyphs");
+        axlua::adapter::push_literal(L, "customGlyphs");
         lua_gettable(L, lo);
         outValue->customGlyphs = lua_isstring(L, -1) ? lua_tostring(L, -1) : "";
         lua_pop(L, 1);
 
-        lua_pushstring(L, "distanceFieldEnabled");
+        axlua::adapter::push_literal(L, "distanceFieldEnabled");
         lua_gettable(L, lo);
         outValue->distanceFieldEnabled = lua_isboolean(L, -1) ? lua_toboolean(L, -1) : false;
         lua_pop(L, 1);
 
-        lua_pushstring(L, "outlineSize");
+        axlua::adapter::push_literal(L, "outlineSize");
         lua_gettable(L, lo);
         outValue->outlineSize = lua_isnumber(L, -1) ? (int)lua_tointeger(L, -1) : 0;
         lua_pop(L, 1);
@@ -1863,22 +1863,22 @@ bool luaval_to_quaternion(lua_State* L, int lo, ax::Quat* outValue, const char* 
 
     if (ok)
     {
-        lua_pushstring(L, "x");
+        axlua::adapter::push_literal(L, "x");
         lua_gettable(L, lo);
         outValue->x = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
 
-        lua_pushstring(L, "y");
+        axlua::adapter::push_literal(L, "y");
         lua_gettable(L, lo);
         outValue->y = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
 
-        lua_pushstring(L, "z");
+        axlua::adapter::push_literal(L, "z");
         lua_gettable(L, lo);
         outValue->z = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
 
-        lua_pushstring(L, "w");
+        axlua::adapter::push_literal(L, "w");
         lua_gettable(L, lo);
         outValue->w = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
@@ -1904,12 +1904,12 @@ bool luaval_to_tex2f(lua_State* L, int lo, ax::Tex2F* outValue, const char* func
 
     if (ok)
     {
-        lua_pushstring(L, "u");
+        axlua::adapter::push_literal(L, "u");
         lua_gettable(L, lo);
         outValue->u = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
 
-        lua_pushstring(L, "v");
+        axlua::adapter::push_literal(L, "v");
         lua_gettable(L, lo);
         outValue->v = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
@@ -2139,7 +2139,7 @@ void physics_raycastinfo_to_luaval(lua_State* L, const RayCastHit2D& info)
 
     lua_newtable(L); /* L: table */
 
-    lua_pushstring(L, "collider"); /* L: table key */
+    axlua::adapter::push_literal(L, "collider"); /* L: table key */
     auto shape = info.collider;
     if (shape == nullptr)
     {
@@ -2151,15 +2151,15 @@ void physics_raycastinfo_to_luaval(lua_State* L, const RayCastHit2D& info)
     }
     lua_rawset(L, -3); /* table[key] = value, L: table */
 
-    lua_pushstring(L, "point"); /* L: table key */
+    axlua::adapter::push_literal(L, "point"); /* L: table key */
     vec2_to_luaval(L, info.point);
     lua_rawset(L, -3); /* table[key] = value, L: table */
 
-    lua_pushstring(L, "normal"); /* L: table key */
+    axlua::adapter::push_literal(L, "normal"); /* L: table key */
     vec2_to_luaval(L, info.normal);
     lua_rawset(L, -3); /* table[key] = value, L: table */
 
-    lua_pushstring(L, "fraction");                /* L: table key */
+    axlua::adapter::push_literal(L, "fraction");                /* L: table key */
     lua_pushnumber(L, (lua_Number)info.fraction); /* L: table key value*/
     lua_rawset(L, -3);                            /* table[key] = value, L: table */
 }
@@ -2175,10 +2175,10 @@ void size_to_luaval(lua_State* L, const Size& sz)
     if (NULL == L)
         return;
     lua_newtable(L);                          /* L: table */
-    lua_pushstring(L, "width");               /* L: table key */
+    axlua::adapter::push_literal(L, "width");               /* L: table key */
     lua_pushnumber(L, (lua_Number)sz.width);  /* L: table key value*/
     lua_rawset(L, -3);                        /* table[key] = value, L: table */
-    lua_pushstring(L, "height");              /* L: table key */
+    axlua::adapter::push_literal(L, "height");              /* L: table key */
     lua_pushnumber(L, (lua_Number)sz.height); /* L: table key value*/
     lua_rawset(L, -3);                        /* table[key] = value, L: table */
 }
@@ -2188,16 +2188,16 @@ void rect_to_luaval(lua_State* L, const Rect& rt)
     if (NULL == L)
         return;
     lua_newtable(L);                               /* L: table */
-    lua_pushstring(L, "x");                        /* L: table key */
+    axlua::adapter::push_literal(L, "x");                        /* L: table key */
     lua_pushnumber(L, (lua_Number)rt.origin.x);    /* L: table key value*/
     lua_rawset(L, -3);                             /* table[key] = value, L: table */
-    lua_pushstring(L, "y");                        /* L: table key */
+    axlua::adapter::push_literal(L, "y");                        /* L: table key */
     lua_pushnumber(L, (lua_Number)rt.origin.y);    /* L: table key value*/
     lua_rawset(L, -3);                             /* table[key] = value, L: table */
-    lua_pushstring(L, "width");                    /* L: table key */
+    axlua::adapter::push_literal(L, "width");                    /* L: table key */
     lua_pushnumber(L, (lua_Number)rt.size.width);  /* L: table key value*/
     lua_rawset(L, -3);                             /* table[key] = value, L: table */
-    lua_pushstring(L, "height");                   /* L: table key */
+    axlua::adapter::push_literal(L, "height");                   /* L: table key */
     lua_pushnumber(L, (lua_Number)rt.size.height); /* L: table key value*/
     lua_rawset(L, -3);                             /* table[key] = value, L: table */
 }
@@ -2207,16 +2207,16 @@ void color32_to_luaval(lua_State* L, const Color32& color)
     if (NULL == L)
         return;
     lua_newtable(L);                        /* L: table */
-    lua_pushstring(L, "r");                 /* L: table key */
+    axlua::adapter::push_literal(L, "r");                 /* L: table key */
     lua_pushnumber(L, (lua_Number)color.r); /* L: table key value*/
     lua_rawset(L, -3);                      /* table[key] = value, L: table */
-    lua_pushstring(L, "g");                 /* L: table key */
+    axlua::adapter::push_literal(L, "g");                 /* L: table key */
     lua_pushnumber(L, (lua_Number)color.g); /* L: table key value*/
     lua_rawset(L, -3);                      /* table[key] = value, L: table */
-    lua_pushstring(L, "b");                 /* L: table key */
+    axlua::adapter::push_literal(L, "b");                 /* L: table key */
     lua_pushnumber(L, (lua_Number)color.b); /* L: table key value*/
     lua_rawset(L, -3);                      /* table[key] = value, L: table */
-    lua_pushstring(L, "a");                 /* L: table key */
+    axlua::adapter::push_literal(L, "a");                 /* L: table key */
     lua_pushnumber(L, (lua_Number)color.a); /* L: table key value*/
     lua_rawset(L, -3);                      /* table[key] = value, L: table */
 }
@@ -2226,16 +2226,16 @@ void color_to_luaval(lua_State* L, const ax::Color& color)
     if (NULL == L)
         return;
     lua_newtable(L);                        /* L: table */
-    lua_pushstring(L, "r");                 /* L: table key */
+    axlua::adapter::push_literal(L, "r");                 /* L: table key */
     lua_pushnumber(L, (lua_Number)color.r); /* L: table key value*/
     lua_rawset(L, -3);                      /* table[key] = value, L: table */
-    lua_pushstring(L, "g");                 /* L: table key */
+    axlua::adapter::push_literal(L, "g");                 /* L: table key */
     lua_pushnumber(L, (lua_Number)color.g); /* L: table key value*/
     lua_rawset(L, -3);                      /* table[key] = value, L: table */
-    lua_pushstring(L, "b");                 /* L: table key */
+    axlua::adapter::push_literal(L, "b");                 /* L: table key */
     lua_pushnumber(L, (lua_Number)color.b); /* L: table key value*/
     lua_rawset(L, -3);                      /* table[key] = value, L: table */
-    lua_pushstring(L, "a");                 /* L: table key */
+    axlua::adapter::push_literal(L, "a");                 /* L: table key */
     lua_pushnumber(L, (lua_Number)color.a); /* L: table key value*/
     lua_rawset(L, -3);                      /* table[key] = value, L: table */
 }
@@ -2256,8 +2256,11 @@ void value_to_luaval(lua_State* L, const ax::Value& inValue)
         lua_pushinteger(L, obj.asInt64());
         break;
     case Value::Type::STRING:
-        lua_pushstring(L, obj.asStringRef().data());
+    {
+        const auto value = obj.asStringRef();
+        lua_pushlstring(L, value.data(), value.size());
         break;
+    }
     case Value::Type::VECTOR:
         valuespan_to_luaval(L, obj.asValueVector());
         break;
@@ -2286,7 +2289,7 @@ void valuemap_to_luaval(lua_State* L, const ax::ValueMap& inValue)
         {
         case Value::Type::BOOLEAN:
         {
-            lua_pushstring(L, key.c_str());
+            lua_pushlstring(L, key.data(), key.size());
             lua_pushboolean(L, obj.asBool());
             lua_rawset(L, -3);
         }
@@ -2294,42 +2297,43 @@ void valuemap_to_luaval(lua_State* L, const ax::ValueMap& inValue)
         case Value::Type::FLOAT:
         case Value::Type::DOUBLE:
         {
-            lua_pushstring(L, key.c_str());
+            lua_pushlstring(L, key.data(), key.size());
             lua_pushnumber(L, obj.asDouble());
             lua_rawset(L, -3);
         }
         break;
         case Value::Type::INTEGER:
         {
-            lua_pushstring(L, key.c_str());
+            lua_pushlstring(L, key.data(), key.size());
             lua_pushinteger(L, obj.asInt64());
             lua_rawset(L, -3);
         }
         break;
         case Value::Type::STRING:
         {
-            lua_pushstring(L, key.c_str());
-            lua_pushstring(L, obj.asString().c_str());
+            lua_pushlstring(L, key.data(), key.size());
+            const auto value = obj.asString();
+            lua_pushlstring(L, value.data(), value.size());
             lua_rawset(L, -3);
         }
         break;
         case Value::Type::VECTOR:
         {
-            lua_pushstring(L, key.c_str());
+            lua_pushlstring(L, key.data(), key.size());
             valuespan_to_luaval(L, obj.asValueVector());
             lua_rawset(L, -3);
         }
         break;
         case Value::Type::MAP:
         {
-            lua_pushstring(L, key.c_str());
+            lua_pushlstring(L, key.data(), key.size());
             valuemap_to_luaval(L, obj.asValueMap());
             lua_rawset(L, -3);
         }
         break;
         case Value::Type::INT_KEY_MAP:
         {
-            lua_pushstring(L, key.c_str());
+            lua_pushlstring(L, key.data(), key.size());
             valuemapintkey_to_luaval(L, obj.asIntKeyMap());
             lua_rawset(L, -3);
         }
@@ -2358,7 +2362,7 @@ void valuemapintkey_to_luaval(lua_State* L, const ax::ValueMapIntKey& inValue)
         {
         case Value::Type::BOOLEAN:
         {
-            lua_pushstring(L, key.c_str());
+            lua_pushlstring(L, key.data(), key.size());
             lua_pushboolean(L, obj.asBool());
             lua_rawset(L, -3);
         }
@@ -2366,42 +2370,43 @@ void valuemapintkey_to_luaval(lua_State* L, const ax::ValueMapIntKey& inValue)
         case Value::Type::FLOAT:
         case Value::Type::DOUBLE:
         {
-            lua_pushstring(L, key.c_str());
+            lua_pushlstring(L, key.data(), key.size());
             lua_pushnumber(L, obj.asDouble());
             lua_rawset(L, -3);
         }
         break;
         case Value::Type::INTEGER:
         {
-            lua_pushstring(L, key.c_str());
+            lua_pushlstring(L, key.data(), key.size());
             lua_pushinteger(L, obj.asInt64());
             lua_rawset(L, -3);
         }
         break;
         case Value::Type::STRING:
         {
-            lua_pushstring(L, key.c_str());
-            lua_pushstring(L, obj.asStringRef().data());
+            lua_pushlstring(L, key.data(), key.size());
+            const auto value = obj.asStringRef();
+            lua_pushlstring(L, value.data(), value.size());
             lua_rawset(L, -3);
         }
         break;
         case Value::Type::VECTOR:
         {
-            lua_pushstring(L, key.c_str());
+            lua_pushlstring(L, key.data(), key.size());
             valuespan_to_luaval(L, obj.asValueVector());
             lua_rawset(L, -3);
         }
         break;
         case Value::Type::MAP:
         {
-            lua_pushstring(L, key.c_str());
+            lua_pushlstring(L, key.data(), key.size());
             valuemap_to_luaval(L, obj.asValueMap());
             lua_rawset(L, -3);
         }
         break;
         case Value::Type::INT_KEY_MAP:
         {
-            lua_pushstring(L, key.c_str());
+            lua_pushlstring(L, key.data(), key.size());
             valuemapintkey_to_luaval(L, obj.asIntKeyMap());
             lua_rawset(L, -3);
         }
@@ -2451,7 +2456,8 @@ void valuespan_to_luaval(lua_State* L, std::span<const Value> inValue)
         case Value::Type::STRING:
         {
             lua_pushnumber(L, (lua_Number)index);
-            lua_pushstring(L, obj.asString().c_str());
+            const auto value = obj.asString();
+            lua_pushlstring(L, value.data(), value.size());
             lua_rawset(L, -3);
             ++index;
         }
@@ -2510,10 +2516,10 @@ void blendfunc_to_luaval(lua_State* L, const ax::BlendFunc& func)
 
     lua_newtable(L); /* L: table */
 
-    lua_pushstring(L, "src");                /* L: table key */
+    axlua::adapter::push_literal(L, "src");                /* L: table key */
     lua_pushnumber(L, (lua_Number)func.src); /* L: table key value*/
     lua_rawset(L, -3);                       /* table[key] = value, L: table */
-    lua_pushstring(L, "dst");                /* L: table key */
+    axlua::adapter::push_literal(L, "dst");                /* L: table key */
     lua_pushnumber(L, (lua_Number)func.dst); /* L: table key value*/
     lua_rawset(L, -3);
 }
@@ -2523,35 +2529,35 @@ void fontdefinition_to_luaval(lua_State* L, const FontDefinition& value)
     if (L == nullptr)
         return;
     lua_newtable(L);
-    lua_pushstring(L, "fontName");
+    axlua::adapter::push_literal(L, "fontName");
     lua_pushlstring(L, value._fontName.data(), value._fontName.size());
     lua_rawset(L, -3);
-    lua_pushstring(L, "fontSize");
+    axlua::adapter::push_literal(L, "fontSize");
     lua_pushinteger(L, value._fontSize);
     lua_rawset(L, -3);
-    lua_pushstring(L, "fontAlignmentH");
+    axlua::adapter::push_literal(L, "fontAlignmentH");
     lua_pushinteger(L, static_cast<int>(value._alignment));
     lua_rawset(L, -3);
-    lua_pushstring(L, "fontAlignmentV");
+    axlua::adapter::push_literal(L, "fontAlignmentV");
     lua_pushinteger(L, static_cast<int>(value._vertAlignment));
     lua_rawset(L, -3);
-    lua_pushstring(L, "fontFillColor");
+    axlua::adapter::push_literal(L, "fontFillColor");
     color32_to_luaval(L, value._fontFillColor);
     lua_rawset(L, -3);
-    lua_pushstring(L, "fontDimensions");
+    axlua::adapter::push_literal(L, "fontDimensions");
     lua_newtable(L);
     lua_pushnumber(L, value._dimensions.x);
     lua_setfield(L, -2, "x");
     lua_pushnumber(L, value._dimensions.y);
     lua_setfield(L, -2, "y");
     lua_rawset(L, -3);
-    lua_pushstring(L, "strokeEnabled");
+    axlua::adapter::push_literal(L, "strokeEnabled");
     lua_pushboolean(L, value._stroke._strokeEnabled);
     lua_rawset(L, -3);
-    lua_pushstring(L, "strokeColor");
+    axlua::adapter::push_literal(L, "strokeColor");
     color32_to_luaval(L, value._stroke._strokeColor);
     lua_rawset(L, -3);
-    lua_pushstring(L, "strokeSize");
+    axlua::adapter::push_literal(L, "strokeSize");
     lua_pushnumber(L, value._stroke._strokeSize);
     lua_rawset(L, -3);
 }
@@ -2563,27 +2569,27 @@ void ttfconfig_to_luaval(lua_State* L, const ax::TTFConfig& config)
 
     lua_newtable(L);
 
-    lua_pushstring(L, "fontFilePath");
-    lua_pushstring(L, config.fontFilePath.c_str());
+    axlua::adapter::push_literal(L, "fontFilePath");
+    lua_pushlstring(L, config.fontFilePath.data(), config.fontFilePath.size());
     lua_rawset(L, -3);
 
-    lua_pushstring(L, "fontSize");
+    axlua::adapter::push_literal(L, "fontSize");
     lua_pushnumber(L, (lua_Number)config.fontSize);
     lua_rawset(L, -3);
 
-    lua_pushstring(L, "glyphs");
+    axlua::adapter::push_literal(L, "glyphs");
     lua_pushnumber(L, (lua_Number)config.glyphs);
     lua_rawset(L, -3);
 
-    lua_pushstring(L, "customGlyphs");
+    axlua::adapter::push_literal(L, "customGlyphs");
     lua_pushlstring(L, config.customGlyphs.c_str(), config.customGlyphs.length());
     lua_rawset(L, -3);
 
-    lua_pushstring(L, "distanceFieldEnabled");
+    axlua::adapter::push_literal(L, "distanceFieldEnabled");
     lua_pushboolean(L, config.distanceFieldEnabled);
     lua_rawset(L, -3);
 
-    lua_pushstring(L, "outlineSize");
+    axlua::adapter::push_literal(L, "outlineSize");
     lua_pushnumber(L, (lua_Number)config.outlineSize);
     lua_rawset(L, -3);
 }
@@ -2594,16 +2600,16 @@ void quaternion_to_luaval(lua_State* L, const ax::Quat& inValue)
         return;
 
     lua_newtable(L);                          /* L: table */
-    lua_pushstring(L, "x");                   /* L: table key */
+    axlua::adapter::push_literal(L, "x");                   /* L: table key */
     lua_pushnumber(L, (lua_Number)inValue.x); /* L: table key value*/
     lua_rawset(L, -3);                        /* table[key] = value, L: table */
-    lua_pushstring(L, "y");                   /* L: table key */
+    axlua::adapter::push_literal(L, "y");                   /* L: table key */
     lua_pushnumber(L, (lua_Number)inValue.y); /* L: table key value*/
     lua_rawset(L, -3);
-    lua_pushstring(L, "z");                   /* L: table key */
+    axlua::adapter::push_literal(L, "z");                   /* L: table key */
     lua_pushnumber(L, (lua_Number)inValue.z); /* L: table key value*/
     lua_rawset(L, -3);
-    lua_pushstring(L, "w");                   /* L: table key */
+    axlua::adapter::push_literal(L, "w");                   /* L: table key */
     lua_pushnumber(L, (lua_Number)inValue.w); /* L: table key value*/
     lua_rawset(L, -3);
 }
@@ -2633,7 +2639,7 @@ bool luaval_to_uniformLocation(lua_State* L, int pos, ax::rhi::UniformLocation& 
     if (pos < 0)
         pos -= 1;  // since we'll be pushing keys for table access
 
-    lua_pushstring(L, "location");
+    axlua::adapter::push_literal(L, "location");
     lua_gettable(L, pos);
     if (lua_isnil(L, -1))
     {
@@ -2642,7 +2648,7 @@ bool luaval_to_uniformLocation(lua_State* L, int pos, ax::rhi::UniformLocation& 
     loc.location = int(lua_tointeger(L, -1));
     lua_pop(L, 1);
 
-    lua_pushstring(L, "offset");
+    axlua::adapter::push_literal(L, "offset");
     lua_gettable(L, pos);
     if (lua_isnil(L, -1))
     {
@@ -2651,7 +2657,7 @@ bool luaval_to_uniformLocation(lua_State* L, int pos, ax::rhi::UniformLocation& 
     loc.offset = int(lua_tointeger(L, -1));
     lua_pop(L, 1);
 
-    lua_pushstring(L, "cpuOffset");
+    axlua::adapter::push_literal(L, "cpuOffset");
     lua_gettable(L, pos);
     if (lua_isnil(L, -1))
     {
@@ -2660,7 +2666,7 @@ bool luaval_to_uniformLocation(lua_State* L, int pos, ax::rhi::UniformLocation& 
     loc.cpuOffset = int(lua_tointeger(L, -1));
     lua_pop(L, 1);
 
-    lua_pushstring(L, "runtimeLocation");
+    axlua::adapter::push_literal(L, "runtimeLocation");
     lua_gettable(L, pos);
     if (lua_isnil(L, -1))
     {
@@ -2679,19 +2685,19 @@ void uniformLocation_to_luaval(lua_State* L, const ax::rhi::UniformLocation& loc
 
     lua_newtable(L);
 
-    lua_pushstring(L, "location");
+    axlua::adapter::push_literal(L, "location");
     lua_pushinteger(L, loc.location);
     lua_rawset(L, -3);
 
-    lua_pushstring(L, "offset");
+    axlua::adapter::push_literal(L, "offset");
     lua_pushinteger(L, loc.offset);
     lua_rawset(L, -3);
 
-    lua_pushstring(L, "cpuOffset");
+    axlua::adapter::push_literal(L, "cpuOffset");
     lua_pushinteger(L, loc.cpuOffset);
     lua_rawset(L, -3);
 
-    lua_pushstring(L, "runtimeLocation");
+    axlua::adapter::push_literal(L, "runtimeLocation");
     lua_pushinteger(L, loc.runtimeLocation);
     lua_rawset(L, -3);
 }

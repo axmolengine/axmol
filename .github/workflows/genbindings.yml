@@ -37,6 +37,11 @@ jobs:
       shell: pwsh
       run: |
         git diff --check
+        $untracked = @(git status --porcelain --untracked-files=all -- extensions/scripting/lua-bindings/generated | Where-Object { $_ -match '^\?\?' })
+        if ($untracked.Count -gt 0) {
+          Write-Error "Generator produced untracked files:`n$($untracked -join "`n")"
+          exit 1
+        }
         git diff --exit-code -- extensions/scripting/lua-bindings/generated
 
   genbindings:
@@ -54,11 +59,9 @@ jobs:
       shell: pwsh
       run: |
         "commit=${{ github.sha }}" >> $env:GITHUB_OUTPUT
-        if (git diff --quiet -- extensions/scripting/lua-bindings/generated) {
-          "changed=false" >> $env:GITHUB_OUTPUT
-        } else {
-          "changed=true" >> $env:GITHUB_OUTPUT
-        }
+        $changes = @(git status --porcelain --untracked-files=all -- extensions/scripting/lua-bindings/generated)
+        $changed = $changes.Count -gt 0
+        "changed=$($changed.ToString().ToLowerInvariant())" >> $env:GITHUB_OUTPUT
 
     - name: Create pull request
       if: ${{ steps.bindings.outputs.changed == 'true' }}

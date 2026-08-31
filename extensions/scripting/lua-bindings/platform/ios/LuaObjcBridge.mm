@@ -24,6 +24,7 @@
  ****************************************************************************/
 
 #include "lua-bindings/platform/ios/LuaObjcBridge.h"
+#include "lua-bindings/runtime/axlua_adapter.h"
 #include <Foundation/Foundation.h>
 
 namespace ax
@@ -33,7 +34,7 @@ void LuaObjcBridge::luaopen_luaoc(lua_State* L)
 {
     s_luaState = L;
     lua_newtable(L);
-    lua_pushstring(L, "callStaticMethod");
+    axlua::adapter::push_literal(L, "callStaticMethod");
     lua_pushcfunction(L, LuaObjcBridge::callObjcStaticMethod);
     lua_rawset(L, -3);
     lua_setglobal(L, "LuaObjcBridge");

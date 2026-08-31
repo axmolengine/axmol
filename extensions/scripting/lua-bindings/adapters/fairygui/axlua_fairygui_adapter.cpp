@@ -530,7 +530,7 @@ argumentError:
 
 static void extendUIEventDispatcher(lua_State* L)
 {
-    lua_pushstring(L, "fgui.UIEventDispatcher");
+    axlua::adapter::push_literal(L, "fgui.UIEventDispatcher");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {
@@ -542,7 +542,7 @@ static void extendUIEventDispatcher(lua_State* L)
 
 static void extendGObject(lua_State* L)
 {
-    lua_pushstring(L, "fgui.GObject");
+    axlua::adapter::push_literal(L, "fgui.GObject");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {
@@ -555,7 +555,7 @@ static void extendGObject(lua_State* L)
 
 static void extendTransition(lua_State* L)
 {
-    lua_pushstring(L, "fgui.Transition");
+    axlua::adapter::push_literal(L, "fgui.Transition");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {
@@ -566,7 +566,7 @@ static void extendTransition(lua_State* L)
 
 static void extendUIObjectFactory(lua_State* L)
 {
-    lua_pushstring(L, "fgui.UIObjectFactory");
+    axlua::adapter::push_literal(L, "fgui.UIObjectFactory");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {
@@ -578,7 +578,7 @@ static void extendUIObjectFactory(lua_State* L)
 
 static void extendGList(lua_State* L)
 {
-    lua_pushstring(L, "fgui.GList");
+    axlua::adapter::push_literal(L, "fgui.GList");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {
@@ -589,7 +589,7 @@ static void extendGList(lua_State* L)
 
 static void extendEventContext(lua_State* L)
 {
-    lua_pushstring(L, "fgui.EventContext");
+    axlua::adapter::push_literal(L, "fgui.EventContext");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {
@@ -741,7 +741,7 @@ argumentError:
 
 static void extendGMovieClip(lua_State* L)
 {
-    lua_pushstring(L, "fgui.GMovieClip");
+    axlua::adapter::push_literal(L, "fgui.GMovieClip");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
         axlua::adapter::set_function(L, "setPlaySettings", lua_ax_fairygui_GMovieClip_setPlaySettings);
@@ -935,7 +935,7 @@ argumentError:
 
 static void extendGTweener(lua_State* L)
 {
-    lua_pushstring(L, "fgui.GTweener");
+    axlua::adapter::push_literal(L, "fgui.GTweener");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {

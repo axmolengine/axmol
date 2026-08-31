@@ -456,16 +456,16 @@ static int axlua_spine_SkeletonAnimation_getBoundingBox(lua_State* luaState)
     Rect rect = obj->getBoundingBox();
     // return a table
     lua_newtable(luaState);
-    lua_pushstring(luaState, "x");
+    axlua::adapter::push_literal(luaState, "x");
     lua_pushnumber(luaState, rect.origin.x);
     lua_rawset(luaState, -3);
-    lua_pushstring(luaState, "y");
+    axlua::adapter::push_literal(luaState, "y");
     lua_pushnumber(luaState, rect.origin.y);
     lua_rawset(luaState, -3);
-    lua_pushstring(luaState, "width");
+    axlua::adapter::push_literal(luaState, "width");
     lua_pushnumber(luaState, rect.size.width);
     lua_rawset(luaState, -3);
-    lua_pushstring(luaState, "height");
+    axlua::adapter::push_literal(luaState, "height");
     lua_pushnumber(luaState, rect.size.height);
     lua_rawset(luaState, -3);
     return 1;
@@ -510,29 +510,29 @@ static int axlua_spine_SkeletonAnimation_findBone(lua_State* luaState)
         if (NULL != bone)
         {
             auto& bonePose = bone->getAppliedPose();
-            lua_pushstring(luaState, "x");
+            axlua::adapter::push_literal(luaState, "x");
             lua_pushnumber(luaState, bonePose.getX());
             lua_rawset(luaState, -3); /* bone.x */
 
-            lua_pushstring(luaState, "y");
+            axlua::adapter::push_literal(luaState, "y");
             lua_pushnumber(luaState, bonePose.getY());
             lua_rawset(luaState, -3); /* bone.y */
 
-            lua_pushstring(luaState, "rotation");
+            axlua::adapter::push_literal(luaState, "rotation");
             lua_pushnumber(luaState, bonePose.getRotation());
             lua_rawset(luaState, -3); /* bone.rotation */
 
-            lua_pushstring(luaState, "scaleX");
+            axlua::adapter::push_literal(luaState, "scaleX");
             lua_pushnumber(luaState, bonePose.getScaleX());
             lua_rawset(luaState, -3); /* bone.scaleX */
-            lua_pushstring(luaState, "scaleY");
+            axlua::adapter::push_literal(luaState, "scaleY");
             lua_pushnumber(luaState, bonePose.getScaleY());
             lua_rawset(luaState, -3); /* bone.scaleY */
 
-            lua_pushstring(luaState, "worldX");
+            axlua::adapter::push_literal(luaState, "worldX");
             lua_pushnumber(luaState, bonePose.getWorldX());
             lua_rawset(luaState, -3); /* bone.worldX */
-            lua_pushstring(luaState, "worldY");
+            axlua::adapter::push_literal(luaState, "worldY");
             lua_pushnumber(luaState, bonePose.getWorldY());
             lua_rawset(luaState, -3); /* bone.worldY */
         }
@@ -552,7 +552,7 @@ argumentError:
 
 static void extendSkeletonAnimation(lua_State* L)
 {
-    lua_pushstring(L, "sp.SkeletonAnimation");
+    axlua::adapter::push_literal(L, "sp.SkeletonAnimation");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {

@@ -9,7 +9,7 @@
   "headers": [
     "%(axdir)s/extensions/sceneext/src/sceneext/sceneext.h",
     "%(axdir)s/extensions/sceneext/src/sceneext/ComExtensionData.h",
-    "%(axdir)s/extensions/scripting/lua-bindings/adapters/sceneext/lua-sceneext-conversions.h"
+    "%(axdir)s/extensions/scripting/lua-bindings/adapters/sceneext/lua_sceneext_conversions.h"
   ],
   "clang_flags": [],
   "classes": [

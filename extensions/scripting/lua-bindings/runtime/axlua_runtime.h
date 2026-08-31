@@ -17,6 +17,7 @@
 #endif
 #include "axmol/base/Event.h"
 #include "axmol/base/Object.h"
+#include "lua-bindings/runtime/axlua_adapter.h"
 #include "lua-bindings/runtime/axlua_conversions.h"
 
 #include <string_view>
@@ -67,8 +68,13 @@ private:
     std::function<Return(Arguments...)> _function;
 };
 
+void drain_pending_callback_unrefs(lua_State* state);
+
 namespace detail
 {
+
+struct LuaCallbackRegistry;
+
 class BorrowedObjectScope
 {
 public:
@@ -130,13 +136,8 @@ public:
     template <class Return, class... Arguments>
     Return invoke(Arguments&&... arguments)
     {
-        if (!_active.load(std::memory_order_acquire) || _state == nullptr)
+        if (!prepare_invoke())
             return default_callback_result<Return>();
-        if (std::this_thread::get_id() != _ownerThread)
-        {
-            report_callback_error("attempted to invoke a Lua callback from a non-owner thread");
-            return default_callback_result<Return>();
-        }
 
         const int top = lua_gettop(_state);
         lua_rawgeti(_state, LUA_REGISTRYINDEX, _ref);
@@ -187,7 +188,11 @@ public:
     }
 
 private:
-    LuaCallbackState(lua_State* state, lua_State* vmState) : _state(state), _vmState(vmState), _ownerThread(std::this_thread::get_id()) {}
+    LuaCallbackState(lua_State* state, std::shared_ptr<LuaCallbackRegistry> registry)
+        : _state(state), _registry(std::move(registry)), _ownerThread(std::this_thread::get_id())
+    {}
+
+    bool prepare_invoke();
 
     template <class Return>
     static Return default_callback_result()
@@ -203,10 +208,9 @@ private:
     void report_callback_error(const char* message);
 
     lua_State* _state = nullptr;
-    // A callback can be created from a Lua coroutine. Its registry reference
-    // and invocation state both belong to the owning VM's main Lua thread,
-    // while `_vmState` remains the key used for shutdown bookkeeping.
-    lua_State* _vmState = nullptr;
+    // The shared registry outlives lua_close when native callbacks survive
+    // their VM. A new VM at the same address gets a different registry.
+    std::shared_ptr<LuaCallbackRegistry> _registry;
     int _ref          = LUA_NOREF;
     std::atomic_bool _active{false};
     std::thread::id _ownerThread;
@@ -253,7 +257,8 @@ std::function<Signature> make_lua_callback(lua_State* state, int index)
 
 bool is_invalid_userdata(lua_State* state, int index);
 void remember_object(lua_State* state, ax::Object* object);
-bool object_expired(ax::Object* object);
+void remember_userdata_object(lua_State* state, int index, ax::Object* object);
+bool object_userdata_current(lua_State* state, int index, ax::Object* object);
 inline int absolute_index(lua_State* state, int index)
 {
     return index > 0 || index <= LUA_REGISTRYINDEX ? index : lua_gettop(state) + index + 1;
@@ -265,7 +270,7 @@ inline void make_weak_value_table(lua_State* state, int tableIndex)
     if (!lua_getmetatable(state, tableIndex))
         lua_newtable(state);
     const int metatableIndex = absolute_index(state, -1);
-    lua_pushliteral(state, "v");
+    axlua::adapter::push_literal(state, "v");
     lua_setfield(state, metatableIndex, "__mode");
     lua_setmetatable(state, tableIndex);
 }
@@ -317,16 +322,38 @@ int push_object(lua_State* state, T* object)
     lua_rawget(state, identityTable);
     if (lua_isuserdata(state, -1))
     {
-        lua_remove(state, identityTable);
-        return 1;
+        if constexpr (std::is_base_of_v<ax::Object, NativeT>)
+        {
+            auto* nativeObject = static_cast<ax::Object*>(const_cast<NativeT*>(object));
+            if (!object_userdata_current(state, -1, nativeObject))
+            {
+                lua_pop(state, 1);
+                lua_pushlightuserdata(state, const_cast<void*>(static_cast<const void*>(object)));
+                lua_pushnil(state);
+                lua_rawset(state, identityTable);
+            }
+            else
+            {
+                lua_remove(state, identityTable);
+                return 1;
+            }
+        }
+        else
+        {
+            lua_remove(state, identityTable);
+            return 1;
+        }
     }
-    lua_pop(state, 1);
+    else
+        lua_pop(state, 1);
 
     sol::stack::unqualified_pusher<sol::detail::as_pointer_tag<T>>::push(state, object);
     const int userdataIndex = absolute_index(state, -1);
     lua_pushlightuserdata(state, const_cast<void*>(static_cast<const void*>(object)));
     lua_pushvalue(state, userdataIndex);
     lua_rawset(state, identityTable);
+    if constexpr (std::is_base_of_v<ax::Object, NativeT>)
+        remember_userdata_object(state, userdataIndex, static_cast<ax::Object*>(const_cast<NativeT*>(object)));
     lua_remove(state, identityTable);
     return 1;
 }
@@ -577,16 +604,16 @@ private:
         table.push();
         const int classTable = absolute_index(state, -1);
 
-        lua_pushliteral(state, "__axlua_name");
+        axlua::adapter::push_literal(state, "__axlua_name");
         lua_pushlstring(state, name.data(), name.size());
         lua_rawset(state, classTable);
-        lua_pushliteral(state, ".classname");
+        axlua::adapter::push_literal(state, ".classname");
         lua_pushlstring(state, name.data(), name.size());
         lua_rawset(state, classTable);
-        lua_pushliteral(state, "__index");
+        axlua::adapter::push_literal(state, "__index");
         lua_pushcfunction(state, &class_index);
         lua_rawset(state, classTable);
-        lua_pushliteral(state, "__newindex");
+        axlua::adapter::push_literal(state, "__newindex");
         lua_pushcfunction(state, &class_new_index);
         lua_rawset(state, classTable);
 
@@ -1023,18 +1050,10 @@ sol::optional<T*> sol_lua_check_get(sol::types<T*>,
         return sol::nullopt;
     }
 
-    T* object          = sol::stack::unqualified_getter<sol::detail::as_pointer_tag<T>>::get(state, index, tracking);
-    const bool expired = [&]() {
-        if constexpr (std::is_base_of_v<ax::Object, T>)
-            return object != nullptr && axlua::object_expired(static_cast<ax::Object*>(object));
-        return false;
-    }();
-    if (object != nullptr && expired)
-    {
-        handler(state, index, sol::type::userdata, sol::type::userdata, "native object has expired");
-        return sol::nullopt;
-    }
-    return object;
+    // Persistent objects use per-userdata WeakPtr metadata; borrowed Events
+    // use the invalid marker set when their callback scope ends. Both are
+    // checked above without consulting a potentially reused native address.
+    return sol::stack::unqualified_getter<sol::detail::as_pointer_tag<T>>::get(state, index, tracking);
 }
 }  // namespace ax
 

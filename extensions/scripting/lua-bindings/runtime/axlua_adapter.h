@@ -2,6 +2,7 @@
 
 #include "lua.hpp"
 
+#include <cstddef>
 #include <string>
 #include <string_view>
 
@@ -41,7 +42,6 @@ int is_boolean(lua_State* state, int index, int hasDefault, Error* error);
 int is_number(lua_State* state, int index, int hasDefault, Error* error);
 int is_string(lua_State* state, int index, int hasDefault, Error* error);
 int is_table(lua_State* state, int index, int hasDefault, Error* error);
-int is_table(lua_State* state, int index, const char* type, int hasDefault, Error* error);
 int is_usertable(lua_State* state, int index, const char* type, int hasDefault, Error* error);
 int is_usertype(lua_State* state, int index, const char* type, int hasDefault, Error* error);
 int is_function(lua_State* state, int index, const char* type, int hasDefault, Error* error);
@@ -53,9 +53,6 @@ void* to_usertype(lua_State* state, int index, void* defaultValue);
 int to_boolean(lua_State* state, int index, int defaultValue);
 lua_Number to_field_number(lua_State* state, int tableIndex, int field, lua_Number defaultValue);
 
-void push_boolean(lua_State* state, int value);
-void push_number(lua_State* state, lua_Number value);
-void push_string(lua_State* state, const char* value);
 void push_usertype(lua_State* state, void* value, const char* type);
 void push_usertype_rooted(lua_State* state, void* value, const char* type);
 
@@ -65,8 +62,17 @@ int ref_function(lua_State* state, int index, int defaultValue);
 void push_function(lua_State* state, int reference);
 void remove_function(lua_State* state, int reference);
 
-inline void push_string(lua_State* state, std::string_view value)
+inline void push_string_view(lua_State* state, std::string_view value)
 {
     lua_pushlstring(state, value.data(), value.size());
+}
+
+// Unlike Lua's lua_pushliteral macro, this helper passes the literal length
+// directly to lua_pushlstring and never performs a runtime strlen.
+template <std::size_t N>
+inline void push_literal(lua_State* state, const char (&value)[N])
+{
+    static_assert(N > 0, "a literal must include its terminating nul");
+    lua_pushlstring(state, value, N - 1);
 }
 }  // namespace axlua::adapter

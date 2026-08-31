@@ -98,7 +98,11 @@ bool AppDelegate::applicationDidFinishLaunching()
     // scene. `std::exit` propagates the smoke result on every platform whose
     // Application::run() otherwise maps a failed launch to zero.
     if (luaBindingSmokeRequested())
-        std::exit(runLuaBindingSmoke(L));
+    {
+        const int smokeResult    = runLuaBindingSmoke(L);
+        const int shutdownResult = finishLuaBindingSmoke(L);
+        std::exit(smokeResult != 0 ? smokeResult : shutdownResult);
+    }
 
     FileUtils::getInstance()->addSearchPath("src");
     FileUtils::getInstance()->addSearchPath("res");

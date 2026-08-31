@@ -4,7 +4,7 @@
 
 #include "extensions/sceneext/src/sceneext/sceneext.h"
 #include "extensions/sceneext/src/sceneext/ComExtensionData.h"
-#include "extensions/scripting/lua-bindings/adapters/sceneext/lua-sceneext-conversions.h"
+#include "extensions/scripting/lua-bindings/adapters/sceneext/lua_sceneext_conversions.h"
 
 namespace ax::lua {
 

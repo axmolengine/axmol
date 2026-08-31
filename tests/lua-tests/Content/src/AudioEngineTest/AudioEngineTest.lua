@@ -22,6 +22,7 @@ end
 function SliderEx:onEnter()
     self._ratio = 0
     self._thumbX = 0
+    self._dragging = false
 
     local progressBar = ax.Sprite:create("cocosui/sliderProgress.png")
     progressBar:setAnchorPoint(ax.p(0,0))
@@ -46,6 +47,7 @@ function SliderEx:onEnter()
 
         self._touchBeganX = self:convertToNodeSpace(location).x
         self._thumbBeganX = self._thumbX
+        self._dragging = true
         if self._callback then
             self._callback(self,self._ratio,SliderEx.TouchEventDown)
         end
@@ -53,6 +55,10 @@ function SliderEx:onEnter()
     end
 
     listenner.onPointerMove = function(event)
+        if not self._dragging then
+            return
+        end
+
         local locationInNodeX = self:convertToNodeSpace(event:getWorldPoint()).x
         self:setThumbPosX(self._thumbBeganX + locationInNodeX - self._touchBeganX)
 
@@ -62,12 +68,21 @@ function SliderEx:onEnter()
     end
 
     listenner.onPointerUp = function(event)
+        if not self._dragging then
+            return
+        end
+
         local locationInNodeX = self:convertToNodeSpace(event:getWorldPoint()).x
         self:setThumbPosX(self._thumbBeganX + locationInNodeX - self._touchBeganX)
+        self._dragging = false
 
         if self._callback then
             self._callback(self,self._ratio,SliderEx.TouchEventUp)
         end
+    end
+
+    listenner.onPointerCancel = function()
+        self._dragging = false
     end
 
     local eventDispatcher = self:getEventDispatcher()
