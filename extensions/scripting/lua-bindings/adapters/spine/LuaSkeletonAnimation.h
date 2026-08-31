@@ -26,6 +26,8 @@ THE SOFTWARE.
 
 #pragma once
 #include "spine/SkeletonAnimation.h"
+#include "lua-bindings/runtime/axlua_adapter.h"
+#include "lua-bindings/runtime/LuaStack.h"
 
 /// @cond
 class LuaSkeletonAnimation : public spine::SkeletonAnimation
@@ -38,5 +40,12 @@ public:
     LuaSkeletonAnimation();
 
     virtual ~LuaSkeletonAnimation();
+
+    void setLuaHandler(int type, ax::LUA_FUNCTION handler) { _luaHandlers[type] = handler; }
+    ax::LUA_FUNCTION getLuaHandler(int type) const { return _luaHandlers[type]; }
+    void clearLuaHandler(int type) { _luaHandlers[type] = 0; }
+
+private:
+    ax::LUA_FUNCTION _luaHandlers[6]{};
 };
 /// @endcond

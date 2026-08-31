@@ -26,12 +26,11 @@
 #include "lua-bindings/generated/axlua_sceneext_gen.h"
 
 #include "lua-bindings/runtime/axlua_adapter.h"
+#include "lua-bindings/runtime/axlua_runtime.h"
 #include "lua-bindings/runtime/axlua_conversions.h"
-#include "lua-bindings/runtime/AxluaCallbackRegistry.h"
 #include "lua-bindings/runtime/LuaValue.h"
 #include "sceneext/sceneext.h"
 #include "sceneio/ActionTimeline/ActionTimelineCache.h"
-#include "lua-bindings/runtime/LuaEngine.h"
 #include "lua-bindings/adapters/sceneext/CustomGUIReader.h"
 
 using namespace ax::ext;
@@ -71,6 +70,7 @@ public:
     virtual ~LuaArmatureWrapper();
 
     virtual void addArmatureFileInfoAsyncCallback(float percent);
+    axlua::Callback<void(float)> callback;
 };
 
 LuaArmatureWrapper::LuaArmatureWrapper() {}
@@ -79,18 +79,7 @@ LuaArmatureWrapper::~LuaArmatureWrapper() {}
 
 void LuaArmatureWrapper::addArmatureFileInfoAsyncCallback(float percent)
 {
-    int handler = AxluaCallbackRegistry::getInstance()->getObjectHandler(
-        (void*)this, AxluaCallbackRegistry::HandlerType::ARMATURE_EVENT);
-
-    if (0 != handler)
-    {
-        LuaArmatureWrapperEventData wrapperData(LuaArmatureWrapperEventData::LuaArmatureWrapperEventType::FILE_ASYNC,
-                                                (void*)&percent);
-
-        BasicScriptData data(this, (void*)&wrapperData);
-
-        LuaEngine::getInstance()->handleEvent(AxluaCallbackRegistry::HandlerType::ARMATURE_EVENT, (void*)&data);
-    }
+    callback(percent);
 }
 
 static int axlua_ArmatureController_setMovementEventCallFunc(lua_State* L)
@@ -128,29 +117,10 @@ static int axlua_ArmatureController_setMovementEventCallFunc(lua_State* L)
         }
 #endif
 
-        LUA_FUNCTION handler = (axlua::adapter::ref_function(L, 2, 0));
-
-        LuaArmatureWrapper* wrapper = new LuaArmatureWrapper();
-        wrapper->autorelease();
-
-        Vector<LuaArmatureWrapper*> vec;
-        vec.pushBack(wrapper);
-        AxluaCallbackRegistry::getInstance()->addObjectHandler((void*)wrapper, handler,
-                                                               AxluaCallbackRegistry::HandlerType::ARMATURE_EVENT);
-
-        self->setMovementEventCallFunc(
-            [=](Armature* armature, MovementEventType movementType, std::string_view movementID) {
-            if (0 != handler)
-            {
-                LuaArmatureMovementEventData movementData(armature, (int)movementType, movementID);
-
-                LuaArmatureWrapperEventData wrapperData(
-                    LuaArmatureWrapperEventData::LuaArmatureWrapperEventType::MOVEMENT_EVENT, (void*)&movementData);
-
-                BasicScriptData data((void*)vec.at(0), (void*)&wrapperData);
-
-                LuaEngine::getInstance()->handleEvent(AxluaCallbackRegistry::HandlerType::ARMATURE_EVENT, (void*)&data);
-            }
+        axlua::Callback<void(Armature*, MovementEventType, std::string_view)> callback(L, 2);
+        self->setMovementEventCallFunc([callback = std::move(callback)](Armature* armature, MovementEventType type,
+                                                                         std::string_view movementID) mutable {
+            callback(armature, type, movementID);
         });
         return 0;
     }
@@ -204,32 +174,10 @@ static int axlua_ArmatureController_setFrameEventCallFunc(lua_State* L)
         }
 #endif
 
-        LUA_FUNCTION handler = (axlua::adapter::ref_function(L, 2, 0));
-
-        LuaArmatureWrapper* wrapper = new LuaArmatureWrapper();
-        wrapper->autorelease();
-
-        Vector<LuaArmatureWrapper*> vec;
-        vec.pushBack(wrapper);
-
-        AxluaCallbackRegistry::getInstance()->addObjectHandler((void*)wrapper, handler,
-                                                               AxluaCallbackRegistry::HandlerType::ARMATURE_EVENT);
-
-        self->setFrameEventCallFunc(
-            [=](ax::ext::Bone* bone, std::string_view frameEventName, int originFrameIndex, int currentFrameIndex) {
-            if (0 != handler)
-            {
-                std::string strFrameEventName(frameEventName);
-
-                LuaArmatureFrameEventData frameData(bone, frameEventName, originFrameIndex, currentFrameIndex);
-
-                LuaArmatureWrapperEventData wrapperData(
-                    LuaArmatureWrapperEventData::LuaArmatureWrapperEventType::FRAME_EVENT, (void*)&frameData);
-
-                BasicScriptData data((void*)vec.at(0), (void*)&wrapperData);
-
-                LuaEngine::getInstance()->handleEvent(AxluaCallbackRegistry::HandlerType::ARMATURE_EVENT, (void*)&data);
-            }
+        axlua::Callback<void(ax::ext::Bone*, std::string_view, int, int)> callback(L, 2);
+        self->setFrameEventCallFunc([callback = std::move(callback)](ax::ext::Bone* bone, std::string_view name,
+                                                                      int origin, int current) mutable {
+            callback(bone, name, origin, current);
         });
 
         return 0;
@@ -295,13 +243,11 @@ static int axlua_ArmatureDataManager_addArmatureFileInfoAsyncCallFunc(lua_State*
         }
 #endif
         const char* configFilePath = axlua::adapter::to_string(L, 2, "");
-        LUA_FUNCTION handler       = (axlua::adapter::ref_function(L, 3, 0));
 
         LuaArmatureWrapper* wrapper = new LuaArmatureWrapper();
         wrapper->autorelease();
 
-        AxluaCallbackRegistry::getInstance()->addObjectHandler((void*)wrapper, handler,
-                                                               AxluaCallbackRegistry::HandlerType::ARMATURE_EVENT);
+        wrapper->callback = axlua::Callback<void(float)>(L, 3);
 
         self->addArmatureFileInfoAsync(configFilePath, wrapper,
                                        AX_SCHEDULE_SELECTOR(LuaArmatureWrapper::addArmatureFileInfoAsyncCallback));
@@ -323,13 +269,10 @@ static int axlua_ArmatureDataManager_addArmatureFileInfoAsyncCallFunc(lua_State*
         const char* plistPath      = axlua::adapter::to_string(L, 3, "");
         const char* configFilePath = axlua::adapter::to_string(L, 4, "");
 
-        LUA_FUNCTION handler = (axlua::adapter::ref_function(L, 5, 0));
-
         LuaArmatureWrapper* wrapper = new LuaArmatureWrapper();
         wrapper->autorelease();
 
-        AxluaCallbackRegistry::getInstance()->addObjectHandler((void*)wrapper, handler,
-                                                               AxluaCallbackRegistry::HandlerType::ARMATURE_EVENT);
+        wrapper->callback = axlua::Callback<void(float)>(L, 5);
 
         self->addArmatureFileInfoAsync(imagePath, plistPath, configFilePath, wrapper,
                                        AX_SCHEDULE_SELECTOR(LuaArmatureWrapper::addArmatureFileInfoAsyncCallback));
@@ -502,11 +445,9 @@ static int axlua_ActionTimeline_setFrameEventCallFunc(lua_State* L)
         }
 #endif
 
-        LUA_FUNCTION handler = (axlua::adapter::ref_function(L, 2, 0));
-        self->setFrameEventCallFunc([=](ext::timeline::Frame* frame) {
-            auto stack = LuaEngine::getInstance()->getLuaStack();
-            axlua::adapter::push_object(stack->getLuaState(), (void*)frame, getLuaTypeName(frame, "axext.Frame"));
-            stack->executeFunctionByHandler(handler, 1);
+        axlua::Callback<void(ext::timeline::Frame*)> callback(L, 2);
+        self->setFrameEventCallFunc([callback = std::move(callback)](ext::timeline::Frame* frame) mutable {
+            callback(frame);
         });
 
         return 0;

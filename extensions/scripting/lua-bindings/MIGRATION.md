@@ -226,9 +226,8 @@ applications. The following are retained until a future breaking release:
 
 * the peer/table and identity bridge used by adapter classes and old Lua object
   tables;
-* `AxluaCallbackRegistry` adapters for WebSocket, XMLHttpRequest, ScrollView,
-  TableView, Spine, FairyGUI, and other `registerScriptHandler` APIs that are
-  still present in the public Lua surface;
+* the public `registerScriptHandler` method names where Lua compatibility still
+  requires them; their implementations now own protected callbacks directly;
 * `NodeEx.lua`'s fluent helpers, lifecycle event-name bridge, and compatibility
   aliases;
 * deprecated Lua method names and the historical numeric-overload conversion

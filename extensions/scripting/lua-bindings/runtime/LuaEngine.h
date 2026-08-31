@@ -33,7 +33,6 @@ extern "C" {
 #include "axmol/base/ScriptSupport.h"
 #include "lua-bindings/runtime/LuaStack.h"
 #include "lua-bindings/runtime/LuaValue.h"
-#include "lua-bindings/runtime/AxluaCallbackRegistry.h"
 #include "lua-bindings/runtime/Lua-BindingsExport.h"
 
 /**
@@ -121,12 +120,6 @@ public:
      */
     void removeScriptHandler(int nHandler) override;
 
-    /**
-     * Reallocate Lua function reference index to the Lua function pointer to add reference.
-     *
-     * @param nHandler the function reference index to find the corresponding Lua function pointer.
-     */
-    int reallocateScriptHandler(int nHandler) override;
 
     /**
      * Execute script code contained in the given string.
@@ -153,10 +146,6 @@ public:
      * @return The integer value returned from the script function.
      */
     int executeGlobalFunction(const char* functionName) override;
-    virtual int executeEvent(int nHandler,
-                             const char* pEventName,
-                             Object* pEventSource              = NULL,
-                             const char* pEventSourceClassName = NULL);
     /**
      * Handle the assert message.
      *
@@ -174,64 +163,12 @@ public:
      */
     bool parseConfig(ConfigType type, std::string_view str) override;
 
-    /**
-     * When some events triggered in the c++ also needs to pass on to lua to handle, we could call this function to send
-     * events.
-     *
-     * @param message the ScriptEvent object that has ScriptEventType and the pointer to information data.
-     * @return default return 0 otherwise return values from the active legacy
-     * event adapters such as menu, action, scheduler, or input callbacks.
-     */
+    /** Forward engine events; modern adapters own their callbacks directly. */
     int sendEvent(const ScriptEvent& message) override;
-
-    /**
-     * Pass on the events related with ScrollView,TableCell,AssertManager, Armature, Accelerometer, Keyboard, Touch,
-     * Touches ,Mouse and Custom event to lua to handle.
-     *
-     * @param type Different AxluaCallbackRegistry::HandlerType means different processing for the data.
-     * @param data The pointer point to the information which should be pass on to lua, it would be parsed in the
-     * function to convert to the specific data according to the AxluaCallbackRegistry::HandlerType,then pass to lua as
-     * function parameters.
-     * @return default return 0 otherwise return values according different AxluaCallbackRegistry::HandlerType.
-     */
-    virtual int handleEvent(AxluaCallbackRegistry::HandlerType type, void* data);
-    /**
-     * Pass on the events related with TableCell and TableView to lua to handle.
-     *
-     * @param type Different AxluaCallbackRegistry::HandlerType means different processing for the data.
-     * @param data The pointer point to the information which should be pass on to lua, it would be parsed in the
-     * function to convert to the specific data according to the AxluaCallbackRegistry::HandlerType,then pass to lua as
-     * function parameters.
-     * @param numResults The number of the return values.
-     * @param func The callback would be called when numResults is > 0.
-     * @return default return 0 otherwise return values according different AxluaCallbackRegistry::HandlerType.
-     */
-    virtual int handleEvent(AxluaCallbackRegistry::HandlerType type,
-                            void* data,
-                            int numResults,
-                            const std::function<void(lua_State*, int)>& func);
 
 private:
     LuaEngine(void) : _stack(nullptr) {}
     bool init(void);
-    int handleMenuClickedEvent(void* data);
-    int handleCallFuncActionEvent(void* data);
-    int handleScheduler(void* data);
-    int handleKeypadEvent(void* data);
-    int handleAccelerometerEvent(void* data);
-    int handleCommonEvent(void* data);
-    int handleTouchEvent(void* data);
-    int handleTouchesEvent(void* data);
-    int handlerControlEvent(void* data);
-    int handleEvenCustom(void* data);
-    int handleAssetsManagerEvent(AxluaCallbackRegistry::HandlerType type, void* data);
-    int handleTableViewEvent(AxluaCallbackRegistry::HandlerType type, void* data);
-    int handleTableViewEvent(AxluaCallbackRegistry::HandlerType type,
-                             void* data,
-                             int numResults,
-                             const std::function<void(lua_State*, int)>& func);
-    int handleArmatureWrapper(AxluaCallbackRegistry::HandlerType type, void* data);
-    int handleEventAcc(void* data);
 
 private:
     static LuaEngine* _defaultEngine;

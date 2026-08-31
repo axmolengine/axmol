@@ -26,6 +26,7 @@
 #pragma once
 
 #include "lua-bindings/runtime/axlua_adapter.h"
+#include "lua-bindings/runtime/axlua_runtime.h"
 
 #include "axmol/network/WebSocket.h"
 
@@ -39,6 +40,11 @@ public:
     void onMessage(WebSocket* ws, const WebSocket::Data& data) override;
     void onClose(WebSocket* ws, uint16_t code, std::string_view reason) override;
     void onError(WebSocket* ws, const WebSocket::ErrorCode& error) override;
+
+    axlua::Callback<void()> onOpenCallback;
+    axlua::Callback<void(std::string_view, bool)> onMessageCallback;
+    axlua::Callback<void()> onCloseCallback;
+    axlua::Callback<void()> onErrorCallback;
 
     enum WebSocketScriptHandlerType
     {

@@ -23,6 +23,7 @@
  ****************************************************************************/
 
 #include "lua-bindings/runtime/LuaEngine.h"
+#include "lua-bindings/runtime/axlua_adapter.h"
 #include "lua-bindings/adapters/sceneext/CustomGUIReader.h"
 #include "rapidjson/writer.h"
 #include "rapidjson/stringbuffer.h"

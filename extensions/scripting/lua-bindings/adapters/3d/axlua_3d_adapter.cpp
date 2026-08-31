@@ -26,6 +26,7 @@
 #include "lua-bindings/adapters/3d/axlua_3d_adapter.h"
 #include "lua-bindings/generated/axlua_3d_gen.h"
 #include "lua-bindings/runtime/axlua_conversions.h"
+#include "lua-bindings/runtime/axlua_runtime.h"
 #include "lua-bindings/runtime/LuaEngine.h"
 #include "axmol/3d/Bundle3D.h"
 #include "axmol/3d/MeshRenderer.h"
@@ -70,13 +71,12 @@ int axlua_3d_MeshRenderer_createAsync(lua_State* L)
                 goto argumentError;
             }
 #endif
-            LUA_FUNCTION handler = axlua::adapter::ref_function(L, 4, 0);
-
-            ax::MeshRenderer::createAsync(modelPath, texturePath, [=](ax::MeshRenderer* mesh, void* callbackparam) {
-                auto stack = LuaEngine::getInstance()->getLuaStack();
-                axlua::adapter::push_object(stack->getLuaState(), (void*)mesh, "ax.MeshRenderer");
-                stack->executeFunctionByHandler(handler, 1);
-            }, nullptr);
+            axlua::Callback<void(ax::MeshRenderer*)> callback(L, 4);
+            ax::MeshRenderer::createAsync(modelPath, texturePath,
+                                          [callback = std::move(callback)](ax::MeshRenderer* mesh, void*) mutable {
+                                              callback(mesh);
+                                          },
+                                          nullptr);
 
             lua_settop(L, 1);
             return 1;
@@ -98,13 +98,12 @@ int axlua_3d_MeshRenderer_createAsync(lua_State* L)
                 goto argumentError;
             }
 #endif
-            LUA_FUNCTION handler = axlua::adapter::ref_function(L, 3, 0);
-
-            ax::MeshRenderer::createAsync(modelPath, [=](ax::MeshRenderer* mesh, void* callbackparam) {
-                auto stack = LuaEngine::getInstance()->getLuaStack();
-                axlua::adapter::push_object(stack->getLuaState(), (void*)mesh, "ax.MeshRenderer");
-                stack->executeFunctionByHandler(handler, 1);
-            }, nullptr);
+            axlua::Callback<void(ax::MeshRenderer*)> callback(L, 3);
+            ax::MeshRenderer::createAsync(modelPath,
+                                          [callback = std::move(callback)](ax::MeshRenderer* mesh, void*) mutable {
+                                              callback(mesh);
+                                          },
+                                          nullptr);
 
             lua_settop(L, 1);
             return 1;

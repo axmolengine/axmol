@@ -7,13 +7,13 @@ set(lua_bindings_runtime_headers
   runtime/lua_module_register.h
   runtime/LuaBridge.h
   runtime/Lua-BindingsExport.h
-  runtime/AxluaCallbackRegistry.h
   runtime/AxluaLoader.h
   runtime/axlua_runtime.h
   runtime/axlua_sol_config.h
   runtime/axlua_adapter.h
   runtime/axlua_conversions.h
   runtime/LuaValue.h
+  runtime/LuaCallFunc.h
 )
 
 set(lua_bindings_runtime_files
@@ -27,7 +27,7 @@ set(lua_bindings_runtime_files
   runtime/axlua_conversions.cpp
   runtime/lua_module_register.cpp
   runtime/ComponentLua.cpp
-  runtime/AxluaCallbackRegistry.cpp
+  runtime/LuaCallFunc.cpp
 )
 
 set(lua_bindings_adapter_headers

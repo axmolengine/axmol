@@ -29,6 +29,7 @@
 #include "lua-bindings/runtime/ComponentLua.h"
 #include "lua-bindings/runtime/LuaValue.h"
 #include "lua-bindings/runtime/LuaEngine.h"
+#include "lua-bindings/runtime/LuaCallFunc.h"
 #if defined(_MSC_VER) || defined(__MINGW32__)
 #    include <WS2tcpip.h>
 #else
@@ -564,9 +565,12 @@ static int axlua_MenuItem_registerScriptTapHandler(lua_State* luaState)
             goto argumentError;
         }
 #endif
-        LUA_FUNCTION handler = axlua::adapter::ref_function(luaState, 2, 0);
-        AxluaCallbackRegistry::getInstance()->addObjectHandler((void*)obj, handler,
-                                                               AxluaCallbackRegistry::HandlerType::MENU_CLICKED);
+        auto callback = axlua::Callback<void(int, MenuItem*)>(luaState, 2);
+        obj->setCallback([callback = std::move(callback)](Object* sender) mutable {
+            auto* item = static_cast<MenuItem*>(sender);
+            if (item)
+                callback(item->getTag(), item);
+        });
         return 0;
     }
 
@@ -611,8 +615,7 @@ static int axlua_MenuItem_unregisterScriptTapHandler(lua_State* luaState)
 
     if (0 == argc)
     {
-        AxluaCallbackRegistry::getInstance()->removeObjectHandler((void*)obj,
-                                                                  AxluaCallbackRegistry::HandlerType::MENU_CLICKED);
+        obj->setCallback(nullptr);
         return 0;
     }
 
@@ -773,14 +776,12 @@ static int axlua_RenderTexture_newImage(lua_State* luaState)
             return 0;
         }
 #endif
-        LUA_FUNCTION handler = axlua::adapter::ref_function(luaState, 2, 0);
-        auto callback        = [=](RefPtr<ax::Image> image) {
-            auto stack = LuaEngine::getInstance()->getLuaStack();
-            stack->pushObject(image, "ax.Image");
-            stack->executeFunctionByHandler(handler, 1);
+        axlua::Callback<void(ax::Image*)> callback(luaState, 2);
+        auto imageCallback = [callback = std::move(callback)](RefPtr<ax::Image> image) mutable {
+            callback(image.get());
         };
 
-        obj->newImage(callback);
+        obj->newImage(imageCallback);
         return 0;
     }
 
@@ -876,61 +877,30 @@ static int axlua_CallFunc_create(lua_State* luaState)
             goto argumentError;
 #endif
 
-        LUA_FUNCTION handler = axlua::adapter::ref_function(luaState, 2, 0);
-
-        bool hasExtraData = false;
-        int ref           = 0;
         if (argc == 2)
         {
 #if _AX_DEBUG >= 1
             if (!axlua::adapter::is_table(luaState, 3, 0, &conversionError))
                 goto argumentError;
 #endif
-            lua_pushvalue(luaState, 3);
-            ref          = luaL_ref(luaState, LUA_REGISTRYINDEX);
-            hasExtraData = true;
         }
         LuaCallFunc* returnValue = new LuaCallFunc();
-        returnValue->initWithFunction([=](void* self, Node* target) {
-            int callbackHandler = AxluaCallbackRegistry::getInstance()->getObjectHandler(
-                (void*)returnValue, AxluaCallbackRegistry::HandlerType::CALLFUNC);
-
-            if (0 != callbackHandler)
-            {
-                LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
-                int argNums     = 1;
-                if (nullptr != target)
-                {
-                    stack->pushObject(target, "ax.Node");
-                }
-                else
-                {
-                    stack->pushNil();
-                }
-
-                if (hasExtraData)
-                {
-                    lua_rawgeti(luaState, LUA_REGISTRYINDEX, ref);
-                    if (lua_istable(luaState, -1))
-                    {
-                        argNums += 1;
-                    }
-                    else
-                    {
-                        lua_pop(luaState, 1);
-                    }
-                }
-                stack->executeFunctionByHandler(callbackHandler, argNums);
-                if (hasExtraData)
-                {
-                    luaL_unref(luaState, LUA_REGISTRYINDEX, ref);
-                }
-                stack->clean();
-            }
-        });
+        if (argc == 2)
+        {
+            sol::table extra(luaState, 3);
+            axlua::Callback<void(Node*, sol::table)> callback(luaState, 2);
+            returnValue->initWithFunction([callback = std::move(callback), extra = std::move(extra)](void*, Node* target) mutable {
+                callback(target, extra);
+            });
+        }
+        else
+        {
+            axlua::Callback<void(Node*)> callback(luaState, 2);
+            returnValue->initWithFunction([callback = std::move(callback)](void*, Node* target) mutable {
+                callback(target);
+            });
+        }
         returnValue->autorelease();
-        AxluaCallbackRegistry::getInstance()->addObjectHandler((void*)returnValue, handler,
-                                                               AxluaCallbackRegistry::HandlerType::CALLFUNC);
 
         axlua::adapter::push_object(luaState, (void*)returnValue, "ax.CallFunc");
         return 1;
@@ -1040,15 +1010,8 @@ static int axlua_Node_enumerateChildren(lua_State* luaState)
 #endif
 
         auto name            = axlua_tosv(luaState, 2);
-        LUA_FUNCTION handler = axlua::adapter::ref_function(luaState, 3, 0);
-        auto stack           = LuaEngine::getInstance()->getLuaStack();
-        obj->enumerateChildren(name, [=](Node* node) -> bool {
-            axlua::adapter::push_object(stack->getLuaState(), (void*)node, "ax.Node");
-            bool ret = stack->executeFunctionByHandler(handler, 1);
-
-            return ret;
-        });
-        stack->removeScriptHandler(handler);
+        axlua::Callback<bool(Node*)> callback(luaState, 3);
+        obj->enumerateChildren(name, [callback = std::move(callback)](Node* node) mutable { return callback(node); });
         lua_settop(luaState, 1);
         return 1;
     }
@@ -3198,14 +3161,10 @@ static void extendSpriteBatchNode(lua_State* luaState)
 
 namespace ax
 {
-AccelerationEventListener* LuaAccelerationEventListener::create()
+AccelerationEventListener* LuaAccelerationEventListener::create(axlua::Callback<void(AccelerationEvent*)> callback)
 {
     AccelerationEventListener* listener = new AccelerationEventListener();
-    if (listener->init([=](AccelerationEvent* event) {
-        LuaAccelerationEventData listenerData(event);
-        BasicScriptData data(listener, (void*)&listenerData);
-        LuaEngine::getInstance()->handleEvent(AxluaCallbackRegistry::HandlerType::EVENT_ACC, (void*)&data);
-    }))
+    if (listener->init([callback = std::move(callback)](AccelerationEvent* event) mutable { callback(event); }))
     {
         listener->autorelease();
     }
@@ -3216,13 +3175,11 @@ AccelerationEventListener* LuaAccelerationEventListener::create()
     return listener;
 }
 
-CustomEventListener* LuaCustomEventListener::create(std::string_view eventName)
+CustomEventListener* LuaCustomEventListener::create(std::string_view eventName,
+                                                     axlua::Callback<void(CustomEvent*)> callback)
 {
     CustomEventListener* eventCustom = new CustomEventListener();
-    if (eventCustom->init(eventName, [=](CustomEvent* event) {
-        BasicScriptData data((void*)eventCustom, (void*)event);
-        LuaEngine::getInstance()->handleEvent(AxluaCallbackRegistry::HandlerType::EVENT_CUSTIOM, (void*)&data);
-    }))
+    if (eventCustom->init(eventName, [callback = std::move(callback)](CustomEvent* event) mutable { callback(event); }))
     {
         eventCustom->autorelease();
     }
@@ -3256,10 +3213,8 @@ static int toaxlua_LuaAccelerationEventListener_create(lua_State* luaState)
             goto argumentError;
         }
 #endif
-        LUA_FUNCTION handler                       = axlua::adapter::ref_function(luaState, 2, 0);
-        ax::AccelerationEventListener* returnValue = ax::LuaAccelerationEventListener::create();
-        AxluaCallbackRegistry::getInstance()->addObjectHandler((void*)returnValue, handler,
-                                                               AxluaCallbackRegistry::HandlerType::EVENT_ACC);
+        axlua::Callback<void(ax::AccelerationEvent*)> callback(luaState, 2);
+        ax::AccelerationEventListener* returnValue = ax::LuaAccelerationEventListener::create(std::move(callback));
         axlua::adapter::push_object(luaState, (void*)returnValue, "ax.AccelerationEventListener");
 
         return 1;
@@ -3301,10 +3256,8 @@ static int axlua_LuaCustomEventListener_create(lua_State* luaState)
         }
 #endif
         auto eventName                       = axlua_tosv(luaState, 2);
-        LUA_FUNCTION handler                 = axlua::adapter::ref_function(luaState, 3, 0);
-        ax::CustomEventListener* returnValue = LuaCustomEventListener::create(eventName);
-        AxluaCallbackRegistry::getInstance()->addObjectHandler((void*)returnValue, handler,
-                                                               AxluaCallbackRegistry::HandlerType::EVENT_CUSTIOM);
+        axlua::Callback<void(ax::CustomEvent*)> callback(luaState, 3);
+        ax::CustomEventListener* returnValue = LuaCustomEventListener::create(eventName, std::move(callback));
 
         axlua::adapter::push_object(luaState, (void*)returnValue, "ax.CustomEventListener");
 
@@ -4099,13 +4052,9 @@ static int axlua_TextureCache_addImageAsync(lua_State* luaState)
         }
 #endif
         auto configFilePath  = axlua_tosv(luaState, 2);
-        LUA_FUNCTION handler = (axlua::adapter::ref_function(luaState, 3, 0));
-
-        self->addImageAsync(configFilePath, [=](Texture2D* tex) {
-            auto stack = LuaEngine::getInstance()->getLuaStack();
-            axlua::adapter::push_object(stack->getLuaState(), (void*)tex, "ax.Texture2D");
-            stack->executeFunctionByHandler(handler, 1);
-            stack->removeScriptHandler(handler);
+        axlua::Callback<void(Texture2D*)> callback(luaState, 3);
+        self->addImageAsync(configFilePath, [callback = std::move(callback)](Texture2D* tex) mutable {
+            callback(tex);
         });
 
         return 0;
@@ -4942,7 +4891,7 @@ static int axlua_utils_captureNode(lua_State* luaState)
 #endif
     {
         ax::Node* node       = static_cast<Node*>(axlua::adapter::to_usertype(luaState, 2, nullptr));
-        LUA_FUNCTION handler = axlua::adapter::ref_function(luaState, 3, 0);
+        axlua::Callback<void(ax::Image*)> callback(luaState, 3);
 
         float scale = 1.0f;
         axlua::adapter::Error conversionError;
@@ -4951,17 +4900,8 @@ static int axlua_utils_captureNode(lua_State* luaState)
             scale = axlua::adapter::to_number(luaState, 4, 1.0);
         }
 
-        ax::utils::captureNode(node, [=](RefPtr<Image> image) {
-            auto stack = LuaEngine::getInstance()->getLuaStack();
-            auto Ls    = stack->getLuaState();
-
-            if (image == nullptr)
-                stack->pushNil();
-            else
-                stack->pushObject(image, "ax.Image");
-
-            stack->executeFunctionByHandler(handler, 1);
-            stack->removeScriptHandler(handler);
+        ax::utils::captureNode(node, [callback = std::move(callback)](RefPtr<Image> image) mutable {
+            callback(image.get());
         }, scale);
 
         return 0;
@@ -4984,15 +4924,10 @@ static int axlua_utils_captureScreen(lua_State* luaState)
     else
 #endif
     {
-        LUA_FUNCTION handler = axlua::adapter::ref_function(luaState, 2, 0);
+        axlua::Callback<void(bool, std::string_view)> callback(luaState, 2);
         auto fileName        = axlua_tosv(luaState, 3);
-        ax::utils::captureScreen([=](bool succeed, std::string_view name) {
-            auto stack = LuaEngine::getInstance()->getLuaStack();
-            auto Ls    = stack->getLuaState();
-            axlua::adapter::push_boolean(Ls, succeed);
-            axlua::adapter::push_string(Ls, name.data());
-            stack->executeFunctionByHandler(handler, 2);
-            stack->removeScriptHandler(handler);
+        ax::utils::captureScreen([callback = std::move(callback)](bool succeed, std::string_view name) mutable {
+            callback(succeed, name);
         }, fileName);
 
         return 0;

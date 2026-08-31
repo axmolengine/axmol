@@ -111,13 +111,6 @@ public:
     virtual void removeScriptHandler(int nHandler);
 
     /**
-     * Reallocate Lua function reference index to the Lua function pointer to add reference.
-     *
-     * @param nHandler the function reference index to find the corresponding Lua function pointer.
-     */
-    virtual int reallocateScriptHandler(int nHandler);
-
-    /**
      * Execute script code contained in the given string.
      *
      * @param codes holding the valid script code that should be executed.

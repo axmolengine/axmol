@@ -28,53 +28,24 @@
 #include <map>
 #include <string>
 #include "lua-bindings/runtime/axlua_adapter.h"
-
-#include "lua-bindings/runtime/LuaStack.h"
 #include "lua-bindings/runtime/LuaValue.h"
-#include "lua-bindings/runtime/LuaEngine.h"
+
 #include "lua-bindings/runtime/axlua_conversions.h"
-#include "lua-bindings/runtime/AxluaCallbackRegistry.h"
 
 using namespace ax;
 
 namespace
 {
-int getWebSocketHandler(LuaWebSocket* socket, AxluaCallbackRegistry::HandlerType type)
-{
-    auto* registry = AxluaCallbackRegistry::getInstanceIfExists();
-    return registry != nullptr ? registry->getObjectHandler(socket, type) : 0;
-}
-
-LuaEngine* getLuaEngineIfExists()
-{
-    return dynamic_cast<LuaEngine*>(ScriptEngineManager::getScriptEngineIfExists());
-}
-
-void dispatchCommonEvent(int handler)
-{
-    if (handler == 0)
-        return;
-    if (auto* engine = ScriptEngineManager::getScriptEngineIfExists())
-    {
-        CommonScriptData data(handler, ""sv);
-        ScriptEvent event(kCommonEvent, (void*)&data);
-        engine->sendEvent(event);
-    }
-}
 }  // namespace
 
-LuaWebSocket::~LuaWebSocket()
-{
-    if (auto* registry = AxluaCallbackRegistry::getInstanceIfExists())
-        registry->removeObjectAllHandlers(this);
-}
+LuaWebSocket::~LuaWebSocket() = default;
 
 void LuaWebSocket::onOpen(WebSocket* ws)
 {
     LuaWebSocket* luaWs = dynamic_cast<LuaWebSocket*>(ws);
     if (luaWs)
     {
-        dispatchCommonEvent(getWebSocketHandler(this, AxluaCallbackRegistry::HandlerType::WEBSOCKET_OPEN));
+        onOpenCallback();
     }
 }
 
@@ -83,18 +54,8 @@ void LuaWebSocket::onMessage(WebSocket* ws, const WebSocket::Data& data)
     LuaWebSocket* luaWs = dynamic_cast<LuaWebSocket*>(ws);
     if (luaWs)
     {
-        const int handler = getWebSocketHandler(this, AxluaCallbackRegistry::HandlerType::WEBSOCKET_MESSAGE);
-        if (handler != 0)
-        {
-            auto* luaEngine = getLuaEngineIfExists();
-            LuaStack* stack = luaEngine != nullptr ? luaEngine->getLuaStack() : nullptr;
-            if (nullptr != stack)
-            {
-                stack->pushString(data.bytes, (int)data.len);
-                stack->pushBoolean(data.isBinary);
-                stack->executeFunctionByHandler(handler, 2);
-            }
-        }
+        if (onMessageCallback)
+            onMessageCallback(std::string_view(data.bytes, data.len), data.isBinary);
     }
 }
 
@@ -103,7 +64,7 @@ void LuaWebSocket::onClose(WebSocket* ws, uint16_t code, std::string_view reason
     LuaWebSocket* luaWs = dynamic_cast<LuaWebSocket*>(ws);
     if (luaWs)
     {
-        dispatchCommonEvent(getWebSocketHandler(this, AxluaCallbackRegistry::HandlerType::WEBSOCKET_CLOSE));
+        onCloseCallback();
     }
 }
 
@@ -112,7 +73,7 @@ void LuaWebSocket::onError(WebSocket* ws, const WebSocket::ErrorCode& error)
     LuaWebSocket* luaWs = dynamic_cast<LuaWebSocket*>(ws);
     if (luaWs)
     {
-        dispatchCommonEvent(getWebSocketHandler(this, AxluaCallbackRegistry::HandlerType::WEBSOCKET_ERROR));
+        onErrorCallback();
     }
 }
 
@@ -308,11 +269,24 @@ int axlua_WebSocket_registerScriptHandler00(lua_State* luaState)
         LuaWebSocket* self = (LuaWebSocket*)axlua::adapter::to_usertype(luaState, 1, 0);
         if (self)
         {
-            int handler = (axlua::adapter::ref_function(luaState, 2, 0));
-            AxluaCallbackRegistry::HandlerType handlerType =
-                (AxluaCallbackRegistry::HandlerType)((int)axlua::adapter::to_number(luaState, 3, 0) +
-                                                     (int)AxluaCallbackRegistry::HandlerType::WEBSOCKET_OPEN);
-            AxluaCallbackRegistry::getInstance()->addObjectHandler((void*)self, handler, handlerType);
+            const int handlerType = static_cast<int>(axlua::adapter::to_number(luaState, 3, 0));
+            switch (handlerType)
+            {
+            case LuaWebSocket::kWebSocketScriptHandlerOpen:
+                self->onOpenCallback = axlua::Callback<void()>(luaState, 2);
+                break;
+            case LuaWebSocket::kWebSocketScriptHandlerMessage:
+                self->onMessageCallback = axlua::Callback<void(std::string_view, bool)>(luaState, 2);
+                break;
+            case LuaWebSocket::kWebSocketScriptHandlerClose:
+                self->onCloseCallback = axlua::Callback<void()>(luaState, 2);
+                break;
+            case LuaWebSocket::kWebSocketScriptHandlerError:
+                self->onErrorCallback = axlua::Callback<void()>(luaState, 2);
+                break;
+            default:
+                return luaL_error(luaState, "WebSocket handler type out of range: %d", handlerType);
+            }
         }
     }
     return 0;
@@ -333,11 +307,14 @@ int axlua_WebSocket_unregisterScriptHandler00(lua_State* luaState)
         LuaWebSocket* self = (LuaWebSocket*)axlua::adapter::to_usertype(luaState, 1, 0);
         if (self)
         {
-            AxluaCallbackRegistry::HandlerType handlerType =
-                (AxluaCallbackRegistry::HandlerType)((int)axlua::adapter::to_number(luaState, 2, 0) +
-                                                     (int)AxluaCallbackRegistry::HandlerType::WEBSOCKET_OPEN);
-
-            AxluaCallbackRegistry::getInstance()->removeObjectHandler((void*)self, handlerType);
+            switch (static_cast<int>(axlua::adapter::to_number(luaState, 2, 0)))
+            {
+            case LuaWebSocket::kWebSocketScriptHandlerOpen: self->onOpenCallback.reset(); break;
+            case LuaWebSocket::kWebSocketScriptHandlerMessage: self->onMessageCallback.reset(); break;
+            case LuaWebSocket::kWebSocketScriptHandlerClose: self->onCloseCallback.reset(); break;
+            case LuaWebSocket::kWebSocketScriptHandlerError: self->onErrorCallback.reset(); break;
+            default: return luaL_error(luaState, "WebSocket handler type out of range");
+            }
         }
     }
     return 0;

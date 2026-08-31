@@ -10,24 +10,6 @@
 #    include "fairygui/FairyGUIMacros.h"
 #    include "fairygui/GLabel.h"
 
-static int handleFairyguiEvent(int handler, fairygui::EventContext* sender)
-{
-    LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
-    object_to_luaval<fairygui::EventContext>(stack->getLuaState(), "fgui.EventContext",
-                                             (fairygui::EventContext*)sender);
-    stack->executeFunctionByHandler(handler, 1);
-    stack->clean();
-    return 0;
-}
-
-static int handleFairyguiEventNoParams(int handler)
-{
-    LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
-    stack->executeFunctionByHandler(handler, 0);
-    stack->clean();
-    return 0;
-}
-
 // GObject's inline convenience overload is not exposed as a standalone AST
 // method by libclang. Keep the old Lua spelling, but reuse the same callback
 // factory as generated bindings instead of maintaining another handler bridge.
@@ -299,9 +281,8 @@ static int lua_ax_fairygui_play(lua_State* L)
             goto argumentError;
         }
 #    endif
-        LUA_FUNCTION handler = (axlua::adapter::ref_function(L, 2, 0));
-        self->play([=]() { handleFairyguiEventNoParams(handler); });
-        AxluaCallbackRegistry::getInstance()->addCustomHandler((void*)self, handler);
+        auto callback = axlua::Callback<void()>(L, 2);
+        self->play([callback = std::move(callback)]() mutable { callback(); });
         return 0;
     }
     if (3 == argc)
@@ -312,7 +293,7 @@ static int lua_ax_fairygui_play(lua_State* L)
             goto argumentError;
         }
 #    endif
-        LUA_FUNCTION handler = (axlua::adapter::ref_function(L, 4, 0));
+        auto callback = axlua::Callback<void()>(L, 4);
         bool ok              = true;
         int times;
         ok &= luaval_to_int(L, 2, (int*)&times, "lua_ax_fairygui_play");
@@ -328,8 +309,7 @@ static int lua_ax_fairygui_play(lua_State* L)
             axlua::adapter::raise_error(L, "invalid arguments in function 'lua_ax_fairygui_play'", nullptr);
             return 0;
         }
-        self->play(times, (float)delay, [=]() { handleFairyguiEventNoParams(handler); });
-        AxluaCallbackRegistry::getInstance()->addCustomHandler((void*)self, handler);
+        self->play(times, (float)delay, [callback = std::move(callback)]() mutable { callback(); });
         return 0;
     }
     luaL_error(L, "'addEventListener' function of Transition has wrong number of arguments: %d, was expecting %d\n",
@@ -362,7 +342,7 @@ static int lua_ax_fairygui_UIObjectFactory_setPackageItemExtension(lua_State* lu
             goto argumentError;
         }
 #    endif
-        LUA_FUNCTION handler = (axlua::adapter::ref_function(luaState, 3, 0));
+        auto callback = axlua::Callback<void(fairygui::GComponent*)>(luaState, 3);
         bool ok              = true;
         std::string url;
         ok &= luaval_to_std_string(luaState, 2, &url, "lua_ax_fairygui_UIObjectFactory_setPackageItemExtension");
@@ -382,7 +362,7 @@ static int lua_ax_fairygui_UIObjectFactory_setPackageItemExtension(lua_State* lu
                 nullptr);
             return 0;
         }
-        fairygui::UIObjectFactory::setPackageItemExtension(url, [=]() -> fairygui::GComponent* {
+        fairygui::UIObjectFactory::setPackageItemExtension(url, [retType, callback = std::move(callback)]() mutable -> fairygui::GComponent* {
             fairygui::GComponent* ret = nullptr;
             if (retType == "GButton")
                 ret = fairygui::GButton::create();
@@ -398,24 +378,9 @@ static int lua_ax_fairygui_UIObjectFactory_setPackageItemExtension(lua_State* lu
                 ret = fairygui::GComboBox::create();
             else
                 ret = fairygui::GComponent::create();
-            LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
-            stack->pushObject(ret, "fgui.GComponent");
-            stack->executeFunctionByHandler(handler, 1);
+            callback(ret);
             return ret;
         });
-        ax::Object* self = nullptr;
-        if (argc == 4)
-        {
-            self = (ax::Object*)axlua::adapter::to_usertype(luaState, 5, 0);
-        }
-        if (self)
-        {
-            AxluaCallbackRegistry::getInstance()->addCustomHandler((void*)self, handler);
-        }
-        else
-        {
-            AxluaCallbackRegistry::getInstance()->addCustomHandler((void*)Director::getInstance(), handler);
-        }
         return 0;
     }
     luaL_error(luaState, "%s has wrong number of arguments: %d, was expecting %d\n ",
@@ -457,15 +422,10 @@ static int lua_ax_fairygui_GList_setItemRenderer(lua_State* L)
             goto argumentError;
         }
 #    endif
-        LUA_FUNCTION handler = (axlua::adapter::ref_function(L, 2, 0));
-        self->itemRenderer   = [=](int index, fairygui::GObject* obj) {
-            LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
-            stack->pushInt(index);
-            object_to_luaval<fairygui::GObject>(stack->getLuaState(), "fgui.GObject", (fairygui::GObject*)obj);
-            stack->executeFunctionByHandler(handler, 2);
-            stack->clean();
+        auto callback = axlua::Callback<void(int, fairygui::GObject*)>(L, 2);
+        self->itemRenderer   = [callback = std::move(callback)](int index, fairygui::GObject* obj) mutable {
+            callback(index, obj);
         };
-        AxluaCallbackRegistry::getInstance()->addCustomHandler((void*)self, handler);
         return 0;
     }
     luaL_error(L, "'setItemRenderer' function of GObject has wrong number of arguments: %d, was expecting %d\n", argc,
@@ -763,9 +723,8 @@ int lua_ax_fairygui_GMovieClip_setPlaySettings(lua_State* luaState)
                 luaState, "invalid arguments in function 'lua_ax_fairygui_GMovieClip_setPlaySettings'", nullptr);
             return 0;
         }
-        LUA_FUNCTION handler = (axlua::adapter::ref_function(luaState, 6, 0));
-        obj->setPlaySettings(arg0, arg1, arg2, arg3, [=](void) { handleFairyguiEventNoParams(handler); });
-        AxluaCallbackRegistry::getInstance()->addCustomHandler((void*)obj, handler);
+        auto callback = axlua::Callback<void()>(luaState, 6);
+        obj->setPlaySettings(arg0, arg1, arg2, arg3, [callback = std::move(callback)]() mutable { callback(); });
         lua_settop(luaState, 1);
         return 1;
     }
@@ -818,14 +777,10 @@ int lua_ax_fairygui_GTweener_onUpdate(lua_State* luaState)
             goto argumentError;
         }
 #    endif
-        LUA_FUNCTION handler = (axlua::adapter::ref_function(luaState, 2, 0));
-        auto&& ret           = obj->onUpdate([=](fairygui::GTweener* sender) {
-            LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
-            object_to_luaval<fairygui::GTweener>(stack->getLuaState(), "fgui.GTweener", (fairygui::GTweener*)sender);
-            stack->executeFunctionByHandler(handler, 1);
-            stack->clean();
+        auto callback = axlua::Callback<void(fairygui::GTweener*)>(luaState, 2);
+        auto&& ret           = obj->onUpdate([callback = std::move(callback)](fairygui::GTweener* sender) mutable {
+            callback(sender);
         });
-        AxluaCallbackRegistry::getInstance()->addCustomHandler((void*)obj, handler);
         object_to_luaval<fairygui::GTweener>(luaState, "fgui.GTweener", (fairygui::GTweener*)ret);
         return 1;
     }
@@ -868,14 +823,10 @@ int lua_ax_fairygui_GTweener_onStart(lua_State* luaState)
             goto argumentError;
         }
 #    endif
-        LUA_FUNCTION handler = (axlua::adapter::ref_function(luaState, 2, 0));
-        auto&& ret           = obj->onStart([=](fairygui::GTweener* sender) {
-            LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
-            object_to_luaval<fairygui::GTweener>(stack->getLuaState(), "fgui.GTweener", (fairygui::GTweener*)sender);
-            stack->executeFunctionByHandler(handler, 1);
-            stack->clean();
+        auto callback = axlua::Callback<void(fairygui::GTweener*)>(luaState, 2);
+        auto&& ret           = obj->onStart([callback = std::move(callback)](fairygui::GTweener* sender) mutable {
+            callback(sender);
         });
-        AxluaCallbackRegistry::getInstance()->addCustomHandler((void*)obj, handler);
         object_to_luaval<fairygui::GTweener>(luaState, "fgui.GTweener", (fairygui::GTweener*)ret);
         return 1;
     }
@@ -918,9 +869,8 @@ int lua_ax_fairygui_GTweener_onComplete(lua_State* luaState)
             goto argumentError;
         }
 #    endif
-        LUA_FUNCTION handler = (axlua::adapter::ref_function(luaState, 2, 0));
-        auto&& ret           = obj->onComplete([=](void) { handleFairyguiEventNoParams(handler); });
-        AxluaCallbackRegistry::getInstance()->addCustomHandler((void*)obj, handler);
+        auto callback = axlua::Callback<void()>(luaState, 2);
+        auto&& ret           = obj->onComplete([callback = std::move(callback)]() mutable { callback(); });
         object_to_luaval<fairygui::GTweener>(luaState, "fgui.GTweener", (fairygui::GTweener*)ret);
         return 1;
     }
@@ -965,14 +915,10 @@ int lua_ax_fairygui_GTweener_onComplete1(lua_State* luaState)
             goto argumentError;
         }
 #    endif
-        LUA_FUNCTION handler = (axlua::adapter::ref_function(luaState, 2, 0));
-        auto&& ret           = obj->onComplete1([=](fairygui::GTweener* sender) {
-            LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
-            object_to_luaval<fairygui::GTweener>(stack->getLuaState(), "fgui.GTweener", (fairygui::GTweener*)sender);
-            stack->executeFunctionByHandler(handler, 1);
-            stack->clean();
+        auto callback = axlua::Callback<void(fairygui::GTweener*)>(luaState, 2);
+        auto&& ret           = obj->onComplete1([callback = std::move(callback)](fairygui::GTweener* sender) mutable {
+            callback(sender);
         });
-        AxluaCallbackRegistry::getInstance()->addCustomHandler((void*)obj, handler);
         object_to_luaval<fairygui::GTweener>(luaState, "fgui.GTweener", (fairygui::GTweener*)ret);
         return 1;
     }

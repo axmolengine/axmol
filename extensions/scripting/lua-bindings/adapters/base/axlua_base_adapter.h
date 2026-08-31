@@ -26,8 +26,8 @@
 #pragma once
 
 #include "lua-bindings/runtime/axlua_adapter.h"
+#include "lua-bindings/runtime/axlua_runtime.h"
 
-#include "lua-bindings/runtime/AxluaCallbackRegistry.h"
 #include "axmol/base/AccelerationEventListener.h"
 #include "axmol/base/CustomEventListener.h"
 #include "axmol/scene/Node.h"
@@ -37,13 +37,13 @@ namespace ax
 class LuaCustomEventListener
 {
 public:
-    static CustomEventListener* create(std::string_view eventName);
+    static CustomEventListener* create(std::string_view eventName, axlua::Callback<void(CustomEvent*)> callback);
 };
 
 class LuaAccelerationEventListener
 {
 public:
-    static AccelerationEventListener* create();
+    static AccelerationEventListener* create(axlua::Callback<void(AccelerationEvent*)> callback);
 };
 }  // namespace ax
 

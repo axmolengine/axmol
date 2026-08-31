@@ -33,6 +33,40 @@
 namespace axlua
 {
 
+// Owning Lua callback used by adapter delegates.  The callback keeps the Lua
+// function alive through LuaCallbackState and invalidates safely when its VM
+// shuts down; it does not rely on an object/type/handler global lookup.
+template <class Signature>
+class Callback;
+
+template <class Return, class... Arguments>
+class Callback<Return(Arguments...)>
+{
+public:
+    Callback() = default;
+    Callback(lua_State* state, int index) : _function(make_lua_callback<Return(Arguments...)>(state, index)) {}
+    explicit Callback(std::function<Return(Arguments...)> function) : _function(std::move(function)) {}
+
+    explicit operator bool() const { return static_cast<bool>(_function); }
+    Return operator()(Arguments... arguments) const
+    {
+        if constexpr (std::is_void_v<Return>)
+        {
+            if (_function)
+                _function(std::forward<Arguments>(arguments)...);
+        }
+        else
+        {
+            return _function ? _function(std::forward<Arguments>(arguments)...) : Return{};
+        }
+    }
+    void reset() { _function = {}; }
+    const std::function<Return(Arguments...)>& function() const { return _function; }
+
+private:
+    std::function<Return(Arguments...)> _function;
+};
+
 namespace detail
 {
 class BorrowedObjectScope

@@ -29,7 +29,6 @@
 
 #    include "lua-bindings/runtime/axlua_adapter.h"
 
-#    include "lua-bindings/runtime/AxluaCallbackRegistry.h"
 
 int register_all_ax_physics2d_adapter(lua_State* luaState);
 

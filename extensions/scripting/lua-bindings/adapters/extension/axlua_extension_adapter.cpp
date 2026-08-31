@@ -27,11 +27,10 @@
 #include "lua-bindings/generated/axlua_extension_gen.h"
 
 #include "lua-bindings/runtime/axlua_adapter.h"
+#include "lua-bindings/runtime/axlua_runtime.h"
 #include "lua-bindings/runtime/axlua_conversions.h"
 #include "lua-bindings/runtime/LuaValue.h"
 #include "extensions/axmol-ext.h"
-#include "lua-bindings/runtime/LuaEngine.h"
-#include "lua-bindings/runtime/AxluaCallbackRegistry.h"
 
 using namespace ax;
 USING_NS_AX_EXT;
@@ -75,44 +74,23 @@ class LuaAssetsManagerDelegateProtocol : public Object, public AssetsManagerDele
 {
 public:
     virtual ~LuaAssetsManagerDelegateProtocol() {}
+    axlua::Callback<void(int)> progressCallback;
+    axlua::Callback<void()> successCallback;
+    axlua::Callback<void(int)> errorCallback;
 
     void onProgress(int percent) override
     {
-        int handler = AxluaCallbackRegistry::getInstance()->getObjectHandler(
-            (void*)this, AxluaCallbackRegistry::HandlerType::ASSETSMANAGER_PROGRESS);
-        if (0 != handler)
-        {
-            LuaAssetsManagerEventData eventData(percent);
-            BasicScriptData data((void*)this, &eventData);
-            LuaEngine::getInstance()->handleEvent(AxluaCallbackRegistry::HandlerType::ASSETSMANAGER_PROGRESS,
-                                                  (void*)&data);
-        }
+        progressCallback(percent);
     }
 
     void onSuccess() override
     {
-        int handler = AxluaCallbackRegistry::getInstance()->getObjectHandler(
-            (void*)this, AxluaCallbackRegistry::HandlerType::ASSETSMANAGER_SUCCESS);
-        if (0 != handler)
-        {
-            LuaAssetsManagerEventData eventData;
-            BasicScriptData data((void*)this, &eventData);
-            LuaEngine::getInstance()->handleEvent(AxluaCallbackRegistry::HandlerType::ASSETSMANAGER_SUCCESS,
-                                                  (void*)&data);
-        }
+        successCallback();
     }
 
     void onError(AssetsManager::ErrorCode errorCode) override
     {
-        int handler = AxluaCallbackRegistry::getInstance()->getObjectHandler(
-            (void*)this, AxluaCallbackRegistry::HandlerType::ASSETSMANAGER_ERROR);
-        if (0 != handler)
-        {
-            LuaAssetsManagerEventData eventData((int)errorCode);
-            BasicScriptData data((void*)this, &eventData);
-            LuaEngine::getInstance()->handleEvent(AxluaCallbackRegistry::HandlerType::ASSETSMANAGER_ERROR,
-                                                  (void*)&data);
-        }
+        errorCallback(static_cast<int>(errorCode));
     }
 };
 
@@ -161,12 +139,14 @@ static int axlua_AssetsManager_setDelegate(lua_State* L)
             delegate->release();
         }
 
-        LUA_FUNCTION handler = axlua::adapter::ref_function(L, 2, 0);
-        AxluaCallbackRegistry::HandlerType handlerType =
-            (AxluaCallbackRegistry::HandlerType)((int)axlua::adapter::to_number(L, 3, 0) +
-                                                 (int)AxluaCallbackRegistry::HandlerType::ASSETSMANAGER_PROGRESS);
-
-        AxluaCallbackRegistry::getInstance()->addObjectHandler((void*)delegate, handler, handlerType);
+        const int handlerType = static_cast<int>(axlua::adapter::to_number(L, 3, 0));
+        switch (handlerType)
+        {
+        case 0: delegate->progressCallback = axlua::Callback<void(int)>(L, 2); break;
+        case 1: delegate->successCallback = axlua::Callback<void()>(L, 2); break;
+        case 2: delegate->errorCallback = axlua::Callback<void(int)>(L, 2); break;
+        default: return luaL_error(L, "AssetsManager delegate type out of range: %d", handlerType);
+        }
         return 0;
     }
 
@@ -224,14 +204,13 @@ static int axlua_Extension_EventListenerAssetsManagerEx_create(lua_State* L)
         ax::extension::AssetsManagerEx* assetManager =
             static_cast<ax::extension::AssetsManagerEx*>(axlua::adapter::to_usertype(L, 2, nullptr));
 
-        LUA_FUNCTION handler = axlua::adapter::ref_function(L, 3, 0);
+        auto callback = axlua::Callback<void(EventAssetsManagerEx*)>(L, 3);
 
         ax::extension::EventListenerAssetsManagerEx* ret =
-            ax::extension::EventListenerAssetsManagerEx::create(assetManager, [=](EventAssetsManagerEx* event) {
-            auto stack = LuaEngine::getInstance()->getLuaStack();
-            axlua::adapter::push_object(stack->getLuaState(), (void*)event, "ax.EventAssetsManagerEx");
-            stack->executeFunctionByHandler(handler, 1);
-        });
+            ax::extension::EventListenerAssetsManagerEx::create(assetManager,
+                                                                [callback = std::move(callback)](EventAssetsManagerEx* event) mutable {
+                                                                    callback(event);
+                                                                });
 
         axlua::adapter::push_object(L, (void*)ret, "ax.EventListenerAssetsManagerEx");
         return 1;
@@ -405,19 +384,14 @@ class LuaScrollViewDelegate : public Object, public ScrollViewDelegate
 {
 public:
     virtual ~LuaScrollViewDelegate() {}
+    axlua::Callback<void(ScrollView*)> scrollCallback;
+    axlua::Callback<void(ScrollView*)> zoomCallback;
 
     void scrollViewDidScroll(ScrollView* view) override
     {
         if (nullptr != view)
         {
-            int handler = AxluaCallbackRegistry::getInstance()->getObjectHandler(
-                (void*)view, AxluaCallbackRegistry::HandlerType::SCROLLVIEW_SCROLL);
-            if (0 != handler)
-            {
-                CommonScriptData data(handler, ""sv);
-                ScriptEvent event(kCommonEvent, (void*)&data);
-                LuaEngine::getInstance()->sendEvent(event);
-            }
+            scrollCallback(view);
         }
     }
 
@@ -425,14 +399,7 @@ public:
     {
         if (nullptr != view)
         {
-            int handler = AxluaCallbackRegistry::getInstance()->getObjectHandler(
-                (void*)view, AxluaCallbackRegistry::HandlerType::SCROLLVIEW_ZOOM);
-            if (0 != handler)
-            {
-                CommonScriptData data(handler, ""sv);
-                ScriptEvent event(kCommonEvent, (void*)&data);
-                LuaEngine::getInstance()->sendEvent(event);
-            }
+            zoomCallback(view);
         }
     }
 };
@@ -522,12 +489,20 @@ static int axlua_extension_ScrollView_registerScriptHandler(lua_State* luaState)
             goto argumentError;
         }
 #endif
-        LUA_FUNCTION handler = (axlua::adapter::ref_function(luaState, 2, 0));
-        AxluaCallbackRegistry::HandlerType handlerType =
-            (AxluaCallbackRegistry::HandlerType)((int)axlua::adapter::to_number(luaState, 3, 0) +
-                                                 (int)AxluaCallbackRegistry::HandlerType::SCROLLVIEW_SCROLL);
-
-        AxluaCallbackRegistry::getInstance()->addObjectHandler((void*)self, handler, handlerType);
+        auto* delegate = dynamic_cast<LuaScrollViewDelegate*>(self->getDelegate());
+        if (!delegate)
+        {
+            delegate = new LuaScrollViewDelegate();
+            self->setUserObject(delegate);
+            self->setDelegate(delegate);
+            delegate->release();
+        }
+        switch (static_cast<int>(axlua::adapter::to_number(luaState, 3, 0)))
+        {
+        case 0: delegate->scrollCallback = axlua::Callback<void(ScrollView*)>(luaState, 2); break;
+        case 1: delegate->zoomCallback = axlua::Callback<void(ScrollView*)>(luaState, 2); break;
+        default: return luaL_error(luaState, "ScrollView handler type out of range");
+        }
         return 0;
     }
 
@@ -576,10 +551,16 @@ static int axlua_extension_ScrollView_unregisterScriptHandler(lua_State* luaStat
         if (!axlua::adapter::is_number(luaState, 2, 0, &conversionError))
             goto argumentError;
 #endif
-        AxluaCallbackRegistry::HandlerType handlerType =
-            (AxluaCallbackRegistry::HandlerType)((int)axlua::adapter::to_number(luaState, 2, 0) +
-                                                 (int)AxluaCallbackRegistry::HandlerType::SCROLLVIEW_SCROLL);
-        AxluaCallbackRegistry::getInstance()->removeObjectHandler((void*)self, handlerType);
+        auto* delegate = dynamic_cast<LuaScrollViewDelegate*>(self->getDelegate());
+        if (delegate)
+        {
+            switch (static_cast<int>(axlua::adapter::to_number(luaState, 2, 0)))
+            {
+            case 0: delegate->scrollCallback.reset(); break;
+            case 1: delegate->zoomCallback.reset(); break;
+            default: return luaL_error(luaState, "ScrollView handler type out of range");
+            }
+        }
         return 0;
     }
 
@@ -626,99 +607,40 @@ public:
 
     void scrollViewDidScroll(ScrollView* view) override
     {
-        if (nullptr != view)
-        {
-            int handler = AxluaCallbackRegistry::getInstance()->getObjectHandler(
-                (void*)view, AxluaCallbackRegistry::HandlerType::SCROLLVIEW_SCROLL);
-            if (0 != handler)
-            {
-                LuaTableViewEventData eventData;
-                BasicScriptData data(view, &eventData);
-                LuaEngine::getInstance()->handleEvent(AxluaCallbackRegistry::HandlerType::SCROLLVIEW_SCROLL,
-                                                      (void*)&data);
-            }
-        }
+        scrollCallback(view);
     }
 
     void scrollViewDidZoom(ScrollView* view) override
     {
-        if (nullptr != view)
-        {
-            int handler = AxluaCallbackRegistry::getInstance()->getObjectHandler(
-                (void*)view, AxluaCallbackRegistry::HandlerType::SCROLLVIEW_ZOOM);
-            if (0 != handler)
-            {
-                LuaTableViewEventData eventData;
-                BasicScriptData data(view, &eventData);
-                LuaEngine::getInstance()->handleEvent(AxluaCallbackRegistry::HandlerType::SCROLLVIEW_ZOOM,
-                                                      (void*)&data);
-            }
-        }
+        zoomCallback(view);
     }
 
     void tableCellTouched(TableView* table, TableViewCell* cell) override
     {
-        if (nullptr != table && nullptr != cell)
-        {
-            int handler = AxluaCallbackRegistry::getInstance()->getObjectHandler(
-                (void*)table, AxluaCallbackRegistry::HandlerType::TABLECELL_TOUCHED);
-            if (0 != handler)
-            {
-                LuaTableViewEventData eventData(cell);
-                BasicScriptData data(table, &eventData);
-                LuaEngine::getInstance()->handleEvent(AxluaCallbackRegistry::HandlerType::TABLECELL_TOUCHED,
-                                                      (void*)&data);
-            }
-        }
+        touchedCallback(table, cell);
     }
 
     void tableCellHighlight(TableView* table, TableViewCell* cell) override
     {
-        if (nullptr != table && nullptr != cell)
-        {
-            int handler = AxluaCallbackRegistry::getInstance()->getObjectHandler(
-                (void*)table, AxluaCallbackRegistry::HandlerType::TABLECELL_HIGHLIGHT);
-            if (0 != handler)
-            {
-                LuaTableViewEventData eventData(cell);
-                BasicScriptData data(table, &eventData);
-                LuaEngine::getInstance()->handleEvent(AxluaCallbackRegistry::HandlerType::TABLECELL_HIGHLIGHT,
-                                                      (void*)&data);
-            }
-        }
+        highlightCallback(table, cell);
     }
 
     void tableCellUnhighlight(TableView* table, TableViewCell* cell) override
     {
-        if (nullptr != table && nullptr != cell)
-        {
-            int handler = AxluaCallbackRegistry::getInstance()->getObjectHandler(
-                (void*)table, AxluaCallbackRegistry::HandlerType::TABLECELL_UNHIGHLIGHT);
-            if (0 != handler)
-            {
-                LuaTableViewEventData eventData(cell);
-                BasicScriptData data(table, &eventData);
-                LuaEngine::getInstance()->handleEvent(AxluaCallbackRegistry::HandlerType::TABLECELL_UNHIGHLIGHT,
-                                                      (void*)&data);
-            }
-        }
+        unhighlightCallback(table, cell);
     }
 
     void tableCellWillRecycle(TableView* table, TableViewCell* cell) override
     {
-        if (nullptr != table && nullptr != cell)
-        {
-            int handler = AxluaCallbackRegistry::getInstance()->getObjectHandler(
-                (void*)table, AxluaCallbackRegistry::HandlerType::TABLECELL_WILL_RECYCLE);
-            if (0 != handler)
-            {
-                LuaTableViewEventData eventData(cell);
-                BasicScriptData data(table, &eventData);
-                LuaEngine::getInstance()->handleEvent(AxluaCallbackRegistry::HandlerType::TABLECELL_WILL_RECYCLE,
-                                                      (void*)&data);
-            }
-        }
+        recycleCallback(table, cell);
     }
+
+    axlua::Callback<void(ScrollView*)> scrollCallback;
+    axlua::Callback<void(ScrollView*)> zoomCallback;
+    axlua::Callback<void(TableView*, TableViewCell*)> touchedCallback;
+    axlua::Callback<void(TableView*, TableViewCell*)> highlightCallback;
+    axlua::Callback<void(TableView*, TableViewCell*)> unhighlightCallback;
+    axlua::Callback<void(TableView*, TableViewCell*)> recycleCallback;
 };
 
 static int axlua_extension_TableView_setDelegate(lua_State* L)
@@ -787,81 +709,23 @@ public:
     LUA_TableViewDataSource() {}
     virtual ~LUA_TableViewDataSource() {}
 
+    axlua::Callback<Size(TableView*, ssize_t)> sizeCallback;
+    axlua::Callback<TableViewCell*(TableView*, ssize_t)> cellCallback;
+    axlua::Callback<ssize_t(TableView*)> countCallback;
+
     Size tableCellSizeForIndex(TableView* table, ssize_t idx) override
     {
-        if (nullptr != table)
-        {
-            int handler = AxluaCallbackRegistry::getInstance()->getObjectHandler(
-                (void*)table, AxluaCallbackRegistry::HandlerType::TABLECELL_SIZE_FOR_INDEX);
-            if (0 != handler)
-            {
-                LuaTableViewEventData eventData(&idx);
-                BasicScriptData data(table, &eventData);
-                float width  = 0.0;
-                float height = 0.0;
-                LuaEngine::getInstance()->handleEvent(AxluaCallbackRegistry::HandlerType::TABLECELL_SIZE_FOR_INDEX,
-                                                      (void*)&data, 2, [&](lua_State* L, int numReturn) {
-                    AXASSERT(numReturn == 2, "tableCellSizeForIndex return count error");
-                    ValueVector vec;
-                    height = (float)axlua::adapter::to_number(L, -1, 0);
-                    lua_pop(L, 1);
-                    width = (float)axlua::adapter::to_number(L, -1, 0);
-                    lua_pop(L, 1);
-                });
-
-                return Size(width, height);
-            }
-        }
-
-        return Size::zero;
+        return sizeCallback(table, idx);
     }
 
     TableViewCell* tableCellAtIndex(TableView* table, ssize_t idx) override
     {
-        if (nullptr != table)
-        {
-            int handler = AxluaCallbackRegistry::getInstance()->getObjectHandler(
-                (void*)table, AxluaCallbackRegistry::HandlerType::TABLECELL_AT_INDEX);
-            if (0 != handler)
-            {
-                LuaTableViewEventData eventData(&idx);
-                BasicScriptData data(table, &eventData);
-                TableViewCell* viewCell = nullptr;
-                LuaEngine::getInstance()->handleEvent(AxluaCallbackRegistry::HandlerType::TABLECELL_AT_INDEX,
-                                                      (void*)&data, 1, [&](lua_State* L, int numReturn) {
-                    AXASSERT(numReturn == 1, "tableCellAtIndex return count error");
-                    viewCell = static_cast<TableViewCell*>(axlua::adapter::to_usertype(L, -1, nullptr));
-                    lua_pop(L, 1);
-                });
-
-                return viewCell;
-            }
-        }
-
-        return NULL;
+        return cellCallback(table, idx);
     }
 
     ssize_t numberOfCellsInTableView(TableView* table) override
     {
-        if (nullptr != table)
-        {
-            int handler = AxluaCallbackRegistry::getInstance()->getObjectHandler(
-                (void*)table, AxluaCallbackRegistry::HandlerType::TABLEVIEW_NUMS_OF_CELLS);
-            if (0 != handler)
-            {
-                LuaTableViewEventData eventData;
-                BasicScriptData data(table, &eventData);
-                ssize_t counts = 0;
-                LuaEngine::getInstance()->handleEvent(AxluaCallbackRegistry::HandlerType::TABLEVIEW_NUMS_OF_CELLS,
-                                                      (void*)&data, 1, [&](lua_State* L, int numReturn) {
-                    AXASSERT(numReturn == 1, "numberOfCellsInTableView return count error");
-                    counts = (ssize_t)axlua::adapter::to_number(L, -1, 0);
-                    lua_pop(L, 1);
-                });
-                return counts;
-            }
-        }
-        return 0;
+        return countCallback(table);
     }
 };
 
@@ -1025,12 +889,25 @@ static int axlua_extension_TableView_registerScriptHandler(lua_State* L)
             goto argumentError;
         }
 #endif
-        LUA_FUNCTION handler = (axlua::adapter::ref_function(L, 2, 0));
-        AxluaCallbackRegistry::HandlerType handlerType =
-            (AxluaCallbackRegistry::HandlerType)((int)axlua::adapter::to_number(L, 3, 0) +
-                                                 (int)AxluaCallbackRegistry::HandlerType::SCROLLVIEW_SCROLL);
-
-        AxluaCallbackRegistry::getInstance()->addObjectHandler((void*)self, handler, handlerType);
+        auto* userDict = static_cast<LuaRefMap*>(self->getUserObject());
+        auto* delegate = userDict ? static_cast<LUA_TableViewDelegate*>(userDict->objectForKey(KEY_TABLEVIEW_DELEGATE)) : nullptr;
+        auto* dataSource = userDict ? static_cast<LUA_TableViewDataSource*>(userDict->objectForKey(KEY_TABLEVIEW_DATA_SOURCE)) : nullptr;
+        const int type = static_cast<int>(axlua::adapter::to_number(L, 3, 0));
+        if (type < 6 && !delegate)
+            return luaL_error(L, "TableView delegate is not initialized");
+        switch (type)
+        {
+        case 0: delegate->scrollCallback = axlua::Callback<void(ScrollView*)>(L, 2); break;
+        case 1: delegate->zoomCallback = axlua::Callback<void(ScrollView*)>(L, 2); break;
+        case 2: delegate->touchedCallback = axlua::Callback<void(TableView*, TableViewCell*)>(L, 2); break;
+        case 3: delegate->highlightCallback = axlua::Callback<void(TableView*, TableViewCell*)>(L, 2); break;
+        case 4: delegate->unhighlightCallback = axlua::Callback<void(TableView*, TableViewCell*)>(L, 2); break;
+        case 5: delegate->recycleCallback = axlua::Callback<void(TableView*, TableViewCell*)>(L, 2); break;
+        case 6: if (!dataSource) return luaL_error(L, "TableView data source is not initialized"); dataSource->sizeCallback = axlua::Callback<Size(TableView*, ssize_t)>(L, 2); break;
+        case 7: if (!dataSource) return luaL_error(L, "TableView data source is not initialized"); dataSource->cellCallback = axlua::Callback<TableViewCell*(TableView*, ssize_t)>(L, 2); break;
+        case 8: if (!dataSource) return luaL_error(L, "TableView data source is not initialized"); dataSource->countCallback = axlua::Callback<ssize_t(TableView*)>(L, 2); break;
+        default: return luaL_error(L, "TableView handler type out of range");
+        }
         return 0;
     }
 
@@ -1079,10 +956,25 @@ static int axlua_extension_TableView_unregisterScriptHandler(lua_State* L)
         if (!axlua::adapter::is_number(L, 2, 0, &conversionError))
             goto argumentError;
 #endif
-        AxluaCallbackRegistry::HandlerType handlerType =
-            (AxluaCallbackRegistry::HandlerType)((int)axlua::adapter::to_number(L, 2, 0) +
-                                                 (int)AxluaCallbackRegistry::HandlerType::SCROLLVIEW_SCROLL);
-        AxluaCallbackRegistry::getInstance()->removeObjectHandler((void*)self, handlerType);
+        auto* userDict = static_cast<LuaRefMap*>(self->getUserObject());
+        auto* delegate = userDict ? static_cast<LUA_TableViewDelegate*>(userDict->objectForKey(KEY_TABLEVIEW_DELEGATE)) : nullptr;
+        auto* dataSource = userDict ? static_cast<LUA_TableViewDataSource*>(userDict->objectForKey(KEY_TABLEVIEW_DATA_SOURCE)) : nullptr;
+        const int type = static_cast<int>(axlua::adapter::to_number(L, 2, 0));
+        if (type < 6 && !delegate)
+            return 0;
+        switch (type)
+        {
+        case 0: delegate->scrollCallback.reset(); break;
+        case 1: delegate->zoomCallback.reset(); break;
+        case 2: delegate->touchedCallback.reset(); break;
+        case 3: delegate->highlightCallback.reset(); break;
+        case 4: delegate->unhighlightCallback.reset(); break;
+        case 5: delegate->recycleCallback.reset(); break;
+        case 6: if (dataSource) dataSource->sizeCallback.reset(); break;
+        case 7: if (dataSource) dataSource->cellCallback.reset(); break;
+        case 8: if (dataSource) dataSource->countCallback.reset(); break;
+        default: return luaL_error(L, "TableView handler type out of range");
+        }
         return 0;
     }
 

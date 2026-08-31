@@ -46,24 +46,12 @@
 
 #include "lua-bindings/runtime/axlua_adapter.h"
 #include "lua-bindings/runtime/axlua_conversions.h"
-#include "lua-bindings/runtime/AxluaCallbackRegistry.h"
+#include "lua-bindings/runtime/axlua_runtime.h"
 #include "lua-bindings/runtime/LuaValue.h"
 #include "axmol/ui/CocosGUI.h"
-#include "lua-bindings/runtime/LuaEngine.h"
 #include "axmol/base/FocusEventListener.h"
 
 using namespace ui;
-
-static int handleUIEvent(int handler, ax::Object* sender, int eventType)
-{
-    LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
-
-    stack->pushObject(sender, "ax.Object");
-    stack->pushInt(eventType);
-    stack->executeFunctionByHandler(handler, 2);
-    stack->clean();
-    return 0;
-}
 
 static void extendWidget(lua_State* L)
 {
@@ -103,14 +91,11 @@ static int axlua_ListView_addScrollViewEventListener(lua_State* L)
             goto argumentError;
         }
 #endif
-        LUA_FUNCTION handler = (axlua::adapter::ref_function(L, 2, 0));
-
-        auto scrollViewCallback = [=](ax::Object* ref, ui::ScrollView::EventType eventType) {
-            handleUIEvent(handler, ref, (int)eventType);
+        axlua::Callback<void(ax::Object*, ui::ScrollView::EventType)> callback(L, 2);
+        auto scrollViewCallback = [callback = std::move(callback)](ax::Object* ref, ui::ScrollView::EventType eventType) mutable {
+            callback(ref, eventType);
         };
         self->addEventListener((ui::ScrollView::ScrollViewCallback)scrollViewCallback);
-
-        AxluaCallbackRegistry::getInstance()->addCustomHandler((void*)self, handler);
         return 0;
     }
 
@@ -449,23 +434,8 @@ static void cloneFocusHandler(const FocusEventListener* src, FocusEventListener*
     if (nullptr == src || nullptr == dst)
         return;
 
-    LUA_FUNCTION handler = AxluaCallbackRegistry::getInstance()->getObjectHandler(
-        (void*)src, AxluaCallbackRegistry::HandlerType::EVENT_FOCUS);
-    if (0 != handler)
-    {
-        int newscriptHandler =
-            ax::ScriptEngineManager::getInstance()->getScriptEngine()->reallocateScriptHandler(handler);
-
-        AxluaCallbackRegistry::getInstance()->addObjectHandler((void*)dst, newscriptHandler,
-                                                               AxluaCallbackRegistry::HandlerType::EVENT_FOCUS);
-        dst->onFocusChanged = [=](ui::Widget* widgetLostFocus, ui::Widget* widgetGetFocus) {
-            auto stack   = LuaEngine::getInstance()->getLuaStack();
-            lua_State* L = stack->getLuaState();
-            axlua::adapter::push_object(L, (void*)widgetLostFocus, "axui.Widget");
-            axlua::adapter::push_object(L, (void*)widgetGetFocus, "axui.Widget");
-            stack->executeFunctionByHandler(handler, 2);
-        };
-    }
+    if (src != nullptr && dst != nullptr)
+        dst->onFocusChanged = src->onFocusChanged;
 }
 
 static int toaxlua_FocusEventListener_clone(lua_State* L)
@@ -547,17 +517,9 @@ static int toaxlua_FocusEventListener_registerScriptHandler(lua_State* L)
             goto argumentError;
         }
 #endif
-        LUA_FUNCTION handler = axlua::adapter::ref_function(L, 2, 0);
-
-        AxluaCallbackRegistry::getInstance()->addObjectHandler((void*)self, handler,
-                                                               AxluaCallbackRegistry::HandlerType::EVENT_FOCUS);
-
-        self->onFocusChanged = [=](ui::Widget* widgetLostFocus, ui::Widget* widgetGetFocus) {
-            auto stack = LuaEngine::getInstance()->getLuaStack();
-            auto Ls    = stack->getLuaState();
-            axlua::adapter::push_object(Ls, (void*)widgetLostFocus, "axui.Widget");
-            axlua::adapter::push_object(Ls, (void*)widgetGetFocus, "axui.Widget");
-            stack->executeFunctionByHandler(handler, 2);
+        axlua::Callback<void(ui::Widget*, ui::Widget*)> callback(L, 2);
+        self->onFocusChanged = [callback = std::move(callback)](ui::Widget* lost, ui::Widget* gained) mutable {
+            callback(lost, gained);
         };
         return 0;
     }

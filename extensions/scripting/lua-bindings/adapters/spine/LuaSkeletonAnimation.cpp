@@ -26,7 +26,6 @@ THE SOFTWARE.
 
 #include "lua-bindings/adapters/spine/LuaSkeletonAnimation.h"
 
-#include "lua-bindings/runtime/AxluaCallbackRegistry.h"
 #include "lua-bindings/runtime/LuaStack.h"
 #include "lua-bindings/runtime/LuaEngine.h"
 #include "spine/SkeletonAssetCache.h"
@@ -37,8 +36,10 @@ LuaSkeletonAnimation::LuaSkeletonAnimation() : spine::SkeletonAnimation() {}
 
 LuaSkeletonAnimation::~LuaSkeletonAnimation()
 {
-    if (auto* registry = AxluaCallbackRegistry::getInstanceIfExists())
-        registry->removeObjectAllHandlers(this);
+    auto* stack = LuaEngine::getInstance()->getLuaStack();
+    for (auto handler : _luaHandlers)
+        if (handler)
+            stack->removeScriptHandler(handler);
 }
 
 LuaSkeletonAnimation* LuaSkeletonAnimation::createWithFile(std::string_view dataFile,

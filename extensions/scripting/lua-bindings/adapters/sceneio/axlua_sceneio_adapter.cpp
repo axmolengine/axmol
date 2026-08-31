@@ -25,9 +25,9 @@
 #include "lua-bindings/adapters/sceneio/axlua_sceneio_adapter.hpp"
 #include "lua-bindings/generated/axlua_sceneio_gen.h"
 #include "lua-bindings/runtime/axlua_adapter.h"
+#include "lua-bindings/runtime/axlua_runtime.h"
 #include "lua-bindings/runtime/axlua_conversions.h"
 #include "lua-bindings/runtime/LuaValue.h"
-#include "lua-bindings/runtime/LuaEngine.h"
 #include "sceneext/ActionTimeline/ActionTimeline.h"
 #include "sceneext/ActionTimeline/ActionTimelineNode.h"
 #include "sceneio/ActionTimeline/CSLoader.h"
@@ -102,17 +102,9 @@ int axlua_sceneio_CSLoader_createNode(lua_State* luaState)
             }
 #endif
 
-            LUA_FUNCTION handler = (axlua::adapter::ref_function(luaState, 3, 0));
-            auto callback        = [handler](ax::Object* ref) {
-                if (nullptr == ref)
-                    return;
-                auto stack = LuaEngine::getInstance()->getLuaStack();
-                axlua::adapter::push_object(stack->getLuaState(), (void*)ref, "axext.Object");
-                stack->executeFunctionByHandler(handler, 1);
-            };
+            auto callback = axlua::Callback<void(ax::Object*)>(luaState, 3);
 
             ax::Node* ret = ax::CSLoader::createNode(filename, callback);
-            AxluaCallbackRegistry::getInstance()->addCustomHandler((void*)ret, handler);
             object_to_luaval<ax::Node>(luaState, "axext.Node", (ax::Node*)ret);
             return 1;
         }

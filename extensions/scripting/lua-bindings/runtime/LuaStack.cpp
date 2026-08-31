@@ -44,7 +44,6 @@ extern "C" {
 #    include "lua-bindings/platform/android/LuaJavaBridge.h"
 #endif
 
-#include "lua-bindings/runtime/AxluaCallbackRegistry.h"
 #include "lua-bindings/generated/axlua_base_gen.h"
 #include "lua-bindings/adapters/base/axlua_base_adapter.h"
 #include "lua-bindings/runtime/axlua_conversions.h"
@@ -577,25 +576,6 @@ bool LuaStack::handleAssert(const char* msg)
     lua_pushfstring(_state, "ASSERT FAILED ON LUA EXECUTE: %s", msg ? msg : "unknown");
     lua_error(_state);
     return true;
-}
-
-int LuaStack::reallocateScriptHandler(int nHandler)
-{
-    LUA_FUNCTION nNewHandle = -1;
-
-    if (pushFunctionByHandler(nHandler))
-    {
-        nNewHandle = axlua::adapter::ref_function(_state, lua_gettop(_state), 0);
-    }
-    /*
-        axlua::adapter::push_function(_state,nNewHandle);
-        if (!lua_isfunction(_state, -1))
-        {
-            AXLOGD("Error!");
-        }
-        lua_settop(_state, 0);
-    */
-    return nNewHandle;
 }
 
 int LuaStack::executeFunction(int handler,

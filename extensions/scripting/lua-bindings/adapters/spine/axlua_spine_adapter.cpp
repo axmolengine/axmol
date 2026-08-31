@@ -29,7 +29,6 @@
 
 #    include "lua-bindings/runtime/axlua_adapter.h"
 #    include "lua-bindings/runtime/axlua_conversions.h"
-#    include "lua-bindings/runtime/AxluaCallbackRegistry.h"
 #    include "lua-bindings/runtime/LuaValue.h"
 #    include "spine/spine-axmol.h"
 #    include "lua-bindings/adapters/spine/LuaSkeletonAnimation.h"
@@ -203,40 +202,35 @@ int axlua_SkeletonAnimation_registerSpineEventHandler00(lua_State* luaState)
             {
                 self->setStartListener(
                     [=](spine::TrackEntry* entry) { executeSpineEvent(self, handler, eventType, entry); });
-                AxluaCallbackRegistry::getInstance()->addObjectHandler(
-                    (void*)self, handler, AxluaCallbackRegistry::HandlerType::EVENT_SPINE_ANIMATION_START);
+                self->setLuaHandler(static_cast<int>(eventType), handler);
             }
             break;
             case spine::EventType::EventType_Interrupt:
             {
                 self->setInterruptListener(
                     [=](spine::TrackEntry* entry) { executeSpineEvent(self, handler, eventType, entry); });
-                AxluaCallbackRegistry::getInstance()->addObjectHandler(
-                    (void*)self, handler, AxluaCallbackRegistry::HandlerType::EVENT_SPINE_ANIMATION_INTERRUPT);
+                self->setLuaHandler(static_cast<int>(eventType), handler);
             }
             break;
             case spine::EventType::EventType_End:
             {
                 self->setEndListener(
                     [=](spine::TrackEntry* entry) { executeSpineEvent(self, handler, eventType, entry); });
-                AxluaCallbackRegistry::getInstance()->addObjectHandler(
-                    (void*)self, handler, AxluaCallbackRegistry::HandlerType::EVENT_SPINE_ANIMATION_END);
+                self->setLuaHandler(static_cast<int>(eventType), handler);
             }
             break;
             case spine::EventType::EventType_Dispose:
             {
                 self->setDisposeListener(
                     [=](spine::TrackEntry* entry) { executeSpineEvent(self, handler, eventType, entry); });
-                AxluaCallbackRegistry::getInstance()->addObjectHandler(
-                    (void*)self, handler, AxluaCallbackRegistry::HandlerType::EVENT_SPINE_ANIMATION_DISPOSE);
+                self->setLuaHandler(static_cast<int>(eventType), handler);
             }
             break;
             case spine::EventType::EventType_Complete:
             {
                 self->setCompleteListener(
                     [=](spine::TrackEntry* entry) { executeSpineEvent(self, handler, eventType, entry); });
-                AxluaCallbackRegistry::getInstance()->addObjectHandler(
-                    (void*)self, handler, AxluaCallbackRegistry::HandlerType::EVENT_SPINE_ANIMATION_COMPLETE);
+                self->setLuaHandler(static_cast<int>(eventType), handler);
             }
             break;
             case spine::EventType::EventType_Event:
@@ -244,8 +238,7 @@ int axlua_SkeletonAnimation_registerSpineEventHandler00(lua_State* luaState)
                 self->setEventListener([=](spine::TrackEntry* entry, spine::Event* event) {
                     executeSpineEvent(self, handler, eventType, entry, event);
                 });
-                AxluaCallbackRegistry::getInstance()->addObjectHandler(
-                    (void*)self, handler, AxluaCallbackRegistry::HandlerType::EVENT_SPINE_ANIMATION_EVENT);
+                self->setLuaHandler(static_cast<int>(eventType), handler);
             }
             break;
             default:
@@ -272,37 +265,31 @@ int axlua_SkeletonAnimation_unregisterSpineEventHandler00(lua_State* luaState)
         if (NULL != self)
         {
             spine::EventType eventType = static_cast<spine::EventType>((int)axlua::adapter::to_number(luaState, 2, 0));
-            AxluaCallbackRegistry::HandlerType handlerType =
-                AxluaCallbackRegistry::HandlerType::EVENT_SPINE_ANIMATION_START;
             switch (eventType)
             {
             case spine::EventType::EventType_Start:
-                handlerType = AxluaCallbackRegistry::HandlerType::EVENT_SPINE_ANIMATION_START;
                 self->setStartListener(nullptr);
                 break;
             case spine::EventType::EventType_Interrupt:
-                handlerType = AxluaCallbackRegistry::HandlerType::EVENT_SPINE_ANIMATION_INTERRUPT;
+                self->setInterruptListener(nullptr);
                 break;
             case spine::EventType::EventType_End:
-                handlerType = AxluaCallbackRegistry::HandlerType::EVENT_SPINE_ANIMATION_END;
                 self->setEndListener(nullptr);
                 break;
             case spine::EventType::EventType_Dispose:
-                handlerType = AxluaCallbackRegistry::HandlerType::EVENT_SPINE_ANIMATION_DISPOSE;
+                self->setDisposeListener(nullptr);
                 break;
             case spine::EventType::EventType_Complete:
-                handlerType = AxluaCallbackRegistry::HandlerType::EVENT_SPINE_ANIMATION_COMPLETE;
                 self->setCompleteListener(nullptr);
                 break;
             case spine::EventType::EventType_Event:
-                handlerType = AxluaCallbackRegistry::HandlerType::EVENT_SPINE_ANIMATION_EVENT;
                 self->setEventListener(nullptr);
                 break;
 
             default:
                 break;
             }
-            AxluaCallbackRegistry::getInstance()->removeObjectHandler((void*)self, handlerType);
+            self->clearLuaHandler(static_cast<int>(eventType));
         }
     }
     return 0;

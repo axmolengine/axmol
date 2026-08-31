@@ -28,7 +28,7 @@
 #include "lua-bindings/runtime/LuaStack.h"
 #include "lua-bindings/runtime/LuaValue.h"
 #include "lua-bindings/runtime/LuaEngine.h"
-#include "lua-bindings/runtime/AxluaCallbackRegistry.h"
+#include "lua-bindings/runtime/axlua_runtime.h"
 
 #include "axmol/network/HttpClient.h"
 
@@ -108,6 +108,9 @@ public:
     inline void setAborted(bool isAborted) { _isAborted = isAborted; }
     inline bool isAborted() const { return _isAborted; }
 
+    void setReadyStateCallback(axlua::Callback<void()> callback) { _readyStateCallback = std::move(callback); }
+    void clearReadyStateCallback() { _readyStateCallback.reset(); }
+
 private:
     std::string _url;
     std::string _meth;
@@ -126,6 +129,7 @@ private:
     std::unordered_map<std::string, std::string> _requestHeader;
     bool _errorFlag;
     bool _isAborted;
+    axlua::Callback<void()> _readyStateCallback;
 };
 
 LuaMinXmlHttpRequest::LuaMinXmlHttpRequest()
@@ -226,20 +230,7 @@ void LuaMinXmlHttpRequest::_sendRequest()
                 _errorFlag = true;
                 _status    = 0;
             }
-            // Deliver the ready-state notification through the legacy handler bridge.
-            auto* callbackRegistry = ax::AxluaCallbackRegistry::getInstanceIfExists();
-            int handler = callbackRegistry != nullptr
-                              ? callbackRegistry->getObjectHandler(
-                                    (void*)this, ax::AxluaCallbackRegistry::HandlerType::XMLHTTPREQUEST_READY_STATE_CHANGE)
-                              : 0;
-
-            if (0 != handler)
-            {
-                AXLOGD("come in handler, handler is {}", handler);
-                ax::CommonScriptData data(handler, ""sv);
-                ax::ScriptEvent event(ax::ScriptEventType::kCommonEvent, (void*)&data);
-                ax::ScriptEngineManager::sendEventToLua(event);
-            }
+            _readyStateCallback();
             return;
         }
 
@@ -261,19 +252,7 @@ void LuaMinXmlHttpRequest::_sendRequest()
             _status = 0;
         }
 
-        // Deliver the ready-state notification through the legacy handler bridge.
-        auto* callbackRegistry = ax::AxluaCallbackRegistry::getInstanceIfExists();
-        int handler = callbackRegistry != nullptr
-                          ? callbackRegistry->getObjectHandler(
-                                (void*)this, ax::AxluaCallbackRegistry::HandlerType::XMLHTTPREQUEST_READY_STATE_CHANGE)
-                          : 0;
-
-        if (0 != handler)
-        {
-            ax::CommonScriptData data(handler, ""sv);
-            ax::ScriptEvent event(ax::ScriptEventType::kCommonEvent, (void*)&data);
-            ax::ScriptEngineManager::sendEventToLua(event);
-        }
+        _readyStateCallback();
         release();
     });
     network::HttpClient::getInstance()->send(_httpRequest);
@@ -1120,9 +1099,7 @@ static int axlua_XMLHttpRequest_registerScriptHandler(lua_State* L)
             goto argumentError;
 #endif
 
-        int handler = (axlua::adapter::ref_function(L, 2, 0));
-        ax::AxluaCallbackRegistry::getInstance()->addObjectHandler(
-            (void*)self, handler, ax::AxluaCallbackRegistry::HandlerType::XMLHTTPREQUEST_READY_STATE_CHANGE);
+        self->setReadyStateCallback(axlua::Callback<void()>(L, 2));
         return 0;
     }
 
@@ -1165,8 +1142,7 @@ static int axlua_XMLHttpRequest_unregisterScriptHandler(lua_State* L)
 
     if (0 == argc)
     {
-        ax::AxluaCallbackRegistry::getInstance()->removeObjectHandler(
-            (void*)self, ax::AxluaCallbackRegistry::HandlerType::XMLHTTPREQUEST_READY_STATE_CHANGE);
+        self->clearReadyStateCallback();
 
         return 0;
     }
