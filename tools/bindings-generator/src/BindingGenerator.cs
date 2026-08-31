@@ -945,7 +945,8 @@ public static unsafe class BindingGenerator
                 string.Equals(candidate.LuaName, method.LuaName, StringComparison.Ordinal) &&
                 string.Equals(candidate.ReturnType, method.ReturnType, StringComparison.Ordinal) &&
                 candidate.IsConst == method.IsConst &&
-                candidate.ParameterTypes.SequenceEqual(method.ParameterTypes, StringComparer.Ordinal));
+                candidate.ParameterTypes.SequenceEqual(method.ParameterTypes, StringComparer.Ordinal) &&
+                candidate.DefaultValues.SequenceEqual(method.DefaultValues, StringComparer.Ordinal));
             if (baseMethod is not null)
                 return true;
         }
