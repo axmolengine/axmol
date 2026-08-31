@@ -1,5 +1,3 @@
-local BindingBenchmarkTest = {}
-
 local DEFAULT_SPRITE_COUNT = 1000
 local SPRITE_STEP = 500
 local MAX_SPRITE_COUNT = 10000
