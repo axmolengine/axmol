@@ -102,6 +102,7 @@ void register_ax_base_types_3(lua_State* L)
     module.class_<ax::MoveTo>("MoveTo");
     module.class_<ax::Node>("Node");
     module.class_<ax::NodeData>("NodeData");
+    module.class_<ax::NodeGrid>("NodeGrid");
 }
 
 void register_ax_base_members_3(lua_State* L)
@@ -111,11 +112,9 @@ void register_ax_base_members_3(lua_State* L)
     class_0_LabelAtlas.bases<ax::AtlasNode, ax::Node, ax::Object, ax::TextureProtocol, ax::BlendProtocol, ax::LabelProtocol>();
     class_0_LabelAtlas.constructors<ax::LabelAtlas()>();
     class_0_LabelAtlas.static_method("_create", axlua::overload(axlua::overload_candidate<std::string_view, std::string_view>(static_cast<ax::LabelAtlas * (*)(std::string_view, std::string_view)>(&ax::LabelAtlas::create)), axlua::overload_candidate<std::string_view, std::string_view, int, int, int>(static_cast<ax::LabelAtlas * (*)(std::string_view, std::string_view, int, int, int)>(&ax::LabelAtlas::create)), axlua::overload_candidate<std::string_view, ax::Texture2D *, int, int, int>(static_cast<ax::LabelAtlas * (*)(std::string_view, ax::Texture2D *, int, int, int)>(&ax::LabelAtlas::create))));
-    class_0_LabelAtlas.method("getDescription", static_cast<std::string (ax::LabelAtlas::*)() const>(&ax::LabelAtlas::getDescription));
     class_0_LabelAtlas.method("getString", static_cast<std::string_view (ax::LabelAtlas::*)() const>(&ax::LabelAtlas::getString));
     class_0_LabelAtlas.method("initWithString", axlua::overload(axlua::overload_candidate<std::string_view, std::string_view>(static_cast<bool (ax::LabelAtlas::*)(std::string_view, std::string_view)>(&ax::LabelAtlas::initWithString)), axlua::overload_candidate<std::string_view, std::string_view, int, int, int>(static_cast<bool (ax::LabelAtlas::*)(std::string_view, std::string_view, int, int, int)>(&ax::LabelAtlas::initWithString)), axlua::overload_candidate<std::string_view, ax::Texture2D *, int, int, int>(static_cast<bool (ax::LabelAtlas::*)(std::string_view, ax::Texture2D *, int, int, int)>(&ax::LabelAtlas::initWithString))));
     class_0_LabelAtlas.method("setString", static_cast<void (ax::LabelAtlas::*)(std::string_view)>(&ax::LabelAtlas::setString));
-    class_0_LabelAtlas.method("updateAtlasValues", static_cast<void (ax::LabelAtlas::*)()>(&ax::LabelAtlas::updateAtlasValues));
     auto class_1_LabelProtocol = module.class_<ax::LabelProtocol>("LabelProtocol");
     auto class_2_Layer = module.class_<ax::Layer>("Layer");
     class_2_Layer.bases<ax::Node, ax::Object>();
@@ -127,13 +126,11 @@ void register_ax_base_members_3(lua_State* L)
     class_3_LayerColor.method("changeWidth", static_cast<void (ax::LayerColor::*)(float)>(&ax::LayerColor::changeWidth));
     class_3_LayerColor.method("changeWidthAndHeight", static_cast<void (ax::LayerColor::*)(float, float)>(&ax::LayerColor::changeWidthAndHeight));
     class_3_LayerColor.static_method("create", axlua::overload(axlua::overload_candidate<>(static_cast<ax::LayerColor * (*)()>(&ax::LayerColor::create)), axlua::overload_candidate<const ax::Color32 &>(static_cast<ax::LayerColor * (*)(const ax::Color32 &)>(&ax::LayerColor::create)), axlua::overload_candidate<const ax::Color32 &, float, float>(static_cast<ax::LayerColor * (*)(const ax::Color32 &, float, float)>(&ax::LayerColor::create))));
-    class_3_LayerColor.method("init", static_cast<bool (ax::LayerColor::*)()>(&ax::LayerColor::init));
     class_3_LayerColor.method("initWithColor", axlua::overload(axlua::overload_candidate<const ax::Color32 &>(static_cast<bool (ax::LayerColor::*)(const ax::Color32 &)>(&ax::LayerColor::initWithColor)), axlua::overload_candidate<const ax::Color32 &, float, float>(static_cast<bool (ax::LayerColor::*)(const ax::Color32 &, float, float)>(&ax::LayerColor::initWithColor))));
     auto class_4_LayerGradient = module.class_<ax::LayerGradient>("LayerGradient");
     class_4_LayerGradient.bases<ax::LayerColor, ax::Sprite, ax::Node, ax::Object, ax::TextureProtocol, ax::BlendProtocol>();
     class_4_LayerGradient.constructors<ax::LayerGradient()>();
     class_4_LayerGradient.static_method("create", axlua::overload(axlua::overload_candidate<>(static_cast<ax::LayerGradient * (*)()>(&ax::LayerGradient::create)), axlua::overload_candidate<const ax::Color32 &, const ax::Color32 &>(static_cast<ax::LayerGradient * (*)(const ax::Color32 &, const ax::Color32 &)>(&ax::LayerGradient::create)), axlua::overload_candidate<const ax::Color32 &, const ax::Color32 &, const ax::Vec2 &>(static_cast<ax::LayerGradient * (*)(const ax::Color32 &, const ax::Color32 &, const ax::Vec2 &)>(&ax::LayerGradient::create))));
-    class_4_LayerGradient.method("getDescription", static_cast<std::string (ax::LayerGradient::*)() const>(&ax::LayerGradient::getDescription));
     class_4_LayerGradient.method("getEndColor", static_cast<const ax::Color32 & (ax::LayerGradient::*)() const>(&ax::LayerGradient::getEndColor));
     class_4_LayerGradient.method("getEndOpacity", static_cast<uint8_t (ax::LayerGradient::*)() const>(&ax::LayerGradient::getEndOpacity));
     class_4_LayerGradient.method("getStartColor", static_cast<const ax::Color32 & (ax::LayerGradient::*)() const>(&ax::LayerGradient::getStartColor));
@@ -152,8 +149,6 @@ void register_ax_base_members_3(lua_State* L)
     class_5_LayerMultiplex.bases<ax::Node, ax::Object>();
     class_5_LayerMultiplex.constructors<ax::LayerMultiplex()>();
     class_5_LayerMultiplex.method("addLayer", static_cast<void (ax::LayerMultiplex::*)(ax::Node *)>(&ax::LayerMultiplex::addLayer));
-    class_5_LayerMultiplex.method("getDescription", static_cast<std::string (ax::LayerMultiplex::*)() const>(&ax::LayerMultiplex::getDescription));
-    class_5_LayerMultiplex.method("init", static_cast<bool (ax::LayerMultiplex::*)()>(&ax::LayerMultiplex::init));
     class_5_LayerMultiplex.method("initWithArray", static_cast<bool (ax::LayerMultiplex::*)(const Vector<ax::Node *> &)>(&ax::LayerMultiplex::initWithArray));
     class_5_LayerMultiplex.method("switchTo", axlua::overload(axlua::overload_candidate<int>(static_cast<void (ax::LayerMultiplex::*)(int)>(&ax::LayerMultiplex::switchTo)), axlua::overload_candidate<int, bool>(static_cast<void (ax::LayerMultiplex::*)(int, bool)>(&ax::LayerMultiplex::switchTo))));
     class_5_LayerMultiplex.method("switchToAndReleaseMe", static_cast<void (ax::LayerMultiplex::*)(int)>(&ax::LayerMultiplex::switchToAndReleaseMe));
@@ -172,7 +167,6 @@ void register_ax_base_members_3(lua_State* L)
     class_6_LayerRadialGradient.method("initWithColor", static_cast<bool (ax::LayerRadialGradient::*)(const ax::Color32 &, const ax::Color32 &, float, const ax::Vec2 &, float)>(&ax::LayerRadialGradient::initWithColor));
     class_6_LayerRadialGradient.method("setBlendFunc", static_cast<void (ax::LayerRadialGradient::*)(const ax::BlendFunc &)>(&ax::LayerRadialGradient::setBlendFunc));
     class_6_LayerRadialGradient.method("setCenter", static_cast<void (ax::LayerRadialGradient::*)(const ax::Vec2 &)>(&ax::LayerRadialGradient::setCenter));
-    class_6_LayerRadialGradient.method("setContentSize", static_cast<void (ax::LayerRadialGradient::*)(const ax::Vec2 &)>(&ax::LayerRadialGradient::setContentSize));
     class_6_LayerRadialGradient.method("setEndColor", static_cast<void (ax::LayerRadialGradient::*)(const ax::Color32 &)>(&ax::LayerRadialGradient::setEndColor));
     class_6_LayerRadialGradient.method("setEndOpacity", static_cast<void (ax::LayerRadialGradient::*)(uint8_t)>(&ax::LayerRadialGradient::setEndOpacity));
     class_6_LayerRadialGradient.method("setExpand", static_cast<void (ax::LayerRadialGradient::*)(float)>(&ax::LayerRadialGradient::setExpand));
@@ -190,7 +184,6 @@ void register_ax_base_members_3(lua_State* L)
     class_7_Lens3D.method("setConcave", static_cast<void (ax::Lens3D::*)(bool)>(&ax::Lens3D::setConcave));
     class_7_Lens3D.method("setLensEffect", static_cast<void (ax::Lens3D::*)(float)>(&ax::Lens3D::setLensEffect));
     class_7_Lens3D.method("setPosition", static_cast<void (ax::Lens3D::*)(const ax::Vec2 &)>(&ax::Lens3D::setPosition));
-    class_7_Lens3D.method("update", static_cast<void (ax::Lens3D::*)(float)>(&ax::Lens3D::update));
     auto class_8_Liquid = module.class_<ax::Liquid>("Liquid");
     class_8_Liquid.bases<ax::Grid3DAction, ax::GridAction, ax::ActionInterval, ax::FiniteTimeAction, ax::Action, ax::Object>();
     class_8_Liquid.constructors<ax::Liquid()>();
@@ -201,7 +194,6 @@ void register_ax_base_members_3(lua_State* L)
     class_8_Liquid.method("initWithDuration", static_cast<bool (ax::Liquid::*)(float, const ax::Vec2 &, unsigned int, float)>(&ax::Liquid::initWithDuration));
     class_8_Liquid.method("setAmplitude", static_cast<void (ax::Liquid::*)(float)>(&ax::Liquid::setAmplitude));
     class_8_Liquid.method("setAmplitudeRate", static_cast<void (ax::Liquid::*)(float)>(&ax::Liquid::setAmplitudeRate));
-    class_8_Liquid.method("update", static_cast<void (ax::Liquid::*)(float)>(&ax::Liquid::update));
     auto class_9_Material = module.class_<ax::Material>("Material");
     class_9_Material.bases<ax::Object>();
     class_9_Material.method("addTechnique", static_cast<void (ax::Material::*)(ax::Technique *)>(&ax::Material::addTechnique));
@@ -229,29 +221,21 @@ void register_ax_base_members_3(lua_State* L)
     auto class_10_Menu = module.class_<ax::Menu>("Menu");
     class_10_Menu.bases<ax::Node, ax::Object>();
     class_10_Menu.constructors<ax::Menu()>();
-    class_10_Menu.method("addChild", axlua::overload(axlua::overload_candidate<ax::Node *>(static_cast<void (ax::Menu::*)(ax::Node *)>(&ax::Menu::addChild)), axlua::overload_candidate<ax::Node *, int>(static_cast<void (ax::Menu::*)(ax::Node *, int)>(&ax::Menu::addChild)), axlua::overload_candidate<ax::Node *, int, int>(static_cast<void (ax::Menu::*)(ax::Node *, int, int)>(&ax::Menu::addChild)), axlua::overload_candidate<ax::Node *, int, std::string_view>(static_cast<void (ax::Menu::*)(ax::Node *, int, std::string_view)>(&ax::Menu::addChild))));
     class_10_Menu.method("alignItemsHorizontally", static_cast<void (ax::Menu::*)()>(&ax::Menu::alignItemsHorizontally));
     class_10_Menu.method("alignItemsHorizontallyWithPadding", static_cast<void (ax::Menu::*)(float)>(&ax::Menu::alignItemsHorizontallyWithPadding));
     class_10_Menu.method("alignItemsVertically", static_cast<void (ax::Menu::*)()>(&ax::Menu::alignItemsVertically));
     class_10_Menu.method("alignItemsVerticallyWithPadding", static_cast<void (ax::Menu::*)(float)>(&ax::Menu::alignItemsVerticallyWithPadding));
-    class_10_Menu.method("getDescription", static_cast<std::string (ax::Menu::*)() const>(&ax::Menu::getDescription));
-    class_10_Menu.method("init", static_cast<bool (ax::Menu::*)()>(&ax::Menu::init));
     class_10_Menu.method("initWithArray", static_cast<bool (ax::Menu::*)(const Vector<ax::MenuItem *> &)>(&ax::Menu::initWithArray));
     class_10_Menu.method("isEnabled", static_cast<bool (ax::Menu::*)() const>(&ax::Menu::isEnabled));
-    class_10_Menu.method("isOpacityModifyRGB", static_cast<bool (ax::Menu::*)() const>(&ax::Menu::isOpacityModifyRGB));
     class_10_Menu.method("onPointerCancel", static_cast<void (ax::Menu::*)(ax::PointerEvent *)>(&ax::Menu::onPointerCancel));
     class_10_Menu.method("onPointerDown", static_cast<bool (ax::Menu::*)(ax::PointerEvent *)>(&ax::Menu::onPointerDown));
-    class_10_Menu.method("onPointerHitTest", static_cast<bool (ax::Menu::*)(ax::PointerEvent *, ax::Vec3 *)>(&ax::Menu::onPointerHitTest));
     class_10_Menu.method("onPointerMove", static_cast<void (ax::Menu::*)(ax::PointerEvent *)>(&ax::Menu::onPointerMove));
     class_10_Menu.method("onPointerUp", static_cast<void (ax::Menu::*)(ax::PointerEvent *)>(&ax::Menu::onPointerUp));
-    class_10_Menu.method("removeChild", static_cast<void (ax::Menu::*)(ax::Node *, bool)>(&ax::Menu::removeChild));
     class_10_Menu.method("setEnabled", static_cast<void (ax::Menu::*)(bool)>(&ax::Menu::setEnabled));
-    class_10_Menu.method("setOpacityModifyRGB", static_cast<void (ax::Menu::*)(bool)>(&ax::Menu::setOpacityModifyRGB));
     auto class_11_MenuItem = module.class_<ax::MenuItem>("MenuItem");
     class_11_MenuItem.bases<ax::Node, ax::Object>();
     class_11_MenuItem.constructors<ax::MenuItem()>();
     class_11_MenuItem.method("activate", static_cast<void (ax::MenuItem::*)()>(&ax::MenuItem::activate));
-    class_11_MenuItem.method("getDescription", static_cast<std::string (ax::MenuItem::*)() const>(&ax::MenuItem::getDescription));
     class_11_MenuItem.method("initWithCallback", static_cast<bool (ax::MenuItem::*)(const ax::ccMenuCallback &)>(&ax::MenuItem::initWithCallback));
     class_11_MenuItem.method("isEnabled", static_cast<bool (ax::MenuItem::*)() const>(&ax::MenuItem::isEnabled));
     class_11_MenuItem.method("isSelected", static_cast<bool (ax::MenuItem::*)() const>(&ax::MenuItem::isSelected));
@@ -280,7 +264,6 @@ void register_ax_base_members_3(lua_State* L)
     auto class_14_MenuItemImage = module.class_<ax::MenuItemImage>("MenuItemImage");
     class_14_MenuItemImage.bases<ax::MenuItemSprite, ax::MenuItem, ax::Node, ax::Object>();
     class_14_MenuItemImage.constructors<ax::MenuItemImage()>();
-    class_14_MenuItemImage.method("init", static_cast<bool (ax::MenuItemImage::*)()>(&ax::MenuItemImage::init));
     class_14_MenuItemImage.method("initWithNormalImage", static_cast<bool (ax::MenuItemImage::*)(std::string_view, std::string_view, std::string_view, const ax::ccMenuCallback &)>(&ax::MenuItemImage::initWithNormalImage));
     class_14_MenuItemImage.method("setDisabledSpriteFrame", static_cast<void (ax::MenuItemImage::*)(ax::SpriteFrame *)>(&ax::MenuItemImage::setDisabledSpriteFrame));
     class_14_MenuItemImage.method("setNormalSpriteFrame", static_cast<void (ax::MenuItemImage::*)(ax::SpriteFrame *)>(&ax::MenuItemImage::setNormalSpriteFrame));
@@ -288,17 +271,13 @@ void register_ax_base_members_3(lua_State* L)
     auto class_15_MenuItemLabel = module.class_<ax::MenuItemLabel>("MenuItemLabel");
     class_15_MenuItemLabel.bases<ax::MenuItem, ax::Node, ax::Object>();
     class_15_MenuItemLabel.constructors<ax::MenuItemLabel()>();
-    class_15_MenuItemLabel.method("activate", static_cast<void (ax::MenuItemLabel::*)()>(&ax::MenuItemLabel::activate));
     class_15_MenuItemLabel.method("getDisabledColor", static_cast<const ax::Color32 & (ax::MenuItemLabel::*)() const>(&ax::MenuItemLabel::getDisabledColor));
     class_15_MenuItemLabel.method("getLabel", static_cast<ax::Node * (ax::MenuItemLabel::*)() const>(&ax::MenuItemLabel::getLabel));
     class_15_MenuItemLabel.method("getString", static_cast<std::string_view (ax::MenuItemLabel::*)() const>(&ax::MenuItemLabel::getString));
     class_15_MenuItemLabel.method("initWithLabel", static_cast<bool (ax::MenuItemLabel::*)(ax::Node *, const ax::ccMenuCallback &)>(&ax::MenuItemLabel::initWithLabel));
-    class_15_MenuItemLabel.method("selected", static_cast<void (ax::MenuItemLabel::*)()>(&ax::MenuItemLabel::selected));
     class_15_MenuItemLabel.method("setDisabledColor", static_cast<void (ax::MenuItemLabel::*)(const ax::Color32 &)>(&ax::MenuItemLabel::setDisabledColor));
-    class_15_MenuItemLabel.method("setEnabled", static_cast<void (ax::MenuItemLabel::*)(bool)>(&ax::MenuItemLabel::setEnabled));
     class_15_MenuItemLabel.method("setLabel", static_cast<void (ax::MenuItemLabel::*)(ax::Node *)>(&ax::MenuItemLabel::setLabel));
     class_15_MenuItemLabel.method("setString", static_cast<void (ax::MenuItemLabel::*)(std::string_view)>(&ax::MenuItemLabel::setString));
-    class_15_MenuItemLabel.method("unselected", static_cast<void (ax::MenuItemLabel::*)()>(&ax::MenuItemLabel::unselected));
     auto class_16_MenuItemSprite = module.class_<ax::MenuItemSprite>("MenuItemSprite");
     class_16_MenuItemSprite.bases<ax::MenuItem, ax::Node, ax::Object>();
     class_16_MenuItemSprite.constructors<ax::MenuItemSprite()>();
@@ -306,51 +285,32 @@ void register_ax_base_members_3(lua_State* L)
     class_16_MenuItemSprite.method("getNormalImage", static_cast<ax::Node * (ax::MenuItemSprite::*)() const>(&ax::MenuItemSprite::getNormalImage));
     class_16_MenuItemSprite.method("getSelectedImage", static_cast<ax::Node * (ax::MenuItemSprite::*)() const>(&ax::MenuItemSprite::getSelectedImage));
     class_16_MenuItemSprite.method("initWithNormalSprite", static_cast<bool (ax::MenuItemSprite::*)(ax::Node *, ax::Node *, ax::Node *, const ax::ccMenuCallback &)>(&ax::MenuItemSprite::initWithNormalSprite));
-    class_16_MenuItemSprite.method("selected", static_cast<void (ax::MenuItemSprite::*)()>(&ax::MenuItemSprite::selected));
     class_16_MenuItemSprite.method("setDisabledImage", static_cast<void (ax::MenuItemSprite::*)(ax::Node *)>(&ax::MenuItemSprite::setDisabledImage));
-    class_16_MenuItemSprite.method("setEnabled", static_cast<void (ax::MenuItemSprite::*)(bool)>(&ax::MenuItemSprite::setEnabled));
     class_16_MenuItemSprite.method("setNormalImage", static_cast<void (ax::MenuItemSprite::*)(ax::Node *)>(&ax::MenuItemSprite::setNormalImage));
     class_16_MenuItemSprite.method("setSelectedImage", static_cast<void (ax::MenuItemSprite::*)(ax::Node *)>(&ax::MenuItemSprite::setSelectedImage));
-    class_16_MenuItemSprite.method("unselected", static_cast<void (ax::MenuItemSprite::*)()>(&ax::MenuItemSprite::unselected));
     auto class_17_MenuItemToggle = module.class_<ax::MenuItemToggle>("MenuItemToggle");
     class_17_MenuItemToggle.bases<ax::MenuItem, ax::Node, ax::Object>();
     class_17_MenuItemToggle.constructors<ax::MenuItemToggle()>();
-    class_17_MenuItemToggle.method("activate", static_cast<void (ax::MenuItemToggle::*)()>(&ax::MenuItemToggle::activate));
     class_17_MenuItemToggle.method("addSubItem", static_cast<void (ax::MenuItemToggle::*)(ax::MenuItem *)>(&ax::MenuItemToggle::addSubItem));
-    class_17_MenuItemToggle.method("cleanup", static_cast<void (ax::MenuItemToggle::*)()>(&ax::MenuItemToggle::cleanup));
     class_17_MenuItemToggle.method("getSelectedIndex", static_cast<unsigned int (ax::MenuItemToggle::*)() const>(&ax::MenuItemToggle::getSelectedIndex));
     class_17_MenuItemToggle.method("getSelectedItem", static_cast<ax::MenuItem * (ax::MenuItemToggle::*)()>(&ax::MenuItemToggle::getSelectedItem));
     class_17_MenuItemToggle.method("initWithItem", static_cast<bool (ax::MenuItemToggle::*)(ax::MenuItem *)>(&ax::MenuItemToggle::initWithItem));
-    class_17_MenuItemToggle.method("selected", static_cast<void (ax::MenuItemToggle::*)()>(&ax::MenuItemToggle::selected));
-    class_17_MenuItemToggle.method("setEnabled", static_cast<void (ax::MenuItemToggle::*)(bool)>(&ax::MenuItemToggle::setEnabled));
     class_17_MenuItemToggle.method("setSelectedIndex", static_cast<void (ax::MenuItemToggle::*)(unsigned int)>(&ax::MenuItemToggle::setSelectedIndex));
     class_17_MenuItemToggle.method("setSubItems", static_cast<void (ax::MenuItemToggle::*)(const Vector<ax::MenuItem *> &)>(&ax::MenuItemToggle::setSubItems));
-    class_17_MenuItemToggle.method("unselected", static_cast<void (ax::MenuItemToggle::*)()>(&ax::MenuItemToggle::unselected));
     auto class_18_MotionStreak = module.class_<ax::MotionStreak>("MotionStreak");
     class_18_MotionStreak.bases<ax::Node, ax::Object, ax::TextureProtocol, ax::BlendProtocol>();
     class_18_MotionStreak.constructors<ax::MotionStreak()>();
     class_18_MotionStreak.static_method("create", axlua::overload(axlua::overload_candidate<float, float, float, const ax::Color32 &, std::string_view>(static_cast<ax::MotionStreak * (*)(float, float, float, const ax::Color32 &, std::string_view)>(&ax::MotionStreak::create)), axlua::overload_candidate<float, float, float, const ax::Color32 &, ax::Texture2D *>(static_cast<ax::MotionStreak * (*)(float, float, float, const ax::Color32 &, ax::Texture2D *)>(&ax::MotionStreak::create))));
     class_18_MotionStreak.method("getBlendFunc", static_cast<const ax::BlendFunc & (ax::MotionStreak::*)() const>(&ax::MotionStreak::getBlendFunc));
-    class_18_MotionStreak.method("getOpacity", static_cast<uint8_t (ax::MotionStreak::*)() const>(&ax::MotionStreak::getOpacity));
     class_18_MotionStreak.method("getPosition", static_cast<const ax::Vec2 & (ax::MotionStreak::*)() const>(&ax::MotionStreak::getPosition));
-    class_18_MotionStreak.method("getPosition3D", static_cast<ax::Vec3 (ax::MotionStreak::*)() const>(&ax::MotionStreak::getPosition3D));
-    class_18_MotionStreak.method("getPositionX", static_cast<float (ax::MotionStreak::*)() const>(&ax::MotionStreak::getPositionX));
-    class_18_MotionStreak.method("getPositionY", static_cast<float (ax::MotionStreak::*)() const>(&ax::MotionStreak::getPositionY));
     class_18_MotionStreak.method("getStroke", static_cast<float (ax::MotionStreak::*)() const>(&ax::MotionStreak::getStroke));
     class_18_MotionStreak.method("getTexture", static_cast<ax::Texture2D * (ax::MotionStreak::*)() const>(&ax::MotionStreak::getTexture));
     class_18_MotionStreak.method("initWithFade", axlua::overload(axlua::overload_candidate<float, float, float, const ax::Color32 &, std::string_view>(static_cast<bool (ax::MotionStreak::*)(float, float, float, const ax::Color32 &, std::string_view)>(&ax::MotionStreak::initWithFade)), axlua::overload_candidate<float, float, float, const ax::Color32 &, ax::Texture2D *>(static_cast<bool (ax::MotionStreak::*)(float, float, float, const ax::Color32 &, ax::Texture2D *)>(&ax::MotionStreak::initWithFade))));
     class_18_MotionStreak.method("isFastMode", static_cast<bool (ax::MotionStreak::*)() const>(&ax::MotionStreak::isFastMode));
-    class_18_MotionStreak.method("isOpacityModifyRGB", static_cast<bool (ax::MotionStreak::*)() const>(&ax::MotionStreak::isOpacityModifyRGB));
     class_18_MotionStreak.method("isStartingPositionInitialized", static_cast<bool (ax::MotionStreak::*)() const>(&ax::MotionStreak::isStartingPositionInitialized));
     class_18_MotionStreak.method("reset", static_cast<void (ax::MotionStreak::*)()>(&ax::MotionStreak::reset));
     class_18_MotionStreak.method("setBlendFunc", static_cast<void (ax::MotionStreak::*)(const ax::BlendFunc &)>(&ax::MotionStreak::setBlendFunc));
     class_18_MotionStreak.method("setFastMode", static_cast<void (ax::MotionStreak::*)(bool)>(&ax::MotionStreak::setFastMode));
-    class_18_MotionStreak.method("setOpacity", static_cast<void (ax::MotionStreak::*)(uint8_t)>(&ax::MotionStreak::setOpacity));
-    class_18_MotionStreak.method("setOpacityModifyRGB", static_cast<void (ax::MotionStreak::*)(bool)>(&ax::MotionStreak::setOpacityModifyRGB));
-    class_18_MotionStreak.method("setPosition", axlua::overload(axlua::overload_candidate<const ax::Vec2 &>(static_cast<void (ax::MotionStreak::*)(const ax::Vec2 &)>(&ax::MotionStreak::setPosition)), axlua::overload_candidate<float, float>(static_cast<void (ax::MotionStreak::*)(float, float)>(&ax::MotionStreak::setPosition))));
-    class_18_MotionStreak.method("setPositionX", static_cast<void (ax::MotionStreak::*)(float)>(&ax::MotionStreak::setPositionX));
-    class_18_MotionStreak.method("setPositionY", static_cast<void (ax::MotionStreak::*)(float)>(&ax::MotionStreak::setPositionY));
-    class_18_MotionStreak.method("setProgramState", axlua::overload(axlua::overload_candidate<rhi::ProgramState *, bool>(static_cast<bool (ax::MotionStreak::*)(rhi::ProgramState *, bool)>(&ax::MotionStreak::setProgramState)), axlua::overload_candidate<rhi::ProgramState *>([](ax::MotionStreak& self, rhi::ProgramState * arg0) -> bool { return static_cast<ax::MotionStreak&>(self).setProgramState(arg0, false); })));
     class_18_MotionStreak.method("setStartingPositionInitialized", static_cast<void (ax::MotionStreak::*)(bool)>(&ax::MotionStreak::setStartingPositionInitialized));
     class_18_MotionStreak.method("setStroke", static_cast<void (ax::MotionStreak::*)(float)>(&ax::MotionStreak::setStroke));
     class_18_MotionStreak.method("setTexture", static_cast<void (ax::MotionStreak::*)(ax::Texture2D *)>(&ax::MotionStreak::setTexture));
@@ -363,7 +323,6 @@ void register_ax_base_members_3(lua_State* L)
     class_19_MoveBy.method("initWithDuration", axlua::overload(axlua::overload_candidate<float, const ax::Vec2 &>(static_cast<bool (ax::MoveBy::*)(float, const ax::Vec2 &)>(&ax::MoveBy::initWithDuration)), axlua::overload_candidate<float, const ax::Vec3 &>(static_cast<bool (ax::MoveBy::*)(float, const ax::Vec3 &)>(&ax::MoveBy::initWithDuration))));
     class_19_MoveBy.method("reverse", static_cast<ax::MoveBy * (ax::MoveBy::*)() const>(&ax::MoveBy::reverse));
     class_19_MoveBy.method("startWithTarget", static_cast<void (ax::MoveBy::*)(ax::Node *)>(&ax::MoveBy::startWithTarget));
-    class_19_MoveBy.method("update", static_cast<void (ax::MoveBy::*)(float)>(&ax::MoveBy::update));
     auto class_20_MoveTo = module.class_<ax::MoveTo>("MoveTo");
     class_20_MoveTo.bases<ax::MoveBy, ax::ActionInterval, ax::FiniteTimeAction, ax::Action, ax::Object>();
     class_20_MoveTo.constructors<ax::MoveTo()>();
@@ -371,7 +330,6 @@ void register_ax_base_members_3(lua_State* L)
     class_20_MoveTo.static_method("create", axlua::overload(axlua::overload_candidate<float, const ax::Vec2 &>(static_cast<ax::MoveTo * (*)(float, const ax::Vec2 &)>(&ax::MoveTo::create)), axlua::overload_candidate<float, const ax::Vec3 &>(static_cast<ax::MoveTo * (*)(float, const ax::Vec3 &)>(&ax::MoveTo::create))));
     class_20_MoveTo.method("initWithDuration", axlua::overload(axlua::overload_candidate<float, const ax::Vec2 &>(static_cast<bool (ax::MoveTo::*)(float, const ax::Vec2 &)>(&ax::MoveTo::initWithDuration)), axlua::overload_candidate<float, const ax::Vec3 &>(static_cast<bool (ax::MoveTo::*)(float, const ax::Vec3 &)>(&ax::MoveTo::initWithDuration))));
     class_20_MoveTo.method("reverse", static_cast<ax::MoveTo * (ax::MoveTo::*)() const>(&ax::MoveTo::reverse));
-    class_20_MoveTo.method("startWithTarget", static_cast<void (ax::MoveTo::*)(ax::Node *)>(&ax::MoveTo::startWithTarget));
     auto class_21_Node = module.class_<ax::Node>("Node");
     class_21_Node.bases<ax::Object>();
     class_21_Node.constructors<ax::Node()>();
@@ -532,6 +490,15 @@ void register_ax_base_members_3(lua_State* L)
     class_21_Node.method("visit", static_cast<void (ax::Node::*)()>(&ax::Node::visit));
     auto class_22_NodeData = module.class_<ax::NodeData>("NodeData");
     class_22_NodeData.method("resetData", static_cast<void (ax::NodeData::*)()>(&ax::NodeData::resetData));
+    auto class_23_NodeGrid = module.class_<ax::NodeGrid>("NodeGrid");
+    class_23_NodeGrid.bases<ax::Node, ax::Object>();
+    class_23_NodeGrid.constructors<ax::NodeGrid()>();
+    class_23_NodeGrid.static_method("create", axlua::overload(axlua::overload_candidate<>(static_cast<ax::NodeGrid * (*)()>(&ax::NodeGrid::create)), axlua::overload_candidate<const ax::Rect &>(static_cast<ax::NodeGrid * (*)(const ax::Rect &)>(&ax::NodeGrid::create))));
+    class_23_NodeGrid.method("getGrid", axlua::overload(axlua::overload_candidate<>(static_cast<ax::GridBase * (ax::NodeGrid::*)()>(&ax::NodeGrid::getGrid)), axlua::overload_candidate<>(static_cast<const ax::GridBase * (ax::NodeGrid::*)() const>(&ax::NodeGrid::getGrid))));
+    class_23_NodeGrid.method("getGridRect", static_cast<const ax::Rect & (ax::NodeGrid::*)() const>(&ax::NodeGrid::getGridRect));
+    class_23_NodeGrid.method("setGrid", static_cast<void (ax::NodeGrid::*)(ax::GridBase *)>(&ax::NodeGrid::setGrid));
+    class_23_NodeGrid.method("setGridRect", static_cast<void (ax::NodeGrid::*)(const ax::Rect &)>(&ax::NodeGrid::setGridRect));
+    class_23_NodeGrid.method("setTarget", static_cast<void (ax::NodeGrid::*)(ax::Node *)>(&ax::NodeGrid::setTarget));
 }
 
 void register_ax_base_enums_3(lua_State* L)

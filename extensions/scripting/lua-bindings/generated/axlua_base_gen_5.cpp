@@ -50,7 +50,6 @@ void register_ax_base_members_5(lua_State* L)
     auto class_0_PointerEventListener = module.class_<ax::PointerEventListener>("PointerEventListener");
     class_0_PointerEventListener.bases<ax::EventListener, ax::Object>();
     class_0_PointerEventListener.constructors<ax::PointerEventListener()>();
-    class_0_PointerEventListener.method("checkAvailable", static_cast<bool (ax::PointerEventListener::*)()>(&ax::PointerEventListener::checkAvailable));
     class_0_PointerEventListener.method("clone", static_cast<ax::PointerEventListener * (ax::PointerEventListener::*)()>(&ax::PointerEventListener::clone));
     class_0_PointerEventListener.static_method("create", static_cast<ax::PointerEventListener * (*)()>(&ax::PointerEventListener::create));
     class_0_PointerEventListener.method("init", static_cast<bool (ax::PointerEventListener::*)()>(&ax::PointerEventListener::init));
@@ -89,16 +88,12 @@ void register_ax_base_members_5(lua_State* L)
     class_3_ProgressFromTo.method("initWithDuration", static_cast<bool (ax::ProgressFromTo::*)(float, float, float)>(&ax::ProgressFromTo::initWithDuration));
     class_3_ProgressFromTo.method("reverse", static_cast<ax::ProgressFromTo * (ax::ProgressFromTo::*)() const>(&ax::ProgressFromTo::reverse));
     class_3_ProgressFromTo.method("startWithTarget", static_cast<void (ax::ProgressFromTo::*)(ax::Node *)>(&ax::ProgressFromTo::startWithTarget));
-    class_3_ProgressFromTo.method("update", static_cast<void (ax::ProgressFromTo::*)(float)>(&ax::ProgressFromTo::update));
     auto class_4_ProgressTimer = module.class_<ax::ProgressTimer>("ProgressTimer");
     class_4_ProgressTimer.bases<ax::Node, ax::Object>();
     class_4_ProgressTimer.constructors<ax::ProgressTimer()>();
     class_4_ProgressTimer.static_method("create", static_cast<ax::ProgressTimer * (*)(ax::Sprite *)>(&ax::ProgressTimer::create));
     class_4_ProgressTimer.method("getBarChangeRate", static_cast<ax::Vec2 (ax::ProgressTimer::*)() const>(&ax::ProgressTimer::getBarChangeRate));
-    class_4_ProgressTimer.method("getColor", static_cast<const ax::Color32 & (ax::ProgressTimer::*)() const>(&ax::ProgressTimer::getColor));
-    class_4_ProgressTimer.method("getDisplayedOpacity", static_cast<uint8_t (ax::ProgressTimer::*)() const>(&ax::ProgressTimer::getDisplayedOpacity));
     class_4_ProgressTimer.method("getMidpoint", static_cast<ax::Vec2 (ax::ProgressTimer::*)() const>(&ax::ProgressTimer::getMidpoint));
-    class_4_ProgressTimer.method("getOpacity", static_cast<uint8_t (ax::ProgressTimer::*)() const>(&ax::ProgressTimer::getOpacity));
     class_4_ProgressTimer.method("getPercentage", static_cast<float (ax::ProgressTimer::*)() const>(&ax::ProgressTimer::getPercentage));
     class_4_ProgressTimer.method("getSprite", static_cast<ax::Sprite * (ax::ProgressTimer::*)() const>(&ax::ProgressTimer::getSprite));
     class_4_ProgressTimer.method("getType", static_cast<ax::ProgressTimer::Type (ax::ProgressTimer::*)() const>(&ax::ProgressTimer::getType));
@@ -106,10 +101,7 @@ void register_ax_base_members_5(lua_State* L)
     class_4_ProgressTimer.method("isReverseDirection", static_cast<bool (ax::ProgressTimer::*)()>(&ax::ProgressTimer::isReverseDirection));
     class_4_ProgressTimer.method("setAnchorPoint", static_cast<void (ax::ProgressTimer::*)(const ax::Vec2 &)>(&ax::ProgressTimer::setAnchorPoint));
     class_4_ProgressTimer.method("setBarChangeRate", static_cast<void (ax::ProgressTimer::*)(const ax::Vec2 &)>(&ax::ProgressTimer::setBarChangeRate));
-    class_4_ProgressTimer.method("setColor", static_cast<void (ax::ProgressTimer::*)(const ax::Color32 &)>(&ax::ProgressTimer::setColor));
-    class_4_ProgressTimer.method("setContentSize", static_cast<void (ax::ProgressTimer::*)(const ax::Vec2 &)>(&ax::ProgressTimer::setContentSize));
     class_4_ProgressTimer.method("setMidpoint", static_cast<void (ax::ProgressTimer::*)(const ax::Vec2 &)>(&ax::ProgressTimer::setMidpoint));
-    class_4_ProgressTimer.method("setOpacity", static_cast<void (ax::ProgressTimer::*)(uint8_t)>(&ax::ProgressTimer::setOpacity));
     class_4_ProgressTimer.method("setPercentage", static_cast<void (ax::ProgressTimer::*)(float)>(&ax::ProgressTimer::setPercentage));
     class_4_ProgressTimer.method("setReverseDirection", static_cast<void (ax::ProgressTimer::*)(bool)>(&ax::ProgressTimer::setReverseDirection));
     class_4_ProgressTimer.method("setSprite", static_cast<void (ax::ProgressTimer::*)(ax::Sprite *)>(&ax::ProgressTimer::setSprite));
@@ -122,7 +114,6 @@ void register_ax_base_members_5(lua_State* L)
     class_5_ProgressTo.method("initWithDuration", static_cast<bool (ax::ProgressTo::*)(float, float)>(&ax::ProgressTo::initWithDuration));
     class_5_ProgressTo.method("reverse", static_cast<ax::ProgressTo * (ax::ProgressTo::*)() const>(&ax::ProgressTo::reverse));
     class_5_ProgressTo.method("startWithTarget", static_cast<void (ax::ProgressTo::*)(ax::Node *)>(&ax::ProgressTo::startWithTarget));
-    class_5_ProgressTo.method("update", static_cast<void (ax::ProgressTo::*)(float)>(&ax::ProgressTo::update));
     auto class_6_Properties = module.class_<ax::Properties>("Properties");
     class_6_Properties.method("exists", static_cast<bool (ax::Properties::*)(std::string_view) const>(&ax::Properties::exists));
     class_6_Properties.method("getBool", axlua::overload(axlua::overload_candidate<std::string_view, bool>(static_cast<bool (ax::Properties::*)(std::string_view, bool) const>(&ax::Properties::getBool)), axlua::overload_candidate<>([](const ax::Properties& self) -> bool { return static_cast<const ax::Properties&>(self).getBool(""sv, false); }), axlua::overload_candidate<std::string_view>([](const ax::Properties& self, std::string_view arg0) -> bool { return static_cast<const ax::Properties&>(self).getBool(arg0, false); })));
@@ -154,7 +145,6 @@ void register_ax_base_members_5(lua_State* L)
     class_7_ProtectedNode.bases<ax::Node, ax::Object>();
     class_7_ProtectedNode.constructors<ax::ProtectedNode()>();
     class_7_ProtectedNode.method("addProtectedChild", axlua::overload(axlua::overload_candidate<ax::Node *>(static_cast<void (ax::ProtectedNode::*)(ax::Node *)>(&ax::ProtectedNode::addProtectedChild)), axlua::overload_candidate<ax::Node *, int>(static_cast<void (ax::ProtectedNode::*)(ax::Node *, int)>(&ax::ProtectedNode::addProtectedChild)), axlua::overload_candidate<ax::Node *, int, int>(static_cast<void (ax::ProtectedNode::*)(ax::Node *, int, int)>(&ax::ProtectedNode::addProtectedChild))));
-    class_7_ProtectedNode.method("cleanup", static_cast<void (ax::ProtectedNode::*)()>(&ax::ProtectedNode::cleanup));
     class_7_ProtectedNode.static_method("create", static_cast<ax::ProtectedNode * (*)()>(&ax::ProtectedNode::create));
     class_7_ProtectedNode.method("disableCascadeColor", static_cast<void (ax::ProtectedNode::*)()>(&ax::ProtectedNode::disableCascadeColor));
     class_7_ProtectedNode.method("disableCascadeOpacity", static_cast<void (ax::ProtectedNode::*)()>(&ax::ProtectedNode::disableCascadeOpacity));
@@ -166,11 +156,7 @@ void register_ax_base_members_5(lua_State* L)
     class_7_ProtectedNode.method("removeProtectedChild", axlua::overload(axlua::overload_candidate<ax::Node *, bool>(static_cast<void (ax::ProtectedNode::*)(ax::Node *, bool)>(&ax::ProtectedNode::removeProtectedChild)), axlua::overload_candidate<ax::Node *>([](ax::ProtectedNode& self, ax::Node * arg0) -> void { static_cast<ax::ProtectedNode&>(self).removeProtectedChild(arg0, true); })));
     class_7_ProtectedNode.method("removeProtectedChildByTag", axlua::overload(axlua::overload_candidate<int, bool>(static_cast<void (ax::ProtectedNode::*)(int, bool)>(&ax::ProtectedNode::removeProtectedChildByTag)), axlua::overload_candidate<int>([](ax::ProtectedNode& self, int arg0) -> void { static_cast<ax::ProtectedNode&>(self).removeProtectedChildByTag(arg0, true); })));
     class_7_ProtectedNode.method("reorderProtectedChild", static_cast<void (ax::ProtectedNode::*)(ax::Node *, int)>(&ax::ProtectedNode::reorderProtectedChild));
-    class_7_ProtectedNode.method("setCameraMask", axlua::overload(axlua::overload_candidate<unsigned short, bool>(static_cast<void (ax::ProtectedNode::*)(unsigned short, bool)>(&ax::ProtectedNode::setCameraMask)), axlua::overload_candidate<unsigned short>([](ax::ProtectedNode& self, unsigned short arg0) -> void { static_cast<ax::ProtectedNode&>(self).setCameraMask(arg0, true); })));
-    class_7_ProtectedNode.method("setGlobalZOrder", static_cast<void (ax::ProtectedNode::*)(float)>(&ax::ProtectedNode::setGlobalZOrder));
     class_7_ProtectedNode.method("sortAllProtectedChildren", static_cast<void (ax::ProtectedNode::*)()>(&ax::ProtectedNode::sortAllProtectedChildren));
-    class_7_ProtectedNode.method("updateDisplayedColor", static_cast<void (ax::ProtectedNode::*)(const ax::Color32 &)>(&ax::ProtectedNode::updateDisplayedColor));
-    class_7_ProtectedNode.method("updateDisplayedOpacity", static_cast<void (ax::ProtectedNode::*)(uint8_t)>(&ax::ProtectedNode::updateDisplayedOpacity));
     auto class_8_RemoveSelf = module.class_<ax::RemoveSelf>("RemoveSelf");
     class_8_RemoveSelf.bases<ax::ActionInstant, ax::FiniteTimeAction, ax::Action, ax::Object>();
     class_8_RemoveSelf.constructors<ax::RemoveSelf()>();
@@ -215,11 +201,6 @@ void register_ax_base_members_5(lua_State* L)
     class_12_RenderView.static_method("create", static_cast<ax::RenderView * (*)(std::string_view)>(&ax::RenderView::create));
     class_12_RenderView.static_method("createWithFullscreen", static_cast<ax::RenderView * (*)(std::string_view)>(&ax::RenderView::createWithFullscreen));
     class_12_RenderView.static_method("createWithRect", axlua::overload(axlua::overload_candidate<std::string_view, const ax::Rect &, float, bool>(static_cast<ax::RenderView * (*)(std::string_view, const ax::Rect &, float, bool)>(&ax::RenderView::createWithRect)), axlua::overload_candidate<std::string_view, const ax::Rect &>([](std::string_view arg0, const ax::Rect & arg1) -> ax::RenderView * { return ax::RenderView::createWithRect(arg0, arg1, 1.0f, false); }), axlua::overload_candidate<std::string_view, const ax::Rect &, float>([](std::string_view arg0, const ax::Rect & arg1, float arg2) -> ax::RenderView * { return ax::RenderView::createWithRect(arg0, arg1, arg2, false); })));
-    class_12_RenderView.method("getNativeDisplay", static_cast<ax::SurfaceHandle (ax::RenderView::*)() const>(&ax::RenderView::getNativeDisplay));
-    class_12_RenderView.method("getSafeAreaRect", static_cast<ax::Rect (ax::RenderView::*)() const>(&ax::RenderView::getSafeAreaRect));
-    class_12_RenderView.method("getWindowPlatform", static_cast<ax::WindowPlatform (ax::RenderView::*)() const>(&ax::RenderView::getWindowPlatform));
-    class_12_RenderView.method("isGfxContextReady", static_cast<bool (ax::RenderView::*)()>(&ax::RenderView::isGfxContextReady));
-    class_12_RenderView.method("setIMEKeyboardState", static_cast<void (ax::RenderView::*)(bool)>(&ax::RenderView::setIMEKeyboardState));
     auto class_13_RenderViewCore = module.class_<ax::RenderViewCore>("RenderViewCore");
     class_13_RenderViewCore.bases<ax::Object>();
     class_13_RenderViewCore.method("endToLua", static_cast<void (ax::RenderViewCore::*)()>(&ax::RenderViewCore::end));
@@ -334,8 +315,6 @@ void register_ax_base_members_5(lua_State* L)
     class_15_Repeat.method("reverse", static_cast<ax::Repeat * (ax::Repeat::*)() const>(&ax::Repeat::reverse));
     class_15_Repeat.method("setInnerAction", static_cast<void (ax::Repeat::*)(ax::FiniteTimeAction *)>(&ax::Repeat::setInnerAction));
     class_15_Repeat.method("startWithTarget", static_cast<void (ax::Repeat::*)(ax::Node *)>(&ax::Repeat::startWithTarget));
-    class_15_Repeat.method("stop", static_cast<void (ax::Repeat::*)()>(&ax::Repeat::stop));
-    class_15_Repeat.method("update", static_cast<void (ax::Repeat::*)(float)>(&ax::Repeat::update));
     auto class_16_RepeatForever = module.class_<ax::RepeatForever>("RepeatForever");
     class_16_RepeatForever.bases<ax::ActionInterval, ax::FiniteTimeAction, ax::Action, ax::Object>();
     class_16_RepeatForever.constructors<ax::RepeatForever()>();
@@ -368,7 +347,6 @@ void register_ax_base_members_5(lua_State* L)
     class_18_Ripple3D.method("setAmplitude", static_cast<void (ax::Ripple3D::*)(float)>(&ax::Ripple3D::setAmplitude));
     class_18_Ripple3D.method("setAmplitudeRate", static_cast<void (ax::Ripple3D::*)(float)>(&ax::Ripple3D::setAmplitudeRate));
     class_18_Ripple3D.method("setPosition", static_cast<void (ax::Ripple3D::*)(const ax::Vec2 &)>(&ax::Ripple3D::setPosition));
-    class_18_Ripple3D.method("update", static_cast<void (ax::Ripple3D::*)(float)>(&ax::Ripple3D::update));
     auto class_19_RotateBy = module.class_<ax::RotateBy>("RotateBy");
     class_19_RotateBy.bases<ax::ActionInterval, ax::FiniteTimeAction, ax::Action, ax::Object>();
     class_19_RotateBy.constructors<ax::RotateBy()>();
@@ -377,7 +355,6 @@ void register_ax_base_members_5(lua_State* L)
     class_19_RotateBy.method("initWithDuration", axlua::overload(axlua::overload_candidate<float, float>(static_cast<bool (ax::RotateBy::*)(float, float)>(&ax::RotateBy::initWithDuration)), axlua::overload_candidate<float, const ax::Vec3 &>(static_cast<bool (ax::RotateBy::*)(float, const ax::Vec3 &)>(&ax::RotateBy::initWithDuration)), axlua::overload_candidate<float, float, float>(static_cast<bool (ax::RotateBy::*)(float, float, float)>(&ax::RotateBy::initWithDuration))));
     class_19_RotateBy.method("reverse", static_cast<ax::RotateBy * (ax::RotateBy::*)() const>(&ax::RotateBy::reverse));
     class_19_RotateBy.method("startWithTarget", static_cast<void (ax::RotateBy::*)(ax::Node *)>(&ax::RotateBy::startWithTarget));
-    class_19_RotateBy.method("update", static_cast<void (ax::RotateBy::*)(float)>(&ax::RotateBy::update));
     auto class_20_RotateTo = module.class_<ax::RotateTo>("RotateTo");
     class_20_RotateTo.bases<ax::ActionInterval, ax::FiniteTimeAction, ax::Action, ax::Object>();
     class_20_RotateTo.constructors<ax::RotateTo()>();
@@ -386,14 +363,12 @@ void register_ax_base_members_5(lua_State* L)
     class_20_RotateTo.method("initWithDuration", axlua::overload(axlua::overload_candidate<float, const ax::Vec3 &>(static_cast<bool (ax::RotateTo::*)(float, const ax::Vec3 &)>(&ax::RotateTo::initWithDuration)), axlua::overload_candidate<float, float, float>(static_cast<bool (ax::RotateTo::*)(float, float, float)>(&ax::RotateTo::initWithDuration))));
     class_20_RotateTo.method("reverse", static_cast<ax::RotateTo * (ax::RotateTo::*)() const>(&ax::RotateTo::reverse));
     class_20_RotateTo.method("startWithTarget", static_cast<void (ax::RotateTo::*)(ax::Node *)>(&ax::RotateTo::startWithTarget));
-    class_20_RotateTo.method("update", static_cast<void (ax::RotateTo::*)(float)>(&ax::RotateTo::update));
     auto class_21_ScaleBy = module.class_<ax::ScaleBy>("ScaleBy");
     class_21_ScaleBy.bases<ax::ScaleTo, ax::ActionInterval, ax::FiniteTimeAction, ax::Action, ax::Object>();
     class_21_ScaleBy.constructors<ax::ScaleBy()>();
     class_21_ScaleBy.method("clone", static_cast<ax::ScaleBy * (ax::ScaleBy::*)() const>(&ax::ScaleBy::clone));
     class_21_ScaleBy.static_method("create", axlua::overload(axlua::overload_candidate<float, float>(static_cast<ax::ScaleBy * (*)(float, float)>(&ax::ScaleBy::create)), axlua::overload_candidate<float, float, float>(static_cast<ax::ScaleBy * (*)(float, float, float)>(&ax::ScaleBy::create)), axlua::overload_candidate<float, float, float, float>(static_cast<ax::ScaleBy * (*)(float, float, float, float)>(&ax::ScaleBy::create))));
     class_21_ScaleBy.method("reverse", static_cast<ax::ScaleBy * (ax::ScaleBy::*)() const>(&ax::ScaleBy::reverse));
-    class_21_ScaleBy.method("startWithTarget", static_cast<void (ax::ScaleBy::*)(ax::Node *)>(&ax::ScaleBy::startWithTarget));
     auto class_22_ScaleTo = module.class_<ax::ScaleTo>("ScaleTo");
     class_22_ScaleTo.bases<ax::ActionInterval, ax::FiniteTimeAction, ax::Action, ax::Object>();
     class_22_ScaleTo.constructors<ax::ScaleTo()>();
@@ -402,7 +377,6 @@ void register_ax_base_members_5(lua_State* L)
     class_22_ScaleTo.method("initWithDuration", axlua::overload(axlua::overload_candidate<float, float>(static_cast<bool (ax::ScaleTo::*)(float, float)>(&ax::ScaleTo::initWithDuration)), axlua::overload_candidate<float, float, float>(static_cast<bool (ax::ScaleTo::*)(float, float, float)>(&ax::ScaleTo::initWithDuration)), axlua::overload_candidate<float, float, float, float>(static_cast<bool (ax::ScaleTo::*)(float, float, float, float)>(&ax::ScaleTo::initWithDuration))));
     class_22_ScaleTo.method("reverse", static_cast<ax::ScaleTo * (ax::ScaleTo::*)() const>(&ax::ScaleTo::reverse));
     class_22_ScaleTo.method("startWithTarget", static_cast<void (ax::ScaleTo::*)(ax::Node *)>(&ax::ScaleTo::startWithTarget));
-    class_22_ScaleTo.method("update", static_cast<void (ax::ScaleTo::*)(float)>(&ax::ScaleTo::update));
     auto class_23_Scene = module.class_<ax::Scene>("Scene");
     class_23_Scene.bases<ax::Node, ax::Object>();
     class_23_Scene.constructors<ax::Scene()>();
@@ -412,15 +386,12 @@ void register_ax_base_members_5(lua_State* L)
     class_23_Scene.static_method("createWithSize", static_cast<ax::Scene * (*)(const ax::Vec2 &)>(&ax::Scene::createWithSize));
     class_23_Scene.method("getDefaultCamera", static_cast<ax::Camera * (ax::Scene::*)() const>(&ax::Scene::getDefaultCamera));
     class_23_Scene.method("getDefaultCameraMode", static_cast<ax::CameraMode (ax::Scene::*)() const>(&ax::Scene::getDefaultCameraMode));
-    class_23_Scene.method("getDescription", static_cast<std::string (ax::Scene::*)() const>(&ax::Scene::getDescription));
     class_23_Scene.method("getPhysicsInterpolationAlpha", static_cast<float (ax::Scene::*)() const>(&ax::Scene::getPhysicsInterpolationAlpha));
     class_23_Scene.method("getPhysicsWorld2D", static_cast<ax::PhysicsWorld2D * (ax::Scene::*)() const>(&ax::Scene::getPhysicsWorld2D));
-    class_23_Scene.method("init", static_cast<bool (ax::Scene::*)()>(&ax::Scene::init));
     class_23_Scene.method("initPhysicsWorld", static_cast<bool (ax::Scene::*)()>(&ax::Scene::initPhysicsWorld));
     class_23_Scene.method("initWithPhysics", static_cast<bool (ax::Scene::*)()>(&ax::Scene::initWithPhysics));
     class_23_Scene.method("initWithSize", static_cast<bool (ax::Scene::*)(const ax::Vec2 &)>(&ax::Scene::initWithSize));
     class_23_Scene.method("isFixedUpdateEnabled", static_cast<bool (ax::Scene::*)() const>(&ax::Scene::isFixedUpdateEnabled));
-    class_23_Scene.method("removeAllChildren", static_cast<void (ax::Scene::*)()>(&ax::Scene::removeAllChildren));
     class_23_Scene.method("setCameraOrderDirty", static_cast<void (ax::Scene::*)()>(&ax::Scene::setCameraOrderDirty));
     class_23_Scene.method("setDebugCamera", static_cast<void (ax::Scene::*)(ax::Camera *)>(&ax::Scene::setDebugCamera));
     class_23_Scene.method("setFixedDeltaTime", static_cast<void (ax::Scene::*)(float)>(&ax::Scene::setFixedDeltaTime));
@@ -444,15 +415,12 @@ void register_ax_base_members_5(lua_State* L)
     class_26_Sequence.method("isDone", static_cast<bool (ax::Sequence::*)() const>(&ax::Sequence::isDone));
     class_26_Sequence.method("reverse", static_cast<ax::Sequence * (ax::Sequence::*)() const>(&ax::Sequence::reverse));
     class_26_Sequence.method("startWithTarget", static_cast<void (ax::Sequence::*)(ax::Node *)>(&ax::Sequence::startWithTarget));
-    class_26_Sequence.method("stop", static_cast<void (ax::Sequence::*)()>(&ax::Sequence::stop));
-    class_26_Sequence.method("update", static_cast<void (ax::Sequence::*)(float)>(&ax::Sequence::update));
     auto class_27_Shaky3D = module.class_<ax::Shaky3D>("Shaky3D");
     class_27_Shaky3D.bases<ax::Grid3DAction, ax::GridAction, ax::ActionInterval, ax::FiniteTimeAction, ax::Action, ax::Object>();
     class_27_Shaky3D.constructors<ax::Shaky3D()>();
     class_27_Shaky3D.method("clone", static_cast<ax::Shaky3D * (ax::Shaky3D::*)() const>(&ax::Shaky3D::clone));
     class_27_Shaky3D.static_method("create", static_cast<ax::Shaky3D * (*)(float, const ax::Vec2 &, int, bool)>(&ax::Shaky3D::create));
     class_27_Shaky3D.method("initWithDuration", static_cast<bool (ax::Shaky3D::*)(float, const ax::Vec2 &, int, bool)>(&ax::Shaky3D::initWithDuration));
-    class_27_Shaky3D.method("update", static_cast<void (ax::Shaky3D::*)(float)>(&ax::Shaky3D::update));
 }
 
 void register_ax_base_enums_5(lua_State* L)

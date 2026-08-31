@@ -291,6 +291,7 @@ public static unsafe class BindingGenerator
             .Select(x => x.First())
             .OrderBy(x => x.QualifiedName, StringComparer.Ordinal)
             .ToArray();
+        uniqueClasses = SuppressRedundantVirtualOverrides(uniqueClasses);
         var uniqueEnums = enums
             .GroupBy(x => x.QualifiedName, StringComparer.Ordinal)
             .Select(x => x.First())
@@ -840,6 +841,25 @@ public static unsafe class BindingGenerator
         GenerationRequest request)
     {
         var parameters = GetParameters(cursor, tree);
+        var overriddenTypes = Array.Empty<string>();
+        if (clang.CXXMethod_isVirtual(cursor) != 0)
+        {
+            var overridden = cursor.OverriddenCursors;
+            try
+            {
+                overriddenTypes = overridden
+                    .ToArray()
+                    .Select(x => GetQualifiedName(clang.getCursorSemanticParent(x)))
+                    .Where(x => !string.IsNullOrWhiteSpace(x))
+                    .Distinct(StringComparer.Ordinal)
+                    .ToArray();
+            }
+            finally
+            {
+                CXCursor.DisposeOverriddenCursors(overridden);
+            }
+        }
+
         return new BindingMethod
         {
             NativeName = cursor.Spelling.CString,
@@ -850,9 +870,92 @@ public static unsafe class BindingGenerator
             DefaultValues = parameters.Select(x => GetDefaultValue(x, contextType, tree)).ToArray(),
             IsStatic = clang.CXXMethod_isStatic(cursor) != 0,
             IsConst = clang.CXXMethod_isConst(cursor) != 0,
-            IsVariadic = clang.Cursor_isVariadic(cursor) != 0
+            IsVariadic = clang.Cursor_isVariadic(cursor) != 0,
+            IsVirtual = clang.CXXMethod_isVirtual(cursor) != 0,
+            OverriddenDeclaringTypes = overriddenTypes
         };
     }
+
+    private static BindingClass[] SuppressRedundantVirtualOverrides(BindingClass[] classes)
+    {
+        var resolved = classes.ToDictionary(x => x.QualifiedName, StringComparer.Ordinal);
+        var changed = true;
+        while (changed)
+        {
+            changed = false;
+            foreach (var bindingClass in classes)
+            {
+                var current = resolved[bindingClass.QualifiedName];
+                var methodGroups = current.Methods.GroupBy(x => x.LuaName, StringComparer.Ordinal)
+                    .ToDictionary(x => x.Key, x => x.ToArray(), StringComparer.Ordinal);
+                var redundant = current.Methods.ToDictionary(
+                    method => MethodIdentity(method),
+                    method => IsRedundantVirtualOverride(method, current, resolved),
+                    StringComparer.Ordinal);
+                var retained = current.Methods.Where(method =>
+                {
+                    if (!redundant[MethodIdentity(method)])
+                        return true;
+                    // A derived Lua overload group may contain a new overload
+                    // alongside a C++ override. Keep the whole group in that
+                    // case: shadowing the base group would otherwise make the
+                    // inherited overload unreachable.
+                    return methodGroups[method.LuaName].Any(other =>
+                        !string.Equals(MethodIdentity(other), MethodIdentity(method), StringComparison.Ordinal) &&
+                        !redundant[MethodIdentity(other)]);
+                }).ToArray();
+                if (retained.Length == current.Methods.Count)
+                    continue;
+
+                resolved[current.QualifiedName] = new BindingClass
+                {
+                    NativeName = current.NativeName,
+                    QualifiedName = current.QualifiedName,
+                    LuaName = current.LuaName,
+                    LuaClassName = current.LuaClassName,
+                    IsAbstract = current.IsAbstract,
+                    Constructors = current.Constructors,
+                    Bases = current.Bases,
+                    Methods = retained,
+                    Fields = current.Fields
+                };
+                changed = true;
+            }
+        }
+
+        return classes.Select(bindingClass => resolved[bindingClass.QualifiedName]).ToArray();
+    }
+
+    private static bool IsRedundantVirtualOverride(
+        BindingMethod method,
+        BindingClass derivedClass,
+        IReadOnlyDictionary<string, BindingClass> classes)
+    {
+        if (!method.IsVirtual || method.OverriddenDeclaringTypes.Count == 0 || method.IsStatic ||
+            method.OverriddenDeclaringTypes.Any(type => !derivedClass.Bases.Contains(type, StringComparer.Ordinal)))
+            return false;
+
+        foreach (var baseType in method.OverriddenDeclaringTypes)
+        {
+            if (!classes.TryGetValue(baseType, out var baseClass))
+                continue;
+
+            var baseMethod = baseClass.Methods.FirstOrDefault(candidate =>
+                string.Equals(candidate.NativeName, method.NativeName, StringComparison.Ordinal) &&
+                string.Equals(candidate.LuaName, method.LuaName, StringComparison.Ordinal) &&
+                string.Equals(candidate.ReturnType, method.ReturnType, StringComparison.Ordinal) &&
+                candidate.IsConst == method.IsConst &&
+                candidate.ParameterTypes.SequenceEqual(method.ParameterTypes, StringComparer.Ordinal));
+            if (baseMethod is not null)
+                return true;
+        }
+
+        return false;
+    }
+
+    private static string MethodIdentity(BindingMethod method) =>
+        method.NativeName + "(" + string.Join(",", method.ParameterTypes) + ")" +
+        (method.IsConst ? " const" : string.Empty) + "|" + method.LuaName;
 
     private static bool IsUsableConstructor(CXCursor cursor) =>
         !IsDeprecated(cursor) &&

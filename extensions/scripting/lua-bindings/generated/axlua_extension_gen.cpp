@@ -27,7 +27,6 @@ void register_ax_extension(lua_State* L)
     class_0_PUParticleSystem3D.method("copyAttributesTo", static_cast<void (ax::PUParticleSystem3D::*)(ax::PUParticleSystem3D *)>(&ax::PUParticleSystem3D::copyAttributesTo));
     class_0_PUParticleSystem3D.static_method("create", axlua::overload(axlua::overload_candidate<>(static_cast<ax::PUParticleSystem3D * (*)()>(&ax::PUParticleSystem3D::create)), axlua::overload_candidate<std::string_view>(static_cast<ax::PUParticleSystem3D * (*)(std::string_view)>(&ax::PUParticleSystem3D::create)), axlua::overload_candidate<std::string_view, std::string_view>(static_cast<ax::PUParticleSystem3D * (*)(std::string_view, std::string_view)>(&ax::PUParticleSystem3D::create))));
     class_0_PUParticleSystem3D.method("forceUpdate", static_cast<void (ax::PUParticleSystem3D::*)(float)>(&ax::PUParticleSystem3D::forceUpdate));
-    class_0_PUParticleSystem3D.method("getAliveParticleCount", static_cast<int (ax::PUParticleSystem3D::*)() const>(&ax::PUParticleSystem3D::getAliveParticleCount));
     class_0_PUParticleSystem3D.method("getDefaultDepth", static_cast<float (ax::PUParticleSystem3D::*)() const>(&ax::PUParticleSystem3D::getDefaultDepth));
     class_0_PUParticleSystem3D.method("getDefaultHeight", static_cast<float (ax::PUParticleSystem3D::*)() const>(&ax::PUParticleSystem3D::getDefaultHeight));
     class_0_PUParticleSystem3D.method("getDefaultWidth", static_cast<float (ax::PUParticleSystem3D::*)() const>(&ax::PUParticleSystem3D::getDefaultWidth));
@@ -45,12 +44,10 @@ void register_ax_extension(lua_State* L)
     class_0_PUParticleSystem3D.method("initWithFilePathAndMaterialPath", static_cast<bool (ax::PUParticleSystem3D::*)(std::string_view, std::string_view)>(&ax::PUParticleSystem3D::initWithFilePathAndMaterialPath));
     class_0_PUParticleSystem3D.method("isMarkedForEmission", static_cast<bool (ax::PUParticleSystem3D::*)() const>(&ax::PUParticleSystem3D::isMarkedForEmission));
     class_0_PUParticleSystem3D.method("makeParticleLocal", static_cast<bool (ax::PUParticleSystem3D::*)(ax::PUParticle3D *)>(&ax::PUParticleSystem3D::makeParticleLocal));
-    class_0_PUParticleSystem3D.method("pauseParticleSystem", static_cast<void (ax::PUParticleSystem3D::*)()>(&ax::PUParticleSystem3D::pauseParticleSystem));
     class_0_PUParticleSystem3D.method("removeAllBehaviourTemplate", static_cast<void (ax::PUParticleSystem3D::*)()>(&ax::PUParticleSystem3D::removeAllBehaviourTemplate));
     class_0_PUParticleSystem3D.method("removeAllEmitter", static_cast<void (ax::PUParticleSystem3D::*)()>(&ax::PUParticleSystem3D::removeAllEmitter));
     class_0_PUParticleSystem3D.method("removeAllListener", static_cast<void (ax::PUParticleSystem3D::*)()>(&ax::PUParticleSystem3D::removeAllListener));
     class_0_PUParticleSystem3D.method("removerAllObserver", static_cast<void (ax::PUParticleSystem3D::*)()>(&ax::PUParticleSystem3D::removerAllObserver));
-    class_0_PUParticleSystem3D.method("resumeParticleSystem", static_cast<void (ax::PUParticleSystem3D::*)()>(&ax::PUParticleSystem3D::resumeParticleSystem));
     class_0_PUParticleSystem3D.method("rotationOffset", [](ax::PUParticleSystem3D& self, ax::Vec3 arg0) -> void { static_cast<ax::PUParticleSystem3D&>(self).rotationOffset(arg0); });
     class_0_PUParticleSystem3D.method("setDefaultDepth", static_cast<void (ax::PUParticleSystem3D::*)(const float)>(&ax::PUParticleSystem3D::setDefaultDepth));
     class_0_PUParticleSystem3D.method("setDefaultHeight", static_cast<void (ax::PUParticleSystem3D::*)(const float)>(&ax::PUParticleSystem3D::setDefaultHeight));
@@ -61,9 +58,6 @@ void register_ax_extension(lua_State* L)
     class_0_PUParticleSystem3D.method("setMaterialName", static_cast<void (ax::PUParticleSystem3D::*)(std::string_view)>(&ax::PUParticleSystem3D::setMaterialName));
     class_0_PUParticleSystem3D.method("setMaxVelocity", static_cast<void (ax::PUParticleSystem3D::*)(float)>(&ax::PUParticleSystem3D::setMaxVelocity));
     class_0_PUParticleSystem3D.method("setParticleSystemScaleVelocity", static_cast<void (ax::PUParticleSystem3D::*)(float)>(&ax::PUParticleSystem3D::setParticleSystemScaleVelocity));
-    class_0_PUParticleSystem3D.method("startParticleSystem", static_cast<void (ax::PUParticleSystem3D::*)()>(&ax::PUParticleSystem3D::startParticleSystem));
-    class_0_PUParticleSystem3D.method("stopParticleSystem", static_cast<void (ax::PUParticleSystem3D::*)()>(&ax::PUParticleSystem3D::stopParticleSystem));
-    class_0_PUParticleSystem3D.method("update", static_cast<void (ax::PUParticleSystem3D::*)(float)>(&ax::PUParticleSystem3D::update));
     class_1_ParticleSystem3D.bases<ax::Node, ax::Object, ax::BlendProtocol>();
     class_1_ParticleSystem3D.constructors<ax::ParticleSystem3D()>();
     class_1_ParticleSystem3D.method("getAliveParticleCount", static_cast<int (ax::ParticleSystem3D::*)() const>(&ax::ParticleSystem3D::getAliveParticleCount));
@@ -185,10 +179,6 @@ void register_ax_extension(lua_State* L)
     class_8_TableView.method("getVerticalFillOrder", static_cast<ax::ext::TableView::VerticalFillOrder (ax::ext::TableView::*)()>(&ax::ext::TableView::getVerticalFillOrder));
     class_8_TableView.method("initWithViewSize", axlua::overload(axlua::overload_candidate<ax::Size, ax::Node *>(static_cast<bool (ax::ext::TableView::*)(ax::Size, ax::Node *)>(&ax::ext::TableView::initWithViewSize)), axlua::overload_candidate<ax::Size>([](ax::ext::TableView& self, ax::Size arg0) -> bool { return static_cast<ax::ext::TableView&>(self).initWithViewSize(arg0, NULL); })));
     class_8_TableView.method("insertCellAtIndex", static_cast<void (ax::ext::TableView::*)(ssize_t)>(&ax::ext::TableView::insertCellAtIndex));
-    class_8_TableView.method("onPointerCancel", static_cast<void (ax::ext::TableView::*)(ax::PointerEvent *)>(&ax::ext::TableView::onPointerCancel));
-    class_8_TableView.method("onPointerDown", static_cast<bool (ax::ext::TableView::*)(ax::PointerEvent *)>(&ax::ext::TableView::onPointerDown));
-    class_8_TableView.method("onPointerMove", static_cast<void (ax::ext::TableView::*)(ax::PointerEvent *)>(&ax::ext::TableView::onPointerMove));
-    class_8_TableView.method("onPointerUp", static_cast<void (ax::ext::TableView::*)(ax::PointerEvent *)>(&ax::ext::TableView::onPointerUp));
     class_8_TableView.method("reloadData", static_cast<void (ax::ext::TableView::*)()>(&ax::ext::TableView::reloadData));
     class_8_TableView.method("removeCellAtIndex", static_cast<void (ax::ext::TableView::*)(ssize_t)>(&ax::ext::TableView::removeCellAtIndex));
     class_8_TableView.method("scrollViewDidScroll", static_cast<void (ax::ext::TableView::*)(ax::ext::ScrollView *)>(&ax::ext::TableView::scrollViewDidScroll));

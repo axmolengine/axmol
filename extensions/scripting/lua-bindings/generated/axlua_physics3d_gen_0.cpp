@@ -37,7 +37,6 @@ void register_ax_physics3d_members_0(lua_State* L)
     class_2_Collider3D.method("getMaterial", static_cast<const ax::PhysicsMaterial & (ax::Collider3D::*)() const>(&ax::Collider3D::getMaterial));
     class_2_Collider3D.method("getType", static_cast<ax::Collider3D::Type (ax::Collider3D::*)() const>(&ax::Collider3D::getType));
     class_2_Collider3D.method("getWorld", static_cast<ax::PhysicsWorld3D * (ax::Collider3D::*)() const>(&ax::Collider3D::getWorld));
-    class_2_Collider3D.method("getWorldTransform", static_cast<ax::Mat4 (ax::Collider3D::*)() const>(&ax::Collider3D::getWorldTransform));
     class_2_Collider3D.method("hasOwnBody", static_cast<bool (ax::Collider3D::*)() const>(&ax::Collider3D::hasOwnBody));
     class_2_Collider3D.method("isAttached", static_cast<bool (ax::Collider3D::*)() const>(&ax::Collider3D::isAttached));
     class_2_Collider3D.method("isAttachedToWorld", static_cast<bool (ax::Collider3D::*)() const>(&ax::Collider3D::isAttachedToWorld));
@@ -46,8 +45,6 @@ void register_ax_physics3d_members_0(lua_State* L)
     class_2_Collider3D.method("setEnabled", static_cast<void (ax::Collider3D::*)(bool)>(&ax::Collider3D::setEnabled));
     class_2_Collider3D.method("setMaterial", static_cast<void (ax::Collider3D::*)(const ax::PhysicsMaterial &)>(&ax::Collider3D::setMaterial));
     class_2_Collider3D.method("setSensor", static_cast<void (ax::Collider3D::*)(bool)>(&ax::Collider3D::setSensor));
-    class_2_Collider3D.method("syncNodeToPhysics", static_cast<void (ax::Collider3D::*)()>(&ax::Collider3D::syncNodeToPhysics));
-    class_2_Collider3D.method("syncPhysicsToNode", static_cast<void (ax::Collider3D::*)()>(&ax::Collider3D::syncPhysicsToNode));
     auto class_3_ConeTwistJoint3D = module.class_<ax::ConeTwistJoint3D>("ConeTwistJoint3D");
     class_3_ConeTwistJoint3D.bases<ax::Joint3D, ax::Component, ax::Object>();
     class_3_ConeTwistJoint3D.method("clearLimits", static_cast<void (ax::ConeTwistJoint3D::*)()>(&ax::ConeTwistJoint3D::clearLimits));

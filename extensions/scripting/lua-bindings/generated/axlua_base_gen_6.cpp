@@ -46,6 +46,7 @@ void register_ax_base_types_6(lua_State* L)
     module.class_<ax::Technique>("Technique");
     module.class_<ax::Texture2D>("Texture2D");
     module.class_<ax::TextureCache>("TextureCache");
+    module.class_<ax::TileMapAtlas>("TileMapAtlas");
 }
 
 void register_ax_base_members_6(lua_State* L)
@@ -57,20 +58,17 @@ void register_ax_base_members_6(lua_State* L)
     class_0_ShakyTiles3D.method("clone", static_cast<ax::ShakyTiles3D * (ax::ShakyTiles3D::*)() const>(&ax::ShakyTiles3D::clone));
     class_0_ShakyTiles3D.static_method("create", static_cast<ax::ShakyTiles3D * (*)(float, const ax::Vec2 &, int, bool)>(&ax::ShakyTiles3D::create));
     class_0_ShakyTiles3D.method("initWithDuration", static_cast<bool (ax::ShakyTiles3D::*)(float, const ax::Vec2 &, int, bool)>(&ax::ShakyTiles3D::initWithDuration));
-    class_0_ShakyTiles3D.method("update", static_cast<void (ax::ShakyTiles3D::*)(float)>(&ax::ShakyTiles3D::update));
     auto class_1_ShatteredTiles3D = module.class_<ax::ShatteredTiles3D>("ShatteredTiles3D");
     class_1_ShatteredTiles3D.bases<ax::TiledGrid3DAction, ax::GridAction, ax::ActionInterval, ax::FiniteTimeAction, ax::Action, ax::Object>();
     class_1_ShatteredTiles3D.constructors<ax::ShatteredTiles3D()>();
     class_1_ShatteredTiles3D.method("clone", static_cast<ax::ShatteredTiles3D * (ax::ShatteredTiles3D::*)() const>(&ax::ShatteredTiles3D::clone));
     class_1_ShatteredTiles3D.static_method("create", static_cast<ax::ShatteredTiles3D * (*)(float, const ax::Vec2 &, int, bool)>(&ax::ShatteredTiles3D::create));
     class_1_ShatteredTiles3D.method("initWithDuration", static_cast<bool (ax::ShatteredTiles3D::*)(float, const ax::Vec2 &, int, bool)>(&ax::ShatteredTiles3D::initWithDuration));
-    class_1_ShatteredTiles3D.method("update", static_cast<void (ax::ShatteredTiles3D::*)(float)>(&ax::ShatteredTiles3D::update));
     auto class_2_Show = module.class_<ax::Show>("Show");
     class_2_Show.bases<ax::ActionInstant, ax::FiniteTimeAction, ax::Action, ax::Object>();
     class_2_Show.constructors<ax::Show()>();
     class_2_Show.method("clone", static_cast<ax::Show * (ax::Show::*)() const>(&ax::Show::clone));
     class_2_Show.static_method("create", static_cast<ax::Show * (*)()>(&ax::Show::create));
-    class_2_Show.method("reverse", static_cast<ax::ActionInstant * (ax::Show::*)() const>(&ax::Show::reverse));
     class_2_Show.method("update", static_cast<void (ax::Show::*)(float)>(&ax::Show::update));
     auto class_3_ShuffleTiles = module.class_<ax::ShuffleTiles>("ShuffleTiles");
     class_3_ShuffleTiles.bases<ax::TiledGrid3DAction, ax::GridAction, ax::ActionInterval, ax::FiniteTimeAction, ax::Action, ax::Object>();
@@ -79,8 +77,6 @@ void register_ax_base_members_6(lua_State* L)
     class_3_ShuffleTiles.static_method("create", static_cast<ax::ShuffleTiles * (*)(float, const ax::Vec2 &, unsigned int)>(&ax::ShuffleTiles::create));
     class_3_ShuffleTiles.method("getDelta", static_cast<ax::Vec2 (ax::ShuffleTiles::*)(const ax::Vec2 &) const>(&ax::ShuffleTiles::getDelta));
     class_3_ShuffleTiles.method("initWithDuration", static_cast<bool (ax::ShuffleTiles::*)(float, const ax::Vec2 &, unsigned int)>(&ax::ShuffleTiles::initWithDuration));
-    class_3_ShuffleTiles.method("startWithTarget", static_cast<void (ax::ShuffleTiles::*)(ax::Node *)>(&ax::ShuffleTiles::startWithTarget));
-    class_3_ShuffleTiles.method("update", static_cast<void (ax::ShuffleTiles::*)(float)>(&ax::ShuffleTiles::update));
     auto class_4_SkewBy = module.class_<ax::SkewBy>("SkewBy");
     class_4_SkewBy.bases<ax::SkewTo, ax::ActionInterval, ax::FiniteTimeAction, ax::Action, ax::Object>();
     class_4_SkewBy.constructors<ax::SkewBy()>();
@@ -88,7 +84,6 @@ void register_ax_base_members_6(lua_State* L)
     class_4_SkewBy.static_method("create", static_cast<ax::SkewBy * (*)(float, float, float)>(&ax::SkewBy::create));
     class_4_SkewBy.method("initWithDuration", static_cast<bool (ax::SkewBy::*)(float, float, float)>(&ax::SkewBy::initWithDuration));
     class_4_SkewBy.method("reverse", static_cast<ax::SkewBy * (ax::SkewBy::*)() const>(&ax::SkewBy::reverse));
-    class_4_SkewBy.method("startWithTarget", static_cast<void (ax::SkewBy::*)(ax::Node *)>(&ax::SkewBy::startWithTarget));
     auto class_5_SkewTo = module.class_<ax::SkewTo>("SkewTo");
     class_5_SkewTo.bases<ax::ActionInterval, ax::FiniteTimeAction, ax::Action, ax::Object>();
     class_5_SkewTo.constructors<ax::SkewTo()>();
@@ -97,7 +92,6 @@ void register_ax_base_members_6(lua_State* L)
     class_5_SkewTo.method("initWithDuration", static_cast<bool (ax::SkewTo::*)(float, float, float)>(&ax::SkewTo::initWithDuration));
     class_5_SkewTo.method("reverse", static_cast<ax::SkewTo * (ax::SkewTo::*)() const>(&ax::SkewTo::reverse));
     class_5_SkewTo.method("startWithTarget", static_cast<void (ax::SkewTo::*)(ax::Node *)>(&ax::SkewTo::startWithTarget));
-    class_5_SkewTo.method("update", static_cast<void (ax::SkewTo::*)(float)>(&ax::SkewTo::update));
     auto class_6_Spawn = module.class_<ax::Spawn>("Spawn");
     class_6_Spawn.bases<ax::ActionInterval, ax::FiniteTimeAction, ax::Action, ax::Object>();
     class_6_Spawn.constructors<ax::Spawn()>();
@@ -106,8 +100,6 @@ void register_ax_base_members_6(lua_State* L)
     class_6_Spawn.method("initWithTwoActions", static_cast<bool (ax::Spawn::*)(ax::FiniteTimeAction *, ax::FiniteTimeAction *)>(&ax::Spawn::initWithTwoActions));
     class_6_Spawn.method("reverse", static_cast<ax::Spawn * (ax::Spawn::*)() const>(&ax::Spawn::reverse));
     class_6_Spawn.method("startWithTarget", static_cast<void (ax::Spawn::*)(ax::Node *)>(&ax::Spawn::startWithTarget));
-    class_6_Spawn.method("stop", static_cast<void (ax::Spawn::*)()>(&ax::Spawn::stop));
-    class_6_Spawn.method("update", static_cast<void (ax::Spawn::*)(float)>(&ax::Spawn::update));
     auto class_7_Speed = module.class_<ax::Speed>("Speed");
     class_7_Speed.bases<ax::Action, ax::Object>();
     class_7_Speed.constructors<ax::Speed()>();
@@ -116,29 +108,21 @@ void register_ax_base_members_6(lua_State* L)
     class_7_Speed.method("getInnerAction", static_cast<ax::ActionInterval * (ax::Speed::*)() const>(&ax::Speed::getInnerAction));
     class_7_Speed.method("getSpeed", static_cast<float (ax::Speed::*)() const>(&ax::Speed::getSpeed));
     class_7_Speed.method("initWithAction", static_cast<bool (ax::Speed::*)(ax::ActionInterval *, float)>(&ax::Speed::initWithAction));
-    class_7_Speed.method("isDone", static_cast<bool (ax::Speed::*)() const>(&ax::Speed::isDone));
     class_7_Speed.method("reverse", static_cast<ax::Speed * (ax::Speed::*)() const>(&ax::Speed::reverse));
     class_7_Speed.method("setInnerAction", static_cast<void (ax::Speed::*)(ax::ActionInterval *)>(&ax::Speed::setInnerAction));
     class_7_Speed.method("setSpeed", static_cast<void (ax::Speed::*)(float)>(&ax::Speed::setSpeed));
-    class_7_Speed.method("startWithTarget", static_cast<void (ax::Speed::*)(ax::Node *)>(&ax::Speed::startWithTarget));
-    class_7_Speed.method("step", static_cast<void (ax::Speed::*)(float)>(&ax::Speed::step));
-    class_7_Speed.method("stop", static_cast<void (ax::Speed::*)()>(&ax::Speed::stop));
     auto class_8_SplitCols = module.class_<ax::SplitCols>("SplitCols");
     class_8_SplitCols.bases<ax::TiledGrid3DAction, ax::GridAction, ax::ActionInterval, ax::FiniteTimeAction, ax::Action, ax::Object>();
     class_8_SplitCols.constructors<ax::SplitCols()>();
     class_8_SplitCols.method("clone", static_cast<ax::SplitCols * (ax::SplitCols::*)() const>(&ax::SplitCols::clone));
     class_8_SplitCols.static_method("create", static_cast<ax::SplitCols * (*)(float, unsigned int)>(&ax::SplitCols::create));
     class_8_SplitCols.method("initWithDuration", static_cast<bool (ax::SplitCols::*)(float, unsigned int)>(&ax::SplitCols::initWithDuration));
-    class_8_SplitCols.method("startWithTarget", static_cast<void (ax::SplitCols::*)(ax::Node *)>(&ax::SplitCols::startWithTarget));
-    class_8_SplitCols.method("update", static_cast<void (ax::SplitCols::*)(float)>(&ax::SplitCols::update));
     auto class_9_SplitRows = module.class_<ax::SplitRows>("SplitRows");
     class_9_SplitRows.bases<ax::TiledGrid3DAction, ax::GridAction, ax::ActionInterval, ax::FiniteTimeAction, ax::Action, ax::Object>();
     class_9_SplitRows.constructors<ax::SplitRows()>();
     class_9_SplitRows.method("clone", static_cast<ax::SplitRows * (ax::SplitRows::*)() const>(&ax::SplitRows::clone));
     class_9_SplitRows.static_method("create", static_cast<ax::SplitRows * (*)(float, unsigned int)>(&ax::SplitRows::create));
     class_9_SplitRows.method("initWithDuration", static_cast<bool (ax::SplitRows::*)(float, unsigned int)>(&ax::SplitRows::initWithDuration));
-    class_9_SplitRows.method("startWithTarget", static_cast<void (ax::SplitRows::*)(ax::Node *)>(&ax::SplitRows::startWithTarget));
-    class_9_SplitRows.method("update", static_cast<void (ax::SplitRows::*)(float)>(&ax::SplitRows::update));
     auto class_10_SpotLight = module.class_<ax::SpotLight>("SpotLight");
     class_10_SpotLight.bases<ax::BaseLight, ax::Node, ax::Object>();
     class_10_SpotLight.constructors<ax::SpotLight()>();
@@ -148,7 +132,6 @@ void register_ax_base_members_6(lua_State* L)
     class_10_SpotLight.method("getDirection", static_cast<ax::Vec3 (ax::SpotLight::*)() const>(&ax::SpotLight::getDirection));
     class_10_SpotLight.method("getDirectionInWorld", static_cast<ax::Vec3 (ax::SpotLight::*)() const>(&ax::SpotLight::getDirectionInWorld));
     class_10_SpotLight.method("getInnerAngle", static_cast<float (ax::SpotLight::*)() const>(&ax::SpotLight::getInnerAngle));
-    class_10_SpotLight.method("getLightType", static_cast<ax::LightType (ax::SpotLight::*)() const>(&ax::SpotLight::getLightType));
     class_10_SpotLight.method("getOuterAngle", static_cast<float (ax::SpotLight::*)() const>(&ax::SpotLight::getOuterAngle));
     class_10_SpotLight.method("getRange", static_cast<float (ax::SpotLight::*)() const>(&ax::SpotLight::getRange));
     class_10_SpotLight.method("setDirection", static_cast<void (ax::SpotLight::*)(const ax::Vec3 &)>(&ax::SpotLight::setDirection));
@@ -167,7 +150,6 @@ void register_ax_base_members_6(lua_State* L)
     class_11_Sprite.method("getBlendFunc", static_cast<const ax::BlendFunc & (ax::Sprite::*)() const>(&ax::Sprite::getBlendFunc));
     class_11_Sprite.method("getCenterRect", static_cast<ax::Rect (ax::Sprite::*)() const>(&ax::Sprite::getCenterRect));
     class_11_Sprite.method("getCenterRectNormalized", static_cast<ax::Rect (ax::Sprite::*)() const>(&ax::Sprite::getCenterRectNormalized));
-    class_11_Sprite.method("getDescription", static_cast<std::string (ax::Sprite::*)() const>(&ax::Sprite::getDescription));
     class_11_Sprite.method("getOffsetPosition", static_cast<const ax::Vec2 & (ax::Sprite::*)() const>(&ax::Sprite::getOffsetPosition));
     class_11_Sprite.method("getResourceName", static_cast<std::string_view (ax::Sprite::*)() const>(&ax::Sprite::getResourceName));
     class_11_Sprite.method("getResourceType", static_cast<int (ax::Sprite::*)() const>(&ax::Sprite::getResourceType));
@@ -175,7 +157,6 @@ void register_ax_base_members_6(lua_State* L)
     class_11_Sprite.method("getTexture", static_cast<ax::Texture2D * (ax::Sprite::*)() const>(&ax::Sprite::getTexture));
     class_11_Sprite.method("getTextureAtlas", static_cast<ax::TextureAtlas * (ax::Sprite::*)() const>(&ax::Sprite::getTextureAtlas));
     class_11_Sprite.method("getTextureRect", static_cast<const ax::Rect & (ax::Sprite::*)() const>(&ax::Sprite::getTextureRect));
-    class_11_Sprite.method("init", static_cast<bool (ax::Sprite::*)()>(&ax::Sprite::init));
     class_11_Sprite.method("initWithFile", axlua::overload(axlua::overload_candidate<std::string_view>(static_cast<bool (ax::Sprite::*)(std::string_view)>(&ax::Sprite::initWithFile)), axlua::overload_candidate<std::string_view, ax::PixelFormat>(static_cast<bool (ax::Sprite::*)(std::string_view, ax::PixelFormat)>(&ax::Sprite::initWithFile)), axlua::overload_candidate<std::string_view, const ax::Rect &>(static_cast<bool (ax::Sprite::*)(std::string_view, const ax::Rect &)>(&ax::Sprite::initWithFile))));
     class_11_Sprite.method("initWithImageData", static_cast<bool (ax::Sprite::*)(const ax::Data &, std::string_view)>(&ax::Sprite::initWithImageData));
     class_11_Sprite.method("initWithSpriteFrame", static_cast<bool (ax::Sprite::*)(ax::SpriteFrame *)>(&ax::Sprite::initWithSpriteFrame));
@@ -185,12 +166,9 @@ void register_ax_base_members_6(lua_State* L)
     class_11_Sprite.method("isFlippedX", static_cast<bool (ax::Sprite::*)() const>(&ax::Sprite::isFlippedX));
     class_11_Sprite.method("isFlippedY", static_cast<bool (ax::Sprite::*)() const>(&ax::Sprite::isFlippedY));
     class_11_Sprite.method("isFrameDisplayed", static_cast<bool (ax::Sprite::*)(ax::SpriteFrame *) const>(&ax::Sprite::isFrameDisplayed));
-    class_11_Sprite.method("isOpacityModifyRGB", static_cast<bool (ax::Sprite::*)() const>(&ax::Sprite::isOpacityModifyRGB));
     class_11_Sprite.method("isStretchEnabled", static_cast<bool (ax::Sprite::*)() const>(&ax::Sprite::isStretchEnabled));
     class_11_Sprite.method("isTextureRectRotated", static_cast<bool (ax::Sprite::*)() const>(&ax::Sprite::isTextureRectRotated));
     class_11_Sprite.method("removeAllChildrenWithCleanup", static_cast<void (ax::Sprite::*)(bool)>(&ax::Sprite::removeAllChildrenWithCleanup));
-    class_11_Sprite.method("removeChild", axlua::overload(axlua::overload_candidate<ax::Node *, bool>(static_cast<void (ax::Sprite::*)(ax::Node *, bool)>(&ax::Sprite::removeChild)), axlua::overload_candidate<ax::Node *>([](ax::Sprite& self, ax::Node * arg0) -> void { static_cast<ax::Sprite&>(self).removeChild(arg0, true); })));
-    class_11_Sprite.method("reorderChild", static_cast<void (ax::Sprite::*)(ax::Node *, int)>(&ax::Sprite::reorderChild));
     class_11_Sprite.method("setAnchorPoint", static_cast<void (ax::Sprite::*)(const ax::Vec2 &)>(&ax::Sprite::setAnchorPoint));
     class_11_Sprite.method("setAtlasIndex", static_cast<void (ax::Sprite::*)(unsigned int)>(&ax::Sprite::setAtlasIndex));
     class_11_Sprite.method("setAutoSize", static_cast<void (ax::Sprite::*)(bool)>(&ax::Sprite::setAutoSize));
@@ -199,24 +177,10 @@ void register_ax_base_members_6(lua_State* L)
     class_11_Sprite.method("setBlendFunc", static_cast<void (ax::Sprite::*)(const ax::BlendFunc &)>(&ax::Sprite::setBlendFunc));
     class_11_Sprite.method("setCenterRect", static_cast<void (ax::Sprite::*)(const ax::Rect &)>(&ax::Sprite::setCenterRect));
     class_11_Sprite.method("setCenterRectNormalized", static_cast<void (ax::Sprite::*)(const ax::Rect &)>(&ax::Sprite::setCenterRectNormalized));
-    class_11_Sprite.method("setContentSize", static_cast<void (ax::Sprite::*)(const ax::Vec2 &)>(&ax::Sprite::setContentSize));
     class_11_Sprite.method("setDirty", static_cast<void (ax::Sprite::*)(bool)>(&ax::Sprite::setDirty));
     class_11_Sprite.method("setDisplayFrameWithAnimationName", static_cast<void (ax::Sprite::*)(std::string_view, unsigned int)>(&ax::Sprite::setDisplayFrameWithAnimationName));
     class_11_Sprite.method("setFlippedX", static_cast<void (ax::Sprite::*)(bool)>(&ax::Sprite::setFlippedX));
     class_11_Sprite.method("setFlippedY", static_cast<void (ax::Sprite::*)(bool)>(&ax::Sprite::setFlippedY));
-    class_11_Sprite.method("setIgnoreAnchorPointForPosition", static_cast<void (ax::Sprite::*)(bool)>(&ax::Sprite::setIgnoreAnchorPointForPosition));
-    class_11_Sprite.method("setOpacityModifyRGB", static_cast<void (ax::Sprite::*)(bool)>(&ax::Sprite::setOpacityModifyRGB));
-    class_11_Sprite.method("setPosition", axlua::overload(axlua::overload_candidate<const ax::Vec2 &>(static_cast<void (ax::Sprite::*)(const ax::Vec2 &)>(&ax::Sprite::setPosition)), axlua::overload_candidate<float, float>(static_cast<void (ax::Sprite::*)(float, float)>(&ax::Sprite::setPosition))));
-    class_11_Sprite.method("setPositionZ", static_cast<void (ax::Sprite::*)(float)>(&ax::Sprite::setPositionZ));
-    class_11_Sprite.method("setProgramState", axlua::overload(axlua::overload_candidate<uint32_t>(static_cast<void (ax::Sprite::*)(uint32_t)>(&ax::Sprite::setProgramState)), axlua::overload_candidate<rhi::ProgramState *, bool>(static_cast<bool (ax::Sprite::*)(rhi::ProgramState *, bool)>(&ax::Sprite::setProgramState)), axlua::overload_candidate<rhi::ProgramState *>([](ax::Sprite& self, rhi::ProgramState * arg0) -> bool { return static_cast<ax::Sprite&>(self).setProgramState(arg0, false); })));
-    class_11_Sprite.method("setRotation", static_cast<void (ax::Sprite::*)(float)>(&ax::Sprite::setRotation));
-    class_11_Sprite.method("setRotationSkewX", static_cast<void (ax::Sprite::*)(float)>(&ax::Sprite::setRotationSkewX));
-    class_11_Sprite.method("setRotationSkewY", static_cast<void (ax::Sprite::*)(float)>(&ax::Sprite::setRotationSkewY));
-    class_11_Sprite.method("setScale", axlua::overload(axlua::overload_candidate<float>(static_cast<void (ax::Sprite::*)(float)>(&ax::Sprite::setScale)), axlua::overload_candidate<float, float>(static_cast<void (ax::Sprite::*)(float, float)>(&ax::Sprite::setScale))));
-    class_11_Sprite.method("setScaleX", static_cast<void (ax::Sprite::*)(float)>(&ax::Sprite::setScaleX));
-    class_11_Sprite.method("setScaleY", static_cast<void (ax::Sprite::*)(float)>(&ax::Sprite::setScaleY));
-    class_11_Sprite.method("setSkewX", static_cast<void (ax::Sprite::*)(float)>(&ax::Sprite::setSkewX));
-    class_11_Sprite.method("setSkewY", static_cast<void (ax::Sprite::*)(float)>(&ax::Sprite::setSkewY));
     class_11_Sprite.method("setSpriteFrame", axlua::overload(axlua::overload_candidate<std::string_view>(static_cast<void (ax::Sprite::*)(std::string_view)>(&ax::Sprite::setSpriteFrame)), axlua::overload_candidate<ax::SpriteFrame *>(static_cast<void (ax::Sprite::*)(ax::SpriteFrame *)>(&ax::Sprite::setSpriteFrame))));
     class_11_Sprite.method("setStretchEnabled", static_cast<void (ax::Sprite::*)(bool)>(&ax::Sprite::setStretchEnabled));
     class_11_Sprite.method("setTexture", axlua::overload(axlua::overload_candidate<std::string_view>(static_cast<void (ax::Sprite::*)(std::string_view)>(&ax::Sprite::setTexture)), axlua::overload_candidate<ax::Texture2D *>(static_cast<void (ax::Sprite::*)(ax::Texture2D *)>(&ax::Sprite::setTexture))));
@@ -224,9 +188,6 @@ void register_ax_base_members_6(lua_State* L)
     class_11_Sprite.method("setTextureRect", axlua::overload(axlua::overload_candidate<const ax::Rect &>(static_cast<void (ax::Sprite::*)(const ax::Rect &)>(&ax::Sprite::setTextureRect)), axlua::overload_candidate<const ax::Rect &, bool, const ax::Vec2 &>(static_cast<void (ax::Sprite::*)(const ax::Rect &, bool, const ax::Vec2 &)>(&ax::Sprite::setTextureRect))));
     class_11_Sprite.method("setVertexLayout", static_cast<void (ax::Sprite::*)()>(&ax::Sprite::setVertexLayout));
     class_11_Sprite.method("setVertexRect", static_cast<void (ax::Sprite::*)(const ax::Rect &)>(&ax::Sprite::setVertexRect));
-    class_11_Sprite.method("setVisible", static_cast<void (ax::Sprite::*)(bool)>(&ax::Sprite::setVisible));
-    class_11_Sprite.method("sortAllChildren", static_cast<void (ax::Sprite::*)()>(&ax::Sprite::sortAllChildren));
-    class_11_Sprite.method("updateTransform", static_cast<void (ax::Sprite::*)()>(&ax::Sprite::updateTransform));
     auto class_12_SpriteBatchNode = module.class_<ax::SpriteBatchNode>("SpriteBatchNode");
     class_12_SpriteBatchNode.bases<ax::Node, ax::Object, ax::TextureProtocol, ax::BlendProtocol>();
     class_12_SpriteBatchNode.constructors<ax::SpriteBatchNode()>();
@@ -237,29 +198,23 @@ void register_ax_base_members_6(lua_State* L)
     class_12_SpriteBatchNode.static_method("create", axlua::overload(axlua::overload_candidate<std::string_view, ssize_t>(static_cast<ax::SpriteBatchNode * (*)(std::string_view, ssize_t)>(&ax::SpriteBatchNode::create)), axlua::overload_candidate<std::string_view>([](std::string_view arg0) -> ax::SpriteBatchNode * { return ax::SpriteBatchNode::create(arg0, 29); })));
     class_12_SpriteBatchNode.static_method("createWithTexture", axlua::overload(axlua::overload_candidate<ax::Texture2D *, ssize_t>(static_cast<ax::SpriteBatchNode * (*)(ax::Texture2D *, ssize_t)>(&ax::SpriteBatchNode::createWithTexture)), axlua::overload_candidate<ax::Texture2D *>([](ax::Texture2D * arg0) -> ax::SpriteBatchNode * { return ax::SpriteBatchNode::createWithTexture(arg0, 29); })));
     class_12_SpriteBatchNode.method("getBlendFunc", static_cast<const ax::BlendFunc & (ax::SpriteBatchNode::*)() const>(&ax::SpriteBatchNode::getBlendFunc));
-    class_12_SpriteBatchNode.method("getDescription", static_cast<std::string (ax::SpriteBatchNode::*)() const>(&ax::SpriteBatchNode::getDescription));
     class_12_SpriteBatchNode.method("getTexture", static_cast<ax::Texture2D * (ax::SpriteBatchNode::*)() const>(&ax::SpriteBatchNode::getTexture));
     class_12_SpriteBatchNode.method("getTextureAtlas", static_cast<ax::TextureAtlas * (ax::SpriteBatchNode::*)()>(&ax::SpriteBatchNode::getTextureAtlas));
     class_12_SpriteBatchNode.method("highestAtlasIndexInChild", static_cast<ssize_t (ax::SpriteBatchNode::*)(ax::Sprite *)>(&ax::SpriteBatchNode::highestAtlasIndexInChild));
     class_12_SpriteBatchNode.method("increaseAtlasCapacity", static_cast<void (ax::SpriteBatchNode::*)()>(&ax::SpriteBatchNode::increaseAtlasCapacity));
-    class_12_SpriteBatchNode.method("init", static_cast<bool (ax::SpriteBatchNode::*)()>(&ax::SpriteBatchNode::init));
     class_12_SpriteBatchNode.method("initWithFile", axlua::overload(axlua::overload_candidate<std::string_view, ssize_t>(static_cast<bool (ax::SpriteBatchNode::*)(std::string_view, ssize_t)>(&ax::SpriteBatchNode::initWithFile)), axlua::overload_candidate<std::string_view>([](ax::SpriteBatchNode& self, std::string_view arg0) -> bool { return static_cast<ax::SpriteBatchNode&>(self).initWithFile(arg0, 29); })));
     class_12_SpriteBatchNode.method("initWithTexture", axlua::overload(axlua::overload_candidate<ax::Texture2D *, ssize_t>(static_cast<bool (ax::SpriteBatchNode::*)(ax::Texture2D *, ssize_t)>(&ax::SpriteBatchNode::initWithTexture)), axlua::overload_candidate<ax::Texture2D *>([](ax::SpriteBatchNode& self, ax::Texture2D * arg0) -> bool { return static_cast<ax::SpriteBatchNode&>(self).initWithTexture(arg0, 29); })));
     class_12_SpriteBatchNode.method("insertQuadFromSprite", static_cast<void (ax::SpriteBatchNode::*)(ax::Sprite *, ssize_t)>(&ax::SpriteBatchNode::insertQuadFromSprite));
     class_12_SpriteBatchNode.method("lowestAtlasIndexInChild", static_cast<ssize_t (ax::SpriteBatchNode::*)(ax::Sprite *)>(&ax::SpriteBatchNode::lowestAtlasIndexInChild));
     class_12_SpriteBatchNode.method("rebuildIndexInOrder", static_cast<ssize_t (ax::SpriteBatchNode::*)(ax::Sprite *, ssize_t)>(&ax::SpriteBatchNode::rebuildIndexInOrder));
     class_12_SpriteBatchNode.method("removeAllChildrenWithCleanup", static_cast<void (ax::SpriteBatchNode::*)(bool)>(&ax::SpriteBatchNode::removeAllChildrenWithCleanup));
-    class_12_SpriteBatchNode.method("removeChild", static_cast<void (ax::SpriteBatchNode::*)(ax::Node *, bool)>(&ax::SpriteBatchNode::removeChild));
     class_12_SpriteBatchNode.method("removeChildAtIndex", static_cast<void (ax::SpriteBatchNode::*)(ssize_t, bool)>(&ax::SpriteBatchNode::removeChildAtIndex));
     class_12_SpriteBatchNode.method("removeSpriteFromAtlas", static_cast<void (ax::SpriteBatchNode::*)(ax::Sprite *)>(&ax::SpriteBatchNode::removeSpriteFromAtlas));
     class_12_SpriteBatchNode.method("reorderBatch", static_cast<void (ax::SpriteBatchNode::*)(bool)>(&ax::SpriteBatchNode::reorderBatch));
-    class_12_SpriteBatchNode.method("reorderChild", static_cast<void (ax::SpriteBatchNode::*)(ax::Node *, int)>(&ax::SpriteBatchNode::reorderChild));
     class_12_SpriteBatchNode.method("reserveCapacity", static_cast<void (ax::SpriteBatchNode::*)(ssize_t)>(&ax::SpriteBatchNode::reserveCapacity));
     class_12_SpriteBatchNode.method("setBlendFunc", static_cast<void (ax::SpriteBatchNode::*)(const ax::BlendFunc &)>(&ax::SpriteBatchNode::setBlendFunc));
-    class_12_SpriteBatchNode.method("setProgramState", axlua::overload(axlua::overload_candidate<rhi::ProgramState *, bool>(static_cast<bool (ax::SpriteBatchNode::*)(rhi::ProgramState *, bool)>(&ax::SpriteBatchNode::setProgramState)), axlua::overload_candidate<rhi::ProgramState *>([](ax::SpriteBatchNode& self, rhi::ProgramState * arg0) -> bool { return static_cast<ax::SpriteBatchNode&>(self).setProgramState(arg0, false); })));
     class_12_SpriteBatchNode.method("setTexture", static_cast<void (ax::SpriteBatchNode::*)(ax::Texture2D *)>(&ax::SpriteBatchNode::setTexture));
     class_12_SpriteBatchNode.method("setTextureAtlas", static_cast<void (ax::SpriteBatchNode::*)(ax::TextureAtlas *)>(&ax::SpriteBatchNode::setTextureAtlas));
-    class_12_SpriteBatchNode.method("sortAllChildren", static_cast<void (ax::SpriteBatchNode::*)()>(&ax::SpriteBatchNode::sortAllChildren));
     auto class_13_SpriteFrame = module.class_<ax::SpriteFrame>("SpriteFrame");
     class_13_SpriteFrame.bases<ax::Object>();
     class_13_SpriteFrame.constructors<ax::SpriteFrame()>();
@@ -411,8 +366,6 @@ void register_ax_base_members_6(lua_State* L)
     class_28_TargetedAction.method("reverse", static_cast<ax::TargetedAction * (ax::TargetedAction::*)() const>(&ax::TargetedAction::reverse));
     class_28_TargetedAction.method("setForcedTarget", static_cast<void (ax::TargetedAction::*)(ax::Node *)>(&ax::TargetedAction::setForcedTarget));
     class_28_TargetedAction.method("startWithTarget", static_cast<void (ax::TargetedAction::*)(ax::Node *)>(&ax::TargetedAction::startWithTarget));
-    class_28_TargetedAction.method("stop", static_cast<void (ax::TargetedAction::*)()>(&ax::TargetedAction::stop));
-    class_28_TargetedAction.method("update", static_cast<void (ax::TargetedAction::*)(float)>(&ax::TargetedAction::update));
     auto class_29_Technique = module.class_<ax::Technique>("Technique");
     class_29_Technique.bases<ax::Object>();
     class_29_Technique.method("addPass", static_cast<void (ax::Technique::*)(ax::Pass *)>(&ax::Technique::addPass));
@@ -471,6 +424,14 @@ void register_ax_base_members_6(lua_State* L)
     class_31_TextureCache.method("unbindAllImageAsync", static_cast<void (ax::TextureCache::*)()>(&ax::TextureCache::unbindAllImageAsync));
     class_31_TextureCache.method("unbindImageAsync", static_cast<void (ax::TextureCache::*)(std::string_view)>(&ax::TextureCache::unbindImageAsync));
     class_31_TextureCache.method("waitForQuit", static_cast<void (ax::TextureCache::*)()>(&ax::TextureCache::waitForQuit));
+    auto class_32_TileMapAtlas = module.class_<ax::TileMapAtlas>("TileMapAtlas");
+    class_32_TileMapAtlas.bases<ax::AtlasNode, ax::Node, ax::Object, ax::TextureProtocol, ax::BlendProtocol>();
+    class_32_TileMapAtlas.constructors<ax::TileMapAtlas()>();
+    class_32_TileMapAtlas.static_method("create", static_cast<ax::TileMapAtlas * (*)(std::string_view, std::string_view, int, int)>(&ax::TileMapAtlas::create));
+    class_32_TileMapAtlas.method("getTileAt", static_cast<ax::Color32 (ax::TileMapAtlas::*)(const ax::Vec2 &) const>(&ax::TileMapAtlas::getTileAt));
+    class_32_TileMapAtlas.method("initWithTileFile", static_cast<bool (ax::TileMapAtlas::*)(std::string_view, std::string_view, int, int)>(&ax::TileMapAtlas::initWithTileFile));
+    class_32_TileMapAtlas.method("releaseMap", static_cast<void (ax::TileMapAtlas::*)()>(&ax::TileMapAtlas::releaseMap));
+    class_32_TileMapAtlas.method("setTile", static_cast<void (ax::TileMapAtlas::*)(const ax::Color32 &, const ax::Vec2 &)>(&ax::TileMapAtlas::setTile));
 }
 
 void register_ax_base_enums_6(lua_State* L)

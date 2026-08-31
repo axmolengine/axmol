@@ -91,6 +91,10 @@ public sealed class BindingMethod
     public bool IsStatic { get; init; }
     public bool IsConst { get; init; }
     public bool IsVariadic { get; init; }
+    [JsonIgnore]
+    public bool IsVirtual { get; init; }
+    [JsonIgnore]
+    public IReadOnlyList<string> OverriddenDeclaringTypes { get; init; } = Array.Empty<string>();
 }
 
 public sealed class BindingField

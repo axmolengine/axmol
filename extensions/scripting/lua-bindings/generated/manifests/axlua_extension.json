@@ -132,17 +132,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getAliveParticleCount",
-          "luaName": "getAliveParticleCount",
-          "declaringType": "ax::PUParticleSystem3D",
-          "returnType": "int",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getDefaultDepth",
           "luaName": "getDefaultDepth",
           "declaringType": "ax::PUParticleSystem3D",
@@ -348,17 +337,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "pauseParticleSystem",
-          "luaName": "pauseParticleSystem",
-          "declaringType": "ax::PUParticleSystem3D",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "removeAllBehaviourTemplate",
           "luaName": "removeAllBehaviourTemplate",
           "declaringType": "ax::PUParticleSystem3D",
@@ -394,17 +372,6 @@
         {
           "nativeName": "removerAllObserver",
           "luaName": "removerAllObserver",
-          "declaringType": "ax::PUParticleSystem3D",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "resumeParticleSystem",
-          "luaName": "resumeParticleSystem",
           "declaringType": "ax::PUParticleSystem3D",
           "returnType": "void",
           "parameterTypes": [],
@@ -551,43 +518,6 @@
         {
           "nativeName": "setParticleSystemScaleVelocity",
           "luaName": "setParticleSystemScaleVelocity",
-          "declaringType": "ax::PUParticleSystem3D",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startParticleSystem",
-          "luaName": "startParticleSystem",
-          "declaringType": "ax::PUParticleSystem3D",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "stopParticleSystem",
-          "luaName": "stopParticleSystem",
-          "declaringType": "ax::PUParticleSystem3D",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
           "declaringType": "ax::PUParticleSystem3D",
           "returnType": "void",
           "parameterTypes": [
@@ -2270,66 +2200,6 @@
           "returnType": "void",
           "parameterTypes": [
             "ssize_t"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "onPointerCancel",
-          "luaName": "onPointerCancel",
-          "declaringType": "ax::ext::TableView",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::PointerEvent *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "onPointerDown",
-          "luaName": "onPointerDown",
-          "declaringType": "ax::ext::TableView",
-          "returnType": "bool",
-          "parameterTypes": [
-            "ax::PointerEvent *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "onPointerMove",
-          "luaName": "onPointerMove",
-          "declaringType": "ax::ext::TableView",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::PointerEvent *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "onPointerUp",
-          "luaName": "onPointerUp",
-          "declaringType": "ax::ext::TableView",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::PointerEvent *"
           ],
           "defaultValues": [
             null

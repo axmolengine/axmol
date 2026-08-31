@@ -57,8 +57,6 @@ void register_ax_physics3d_members_1(lua_State* L)
     auto class_3_PivotJoint3D = module.class_<ax::PivotJoint3D>("PivotJoint3D");
     class_3_PivotJoint3D.bases<ax::Joint3D, ax::Component, ax::Object>();
     class_3_PivotJoint3D.static_method("create", axlua::overload(axlua::overload_candidate<ax::Rigidbody3D *>(static_cast<ax::PivotJoint3D * (*)(ax::Rigidbody3D *)>(&ax::PivotJoint3D::create)), axlua::overload_candidate<>([]() -> ax::PivotJoint3D * { return ax::PivotJoint3D::create(nullptr); })));
-    class_3_PivotJoint3D.method("setAnchor", static_cast<void (ax::PivotJoint3D::*)(const ax::Vec3 &)>(&ax::PivotJoint3D::setAnchor));
-    class_3_PivotJoint3D.method("setConnectedAnchor", static_cast<void (ax::PivotJoint3D::*)(const ax::Vec3 &)>(&ax::PivotJoint3D::setConnectedAnchor));
     auto class_4_Rigidbody3D = module.class_<ax::Rigidbody3D>("Rigidbody3D");
     class_4_Rigidbody3D.bases<ax::PhysicsActor, ax::Component, ax::Object>();
     class_4_Rigidbody3D.method("applyAngularImpulse", static_cast<void (ax::Rigidbody3D::*)(const ax::Vec3 &)>(&ax::Rigidbody3D::applyAngularImpulse));
@@ -82,7 +80,6 @@ void register_ax_physics3d_members_1(lua_State* L)
     class_4_Rigidbody3D.method("getTotalForce", static_cast<ax::Vec3 (ax::Rigidbody3D::*)() const>(&ax::Rigidbody3D::getTotalForce));
     class_4_Rigidbody3D.method("getTotalTorque", static_cast<ax::Vec3 (ax::Rigidbody3D::*)() const>(&ax::Rigidbody3D::getTotalTorque));
     class_4_Rigidbody3D.method("getWorld", static_cast<ax::PhysicsWorld3D * (ax::Rigidbody3D::*)() const>(&ax::Rigidbody3D::getWorld));
-    class_4_Rigidbody3D.method("getWorldTransform", static_cast<ax::Mat4 (ax::Rigidbody3D::*)() const>(&ax::Rigidbody3D::getWorldTransform));
     class_4_Rigidbody3D.method("isAllowSleeping", static_cast<bool (ax::Rigidbody3D::*)() const>(&ax::Rigidbody3D::isAllowSleeping));
     class_4_Rigidbody3D.method("isAttached", static_cast<bool (ax::Rigidbody3D::*)() const>(&ax::Rigidbody3D::isAttached));
     class_4_Rigidbody3D.method("isDynamic", static_cast<bool (ax::Rigidbody3D::*)() const>(&ax::Rigidbody3D::isDynamic));
@@ -108,8 +105,6 @@ void register_ax_physics3d_members_1(lua_State* L)
     class_4_Rigidbody3D.method("setPosition", axlua::overload(axlua::overload_candidate<const ax::Vec3 &, bool>(static_cast<void (ax::Rigidbody3D::*)(const ax::Vec3 &, bool)>(&ax::Rigidbody3D::setPosition)), axlua::overload_candidate<const ax::Vec3 &>([](ax::Rigidbody3D& self, const ax::Vec3 & arg0) -> void { static_cast<ax::Rigidbody3D&>(self).setPosition(arg0, false); })));
     class_4_Rigidbody3D.method("setRotation", axlua::overload(axlua::overload_candidate<const ax::Quat &, bool>(static_cast<void (ax::Rigidbody3D::*)(const ax::Quat &, bool)>(&ax::Rigidbody3D::setRotation)), axlua::overload_candidate<const ax::Quat &>([](ax::Rigidbody3D& self, const ax::Quat & arg0) -> void { static_cast<ax::Rigidbody3D&>(self).setRotation(arg0, false); })));
     class_4_Rigidbody3D.method("setRotationEnabled", static_cast<void (ax::Rigidbody3D::*)(ax::bvec3)>(&ax::Rigidbody3D::setRotationEnabled));
-    class_4_Rigidbody3D.method("syncNodeToPhysics", static_cast<void (ax::Rigidbody3D::*)()>(&ax::Rigidbody3D::syncNodeToPhysics));
-    class_4_Rigidbody3D.method("syncPhysicsToNode", static_cast<void (ax::Rigidbody3D::*)()>(&ax::Rigidbody3D::syncPhysicsToNode));
     class_4_Rigidbody3D.method("world2Local", static_cast<ax::Vec3 (ax::Rigidbody3D::*)(const ax::Vec3 &)>(&ax::Rigidbody3D::world2Local));
     auto class_5_SixDofJoint3D = module.class_<ax::SixDofJoint3D>("SixDofJoint3D");
     class_5_SixDofJoint3D.bases<ax::Joint3D, ax::Component, ax::Object>();

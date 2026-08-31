@@ -34,9 +34,7 @@ void register_ax_ui_members_2(lua_State* L)
     auto class_1_RelativeLayoutParameter = module.class_<ax::ui::RelativeLayoutParameter>("RelativeLayoutParameter");
     class_1_RelativeLayoutParameter.bases<ax::ui::LayoutParameter, ax::Object>();
     class_1_RelativeLayoutParameter.constructors<ax::ui::RelativeLayoutParameter()>();
-    class_1_RelativeLayoutParameter.method("copyProperties", static_cast<void (ax::ui::RelativeLayoutParameter::*)(ax::ui::LayoutParameter *)>(&ax::ui::RelativeLayoutParameter::copyProperties));
     class_1_RelativeLayoutParameter.static_method("create", static_cast<ax::ui::RelativeLayoutParameter * (*)()>(&ax::ui::RelativeLayoutParameter::create));
-    class_1_RelativeLayoutParameter.method("createCloneInstance", static_cast<ax::ui::LayoutParameter * (ax::ui::RelativeLayoutParameter::*)()>(&ax::ui::RelativeLayoutParameter::createCloneInstance));
     class_1_RelativeLayoutParameter.method("getAlign", static_cast<ax::ui::RelativeLayoutParameter::RelativeAlign (ax::ui::RelativeLayoutParameter::*)() const>(&ax::ui::RelativeLayoutParameter::getAlign));
     class_1_RelativeLayoutParameter.method("getRelativeName", static_cast<std::string_view (ax::ui::RelativeLayoutParameter::*)() const>(&ax::ui::RelativeLayoutParameter::getRelativeName));
     class_1_RelativeLayoutParameter.method("getRelativeToWidgetName", static_cast<std::string_view (ax::ui::RelativeLayoutParameter::*)() const>(&ax::ui::RelativeLayoutParameter::getRelativeToWidgetName));
@@ -88,7 +86,6 @@ void register_ax_ui_members_2(lua_State* L)
     class_7_RichText.method("getAnchorTextShadowBlurRadius", static_cast<int (ax::ui::RichText::*)()>(&ax::ui::RichText::getAnchorTextShadowBlurRadius));
     class_7_RichText.method("getAnchorTextShadowColor32", static_cast<ax::Color32 (ax::ui::RichText::*)()>(&ax::ui::RichText::getAnchorTextShadowColor32));
     class_7_RichText.method("getAnchorTextShadowOffset", static_cast<ax::Vec2 (ax::ui::RichText::*)()>(&ax::ui::RichText::getAnchorTextShadowOffset));
-    class_7_RichText.method("getDescription", static_cast<std::string (ax::ui::RichText::*)() const>(&ax::ui::RichText::getDescription));
     class_7_RichText.method("getFontColor", static_cast<std::string (ax::ui::RichText::*)()>(&ax::ui::RichText::getFontColor));
     class_7_RichText.method("getFontColor32", static_cast<ax::Color32 (ax::ui::RichText::*)()>(&ax::ui::RichText::getFontColor32));
     class_7_RichText.method("getFontFace", static_cast<std::string (ax::ui::RichText::*)()>(&ax::ui::RichText::getFontFace));
@@ -96,7 +93,6 @@ void register_ax_ui_members_2(lua_State* L)
     class_7_RichText.method("getHorizontalAlignment", static_cast<ax::ui::RichText::HorizontalAlignment (ax::ui::RichText::*)() const>(&ax::ui::RichText::getHorizontalAlignment));
     class_7_RichText.method("getVerticalAlignment", static_cast<ax::ui::RichText::VerticalAlignment (ax::ui::RichText::*)() const>(&ax::ui::RichText::getVerticalAlignment));
     class_7_RichText.method("getWrapMode", static_cast<ax::ui::RichText::WrapMode (ax::ui::RichText::*)() const>(&ax::ui::RichText::getWrapMode));
-    class_7_RichText.method("init", static_cast<bool (ax::ui::RichText::*)()>(&ax::ui::RichText::init));
     class_7_RichText.method("insertElement", static_cast<void (ax::ui::RichText::*)(ax::ui::RichElement *, int)>(&ax::ui::RichText::insertElement));
     class_7_RichText.method("isAnchorTextBoldEnabled", static_cast<bool (ax::ui::RichText::*)()>(&ax::ui::RichText::isAnchorTextBoldEnabled));
     class_7_RichText.method("isAnchorTextDelEnabled", static_cast<bool (ax::ui::RichText::*)()>(&ax::ui::RichText::isAnchorTextDelEnabled));
@@ -117,7 +113,6 @@ void register_ax_ui_members_2(lua_State* L)
     class_7_RichText.method("setAnchorTextOutline", axlua::overload(axlua::overload_candidate<bool, const ax::Color32 &, int>(static_cast<void (ax::ui::RichText::*)(bool, const ax::Color32 &, int)>(&ax::ui::RichText::setAnchorTextOutline)), axlua::overload_candidate<bool>([](ax::ui::RichText& self, bool arg0) -> void { static_cast<ax::ui::RichText&>(self).setAnchorTextOutline(arg0, ax::Color32::white, -1); }), axlua::overload_candidate<bool, const ax::Color32 &>([](ax::ui::RichText& self, bool arg0, const ax::Color32 & arg1) -> void { static_cast<ax::ui::RichText&>(self).setAnchorTextOutline(arg0, arg1, -1); })));
     class_7_RichText.method("setAnchorTextShadow", axlua::overload(axlua::overload_candidate<bool, const ax::Color32 &, const ax::Vec2 &, int>(static_cast<void (ax::ui::RichText::*)(bool, const ax::Color32 &, const ax::Vec2 &, int)>(&ax::ui::RichText::setAnchorTextShadow)), axlua::overload_candidate<bool>([](ax::ui::RichText& self, bool arg0) -> void { static_cast<ax::ui::RichText&>(self).setAnchorTextShadow(arg0, ax::Color32::black, ax::Vec2(2.0, -2.0), 0); }), axlua::overload_candidate<bool, const ax::Color32 &>([](ax::ui::RichText& self, bool arg0, const ax::Color32 & arg1) -> void { static_cast<ax::ui::RichText&>(self).setAnchorTextShadow(arg0, arg1, ax::Vec2(2.0, -2.0), 0); }), axlua::overload_candidate<bool, const ax::Color32 &, const ax::Vec2 &>([](ax::ui::RichText& self, bool arg0, const ax::Color32 & arg1, const ax::Vec2 & arg2) -> void { static_cast<ax::ui::RichText&>(self).setAnchorTextShadow(arg0, arg1, arg2, 0); })));
     class_7_RichText.method("setAnchorTextUnderline", static_cast<void (ax::ui::RichText::*)(bool)>(&ax::ui::RichText::setAnchorTextUnderline));
-    class_7_RichText.method("setAutoSize", static_cast<void (ax::ui::RichText::*)(bool)>(&ax::ui::RichText::setAutoSize));
     class_7_RichText.method("setFontColor", static_cast<void (ax::ui::RichText::*)(std::string_view)>(&ax::ui::RichText::setFontColor));
     class_7_RichText.method("setFontFace", static_cast<void (ax::ui::RichText::*)(std::string_view)>(&ax::ui::RichText::setFontFace));
     class_7_RichText.method("setFontSize", static_cast<void (ax::ui::RichText::*)(float)>(&ax::ui::RichText::setFontSize));
@@ -163,7 +158,6 @@ void register_ax_ui_members_2(lua_State* L)
     auto class_9_ScrollView = module.class_<ax::ui::ScrollView>("ScrollView");
     class_9_ScrollView.bases<ax::ui::LayoutGroup, ax::ui::Widget, ax::ProtectedNode, ax::Node, ax::Object, ax::ui::LayoutParameterProtocol, ax::ui::LayoutProtocol>();
     class_9_ScrollView.constructors<ax::ui::ScrollView()>();
-    class_9_ScrollView.method("addChild", axlua::overload(axlua::overload_candidate<ax::Node *>(static_cast<void (ax::ui::ScrollView::*)(ax::Node *)>(&ax::ui::ScrollView::addChild)), axlua::overload_candidate<ax::Node *, int>(static_cast<void (ax::ui::ScrollView::*)(ax::Node *, int)>(&ax::ui::ScrollView::addChild)), axlua::overload_candidate<ax::Node *, int, int>(static_cast<void (ax::ui::ScrollView::*)(ax::Node *, int, int)>(&ax::ui::ScrollView::addChild)), axlua::overload_candidate<ax::Node *, int, std::string_view>(static_cast<void (ax::ui::ScrollView::*)(ax::Node *, int, std::string_view)>(&ax::ui::ScrollView::addChild))));
     class_9_ScrollView.method("addEventListener", static_cast<void (ax::ui::ScrollView::*)(const ax::ui::ScrollView::ScrollViewCallback &)>(&ax::ui::ScrollView::addEventListener));
     class_9_ScrollView.static_method("calculateItemPositionWithAnchor", static_cast<ax::Vec2 (*)(const ax::Node *, const ax::Vec2 &)>(&ax::ui::ScrollView::calculateItemPositionWithAnchor));
     class_9_ScrollView.static_method("create", static_cast<ax::ui::ScrollView * (*)()>(&ax::ui::ScrollView::create));
@@ -178,7 +172,6 @@ void register_ax_ui_members_2(lua_State* L)
     class_9_ScrollView.method("getInnerContainer", static_cast<ax::ui::LayoutGroup * (ax::ui::ScrollView::*)() const>(&ax::ui::ScrollView::getInnerContainer));
     class_9_ScrollView.method("getInnerContainerPosition", static_cast<const ax::Vec2 & (ax::ui::ScrollView::*)() const>(&ax::ui::ScrollView::getInnerContainerPosition));
     class_9_ScrollView.method("getInnerContainerSize", static_cast<const ax::Vec2 & (ax::ui::ScrollView::*)() const>(&ax::ui::ScrollView::getInnerContainerSize));
-    class_9_ScrollView.method("getLayoutType", static_cast<ax::ui::LayoutGroup::Type (ax::ui::ScrollView::*)() const>(&ax::ui::ScrollView::getLayoutType));
     class_9_ScrollView.method("getScrollBarAutoHideTime", static_cast<float (ax::ui::ScrollView::*)() const>(&ax::ui::ScrollView::getScrollBarAutoHideTime));
     class_9_ScrollView.method("getScrollBarColor", static_cast<const ax::Color32 & (ax::ui::ScrollView::*)() const>(&ax::ui::ScrollView::getScrollBarColor));
     class_9_ScrollView.method("getScrollBarOpacity", static_cast<uint8_t (ax::ui::ScrollView::*)() const>(&ax::ui::ScrollView::getScrollBarOpacity));
@@ -213,9 +206,6 @@ void register_ax_ui_members_2(lua_State* L)
     class_9_ScrollView.method("onPointerMove", static_cast<void (ax::ui::ScrollView::*)(ax::PointerEvent *)>(&ax::ui::ScrollView::onPointerMove));
     class_9_ScrollView.method("onPointerScroll", static_cast<bool (ax::ui::ScrollView::*)(ax::PointerEvent *)>(&ax::ui::ScrollView::onPointerScroll));
     class_9_ScrollView.method("onPointerUp", static_cast<void (ax::ui::ScrollView::*)(ax::PointerEvent *)>(&ax::ui::ScrollView::onPointerUp));
-    class_9_ScrollView.method("removeAllChildren", static_cast<void (ax::ui::ScrollView::*)()>(&ax::ui::ScrollView::removeAllChildren));
-    class_9_ScrollView.method("removeAllChildrenWithCleanup", static_cast<void (ax::ui::ScrollView::*)(bool)>(&ax::ui::ScrollView::removeAllChildrenWithCleanup));
-    class_9_ScrollView.method("removeChild", axlua::overload(axlua::overload_candidate<ax::Node *, bool>(static_cast<void (ax::ui::ScrollView::*)(ax::Node *, bool)>(&ax::ui::ScrollView::removeChild)), axlua::overload_candidate<ax::Node *>([](ax::ui::ScrollView& self, ax::Node * arg0) -> void { static_cast<ax::ui::ScrollView&>(self).removeChild(arg0, true); })));
     class_9_ScrollView.method("scrollToBottom", static_cast<void (ax::ui::ScrollView::*)(float, bool)>(&ax::ui::ScrollView::scrollToBottom));
     class_9_ScrollView.method("scrollToBottomLeft", static_cast<void (ax::ui::ScrollView::*)(float, bool)>(&ax::ui::ScrollView::scrollToBottomLeft));
     class_9_ScrollView.method("scrollToBottomRight", static_cast<void (ax::ui::ScrollView::*)(float, bool)>(&ax::ui::ScrollView::scrollToBottomRight));
@@ -233,7 +223,6 @@ void register_ax_ui_members_2(lua_State* L)
     class_9_ScrollView.method("setInertiaScrollEnabled", static_cast<void (ax::ui::ScrollView::*)(bool)>(&ax::ui::ScrollView::setInertiaScrollEnabled));
     class_9_ScrollView.method("setInnerContainerPosition", static_cast<void (ax::ui::ScrollView::*)(const ax::Vec2 &)>(&ax::ui::ScrollView::setInnerContainerPosition));
     class_9_ScrollView.method("setInnerContainerSize", static_cast<void (ax::ui::ScrollView::*)(const ax::Vec2 &)>(&ax::ui::ScrollView::setInnerContainerSize));
-    class_9_ScrollView.method("setLayoutType", static_cast<void (ax::ui::ScrollView::*)(ax::ui::LayoutGroup::Type)>(&ax::ui::ScrollView::setLayoutType));
     class_9_ScrollView.method("setScrollBarAutoHideEnabled", static_cast<void (ax::ui::ScrollView::*)(bool)>(&ax::ui::ScrollView::setScrollBarAutoHideEnabled));
     class_9_ScrollView.method("setScrollBarAutoHideTime", static_cast<void (ax::ui::ScrollView::*)(float)>(&ax::ui::ScrollView::setScrollBarAutoHideTime));
     class_9_ScrollView.method("setScrollBarColor", static_cast<void (ax::ui::ScrollView::*)(const ax::Color32 &)>(&ax::ui::ScrollView::setScrollBarColor));
@@ -261,17 +250,14 @@ void register_ax_ui_members_2(lua_State* L)
     class_10_Slider.method("getBallPressedFile", static_cast<ax::ResourceData (ax::ui::Slider::*)()>(&ax::ui::Slider::getBallPressedFile));
     class_10_Slider.method("getCapInsetsBarRenderer", static_cast<const ax::Rect & (ax::ui::Slider::*)() const>(&ax::ui::Slider::getCapInsetsBarRenderer));
     class_10_Slider.method("getCapInsetsProgressBarRenderer", static_cast<const ax::Rect & (ax::ui::Slider::*)() const>(&ax::ui::Slider::getCapInsetsProgressBarRenderer));
-    class_10_Slider.method("getDescription", static_cast<std::string (ax::ui::Slider::*)() const>(&ax::ui::Slider::getDescription));
     class_10_Slider.method("getMaxPercent", static_cast<int (ax::ui::Slider::*)() const>(&ax::ui::Slider::getMaxPercent));
     class_10_Slider.method("getPercent", static_cast<int (ax::ui::Slider::*)() const>(&ax::ui::Slider::getPercent));
     class_10_Slider.method("getProgressBarFile", static_cast<ax::ResourceData (ax::ui::Slider::*)()>(&ax::ui::Slider::getProgressBarFile));
-    class_10_Slider.method("getRenderNode", static_cast<ax::Node * (ax::ui::Slider::*)()>(&ax::ui::Slider::getRenderNode));
     class_10_Slider.method("getSlidBallDisabledRenderer", static_cast<ax::Sprite * (ax::ui::Slider::*)() const>(&ax::ui::Slider::getSlidBallDisabledRenderer));
     class_10_Slider.method("getSlidBallNormalRenderer", static_cast<ax::Sprite * (ax::ui::Slider::*)() const>(&ax::ui::Slider::getSlidBallNormalRenderer));
     class_10_Slider.method("getSlidBallPressedRenderer", static_cast<ax::Sprite * (ax::ui::Slider::*)() const>(&ax::ui::Slider::getSlidBallPressedRenderer));
     class_10_Slider.method("getSlidBallRenderer", static_cast<ax::Node * (ax::ui::Slider::*)() const>(&ax::ui::Slider::getSlidBallRenderer));
     class_10_Slider.method("getZoomScale", static_cast<float (ax::ui::Slider::*)() const>(&ax::ui::Slider::getZoomScale));
-    class_10_Slider.method("init", static_cast<bool (ax::ui::Slider::*)()>(&ax::ui::Slider::init));
     class_10_Slider.method("isScale9Enabled", static_cast<bool (ax::ui::Slider::*)() const>(&ax::ui::Slider::isScale9Enabled));
     class_10_Slider.method("loadBarTexture", axlua::overload(axlua::overload_candidate<std::string_view, ax::ui::Widget::TextureResType>(static_cast<void (ax::ui::Slider::*)(std::string_view, ax::ui::Widget::TextureResType)>(&ax::ui::Slider::loadBarTexture)), axlua::overload_candidate<std::string_view>([](ax::ui::Slider& self, std::string_view arg0) -> void { static_cast<ax::ui::Slider&>(self).loadBarTexture(arg0, ax::ui::Widget::TextureResType::LOCAL); })));
     class_10_Slider.method("loadProgressBarTexture", axlua::overload(axlua::overload_candidate<std::string_view, ax::ui::Widget::TextureResType>(static_cast<void (ax::ui::Slider::*)(std::string_view, ax::ui::Widget::TextureResType)>(&ax::ui::Slider::loadProgressBarTexture)), axlua::overload_candidate<std::string_view>([](ax::ui::Slider& self, std::string_view arg0) -> void { static_cast<ax::ui::Slider&>(self).loadProgressBarTexture(arg0, ax::ui::Widget::TextureResType::LOCAL); })));
@@ -285,7 +271,6 @@ void register_ax_ui_members_2(lua_State* L)
     class_10_Slider.method("onPointerMove", static_cast<void (ax::ui::Slider::*)(ax::PointerEvent *)>(&ax::ui::Slider::onPointerMove));
     class_10_Slider.method("onPointerUp", static_cast<void (ax::ui::Slider::*)(ax::PointerEvent *)>(&ax::ui::Slider::onPointerUp));
     class_10_Slider.method("resolvePreferredSize", static_cast<ax::Vec2 (ax::ui::Slider::*)(const ax::Vec2 &) const>(&ax::ui::Slider::resolvePreferredSize));
-    class_10_Slider.method("setAutoSize", static_cast<void (ax::ui::Slider::*)(bool)>(&ax::ui::Slider::setAutoSize));
     class_10_Slider.method("setCapInsetProgressBarRenderer", static_cast<void (ax::ui::Slider::*)(const ax::Rect &)>(&ax::ui::Slider::setCapInsetProgressBarRenderer));
     class_10_Slider.method("setCapInsets", static_cast<void (ax::ui::Slider::*)(const ax::Rect &)>(&ax::ui::Slider::setCapInsets));
     class_10_Slider.method("setCapInsetsBarRenderer", static_cast<void (ax::ui::Slider::*)(const ax::Rect &)>(&ax::ui::Slider::setCapInsetsBarRenderer));

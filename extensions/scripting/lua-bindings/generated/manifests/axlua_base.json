@@ -38,17 +38,6 @@
       ],
       "methods": [
         {
-          "nativeName": "checkAvailable",
-          "luaName": "checkAvailable",
-          "declaringType": "ax::AccelerationEventListener",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "clone",
           "luaName": "clone",
           "declaringType": "ax::AccelerationEventListener",
@@ -436,21 +425,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::ActionCamera",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -471,34 +445,7 @@
         "ax::Action",
         "ax::Object"
       ],
-      "methods": [
-        {
-          "nativeName": "isDone",
-          "luaName": "isDone",
-          "declaringType": "ax::ActionCoroutine",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "step",
-          "luaName": "step",
-          "declaringType": "ax::ActionCoroutine",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        }
-      ],
+      "methods": [],
       "fields": []
     },
     {
@@ -533,47 +480,6 @@
           "returnType": "bool",
           "parameterTypes": [
             "ax::ActionInterval *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::ActionEase",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "stop",
-          "luaName": "stop",
-          "declaringType": "ax::ActionEase",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::ActionEase",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
           ],
           "defaultValues": [
             null
@@ -667,36 +573,6 @@
           "isStatic": false,
           "isConst": true,
           "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::ActionFloat",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::ActionFloat",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -737,17 +613,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "isDone",
-          "luaName": "isDone",
-          "declaringType": "ax::ActionInstant",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "reverse",
           "luaName": "reverse",
           "declaringType": "ax::ActionInstant",
@@ -756,51 +621,6 @@
           "defaultValues": [],
           "isStatic": false,
           "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::ActionInstant",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "step",
-          "luaName": "step",
-          "declaringType": "ax::ActionInstant",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::ActionInstant",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
           "isVariadic": false
         }
       ],
@@ -868,17 +688,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "isDone",
-          "luaName": "isDone",
-          "declaringType": "ax::ActionInterval",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "reverse",
           "luaName": "reverse",
           "declaringType": "ax::ActionInterval",
@@ -892,36 +701,6 @@
         {
           "nativeName": "setAmplitudeRate",
           "luaName": "setAmplitudeRate",
-          "declaringType": "ax::ActionInterval",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::ActionInterval",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "step",
-          "luaName": "step",
           "declaringType": "ax::ActionInterval",
           "returnType": "void",
           "parameterTypes": [
@@ -1301,21 +1080,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::ActionTween",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -1362,17 +1126,6 @@
           ],
           "isStatic": true,
           "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getLightType",
-          "luaName": "getLightType",
-          "declaringType": "ax::AmbientLight",
-          "returnType": "ax::LightType",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
           "isVariadic": false
         }
       ],
@@ -1504,32 +1257,6 @@
           "returnType": "void",
           "parameterTypes": [
             "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "stop",
-          "luaName": "stop",
-          "declaringType": "ax::Animate",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::Animate",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
           ],
           "defaultValues": [
             null
@@ -2207,17 +1934,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getColor",
-          "luaName": "getColor",
-          "declaringType": "ax::AtlasNode",
-          "returnType": "const ax::Color32 \u0026",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getQuadsToDraw",
           "luaName": "getQuadsToDraw",
           "declaringType": "ax::AtlasNode",
@@ -2293,17 +2009,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "isOpacityModifyRGB",
-          "luaName": "isOpacityModifyRGB",
-          "declaringType": "ax::AtlasNode",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setBlendFunc",
           "luaName": "setBlendFunc",
           "declaringType": "ax::AtlasNode",
@@ -2313,68 +2018,6 @@
           ],
           "defaultValues": [
             null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setColor",
-          "luaName": "setColor",
-          "declaringType": "ax::AtlasNode",
-          "returnType": "void",
-          "parameterTypes": [
-            "const ax::Color32 \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setOpacity",
-          "luaName": "setOpacity",
-          "declaringType": "ax::AtlasNode",
-          "returnType": "void",
-          "parameterTypes": [
-            "uint8_t"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setOpacityModifyRGB",
-          "luaName": "setOpacityModifyRGB",
-          "declaringType": "ax::AtlasNode",
-          "returnType": "void",
-          "parameterTypes": [
-            "bool"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setProgramState",
-          "luaName": "setProgramState",
-          "declaringType": "ax::AtlasNode",
-          "returnType": "bool",
-          "parameterTypes": [
-            "rhi::ProgramState *",
-            "bool"
-          ],
-          "defaultValues": [
-            null,
-            "false"
           ],
           "isStatic": false,
           "isConst": false,
@@ -2635,21 +2278,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::BezierBy",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -2722,21 +2350,6 @@
           "defaultValues": [],
           "isStatic": false,
           "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::BezierTo",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
           "isVariadic": false
         }
       ],
@@ -2824,32 +2437,6 @@
           "returnType": "void",
           "parameterTypes": [
             "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "stop",
-          "luaName": "stop",
-          "declaringType": "ax::Blink",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::Blink",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
           ],
           "defaultValues": [
             null
@@ -3772,28 +3359,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getBrushType",
-          "luaName": "getBrushType",
-          "declaringType": "ax::CameraBackgroundColorBrush",
-          "returnType": "ax::CameraBackgroundBrush::BrushType",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::CameraBackgroundColorBrush",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setColor",
           "luaName": "setColor",
           "declaringType": "ax::CameraBackgroundColorBrush",
@@ -3840,28 +3405,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getBrushType",
-          "luaName": "getBrushType",
-          "declaringType": "ax::CameraBackgroundDepthBrush",
-          "returnType": "ax::CameraBackgroundBrush::BrushType",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::CameraBackgroundDepthBrush",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         },
@@ -3937,17 +3480,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getBrushType",
-          "luaName": "getBrushType",
-          "declaringType": "ax::CameraBackgroundSkyBoxBrush",
-          "returnType": "ax::CameraBackgroundBrush::BrushType",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getTexture",
           "luaName": "getTexture",
           "declaringType": "ax::CameraBackgroundSkyBoxBrush",
@@ -3959,17 +3491,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::CameraBackgroundSkyBoxBrush",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "isActived",
           "luaName": "isActived",
           "declaringType": "ax::CameraBackgroundSkyBoxBrush",
@@ -3978,17 +3499,6 @@
           "defaultValues": [],
           "isStatic": false,
           "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "isValid",
-          "luaName": "isValid",
-          "declaringType": "ax::CameraBackgroundSkyBoxBrush",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
           "isVariadic": false
         },
         {
@@ -4080,36 +3590,6 @@
           "isStatic": false,
           "isConst": true,
           "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::CardinalSplineBy",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "updatePosition",
-          "luaName": "updatePosition",
-          "declaringType": "ax::CardinalSplineBy",
-          "returnType": "void",
-          "parameterTypes": [
-            "const ax::Vec2 \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -4192,21 +3672,6 @@
           "returnType": "void",
           "parameterTypes": [
             "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::CardinalSplineTo",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
           ],
           "defaultValues": [
             null
@@ -4459,38 +3924,6 @@
         {
           "nativeName": "setAlphaThreshold",
           "luaName": "setAlphaThreshold",
-          "declaringType": "ax::ClippingNode",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setCameraMask",
-          "luaName": "setCameraMask",
-          "declaringType": "ax::ClippingNode",
-          "returnType": "void",
-          "parameterTypes": [
-            "unsigned short",
-            "bool"
-          ],
-          "defaultValues": [
-            null,
-            "true"
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setGlobalZOrder",
-          "luaName": "setGlobalZOrder",
           "declaringType": "ax::ClippingNode",
           "returnType": "void",
           "parameterTypes": [
@@ -4808,21 +4241,6 @@
           "isStatic": true,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::ComponentLua",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -4879,17 +4297,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "checkAvailable",
-          "luaName": "checkAvailable",
-          "declaringType": "ax::CustomEventListener",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
         {
           "nativeName": "clone",
           "luaName": "clone",
@@ -4975,21 +4382,6 @@
           "defaultValues": [],
           "isStatic": false,
           "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::DelayTime",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
           "isVariadic": false
         }
       ],
@@ -5340,17 +4732,6 @@
           "luaName": "getDirectionInWorld",
           "declaringType": "ax::DirectionLight",
           "returnType": "ax::Vec3",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getLightType",
-          "luaName": "getLightType",
-          "declaringType": "ax::DirectionLight",
-          "returnType": "ax::LightType",
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": false,
@@ -6986,17 +6367,6 @@
           "defaultValues": [],
           "isStatic": false,
           "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::DrawNode",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
           "isVariadic": false
         },
         {
@@ -10356,38 +9726,12 @@
           "isVariadic": false
         },
         {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::FadeIn",
-          "returnType": "ax::FadeTo *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setReverseAction",
           "luaName": "setReverseAction",
           "declaringType": "ax::FadeIn",
           "returnType": "void",
           "parameterTypes": [
             "ax::FadeTo *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::FadeIn",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
           ],
           "defaultValues": [
             null
@@ -10446,38 +9790,12 @@
           "isVariadic": false
         },
         {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::FadeOut",
-          "returnType": "ax::FadeTo *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setReverseAction",
           "luaName": "setReverseAction",
           "declaringType": "ax::FadeOut",
           "returnType": "void",
           "parameterTypes": [
             "ax::FadeTo *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::FadeOut",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
           ],
           "defaultValues": [
             null
@@ -10538,23 +9856,6 @@
           "isStatic": true,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "testFunc",
-          "luaName": "testFunc",
-          "declaringType": "ax::FadeOutBLTiles",
-          "returnType": "float",
-          "parameterTypes": [
-            "const ax::Vec2 \u0026",
-            "float"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -10607,23 +9908,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "testFunc",
-          "luaName": "testFunc",
-          "declaringType": "ax::FadeOutDownTiles",
-          "returnType": "float",
-          "parameterTypes": [
-            "const ax::Vec2 \u0026",
-            "float"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -10742,21 +10026,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::FadeOutTRTiles",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -10808,40 +10077,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "testFunc",
-          "luaName": "testFunc",
-          "declaringType": "ax::FadeOutUpTiles",
-          "returnType": "float",
-          "parameterTypes": [
-            "const ax::Vec2 \u0026",
-            "float"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "transformTile",
-          "luaName": "transformTile",
-          "declaringType": "ax::FadeOutUpTiles",
-          "returnType": "void",
-          "parameterTypes": [
-            "const ax::Vec2 \u0026",
-            "float"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -10937,21 +10172,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::FadeTo",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -10984,17 +10204,6 @@
           "defaultValues": [
             null
           ],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getDescription",
-          "luaName": "getDescription",
-          "declaringType": "ax::FastTMXLayer",
-          "returnType": "std::string",
-          "parameterTypes": [],
-          "defaultValues": [],
           "isStatic": false,
           "isConst": true,
           "isVariadic": false
@@ -11135,23 +10344,6 @@
             null,
             null,
             null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "removeChild",
-          "luaName": "removeChild",
-          "declaringType": "ax::FastTMXLayer",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *",
-            "bool"
-          ],
-          "defaultValues": [
-            null,
-            "true"
           ],
           "isStatic": false,
           "isConst": false,
@@ -11367,17 +10559,6 @@
           ],
           "isStatic": true,
           "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getDescription",
-          "luaName": "getDescription",
-          "declaringType": "ax::FastTMXTiledMap",
-          "returnType": "std::string",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
           "isVariadic": false
         },
         {
@@ -12479,21 +11660,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::FlipX3D",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -12696,17 +11862,6 @@
       ],
       "methods": [
         {
-          "nativeName": "checkAvailable",
-          "luaName": "checkAvailable",
-          "declaringType": "ax::FocusEventListener",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "clone",
           "luaName": "clone",
           "declaringType": "ax::FocusEventListener",
@@ -12858,17 +12013,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "isDone",
-          "luaName": "isDone",
-          "declaringType": "ax::Follow",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "reverse",
           "luaName": "reverse",
           "declaringType": "ax::Follow",
@@ -12893,32 +12037,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "step",
-          "luaName": "step",
-          "declaringType": "ax::Follow",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "stop",
-          "luaName": "stop",
-          "declaringType": "ax::Follow",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -12940,39 +12058,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "afterBlit",
-          "luaName": "afterBlit",
-          "declaringType": "ax::Grid3D",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "beforeBlit",
-          "luaName": "beforeBlit",
-          "declaringType": "ax::Grid3D",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "calculateVertexPoints",
-          "luaName": "calculateVertexPoints",
-          "declaringType": "ax::Grid3D",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
         {
           "nativeName": "create",
           "luaName": "create",
@@ -13057,17 +12142,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "reuse",
-          "luaName": "reuse",
-          "declaringType": "ax::Grid3D",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setNeedDepthTestForBlit",
           "luaName": "setNeedDepthTestForBlit",
           "declaringType": "ax::Grid3D",
@@ -13109,17 +12183,6 @@
           "defaultValues": [],
           "isStatic": false,
           "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getGrid",
-          "luaName": "getGrid",
-          "declaringType": "ax::Grid3DAction",
-          "returnType": "ax::GridBase *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
           "isVariadic": false
         },
         {
@@ -13557,17 +12620,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::Hide",
-          "returnType": "ax::ActionInstant *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "update",
           "luaName": "update",
           "declaringType": "ax::Hide",
@@ -13923,21 +12975,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::JumpBy",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -14067,21 +13104,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::JumpTiles3D",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -14168,21 +13190,6 @@
           "defaultValues": [],
           "isStatic": false,
           "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::JumpTo",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
           "isVariadic": false
         }
       ],
@@ -14276,17 +13283,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "checkAvailable",
-          "luaName": "checkAvailable",
-          "declaringType": "ax::KeyboardEventListener",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
         {
           "nativeName": "clone",
           "luaName": "clone",
@@ -14717,43 +13713,10 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getBoundingBox",
-          "luaName": "getBoundingBox",
-          "declaringType": "ax::Label",
-          "returnType": "ax::Rect",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getCharCount",
           "luaName": "getCharCount",
           "declaringType": "ax::Label",
           "returnType": "int",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getContentSize",
-          "luaName": "getContentSize",
-          "declaringType": "ax::Label",
-          "returnType": "const ax::Vec2 \u0026",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getDescription",
-          "luaName": "getDescription",
-          "declaringType": "ax::Label",
-          "returnType": "std::string",
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": false,
@@ -15141,17 +14104,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "isOpacityModifyRGB",
-          "luaName": "isOpacityModifyRGB",
-          "declaringType": "ax::Label",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "isShadowEnabled",
           "luaName": "isShadowEnabled",
           "declaringType": "ax::Label",
@@ -15183,23 +14135,6 @@
           ],
           "defaultValues": [
             null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "removeChild",
-          "luaName": "removeChild",
-          "declaringType": "ax::Label",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *",
-            "bool"
-          ],
-          "defaultValues": [
-            null,
-            "true"
           ],
           "isStatic": false,
           "isConst": false,
@@ -15351,23 +14286,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "setCameraMask",
-          "luaName": "setCameraMask",
-          "declaringType": "ax::Label",
-          "returnType": "void",
-          "parameterTypes": [
-            "unsigned short",
-            "bool"
-          ],
-          "defaultValues": [
-            null,
-            "true"
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setCharMap",
           "luaName": "setCharMap",
           "declaringType": "ax::Label",
@@ -15474,21 +14392,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "setGlobalZOrder",
-          "luaName": "setGlobalZOrder",
-          "declaringType": "ax::Label",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setHeight",
           "luaName": "setHeight",
           "declaringType": "ax::Label",
@@ -15579,21 +14482,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "setOpacityModifyRGB",
-          "luaName": "setOpacityModifyRGB",
-          "declaringType": "ax::Label",
-          "returnType": "void",
-          "parameterTypes": [
-            "bool"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setOverflow",
           "luaName": "setOverflow",
           "declaringType": "ax::Label",
@@ -15603,23 +14491,6 @@
           ],
           "defaultValues": [
             null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setProgramState",
-          "luaName": "setProgramState",
-          "declaringType": "ax::Label",
-          "returnType": "bool",
-          "parameterTypes": [
-            "rhi::ProgramState *",
-            "bool"
-          ],
-          "defaultValues": [
-            null,
-            "false"
           ],
           "isStatic": false,
           "isConst": false,
@@ -15755,36 +14626,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "updateDisplayedColor",
-          "luaName": "updateDisplayedColor",
-          "declaringType": "ax::Label",
-          "returnType": "void",
-          "parameterTypes": [
-            "const ax::Color32 \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "updateDisplayedOpacity",
-          "luaName": "updateDisplayedOpacity",
-          "declaringType": "ax::Label",
-          "returnType": "void",
-          "parameterTypes": [
-            "uint8_t"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -15874,17 +14715,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getDescription",
-          "luaName": "getDescription",
-          "declaringType": "ax::LabelAtlas",
-          "returnType": "std::string",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getString",
           "luaName": "getString",
           "declaringType": "ax::LabelAtlas",
@@ -15969,17 +14799,6 @@
           "defaultValues": [
             null
           ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "updateAtlasValues",
-          "luaName": "updateAtlasValues",
-          "declaringType": "ax::LabelAtlas",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
@@ -16137,17 +14956,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::LayerColor",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "initWithColor",
           "luaName": "initWithColor",
           "declaringType": "ax::LayerColor",
@@ -16250,17 +15058,6 @@
           ],
           "isStatic": true,
           "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getDescription",
-          "luaName": "getDescription",
-          "declaringType": "ax::LayerGradient",
-          "returnType": "std::string",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
           "isVariadic": false
         },
         {
@@ -16497,28 +15294,6 @@
           "defaultValues": [
             null
           ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getDescription",
-          "luaName": "getDescription",
-          "declaringType": "ax::LayerMultiplex",
-          "returnType": "std::string",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::LayerMultiplex",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
@@ -16781,21 +15556,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "setContentSize",
-          "luaName": "setContentSize",
-          "declaringType": "ax::LayerRadialGradient",
-          "returnType": "void",
-          "parameterTypes": [
-            "const ax::Vec2 \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setEndColor",
           "luaName": "setEndColor",
           "declaringType": "ax::LayerRadialGradient",
@@ -17028,21 +15788,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::Lens3D",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -17161,21 +15906,6 @@
         {
           "nativeName": "setAmplitudeRate",
           "luaName": "setAmplitudeRate",
-          "declaringType": "ax::Liquid",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
           "declaringType": "ax::Liquid",
           "returnType": "void",
           "parameterTypes": [
@@ -17527,76 +16257,6 @@
       ],
       "methods": [
         {
-          "nativeName": "addChild",
-          "luaName": "addChild",
-          "declaringType": "ax::Menu",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "addChild",
-          "luaName": "addChild",
-          "declaringType": "ax::Menu",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *",
-            "int"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "addChild",
-          "luaName": "addChild",
-          "declaringType": "ax::Menu",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *",
-            "int",
-            "int"
-          ],
-          "defaultValues": [
-            null,
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "addChild",
-          "luaName": "addChild",
-          "declaringType": "ax::Menu",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *",
-            "int",
-            "std::string_view"
-          ],
-          "defaultValues": [
-            null,
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "alignItemsHorizontally",
           "luaName": "alignItemsHorizontally",
           "declaringType": "ax::Menu",
@@ -17649,28 +16309,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getDescription",
-          "luaName": "getDescription",
-          "declaringType": "ax::Menu",
-          "returnType": "std::string",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::Menu",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "initWithArray",
           "luaName": "initWithArray",
           "declaringType": "ax::Menu",
@@ -17688,17 +16326,6 @@
         {
           "nativeName": "isEnabled",
           "luaName": "isEnabled",
-          "declaringType": "ax::Menu",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "isOpacityModifyRGB",
-          "luaName": "isOpacityModifyRGB",
           "declaringType": "ax::Menu",
           "returnType": "bool",
           "parameterTypes": [],
@@ -17738,23 +16365,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "onPointerHitTest",
-          "luaName": "onPointerHitTest",
-          "declaringType": "ax::Menu",
-          "returnType": "bool",
-          "parameterTypes": [
-            "ax::PointerEvent *",
-            "ax::Vec3 *"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "onPointerMove",
           "luaName": "onPointerMove",
           "declaringType": "ax::Menu",
@@ -17785,40 +16395,8 @@
           "isVariadic": false
         },
         {
-          "nativeName": "removeChild",
-          "luaName": "removeChild",
-          "declaringType": "ax::Menu",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *",
-            "bool"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setEnabled",
           "luaName": "setEnabled",
-          "declaringType": "ax::Menu",
-          "returnType": "void",
-          "parameterTypes": [
-            "bool"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setOpacityModifyRGB",
-          "luaName": "setOpacityModifyRGB",
           "declaringType": "ax::Menu",
           "returnType": "void",
           "parameterTypes": [
@@ -17860,17 +16438,6 @@
           "defaultValues": [],
           "isStatic": false,
           "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getDescription",
-          "luaName": "getDescription",
-          "declaringType": "ax::MenuItem",
-          "returnType": "std::string",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
           "isVariadic": false
         },
         {
@@ -18203,17 +16770,6 @@
       ],
       "methods": [
         {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::MenuItemImage",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "initWithNormalImage",
           "luaName": "initWithNormalImage",
           "declaringType": "ax::MenuItemImage",
@@ -18301,17 +16857,6 @@
       ],
       "methods": [
         {
-          "nativeName": "activate",
-          "luaName": "activate",
-          "declaringType": "ax::MenuItemLabel",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getDisabledColor",
           "luaName": "getDisabledColor",
           "declaringType": "ax::MenuItemLabel",
@@ -18362,38 +16907,12 @@
           "isVariadic": false
         },
         {
-          "nativeName": "selected",
-          "luaName": "selected",
-          "declaringType": "ax::MenuItemLabel",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setDisabledColor",
           "luaName": "setDisabledColor",
           "declaringType": "ax::MenuItemLabel",
           "returnType": "void",
           "parameterTypes": [
             "const ax::Color32 \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setEnabled",
-          "luaName": "setEnabled",
-          "declaringType": "ax::MenuItemLabel",
-          "returnType": "void",
-          "parameterTypes": [
-            "bool"
           ],
           "defaultValues": [
             null
@@ -18428,17 +16947,6 @@
           "defaultValues": [
             null
           ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "unselected",
-          "luaName": "unselected",
-          "declaringType": "ax::MenuItemLabel",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
@@ -18519,38 +17027,12 @@
           "isVariadic": false
         },
         {
-          "nativeName": "selected",
-          "luaName": "selected",
-          "declaringType": "ax::MenuItemSprite",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setDisabledImage",
           "luaName": "setDisabledImage",
           "declaringType": "ax::MenuItemSprite",
           "returnType": "void",
           "parameterTypes": [
             "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setEnabled",
-          "luaName": "setEnabled",
-          "declaringType": "ax::MenuItemSprite",
-          "returnType": "void",
-          "parameterTypes": [
-            "bool"
           ],
           "defaultValues": [
             null
@@ -18588,17 +17070,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "unselected",
-          "luaName": "unselected",
-          "declaringType": "ax::MenuItemSprite",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -18622,17 +17093,6 @@
       ],
       "methods": [
         {
-          "nativeName": "activate",
-          "luaName": "activate",
-          "declaringType": "ax::MenuItemToggle",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "addSubItem",
           "luaName": "addSubItem",
           "declaringType": "ax::MenuItemToggle",
@@ -18643,17 +17103,6 @@
           "defaultValues": [
             null
           ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "cleanup",
-          "luaName": "cleanup",
-          "declaringType": "ax::MenuItemToggle",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
@@ -18696,32 +17145,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "selected",
-          "luaName": "selected",
-          "declaringType": "ax::MenuItemToggle",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setEnabled",
-          "luaName": "setEnabled",
-          "declaringType": "ax::MenuItemToggle",
-          "returnType": "void",
-          "parameterTypes": [
-            "bool"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setSelectedIndex",
           "luaName": "setSelectedIndex",
           "declaringType": "ax::MenuItemToggle",
@@ -18747,17 +17170,6 @@
           "defaultValues": [
             null
           ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "unselected",
-          "luaName": "unselected",
-          "declaringType": "ax::MenuItemToggle",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
@@ -18842,54 +17254,10 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getOpacity",
-          "luaName": "getOpacity",
-          "declaringType": "ax::MotionStreak",
-          "returnType": "uint8_t",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getPosition",
           "luaName": "getPosition",
           "declaringType": "ax::MotionStreak",
           "returnType": "const ax::Vec2 \u0026",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getPosition3D",
-          "luaName": "getPosition3D",
-          "declaringType": "ax::MotionStreak",
-          "returnType": "ax::Vec3",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getPositionX",
-          "luaName": "getPositionX",
-          "declaringType": "ax::MotionStreak",
-          "returnType": "float",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getPositionY",
-          "luaName": "getPositionY",
-          "declaringType": "ax::MotionStreak",
-          "returnType": "float",
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": false,
@@ -18976,17 +17344,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "isOpacityModifyRGB",
-          "luaName": "isOpacityModifyRGB",
-          "declaringType": "ax::MotionStreak",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "isStartingPositionInitialized",
           "luaName": "isStartingPositionInitialized",
           "declaringType": "ax::MotionStreak",
@@ -19033,115 +17390,6 @@
           ],
           "defaultValues": [
             null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setOpacity",
-          "luaName": "setOpacity",
-          "declaringType": "ax::MotionStreak",
-          "returnType": "void",
-          "parameterTypes": [
-            "uint8_t"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setOpacityModifyRGB",
-          "luaName": "setOpacityModifyRGB",
-          "declaringType": "ax::MotionStreak",
-          "returnType": "void",
-          "parameterTypes": [
-            "bool"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setPosition",
-          "luaName": "setPosition",
-          "declaringType": "ax::MotionStreak",
-          "returnType": "void",
-          "parameterTypes": [
-            "const ax::Vec2 \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setPosition",
-          "luaName": "setPosition",
-          "declaringType": "ax::MotionStreak",
-          "returnType": "void",
-          "parameterTypes": [
-            "float",
-            "float"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setPositionX",
-          "luaName": "setPositionX",
-          "declaringType": "ax::MotionStreak",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setPositionY",
-          "luaName": "setPositionY",
-          "declaringType": "ax::MotionStreak",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setProgramState",
-          "luaName": "setProgramState",
-          "declaringType": "ax::MotionStreak",
-          "returnType": "bool",
-          "parameterTypes": [
-            "rhi::ProgramState *",
-            "bool"
-          ],
-          "defaultValues": [
-            null,
-            "false"
           ],
           "isStatic": false,
           "isConst": false,
@@ -19333,21 +17581,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::MoveBy",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -19460,21 +17693,6 @@
           "defaultValues": [],
           "isStatic": false,
           "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::MoveTo",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
           "isVariadic": false
         }
       ],
@@ -22108,21 +20326,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::OrbitCamera",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -22178,21 +20381,6 @@
           "returnType": "ax::GridBase *",
           "parameterTypes": [],
           "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::PageTurn3D",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
@@ -22328,23 +20516,6 @@
             "bool"
           ],
           "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "removeChild",
-          "luaName": "removeChild",
-          "declaringType": "ax::ParallaxNode",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *",
-            "bool"
-          ],
-          "defaultValues": [
-            null,
             null
           ],
           "isStatic": false,
@@ -22603,23 +20774,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "removeChild",
-          "luaName": "removeChild",
-          "declaringType": "ax::ParticleBatchNode",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *",
-            "bool"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "removeChildAtIndex",
           "luaName": "removeChildAtIndex",
           "declaringType": "ax::ParticleBatchNode",
@@ -22627,23 +20781,6 @@
           "parameterTypes": [
             "int",
             "bool"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reorderChild",
-          "luaName": "reorderChild",
-          "declaringType": "ax::ParticleBatchNode",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *",
-            "int"
           ],
           "defaultValues": [
             null,
@@ -22957,17 +21094,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::ParticleExplosion",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "initWithTotalParticles",
           "luaName": "initWithTotalParticles",
           "declaringType": "ax::ParticleExplosion",
@@ -23030,17 +21156,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::ParticleFire",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         },
@@ -23111,17 +21226,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::ParticleFireworks",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "initWithTotalParticles",
           "luaName": "initWithTotalParticles",
           "declaringType": "ax::ParticleFireworks",
@@ -23184,17 +21288,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::ParticleFlower",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         },
@@ -23276,17 +21369,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::ParticleGalaxy",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "initWithTotalParticles",
           "luaName": "initWithTotalParticles",
           "declaringType": "ax::ParticleGalaxy",
@@ -23349,17 +21431,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::ParticleMeteor",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         },
@@ -23430,17 +21501,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::ParticleRain",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "initWithTotalParticles",
           "luaName": "initWithTotalParticles",
           "declaringType": "ax::ParticleRain",
@@ -23503,17 +21563,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::ParticleSmoke",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         },
@@ -23584,17 +21633,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::ParticleSnow",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "initWithTotalParticles",
           "luaName": "initWithTotalParticles",
           "declaringType": "ax::ParticleSnow",
@@ -23661,17 +21699,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::ParticleSpiral",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "initWithTotalParticles",
           "luaName": "initWithTotalParticles",
           "declaringType": "ax::ParticleSpiral",
@@ -23734,17 +21761,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::ParticleSun",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         },
@@ -24723,17 +22739,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::ParticleSystem",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "initWithFile",
           "luaName": "initWithFile",
           "declaringType": "ax::ParticleSystem",
@@ -24882,17 +22887,6 @@
           "defaultValues": [],
           "isStatic": false,
           "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "isOpacityModifyRGB",
-          "luaName": "isOpacityModifyRGB",
-          "declaringType": "ax::ParticleSystem",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
           "isVariadic": false
         },
         {
@@ -25603,21 +23597,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "setOpacityModifyRGB",
-          "luaName": "setOpacityModifyRGB",
-          "declaringType": "ax::ParticleSystem",
-          "returnType": "void",
-          "parameterTypes": [
-            "bool"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setPosVar",
           "luaName": "setPosVar",
           "declaringType": "ax::ParticleSystem",
@@ -25723,72 +23702,12 @@
           "isVariadic": false
         },
         {
-          "nativeName": "setRotation",
-          "luaName": "setRotation",
-          "declaringType": "ax::ParticleSystem",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setRotationIsDir",
           "luaName": "setRotationIsDir",
           "declaringType": "ax::ParticleSystem",
           "returnType": "void",
           "parameterTypes": [
             "bool"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setScale",
-          "luaName": "setScale",
-          "declaringType": "ax::ParticleSystem",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setScaleX",
-          "luaName": "setScaleX",
-          "declaringType": "ax::ParticleSystem",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setScaleY",
-          "luaName": "setScaleY",
-          "declaringType": "ax::ParticleSystem",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
           ],
           "defaultValues": [
             null
@@ -26193,21 +24112,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::ParticleSystem",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "updateParticleQuads",
           "luaName": "updateParticleQuads",
           "declaringType": "ax::ParticleSystem",
@@ -26310,17 +24214,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getDescription",
-          "luaName": "getDescription",
-          "declaringType": "ax::ParticleSystemQuad",
-          "returnType": "std::string",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "listenRendererRecreated",
           "luaName": "listenRendererRecreated",
           "declaringType": "ax::ParticleSystemQuad",
@@ -26363,17 +24256,6 @@
             null,
             null
           ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "updateParticleQuads",
-          "luaName": "updateParticleQuads",
-          "declaringType": "ax::ParticleSystemQuad",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
@@ -26741,17 +24623,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getLightType",
-          "luaName": "getLightType",
-          "declaringType": "ax::PointLight",
-          "returnType": "ax::LightType",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getRange",
           "luaName": "getRange",
           "declaringType": "ax::PointLight",
@@ -27063,17 +24934,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "checkAvailable",
-          "luaName": "checkAvailable",
-          "declaringType": "ax::PointerEventListener",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
         {
           "nativeName": "clone",
           "luaName": "clone",
@@ -27534,21 +25394,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::ProgressFromTo",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -27597,43 +25442,10 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getColor",
-          "luaName": "getColor",
-          "declaringType": "ax::ProgressTimer",
-          "returnType": "const ax::Color32 \u0026",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getDisplayedOpacity",
-          "luaName": "getDisplayedOpacity",
-          "declaringType": "ax::ProgressTimer",
-          "returnType": "uint8_t",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getMidpoint",
           "luaName": "getMidpoint",
           "declaringType": "ax::ProgressTimer",
           "returnType": "ax::Vec2",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getOpacity",
-          "luaName": "getOpacity",
-          "declaringType": "ax::ProgressTimer",
-          "returnType": "uint8_t",
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": false,
@@ -27730,57 +25542,12 @@
           "isVariadic": false
         },
         {
-          "nativeName": "setColor",
-          "luaName": "setColor",
-          "declaringType": "ax::ProgressTimer",
-          "returnType": "void",
-          "parameterTypes": [
-            "const ax::Color32 \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setContentSize",
-          "luaName": "setContentSize",
-          "declaringType": "ax::ProgressTimer",
-          "returnType": "void",
-          "parameterTypes": [
-            "const ax::Vec2 \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setMidpoint",
           "luaName": "setMidpoint",
           "declaringType": "ax::ProgressTimer",
           "returnType": "void",
           "parameterTypes": [
             "const ax::Vec2 \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setOpacity",
-          "luaName": "setOpacity",
-          "declaringType": "ax::ProgressTimer",
-          "returnType": "void",
-          "parameterTypes": [
-            "uint8_t"
           ],
           "defaultValues": [
             null
@@ -27934,21 +25701,6 @@
           "returnType": "void",
           "parameterTypes": [
             "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::ProgressTo",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
           ],
           "defaultValues": [
             null
@@ -28464,17 +26216,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "cleanup",
-          "luaName": "cleanup",
-          "declaringType": "ax::ProtectedNode",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::ProtectedNode",
@@ -28626,74 +26367,12 @@
           "isVariadic": false
         },
         {
-          "nativeName": "setCameraMask",
-          "luaName": "setCameraMask",
-          "declaringType": "ax::ProtectedNode",
-          "returnType": "void",
-          "parameterTypes": [
-            "unsigned short",
-            "bool"
-          ],
-          "defaultValues": [
-            null,
-            "true"
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setGlobalZOrder",
-          "luaName": "setGlobalZOrder",
-          "declaringType": "ax::ProtectedNode",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "sortAllProtectedChildren",
           "luaName": "sortAllProtectedChildren",
           "declaringType": "ax::ProtectedNode",
           "returnType": "void",
           "parameterTypes": [],
           "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "updateDisplayedColor",
-          "luaName": "updateDisplayedColor",
-          "declaringType": "ax::ProtectedNode",
-          "returnType": "void",
-          "parameterTypes": [
-            "const ax::Color32 \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "updateDisplayedOpacity",
-          "luaName": "updateDisplayedOpacity",
-          "declaringType": "ax::ProtectedNode",
-          "returnType": "void",
-          "parameterTypes": [
-            "uint8_t"
-          ],
-          "defaultValues": [
-            null
-          ],
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
@@ -29357,65 +27036,6 @@
             "false"
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getNativeDisplay",
-          "luaName": "getNativeDisplay",
-          "declaringType": "ax::RenderView",
-          "returnType": "ax::SurfaceHandle",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getSafeAreaRect",
-          "luaName": "getSafeAreaRect",
-          "declaringType": "ax::RenderView",
-          "returnType": "ax::Rect",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getWindowPlatform",
-          "luaName": "getWindowPlatform",
-          "declaringType": "ax::RenderView",
-          "returnType": "ax::WindowPlatform",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "isGfxContextReady",
-          "luaName": "isGfxContextReady",
-          "declaringType": "ax::RenderView",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setIMEKeyboardState",
-          "luaName": "setIMEKeyboardState",
-          "declaringType": "ax::RenderView",
-          "returnType": "void",
-          "parameterTypes": [
-            "bool"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -30879,32 +28499,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "stop",
-          "luaName": "stop",
-          "declaringType": "ax::Repeat",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::Repeat",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -31298,21 +28892,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::Ripple3D",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -31478,21 +29057,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::RotateBy",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -31641,21 +29205,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::RotateTo",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -31757,21 +29306,6 @@
           "defaultValues": [],
           "isStatic": false,
           "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::ScaleBy",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
           "isVariadic": false
         }
       ],
@@ -31946,21 +29480,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::ScaleTo",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -32112,17 +29631,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getDescription",
-          "luaName": "getDescription",
-          "declaringType": "ax::Scene",
-          "returnType": "std::string",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getPhysicsInterpolationAlpha",
           "luaName": "getPhysicsInterpolationAlpha",
           "declaringType": "ax::Scene",
@@ -32142,17 +29650,6 @@
           "defaultValues": [],
           "isStatic": false,
           "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::Scene",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
           "isVariadic": false
         },
         {
@@ -32201,17 +29698,6 @@
           "defaultValues": [],
           "isStatic": false,
           "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "removeAllChildren",
-          "luaName": "removeAllChildren",
-          "declaringType": "ax::Scene",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
           "isVariadic": false
         },
         {
@@ -32487,32 +29973,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "stop",
-          "luaName": "stop",
-          "declaringType": "ax::Sequence",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::Sequence",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -32585,21 +30045,6 @@
             null,
             null,
             null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::Shaky3D",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
             null
           ],
           "isStatic": false,
@@ -32682,21 +30127,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::ShakyTiles3D",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -32774,21 +30204,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::ShatteredTiles3D",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -32832,17 +30247,6 @@
           "defaultValues": [],
           "isStatic": true,
           "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::Show",
-          "returnType": "ax::ActionInstant *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
           "isVariadic": false
         },
         {
@@ -32947,36 +30351,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::ShuffleTiles",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::ShuffleTiles",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -33059,21 +30433,6 @@
           "defaultValues": [],
           "isStatic": false,
           "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::SkewBy",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
           "isVariadic": false
         }
       ],
@@ -33172,21 +30531,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::SkewTo",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -33271,32 +30615,6 @@
           "returnType": "void",
           "parameterTypes": [
             "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "stop",
-          "luaName": "stop",
-          "declaringType": "ax::Spawn",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::Spawn",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
           ],
           "defaultValues": [
             null
@@ -33393,17 +30711,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "isDone",
-          "luaName": "isDone",
-          "declaringType": "ax::Speed",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "reverse",
           "luaName": "reverse",
           "declaringType": "ax::Speed",
@@ -33440,47 +30747,6 @@
           "defaultValues": [
             null
           ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::Speed",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "step",
-          "luaName": "step",
-          "declaringType": "ax::Speed",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "stop",
-          "luaName": "stop",
-          "declaringType": "ax::Speed",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
@@ -33553,36 +30819,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::SplitCols",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::SplitCols",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -33647,36 +30883,6 @@
           ],
           "defaultValues": [
             null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::SplitRows",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::SplitRows",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
             null
           ],
           "isStatic": false,
@@ -33778,17 +30984,6 @@
           "luaName": "getInnerAngle",
           "declaringType": "ax::SpotLight",
           "returnType": "float",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getLightType",
-          "luaName": "getLightType",
-          "declaringType": "ax::SpotLight",
-          "returnType": "ax::LightType",
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": false,
@@ -34089,17 +31284,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getDescription",
-          "luaName": "getDescription",
-          "declaringType": "ax::Sprite",
-          "returnType": "std::string",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getOffsetPosition",
           "luaName": "getOffsetPosition",
           "declaringType": "ax::Sprite",
@@ -34174,17 +31358,6 @@
           "defaultValues": [],
           "isStatic": false,
           "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::Sprite",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
           "isVariadic": false
         },
         {
@@ -34383,17 +31556,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "isOpacityModifyRGB",
-          "luaName": "isOpacityModifyRGB",
-          "declaringType": "ax::Sprite",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "isStretchEnabled",
           "luaName": "isStretchEnabled",
           "declaringType": "ax::Sprite",
@@ -34424,40 +31586,6 @@
             "bool"
           ],
           "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "removeChild",
-          "luaName": "removeChild",
-          "declaringType": "ax::Sprite",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *",
-            "bool"
-          ],
-          "defaultValues": [
-            null,
-            "true"
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reorderChild",
-          "luaName": "reorderChild",
-          "declaringType": "ax::Sprite",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *",
-            "int"
-          ],
-          "defaultValues": [
-            null,
             null
           ],
           "isStatic": false,
@@ -34585,21 +31713,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "setContentSize",
-          "luaName": "setContentSize",
-          "declaringType": "ax::Sprite",
-          "returnType": "void",
-          "parameterTypes": [
-            "const ax::Vec2 \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setDirty",
           "luaName": "setDirty",
           "declaringType": "ax::Sprite",
@@ -34653,252 +31766,6 @@
           "returnType": "void",
           "parameterTypes": [
             "bool"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setIgnoreAnchorPointForPosition",
-          "luaName": "setIgnoreAnchorPointForPosition",
-          "declaringType": "ax::Sprite",
-          "returnType": "void",
-          "parameterTypes": [
-            "bool"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setOpacityModifyRGB",
-          "luaName": "setOpacityModifyRGB",
-          "declaringType": "ax::Sprite",
-          "returnType": "void",
-          "parameterTypes": [
-            "bool"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setPosition",
-          "luaName": "setPosition",
-          "declaringType": "ax::Sprite",
-          "returnType": "void",
-          "parameterTypes": [
-            "const ax::Vec2 \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setPosition",
-          "luaName": "setPosition",
-          "declaringType": "ax::Sprite",
-          "returnType": "void",
-          "parameterTypes": [
-            "float",
-            "float"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setPositionZ",
-          "luaName": "setPositionZ",
-          "declaringType": "ax::Sprite",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setProgramState",
-          "luaName": "setProgramState",
-          "declaringType": "ax::Sprite",
-          "returnType": "void",
-          "parameterTypes": [
-            "uint32_t"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setProgramState",
-          "luaName": "setProgramState",
-          "declaringType": "ax::Sprite",
-          "returnType": "bool",
-          "parameterTypes": [
-            "rhi::ProgramState *",
-            "bool"
-          ],
-          "defaultValues": [
-            null,
-            "false"
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setRotation",
-          "luaName": "setRotation",
-          "declaringType": "ax::Sprite",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setRotationSkewX",
-          "luaName": "setRotationSkewX",
-          "declaringType": "ax::Sprite",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setRotationSkewY",
-          "luaName": "setRotationSkewY",
-          "declaringType": "ax::Sprite",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setScale",
-          "luaName": "setScale",
-          "declaringType": "ax::Sprite",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setScale",
-          "luaName": "setScale",
-          "declaringType": "ax::Sprite",
-          "returnType": "void",
-          "parameterTypes": [
-            "float",
-            "float"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setScaleX",
-          "luaName": "setScaleX",
-          "declaringType": "ax::Sprite",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setScaleY",
-          "luaName": "setScaleY",
-          "declaringType": "ax::Sprite",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setSkewX",
-          "luaName": "setSkewX",
-          "declaringType": "ax::Sprite",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setSkewY",
-          "luaName": "setSkewY",
-          "declaringType": "ax::Sprite",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
           ],
           "defaultValues": [
             null
@@ -35053,43 +31920,6 @@
           "defaultValues": [
             null
           ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setVisible",
-          "luaName": "setVisible",
-          "declaringType": "ax::Sprite",
-          "returnType": "void",
-          "parameterTypes": [
-            "bool"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "sortAllChildren",
-          "luaName": "sortAllChildren",
-          "declaringType": "ax::Sprite",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "updateTransform",
-          "luaName": "updateTransform",
-          "declaringType": "ax::Sprite",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
@@ -35283,17 +32113,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getDescription",
-          "luaName": "getDescription",
-          "declaringType": "ax::SpriteBatchNode",
-          "returnType": "std::string",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getTexture",
           "luaName": "getTexture",
           "declaringType": "ax::SpriteBatchNode",
@@ -35335,17 +32154,6 @@
           "luaName": "increaseAtlasCapacity",
           "declaringType": "ax::SpriteBatchNode",
           "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::SpriteBatchNode",
-          "returnType": "bool",
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": false,
@@ -35451,23 +32259,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "removeChild",
-          "luaName": "removeChild",
-          "declaringType": "ax::SpriteBatchNode",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *",
-            "bool"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "removeChildAtIndex",
           "luaName": "removeChildAtIndex",
           "declaringType": "ax::SpriteBatchNode",
@@ -35515,23 +32306,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "reorderChild",
-          "luaName": "reorderChild",
-          "declaringType": "ax::SpriteBatchNode",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *",
-            "int"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "reserveCapacity",
           "luaName": "reserveCapacity",
           "declaringType": "ax::SpriteBatchNode",
@@ -35556,23 +32330,6 @@
           ],
           "defaultValues": [
             null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setProgramState",
-          "luaName": "setProgramState",
-          "declaringType": "ax::SpriteBatchNode",
-          "returnType": "bool",
-          "parameterTypes": [
-            "rhi::ProgramState *",
-            "bool"
-          ],
-          "defaultValues": [
-            null,
-            "false"
           ],
           "isStatic": false,
           "isConst": false,
@@ -35604,17 +32361,6 @@
           "defaultValues": [
             null
           ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "sortAllChildren",
-          "luaName": "sortAllChildren",
-          "declaringType": "ax::SpriteBatchNode",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
@@ -37630,32 +34376,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "stop",
-          "luaName": "stop",
-          "declaringType": "ax::TargetedAction",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::TargetedAction",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -38608,17 +35328,6 @@
       ],
       "methods": [
         {
-          "nativeName": "calculateVertexPoints",
-          "luaName": "calculateVertexPoints",
-          "declaringType": "ax::TiledGrid3D",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::TiledGrid3D",
@@ -38689,17 +35398,6 @@
           "isStatic": true,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "reuse",
-          "luaName": "reuse",
-          "declaringType": "ax::TiledGrid3D",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -38728,17 +35426,6 @@
           "defaultValues": [],
           "isStatic": false,
           "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getGrid",
-          "luaName": "getGrid",
-          "declaringType": "ax::TiledGrid3DAction",
-          "returnType": "ax::GridBase *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
           "isVariadic": false
         }
       ],
@@ -38948,21 +35635,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::TintBy",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -39070,21 +35742,6 @@
           "returnType": "void",
           "parameterTypes": [
             "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::TintTo",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
           ],
           "defaultValues": [
             null
@@ -39348,21 +36005,6 @@
       ],
       "methods": [
         {
-          "nativeName": "actionWithSize",
-          "luaName": "actionWithSize",
-          "declaringType": "ax::TransitionFadeBL",
-          "returnType": "ax::ActionInterval *",
-          "parameterTypes": [
-            "const ax::Vec2 \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::TransitionFadeBL",
@@ -39403,21 +36045,6 @@
         "ax::TransitionEaseScene"
       ],
       "methods": [
-        {
-          "nativeName": "actionWithSize",
-          "luaName": "actionWithSize",
-          "declaringType": "ax::TransitionFadeDown",
-          "returnType": "ax::ActionInterval *",
-          "parameterTypes": [
-            "const ax::Vec2 \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
         {
           "nativeName": "create",
           "luaName": "create",
@@ -39489,21 +36116,6 @@
           "isStatic": true,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "easeActionWithAction",
-          "luaName": "easeActionWithAction",
-          "declaringType": "ax::TransitionFadeTR",
-          "returnType": "ax::ActionInterval *",
-          "parameterTypes": [
-            "ax::ActionInterval *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -39529,21 +36141,6 @@
         "ax::TransitionEaseScene"
       ],
       "methods": [
-        {
-          "nativeName": "actionWithSize",
-          "luaName": "actionWithSize",
-          "declaringType": "ax::TransitionFadeUp",
-          "returnType": "ax::ActionInterval *",
-          "parameterTypes": [
-            "const ax::Vec2 \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
         {
           "nativeName": "create",
           "luaName": "create",
@@ -39866,21 +36463,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "easeActionWithAction",
-          "luaName": "easeActionWithAction",
-          "declaringType": "ax::TransitionMoveInL",
-          "returnType": "ax::ActionInterval *",
-          "parameterTypes": [
-            "ax::ActionInterval *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -40381,17 +36963,6 @@
       ],
       "methods": [
         {
-          "nativeName": "cleanup",
-          "luaName": "cleanup",
-          "declaringType": "ax::TransitionScene",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::TransitionScene",
@@ -40568,21 +37139,6 @@
           "isStatic": true,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "easeActionWithAction",
-          "luaName": "easeActionWithAction",
-          "declaringType": "ax::TransitionShrinkGrow",
-          "returnType": "ax::ActionInterval *",
-          "parameterTypes": [
-            "ax::ActionInterval *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -40608,17 +37164,6 @@
         "ax::TransitionEaseScene"
       ],
       "methods": [
-        {
-          "nativeName": "action",
-          "luaName": "action",
-          "declaringType": "ax::TransitionSlideInB",
-          "returnType": "ax::ActionInterval *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
         {
           "nativeName": "create",
           "luaName": "create",
@@ -40686,21 +37231,6 @@
           "isStatic": true,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "easeActionWithAction",
-          "luaName": "easeActionWithAction",
-          "declaringType": "ax::TransitionSlideInL",
-          "returnType": "ax::ActionInterval *",
-          "parameterTypes": [
-            "ax::ActionInterval *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -40726,17 +37256,6 @@
         "ax::TransitionEaseScene"
       ],
       "methods": [
-        {
-          "nativeName": "action",
-          "luaName": "action",
-          "declaringType": "ax::TransitionSlideInR",
-          "returnType": "ax::ActionInterval *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
         {
           "nativeName": "create",
           "luaName": "create",
@@ -40778,17 +37297,6 @@
         "ax::TransitionEaseScene"
       ],
       "methods": [
-        {
-          "nativeName": "action",
-          "luaName": "action",
-          "declaringType": "ax::TransitionSlideInT",
-          "returnType": "ax::ActionInterval *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
         {
           "nativeName": "create",
           "luaName": "create",
@@ -40856,21 +37364,6 @@
           "isStatic": true,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "easeActionWithAction",
-          "luaName": "easeActionWithAction",
-          "declaringType": "ax::TransitionSplitCols",
-          "returnType": "ax::ActionInterval *",
-          "parameterTypes": [
-            "ax::ActionInterval *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -40896,17 +37389,6 @@
         "ax::TransitionEaseScene"
       ],
       "methods": [
-        {
-          "nativeName": "action",
-          "luaName": "action",
-          "declaringType": "ax::TransitionSplitRows",
-          "returnType": "ax::ActionInterval *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
         {
           "nativeName": "create",
           "luaName": "create",
@@ -40961,21 +37443,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "easeActionWithAction",
-          "luaName": "easeActionWithAction",
-          "declaringType": "ax::TransitionTurnOffTiles",
-          "returnType": "ax::ActionInterval *",
-          "parameterTypes": [
-            "ax::ActionInterval *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -41247,21 +37714,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::TurnOffTiles",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "turnOffTile",
           "luaName": "turnOffTile",
           "declaringType": "ax::TurnOffTiles",
@@ -41283,21 +37735,6 @@
           "returnType": "void",
           "parameterTypes": [
             "const ax::Vec2 \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::TurnOffTiles",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
           ],
           "defaultValues": [
             null
@@ -41457,21 +37894,6 @@
           "returnType": "void",
           "parameterTypes": [
             "const ax::Vec2 \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::Twirl",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
           ],
           "defaultValues": [
             null
@@ -41684,21 +38106,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::Waves",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -41828,21 +38235,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::Waves3D",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -41961,21 +38353,6 @@
         {
           "nativeName": "setAmplitudeRate",
           "luaName": "setAmplitudeRate",
-          "declaringType": "ax::WavesTiles3D",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
           "declaringType": "ax::WavesTiles3D",
           "returnType": "void",
           "parameterTypes": [
@@ -42148,17 +38525,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "checkAvailable",
-          "luaName": "checkAvailable",
-          "declaringType": "ax::XRInputEventListener",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
         {
           "nativeName": "clone",
           "luaName": "clone",

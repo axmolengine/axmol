@@ -54,8 +54,6 @@ void register_ax_base_types_1(lua_State* L)
     module.class_<ax::EaseSineOut>("EaseSineOut");
     module.class_<ax::Event>("Event");
     module.class_<ax::EventDispatcher>("EventDispatcher");
-    module.class_<ax::EventListener>("EventListener");
-    module.class_<ax::FadeIn>("FadeIn");
 }
 
 void register_ax_base_members_1(lua_State* L)
@@ -88,7 +86,6 @@ void register_ax_base_members_1(lua_State* L)
     class_0_DrawNode.method("getLocalRotation", static_cast<float (ax::DrawNode::*)() const>(&ax::DrawNode::getLocalRotation));
     class_0_DrawNode.method("getLocalScale", static_cast<const ax::Vec2 & (ax::DrawNode::*)() const>(&ax::DrawNode::getLocalScale));
     class_0_DrawNode.method("getThicknessScale", static_cast<float (ax::DrawNode::*)() const>(&ax::DrawNode::getThicknessScale));
-    class_0_DrawNode.method("init", static_cast<bool (ax::DrawNode::*)()>(&ax::DrawNode::init));
     class_0_DrawNode.method("isIsolated", static_cast<bool (ax::DrawNode::*)() const>(&ax::DrawNode::isIsolated));
     class_0_DrawNode.method("isLocalTransformEnabled", static_cast<bool (ax::DrawNode::*)() const>(&ax::DrawNode::isLocalTransformEnabled));
     class_0_DrawNode.method("isPreserveDrawOrder", static_cast<bool (ax::DrawNode::*)() const>(&ax::DrawNode::isPreserveDrawOrder));
@@ -379,20 +376,6 @@ void register_ax_base_members_1(lua_State* L)
     class_39_EventDispatcher.method("resumeEventListenersForTarget", axlua::overload(axlua::overload_candidate<ax::Node *, bool>(static_cast<void (ax::EventDispatcher::*)(ax::Node *, bool)>(&ax::EventDispatcher::resumeEventListenersForTarget)), axlua::overload_candidate<ax::Node *>([](ax::EventDispatcher& self, ax::Node * arg0) -> void { static_cast<ax::EventDispatcher&>(self).resumeEventListenersForTarget(arg0, false); })));
     class_39_EventDispatcher.method("setEnabled", static_cast<void (ax::EventDispatcher::*)(bool)>(&ax::EventDispatcher::setEnabled));
     class_39_EventDispatcher.method("setPriority", static_cast<void (ax::EventDispatcher::*)(ax::EventListener *, int)>(&ax::EventDispatcher::setPriority));
-    auto class_40_EventListener = module.class_<ax::EventListener>("EventListener");
-    class_40_EventListener.bases<ax::Object>();
-    class_40_EventListener.method("checkAvailable", static_cast<bool (ax::EventListener::*)()>(&ax::EventListener::checkAvailable));
-    class_40_EventListener.method("clone", static_cast<ax::EventListener * (ax::EventListener::*)()>(&ax::EventListener::clone));
-    class_40_EventListener.method("isEnabled", static_cast<bool (ax::EventListener::*)() const>(&ax::EventListener::isEnabled));
-    class_40_EventListener.method("setEnabled", static_cast<void (ax::EventListener::*)(bool)>(&ax::EventListener::setEnabled));
-    auto class_41_FadeIn = module.class_<ax::FadeIn>("FadeIn");
-    class_41_FadeIn.bases<ax::FadeTo, ax::ActionInterval, ax::FiniteTimeAction, ax::Action, ax::Object>();
-    class_41_FadeIn.constructors<ax::FadeIn()>();
-    class_41_FadeIn.method("clone", static_cast<ax::FadeIn * (ax::FadeIn::*)() const>(&ax::FadeIn::clone));
-    class_41_FadeIn.static_method("create", static_cast<ax::FadeIn * (*)(float)>(&ax::FadeIn::create));
-    class_41_FadeIn.method("reverse", static_cast<ax::FadeTo * (ax::FadeIn::*)() const>(&ax::FadeIn::reverse));
-    class_41_FadeIn.method("setReverseAction", static_cast<void (ax::FadeIn::*)(ax::FadeTo *)>(&ax::FadeIn::setReverseAction));
-    class_41_FadeIn.method("startWithTarget", static_cast<void (ax::FadeIn::*)(ax::Node *)>(&ax::FadeIn::startWithTarget));
 }
 
 void register_ax_base_enums_1(lua_State* L)
@@ -401,7 +384,6 @@ void register_ax_base_enums_1(lua_State* L)
     auto class_0_DrawNode = module.class_<ax::DrawNode>("DrawNode");
     auto class_38_Event = module.class_<ax::Event>("Event");
     auto class_39_EventDispatcher = module.class_<ax::EventDispatcher>("EventDispatcher");
-    auto class_40_EventListener = module.class_<ax::EventListener>("EventListener");
     auto enum_0_DrawMode = class_0_DrawNode.get_or_create_table("DrawMode");
     enum_0_DrawMode.set("Fill", 0ll);
     enum_0_DrawMode.set("Outline", 1ll);
@@ -427,16 +409,6 @@ void register_ax_base_enums_1(lua_State* L)
     enum_4_DirtyFlag.set("FIXED_PRIORITY", 1ll);
     enum_4_DirtyFlag.set("SCENE_GRAPH_PRIORITY", 2ll);
     enum_4_DirtyFlag.set("ALL", 3ll);
-    auto enum_5_Type = class_40_EventListener.get_or_create_table("Type");
-    enum_5_Type.set("UNKNOWN", 0ll);
-    enum_5_Type.set("POINTER", 1ll);
-    enum_5_Type.set("KEYBOARD", 2ll);
-    enum_5_Type.set("MOUSE", 3ll);
-    enum_5_Type.set("ACCELERATION", 4ll);
-    enum_5_Type.set("FOCUS", 5ll);
-    enum_5_Type.set("GAME_CONTROLLER", 6ll);
-    enum_5_Type.set("XR_INPUT", 7ll);
-    enum_5_Type.set("CUSTOM", 8ll);
 }
 
 } // namespace ax::lua::detail

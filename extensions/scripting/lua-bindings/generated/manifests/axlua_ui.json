@@ -77,17 +77,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getRenderNode",
-          "luaName": "getRenderNode",
-          "declaringType": "ax::ui::AbstractCheckButton",
-          "returnType": "ax::Node *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getRendererBackground",
           "luaName": "getRendererBackground",
           "declaringType": "ax::ui::AbstractCheckButton",
@@ -455,17 +444,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getDescription",
-          "luaName": "getDescription",
-          "declaringType": "ax::ui::Button",
-          "returnType": "std::string",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getDisabledFile",
           "luaName": "getDisabledFile",
           "declaringType": "ax::ui::Button",
@@ -503,17 +481,6 @@
           "luaName": "getPressedFile",
           "declaringType": "ax::ui::Button",
           "returnType": "ax::ResourceData",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getRenderNode",
-          "luaName": "getRenderNode",
-          "declaringType": "ax::ui::Button",
-          "returnType": "ax::Node *",
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": false,
@@ -791,21 +758,6 @@
           ],
           "isStatic": false,
           "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setAutoSize",
-          "luaName": "setAutoSize",
-          "declaringType": "ax::ui::Button",
-          "returnType": "void",
-          "parameterTypes": [
-            "bool"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
           "isVariadic": false
         },
         {
@@ -1126,17 +1078,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getDescription",
-          "luaName": "getDescription",
-          "declaringType": "ax::ui::CheckBox",
-          "returnType": "std::string",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "onPointerUp",
           "luaName": "onPointerUp",
           "declaringType": "ax::ui::CheckBox",
@@ -1276,17 +1217,6 @@
           "luaName": "getCapInsetsPressedRenderer",
           "declaringType": "ax::ui::EditBox",
           "returnType": "const ax::Rect \u0026",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getDescription",
-          "luaName": "getDescription",
-          "declaringType": "ax::ui::EditBox",
-          "returnType": "std::string",
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": false,
@@ -1986,21 +1916,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "setPosition",
-          "luaName": "setPosition",
-          "declaringType": "ax::ui::EditBox",
-          "returnType": "void",
-          "parameterTypes": [
-            "const ax::Vec2 \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setReturnType",
           "luaName": "setReturnType",
           "declaringType": "ax::ui::EditBox",
@@ -2119,17 +2034,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::ui::HBox",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         },
@@ -2344,32 +2248,10 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getDescription",
-          "luaName": "getDescription",
-          "declaringType": "ax::ui::ImageView",
-          "returnType": "std::string",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getRenderFile",
           "luaName": "getRenderFile",
           "declaringType": "ax::ui::ImageView",
           "returnType": "ax::ResourceData",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getRenderNode",
-          "luaName": "getRenderNode",
-          "declaringType": "ax::ui::ImageView",
-          "returnType": "ax::Node *",
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": false,
@@ -2445,21 +2327,6 @@
           ],
           "isStatic": false,
           "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setAutoSize",
-          "luaName": "setAutoSize",
-          "declaringType": "ax::ui::ImageView",
-          "returnType": "void",
-          "parameterTypes": [
-            "bool"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
           "isVariadic": false
         },
         {
@@ -2761,17 +2628,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getRenderNode",
-          "luaName": "getRenderNode",
-          "declaringType": "ax::ui::InputField",
-          "returnType": "ax::Node *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getSelectedText",
           "luaName": "getSelectedText",
           "declaringType": "ax::ui::InputField",
@@ -3032,21 +2888,6 @@
           "returnType": "void",
           "parameterTypes": [
             "const ax::Color32 \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setEnabled",
-          "luaName": "setEnabled",
-          "declaringType": "ax::ui::InputField",
-          "returnType": "void",
-          "parameterTypes": [
-            "bool"
           ],
           "defaultValues": [
             null
@@ -4108,23 +3949,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "findNextFocusedWidget",
-          "luaName": "findNextFocusedWidget",
-          "declaringType": "ax::ui::LayoutGroup",
-          "returnType": "ax::ui::Widget *",
-          "parameterTypes": [
-            "ax::ui::Widget::FocusDirection",
-            "ax::ui::Widget *"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "forceDoLayout",
           "luaName": "forceDoLayout",
           "declaringType": "ax::ui::LayoutGroup",
@@ -4257,17 +4081,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getDescription",
-          "luaName": "getDescription",
-          "declaringType": "ax::ui::LayoutGroup",
-          "returnType": "std::string",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getLayoutType",
           "luaName": "getLayoutType",
           "declaringType": "ax::ui::LayoutGroup",
@@ -4283,17 +4096,6 @@
           "luaName": "getRenderFile",
           "declaringType": "ax::ui::LayoutGroup",
           "returnType": "ax::ResourceData",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::ui::LayoutGroup",
-          "returnType": "bool",
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": false,
@@ -4769,21 +4571,6 @@
       ],
       "methods": [
         {
-          "nativeName": "copyProperties",
-          "luaName": "copyProperties",
-          "declaringType": "ax::ui::LinearLayoutParameter",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::ui::LayoutParameter *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::ui::LinearLayoutParameter",
@@ -4791,17 +4578,6 @@
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "createCloneInstance",
-          "luaName": "createCloneInstance",
-          "declaringType": "ax::ui::LinearLayoutParameter",
-          "returnType": "ax::ui::LayoutParameter *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         },
@@ -4857,76 +4633,6 @@
         "ax::ui::LayoutProtocol"
       ],
       "methods": [
-        {
-          "nativeName": "addChild",
-          "luaName": "addChild",
-          "declaringType": "ax::ui::ListView",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "addChild",
-          "luaName": "addChild",
-          "declaringType": "ax::ui::ListView",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *",
-            "int"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "addChild",
-          "luaName": "addChild",
-          "declaringType": "ax::ui::ListView",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *",
-            "int",
-            "int"
-          ],
-          "defaultValues": [
-            null,
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "addChild",
-          "luaName": "addChild",
-          "declaringType": "ax::ui::ListView",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *",
-            "int",
-            "std::string_view"
-          ],
-          "defaultValues": [
-            null,
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
         {
           "nativeName": "addEventListener",
           "luaName": "addEventListener",
@@ -5062,17 +4768,6 @@
           "luaName": "getCurSelectedIndex",
           "declaringType": "ax::ui::ListView",
           "returnType": "ssize_t",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getDescription",
-          "luaName": "getDescription",
-          "declaringType": "ax::ui::ListView",
-          "returnType": "std::string",
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": false,
@@ -5220,17 +4915,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::ui::ListView",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "insertCustomItem",
           "luaName": "insertCustomItem",
           "declaringType": "ax::ui::ListView",
@@ -5263,39 +4947,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "jumpToBottom",
-          "luaName": "jumpToBottom",
-          "declaringType": "ax::ui::ListView",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "jumpToBottomLeft",
-          "luaName": "jumpToBottomLeft",
-          "declaringType": "ax::ui::ListView",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "jumpToBottomRight",
-          "luaName": "jumpToBottomRight",
-          "declaringType": "ax::ui::ListView",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "jumpToItem",
           "luaName": "jumpToItem",
           "declaringType": "ax::ui::ListView",
@@ -5310,106 +4961,6 @@
             null,
             null
           ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "jumpToLeft",
-          "luaName": "jumpToLeft",
-          "declaringType": "ax::ui::ListView",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "jumpToPercentBothDirection",
-          "luaName": "jumpToPercentBothDirection",
-          "declaringType": "ax::ui::ListView",
-          "returnType": "void",
-          "parameterTypes": [
-            "const ax::Vec2 \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "jumpToPercentHorizontal",
-          "luaName": "jumpToPercentHorizontal",
-          "declaringType": "ax::ui::ListView",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "jumpToPercentVertical",
-          "luaName": "jumpToPercentVertical",
-          "declaringType": "ax::ui::ListView",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "jumpToRight",
-          "luaName": "jumpToRight",
-          "declaringType": "ax::ui::ListView",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "jumpToTop",
-          "luaName": "jumpToTop",
-          "declaringType": "ax::ui::ListView",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "jumpToTopLeft",
-          "luaName": "jumpToTopLeft",
-          "declaringType": "ax::ui::ListView",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "jumpToTopRight",
-          "luaName": "jumpToTopRight",
-          "declaringType": "ax::ui::ListView",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
@@ -5441,55 +4992,12 @@
           "isVariadic": false
         },
         {
-          "nativeName": "removeAllChildren",
-          "luaName": "removeAllChildren",
-          "declaringType": "ax::ui::ListView",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "removeAllChildrenWithCleanup",
-          "luaName": "removeAllChildrenWithCleanup",
-          "declaringType": "ax::ui::ListView",
-          "returnType": "void",
-          "parameterTypes": [
-            "bool"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "removeAllItems",
           "luaName": "removeAllItems",
           "declaringType": "ax::ui::ListView",
           "returnType": "void",
           "parameterTypes": [],
           "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "removeChild",
-          "luaName": "removeChild",
-          "declaringType": "ax::ui::ListView",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *",
-            "bool"
-          ],
-          "defaultValues": [
-            null,
-            "true"
-          ],
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
@@ -5512,17 +5020,6 @@
         {
           "nativeName": "removeLastItem",
           "luaName": "removeLastItem",
-          "declaringType": "ax::ui::ListView",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "requestDoLayout",
-          "luaName": "requestDoLayout",
           "declaringType": "ax::ui::ListView",
           "returnType": "void",
           "parameterTypes": [],
@@ -5593,21 +5090,6 @@
           "returnType": "void",
           "parameterTypes": [
             "int"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setDirection",
-          "luaName": "setDirection",
-          "declaringType": "ax::ui::ListView",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::ui::ScrollView::Direction"
           ],
           "defaultValues": [
             null
@@ -5850,17 +5332,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getDescription",
-          "luaName": "getDescription",
-          "declaringType": "ax::ui::LoadingBar",
-          "returnType": "std::string",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getDirection",
           "luaName": "getDirection",
           "declaringType": "ax::ui::LoadingBar",
@@ -5887,17 +5358,6 @@
           "luaName": "getRenderFile",
           "declaringType": "ax::ui::LoadingBar",
           "returnType": "ax::ResourceData",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getRenderNode",
-          "luaName": "getRenderNode",
-          "declaringType": "ax::ui::LoadingBar",
-          "returnType": "ax::Node *",
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": false,
@@ -5945,21 +5405,6 @@
           ],
           "isStatic": false,
           "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setAutoSize",
-          "luaName": "setAutoSize",
-          "declaringType": "ax::ui::LoadingBar",
-          "returnType": "void",
-          "parameterTypes": [
-            "bool"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
           "isVariadic": false
         },
         {
@@ -6128,17 +5573,6 @@
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "doLayout",
-          "luaName": "doLayout",
-          "declaringType": "ax::ui::PageView",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         },
@@ -6697,17 +6131,6 @@
           "isStatic": true,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "getDescription",
-          "luaName": "getDescription",
-          "declaringType": "ax::ui::RadioButton",
-          "returnType": "std::string",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -6771,17 +6194,6 @@
           "defaultValues": [],
           "isStatic": true,
           "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getDescription",
-          "luaName": "getDescription",
-          "declaringType": "ax::ui::RadioButtonGroup",
-          "returnType": "std::string",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
           "isVariadic": false
         },
         {
@@ -7025,21 +6437,6 @@
       ],
       "methods": [
         {
-          "nativeName": "copyProperties",
-          "luaName": "copyProperties",
-          "declaringType": "ax::ui::RelativeLayoutParameter",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::ui::LayoutParameter *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::ui::RelativeLayoutParameter",
@@ -7047,17 +6444,6 @@
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "createCloneInstance",
-          "luaName": "createCloneInstance",
-          "declaringType": "ax::ui::RelativeLayoutParameter",
-          "returnType": "ax::ui::LayoutParameter *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         },
@@ -7752,17 +7138,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getDescription",
-          "luaName": "getDescription",
-          "declaringType": "ax::ui::RichText",
-          "returnType": "std::string",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getFontColor",
           "luaName": "getFontColor",
           "declaringType": "ax::ui::RichText",
@@ -7837,17 +7212,6 @@
           "defaultValues": [],
           "isStatic": false,
           "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::ui::RichText",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
           "isVariadic": false
         },
         {
@@ -8139,21 +7503,6 @@
         {
           "nativeName": "setAnchorTextUnderline",
           "luaName": "setAnchorTextUnderline",
-          "declaringType": "ax::ui::RichText",
-          "returnType": "void",
-          "parameterTypes": [
-            "bool"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setAutoSize",
-          "luaName": "setAutoSize",
           "declaringType": "ax::ui::RichText",
           "returnType": "void",
           "parameterTypes": [
@@ -9082,76 +8431,6 @@
       ],
       "methods": [
         {
-          "nativeName": "addChild",
-          "luaName": "addChild",
-          "declaringType": "ax::ui::ScrollView",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "addChild",
-          "luaName": "addChild",
-          "declaringType": "ax::ui::ScrollView",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *",
-            "int"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "addChild",
-          "luaName": "addChild",
-          "declaringType": "ax::ui::ScrollView",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *",
-            "int",
-            "int"
-          ],
-          "defaultValues": [
-            null,
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "addChild",
-          "luaName": "addChild",
-          "declaringType": "ax::ui::ScrollView",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *",
-            "int",
-            "std::string_view"
-          ],
-          "defaultValues": [
-            null,
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "addEventListener",
           "luaName": "addEventListener",
           "declaringType": "ax::ui::ScrollView",
@@ -9334,17 +8613,6 @@
           "luaName": "getInnerContainerSize",
           "declaringType": "ax::ui::ScrollView",
           "returnType": "const ax::Vec2 \u0026",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getLayoutType",
-          "luaName": "getLayoutType",
-          "declaringType": "ax::ui::ScrollView",
-          "returnType": "ax::ui::LayoutGroup::Type",
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": false,
@@ -9758,49 +9026,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "removeAllChildren",
-          "luaName": "removeAllChildren",
-          "declaringType": "ax::ui::ScrollView",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "removeAllChildrenWithCleanup",
-          "luaName": "removeAllChildrenWithCleanup",
-          "declaringType": "ax::ui::ScrollView",
-          "returnType": "void",
-          "parameterTypes": [
-            "bool"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "removeChild",
-          "luaName": "removeChild",
-          "declaringType": "ax::ui::ScrollView",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *",
-            "bool"
-          ],
-          "defaultValues": [
-            null,
-            "true"
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "scrollToBottom",
           "luaName": "scrollToBottom",
           "declaringType": "ax::ui::ScrollView",
@@ -10100,21 +9325,6 @@
           "returnType": "void",
           "parameterTypes": [
             "const ax::Vec2 \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setLayoutType",
-          "luaName": "setLayoutType",
-          "declaringType": "ax::ui::ScrollView",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::ui::LayoutGroup::Type"
           ],
           "defaultValues": [
             null
@@ -10482,17 +9692,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getDescription",
-          "luaName": "getDescription",
-          "declaringType": "ax::ui::Slider",
-          "returnType": "std::string",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getMaxPercent",
           "luaName": "getMaxPercent",
           "declaringType": "ax::ui::Slider",
@@ -10519,17 +9718,6 @@
           "luaName": "getProgressBarFile",
           "declaringType": "ax::ui::Slider",
           "returnType": "ax::ResourceData",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getRenderNode",
-          "luaName": "getRenderNode",
-          "declaringType": "ax::ui::Slider",
-          "returnType": "ax::Node *",
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": false,
@@ -10589,17 +9777,6 @@
           "defaultValues": [],
           "isStatic": false,
           "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::ui::Slider",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
           "isVariadic": false
         },
         {
@@ -10809,21 +9986,6 @@
           ],
           "isStatic": false,
           "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setAutoSize",
-          "luaName": "setAutoSize",
-          "declaringType": "ax::ui::Slider",
-          "returnType": "void",
-          "parameterTypes": [
-            "bool"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
           "isVariadic": false
         },
         {
@@ -11642,17 +10804,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getDescription",
-          "luaName": "getDescription",
-          "declaringType": "ax::ui::Text",
-          "returnType": "std::string",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getEffectColor",
           "luaName": "getEffectColor",
           "declaringType": "ax::ui::Text",
@@ -11720,17 +10871,6 @@
           "defaultValues": [],
           "isStatic": false,
           "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getRenderNode",
-          "luaName": "getRenderNode",
-          "declaringType": "ax::ui::Text",
-          "returnType": "ax::Node *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
           "isVariadic": false
         },
         {
@@ -12114,32 +11254,10 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getDescription",
-          "luaName": "getDescription",
-          "declaringType": "ax::ui::TextAtlas",
-          "returnType": "std::string",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getRenderFile",
           "luaName": "getRenderFile",
           "declaringType": "ax::ui::TextAtlas",
           "returnType": "ax::ResourceData",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getRenderNode",
-          "luaName": "getRenderNode",
-          "declaringType": "ax::ui::TextAtlas",
-          "returnType": "ax::Node *",
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": false,
@@ -12295,32 +11413,10 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getDescription",
-          "luaName": "getDescription",
-          "declaringType": "ax::ui::TextBMFont",
-          "returnType": "std::string",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getRenderFile",
           "luaName": "getRenderFile",
           "declaringType": "ax::ui::TextBMFont",
           "returnType": "ax::ResourceData",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getRenderNode",
-          "luaName": "getRenderNode",
-          "declaringType": "ax::ui::TextBMFont",
-          "returnType": "ax::Node *",
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": false,

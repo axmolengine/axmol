@@ -40,17 +40,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getOffset",
-          "luaName": "getOffset",
-          "declaringType": "ax::BoxCollider2D",
-          "returnType": "ax::Vec2",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getSize",
           "luaName": "getSize",
           "declaringType": "ax::BoxCollider2D",
@@ -92,17 +81,6 @@
             "ax::Vec2(0.0f, 0.0f)"
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getOffset",
-          "luaName": "getOffset",
-          "declaringType": "ax::CircleCollider2D",
-          "returnType": "ax::Vec2",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         },
@@ -798,17 +776,6 @@
           "isStatic": true,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "getOffset",
-          "luaName": "getOffset",
-          "declaringType": "ax::EdgeBoxCollider2D",
-          "returnType": "ax::Vec2",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -825,17 +792,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "getCenter",
-          "luaName": "getCenter",
-          "declaringType": "ax::EdgeChainCollider2D",
-          "returnType": "ax::Vec2",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
         {
           "nativeName": "getPointsCount",
           "luaName": "getPointsCount",
@@ -862,17 +818,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "getCenter",
-          "luaName": "getCenter",
-          "declaringType": "ax::EdgePolygonCollider2D",
-          "returnType": "ax::Vec2",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
         {
           "nativeName": "getPointsCount",
           "luaName": "getPointsCount",
@@ -915,17 +860,6 @@
             "ax::PHYSICS_MATERIAL_2D_DEFAULT"
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getCenter",
-          "luaName": "getCenter",
-          "declaringType": "ax::EdgeSegmentCollider2D",
-          "returnType": "ax::Vec2",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         },
@@ -2066,17 +2000,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "getCenter",
-          "luaName": "getCenter",
-          "declaringType": "ax::PolygonCollider2D",
-          "returnType": "ax::Vec2",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
         {
           "nativeName": "getPoint",
           "luaName": "getPoint",

@@ -24,21 +24,6 @@
       ],
       "methods": [
         {
-          "nativeName": "getAction",
-          "luaName": "getAction",
-          "declaringType": "ax::ext::ActionFadeFrame",
-          "returnType": "ax::ActionInterval *",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getOpacity",
           "luaName": "getOpacity",
           "declaringType": "ax::ext::ActionFadeFrame",
@@ -383,21 +368,6 @@
       ],
       "methods": [
         {
-          "nativeName": "getAction",
-          "luaName": "getAction",
-          "declaringType": "ax::ext::ActionMoveFrame",
-          "returnType": "ax::ActionInterval *",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getPosition",
           "luaName": "getPosition",
           "declaringType": "ax::ext::ActionMoveFrame",
@@ -697,38 +667,6 @@
       ],
       "methods": [
         {
-          "nativeName": "getAction",
-          "luaName": "getAction",
-          "declaringType": "ax::ext::ActionRotationFrame",
-          "returnType": "ax::ActionInterval *",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getAction",
-          "luaName": "getAction",
-          "declaringType": "ax::ext::ActionRotationFrame",
-          "returnType": "ax::ActionInterval *",
-          "parameterTypes": [
-            "float",
-            "ax::ext::ActionFrame *"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getRotation",
           "luaName": "getRotation",
           "declaringType": "ax::ext::ActionRotationFrame",
@@ -774,21 +712,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "getAction",
-          "luaName": "getAction",
-          "declaringType": "ax::ext::ActionScaleFrame",
-          "returnType": "ax::ActionInterval *",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
         {
           "nativeName": "getScaleX",
           "luaName": "getScaleX",
@@ -861,21 +784,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "getAction",
-          "luaName": "getAction",
-          "declaringType": "ax::ext::ActionTintFrame",
-          "returnType": "ax::ActionInterval *",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
         {
           "nativeName": "getColor",
           "luaName": "getColor",
@@ -5150,21 +5058,6 @@
       ],
       "methods": [
         {
-          "nativeName": "copy",
-          "luaName": "copy",
-          "declaringType": "ax::ext::SpriteDisplayData",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::ext::DisplayData *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::ext::SpriteDisplayData",
@@ -6042,17 +5935,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::ext::timeline::AlphaFrame",
-          "returnType": "ax::ext::timeline::Frame *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::ext::timeline::AlphaFrame",
@@ -6110,17 +5992,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::ext::timeline::AnchorPointFrame",
-          "returnType": "ax::ext::timeline::Frame *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::ext::timeline::AnchorPointFrame",
@@ -6177,17 +6048,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::ext::timeline::BlendFuncFrame",
-          "returnType": "ax::ext::timeline::Frame *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
         {
           "nativeName": "create",
           "luaName": "create",
@@ -6776,17 +6636,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::ext::timeline::ColorFrame",
-          "returnType": "ax::ext::timeline::Frame *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::ext::timeline::ColorFrame",
@@ -6859,17 +6708,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::ext::timeline::EventFrame",
-          "returnType": "ax::ext::timeline::Frame *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::ext::timeline::EventFrame",
@@ -6909,21 +6747,6 @@
           "returnType": "void",
           "parameterTypes": [
             "std::string_view"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setNode",
-          "luaName": "setNode",
-          "declaringType": "ax::ext::timeline::EventFrame",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
           ],
           "defaultValues": [
             null
@@ -7160,17 +6983,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::ext::timeline::InnerActionFrame",
-          "returnType": "ax::ext::timeline::Frame *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::ext::timeline::InnerActionFrame",
@@ -7336,17 +7148,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::ext::timeline::PlayableFrame",
-          "returnType": "ax::ext::timeline::Frame *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::ext::timeline::PlayableFrame",
@@ -7403,17 +7204,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::ext::timeline::PositionFrame",
-          "returnType": "ax::ext::timeline::Frame *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
         {
           "nativeName": "create",
           "luaName": "create",
@@ -7524,17 +7314,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::ext::timeline::RotationFrame",
-          "returnType": "ax::ext::timeline::Frame *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::ext::timeline::RotationFrame",
@@ -7593,17 +7372,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::ext::timeline::RotationSkewFrame",
-          "returnType": "ax::ext::timeline::Frame *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::ext::timeline::RotationSkewFrame",
@@ -7634,17 +7402,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::ext::timeline::ScaleFrame",
-          "returnType": "ax::ext::timeline::Frame *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
         {
           "nativeName": "create",
           "luaName": "create",
@@ -7796,28 +7553,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "getBoundingBox",
-          "luaName": "getBoundingBox",
-          "declaringType": "ax::ext::timeline::SkeletonNode",
-          "returnType": "ax::Rect",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::ext::timeline::SkeletonNode",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -7839,17 +7574,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::ext::timeline::SkewFrame",
-          "returnType": "ax::ext::timeline::Frame *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
         {
           "nativeName": "create",
           "luaName": "create",
@@ -7934,17 +7658,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::ext::timeline::TextureFrame",
-          "returnType": "ax::ext::timeline::Frame *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::ext::timeline::TextureFrame",
@@ -7964,21 +7677,6 @@
           "defaultValues": [],
           "isStatic": false,
           "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setNode",
-          "luaName": "setNode",
-          "declaringType": "ax::ext::timeline::TextureFrame",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
           "isVariadic": false
         },
         {
@@ -8224,17 +7922,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::ext::timeline::VisibleFrame",
-          "returnType": "ax::ext::timeline::Frame *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::ext::timeline::VisibleFrame",
@@ -8291,17 +7978,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::ext::timeline::ZOrderFrame",
-          "returnType": "ax::ext::timeline::Frame *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
         {
           "nativeName": "create",
           "luaName": "create",

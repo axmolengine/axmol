@@ -2,6 +2,7 @@
 #include "lua-bindings/runtime/axlua_runtime.h"
 #include "lua-bindings/runtime/axlua_conversions.h"
 #include "axmol/scene/Node.h"
+#include "axmol/2d/Sprite.h"
 #include "axmol/base/AutoreleasePool.h"
 #include "axmol/base/Director.h"
 #include "axmol/base/EventDispatcher.h"
@@ -114,6 +115,12 @@ bool checkExpiredLookup(lua_State* state)
 
 bool checkFastBindings(lua_State* state)
 {
+    // Use a default-constructed Sprite for the inheritance check. Creating a
+    // textured Sprite would require a renderer, which is unavailable in the
+    // headless smoke executable.
+    auto* smokeSprite = new ax::Sprite();
+    axlua::push_object(state, smokeSprite);
+    lua_setglobal(state, "__fast_sprite");
     bool ok = checkLua(state, R"lua(
         local node = ax.Node:create()
 
@@ -159,7 +166,34 @@ bool checkFastBindings(lua_State* state)
         local scene = ax.Scene:create()
         scene:setPosition(7, 8)
         assert(scene:getPositionX() == 7 and scene:getPositionY() == 8)
+
+        -- Sprite overrides reuse Node's generated Lua methods. The native
+        -- virtual dispatch still receives the concrete Sprite instance.
+        local sprite = __fast_sprite
+        assert(sprite.setPosition == ax.Node.setPosition)
+        assert(sprite.setScale == ax.Node.setScale)
+        assert(sprite.setRotation == ax.Node.setRotation)
+        assert(sprite.setVisible == ax.Node.setVisible)
+        assert(sprite.setOpacity == ax.Node.setOpacity)
+        sprite:setPosition(11, 12)
+        sprite:setScale(1.25)
+        sprite:setRotation(30)
+        sprite:setVisible(false)
+        sprite:setOpacity(200)
+        assert(sprite:getPositionX() == 11 and sprite:getPositionY() == 12)
+        assert(sprite:getScaleX() == 1.25 and sprite:getScaleY() == 1.25)
+        assert(sprite:getRotation() == 30 and sprite:isVisible() == false)
+        assert(sprite:getOpacity() == 200)
+        local child = ax.Node:create()
+        sprite:addChild(child, 0, 'sprite-child')
+        assert(rawequal(sprite:getChildByName('sprite-child'), child))
+        local setPosition = ax.Node.setPosition
+        setPosition(sprite, 21, 22)
+        assert(sprite:getPositionX() == 21 and sprite:getPositionY() == 22)
     )lua");
+    lua_pushnil(state);
+    lua_setglobal(state, "__fast_sprite");
+    smokeSprite->release();
     if (!ok)
         return false;
 

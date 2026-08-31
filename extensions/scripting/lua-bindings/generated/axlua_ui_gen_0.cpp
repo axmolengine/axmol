@@ -29,7 +29,6 @@ void register_ax_ui_members_0(lua_State* L)
     class_0_AbstractCheckButton.method("getBackPressedFile", static_cast<ax::ResourceData (ax::ui::AbstractCheckButton::*)()>(&ax::ui::AbstractCheckButton::getBackPressedFile));
     class_0_AbstractCheckButton.method("getCrossDisabledFile", static_cast<ax::ResourceData (ax::ui::AbstractCheckButton::*)()>(&ax::ui::AbstractCheckButton::getCrossDisabledFile));
     class_0_AbstractCheckButton.method("getCrossNormalFile", static_cast<ax::ResourceData (ax::ui::AbstractCheckButton::*)()>(&ax::ui::AbstractCheckButton::getCrossNormalFile));
-    class_0_AbstractCheckButton.method("getRenderNode", static_cast<ax::Node * (ax::ui::AbstractCheckButton::*)()>(&ax::ui::AbstractCheckButton::getRenderNode));
     class_0_AbstractCheckButton.method("getRendererBackground", static_cast<ax::Sprite * (ax::ui::AbstractCheckButton::*)() const>(&ax::ui::AbstractCheckButton::getRendererBackground));
     class_0_AbstractCheckButton.method("getRendererBackgroundDisabled", static_cast<ax::Sprite * (ax::ui::AbstractCheckButton::*)() const>(&ax::ui::AbstractCheckButton::getRendererBackgroundDisabled));
     class_0_AbstractCheckButton.method("getRendererBackgroundSelected", static_cast<ax::Sprite * (ax::ui::AbstractCheckButton::*)() const>(&ax::ui::AbstractCheckButton::getRendererBackgroundSelected));
@@ -55,12 +54,10 @@ void register_ax_ui_members_0(lua_State* L)
     class_1_Button.method("getCapInsetsDisabledRenderer", static_cast<const ax::Rect & (ax::ui::Button::*)() const>(&ax::ui::Button::getCapInsetsDisabledRenderer));
     class_1_Button.method("getCapInsetsNormalRenderer", static_cast<const ax::Rect & (ax::ui::Button::*)() const>(&ax::ui::Button::getCapInsetsNormalRenderer));
     class_1_Button.method("getCapInsetsPressedRenderer", static_cast<const ax::Rect & (ax::ui::Button::*)() const>(&ax::ui::Button::getCapInsetsPressedRenderer));
-    class_1_Button.method("getDescription", static_cast<std::string (ax::ui::Button::*)() const>(&ax::ui::Button::getDescription));
     class_1_Button.method("getDisabledFile", static_cast<ax::ResourceData (ax::ui::Button::*)()>(&ax::ui::Button::getDisabledFile));
     class_1_Button.method("getNormalFile", static_cast<ax::ResourceData (ax::ui::Button::*)()>(&ax::ui::Button::getNormalFile));
     class_1_Button.method("getNormalTextureSize", static_cast<ax::Vec2 (ax::ui::Button::*)() const>(&ax::ui::Button::getNormalTextureSize));
     class_1_Button.method("getPressedFile", static_cast<ax::ResourceData (ax::ui::Button::*)()>(&ax::ui::Button::getPressedFile));
-    class_1_Button.method("getRenderNode", static_cast<ax::Node * (ax::ui::Button::*)()>(&ax::ui::Button::getRenderNode));
     class_1_Button.method("getRendererClicked", static_cast<ax::ui::Scale9Sprite * (ax::ui::Button::*)() const>(&ax::ui::Button::getRendererClicked));
     class_1_Button.method("getRendererDisabled", static_cast<ax::ui::Scale9Sprite * (ax::ui::Button::*)() const>(&ax::ui::Button::getRendererDisabled));
     class_1_Button.method("getRendererNormal", static_cast<ax::ui::Scale9Sprite * (ax::ui::Button::*)() const>(&ax::ui::Button::getRendererNormal));
@@ -81,7 +78,6 @@ void register_ax_ui_members_0(lua_State* L)
     class_1_Button.method("resetNormalRender", static_cast<void (ax::ui::Button::*)()>(&ax::ui::Button::resetNormalRender));
     class_1_Button.method("resetPressedRender", static_cast<void (ax::ui::Button::*)()>(&ax::ui::Button::resetPressedRender));
     class_1_Button.method("resolvePreferredSize", static_cast<ax::Vec2 (ax::ui::Button::*)(const ax::Vec2 &) const>(&ax::ui::Button::resolvePreferredSize));
-    class_1_Button.method("setAutoSize", static_cast<void (ax::ui::Button::*)(bool)>(&ax::ui::Button::setAutoSize));
     class_1_Button.method("setCapInsets", static_cast<void (ax::ui::Button::*)(const ax::Rect &)>(&ax::ui::Button::setCapInsets));
     class_1_Button.method("setCapInsetsDisabledRenderer", static_cast<void (ax::ui::Button::*)(const ax::Rect &)>(&ax::ui::Button::setCapInsetsDisabledRenderer));
     class_1_Button.method("setCapInsetsNormalRenderer", static_cast<void (ax::ui::Button::*)(const ax::Rect &)>(&ax::ui::Button::setCapInsetsNormalRenderer));
@@ -101,7 +97,6 @@ void register_ax_ui_members_0(lua_State* L)
     class_2_CheckBox.method("addEventListener", static_cast<void (ax::ui::CheckBox::*)(const ax::ui::CheckBox::CheckBoxCallback &)>(&ax::ui::CheckBox::addEventListener));
     class_2_CheckBox.static_method("create", axlua::overload(axlua::overload_candidate<>(static_cast<ax::ui::CheckBox * (*)()>(&ax::ui::CheckBox::create)), axlua::overload_candidate<std::string_view, std::string_view, ax::ui::Widget::TextureResType>(static_cast<ax::ui::CheckBox * (*)(std::string_view, std::string_view, ax::ui::Widget::TextureResType)>(&ax::ui::CheckBox::create)), axlua::overload_candidate<std::string_view, std::string_view>([](std::string_view arg0, std::string_view arg1) -> ax::ui::CheckBox * { return ax::ui::CheckBox::create(arg0, arg1, ax::ui::Widget::TextureResType::LOCAL); }), axlua::overload_candidate<std::string_view, std::string_view, std::string_view, std::string_view, std::string_view, ax::ui::Widget::TextureResType>(static_cast<ax::ui::CheckBox * (*)(std::string_view, std::string_view, std::string_view, std::string_view, std::string_view, ax::ui::Widget::TextureResType)>(&ax::ui::CheckBox::create)), axlua::overload_candidate<std::string_view, std::string_view, std::string_view, std::string_view, std::string_view>([](std::string_view arg0, std::string_view arg1, std::string_view arg2, std::string_view arg3, std::string_view arg4) -> ax::ui::CheckBox * { return ax::ui::CheckBox::create(arg0, arg1, arg2, arg3, arg4, ax::ui::Widget::TextureResType::LOCAL); })));
     class_2_CheckBox.static_method("createInstance", static_cast<ax::Object * (*)()>(&ax::ui::CheckBox::createInstance));
-    class_2_CheckBox.method("getDescription", static_cast<std::string (ax::ui::CheckBox::*)() const>(&ax::ui::CheckBox::getDescription));
     class_2_CheckBox.method("onPointerUp", static_cast<void (ax::ui::CheckBox::*)(ax::PointerEvent *)>(&ax::ui::CheckBox::onPointerUp));
     auto class_3_EditBox = module.class_<ax::ui::EditBox>("EditBox");
     class_3_EditBox.bases<ax::ui::Widget, ax::ProtectedNode, ax::Node, ax::Object, ax::ui::LayoutParameterProtocol, ax::InputDelegate>();
@@ -111,7 +106,6 @@ void register_ax_ui_members_0(lua_State* L)
     class_3_EditBox.method("getCapInsetsDisabledRenderer", static_cast<const ax::Rect & (ax::ui::EditBox::*)() const>(&ax::ui::EditBox::getCapInsetsDisabledRenderer));
     class_3_EditBox.method("getCapInsetsNormalRenderer", static_cast<const ax::Rect & (ax::ui::EditBox::*)() const>(&ax::ui::EditBox::getCapInsetsNormalRenderer));
     class_3_EditBox.method("getCapInsetsPressedRenderer", static_cast<const ax::Rect & (ax::ui::EditBox::*)() const>(&ax::ui::EditBox::getCapInsetsPressedRenderer));
-    class_3_EditBox.method("getDescription", static_cast<std::string (ax::ui::EditBox::*)() const>(&ax::ui::EditBox::getDescription));
     class_3_EditBox.method("getFontColor", static_cast<const ax::Color32 & (ax::ui::EditBox::*)() const>(&ax::ui::EditBox::getFontColor));
     class_3_EditBox.method("getFontName", static_cast<std::string_view (ax::ui::EditBox::*)() const>(&ax::ui::EditBox::getFontName));
     class_3_EditBox.method("getFontSize", static_cast<int (ax::ui::EditBox::*)() const>(&ax::ui::EditBox::getFontSize));
@@ -158,7 +152,6 @@ void register_ax_ui_members_0(lua_State* L)
     class_3_EditBox.method("setPlaceholderFontColor", static_cast<void (ax::ui::EditBox::*)(const ax::Color32 &)>(&ax::ui::EditBox::setPlaceholderFontColor));
     class_3_EditBox.method("setPlaceholderFontName", static_cast<void (ax::ui::EditBox::*)(std::string_view)>(&ax::ui::EditBox::setPlaceholderFontName));
     class_3_EditBox.method("setPlaceholderFontSize", static_cast<void (ax::ui::EditBox::*)(int)>(&ax::ui::EditBox::setPlaceholderFontSize));
-    class_3_EditBox.method("setPosition", static_cast<void (ax::ui::EditBox::*)(const ax::Vec2 &)>(&ax::ui::EditBox::setPosition));
     class_3_EditBox.method("setReturnType", static_cast<void (ax::ui::EditBox::*)(ax::ui::EditBox::KeyboardReturnType)>(&ax::ui::EditBox::setReturnType));
     class_3_EditBox.method("setText", static_cast<void (ax::ui::EditBox::*)(std::string_view)>(&ax::ui::EditBox::setText));
     class_3_EditBox.method("setTextHorizontalAlignment", static_cast<void (ax::ui::EditBox::*)(ax::TextHAlignment)>(&ax::ui::EditBox::setTextHorizontalAlignment));
@@ -168,7 +161,6 @@ void register_ax_ui_members_0(lua_State* L)
     class_4_HBox.bases<ax::ui::LayoutGroup, ax::ui::Widget, ax::ProtectedNode, ax::Node, ax::Object, ax::ui::LayoutParameterProtocol, ax::ui::LayoutProtocol>();
     class_4_HBox.constructors<ax::ui::HBox()>();
     class_4_HBox.static_method("create", axlua::overload(axlua::overload_candidate<>(static_cast<ax::ui::HBox * (*)()>(&ax::ui::HBox::create)), axlua::overload_candidate<const ax::Vec2 &>(static_cast<ax::ui::HBox * (*)(const ax::Vec2 &)>(&ax::ui::HBox::create))));
-    class_4_HBox.method("init", static_cast<bool (ax::ui::HBox::*)()>(&ax::ui::HBox::init));
     class_4_HBox.method("initWithSize", static_cast<bool (ax::ui::HBox::*)(const ax::Vec2 &)>(&ax::ui::HBox::initWithSize));
     auto class_5_Helper = module.class_<ax::ui::Helper>("Helper");
     class_5_Helper.static_method("changeLayoutSystemActiveState", static_cast<void (*)(bool)>(&ax::ui::Helper::changeLayoutSystemActiveState));
@@ -184,14 +176,11 @@ void register_ax_ui_members_0(lua_State* L)
     class_6_ImageView.static_method("createInstance", static_cast<ax::Object * (*)()>(&ax::ui::ImageView::createInstance));
     class_6_ImageView.method("getBlendFunc", static_cast<const ax::BlendFunc & (ax::ui::ImageView::*)() const>(&ax::ui::ImageView::getBlendFunc));
     class_6_ImageView.method("getCapInsets", static_cast<const ax::Rect & (ax::ui::ImageView::*)() const>(&ax::ui::ImageView::getCapInsets));
-    class_6_ImageView.method("getDescription", static_cast<std::string (ax::ui::ImageView::*)() const>(&ax::ui::ImageView::getDescription));
     class_6_ImageView.method("getRenderFile", static_cast<ax::ResourceData (ax::ui::ImageView::*)()>(&ax::ui::ImageView::getRenderFile));
-    class_6_ImageView.method("getRenderNode", static_cast<ax::Node * (ax::ui::ImageView::*)()>(&ax::ui::ImageView::getRenderNode));
     class_6_ImageView.method("init", axlua::overload(axlua::overload_candidate<>(static_cast<bool (ax::ui::ImageView::*)()>(&ax::ui::ImageView::init)), axlua::overload_candidate<std::string_view, ax::ui::Widget::TextureResType>(static_cast<bool (ax::ui::ImageView::*)(std::string_view, ax::ui::Widget::TextureResType)>(&ax::ui::ImageView::init)), axlua::overload_candidate<std::string_view>([](ax::ui::ImageView& self, std::string_view arg0) -> bool { return static_cast<ax::ui::ImageView&>(self).init(arg0, ax::ui::Widget::TextureResType::LOCAL); })));
     class_6_ImageView.method("isScale9Enabled", static_cast<bool (ax::ui::ImageView::*)() const>(&ax::ui::ImageView::isScale9Enabled));
     class_6_ImageView.method("loadTexture", axlua::overload(axlua::overload_candidate<std::string_view, ax::ui::Widget::TextureResType>(static_cast<void (ax::ui::ImageView::*)(std::string_view, ax::ui::Widget::TextureResType)>(&ax::ui::ImageView::loadTexture)), axlua::overload_candidate<std::string_view>([](ax::ui::ImageView& self, std::string_view arg0) -> void { static_cast<ax::ui::ImageView&>(self).loadTexture(arg0, ax::ui::Widget::TextureResType::LOCAL); })));
     class_6_ImageView.method("resolvePreferredSize", static_cast<ax::Vec2 (ax::ui::ImageView::*)(const ax::Vec2 &) const>(&ax::ui::ImageView::resolvePreferredSize));
-    class_6_ImageView.method("setAutoSize", static_cast<void (ax::ui::ImageView::*)(bool)>(&ax::ui::ImageView::setAutoSize));
     class_6_ImageView.method("setBlendFunc", static_cast<void (ax::ui::ImageView::*)(const ax::BlendFunc &)>(&ax::ui::ImageView::setBlendFunc));
     class_6_ImageView.method("setCapInsets", static_cast<void (ax::ui::ImageView::*)(const ax::Rect &)>(&ax::ui::ImageView::setCapInsets));
     class_6_ImageView.method("setScale9Enabled", static_cast<void (ax::ui::ImageView::*)(bool)>(&ax::ui::ImageView::setScale9Enabled));
@@ -216,7 +205,6 @@ void register_ax_ui_members_0(lua_State* L)
     class_7_InputField.method("getPlaceholderColor", static_cast<const ax::Color32 & (ax::ui::InputField::*)() const>(&ax::ui::InputField::getPlaceholderColor));
     class_7_InputField.method("getPlaceholderText", static_cast<std::string_view (ax::ui::InputField::*)() const>(&ax::ui::InputField::getPlaceholderText));
     class_7_InputField.method("getRenderLabel", static_cast<ax::Label * (ax::ui::InputField::*)()>(&ax::ui::InputField::getRenderLabel));
-    class_7_InputField.method("getRenderNode", static_cast<ax::Node * (ax::ui::InputField::*)()>(&ax::ui::InputField::getRenderNode));
     class_7_InputField.method("getSelectedText", static_cast<std::string (ax::ui::InputField::*)() const>(&ax::ui::InputField::getSelectedText));
     class_7_InputField.method("getSelectionColor", static_cast<const ax::Color & (ax::ui::InputField::*)() const>(&ax::ui::InputField::getSelectionColor));
     class_7_InputField.method("getString", static_cast<std::string_view (ax::ui::InputField::*)() const>(&ax::ui::InputField::getString));
@@ -238,7 +226,6 @@ void register_ax_ui_members_0(lua_State* L)
     class_7_InputField.method("setContinuousTouchCallback", static_cast<void (ax::ui::InputField::*)(std::function<void (const ax::Point &)>)>(&ax::ui::InputField::setContinuousTouchCallback));
     class_7_InputField.method("setContinuousTouchDelayTime", static_cast<void (ax::ui::InputField::*)(float)>(&ax::ui::InputField::setContinuousTouchDelayTime));
     class_7_InputField.method("setCursorColor", static_cast<void (ax::ui::InputField::*)(const ax::Color32 &)>(&ax::ui::InputField::setCursorColor));
-    class_7_InputField.method("setEnabled", static_cast<void (ax::ui::InputField::*)(bool)>(&ax::ui::InputField::setEnabled));
     class_7_InputField.method("setFontName", static_cast<void (ax::ui::InputField::*)(std::string_view)>(&ax::ui::InputField::setFontName));
     class_7_InputField.method("setFontSize", static_cast<void (ax::ui::InputField::*)(float)>(&ax::ui::InputField::setFontSize));
     class_7_InputField.method("setMaxLength", static_cast<void (ax::ui::InputField::*)(int)>(&ax::ui::InputField::setMaxLength));

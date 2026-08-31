@@ -123,17 +123,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getWorldTransform",
-          "luaName": "getWorldTransform",
-          "declaringType": "ax::Collider3D",
-          "returnType": "ax::Mat4",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "hasOwnBody",
           "luaName": "hasOwnBody",
           "declaringType": "ax::Collider3D",
@@ -229,28 +218,6 @@
           "defaultValues": [
             null
           ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "syncNodeToPhysics",
-          "luaName": "syncNodeToPhysics",
-          "declaringType": "ax::Collider3D",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "syncPhysicsToNode",
-          "luaName": "syncPhysicsToNode",
-          "declaringType": "ax::Collider3D",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
@@ -1656,36 +1623,6 @@
           "isStatic": true,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "setAnchor",
-          "luaName": "setAnchor",
-          "declaringType": "ax::PivotJoint3D",
-          "returnType": "void",
-          "parameterTypes": [
-            "const ax::Vec3 \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setConnectedAnchor",
-          "luaName": "setConnectedAnchor",
-          "declaringType": "ax::PivotJoint3D",
-          "returnType": "void",
-          "parameterTypes": [
-            "const ax::Vec3 \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -1954,17 +1891,6 @@
           "luaName": "getWorld",
           "declaringType": "ax::Rigidbody3D",
           "returnType": "ax::PhysicsWorld3D *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getWorldTransform",
-          "luaName": "getWorldTransform",
-          "declaringType": "ax::Rigidbody3D",
-          "returnType": "ax::Mat4",
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": false,
@@ -2324,28 +2250,6 @@
           "defaultValues": [
             null
           ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "syncNodeToPhysics",
-          "luaName": "syncNodeToPhysics",
-          "declaringType": "ax::Rigidbody3D",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "syncPhysicsToNode",
-          "luaName": "syncPhysicsToNode",
-          "declaringType": "ax::Rigidbody3D",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
           "isStatic": false,
           "isConst": false,
           "isVariadic": false

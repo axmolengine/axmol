@@ -35,11 +35,9 @@ void register_ax_physics2d(lua_State* L)
     auto class_22_WheelJoint2D = module.class_<ax::WheelJoint2D>("WheelJoint2D");
     class_0_BoxCollider2D.bases<ax::Collider2D, ax::Object>();
     class_0_BoxCollider2D.static_method("create", axlua::overload(axlua::overload_candidate<const ax::Vec2 &, const ax::PhysicsMaterial2D &, const ax::Vec2 &, float>(static_cast<ax::BoxCollider2D * (*)(const ax::Vec2 &, const ax::PhysicsMaterial2D &, const ax::Vec2 &, float)>(&ax::BoxCollider2D::create)), axlua::overload_candidate<const ax::Vec2 &>([](const ax::Vec2 & arg0) -> ax::BoxCollider2D * { return ax::BoxCollider2D::create(arg0, ax::PHYSICS_MATERIAL_2D_DEFAULT, ax::Vec2::zero, 0.0f); }), axlua::overload_candidate<const ax::Vec2 &, const ax::PhysicsMaterial2D &>([](const ax::Vec2 & arg0, const ax::PhysicsMaterial2D & arg1) -> ax::BoxCollider2D * { return ax::BoxCollider2D::create(arg0, arg1, ax::Vec2::zero, 0.0f); }), axlua::overload_candidate<const ax::Vec2 &, const ax::PhysicsMaterial2D &, const ax::Vec2 &>([](const ax::Vec2 & arg0, const ax::PhysicsMaterial2D & arg1, const ax::Vec2 & arg2) -> ax::BoxCollider2D * { return ax::BoxCollider2D::create(arg0, arg1, arg2, 0.0f); })));
-    class_0_BoxCollider2D.method("getOffset", static_cast<ax::Vec2 (ax::BoxCollider2D::*)()>(&ax::BoxCollider2D::getOffset));
     class_0_BoxCollider2D.method("getSize", static_cast<ax::Vec2 (ax::BoxCollider2D::*)() const>(&ax::BoxCollider2D::getSize));
     class_1_CircleCollider2D.bases<ax::Collider2D, ax::Object>();
     class_1_CircleCollider2D.static_method("create", axlua::overload(axlua::overload_candidate<float, const ax::PhysicsMaterial2D &, const ax::Vec2 &>(static_cast<ax::CircleCollider2D * (*)(float, const ax::PhysicsMaterial2D &, const ax::Vec2 &)>(&ax::CircleCollider2D::create)), axlua::overload_candidate<float>([](float arg0) -> ax::CircleCollider2D * { return ax::CircleCollider2D::create(arg0, ax::PHYSICS_MATERIAL_2D_DEFAULT, ax::Vec2(0.0f, 0.0f)); }), axlua::overload_candidate<float, const ax::PhysicsMaterial2D &>([](float arg0, const ax::PhysicsMaterial2D & arg1) -> ax::CircleCollider2D * { return ax::CircleCollider2D::create(arg0, arg1, ax::Vec2(0.0f, 0.0f)); })));
-    class_1_CircleCollider2D.method("getOffset", static_cast<ax::Vec2 (ax::CircleCollider2D::*)()>(&ax::CircleCollider2D::getOffset));
     class_1_CircleCollider2D.method("getRadius", static_cast<float (ax::CircleCollider2D::*)() const>(&ax::CircleCollider2D::getRadius));
     class_2_Collider2D.bases<ax::Object>();
     class_2_Collider2D.method("containsPoint", static_cast<bool (ax::Collider2D::*)(const ax::Vec2 &) const>(&ax::Collider2D::containsPoint));
@@ -95,16 +93,12 @@ void register_ax_physics2d(lua_State* L)
     class_5_DistanceJoint2D.method("setUseLimits", static_cast<void (ax::DistanceJoint2D::*)(bool)>(&ax::DistanceJoint2D::setUseLimits));
     class_6_EdgeBoxCollider2D.bases<ax::Collider2D, ax::Object>();
     class_6_EdgeBoxCollider2D.static_method("create", axlua::overload(axlua::overload_candidate<const ax::Vec2 &, const ax::PhysicsMaterial2D &, const ax::Vec2 &>(static_cast<ax::EdgeBoxCollider2D * (*)(const ax::Vec2 &, const ax::PhysicsMaterial2D &, const ax::Vec2 &)>(&ax::EdgeBoxCollider2D::create)), axlua::overload_candidate<const ax::Vec2 &>([](const ax::Vec2 & arg0) -> ax::EdgeBoxCollider2D * { return ax::EdgeBoxCollider2D::create(arg0, ax::PHYSICS_MATERIAL_2D_DEFAULT, ax::Vec2::zero); }), axlua::overload_candidate<const ax::Vec2 &, const ax::PhysicsMaterial2D &>([](const ax::Vec2 & arg0, const ax::PhysicsMaterial2D & arg1) -> ax::EdgeBoxCollider2D * { return ax::EdgeBoxCollider2D::create(arg0, arg1, ax::Vec2::zero); })));
-    class_6_EdgeBoxCollider2D.method("getOffset", static_cast<ax::Vec2 (ax::EdgeBoxCollider2D::*)()>(&ax::EdgeBoxCollider2D::getOffset));
     class_7_EdgeChainCollider2D.bases<ax::Collider2D, ax::Object>();
-    class_7_EdgeChainCollider2D.method("getCenter", static_cast<ax::Vec2 (ax::EdgeChainCollider2D::*)()>(&ax::EdgeChainCollider2D::getCenter));
     class_7_EdgeChainCollider2D.method("getPointsCount", static_cast<int (ax::EdgeChainCollider2D::*)() const>(&ax::EdgeChainCollider2D::getPointsCount));
     class_8_EdgePolygonCollider2D.bases<ax::Collider2D, ax::Object>();
-    class_8_EdgePolygonCollider2D.method("getCenter", static_cast<ax::Vec2 (ax::EdgePolygonCollider2D::*)()>(&ax::EdgePolygonCollider2D::getCenter));
     class_8_EdgePolygonCollider2D.method("getPointsCount", static_cast<int (ax::EdgePolygonCollider2D::*)() const>(&ax::EdgePolygonCollider2D::getPointsCount));
     class_9_EdgeSegmentCollider2D.bases<ax::Collider2D, ax::Object>();
     class_9_EdgeSegmentCollider2D.static_method("create", axlua::overload(axlua::overload_candidate<const ax::Vec2 &, const ax::Vec2 &, const ax::PhysicsMaterial2D &>(static_cast<ax::EdgeSegmentCollider2D * (*)(const ax::Vec2 &, const ax::Vec2 &, const ax::PhysicsMaterial2D &)>(&ax::EdgeSegmentCollider2D::create)), axlua::overload_candidate<const ax::Vec2 &, const ax::Vec2 &>([](const ax::Vec2 & arg0, const ax::Vec2 & arg1) -> ax::EdgeSegmentCollider2D * { return ax::EdgeSegmentCollider2D::create(arg0, arg1, ax::PHYSICS_MATERIAL_2D_DEFAULT); })));
-    class_9_EdgeSegmentCollider2D.method("getCenter", static_cast<ax::Vec2 (ax::EdgeSegmentCollider2D::*)()>(&ax::EdgeSegmentCollider2D::getCenter));
     class_9_EdgeSegmentCollider2D.method("getPointA", static_cast<ax::Vec2 (ax::EdgeSegmentCollider2D::*)() const>(&ax::EdgeSegmentCollider2D::getPointA));
     class_9_EdgeSegmentCollider2D.method("getPointB", static_cast<ax::Vec2 (ax::EdgeSegmentCollider2D::*)() const>(&ax::EdgeSegmentCollider2D::getPointB));
     class_10_FilterJoint2D.bases<ax::Joint2D, ax::Component, ax::Object>();
@@ -188,7 +182,6 @@ void register_ax_physics2d(lua_State* L)
     class_16_PivotJoint2D.method("setUseMotor", static_cast<void (ax::PivotJoint2D::*)(bool)>(&ax::PivotJoint2D::setUseMotor));
     class_16_PivotJoint2D.method("setUseSpring", static_cast<void (ax::PivotJoint2D::*)(bool)>(&ax::PivotJoint2D::setUseSpring));
     class_17_PolygonCollider2D.bases<ax::Collider2D, ax::Object>();
-    class_17_PolygonCollider2D.method("getCenter", static_cast<ax::Vec2 (ax::PolygonCollider2D::*)()>(&ax::PolygonCollider2D::getCenter));
     class_17_PolygonCollider2D.method("getPoint", static_cast<ax::Vec2 (ax::PolygonCollider2D::*)(int) const>(&ax::PolygonCollider2D::getPoint));
     class_17_PolygonCollider2D.method("getPointsCount", static_cast<int (ax::PolygonCollider2D::*)() const>(&ax::PolygonCollider2D::getPointsCount));
     class_18_Rigidbody2D.bases<ax::Component, ax::Object>();

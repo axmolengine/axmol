@@ -68,14 +68,12 @@ void register_ax_ui_members_3(lua_State* L)
     class_2_Text.method("getAutoRenderSize", static_cast<ax::Vec2 (ax::ui::Text::*)()>(&ax::ui::Text::getAutoRenderSize));
     class_2_Text.method("getBlendFunc", static_cast<const ax::BlendFunc & (ax::ui::Text::*)() const>(&ax::ui::Text::getBlendFunc));
     class_2_Text.method("getCharCount", static_cast<ssize_t (ax::ui::Text::*)() const>(&ax::ui::Text::getCharCount));
-    class_2_Text.method("getDescription", static_cast<std::string (ax::ui::Text::*)() const>(&ax::ui::Text::getDescription));
     class_2_Text.method("getEffectColor", static_cast<ax::Color32 (ax::ui::Text::*)() const>(&ax::ui::Text::getEffectColor));
     class_2_Text.method("getFontName", static_cast<std::string_view (ax::ui::Text::*)() const>(&ax::ui::Text::getFontName));
     class_2_Text.method("getFontSize", static_cast<float (ax::ui::Text::*)() const>(&ax::ui::Text::getFontSize));
     class_2_Text.method("getLabelEffectType", static_cast<ax::LabelEffect (ax::ui::Text::*)() const>(&ax::ui::Text::getLabelEffectType));
     class_2_Text.method("getLetter", static_cast<ax::Sprite * (ax::ui::Text::*)(int)>(&ax::ui::Text::getLetter));
     class_2_Text.method("getOutlineSize", static_cast<int (ax::ui::Text::*)() const>(&ax::ui::Text::getOutlineSize));
-    class_2_Text.method("getRenderNode", static_cast<ax::Node * (ax::ui::Text::*)()>(&ax::ui::Text::getRenderNode));
     class_2_Text.method("getShadowBlurRadius", static_cast<float (ax::ui::Text::*)() const>(&ax::ui::Text::getShadowBlurRadius));
     class_2_Text.method("getShadowColor", static_cast<ax::Color32 (ax::ui::Text::*)() const>(&ax::ui::Text::getShadowColor));
     class_2_Text.method("getShadowOffset", static_cast<ax::Vec2 (ax::ui::Text::*)() const>(&ax::ui::Text::getShadowOffset));
@@ -104,9 +102,7 @@ void register_ax_ui_members_3(lua_State* L)
     class_3_TextAtlas.static_method("create", axlua::overload(axlua::overload_candidate<>(static_cast<ax::ui::TextAtlas * (*)()>(&ax::ui::TextAtlas::create)), axlua::overload_candidate<std::string_view, std::string_view, int, int, std::string_view>(static_cast<ax::ui::TextAtlas * (*)(std::string_view, std::string_view, int, int, std::string_view)>(&ax::ui::TextAtlas::create))));
     class_3_TextAtlas.static_method("createInstance", static_cast<ax::Object * (*)()>(&ax::ui::TextAtlas::createInstance));
     class_3_TextAtlas.method("getCharCount", static_cast<ssize_t (ax::ui::TextAtlas::*)() const>(&ax::ui::TextAtlas::getCharCount));
-    class_3_TextAtlas.method("getDescription", static_cast<std::string (ax::ui::TextAtlas::*)() const>(&ax::ui::TextAtlas::getDescription));
     class_3_TextAtlas.method("getRenderFile", static_cast<ax::ResourceData (ax::ui::TextAtlas::*)()>(&ax::ui::TextAtlas::getRenderFile));
-    class_3_TextAtlas.method("getRenderNode", static_cast<ax::Node * (ax::ui::TextAtlas::*)()>(&ax::ui::TextAtlas::getRenderNode));
     class_3_TextAtlas.method("getString", static_cast<std::string_view (ax::ui::TextAtlas::*)() const>(&ax::ui::TextAtlas::getString));
     class_3_TextAtlas.method("resolvePreferredSize", static_cast<ax::Vec2 (ax::ui::TextAtlas::*)(const ax::Vec2 &) const>(&ax::ui::TextAtlas::resolvePreferredSize));
     class_3_TextAtlas.method("setProperty", static_cast<void (ax::ui::TextAtlas::*)(std::string_view, std::string_view, int, int, std::string_view)>(&ax::ui::TextAtlas::setProperty));
@@ -118,9 +114,7 @@ void register_ax_ui_members_3(lua_State* L)
     class_4_TextBMFont.static_method("create", axlua::overload(axlua::overload_candidate<>(static_cast<ax::ui::TextBMFont * (*)()>(&ax::ui::TextBMFont::create)), axlua::overload_candidate<std::string_view, std::string_view>(static_cast<ax::ui::TextBMFont * (*)(std::string_view, std::string_view)>(&ax::ui::TextBMFont::create))));
     class_4_TextBMFont.static_method("createInstance", static_cast<ax::Object * (*)()>(&ax::ui::TextBMFont::createInstance));
     class_4_TextBMFont.method("getCharCount", static_cast<ssize_t (ax::ui::TextBMFont::*)() const>(&ax::ui::TextBMFont::getCharCount));
-    class_4_TextBMFont.method("getDescription", static_cast<std::string (ax::ui::TextBMFont::*)() const>(&ax::ui::TextBMFont::getDescription));
     class_4_TextBMFont.method("getRenderFile", static_cast<ax::ResourceData (ax::ui::TextBMFont::*)()>(&ax::ui::TextBMFont::getRenderFile));
-    class_4_TextBMFont.method("getRenderNode", static_cast<ax::Node * (ax::ui::TextBMFont::*)()>(&ax::ui::TextBMFont::getRenderNode));
     class_4_TextBMFont.method("getString", static_cast<std::string_view (ax::ui::TextBMFont::*)() const>(&ax::ui::TextBMFont::getString));
     class_4_TextBMFont.method("resetRender", static_cast<void (ax::ui::TextBMFont::*)()>(&ax::ui::TextBMFont::resetRender));
     class_4_TextBMFont.method("resolvePreferredSize", static_cast<ax::Vec2 (ax::ui::TextBMFont::*)(const ax::Vec2 &) const>(&ax::ui::TextBMFont::resolvePreferredSize));

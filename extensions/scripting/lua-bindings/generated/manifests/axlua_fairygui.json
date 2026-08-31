@@ -211,17 +211,6 @@
       ],
       "methods": [
         {
-          "nativeName": "applyTextFormat",
-          "luaName": "applyTextFormat",
-          "declaringType": "fairygui::GBasicTextField",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "fairygui::GBasicTextField",
@@ -229,58 +218,6 @@
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getTextFormat",
-          "luaName": "getTextFormat",
-          "declaringType": "fairygui::GBasicTextField",
-          "returnType": "fairygui::TextFormat *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "isSingleLine",
-          "luaName": "isSingleLine",
-          "declaringType": "fairygui::GBasicTextField",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setAutoSize",
-          "luaName": "setAutoSize",
-          "declaringType": "fairygui::GBasicTextField",
-          "returnType": "void",
-          "parameterTypes": [
-            "fairygui::AutoSizeType"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setSingleLine",
-          "luaName": "setSingleLine",
-          "declaringType": "fairygui::GBasicTextField",
-          "returnType": "void",
-          "parameterTypes": [
-            "bool"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -318,32 +255,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getIcon",
-          "luaName": "getIcon",
-          "declaringType": "fairygui::GButton",
-          "returnType": "const std::string \u0026",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getProp",
-          "luaName": "getProp",
-          "declaringType": "fairygui::GButton",
-          "returnType": "ax::Value",
-          "parameterTypes": [
-            "fairygui::ObjectPropID"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getRelatedController",
           "luaName": "getRelatedController",
           "declaringType": "fairygui::GButton",
@@ -368,17 +279,6 @@
         {
           "nativeName": "getSelectedTitle",
           "luaName": "getSelectedTitle",
-          "declaringType": "fairygui::GButton",
-          "returnType": "const std::string \u0026",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getText",
-          "luaName": "getText",
           "declaringType": "fairygui::GButton",
           "returnType": "const std::string \u0026",
           "parameterTypes": [],
@@ -469,38 +369,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "setIcon",
-          "luaName": "setIcon",
-          "declaringType": "fairygui::GButton",
-          "returnType": "void",
-          "parameterTypes": [
-            "const std::string \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setProp",
-          "luaName": "setProp",
-          "declaringType": "fairygui::GButton",
-          "returnType": "void",
-          "parameterTypes": [
-            "fairygui::ObjectPropID",
-            "const ax::Value \u0026"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setRelatedController",
           "luaName": "setRelatedController",
           "declaringType": "fairygui::GButton",
@@ -548,21 +416,6 @@
         {
           "nativeName": "setSelectedTitle",
           "luaName": "setSelectedTitle",
-          "declaringType": "fairygui::GButton",
-          "returnType": "void",
-          "parameterTypes": [
-            "const std::string \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setText",
-          "luaName": "setText",
           "declaringType": "fairygui::GButton",
           "returnType": "void",
           "parameterTypes": [
@@ -665,17 +518,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getIcon",
-          "luaName": "getIcon",
-          "declaringType": "fairygui::GComboBox",
-          "returnType": "const std::string \u0026",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getIcons",
           "luaName": "getIcons",
           "declaringType": "fairygui::GComboBox",
@@ -698,21 +540,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getProp",
-          "luaName": "getProp",
-          "declaringType": "fairygui::GComboBox",
-          "returnType": "ax::Value",
-          "parameterTypes": [
-            "fairygui::ObjectPropID"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getSelectedIndex",
           "luaName": "getSelectedIndex",
           "declaringType": "fairygui::GComboBox",
@@ -728,17 +555,6 @@
           "luaName": "getSelectionController",
           "declaringType": "fairygui::GComboBox",
           "returnType": "fairygui::GController *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getText",
-          "luaName": "getText",
-          "declaringType": "fairygui::GComboBox",
-          "returnType": "const std::string \u0026",
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": false,
@@ -823,38 +639,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "setIcon",
-          "luaName": "setIcon",
-          "declaringType": "fairygui::GComboBox",
-          "returnType": "void",
-          "parameterTypes": [
-            "const std::string \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setProp",
-          "luaName": "setProp",
-          "declaringType": "fairygui::GComboBox",
-          "returnType": "void",
-          "parameterTypes": [
-            "fairygui::ObjectPropID",
-            "const ax::Value \u0026"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setSelectedIndex",
           "luaName": "setSelectedIndex",
           "declaringType": "fairygui::GComboBox",
@@ -876,21 +660,6 @@
           "returnType": "void",
           "parameterTypes": [
             "fairygui::GController *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setText",
-          "luaName": "setText",
-          "declaringType": "fairygui::GComboBox",
-          "returnType": "void",
-          "parameterTypes": [
-            "const std::string \u0026"
           ],
           "defaultValues": [
             null
@@ -1434,23 +1203,6 @@
           "defaultValues": [],
           "isStatic": false,
           "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "hitTest",
-          "luaName": "hitTest",
-          "declaringType": "fairygui::GComponent",
-          "returnType": "fairygui::GObject *",
-          "parameterTypes": [
-            "const ax::Vec2 \u0026",
-            "const ax::Camera *"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
           "isVariadic": false
         },
         {
@@ -2141,21 +1893,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getProp",
-          "luaName": "getProp",
-          "declaringType": "fairygui::GGraph",
-          "returnType": "ax::Value",
-          "parameterTypes": [
-            "fairygui::ObjectPropID"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "isEmpty",
           "luaName": "isEmpty",
           "declaringType": "fairygui::GGraph",
@@ -2175,23 +1912,6 @@
             "const ax::Color32 \u0026"
           ],
           "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setProp",
-          "luaName": "setProp",
-          "declaringType": "fairygui::GGraph",
-          "returnType": "void",
-          "parameterTypes": [
-            "fairygui::ObjectPropID",
-            "const ax::Value \u0026"
-          ],
-          "defaultValues": [
-            null,
             null
           ],
           "isStatic": false,
@@ -2483,17 +2203,6 @@
       ],
       "methods": [
         {
-          "nativeName": "constructFromResource",
-          "luaName": "constructFromResource",
-          "declaringType": "fairygui::GImage",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "fairygui::GImage",
@@ -2557,21 +2266,6 @@
           "defaultValues": [],
           "isStatic": false,
           "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getProp",
-          "luaName": "getProp",
-          "declaringType": "fairygui::GImage",
-          "returnType": "ax::Value",
-          "parameterTypes": [
-            "fairygui::ObjectPropID"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
           "isVariadic": false
         },
         {
@@ -2674,23 +2368,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "setProp",
-          "luaName": "setProp",
-          "declaringType": "fairygui::GImage",
-          "returnType": "void",
-          "parameterTypes": [
-            "fairygui::ObjectPropID",
-            "const ax::Value \u0026"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -2714,23 +2391,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "addChildAt",
-          "luaName": "addChildAt",
-          "declaringType": "fairygui::GList",
-          "returnType": "fairygui::GObject *",
-          "parameterTypes": [
-            "fairygui::GObject *",
-            "int"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
         {
           "nativeName": "addItemFromPool",
           "luaName": "addItemFromPool",
@@ -2867,17 +2527,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getFirstChildInView",
-          "luaName": "getFirstChildInView",
-          "declaringType": "fairygui::GList",
-          "returnType": "int",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getFromPool",
           "luaName": "getFromPool",
           "declaringType": "fairygui::GList",
@@ -3007,21 +2656,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getSnappingPosition",
-          "luaName": "getSnappingPosition",
-          "declaringType": "fairygui::GList",
-          "returnType": "ax::Vec2",
-          "parameterTypes": [
-            "const ax::Vec2 \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getVerticalAlign",
           "luaName": "getVerticalAlign",
           "declaringType": "fairygui::GList",
@@ -3080,21 +2714,6 @@
           "returnType": "void",
           "parameterTypes": [],
           "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "removeChildAt",
-          "luaName": "removeChildAt",
-          "declaringType": "fairygui::GList",
-          "returnType": "void",
-          "parameterTypes": [
-            "int"
-          ],
-          "defaultValues": [
-            null
-          ],
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
@@ -3620,32 +3239,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getIcon",
-          "luaName": "getIcon",
-          "declaringType": "fairygui::GLoader",
-          "returnType": "const std::string \u0026",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getProp",
-          "luaName": "getProp",
-          "declaringType": "fairygui::GLoader",
-          "returnType": "ax::Value",
-          "parameterTypes": [
-            "fairygui::ObjectPropID"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getURL",
           "luaName": "getURL",
           "declaringType": "fairygui::GLoader",
@@ -3836,21 +3429,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "setIcon",
-          "luaName": "setIcon",
-          "declaringType": "fairygui::GLoader",
-          "returnType": "void",
-          "parameterTypes": [
-            "const std::string \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setPlaying",
           "luaName": "setPlaying",
           "declaringType": "fairygui::GLoader",
@@ -3859,23 +3437,6 @@
             "bool"
           ],
           "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setProp",
-          "luaName": "setProp",
-          "declaringType": "fairygui::GLoader",
-          "returnType": "void",
-          "parameterTypes": [
-            "fairygui::ObjectPropID",
-            "const ax::Value \u0026"
-          ],
-          "defaultValues": [
-            null,
             null
           ],
           "isStatic": false,
@@ -3964,17 +3525,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "constructFromResource",
-          "luaName": "constructFromResource",
-          "declaringType": "fairygui::GMovieClip",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "fairygui::GMovieClip",
@@ -4016,21 +3566,6 @@
           "defaultValues": [],
           "isStatic": false,
           "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getProp",
-          "luaName": "getProp",
-          "declaringType": "fairygui::GMovieClip",
-          "returnType": "ax::Value",
-          "parameterTypes": [
-            "fairygui::ObjectPropID"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
           "isVariadic": false
         },
         {
@@ -4109,23 +3644,6 @@
             "bool"
           ],
           "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setProp",
-          "luaName": "setProp",
-          "declaringType": "fairygui::GMovieClip",
-          "returnType": "void",
-          "parameterTypes": [
-            "fairygui::ObjectPropID",
-            "const ax::Value \u0026"
-          ],
-          "defaultValues": [
-            null,
             null
           ],
           "isStatic": false,
@@ -5630,17 +5148,6 @@
       ],
       "methods": [
         {
-          "nativeName": "applyTextFormat",
-          "luaName": "applyTextFormat",
-          "declaringType": "fairygui::GRichTextField",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "fairygui::GRichTextField",
@@ -5648,75 +5155,6 @@
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getTextFormat",
-          "luaName": "getTextFormat",
-          "declaringType": "fairygui::GRichTextField",
-          "returnType": "fairygui::TextFormat *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "hitTest",
-          "luaName": "hitTest",
-          "declaringType": "fairygui::GRichTextField",
-          "returnType": "fairygui::GObject *",
-          "parameterTypes": [
-            "const ax::Vec2 \u0026",
-            "const ax::Camera *"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "isSingleLine",
-          "luaName": "isSingleLine",
-          "declaringType": "fairygui::GRichTextField",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setAutoSize",
-          "luaName": "setAutoSize",
-          "declaringType": "fairygui::GRichTextField",
-          "returnType": "void",
-          "parameterTypes": [
-            "fairygui::AutoSizeType"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setSingleLine",
-          "luaName": "setSingleLine",
-          "declaringType": "fairygui::GRichTextField",
-          "returnType": "void",
-          "parameterTypes": [
-            "bool"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -6567,32 +6005,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getProp",
-          "luaName": "getProp",
-          "declaringType": "fairygui::GTextField",
-          "returnType": "ax::Value",
-          "parameterTypes": [
-            "fairygui::ObjectPropID"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getText",
-          "luaName": "getText",
-          "declaringType": "fairygui::GTextField",
-          "returnType": "const std::string \u0026",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getTextFormat",
           "luaName": "getTextFormat",
           "declaringType": "fairygui::GTextField",
@@ -6697,44 +6109,12 @@
           "isVariadic": false
         },
         {
-          "nativeName": "setProp",
-          "luaName": "setProp",
-          "declaringType": "fairygui::GTextField",
-          "returnType": "void",
-          "parameterTypes": [
-            "fairygui::ObjectPropID",
-            "const ax::Value \u0026"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setSingleLine",
           "luaName": "setSingleLine",
           "declaringType": "fairygui::GTextField",
           "returnType": "void",
           "parameterTypes": [
             "bool"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setText",
-          "luaName": "setText",
-          "declaringType": "fairygui::GTextField",
-          "returnType": "void",
-          "parameterTypes": [
-            "const std::string \u0026"
           ],
           "defaultValues": [
             null
@@ -6798,17 +6178,6 @@
       ],
       "methods": [
         {
-          "nativeName": "applyTextFormat",
-          "luaName": "applyTextFormat",
-          "declaringType": "fairygui::GTextInput",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "fairygui::GTextInput",
@@ -6817,28 +6186,6 @@
           "defaultValues": [],
           "isStatic": true,
           "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getTextFormat",
-          "luaName": "getTextFormat",
-          "declaringType": "fairygui::GTextInput",
-          "returnType": "fairygui::TextFormat *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "isSingleLine",
-          "luaName": "isSingleLine",
-          "declaringType": "fairygui::GTextInput",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
           "isVariadic": false
         },
         {
@@ -6908,21 +6255,6 @@
           "returnType": "void",
           "parameterTypes": [
             "const std::string \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setSingleLine",
-          "luaName": "setSingleLine",
-          "declaringType": "fairygui::GTextInput",
-          "returnType": "void",
-          "parameterTypes": [
-            "bool"
           ],
           "defaultValues": [
             null
