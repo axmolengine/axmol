@@ -484,6 +484,42 @@ enum class ClassMemberKind
     getter,
 };
 
+// Look only for concrete entries on the public class-table chain. This is the
+// common generated-method path and deliberately excludes accessors and
+// metatable fallback so a miss cannot duplicate the full lookup below.
+bool lookup_public_class_value(lua_State* state, int classTableIndex, int keyIndex)
+{
+    classTableIndex = absolute_index(state, classTableIndex);
+    keyIndex        = absolute_index(state, keyIndex);
+
+    lua_pushvalue(state, classTableIndex);
+    int currentClassTable = absolute_index(state, -1);
+    for (int depth = 0; depth < 64; ++depth)
+    {
+        lua_pushvalue(state, keyIndex);
+        lua_rawget(state, currentClassTable);
+        if (!lua_isnil(state, -1))
+        {
+            lua_remove(state, currentClassTable);
+            return true;
+        }
+        lua_pop(state, 1);
+
+        if (!push_registered_base(state, currentClassTable))
+        {
+            // A compatibility registry miss may leave nil above the cursor.
+            lua_settop(state, currentClassTable);
+            lua_pop(state, 1);
+            return false;
+        }
+        lua_remove(state, currentClassTable);
+        currentClassTable = absolute_index(state, -1);
+    }
+
+    lua_pop(state, 1);
+    return false;
+}
+
 bool lookup_class_accessor(lua_State* state, int classTableIndex, int keyIndex, const char* accessorTable)
 {
     classTableIndex = absolute_index(state, classTableIndex);
@@ -507,6 +543,10 @@ ClassMemberKind lookup_class_member(lua_State* state, int classTableIndex, int k
 {
     classTableIndex = absolute_index(state, classTableIndex);
     keyIndex        = absolute_index(state, keyIndex);
+
+    if (lookup_public_class_value(state, classTableIndex, keyIndex))
+        return ClassMemberKind::value;
+
     for (int depth = 0; depth < 64; ++depth)
     {
         lua_pushvalue(state, keyIndex);
