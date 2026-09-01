@@ -319,11 +319,13 @@ namespace detail
 template <class T>
 inline T fast_number(lua_State* state, int index)
 {
+#if defined(_AX_DEBUG) && _AX_DEBUG > 0
     if (lua_type(state, index) != LUA_TNUMBER)
     {
         luaL_typeerror(state, index, "number");
         return T{};
     }
+#endif
     return static_cast<T>(lua_tonumber(state, index));
 }
 
