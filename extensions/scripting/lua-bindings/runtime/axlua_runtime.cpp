@@ -281,6 +281,44 @@ void push_user_environment(lua_State* state, int index)
     }
 }
 
+// Read an existing peer/uservalue without materializing one. Ordinary native
+// objects have no peer table until Lua code explicitly attaches peer state;
+// keeping this lookup non-allocating is the no-peer instance-index fast path.
+bool push_existing_user_environment(lua_State* state, int index)
+{
+    index = absolute_index(state, index);
+#if LUA_VERSION_NUM == 501 || defined(LUAJIT_VERSION)
+    lua_getfenv(state, index);
+    bool sharedEnvironment = false;
+    if (lua_istable(state, -1))
+    {
+        lua_pushvalue(state, LUA_GLOBALSINDEX);
+        sharedEnvironment = lua_rawequal(state, -1, -2) != 0;
+        lua_pop(state, 1);
+    }
+    if (!lua_istable(state, -1) || sharedEnvironment)
+    {
+        lua_pop(state, 1);
+        return false;
+    }
+#elif LUA_VERSION_NUM >= 504
+    lua_getiuservalue(state, index, 1);
+    if (!lua_istable(state, -1))
+    {
+        lua_pop(state, 1);
+        return false;
+    }
+#else
+    lua_getuservalue(state, index);
+    if (!lua_istable(state, -1))
+    {
+        lua_pop(state, 1);
+        return false;
+    }
+#endif
+    return true;
+}
+
 void mark_userdata_invalid(lua_State* state, int index)
 {
     index = absolute_index(state, index);
@@ -909,12 +947,14 @@ bool is_invalid_userdata(lua_State* state, int index)
     if (lua_type(state, index) != LUA_TUSERDATA)
         return false;
     index = absolute_index(state, index);
-    push_user_environment(state, index);
-    lua_getfield(state, -1, "__axlua_invalid");
-    const bool invalid = lua_toboolean(state, -1) != 0;
-    lua_pop(state, 2);
-    if (invalid)
-        return true;
+    if (push_existing_user_environment(state, index))
+    {
+        lua_getfield(state, -1, "__axlua_invalid");
+        const bool invalid = lua_toboolean(state, -1) != 0;
+        lua_pop(state, 2);
+        if (invalid)
+            return true;
+    }
 
     lua_getfield(state, LUA_REGISTRYINDEX, kAxluaObjectLifetimeRegistryKey);
     if (!lua_istable(state, -1))
@@ -1026,20 +1066,20 @@ int class_index(lua_State* state)
     if (is_invalid_userdata(state, 1))
         return luaL_error(state, "attempt to access an expired Axmol object");
 
-    push_user_environment(state, 1);
     // Legacy Lua classes attach their methods to the peer table's metatable
-    // (`__index = cls`).  Sol2 userdata reaches this dispatcher first, so a
-    // raw lookup alone would hide ctor and every other Lua-side class method.
-    // lua_gettable already checks raw peer fields before the metatable; avoid
-    // a redundant raw lookup on every native method access.
-    lua_pushvalue(state, 2);
-    lua_gettable(state, -2);
-    if (!lua_isnil(state, -1))
+    // (`__index = cls`). Only inspect that compatibility layer when a peer
+    // already exists; ordinary native objects skip these table operations.
+    if (push_existing_user_environment(state, 1))
     {
-        lua_remove(state, -2);
-        return 1;
+        lua_pushvalue(state, 2);
+        lua_gettable(state, -2);
+        if (!lua_isnil(state, -1))
+        {
+            lua_remove(state, -2);
+            return 1;
+        }
+        lua_pop(state, 2);
     }
-    lua_pop(state, 2);
 
     if (push_class_table(state, 1))
     {
