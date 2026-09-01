@@ -149,6 +149,7 @@ conversions:
     "JointMotor": "joint_motor_to_luaval(tolua_S, ${in_value})"
     "ContactInfo3D": "contact_info_3d_to_luaval(tolua_S, ${in_value})"
     "ContactInfo2D": "physics_contactinfo2d_to_luaval(tolua_S, ${in_value})"
+    "@vector<ax::ContactInfo3D>": "contact_info_3d_span_to_luaval(tolua_S, ${in_value})"
     "RayCastHit2D": "physics_raycastinfo_to_luaval(tolua_S, ${in_value})"
     "Array*": "array_to_luaval(tolua_S,${in_value})"
     "Dictionary*": "dictionary_to_luaval(tolua_S, ${in_value})"

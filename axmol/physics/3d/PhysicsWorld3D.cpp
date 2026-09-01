@@ -314,6 +314,37 @@ void PhysicsWorld3D::dispatchQueuedEvents()
     }
 }
 
+void PhysicsWorld3D::flushPersistedContacts()
+{
+    std::unordered_map<Rigidbody3D*, std::vector<ContactInfo3D>> contacts;
+    {
+        std::scoped_lock lock(_persistedMutex);
+        if (_persistedContacts.empty() && _activePersistedBodies.empty())
+            return;
+        contacts.swap(_persistedContacts);
+    }
+
+    // Clear stale contacts for bodies that stopped colliding in this step
+    for (auto it = _activePersistedBodies.begin(); it != _activePersistedBodies.end();)
+    {
+        // Sleeping bodies stop getting OnContactPersisted even while still touching —
+        // only clear when the body is genuinely active and separated.
+        if (contacts.find(*it) == contacts.end() && _physicsSystem.GetBodyInterface().IsActive((*it)->internalHandle()))
+        {
+            (*it)->_persistedContacts.clear();
+            it = _activePersistedBodies.erase(it);
+        }
+        else
+            ++it;
+    }
+
+    for (auto& [body, bodyContacts] : contacts)
+    {
+        body->_persistedContacts = std::move(bodyContacts);
+        _activePersistedBodies.insert(body);
+    }
+}
+
 void PhysicsWorld3D::setPreSolveCallback(PreSolveCallback cb)
 {
     _preSolveCallback = std::move(cb);
@@ -380,6 +411,7 @@ void PhysicsWorld3D::stepSimulation(float dt)
     _physicsSystem.Update(dt, 1, &_tempAllocator, &_jobSystem);
 
     dispatchQueuedEvents();
+    flushPersistedContacts();
 
     for (auto* actor : _physicsActors)
         actor->postSimulate();
@@ -518,6 +550,12 @@ void PhysicsWorld3D::removePhysicsActorInternal(PhysicsActor* actor)
                 bodyInterface.RemoveBody(bodyID);
             rigidbody->invalidate();
         }
+
+        _activePersistedBodies.erase(rigidbody);
+        {
+            std::scoped_lock lock(_persistedMutex);
+            _persistedContacts.erase(rigidbody);
+        }
     }
     else if (actor->getActorType() == PhysicsActor::kCollider)
     {
@@ -612,11 +650,46 @@ void PhysicsWorld3D::OnContactAdded(const JPH::Body& body1,
         queueContactEvent(std::move(info), ContactEvent3D::EventCode::ContactBegin);
 }
 
-void PhysicsWorld3D::OnContactPersisted(const JPH::Body& /*body1*/,
-                                        const JPH::Body& /*body2*/,
-                                        const JPH::ContactManifold& /*manifold*/,
+void PhysicsWorld3D::OnContactPersisted(const JPH::Body& body1,
+                                        const JPH::Body& body2,
+                                        const JPH::ContactManifold& manifold,
                                         JPH::ContactSettings&)
-{}
+{
+    if (!isGlobalEventEnabled(ContactEventBits::Persisted))
+        return;
+
+    if (body1.IsSensor() || body2.IsSensor())
+        return;
+
+    PhysicsActor* actorA = asActor(body1);
+    PhysicsActor* actorB = asActor(body2);
+    if (!actorA || !actorB)
+        return;
+
+    const bool persistedEnabledAcrorA = actorA->isEventEnabled(ContactEventBits::Persisted);
+    const bool persistedEnabledAcrorB = actorB->isEventEnabled(ContactEventBits::Persisted);
+    if (!persistedEnabledAcrorA && !persistedEnabledAcrorB)
+        return;
+
+    ContactInfo3D info{.actorA = actorA, .actorB = actorB};
+    fillContactPoints(info, body1, body2, manifold, /*includeVelocity=*/true);
+
+    const bool pushA = actorA->getActorType() == PhysicsActor::kRigidbody && persistedEnabledAcrorA;
+    const bool pushB = actorB->getActorType() == PhysicsActor::kRigidbody && persistedEnabledAcrorB;
+
+    // Hot path (every step, per persisted pair); single-side subscription is the
+    // common case — branch to avoid an unnecessary allocation+copy.
+    std::scoped_lock lock(_persistedMutex);
+    if (pushA && pushB)
+    {
+        _persistedContacts[static_cast<Rigidbody3D*>(actorA)].push_back(info);
+        _persistedContacts[static_cast<Rigidbody3D*>(actorB)].push_back(std::move(info));
+    }
+    else if (pushA)
+        _persistedContacts[static_cast<Rigidbody3D*>(actorA)].push_back(std::move(info));
+    else if (pushB)
+        _persistedContacts[static_cast<Rigidbody3D*>(actorB)].push_back(std::move(info));
+}
 
 void PhysicsWorld3D::OnContactRemoved(const JPH::SubShapeIDPair& subShapePair)
 {

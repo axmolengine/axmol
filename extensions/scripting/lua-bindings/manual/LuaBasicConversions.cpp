@@ -2754,6 +2754,21 @@ void contact_info_3d_to_luaval(lua_State* L, const ContactInfo3D& info)
     }
     lua_rawset(L, -3);
 }
+
+void contact_info_3d_span_to_luaval(lua_State* L, std::span<const ax::ContactInfo3D> infos)
+{
+    if (nullptr == L)
+        return;
+
+    lua_newtable(L);
+    int index = 1;
+    for (const auto& info : infos)
+    {
+        lua_pushnumber(L, index++);
+        contact_info_3d_to_luaval(L, info);
+        lua_rawset(L, -3);
+    }
+}
 #endif  // #if defined(AX_ENABLE_PHYSICS_3D)
 
 void size_to_luaval(lua_State* L, const Size& sz)

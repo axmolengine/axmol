@@ -59,6 +59,7 @@ static ax::Scene* physicsScene = nullptr;
 Physics3DTests::Physics3DTests()
 {
     ADD_TEST_CASE(BasicPhysics3DDemo);
+    ADD_TEST_CASE(Physics3DPersistedContactsDemo);
     ADD_TEST_CASE(Joint3DDemo);
     ADD_TEST_CASE(Physics3DOneWayPlatform);
     ADD_TEST_CASE(Physics3DKinematicDemo);
@@ -278,6 +279,59 @@ bool BasicPhysics3DDemo::init()
     setDebugCamera(_camera);
 
     return true;
+}
+
+std::string Physics3DPersistedContactsDemo::subtitle() const
+{
+    return "Physics3D Persisted Contacts";
+}
+
+bool Physics3DPersistedContactsDemo::init()
+{
+    if (!Physics3DTestDemo::init())
+        return false;
+    getPhysicsWorld3D()->setGlobalEventEnabled(ContactEventBits::Persisted, true);
+    auto floor = MeshRenderer::create("MeshRendererTest/box.c3t");
+    floor->setTexture("MeshRendererTest/plane.png");
+    floor->setScaleX(20.0f);
+    floor->setScaleZ(20.0f);
+    floor->setPosition3D(Vec3(0.0f, -5.0f, 0.0f));
+    floor->setCameraMask((unsigned short)CameraFlag::USER1);
+    addChild(floor);
+    _floorBody = Rigidbody3D::create(BoxCollider3D::create(Vec3(20.0f, 1.0f, 20.0f)));
+    floor->addComponent(_floorBody);
+    _floorBody->syncNodeToPhysics();
+    _floorBody->setSyncFlag(Rigidbody3D::SyncFlag::NODE_TO_PHYSICS);
+    _floorBody->setEventEnabled(ContactEventBits::Persisted, true);
+    for (int i = 0; i < 10; ++i)
+    {
+        auto box = MeshRenderer::create("MeshRendererTest/box.c3t");
+        box->setTexture("Images/CyanSquare.png");
+        box->setPosition3D(Vec3(0.0f, -3.8f + i * 1.05f, 0.0f));
+        box->setCameraMask((unsigned short)CameraFlag::USER1);
+        addChild(box);
+        auto body = Rigidbody3D::create(BoxCollider3D::create(Vec3(1.0f, 1.0f, 1.0f)), 1.0f);
+        box->addComponent(body);
+        body->syncNodeToPhysics();
+        body->setSyncFlag(Rigidbody3D::SyncFlag::PHYSICS_TO_NODE);
+    }
+    TTFConfig ttfConfig("fonts/arial.ttf", 20);
+    _contactLabel   = Label::createWithTTF(ttfConfig, "Manifolds: 0  Contact points: 0");
+    const auto size = Director::getInstance()->getCanvasSize();
+    _contactLabel->setPosition(Vec2(size.width * 0.5f, size.height - 110.0f));
+    addChild(_contactLabel, 1);
+    scheduleUpdate();
+    setDebugCamera(_camera);
+    return true;
+}
+
+void Physics3DPersistedContactsDemo::update(float /*delta*/)
+{
+    const auto& manifolds = _floorBody->getPersistedContacts();
+    size_t pointCount     = 0;
+    for (const auto& manifold : manifolds)
+        pointCount += manifold.points.size();
+    _contactLabel->setString(fmt::format("Manifolds: {}  Contact points: {}", manifolds.size(), pointCount));
 }
 
 std::string Physics3DOneWayPlatform::subtitle() const
