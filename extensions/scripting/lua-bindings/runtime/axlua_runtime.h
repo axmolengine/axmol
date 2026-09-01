@@ -331,11 +331,13 @@ inline T fast_number(lua_State* state, int index)
 
 inline bool fast_boolean(lua_State* state, int index)
 {
+#if defined(_AX_DEBUG) && _AX_DEBUG > 0
     if (lua_type(state, index) != LUA_TBOOLEAN)
     {
         luaL_typeerror(state, index, "boolean");
         return false;
     }
+#endif
     return lua_toboolean(state, index) != 0;
 }
 }  // namespace detail

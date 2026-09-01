@@ -70,11 +70,17 @@ Release/O3 result: normal Binding Performance Test improved from about 11,000 to
 
 `class_index` currently checks the userdata environment and the WeakPtr lifetime registry on every method lookup. The old binding does not perform an equivalent WeakPtr lookup.
 
-Measure its cost with a temporary Release-only A/B experiment. The unsafe variant is diagnostic only and must not be committed.
+The temporary Release-only A/B experiment improved the benchmark from about 12,500 to about 14,500 stars. The unsafe variant was reverted and must not be committed.
 
-If the difference is small, retain the existing implementation and stop optimizing this area.
+The lookup is O(1), but two method calls per Sprite at 55 FPS produce roughly 1.37 million lifetime checks per second at 12,500 stars. The registry-table lookup, userdata-key lookup, Lua stack traffic, and WeakPtr access therefore have a material aggregate cost.
 
-If the difference is material, design a fast validity representation that preserves:
+Caching the lifetime table in a `class_index` closure upvalue was tested. The result remained about 12,500 stars, so the registry-table lookup is not a material part of the remaining cost. The closure change was reverted.
+
+The next implementation uses owner-thread invalidation as the normal Release fast path. Axmol object destruction on the owning Lua thread already marks canonical userdata invalid and clears its native pointer. A monotonic runtime flag enables the original per-access WeakPtr lookup as soon as any exposed object is destroyed from a different VM owner thread, where Lua cannot be touched safely. Debug builds retain the full lookup unconditionally.
+
+This keeps the cross-thread and multi-VM fallback while avoiding the userdata-keyed WeakPtr lookup during normal single-threaded engine operation. Benchmark and lifecycle tests must pass before retaining it.
+
+Any further design must preserve:
 
 - owner-thread destruction invalidation;
 - foreign-thread destruction detection;

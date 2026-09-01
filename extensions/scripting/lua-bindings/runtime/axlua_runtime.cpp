@@ -171,6 +171,10 @@ public:
     std::unordered_map<lua_State*, DynamicObjectPushers> dynamicObjectPushers;
     std::unordered_map<const std::type_info*, std::string> nativeTypeNamesByAddress;
     std::unordered_map<std::string, std::string> nativeTypeNamesByName;
+    // Owner-thread destruction marks every canonical Lua handle invalid
+    // immediately. If any exposed object is destroyed from another thread,
+    // Lua cannot be touched there; permanently enable the WeakPtr fallback.
+    std::atomic<bool> requiresWeakLifetimeLookup{false};
 
     void drainCallbacks()
     {
@@ -1057,6 +1061,12 @@ bool prepare_class_index_peer(lua_State* state, int index)
         }
     }
 
+#if !defined(_AX_DEBUG) || _AX_DEBUG == 0
+    auto* runtime = AxluaRuntimeState::existing();
+    if (runtime != nullptr && !runtime->requiresWeakLifetimeLookup.load(std::memory_order_acquire))
+        return hasPeer;
+#endif
+
     lua_rawgetp(state, LUA_REGISTRYINDEX, &kAxluaObjectLifetimeRegistryToken);
     if (lua_istable(state, -1))
     {
@@ -1434,6 +1444,7 @@ void invalidate_object(lua_State*, void* object)
         return;
 
     std::vector<lua_State*> statesToInvalidate;
+    bool hasForeignVm = false;
     // Avoid touching Lua for objects that were never exposed to this binding,
     // including objects destroyed from worker threads.
     {
@@ -1442,9 +1453,15 @@ void invalidate_object(lua_State*, void* object)
         if (found == runtime->nativeObjects.end())
             return;
         for (const auto& [vmState, ownerThread] : found->second.vmThreads)
+        {
             if (ownerThread == std::this_thread::get_id())
                 statesToInvalidate.push_back(vmState);
+            else
+                hasForeignVm = true;
+        }
     }
+    if (hasForeignVm)
+        runtime->requiresWeakLifetimeLookup.store(true, std::memory_order_release);
     if (statesToInvalidate.empty())
     {
         // Lua is thread-confined. Keep the weak entry so subsequent Lua reads
