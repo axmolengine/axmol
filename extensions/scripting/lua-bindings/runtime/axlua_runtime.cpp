@@ -992,6 +992,47 @@ bool is_invalid_userdata(lua_State* state, int index)
     return expired;
 }
 
+// Prepare the instance lookup state in one pass. class_index needs both the
+// lifetime result and a possible peer table; keeping the table on the stack
+// avoids reading the userdata uservalue twice for every method access.
+bool prepare_class_index_peer(lua_State* state, int index)
+{
+    const bool hasPeer = push_existing_user_environment(state, index);
+    if (hasPeer)
+    {
+        lua_getfield(state, -1, "__axlua_invalid");
+        const bool invalid = lua_toboolean(state, -1) != 0;
+        lua_pop(state, 1);
+        if (invalid)
+        {
+            lua_pop(state, 1);
+            luaL_error(state, "attempt to access an expired Axmol object");
+            return false;
+        }
+    }
+
+    lua_rawgetp(state, LUA_REGISTRYINDEX, &kAxluaObjectLifetimeRegistryToken);
+    if (lua_istable(state, -1))
+    {
+        lua_pushvalue(state, index);
+        lua_rawget(state, -2);
+        auto* lifetime = static_cast<ax::WeakPtr<ax::Object>*>(lua_touserdata(state, -1));
+        const bool expired = lifetime != nullptr && lifetime->expired();
+        lua_pop(state, 2);
+        if (expired)
+        {
+            if (hasPeer)
+                lua_pop(state, 1);
+            luaL_error(state, "attempt to access an expired Axmol object");
+            return false;
+        }
+    }
+    else
+        lua_pop(state, 1);
+
+    return hasPeer;
+}
+
 void remember_object(lua_State* state, ax::Object* object)
 {
     if (state == nullptr || object == nullptr)
@@ -1085,13 +1126,10 @@ int class_index(lua_State* state)
         return 1;
     }
 
-    if (is_invalid_userdata(state, 1))
-        return luaL_error(state, "attempt to access an expired Axmol object");
-
     // Legacy Lua classes attach their methods to the peer table's metatable
     // (`__index = cls`). Only inspect that compatibility layer when a peer
     // already exists; ordinary native objects skip these table operations.
-    if (push_existing_user_environment(state, 1))
+    if (prepare_class_index_peer(state, 1))
     {
         lua_pushvalue(state, 2);
         lua_gettable(state, -2);
