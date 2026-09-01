@@ -114,7 +114,7 @@ struct NativeObjectRecord
 // than a transient coroutine pointer.  `install()` records the main thread
 // before any generated binding can create callbacks or userdata.
 constexpr char kAxluaMainThreadRegistryKey[]     = "axlua.runtime.main_thread";
-constexpr char kAxluaObjectLifetimeRegistryKey[] = "axlua.object.lifetimes";
+char kAxluaObjectLifetimeRegistryToken;
 
 lua_State* vm_state(lua_State* state)
 {
@@ -978,7 +978,7 @@ bool is_invalid_userdata(lua_State* state, int index)
             return true;
     }
 
-    lua_getfield(state, LUA_REGISTRYINDEX, kAxluaObjectLifetimeRegistryKey);
+    lua_rawgetp(state, LUA_REGISTRYINDEX, &kAxluaObjectLifetimeRegistryToken);
     if (!lua_istable(state, -1))
     {
         lua_pop(state, 1);
@@ -1029,7 +1029,7 @@ void remember_userdata_object(lua_State* state, int index, ax::Object* object)
             return;
         lifetime = found->second.object;
     }
-    lua_getfield(state, LUA_REGISTRYINDEX, kAxluaObjectLifetimeRegistryKey);
+    lua_rawgetp(state, LUA_REGISTRYINDEX, &kAxluaObjectLifetimeRegistryToken);
     if (!lua_istable(state, -1))
     {
         lua_pop(state, 1);
@@ -1039,7 +1039,7 @@ void remember_userdata_object(lua_State* state, int index, ax::Object* object)
         lua_setfield(state, -2, "__mode");
         lua_setmetatable(state, -2);
         lua_pushvalue(state, -1);
-        lua_setfield(state, LUA_REGISTRYINDEX, kAxluaObjectLifetimeRegistryKey);
+        lua_rawsetp(state, LUA_REGISTRYINDEX, &kAxluaObjectLifetimeRegistryToken);
     }
     const int table = absolute_index(state, -1);
     lua_pushvalue(state, index);
@@ -1056,7 +1056,7 @@ bool object_userdata_current(lua_State* state, int index, ax::Object* object)
     if (state == nullptr || object == nullptr || lua_type(state, index) != LUA_TUSERDATA)
         return false;
     index = absolute_index(state, index);
-    lua_getfield(state, LUA_REGISTRYINDEX, kAxluaObjectLifetimeRegistryKey);
+    lua_rawgetp(state, LUA_REGISTRYINDEX, &kAxluaObjectLifetimeRegistryToken);
     if (!lua_istable(state, -1))
     {
         lua_pop(state, 1);
