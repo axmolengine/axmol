@@ -426,6 +426,17 @@ bool push_class_table(lua_State* state, int userdataIndex)
     if (!lua_isuserdata(state, userdataIndex) || !lua_getmetatable(state, userdataIndex))
         return false;
 
+    // Generated userdata metatables are stable for the lifetime of the VM.
+    // Keep their class table directly on the metatable so the hot instance
+    // lookup avoids a registry table and a lightuserdata key round trip.
+    lua_getfield(state, -1, "__axlua_class_table");
+    if (lua_istable(state, -1))
+    {
+        lua_remove(state, -2);  // userdata metatable
+        return true;
+    }
+    lua_pop(state, 1);
+
     const void* metatableKey = lua_topointer(state, -1);
     lua_getfield(state, LUA_REGISTRYINDEX, "axlua.class.tables");
     if (!lua_istable(state, -1))

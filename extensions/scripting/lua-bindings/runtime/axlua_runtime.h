@@ -834,6 +834,12 @@ private:
         lua_pushcfunction(state, &class_new_index);
         lua_setfield(state, metatable, "__newindex");
 
+        // Keep a direct mapping for the hot userdata lookup. The registry
+        // mapping below remains as a compatibility fallback for older or
+        // manually-created metatables.
+        table.push();
+        lua_setfield(state, metatable, "__axlua_class_table");
+
         lua_getfield(state, LUA_REGISTRYINDEX, "axlua.class.tables");
         if (!lua_istable(state, -1))
         {

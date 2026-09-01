@@ -54,13 +54,6 @@ function BindingBenchmarkTest()
         phase = 0
     end
 
-    -- Cache the generated methods once so the per-frame benchmark does not
-    -- perform sprite:setPosition / sprite:setOpacity member lookup on every
-    -- iteration. The calls still receive the original full userdata, so this
-    -- isolates lookup overhead without changing lifetime or type checking.
-    local setPosition = ax.Node.setPosition
-    local setOpacity = ax.Node.setOpacity
-
     ensureSprites(DEFAULT_SPRITE_COUNT)
 
     local decrease = ax.MenuItemFont:create("- 500")
@@ -81,8 +74,8 @@ function BindingBenchmarkTest()
             local sprite = sprites[index]
             local x = (index * 37 + phase * (20 + index % 11)) % visible.width
             local y = (index * 67 + phase * (15 + index % 13)) % visible.height
-            setPosition(sprite, x, y)
-            setOpacity(sprite, 160 + math.floor((index + phase * 60) % 96))
+            sprite:setPosition(x, y)
+            sprite:setOpacity(160 + math.floor((index + phase * 60) % 96))
         end
     end)
 
