@@ -905,6 +905,9 @@ private:
             lua_setfield(state, LUA_REGISTRYINDEX, "axlua.class.bases");
         }
         const int bases = absolute_index(state, -1);
+        lua_pushliteral(state, "__axlua_base_class");
+        lua_pushvalue(state, baseTable);
+        lua_rawset(state, classTable);
         lua_pushlightuserdata(state, const_cast<void*>(lua_topointer(state, classTable)));
         lua_pushvalue(state, baseTable);
         lua_rawset(state, bases);

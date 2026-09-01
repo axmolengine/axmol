@@ -454,6 +454,17 @@ bool push_class_table(lua_State* state, int userdataIndex)
 bool push_registered_base(lua_State* state, int classTableIndex)
 {
     classTableIndex = absolute_index(state, classTableIndex);
+
+    // Generated class tables retain their direct base table for the lifetime
+    // of the VM. Prefer this local link over the registry indirection used by
+    // compatibility tables; the returned table remains live and still sees
+    // all runtime Lua modifications.
+    lua_pushliteral(state, "__axlua_base_class");
+    lua_rawget(state, classTableIndex);
+    if (lua_istable(state, -1))
+        return true;
+    lua_pop(state, 1);
+
     lua_getfield(state, LUA_REGISTRYINDEX, "axlua.class.bases");
     if (!lua_istable(state, -1))
     {
