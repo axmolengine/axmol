@@ -265,13 +265,13 @@ inline int absolute_index(lua_State* state, int index)
 }
 
 // Direct extraction from the canonical Axmol userdata for generated fast
-// bindings.  This is the same native pointer convention the rest of the
-// runtime relies on (first machine word), never a raw lightuserdata exposed
-// to Lua.  It preserves stale-object detection and validates the expected
-// native type without going through sol2's generic conversion machinery.
+// bindings. This uses the same first-word pointer convention as the legacy
+// bindings. Debug builds retain the runtime checks; Release follows the
+// legacy hot path and performs only the raw pointer extraction.
 template <class T>
 T* fast_object(lua_State* state, int index)
 {
+#if defined(_AX_DEBUG) && _AX_DEBUG > 0
     if (lua_type(state, index) != LUA_TUSERDATA)
     {
         luaL_typeerror(state, index, "userdata");
@@ -289,8 +289,12 @@ T* fast_object(lua_State* state, int index)
         luaL_error(state, "attempt to access an expired Axmol object");
         return nullptr;
     }
+#else
+    void** storage = static_cast<void**>(lua_touserdata(state, index));
+#endif
 
     using NativeT = std::remove_cv_t<T>;
+#if defined(_AX_DEBUG) && _AX_DEBUG > 0
     if constexpr (std::is_base_of_v<ax::Object, NativeT>)
     {
         auto* typed = dynamic_cast<NativeT*>(static_cast<ax::Object*>(*storage));
@@ -301,6 +305,7 @@ T* fast_object(lua_State* state, int index)
         }
         return typed;
     }
+#endif
 
     return static_cast<NativeT*>(*storage);
 }
