@@ -510,7 +510,13 @@ ClassMemberKind lookup_class_member(lua_State* state, int classTableIndex, int k
     for (int depth = 0; depth < 64; ++depth)
     {
         lua_pushvalue(state, keyIndex);
-        lua_gettable(state, classTableIndex);
+        // Preserve the class table's original __index behavior for the first
+        // lookup (it may provide dynamic members), then use raw reads while
+        // walking registered bases to avoid recursively repeating that walk.
+        if (depth == 0)
+            lua_gettable(state, classTableIndex);
+        else
+            lua_rawget(state, classTableIndex);
         if (!lua_isnil(state, -1))
             return ClassMemberKind::value;
         lua_pop(state, 1);
