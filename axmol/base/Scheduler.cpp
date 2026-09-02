@@ -245,11 +245,7 @@ Scheduler::~Scheduler()
     unscheduleAll();
 }
 
-void Scheduler::schedule(const SchedulerFunc& callback,
-                         void* target,
-                         float interval,
-                         bool paused,
-                         std::string_view key)
+void Scheduler::schedule(const SchedulerFunc& callback, void* target, float interval, bool paused, std::string_view key)
 {
     this->schedule(callback, target, interval, AX_REPEAT_FOREVER, 0.0f, paused, key);
 }
@@ -367,10 +363,7 @@ void Scheduler::priorityIn(tlx::pod_vector<SchedHandle*>& list,
     _schedIndexMap.emplace(target, sched);
 }
 
-void Scheduler::appendIn(tlx::pod_vector<SchedHandle*>& list,
-                         const SchedulerFunc& callback,
-                         void* target,
-                         bool paused)
+void Scheduler::appendIn(tlx::pod_vector<SchedHandle*>& list, const SchedulerFunc& callback, void* target, bool paused)
 {
     auto sched = new SchedHandle(&list, callback, target, 0, paused);
     list.emplace_back(sched);
