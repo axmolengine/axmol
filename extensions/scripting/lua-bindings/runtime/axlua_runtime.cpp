@@ -115,7 +115,7 @@ struct NativeObjectRecord
 // registrations and shutdown bookkeeping must use the VM identity rather
 // than a transient coroutine pointer.  `install()` records the main thread
 // before any generated binding can create callbacks or userdata.
-constexpr char kAxluaMainThreadRegistryKey[]     = "axlua.runtime.main_thread";
+constexpr char kAxluaMainThreadRegistryKey[] = "axlua.runtime.main_thread";
 char kAxluaObjectLifetimeRegistryToken;
 
 lua_State* vm_state(lua_State* state)
@@ -1070,7 +1070,7 @@ bool prepare_class_index_peer(lua_State* state, int index)
     {
         lua_pushvalue(state, index);
         lua_rawget(state, -2);
-        auto* lifetime = static_cast<ax::WeakPtr<ax::Object>*>(lua_touserdata(state, -1));
+        auto* lifetime     = static_cast<ax::WeakPtr<ax::Object>*>(lua_touserdata(state, -1));
         const bool expired = lifetime != nullptr && lifetime->expired();
         lua_pop(state, 2);
         if (expired)
@@ -1301,8 +1301,8 @@ int dispatch_overload_callable(lua_State* state, int argumentStart, int contextU
         const int candidateTable = absolute_index(state, -1);
         lua_rawgeti(state, candidateTable, 2);
         const auto* signature = static_cast<const OverloadSignature*>(lua_touserdata(state, -1));
-        const bool matches = signature->argumentCount == signatureArgumentCount &&
-                             signature->matches(state, argumentStart);
+        const bool matches =
+            signature->argumentCount == signatureArgumentCount && signature->matches(state, argumentStart);
         lua_pop(state, 2);
         if (matches)
         {
