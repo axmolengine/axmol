@@ -528,28 +528,6 @@
       ],
       "methods": [
         {
-          "nativeName": "checkAvailable",
-          "luaName": "checkAvailable",
-          "declaringType": "ax::ContactEventListener2D",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::ContactEventListener2D",
-          "returnType": "ax::ContactEventListener2D *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::ContactEventListener2D",
@@ -2782,21 +2760,6 @@
           "returnType": "void",
           "parameterTypes": [],
           "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setEnabled",
-          "luaName": "setEnabled",
-          "declaringType": "ax::Rigidbody2D",
-          "returnType": "void",
-          "parameterTypes": [
-            "bool"
-          ],
-          "defaultValues": [
-            null
-          ],
           "isStatic": false,
           "isConst": false,
           "isVariadic": false

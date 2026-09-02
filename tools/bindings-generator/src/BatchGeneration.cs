@@ -53,27 +53,35 @@ public static class BatchBindingGenerator
         ValidateManualAdapters(request);
 
         var configPaths = SelectConfigurations(request.ConfigurationDirectory, request.Module);
-        var registeredClasses = new Dictionary<string, (string Module, string NativeName)>(StringComparer.Ordinal);
-        foreach (var configPath in configPaths)
+        var loadedConfigurations = new Dictionary<string, ModuleConfiguration>(StringComparer.OrdinalIgnoreCase);
+        foreach (var configPath in SelectConfigurations(request.ConfigurationDirectory, "all"))
         {
-            ModuleConfiguration config;
             try
             {
-                config = LoadConfiguration(configPath, request.RepositoryRoot);
+                loadedConfigurations[configPath] = LoadConfiguration(configPath, request.RepositoryRoot);
             }
             catch (Exception ex) when (ex is InvalidDataException or JsonException or IOException)
             {
-                diagnostics.Add(new GenerationDiagnostic
+                if (configPaths.Contains(configPath, StringComparer.OrdinalIgnoreCase))
                 {
-                    Severity = "error",
-                    Code = "AXLUA002",
-                    Message = $"Invalid binding configuration '{configPath}': {ex.Message}",
-                    Header = configPath
-                });
-                continue;
+                    diagnostics.Add(new GenerationDiagnostic
+                    {
+                        Severity = "error",
+                        Code = "AXLUA002",
+                        Message = $"Invalid binding configuration '{configPath}': {ex.Message}",
+                        Header = configPath
+                    });
+                }
             }
+        }
+        var classSelections = loadedConfigurations.Values.Select(config => config.ToClassSelection()).ToArray();
+        var registeredClasses = new Dictionary<string, (string Module, string NativeName)>(StringComparer.Ordinal);
+        foreach (var configPath in configPaths)
+        {
+            if (!loadedConfigurations.TryGetValue(configPath, out var config))
+                continue;
 
-            var generationRequest = config.ToRequest(request);
+            var generationRequest = config.ToRequest(request, classSelections);
             var result = BindingGenerator.Generate(generationRequest);
             results.Add(result);
             diagnostics.AddRange(result.Diagnostics);
@@ -408,7 +416,17 @@ public static class BatchBindingGenerator
         public string? ConditionalExpression { get; init; }
         public int CppChunkCount { get; init; }
 
-        public GenerationRequest ToRequest(BatchGenerationRequest batch)
+        public BindingClassSelection ToClassSelection() => new()
+        {
+            NativeNamespaces = NativeNamespaces,
+            ClassPatterns = ClassPatterns,
+            SkipRules = SkipRules,
+            RenameRules = RenameRules
+        };
+
+        public GenerationRequest ToRequest(
+            BatchGenerationRequest batch,
+            IReadOnlyList<BindingClassSelection> classSelections)
         {
             var clangArguments = batch.ClangArguments.Concat(ClangFlags).ToArray();
             return new GenerationRequest
@@ -429,6 +447,7 @@ public static class BatchBindingGenerator
                 RenameRules = RenameRules,
                 ClassRenames = ClassRenames,
                 FastBindings = FastBindings,
+                BindingClassSelections = classSelections,
                 LuaNamespace = LuaNamespace,
                 LuaTypeNamespace = LuaTypeNamespace,
                 ConditionalExpression = ConditionalExpression,

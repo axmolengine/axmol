@@ -841,6 +841,7 @@ public static unsafe class BindingGenerator
         GenerationRequest request)
     {
         var parameters = GetParameters(cursor, tree);
+        var luaName = RenameMethod(className, cursor.Spelling.CString, request);
         var overriddenTypes = Array.Empty<string>();
         if (clang.CXXMethod_isVirtual(cursor) != 0)
         {
@@ -849,6 +850,7 @@ public static unsafe class BindingGenerator
             {
                 overriddenTypes = overridden
                     .ToArray()
+                    .Where(x => IsBoundBaseOverride(x, tree, luaName, request))
                     .Select(x => GetQualifiedName(clang.getCursorSemanticParent(x)))
                     .Where(x => !string.IsNullOrWhiteSpace(x))
                     .Distinct(StringComparer.Ordinal)
@@ -863,7 +865,7 @@ public static unsafe class BindingGenerator
         return new BindingMethod
         {
             NativeName = cursor.Spelling.CString,
-            LuaName = RenameMethod(className, cursor.Spelling.CString, request),
+            LuaName = luaName,
             DeclaringType = contextType,
             ReturnType = ResolveType(cursor.ResultType.Spelling.CString, contextType, tree),
             ParameterTypes = parameters.Select(x => ResolveType(x.Type.Spelling.CString, contextType, tree)).ToArray(),
@@ -890,7 +892,7 @@ public static unsafe class BindingGenerator
                     .ToDictionary(x => x.Key, x => x.ToArray(), StringComparer.Ordinal);
                 var redundant = current.Methods.ToDictionary(
                     method => MethodIdentity(method),
-                    method => IsRedundantVirtualOverride(method, current, resolved),
+                    method => IsRedundantVirtualOverride(method, current),
                     StringComparer.Ordinal);
                 var retained = current.Methods.Where(method =>
                 {
@@ -928,30 +930,63 @@ public static unsafe class BindingGenerator
 
     private static bool IsRedundantVirtualOverride(
         BindingMethod method,
-        BindingClass derivedClass,
-        IReadOnlyDictionary<string, BindingClass> classes)
+        BindingClass derivedClass)
     {
-        if (!method.IsVirtual || method.OverriddenDeclaringTypes.Count == 0 || method.IsStatic ||
-            method.OverriddenDeclaringTypes.Any(type => !derivedClass.Bases.Contains(type, StringComparer.Ordinal)))
+        // Clang's override cursor identifies the exact C++ signature, so
+        // default arguments are intentionally irrelevant here. The cursor is
+        // recorded only when its base class and method are part of the complete
+        // binding configuration, including cross-module bases.
+        return method.IsVirtual && !method.IsStatic && method.OverriddenDeclaringTypes.Count > 0 &&
+               method.OverriddenDeclaringTypes.All(type =>
+                   derivedClass.Bases.Contains(type, StringComparer.Ordinal));
+    }
+
+    private static bool IsBoundBaseOverride(
+        CXCursor overridden,
+        CursorTree tree,
+        string derivedLuaName,
+        GenerationRequest request)
+    {
+        if (!IsUsableMethod(overridden) || !IsSupportedSignature(overridden, tree) ||
+            overridden.Spelling.CString.StartsWith("operator", StringComparison.Ordinal))
             return false;
 
-        foreach (var baseType in method.OverriddenDeclaringTypes)
-        {
-            if (!classes.TryGetValue(baseType, out var baseClass))
-                continue;
+        var owner = clang.getCursorSemanticParent(overridden);
+        var ownerName = owner.Spelling.CString;
+        var selection = FindBindingClassSelection(GetQualifiedName(owner), request);
+        if (selection is null || IsSkipped(ownerName, overridden.Spelling.CString, selection.SkipRules))
+            return false;
 
-            var baseMethod = baseClass.Methods.FirstOrDefault(candidate =>
-                string.Equals(candidate.NativeName, method.NativeName, StringComparison.Ordinal) &&
-                string.Equals(candidate.LuaName, method.LuaName, StringComparison.Ordinal) &&
-                string.Equals(candidate.ReturnType, method.ReturnType, StringComparison.Ordinal) &&
-                candidate.IsConst == method.IsConst &&
-                candidate.ParameterTypes.SequenceEqual(method.ParameterTypes, StringComparer.Ordinal) &&
-                candidate.DefaultValues.SequenceEqual(method.DefaultValues, StringComparer.Ordinal));
-            if (baseMethod is not null)
-                return true;
-        }
+        return string.Equals(
+            RenameMethod(ownerName, overridden.Spelling.CString, selection.RenameRules),
+            derivedLuaName,
+            StringComparison.Ordinal);
+    }
 
-        return false;
+    private static BindingClassSelection? FindBindingClassSelection(
+        string qualifiedName,
+        GenerationRequest request)
+    {
+        var separator = qualifiedName.LastIndexOf("::", StringComparison.Ordinal);
+        var namespaceName = separator >= 0 ? qualifiedName[..separator] : string.Empty;
+        var className = separator >= 0 ? qualifiedName[(separator + 2)..] : qualifiedName;
+        var selections = request.BindingClassSelections.Count > 0
+            ? request.BindingClassSelections
+            : new[]
+            {
+                new BindingClassSelection
+                {
+                    NativeNamespaces = request.NativeNamespaces,
+                    ClassPatterns = request.ClassPatterns,
+                    SkipRules = request.SkipRules,
+                    RenameRules = request.RenameRules
+                }
+            };
+        return selections.FirstOrDefault(selection =>
+            (selection.NativeNamespaces.Count == 0 ||
+             selection.NativeNamespaces.Contains(namespaceName, StringComparer.Ordinal)) &&
+            (selection.ClassPatterns.Count == 0 ||
+             selection.ClassPatterns.Any(pattern => MatchesConfiguredPattern(className, pattern))));
     }
 
     private static string MethodIdentity(BindingMethod method) =>
@@ -1476,8 +1511,14 @@ public static unsafe class BindingGenerator
         request.ClassRenames.FirstOrDefault(x => string.Equals(x.NativeName, nativeName, StringComparison.Ordinal))?.LuaName ?? nativeName;
 
     private static string RenameMethod(string className, string methodName, GenerationRequest request)
+        => RenameMethod(className, methodName, request.RenameRules);
+
+    private static string RenameMethod(
+        string className,
+        string methodName,
+        IReadOnlyList<BindingRenameRule> renameRules)
     {
-        var rule = request.RenameRules.FirstOrDefault(x =>
+        var rule = renameRules.FirstOrDefault(x =>
             (x.ClassPattern == "*" || MatchesConfiguredPattern(className, x.ClassPattern)) &&
             MatchesConfiguredPrefix(methodName, x.MethodPattern));
         return rule?.LuaName ?? methodName;
@@ -1488,7 +1529,15 @@ public static unsafe class BindingGenerator
         if (request.SkipPatterns.Any(pattern => MatchesConfiguredPrefix(methodName, pattern)))
             return true;
 
-        return request.SkipRules.Any(rule =>
+        return IsSkipped(className, methodName, request.SkipRules);
+    }
+
+    private static bool IsSkipped(
+        string className,
+        string methodName,
+        IReadOnlyList<BindingSkipRule> skipRules)
+    {
+        return skipRules.Any(rule =>
             (rule.ClassPattern == "*" || MatchesConfiguredPattern(className, rule.ClassPattern)) &&
             rule.MethodPatterns.Any(pattern =>
                 !string.IsNullOrWhiteSpace(pattern) &&

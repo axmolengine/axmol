@@ -138,12 +138,10 @@ void register_ax_ui_members_0(lua_State* L)
     class_3_EditBox.method("setCapInsetsDisabledRenderer", static_cast<void (ax::ui::EditBox::*)(const ax::Rect &)>(&ax::ui::EditBox::setCapInsetsDisabledRenderer));
     class_3_EditBox.method("setCapInsetsNormalRenderer", static_cast<void (ax::ui::EditBox::*)(const ax::Rect &)>(&ax::ui::EditBox::setCapInsetsNormalRenderer));
     class_3_EditBox.method("setCapInsetsPressedRenderer", static_cast<void (ax::ui::EditBox::*)(const ax::Rect &)>(&ax::ui::EditBox::setCapInsetsPressedRenderer));
-    class_3_EditBox.method("setContentSize", static_cast<void (ax::ui::EditBox::*)(const ax::Size &)>(&ax::ui::EditBox::setContentSize));
     class_3_EditBox.method("setFont", static_cast<void (ax::ui::EditBox::*)(std::string_view, int)>(&ax::ui::EditBox::setFont));
     class_3_EditBox.method("setFontColor", static_cast<void (ax::ui::EditBox::*)(const ax::Color32 &)>(&ax::ui::EditBox::setFontColor));
     class_3_EditBox.method("setFontName", static_cast<void (ax::ui::EditBox::*)(std::string_view)>(&ax::ui::EditBox::setFontName));
     class_3_EditBox.method("setFontSize", static_cast<void (ax::ui::EditBox::*)(int)>(&ax::ui::EditBox::setFontSize));
-    class_3_EditBox.method("setGlobalZOrder", static_cast<void (ax::ui::EditBox::*)(float)>(&ax::ui::EditBox::setGlobalZOrder));
     class_3_EditBox.method("setInputFlag", static_cast<void (ax::ui::EditBox::*)(ax::ui::EditBox::InputFlag)>(&ax::ui::EditBox::setInputFlag));
     class_3_EditBox.method("setInputMode", static_cast<void (ax::ui::EditBox::*)(ax::ui::EditBox::InputMode)>(&ax::ui::EditBox::setInputMode));
     class_3_EditBox.method("setMaxLength", static_cast<void (ax::ui::EditBox::*)(int)>(&ax::ui::EditBox::setMaxLength));
@@ -155,7 +153,6 @@ void register_ax_ui_members_0(lua_State* L)
     class_3_EditBox.method("setReturnType", static_cast<void (ax::ui::EditBox::*)(ax::ui::EditBox::KeyboardReturnType)>(&ax::ui::EditBox::setReturnType));
     class_3_EditBox.method("setText", static_cast<void (ax::ui::EditBox::*)(std::string_view)>(&ax::ui::EditBox::setText));
     class_3_EditBox.method("setTextHorizontalAlignment", static_cast<void (ax::ui::EditBox::*)(ax::TextHAlignment)>(&ax::ui::EditBox::setTextHorizontalAlignment));
-    class_3_EditBox.method("setVisible", static_cast<void (ax::ui::EditBox::*)(bool)>(&ax::ui::EditBox::setVisible));
     class_3_EditBox.method("unregisterScriptEditBoxHandler", static_cast<void (ax::ui::EditBox::*)()>(&ax::ui::EditBox::unregisterScriptEditBoxHandler));
     auto class_4_HBox = module.class_<ax::ui::HBox>("HBox");
     class_4_HBox.bases<ax::ui::LayoutGroup, ax::ui::Widget, ax::ProtectedNode, ax::Node, ax::Object, ax::ui::LayoutParameterProtocol, ax::ui::LayoutProtocol>();

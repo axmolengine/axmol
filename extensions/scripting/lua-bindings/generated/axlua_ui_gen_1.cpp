@@ -45,7 +45,6 @@ void register_ax_ui_members_1(lua_State* L)
     class_0_LayoutComponent.method("getTopMargin", static_cast<float (ax::ui::LayoutComponent::*)() const>(&ax::ui::LayoutComponent::getTopMargin));
     class_0_LayoutComponent.method("getUsingPercentContentSize", static_cast<bool (ax::ui::LayoutComponent::*)() const>(&ax::ui::LayoutComponent::getUsingPercentContentSize));
     class_0_LayoutComponent.method("getVerticalEdge", static_cast<ax::ui::LayoutComponent::VerticalEdge (ax::ui::LayoutComponent::*)() const>(&ax::ui::LayoutComponent::getVerticalEdge));
-    class_0_LayoutComponent.method("init", static_cast<bool (ax::ui::LayoutComponent::*)()>(&ax::ui::LayoutComponent::init));
     class_0_LayoutComponent.method("isPercentHeightEnabled", static_cast<bool (ax::ui::LayoutComponent::*)() const>(&ax::ui::LayoutComponent::isPercentHeightEnabled));
     class_0_LayoutComponent.method("isPercentWidthEnabled", static_cast<bool (ax::ui::LayoutComponent::*)() const>(&ax::ui::LayoutComponent::isPercentWidthEnabled));
     class_0_LayoutComponent.method("isPositionPercentXEnabled", static_cast<bool (ax::ui::LayoutComponent::*)() const>(&ax::ui::LayoutComponent::isPositionPercentXEnabled));
@@ -81,7 +80,6 @@ void register_ax_ui_members_1(lua_State* L)
     auto class_1_LayoutGroup = module.class_<ax::ui::LayoutGroup>("LayoutGroup");
     class_1_LayoutGroup.bases<ax::ui::Widget, ax::ProtectedNode, ax::Node, ax::Object, ax::ui::LayoutParameterProtocol, ax::ui::LayoutProtocol>();
     class_1_LayoutGroup.constructors<ax::ui::LayoutGroup()>();
-    class_1_LayoutGroup.method("addChild", axlua::overload(axlua::overload_candidate<ax::Node *>(static_cast<void (ax::ui::LayoutGroup::*)(ax::Node *)>(&ax::ui::LayoutGroup::addChild)), axlua::overload_candidate<ax::Node *, int>(static_cast<void (ax::ui::LayoutGroup::*)(ax::Node *, int)>(&ax::ui::LayoutGroup::addChild)), axlua::overload_candidate<ax::Node *, int, int>(static_cast<void (ax::ui::LayoutGroup::*)(ax::Node *, int, int)>(&ax::ui::LayoutGroup::addChild)), axlua::overload_candidate<ax::Node *, int, std::string_view>(static_cast<void (ax::ui::LayoutGroup::*)(ax::Node *, int, std::string_view)>(&ax::ui::LayoutGroup::addChild))));
     class_1_LayoutGroup.static_method("create", static_cast<ax::ui::LayoutGroup * (*)()>(&ax::ui::LayoutGroup::create));
     class_1_LayoutGroup.static_method("createInstance", static_cast<ax::Object * (*)()>(&ax::ui::LayoutGroup::createInstance));
     class_1_LayoutGroup.method("forceDoLayout", static_cast<void (ax::ui::LayoutGroup::*)()>(&ax::ui::LayoutGroup::forceDoLayout));
@@ -102,10 +100,8 @@ void register_ax_ui_members_1(lua_State* L)
     class_1_LayoutGroup.method("isClippingEnabled", static_cast<bool (ax::ui::LayoutGroup::*)() const>(&ax::ui::LayoutGroup::isClippingEnabled));
     class_1_LayoutGroup.method("isLoopFocus", static_cast<bool (ax::ui::LayoutGroup::*)() const>(&ax::ui::LayoutGroup::isLoopFocus));
     class_1_LayoutGroup.method("isPassFocusToChild", static_cast<bool (ax::ui::LayoutGroup::*)() const>(&ax::ui::LayoutGroup::isPassFocusToChild));
-    class_1_LayoutGroup.method("removeAllChildren", static_cast<void (ax::ui::LayoutGroup::*)()>(&ax::ui::LayoutGroup::removeAllChildren));
     class_1_LayoutGroup.method("removeAllChildrenWithCleanup", static_cast<void (ax::ui::LayoutGroup::*)(bool)>(&ax::ui::LayoutGroup::removeAllChildrenWithCleanup));
     class_1_LayoutGroup.method("removeBackGroundImage", static_cast<void (ax::ui::LayoutGroup::*)()>(&ax::ui::LayoutGroup::removeBackGroundImage));
-    class_1_LayoutGroup.method("removeChild", axlua::overload(axlua::overload_candidate<ax::Node *, bool>(static_cast<void (ax::ui::LayoutGroup::*)(ax::Node *, bool)>(&ax::ui::LayoutGroup::removeChild)), axlua::overload_candidate<ax::Node *>([](ax::ui::LayoutGroup& self, ax::Node * arg0) -> void { static_cast<ax::ui::LayoutGroup&>(self).removeChild(arg0, true); })));
     class_1_LayoutGroup.method("requestDoLayout", static_cast<void (ax::ui::LayoutGroup::*)()>(&ax::ui::LayoutGroup::requestDoLayout));
     class_1_LayoutGroup.method("setBackGroundColor", axlua::overload(axlua::overload_candidate<const ax::Color32 &>(static_cast<void (ax::ui::LayoutGroup::*)(const ax::Color32 &)>(&ax::ui::LayoutGroup::setBackGroundColor)), axlua::overload_candidate<const ax::Color32 &, const ax::Color32 &>(static_cast<void (ax::ui::LayoutGroup::*)(const ax::Color32 &, const ax::Color32 &)>(&ax::ui::LayoutGroup::setBackGroundColor))));
     class_1_LayoutGroup.method("setBackGroundColorOpacity", static_cast<void (ax::ui::LayoutGroup::*)(uint8_t)>(&ax::ui::LayoutGroup::setBackGroundColorOpacity));
@@ -116,10 +112,8 @@ void register_ax_ui_members_1(lua_State* L)
     class_1_LayoutGroup.method("setBackGroundImageColor", static_cast<void (ax::ui::LayoutGroup::*)(const ax::Color32 &)>(&ax::ui::LayoutGroup::setBackGroundImageColor));
     class_1_LayoutGroup.method("setBackGroundImageOpacity", static_cast<void (ax::ui::LayoutGroup::*)(uint8_t)>(&ax::ui::LayoutGroup::setBackGroundImageOpacity));
     class_1_LayoutGroup.method("setBackGroundImageScale9Enabled", static_cast<void (ax::ui::LayoutGroup::*)(bool)>(&ax::ui::LayoutGroup::setBackGroundImageScale9Enabled));
-    class_1_LayoutGroup.method("setCameraMask", axlua::overload(axlua::overload_candidate<unsigned short, bool>(static_cast<void (ax::ui::LayoutGroup::*)(unsigned short, bool)>(&ax::ui::LayoutGroup::setCameraMask)), axlua::overload_candidate<unsigned short>([](ax::ui::LayoutGroup& self, unsigned short arg0) -> void { static_cast<ax::ui::LayoutGroup&>(self).setCameraMask(arg0, true); })));
     class_1_LayoutGroup.method("setClippingEnabled", static_cast<void (ax::ui::LayoutGroup::*)(bool)>(&ax::ui::LayoutGroup::setClippingEnabled));
     class_1_LayoutGroup.method("setClippingType", static_cast<void (ax::ui::LayoutGroup::*)(ax::ui::LayoutGroup::ClippingType)>(&ax::ui::LayoutGroup::setClippingType));
-    class_1_LayoutGroup.method("setGlobalZOrder", static_cast<void (ax::ui::LayoutGroup::*)(float)>(&ax::ui::LayoutGroup::setGlobalZOrder));
     class_1_LayoutGroup.method("setLayoutType", static_cast<void (ax::ui::LayoutGroup::*)(ax::ui::LayoutGroup::Type)>(&ax::ui::LayoutGroup::setLayoutType));
     class_1_LayoutGroup.method("setLoopFocus", static_cast<void (ax::ui::LayoutGroup::*)(bool)>(&ax::ui::LayoutGroup::setLoopFocus));
     class_1_LayoutGroup.method("setPassFocusToChild", static_cast<void (ax::ui::LayoutGroup::*)(bool)>(&ax::ui::LayoutGroup::setPassFocusToChild));
@@ -206,7 +200,6 @@ void register_ax_ui_members_1(lua_State* L)
     class_6_PageView.static_method("create", static_cast<ax::ui::PageView * (*)()>(&ax::ui::PageView::create));
     class_6_PageView.static_method("createInstance", static_cast<ax::Object * (*)()>(&ax::ui::PageView::createInstance));
     class_6_PageView.method("getCurrentPageIndex", static_cast<ssize_t (ax::ui::PageView::*)()>(&ax::ui::PageView::getCurrentPageIndex));
-    class_6_PageView.method("getDescription", static_cast<std::string (ax::ui::PageView::*)() const>(&ax::ui::PageView::getDescription));
     class_6_PageView.method("getIndicatorEnabled", static_cast<bool (ax::ui::PageView::*)() const>(&ax::ui::PageView::getIndicatorEnabled));
     class_6_PageView.method("getIndicatorIndexNodesColor", static_cast<const ax::Color32 & (ax::ui::PageView::*)() const>(&ax::ui::PageView::getIndicatorIndexNodesColor));
     class_6_PageView.method("getIndicatorIndexNodesOpacity", static_cast<uint8_t (ax::ui::PageView::*)() const>(&ax::ui::PageView::getIndicatorIndexNodesOpacity));
@@ -216,7 +209,6 @@ void register_ax_ui_members_1(lua_State* L)
     class_6_PageView.method("getIndicatorSelectedIndexColor", static_cast<const ax::Color32 & (ax::ui::PageView::*)() const>(&ax::ui::PageView::getIndicatorSelectedIndexColor));
     class_6_PageView.method("getIndicatorSelectedIndexOpacity", static_cast<uint8_t (ax::ui::PageView::*)() const>(&ax::ui::PageView::getIndicatorSelectedIndexOpacity));
     class_6_PageView.method("getIndicatorSpaceBetweenIndexNodes", static_cast<float (ax::ui::PageView::*)() const>(&ax::ui::PageView::getIndicatorSpaceBetweenIndexNodes));
-    class_6_PageView.method("init", static_cast<bool (ax::ui::PageView::*)()>(&ax::ui::PageView::init));
     class_6_PageView.method("insertPage", static_cast<void (ax::ui::PageView::*)(ax::ui::Widget *, int)>(&ax::ui::PageView::insertPage));
     class_6_PageView.method("removeAllPages", static_cast<void (ax::ui::PageView::*)()>(&ax::ui::PageView::removeAllPages));
     class_6_PageView.method("removePage", static_cast<void (ax::ui::PageView::*)(ax::ui::Widget *)>(&ax::ui::PageView::removePage));
@@ -225,7 +217,6 @@ void register_ax_ui_members_1(lua_State* L)
     class_6_PageView.method("scrollToPage", axlua::overload(axlua::overload_candidate<ssize_t>(static_cast<void (ax::ui::PageView::*)(ssize_t)>(&ax::ui::PageView::scrollToPage)), axlua::overload_candidate<ssize_t, float>(static_cast<void (ax::ui::PageView::*)(ssize_t, float)>(&ax::ui::PageView::scrollToPage))));
     class_6_PageView.method("setAutoScrollStopEpsilon", static_cast<void (ax::ui::PageView::*)(float)>(&ax::ui::PageView::setAutoScrollStopEpsilon));
     class_6_PageView.method("setCurrentPageIndex", static_cast<void (ax::ui::PageView::*)(ssize_t)>(&ax::ui::PageView::setCurrentPageIndex));
-    class_6_PageView.method("setDirection", static_cast<void (ax::ui::PageView::*)(ax::ui::ScrollView::Direction)>(&ax::ui::PageView::setDirection));
     class_6_PageView.method("setIndicatorEnabled", static_cast<void (ax::ui::PageView::*)(bool)>(&ax::ui::PageView::setIndicatorEnabled));
     class_6_PageView.method("setIndicatorIndexNodesColor", static_cast<void (ax::ui::PageView::*)(const ax::Color32 &)>(&ax::ui::PageView::setIndicatorIndexNodesColor));
     class_6_PageView.method("setIndicatorIndexNodesOpacity", static_cast<void (ax::ui::PageView::*)(uint8_t)>(&ax::ui::PageView::setIndicatorIndexNodesOpacity));

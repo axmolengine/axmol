@@ -42,7 +42,6 @@ void register_ax_physics3d_members_0(lua_State* L)
     class_2_Collider3D.method("isAttachedToWorld", static_cast<bool (ax::Collider3D::*)() const>(&ax::Collider3D::isAttachedToWorld));
     class_2_Collider3D.method("isSensor", static_cast<bool (ax::Collider3D::*)() const>(&ax::Collider3D::isSensor));
     class_2_Collider3D.method("isValid", static_cast<bool (ax::Collider3D::*)() const>(&ax::Collider3D::isValid));
-    class_2_Collider3D.method("setEnabled", static_cast<void (ax::Collider3D::*)(bool)>(&ax::Collider3D::setEnabled));
     class_2_Collider3D.method("setMaterial", static_cast<void (ax::Collider3D::*)(const ax::PhysicsMaterial &)>(&ax::Collider3D::setMaterial));
     class_2_Collider3D.method("setSensor", static_cast<void (ax::Collider3D::*)(bool)>(&ax::Collider3D::setSensor));
     auto class_3_ConeTwistJoint3D = module.class_<ax::ConeTwistJoint3D>("ConeTwistJoint3D");
@@ -75,8 +74,6 @@ void register_ax_physics3d_members_0(lua_State* L)
     class_4_ContactEvent3D.method("getEventCode", static_cast<ax::ContactEvent3D::EventCode (ax::ContactEvent3D::*)() const>(&ax::ContactEvent3D::getEventCode));
     auto class_5_ContactEventListener3D = module.class_<ax::ContactEventListener3D>("ContactEventListener3D");
     class_5_ContactEventListener3D.bases<ax::CustomEventListener, ax::EventListener, ax::Object>();
-    class_5_ContactEventListener3D.method("checkAvailable", static_cast<bool (ax::ContactEventListener3D::*)()>(&ax::ContactEventListener3D::checkAvailable));
-    class_5_ContactEventListener3D.method("clone", static_cast<ax::ContactEventListener3D * (ax::ContactEventListener3D::*)()>(&ax::ContactEventListener3D::clone));
     class_5_ContactEventListener3D.static_method("create", static_cast<ax::ContactEventListener3D * (*)()>(&ax::ContactEventListener3D::create));
     class_5_ContactEventListener3D.field("onCollisionHit", &ax::ContactEventListener3D::onCollisionHit);
     class_5_ContactEventListener3D.field("onContactBegin", &ax::ContactEventListener3D::onContactBegin);

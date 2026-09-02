@@ -291,6 +291,11 @@ T* fast_object(lua_State* state, int index)
     }
 #else
     void** storage = static_cast<void**>(lua_touserdata(state, index));
+    if (!storage || !*storage)
+    {
+        luaL_error(state, "attempt to access an expired Axmol object");
+        return nullptr;
+    }
 #endif
 
     using NativeT = std::remove_cv_t<T>;

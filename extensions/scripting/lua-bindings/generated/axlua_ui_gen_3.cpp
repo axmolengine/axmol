@@ -124,7 +124,6 @@ void register_ax_ui_members_3(lua_State* L)
     class_5_VBox.bases<ax::ui::LayoutGroup, ax::ui::Widget, ax::ProtectedNode, ax::Node, ax::Object, ax::ui::LayoutParameterProtocol, ax::ui::LayoutProtocol>();
     class_5_VBox.constructors<ax::ui::VBox()>();
     class_5_VBox.static_method("create", axlua::overload(axlua::overload_candidate<>(static_cast<ax::ui::VBox * (*)()>(&ax::ui::VBox::create)), axlua::overload_candidate<const ax::Vec2 &>(static_cast<ax::ui::VBox * (*)(const ax::Vec2 &)>(&ax::ui::VBox::create))));
-    class_5_VBox.method("init", static_cast<bool (ax::ui::VBox::*)()>(&ax::ui::VBox::init));
     class_5_VBox.method("initWithSize", static_cast<bool (ax::ui::VBox::*)(const ax::Vec2 &)>(&ax::ui::VBox::initWithSize));
     auto class_6_Widget = module.class_<ax::ui::Widget>("Widget");
     class_6_Widget.bases<ax::ProtectedNode, ax::Node, ax::Object, ax::ui::LayoutParameterProtocol>();
@@ -145,7 +144,6 @@ void register_ax_ui_members_3(lua_State* L)
     class_6_Widget.method("getCallbackType", static_cast<std::string_view (ax::ui::Widget::*)() const>(&ax::ui::Widget::getCallbackType));
     class_6_Widget.static_method("getCurrentFocusedWidget", static_cast<ax::ui::Widget * (*)()>(&ax::ui::Widget::getCurrentFocusedWidget));
     class_6_Widget.method("getCustomSize", static_cast<const ax::Vec2 & (ax::ui::Widget::*)() const>(&ax::ui::Widget::getCustomSize));
-    class_6_Widget.method("getDescription", static_cast<std::string (ax::ui::Widget::*)() const>(&ax::ui::Widget::getDescription));
     class_6_Widget.method("getLayoutParameter", static_cast<ax::ui::LayoutParameter * (ax::ui::Widget::*)() const>(&ax::ui::Widget::getLayoutParameter));
     class_6_Widget.method("getLayoutSize", static_cast<const ax::Vec2 & (ax::ui::Widget::*)()>(&ax::ui::Widget::getLayoutSize));
     class_6_Widget.method("getLeftBoundary", static_cast<float (ax::ui::Widget::*)() const>(&ax::ui::Widget::getLeftBoundary));
@@ -154,9 +152,6 @@ void register_ax_ui_members_3(lua_State* L)
     class_6_Widget.method("getPreferredSize", static_cast<ax::Vec2 (ax::ui::Widget::*)() const>(&ax::ui::Widget::getPreferredSize));
     class_6_Widget.method("getRenderNode", static_cast<ax::Node * (ax::ui::Widget::*)()>(&ax::ui::Widget::getRenderNode));
     class_6_Widget.method("getRightBoundary", static_cast<float (ax::ui::Widget::*)() const>(&ax::ui::Widget::getRightBoundary));
-    class_6_Widget.method("getScale", static_cast<float (ax::ui::Widget::*)() const>(&ax::ui::Widget::getScale));
-    class_6_Widget.method("getScaleX", static_cast<float (ax::ui::Widget::*)() const>(&ax::ui::Widget::getScaleX));
-    class_6_Widget.method("getScaleY", static_cast<float (ax::ui::Widget::*)() const>(&ax::ui::Widget::getScaleY));
     class_6_Widget.method("getScaleZ", static_cast<float (ax::Node::*)() const>(&ax::Node::getScaleZ));
     class_6_Widget.method("getSizePercent", static_cast<const ax::Vec2 & (ax::ui::Widget::*)()>(&ax::ui::Widget::getSizePercent));
     class_6_Widget.method("getSizeType", static_cast<ax::ui::Widget::SizeType (ax::ui::Widget::*)() const>(&ax::ui::Widget::getSizeType));
@@ -164,7 +159,6 @@ void register_ax_ui_members_3(lua_State* L)
     class_6_Widget.method("getTouchBeganPosition", static_cast<const ax::Vec2 & (ax::ui::Widget::*)() const>(&ax::ui::Widget::getTouchBeganPosition));
     class_6_Widget.method("getTouchEndPosition", static_cast<const ax::Vec2 & (ax::ui::Widget::*)() const>(&ax::ui::Widget::getTouchEndPosition));
     class_6_Widget.method("getTouchMovePosition", static_cast<const ax::Vec2 & (ax::ui::Widget::*)() const>(&ax::ui::Widget::getTouchMovePosition));
-    class_6_Widget.method("init", static_cast<bool (ax::ui::Widget::*)()>(&ax::ui::Widget::init));
     class_6_Widget.method("interceptPointerEvent", static_cast<void (ax::ui::Widget::*)(ax::ui::Widget *, ax::PointerEvent *)>(&ax::ui::Widget::interceptPointerEvent));
     class_6_Widget.method("isAutoSize", static_cast<bool (ax::ui::Widget::*)() const>(&ax::ui::Widget::isAutoSize));
     class_6_Widget.method("isBright", static_cast<bool (ax::ui::Widget::*)() const>(&ax::ui::Widget::isBright));
@@ -188,7 +182,6 @@ void register_ax_ui_members_3(lua_State* L)
     class_6_Widget.method("setBrightStyle", static_cast<void (ax::ui::Widget::*)(ax::ui::Widget::BrightStyle)>(&ax::ui::Widget::setBrightStyle));
     class_6_Widget.method("setCallbackName", static_cast<void (ax::ui::Widget::*)(std::string_view)>(&ax::ui::Widget::setCallbackName));
     class_6_Widget.method("setCallbackType", static_cast<void (ax::ui::Widget::*)(std::string_view)>(&ax::ui::Widget::setCallbackType));
-    class_6_Widget.method("setContentSize", static_cast<void (ax::ui::Widget::*)(const ax::Vec2 &)>(&ax::ui::Widget::setContentSize));
     class_6_Widget.method("setEnabled", static_cast<void (ax::ui::Widget::*)(bool)>(&ax::ui::Widget::setEnabled));
     class_6_Widget.method("setFlippedX", static_cast<void (ax::ui::Widget::*)(bool)>(&ax::ui::Widget::setFlippedX));
     class_6_Widget.method("setFlippedY", static_cast<void (ax::ui::Widget::*)(bool)>(&ax::ui::Widget::setFlippedY));
@@ -198,14 +191,9 @@ void register_ax_ui_members_3(lua_State* L)
     class_6_Widget.method("setLayoutComponentEnabled", static_cast<void (ax::ui::Widget::*)(bool)>(&ax::ui::Widget::setLayoutComponentEnabled));
     class_6_Widget.method("setLayoutParameter", static_cast<void (ax::ui::Widget::*)(ax::ui::LayoutParameter *)>(&ax::ui::Widget::setLayoutParameter));
     class_6_Widget.method("setPointerEnabled", static_cast<void (ax::ui::Widget::*)(bool)>(&ax::ui::Widget::setPointerEnabled));
-    class_6_Widget.method("setPosition", static_cast<void (ax::ui::Widget::*)(const ax::Vec2 &)>(&ax::ui::Widget::setPosition));
-    class_6_Widget.method("setPositionNormalized", static_cast<void (ax::ui::Widget::*)(const ax::Vec2 &)>(&ax::ui::Widget::setPositionNormalized));
     class_6_Widget.method("setPositionPercent", static_cast<void (ax::ui::Widget::*)(const ax::Vec2 &)>(&ax::ui::Widget::setPositionPercent));
     class_6_Widget.method("setPositionType", static_cast<void (ax::ui::Widget::*)(ax::ui::Widget::PositionType)>(&ax::ui::Widget::setPositionType));
     class_6_Widget.method("setPropagatePointerEvents", static_cast<void (ax::ui::Widget::*)(bool)>(&ax::ui::Widget::setPropagatePointerEvents));
-    class_6_Widget.method("setScale", axlua::overload(axlua::overload_candidate<float>(static_cast<void (ax::ui::Widget::*)(float)>(&ax::ui::Widget::setScale)), axlua::overload_candidate<float, float>(static_cast<void (ax::ui::Widget::*)(float, float)>(&ax::ui::Widget::setScale))));
-    class_6_Widget.method("setScaleX", static_cast<void (ax::ui::Widget::*)(float)>(&ax::ui::Widget::setScaleX));
-    class_6_Widget.method("setScaleY", static_cast<void (ax::ui::Widget::*)(float)>(&ax::ui::Widget::setScaleY));
     class_6_Widget.method("setScaleZ", static_cast<void (ax::Node::*)(float)>(&ax::Node::setScaleZ));
     class_6_Widget.method("setSizePercent", static_cast<void (ax::ui::Widget::*)(const ax::Vec2 &)>(&ax::ui::Widget::setSizePercent));
     class_6_Widget.method("setSizeType", static_cast<void (ax::ui::Widget::*)(ax::ui::Widget::SizeType)>(&ax::ui::Widget::setSizeType));

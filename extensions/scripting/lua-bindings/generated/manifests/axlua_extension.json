@@ -772,21 +772,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::ParticleSystem3D",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -1214,28 +1199,6 @@
       ],
       "methods": [
         {
-          "nativeName": "checkAvailable",
-          "luaName": "checkAvailable",
-          "declaringType": "ax::ext::EventListenerAssetsManagerEx",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::ext::EventListenerAssetsManagerEx",
-          "returnType": "ax::ext::EventListenerAssetsManagerEx *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "init",
           "luaName": "init",
           "declaringType": "ax::ext::EventListenerAssetsManagerEx",
@@ -1486,17 +1449,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getContentSize",
-          "luaName": "getContentSize",
-          "declaringType": "ax::ext::ScrollView",
-          "returnType": "const ax::Size \u0026",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getDirection",
           "luaName": "getDirection",
           "declaringType": "ax::ext::ScrollView",
@@ -1538,17 +1490,6 @@
           "defaultValues": [],
           "isStatic": false,
           "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::ext::ScrollView",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
           "isVariadic": false
         },
         {
@@ -1691,23 +1632,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "onPointerHitTest",
-          "luaName": "onPointerHitTest",
-          "declaringType": "ax::ext::ScrollView",
-          "returnType": "bool",
-          "parameterTypes": [
-            "ax::PointerEvent *",
-            "ax::Vec3 *"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "onPointerMove",
           "luaName": "onPointerMove",
           "declaringType": "ax::ext::ScrollView",
@@ -1779,17 +1703,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "removeAllChildren",
-          "luaName": "removeAllChildren",
-          "declaringType": "ax::ext::ScrollView",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "removeAllChildrenWithCleanup",
           "luaName": "removeAllChildrenWithCleanup",
           "declaringType": "ax::ext::ScrollView",
@@ -1799,23 +1712,6 @@
           ],
           "defaultValues": [
             null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "removeChild",
-          "luaName": "removeChild",
-          "declaringType": "ax::ext::ScrollView",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *",
-            "bool"
-          ],
-          "defaultValues": [
-            null,
-            "true"
           ],
           "isStatic": false,
           "isConst": false,
@@ -1920,21 +1816,6 @@
           ],
           "defaultValues": [
             null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setContentSize",
-          "luaName": "setContentSize",
-          "declaringType": "ax::ext::ScrollView",
-          "returnType": "void",
-          "parameterTypes": [
-            "const ax::Size \u0026"
-          ],
-          "defaultValues": [
             null
           ],
           "isStatic": false,

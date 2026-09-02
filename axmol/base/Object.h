@@ -31,9 +31,6 @@ THE SOFTWARE.
 #include "axmol/base/Config.h"
 
 #include <stdint.h>
-#if AX_ENABLE_SCRIPT_BINDING
-#    include <atomic>
-#endif
 
 #define AX_OBJECT_LEAK_DETECTION 0
 
@@ -146,8 +143,8 @@ public:
     uint64_t getObjectID() const noexcept { return _ID; }
 
 #if AX_ENABLE_SCRIPT_BINDING
-    void markScriptBindingExposed() noexcept { _scriptBindingExposed.store(true, std::memory_order_relaxed); }
-    bool hasScriptBindingExposure() const noexcept { return _scriptBindingExposed.load(std::memory_order_relaxed); }
+    void markScriptBindingExposed() noexcept { _scriptBindingExposed = true; }
+    bool hasScriptBindingExposure() const noexcept { return _scriptBindingExposed; }
 #endif
 
 protected:
@@ -207,7 +204,7 @@ private:
     uint64_t _ID;
 
 #if AX_ENABLE_SCRIPT_BINDING
-    std::atomic_bool _scriptBindingExposed{false};
+    bool _scriptBindingExposed{false};
 #endif
 
     // A memory slot identifier specifically for WeakObjectRegistry. -1 indicates that it is not allocated.

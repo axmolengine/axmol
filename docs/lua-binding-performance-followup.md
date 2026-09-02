@@ -76,18 +76,22 @@ The lookup is O(1), but two method calls per Sprite at 55 FPS produce roughly 1.
 
 Caching the lifetime table in a `class_index` closure upvalue was tested. The result remained about 12,500 stars, so the registry-table lookup is not a material part of the remaining cost. The closure change was reverted.
 
-The next implementation uses owner-thread invalidation as the normal Release fast path. Axmol object destruction on the owning Lua thread already marks canonical userdata invalid and clears its native pointer. A monotonic runtime flag enables the original per-access WeakPtr lookup as soon as any exposed object is destroyed from a different VM owner thread, where Lua cannot be touched safely. Debug builds retain the full lookup unconditionally.
+The final implementation uses owner-thread invalidation as the Release fast path. Lua VM access and userdata invalidation are confined to each VM's owner thread; native objects may still be shared when their own synchronization contract is honored. Destruction of an object exposed to Lua must be marshalled to the owner thread, where canonical userdata is synchronously marked invalid and its native pointer is cleared. Release therefore skips the per-access WeakPtr lookup, while Debug retains the full diagnostic lookup. No foreign-thread Lua-state fallback is maintained because Lua state access and the binding's invalidation bookkeeping are not thread-safe.
 
-This keeps the cross-thread and multi-VM fallback while avoiding the userdata-keyed WeakPtr lookup during normal single-threaded engine operation. Benchmark and lifecycle tests must pass before retaining it.
+The fast object extractor still rejects cleared userdata before entering generated native code, so cached calls cannot dereference a stale handle. Multi-VM behavior remains valid when each VM is used from its owning thread. Benchmark and lifecycle tests must pass before retaining the change.
 
 Any further design must preserve:
 
 - owner-thread destruction invalidation;
-- foreign-thread destruction detection;
 - multiple Lua VMs;
 - address reuse protection;
 - borrowed userdata invalidation;
 - canonical userdata identity.
+
+The generator's virtual override pass compares the C++ signature (including
+parameter types and constness) but intentionally ignores default arguments.
+When a derived class adds another overload with the same Lua name, the entire
+Lua overload group is retained so the inherited overloads remain reachable.
 
 Possible designs must be evaluated against Lua 5.1/LuaJIT user-environment constraints. Merely deleting the WeakPtr lookup in Release is not an acceptable final implementation.
 

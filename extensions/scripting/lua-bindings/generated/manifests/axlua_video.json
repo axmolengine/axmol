@@ -86,17 +86,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getRenderNode",
-          "luaName": "getRenderNode",
-          "declaringType": "ax::ui::VideoPlayer",
-          "returnType": "ax::Node *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getState",
           "luaName": "getState",
           "declaringType": "ax::ui::VideoPlayer",
@@ -127,17 +116,6 @@
           "defaultValues": [],
           "isStatic": false,
           "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::ui::VideoPlayer",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
           "isVariadic": false
         },
         {
@@ -233,17 +211,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "pause",
-          "luaName": "pause",
-          "declaringType": "ax::ui::VideoPlayer",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "pausePlayback",
           "luaName": "pausePlayback",
           "declaringType": "ax::ui::VideoPlayer",
@@ -257,17 +224,6 @@
         {
           "nativeName": "play",
           "luaName": "play",
-          "declaringType": "ax::ui::VideoPlayer",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "resume",
-          "luaName": "resume",
           "declaringType": "ax::ui::VideoPlayer",
           "returnType": "void",
           "parameterTypes": [],
@@ -294,21 +250,6 @@
           "returnType": "void",
           "parameterTypes": [
             "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setContentSize",
-          "luaName": "setContentSize",
-          "declaringType": "ax::ui::VideoPlayer",
-          "returnType": "void",
-          "parameterTypes": [
-            "const ax::Size \u0026"
           ],
           "defaultValues": [
             null
@@ -444,21 +385,6 @@
           "returnType": "void",
           "parameterTypes": [
             "ax::ui::VideoController *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setVisible",
-          "luaName": "setVisible",
-          "declaringType": "ax::ui::VideoPlayer",
-          "returnType": "void",
-          "parameterTypes": [
-            "bool"
           ],
           "defaultValues": [
             null

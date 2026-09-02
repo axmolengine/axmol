@@ -35,7 +35,6 @@ void register_ax_webview(lua_State* L)
     class_0_WebView.method("setOnShouldStartLoading", static_cast<void (ax::ui::WebView::*)(const std::function<bool (ax::ui::WebView *, std::string_view)> &)>(&ax::ui::WebView::setOnShouldStartLoading));
     class_0_WebView.method("setOpacityWebView", static_cast<void (ax::ui::WebView::*)(float)>(&ax::ui::WebView::setOpacityWebView));
     class_0_WebView.method("setScalesPageToFit", static_cast<void (ax::ui::WebView::*)(const bool)>(&ax::ui::WebView::setScalesPageToFit));
-    class_0_WebView.method("setVisible", static_cast<void (ax::ui::WebView::*)(bool)>(&ax::ui::WebView::setVisible));
     class_0_WebView.method("stopLoading", static_cast<void (ax::ui::WebView::*)()>(&ax::ui::WebView::stopLoading));
 }
 

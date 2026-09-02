@@ -18,11 +18,9 @@ void register_ax_video(lua_State* L)
     class_0_VideoPlayer.method("getCurrentTime", static_cast<float (ax::ui::VideoPlayer::*)()>(&ax::ui::VideoPlayer::getCurrentTime));
     class_0_VideoPlayer.method("getDuration", static_cast<float (ax::ui::VideoPlayer::*)()>(&ax::ui::VideoPlayer::getDuration));
     class_0_VideoPlayer.method("getFileName", static_cast<std::string_view (ax::ui::VideoPlayer::*)() const>(&ax::ui::VideoPlayer::getFileName));
-    class_0_VideoPlayer.method("getRenderNode", static_cast<ax::Node * (ax::ui::VideoPlayer::*)()>(&ax::ui::VideoPlayer::getRenderNode));
     class_0_VideoPlayer.method("getState", static_cast<ax::ui::VideoPlayer::State (ax::ui::VideoPlayer::*)() const>(&ax::ui::VideoPlayer::getState));
     class_0_VideoPlayer.method("getURL", static_cast<std::string_view (ax::ui::VideoPlayer::*)() const>(&ax::ui::VideoPlayer::getURL));
     class_0_VideoPlayer.method("getVideoController", static_cast<ax::ui::VideoController * (ax::ui::VideoPlayer::*)() const>(&ax::ui::VideoPlayer::getVideoController));
-    class_0_VideoPlayer.method("init", static_cast<bool (ax::ui::VideoPlayer::*)()>(&ax::ui::VideoPlayer::init));
     class_0_VideoPlayer.method("isFullscreen", static_cast<bool (ax::ui::VideoPlayer::*)() const>(&ax::ui::VideoPlayer::isFullscreen));
     class_0_VideoPlayer.method("isKeepAspectRatio", static_cast<bool (ax::ui::VideoPlayer::*)() const>(&ax::ui::VideoPlayer::isKeepAspectRatio));
     class_0_VideoPlayer.method("isLooping", static_cast<bool (ax::ui::VideoPlayer::*)() const>(&ax::ui::VideoPlayer::isLooping));
@@ -31,13 +29,10 @@ void register_ax_video(lua_State* L)
     class_0_VideoPlayer.method("onEnter", static_cast<void (ax::ui::VideoPlayer::*)()>(&ax::ui::VideoPlayer::onEnter));
     class_0_VideoPlayer.method("onExit", static_cast<void (ax::ui::VideoPlayer::*)()>(&ax::ui::VideoPlayer::onExit));
     class_0_VideoPlayer.method("onPlayEvent", static_cast<void (ax::ui::VideoPlayer::*)(ax::ui::VideoPlayer::EventType)>(&ax::ui::VideoPlayer::onPlayEvent));
-    class_0_VideoPlayer.method("pause", static_cast<void (ax::ui::VideoPlayer::*)()>(&ax::ui::VideoPlayer::pause));
     class_0_VideoPlayer.method("pausePlayback", static_cast<void (ax::ui::VideoPlayer::*)()>(&ax::ui::VideoPlayer::pausePlayback));
     class_0_VideoPlayer.method("play", static_cast<void (ax::ui::VideoPlayer::*)()>(&ax::ui::VideoPlayer::play));
-    class_0_VideoPlayer.method("resume", static_cast<void (ax::ui::VideoPlayer::*)()>(&ax::ui::VideoPlayer::resume));
     class_0_VideoPlayer.method("resumePlayback", static_cast<void (ax::ui::VideoPlayer::*)()>(&ax::ui::VideoPlayer::resumePlayback));
     class_0_VideoPlayer.method("seekTo", static_cast<void (ax::ui::VideoPlayer::*)(float)>(&ax::ui::VideoPlayer::seekTo));
-    class_0_VideoPlayer.method("setContentSize", static_cast<void (ax::ui::VideoPlayer::*)(const ax::Size &)>(&ax::ui::VideoPlayer::setContentSize));
     class_0_VideoPlayer.method("setFileName", static_cast<void (ax::ui::VideoPlayer::*)(std::string_view)>(&ax::ui::VideoPlayer::setFileName));
     class_0_VideoPlayer.method("setFullscreen", static_cast<void (ax::ui::VideoPlayer::*)(bool)>(&ax::ui::VideoPlayer::setFullscreen));
     class_0_VideoPlayer.method("setKeepAspectRatio", static_cast<void (ax::ui::VideoPlayer::*)(bool)>(&ax::ui::VideoPlayer::setKeepAspectRatio));
@@ -47,7 +42,6 @@ void register_ax_video(lua_State* L)
     class_0_VideoPlayer.method("setURL", static_cast<void (ax::ui::VideoPlayer::*)(std::string_view)>(&ax::ui::VideoPlayer::setURL));
     class_0_VideoPlayer.method("setUserInputEnabled", static_cast<void (ax::ui::VideoPlayer::*)(bool)>(&ax::ui::VideoPlayer::setUserInputEnabled));
     class_0_VideoPlayer.method("setVideoController", static_cast<void (ax::ui::VideoPlayer::*)(ax::ui::VideoController *)>(&ax::ui::VideoPlayer::setVideoController));
-    class_0_VideoPlayer.method("setVisible", static_cast<void (ax::ui::VideoPlayer::*)(bool)>(&ax::ui::VideoPlayer::setVisible));
     class_0_VideoPlayer.method("stop", static_cast<void (ax::ui::VideoPlayer::*)()>(&ax::ui::VideoPlayer::stop));
     auto enum_0_EventType = class_0_VideoPlayer.get_or_create_table("EventType");
     enum_0_EventType.set("PLAYING", 0ll);

@@ -38,17 +38,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::AccelerationEventListener",
-          "returnType": "ax::AccelerationEventListener *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::AccelerationEventListener",
@@ -308,17 +297,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::ActionCamera",
-          "returnType": "ax::ActionCamera *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getCenter",
           "luaName": "getCenter",
           "declaringType": "ax::ActionCamera",
@@ -345,17 +323,6 @@
           "luaName": "getUp",
           "declaringType": "ax::ActionCamera",
           "returnType": "const ax::Vec3 \u0026",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::ActionCamera",
-          "returnType": "ax::ActionCamera *",
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": false,
@@ -511,17 +478,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::ActionFloat",
-          "returnType": "ax::ActionFloat *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::ActionFloat",
@@ -562,17 +518,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::ActionFloat",
-          "returnType": "ax::ActionFloat *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -600,30 +545,7 @@
         "ax::Action",
         "ax::Object"
       ],
-      "methods": [
-        {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::ActionInstant",
-          "returnType": "ax::ActionInstant *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::ActionInstant",
-          "returnType": "ax::ActionInstant *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        }
-      ],
+      "methods": [],
       "fields": []
     },
     {
@@ -639,17 +561,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::ActionInterval",
-          "returnType": "ax::ActionInterval *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
         {
           "nativeName": "getAmplitudeRate",
           "luaName": "getAmplitudeRate",
@@ -685,17 +596,6 @@
           ],
           "isStatic": false,
           "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::ActionInterval",
-          "returnType": "ax::ActionInterval *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
           "isVariadic": false
         },
         {
@@ -1003,17 +903,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::ActionTween",
-          "returnType": "ax::ActionTween *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::ActionTween",
@@ -1049,32 +938,6 @@
             null,
             null,
             null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::ActionTween",
-          "returnType": "ax::ActionTween *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::ActionTween",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
             null
           ],
           "isStatic": false,
@@ -1151,17 +1014,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::Animate",
-          "returnType": "ax::Animate *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::Animate",
@@ -1225,38 +1077,12 @@
           "isVariadic": false
         },
         {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::Animate",
-          "returnType": "ax::Animate *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setAnimation",
           "luaName": "setAnimation",
           "declaringType": "ax::Animate",
           "returnType": "void",
           "parameterTypes": [
             "ax::Animation *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::Animate",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
           ],
           "defaultValues": [
             null
@@ -2226,17 +2052,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::BezierBy",
-          "returnType": "ax::BezierBy *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "initWithDuration",
           "luaName": "initWithDuration",
           "declaringType": "ax::BezierBy",
@@ -2247,32 +2062,6 @@
           ],
           "defaultValues": [
             null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::BezierBy",
-          "returnType": "ax::BezierBy *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::BezierBy",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
             null
           ],
           "isStatic": false,
@@ -2314,17 +2103,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::BezierTo",
-          "returnType": "ax::BezierTo *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "initWithDuration",
           "luaName": "initWithDuration",
           "declaringType": "ax::BezierTo",
@@ -2339,17 +2117,6 @@
           ],
           "isStatic": false,
           "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::BezierTo",
-          "returnType": "ax::BezierTo *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
           "isVariadic": false
         }
       ],
@@ -2374,17 +2141,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::Blink",
-          "returnType": "ax::Blink *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
         {
           "nativeName": "create",
           "luaName": "create",
@@ -2413,32 +2169,6 @@
           ],
           "defaultValues": [
             null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::Blink",
-          "returnType": "ax::Blink *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::Blink",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
             null
           ],
           "isStatic": false,
@@ -2481,49 +2211,12 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::CallFunc",
-          "returnType": "ax::CallFunc *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "execute",
           "luaName": "execute",
           "declaringType": "ax::CallFunc",
           "returnType": "void",
           "parameterTypes": [],
           "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::CallFunc",
-          "returnType": "ax::CallFunc *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::CallFunc",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
@@ -3568,30 +3261,7 @@
         "ax::Action",
         "ax::Object"
       ],
-      "methods": [
-        {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::CardinalSplineBy",
-          "returnType": "ax::CardinalSplineBy *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::CardinalSplineBy",
-          "returnType": "ax::CardinalSplineBy *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        }
-      ],
+      "methods": [],
       "fields": []
     },
     {
@@ -3613,17 +3283,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::CardinalSplineTo",
-          "returnType": "ax::CardinalSplineTo *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
         {
           "nativeName": "getPoints",
           "luaName": "getPoints",
@@ -3648,32 +3307,6 @@
           "defaultValues": [
             null,
             null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::CardinalSplineTo",
-          "returnType": "ax::CardinalSplineTo *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::CardinalSplineTo",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
             null
           ],
           "isStatic": false,
@@ -3715,17 +3348,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::CatmullRomBy",
-          "returnType": "ax::CatmullRomBy *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "initWithDuration",
           "luaName": "initWithDuration",
           "declaringType": "ax::CatmullRomBy",
@@ -3740,17 +3362,6 @@
           ],
           "isStatic": false,
           "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::CatmullRomBy",
-          "returnType": "ax::CatmullRomBy *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
           "isVariadic": false
         }
       ],
@@ -3772,17 +3383,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::CatmullRomTo",
-          "returnType": "ax::CatmullRomTo *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "initWithDuration",
           "luaName": "initWithDuration",
           "declaringType": "ax::CatmullRomTo",
@@ -3797,17 +3397,6 @@
           ],
           "isStatic": false,
           "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::CatmullRomTo",
-          "returnType": "ax::CatmullRomTo *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
           "isVariadic": false
         }
       ],
@@ -4298,17 +3887,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::CustomEventListener",
-          "returnType": "ax::CustomEventListener *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::CustomEventListener",
@@ -4348,17 +3926,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::DelayTime",
-          "returnType": "ax::DelayTime *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::DelayTime",
@@ -4371,17 +3938,6 @@
           ],
           "isStatic": true,
           "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::DelayTime",
-          "returnType": "ax::DelayTime *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
           "isVariadic": false
         }
       ],
@@ -6572,17 +6128,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::EaseBackIn",
-          "returnType": "ax::EaseBackIn *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::EaseBackIn",
@@ -6594,32 +6139,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::EaseBackIn",
-          "returnType": "ax::ActionEase *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::EaseBackIn",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -6647,17 +6166,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::EaseBackInOut",
-          "returnType": "ax::EaseBackInOut *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::EaseBackInOut",
@@ -6669,32 +6177,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::EaseBackInOut",
-          "returnType": "ax::ActionEase *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::EaseBackInOut",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -6722,17 +6204,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::EaseBackOut",
-          "returnType": "ax::EaseBackOut *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::EaseBackOut",
@@ -6744,32 +6215,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::EaseBackOut",
-          "returnType": "ax::ActionEase *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::EaseBackOut",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -6797,17 +6242,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::EaseBezierAction",
-          "returnType": "ax::EaseBezierAction *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::EaseBezierAction",
@@ -6820,17 +6254,6 @@
           ],
           "isStatic": true,
           "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::EaseBezierAction",
-          "returnType": "ax::EaseBezierAction *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
           "isVariadic": false
         },
         {
@@ -6848,21 +6271,6 @@
             null,
             null,
             null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::EaseBezierAction",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
             null
           ],
           "isStatic": false,
@@ -6910,17 +6318,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::EaseBounceIn",
-          "returnType": "ax::EaseBounceIn *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::EaseBounceIn",
@@ -6932,32 +6329,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::EaseBounceIn",
-          "returnType": "ax::ActionEase *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::EaseBounceIn",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -6985,17 +6356,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::EaseBounceInOut",
-          "returnType": "ax::EaseBounceInOut *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::EaseBounceInOut",
@@ -7007,32 +6367,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::EaseBounceInOut",
-          "returnType": "ax::ActionEase *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::EaseBounceInOut",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -7060,17 +6394,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::EaseBounceOut",
-          "returnType": "ax::EaseBounceOut *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::EaseBounceOut",
@@ -7082,32 +6405,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::EaseBounceOut",
-          "returnType": "ax::ActionEase *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::EaseBounceOut",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -7135,17 +6432,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::EaseCircleActionIn",
-          "returnType": "ax::EaseCircleActionIn *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::EaseCircleActionIn",
@@ -7157,32 +6443,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::EaseCircleActionIn",
-          "returnType": "ax::ActionEase *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::EaseCircleActionIn",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -7210,17 +6470,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::EaseCircleActionInOut",
-          "returnType": "ax::EaseCircleActionInOut *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::EaseCircleActionInOut",
@@ -7232,32 +6481,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::EaseCircleActionInOut",
-          "returnType": "ax::ActionEase *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::EaseCircleActionInOut",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -7285,17 +6508,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::EaseCircleActionOut",
-          "returnType": "ax::EaseCircleActionOut *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::EaseCircleActionOut",
@@ -7307,32 +6519,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::EaseCircleActionOut",
-          "returnType": "ax::ActionEase *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::EaseCircleActionOut",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -7360,17 +6546,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::EaseCubicActionIn",
-          "returnType": "ax::EaseCubicActionIn *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::EaseCubicActionIn",
@@ -7382,32 +6557,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::EaseCubicActionIn",
-          "returnType": "ax::ActionEase *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::EaseCubicActionIn",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -7435,17 +6584,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::EaseCubicActionInOut",
-          "returnType": "ax::EaseCubicActionInOut *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::EaseCubicActionInOut",
@@ -7457,32 +6595,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::EaseCubicActionInOut",
-          "returnType": "ax::ActionEase *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::EaseCubicActionInOut",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -7510,17 +6622,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::EaseCubicActionOut",
-          "returnType": "ax::EaseCubicActionOut *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::EaseCubicActionOut",
@@ -7532,32 +6633,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::EaseCubicActionOut",
-          "returnType": "ax::ActionEase *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::EaseCubicActionOut",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -7647,17 +6722,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::EaseElasticIn",
-          "returnType": "ax::EaseElasticIn *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::EaseElasticIn",
@@ -7671,32 +6735,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::EaseElasticIn",
-          "returnType": "ax::EaseElastic *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::EaseElasticIn",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -7725,17 +6763,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::EaseElasticInOut",
-          "returnType": "ax::EaseElasticInOut *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::EaseElasticInOut",
@@ -7749,32 +6776,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::EaseElasticInOut",
-          "returnType": "ax::EaseElastic *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::EaseElasticInOut",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -7803,17 +6804,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::EaseElasticOut",
-          "returnType": "ax::EaseElasticOut *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::EaseElasticOut",
@@ -7827,32 +6817,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::EaseElasticOut",
-          "returnType": "ax::EaseElastic *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::EaseElasticOut",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -7880,17 +6844,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::EaseExponentialIn",
-          "returnType": "ax::EaseExponentialIn *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::EaseExponentialIn",
@@ -7902,32 +6855,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::EaseExponentialIn",
-          "returnType": "ax::ActionEase *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::EaseExponentialIn",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -7955,17 +6882,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::EaseExponentialInOut",
-          "returnType": "ax::EaseExponentialInOut *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::EaseExponentialInOut",
@@ -7977,32 +6893,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::EaseExponentialInOut",
-          "returnType": "ax::ActionEase *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::EaseExponentialInOut",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -8030,17 +6920,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::EaseExponentialOut",
-          "returnType": "ax::EaseExponentialOut *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::EaseExponentialOut",
@@ -8052,32 +6931,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::EaseExponentialOut",
-          "returnType": "ax::ActionEase *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::EaseExponentialOut",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -8106,17 +6959,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::EaseIn",
-          "returnType": "ax::EaseIn *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::EaseIn",
@@ -8130,32 +6972,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::EaseIn",
-          "returnType": "ax::EaseRateAction *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::EaseIn",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -8184,17 +7000,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::EaseInOut",
-          "returnType": "ax::EaseInOut *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::EaseInOut",
@@ -8208,32 +7013,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::EaseInOut",
-          "returnType": "ax::EaseRateAction *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::EaseInOut",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -8262,17 +7041,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::EaseOut",
-          "returnType": "ax::EaseOut *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::EaseOut",
@@ -8286,32 +7054,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::EaseOut",
-          "returnType": "ax::EaseRateAction *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::EaseOut",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -8339,17 +7081,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::EaseQuadraticActionIn",
-          "returnType": "ax::EaseQuadraticActionIn *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::EaseQuadraticActionIn",
@@ -8361,32 +7092,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::EaseQuadraticActionIn",
-          "returnType": "ax::ActionEase *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::EaseQuadraticActionIn",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -8414,17 +7119,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::EaseQuadraticActionInOut",
-          "returnType": "ax::EaseQuadraticActionInOut *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::EaseQuadraticActionInOut",
@@ -8436,32 +7130,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::EaseQuadraticActionInOut",
-          "returnType": "ax::ActionEase *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::EaseQuadraticActionInOut",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -8489,17 +7157,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::EaseQuadraticActionOut",
-          "returnType": "ax::EaseQuadraticActionOut *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::EaseQuadraticActionOut",
@@ -8511,32 +7168,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::EaseQuadraticActionOut",
-          "returnType": "ax::ActionEase *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::EaseQuadraticActionOut",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -8564,17 +7195,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::EaseQuarticActionIn",
-          "returnType": "ax::EaseQuarticActionIn *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::EaseQuarticActionIn",
@@ -8586,32 +7206,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::EaseQuarticActionIn",
-          "returnType": "ax::ActionEase *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::EaseQuarticActionIn",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -8639,17 +7233,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::EaseQuarticActionInOut",
-          "returnType": "ax::EaseQuarticActionInOut *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::EaseQuarticActionInOut",
@@ -8661,32 +7244,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::EaseQuarticActionInOut",
-          "returnType": "ax::ActionEase *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::EaseQuarticActionInOut",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -8714,17 +7271,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::EaseQuarticActionOut",
-          "returnType": "ax::EaseQuarticActionOut *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::EaseQuarticActionOut",
@@ -8736,32 +7282,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::EaseQuarticActionOut",
-          "returnType": "ax::ActionEase *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::EaseQuarticActionOut",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -8789,17 +7309,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::EaseQuinticActionIn",
-          "returnType": "ax::EaseQuinticActionIn *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::EaseQuinticActionIn",
@@ -8811,32 +7320,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::EaseQuinticActionIn",
-          "returnType": "ax::ActionEase *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::EaseQuinticActionIn",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -8864,17 +7347,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::EaseQuinticActionInOut",
-          "returnType": "ax::EaseQuinticActionInOut *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::EaseQuinticActionInOut",
@@ -8886,32 +7358,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::EaseQuinticActionInOut",
-          "returnType": "ax::ActionEase *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::EaseQuinticActionInOut",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -8939,17 +7385,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::EaseQuinticActionOut",
-          "returnType": "ax::EaseQuinticActionOut *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::EaseQuinticActionOut",
@@ -8961,32 +7396,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::EaseQuinticActionOut",
-          "returnType": "ax::ActionEase *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::EaseQuinticActionOut",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -9092,17 +7501,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::EaseSineIn",
-          "returnType": "ax::EaseSineIn *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::EaseSineIn",
@@ -9114,32 +7512,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::EaseSineIn",
-          "returnType": "ax::ActionEase *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::EaseSineIn",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -9167,17 +7539,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::EaseSineInOut",
-          "returnType": "ax::EaseSineInOut *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::EaseSineInOut",
@@ -9189,32 +7550,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::EaseSineInOut",
-          "returnType": "ax::ActionEase *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::EaseSineInOut",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -9242,17 +7577,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::EaseSineOut",
-          "returnType": "ax::EaseSineOut *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::EaseSineOut",
@@ -9264,32 +7588,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::EaseSineOut",
-          "returnType": "ax::ActionEase *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::EaseSineOut",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -9700,17 +7998,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::FadeIn",
-          "returnType": "ax::FadeIn *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::FadeIn",
@@ -9763,17 +8050,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::FadeOut",
-          "returnType": "ax::FadeOut *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
         {
           "nativeName": "create",
           "luaName": "create",
@@ -9830,17 +8106,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::FadeOutBLTiles",
-          "returnType": "ax::FadeOutBLTiles *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::FadeOutBLTiles",
@@ -9884,17 +8149,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::FadeOutDownTiles",
-          "returnType": "ax::FadeOutDownTiles *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::FadeOutDownTiles",
@@ -9935,17 +8189,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::FadeOutTRTiles",
-          "returnType": "ax::FadeOutTRTiles *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
         {
           "nativeName": "create",
           "luaName": "create",
@@ -10053,17 +8296,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::FadeOutUpTiles",
-          "returnType": "ax::FadeOutUpTiles *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::FadeOutUpTiles",
@@ -10103,17 +8335,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::FadeTo",
-          "returnType": "ax::FadeTo *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::FadeTo",
@@ -10141,32 +8362,6 @@
           ],
           "defaultValues": [
             null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::FadeTo",
-          "returnType": "ax::FadeTo *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::FadeTo",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
             null
           ],
           "isStatic": false,
@@ -11443,32 +9638,10 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::FiniteTimeAction",
-          "returnType": "ax::FiniteTimeAction *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getDuration",
           "luaName": "getDuration",
           "declaringType": "ax::FiniteTimeAction",
           "returnType": "float",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::FiniteTimeAction",
-          "returnType": "ax::FiniteTimeAction *",
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": false,
@@ -11513,17 +9686,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::FlipX",
-          "returnType": "ax::FlipX *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::FlipX",
@@ -11545,32 +9707,6 @@
           "returnType": "bool",
           "parameterTypes": [
             "bool"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::FlipX",
-          "returnType": "ax::FlipX *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::FlipX",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
           ],
           "defaultValues": [
             null
@@ -11603,17 +9739,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::FlipX3D",
-          "returnType": "ax::FlipX3D *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
         {
           "nativeName": "create",
           "luaName": "create",
@@ -11684,17 +9809,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::FlipY",
-          "returnType": "ax::FlipY *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::FlipY",
@@ -11716,32 +9830,6 @@
           "returnType": "bool",
           "parameterTypes": [
             "bool"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::FlipY",
-          "returnType": "ax::FlipY *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::FlipY",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
           ],
           "defaultValues": [
             null
@@ -11776,17 +9864,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::FlipY3D",
-          "returnType": "ax::FlipY3D *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::FlipY3D",
@@ -11798,21 +9875,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::FlipY3D",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -11862,17 +9924,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::FocusEventListener",
-          "returnType": "ax::FocusEventListener *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::FocusEventListener",
@@ -11914,17 +9965,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::Follow",
-          "returnType": "ax::Follow *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
         {
           "nativeName": "create",
           "luaName": "create",
@@ -12006,17 +10046,6 @@
           "luaName": "isBoundarySet",
           "declaringType": "ax::Follow",
           "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::Follow",
-          "returnType": "ax::Follow *",
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": false,
@@ -12175,17 +10204,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::Grid3DAction",
-          "returnType": "ax::Grid3DAction *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getGridRect",
           "luaName": "getGridRect",
           "declaringType": "ax::Grid3DAction",
@@ -12214,17 +10232,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::GridAction",
-          "returnType": "ax::GridAction *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getGrid",
           "luaName": "getGrid",
           "declaringType": "ax::GridAction",
@@ -12246,32 +10253,6 @@
           ],
           "defaultValues": [
             null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::GridAction",
-          "returnType": "ax::GridAction *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::GridAction",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
             null
           ],
           "isStatic": false,
@@ -12598,17 +10579,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::Hide",
-          "returnType": "ax::Hide *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::Hide",
@@ -12616,21 +10586,6 @@
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::Hide",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -12898,17 +10853,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::JumpBy",
-          "returnType": "ax::JumpBy *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::JumpBy",
@@ -12949,32 +10893,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::JumpBy",
-          "returnType": "ax::JumpBy *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::JumpBy",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -13000,17 +10918,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::JumpTiles3D",
-          "returnType": "ax::JumpTiles3D *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
         {
           "nativeName": "create",
           "luaName": "create",
@@ -13129,17 +11036,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::JumpTo",
-          "returnType": "ax::JumpTo *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::JumpTo",
@@ -13179,17 +11075,6 @@
           ],
           "isStatic": false,
           "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::JumpTo",
-          "returnType": "ax::JumpTo *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
           "isVariadic": false
         }
       ],
@@ -13283,17 +11168,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::KeyboardEventListener",
-          "returnType": "ax::KeyboardEventListener *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
         {
           "nativeName": "create",
           "luaName": "create",
@@ -15116,17 +12990,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::LayerGradient",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "initWithColor",
           "luaName": "initWithColor",
           "declaringType": "ax::LayerGradient",
@@ -15670,17 +13533,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::Lens3D",
-          "returnType": "ax::Lens3D *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::Lens3D",
@@ -15813,17 +13665,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::Liquid",
-          "returnType": "ax::Liquid *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
         {
           "nativeName": "create",
           "luaName": "create",
@@ -17478,17 +15319,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::MoveBy",
-          "returnType": "ax::MoveBy *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::MoveBy",
@@ -17550,32 +15380,6 @@
           ],
           "defaultValues": [
             null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::MoveBy",
-          "returnType": "ax::MoveBy *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::MoveBy",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
             null
           ],
           "isStatic": false,
@@ -17606,17 +15410,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::MoveTo",
-          "returnType": "ax::MoveTo *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::MoveTo",
@@ -17682,17 +15475,6 @@
           ],
           "isStatic": false,
           "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::MoveTo",
-          "returnType": "ax::MoveTo *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
           "isVariadic": false
         }
       ],
@@ -20248,17 +18030,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::OrbitCamera",
-          "returnType": "ax::OrbitCamera *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::OrbitCamera",
@@ -20311,21 +18082,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::OrbitCamera",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -20347,17 +18103,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::PageTurn3D",
-          "returnType": "ax::PageTurn3D *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::PageTurn3D",
@@ -20371,17 +18116,6 @@
             null
           ],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getGrid",
-          "luaName": "getGrid",
-          "declaringType": "ax::PageTurn3D",
-          "returnType": "ax::GridBase *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -24498,17 +22232,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::Place",
-          "returnType": "ax::Place *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::Place",
@@ -24530,32 +22253,6 @@
           "returnType": "bool",
           "parameterTypes": [
             "const ax::Vec2 \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::Place",
-          "returnType": "ax::Place *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::Place",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
           ],
           "defaultValues": [
             null
@@ -24935,17 +22632,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::PointerEventListener",
-          "returnType": "ax::PointerEventListener *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::PointerEventListener",
@@ -25321,17 +23007,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::ProgressFromTo",
-          "returnType": "ax::ProgressFromTo *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::ProgressFromTo",
@@ -25363,32 +23038,6 @@
           "defaultValues": [
             null,
             null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::ProgressFromTo",
-          "returnType": "ax::ProgressFromTo *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::ProgressFromTo",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
             null
           ],
           "isStatic": false,
@@ -25639,17 +23288,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::ProgressTo",
-          "returnType": "ax::ProgressTo *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::ProgressTo",
@@ -25677,32 +23315,6 @@
           ],
           "defaultValues": [
             null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::ProgressTo",
-          "returnType": "ax::ProgressTo *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::ProgressTo",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
             null
           ],
           "isStatic": false,
@@ -26400,17 +24012,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::RemoveSelf",
-          "returnType": "ax::RemoveSelf *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::RemoveSelf",
@@ -26432,32 +24033,6 @@
           "returnType": "bool",
           "parameterTypes": [
             "bool"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::RemoveSelf",
-          "returnType": "ax::RemoveSelf *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::RemoveSelf",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
           ],
           "defaultValues": [
             null
@@ -28393,17 +25968,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::Repeat",
-          "returnType": "ax::Repeat *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::Repeat",
@@ -28449,49 +26013,12 @@
           "isVariadic": false
         },
         {
-          "nativeName": "isDone",
-          "luaName": "isDone",
-          "declaringType": "ax::Repeat",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::Repeat",
-          "returnType": "ax::Repeat *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setInnerAction",
           "luaName": "setInnerAction",
           "declaringType": "ax::Repeat",
           "returnType": "void",
           "parameterTypes": [
             "ax::FiniteTimeAction *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::Repeat",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
           ],
           "defaultValues": [
             null
@@ -28522,17 +26049,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::RepeatForever",
-          "returnType": "ax::RepeatForever *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
         {
           "nativeName": "create",
           "luaName": "create",
@@ -28575,64 +26091,12 @@
           "isVariadic": false
         },
         {
-          "nativeName": "isDone",
-          "luaName": "isDone",
-          "declaringType": "ax::RepeatForever",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::RepeatForever",
-          "returnType": "ax::RepeatForever *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setInnerAction",
           "luaName": "setInnerAction",
           "declaringType": "ax::RepeatForever",
           "returnType": "void",
           "parameterTypes": [
             "ax::ActionInterval *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::RepeatForever",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "step",
-          "luaName": "step",
-          "declaringType": "ax::RepeatForever",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
           ],
           "defaultValues": [
             null
@@ -28664,17 +26128,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::ReuseGrid",
-          "returnType": "ax::ReuseGrid *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::ReuseGrid",
@@ -28696,32 +26149,6 @@
           "returnType": "bool",
           "parameterTypes": [
             "int"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::ReuseGrid",
-          "returnType": "ax::ReuseGrid *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::ReuseGrid",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
           ],
           "defaultValues": [
             null
@@ -28754,17 +26181,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::Ripple3D",
-          "returnType": "ax::Ripple3D *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
         {
           "nativeName": "create",
           "luaName": "create",
@@ -28916,17 +26332,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::RotateBy",
-          "returnType": "ax::RotateBy *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::RotateBy",
@@ -29026,32 +26431,6 @@
           "defaultValues": [
             null,
             null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::RotateBy",
-          "returnType": "ax::RotateBy *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::RotateBy",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
             null
           ],
           "isStatic": false,
@@ -29081,17 +26460,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::RotateTo",
-          "returnType": "ax::RotateTo *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::RotateTo",
@@ -29174,32 +26542,6 @@
           "defaultValues": [
             null,
             null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::RotateTo",
-          "returnType": "ax::RotateTo *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::RotateTo",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
             null
           ],
           "isStatic": false,
@@ -29230,17 +26572,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::ScaleBy",
-          "returnType": "ax::ScaleBy *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::ScaleBy",
@@ -29295,17 +26626,6 @@
           ],
           "isStatic": true,
           "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::ScaleBy",
-          "returnType": "ax::ScaleBy *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
           "isVariadic": false
         }
       ],
@@ -29331,17 +26651,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::ScaleTo",
-          "returnType": "ax::ScaleTo *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::ScaleTo",
@@ -29449,32 +26758,6 @@
             null,
             null,
             null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::ScaleTo",
-          "returnType": "ax::ScaleTo *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::ScaleTo",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
             null
           ],
           "isStatic": false,
@@ -29895,17 +27178,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::Sequence",
-          "returnType": "ax::Sequence *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "init",
           "luaName": "init",
           "declaringType": "ax::Sequence",
@@ -29936,43 +27208,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "isDone",
-          "luaName": "isDone",
-          "declaringType": "ax::Sequence",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::Sequence",
-          "returnType": "ax::Sequence *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::Sequence",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -29998,17 +27233,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::Shaky3D",
-          "returnType": "ax::Shaky3D *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
         {
           "nativeName": "create",
           "luaName": "create",
@@ -30076,17 +27300,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::ShakyTiles3D",
-          "returnType": "ax::ShakyTiles3D *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::ShakyTiles3D",
@@ -30153,17 +27366,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::ShatteredTiles3D",
-          "returnType": "ax::ShatteredTiles3D *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::ShatteredTiles3D",
@@ -30228,17 +27430,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::Show",
-          "returnType": "ax::Show *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::Show",
@@ -30246,21 +27437,6 @@
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::Show",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -30288,17 +27464,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::ShuffleTiles",
-          "returnType": "ax::ShuffleTiles *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
         {
           "nativeName": "create",
           "luaName": "create",
@@ -30376,17 +27541,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::SkewBy",
-          "returnType": "ax::SkewBy *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::SkewBy",
@@ -30422,17 +27576,6 @@
           ],
           "isStatic": false,
           "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::SkewBy",
-          "returnType": "ax::SkewBy *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
           "isVariadic": false
         }
       ],
@@ -30458,17 +27601,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::SkewTo",
-          "returnType": "ax::SkewTo *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::SkewTo",
@@ -30500,32 +27632,6 @@
           "defaultValues": [
             null,
             null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::SkewTo",
-          "returnType": "ax::SkewTo *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::SkewTo",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
             null
           ],
           "isStatic": false,
@@ -30554,17 +27660,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::Spawn",
-          "returnType": "ax::Spawn *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
         {
           "nativeName": "init",
           "luaName": "init",
@@ -30596,32 +27691,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::Spawn",
-          "returnType": "ax::Spawn *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::Spawn",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -30643,17 +27712,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::Speed",
-          "returnType": "ax::Speed *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
         {
           "nativeName": "create",
           "luaName": "create",
@@ -30711,17 +27769,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::Speed",
-          "returnType": "ax::Speed *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setInnerAction",
           "luaName": "setInnerAction",
           "declaringType": "ax::Speed",
@@ -30775,17 +27822,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::SplitCols",
-          "returnType": "ax::SplitCols *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
         {
           "nativeName": "create",
           "luaName": "create",
@@ -30844,17 +27880,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::SplitRows",
-          "returnType": "ax::SplitRows *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
         {
           "nativeName": "create",
           "luaName": "create",
@@ -33255,17 +30280,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::StopGrid",
-          "returnType": "ax::StopGrid *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::StopGrid",
@@ -33273,32 +30287,6 @@
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::StopGrid",
-          "returnType": "ax::StopGrid *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::StopGrid",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -34270,17 +31258,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::TargetedAction",
-          "returnType": "ax::TargetedAction *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::TargetedAction",
@@ -34337,34 +31314,8 @@
           "isVariadic": false
         },
         {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::TargetedAction",
-          "returnType": "ax::TargetedAction *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setForcedTarget",
           "luaName": "setForcedTarget",
-          "declaringType": "ax::TargetedAction",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
           "declaringType": "ax::TargetedAction",
           "returnType": "void",
           "parameterTypes": [
@@ -35416,19 +32367,7 @@
         "ax::Action",
         "ax::Object"
       ],
-      "methods": [
-        {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::TiledGrid3DAction",
-          "returnType": "ax::TiledGrid3DAction *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        }
-      ],
+      "methods": [],
       "fields": []
     },
     {
@@ -35558,17 +32497,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::TintBy",
-          "returnType": "ax::TintBy *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::TintBy",
@@ -35609,32 +32537,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::TintBy",
-          "returnType": "ax::TintBy *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::TintBy",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -35658,17 +32560,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::TintTo",
-          "returnType": "ax::TintTo *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
         {
           "nativeName": "create",
           "luaName": "create",
@@ -35723,32 +32614,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::TintTo",
-          "returnType": "ax::TintTo *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::TintTo",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -35773,17 +32638,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::ToggleVisibility",
-          "returnType": "ax::ToggleVisibility *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::ToggleVisibility",
@@ -35791,32 +32645,6 @@
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": true,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::ToggleVisibility",
-          "returnType": "ax::ToggleVisibility *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::ToggleVisibility",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
           "isConst": false,
           "isVariadic": false
         }
@@ -37648,17 +34476,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::TurnOffTiles",
-          "returnType": "ax::TurnOffTiles *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::TurnOffTiles",
@@ -37767,17 +34584,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::Twirl",
-          "returnType": "ax::Twirl *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
         {
           "nativeName": "create",
           "luaName": "create",
@@ -37995,17 +34801,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::Waves",
-          "returnType": "ax::Waves *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::Waves",
@@ -38132,17 +34927,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::Waves3D",
-          "returnType": "ax::Waves3D *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::Waves3D",
@@ -38260,17 +35044,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::WavesTiles3D",
-          "returnType": "ax::WavesTiles3D *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
         {
           "nativeName": "create",
           "luaName": "create",
@@ -38525,17 +35298,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::XRInputEventListener",
-          "returnType": "ax::XRInputEventListener *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
         {
           "nativeName": "create",
           "luaName": "create",

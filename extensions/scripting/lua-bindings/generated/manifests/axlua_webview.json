@@ -332,21 +332,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "setVisible",
-          "luaName": "setVisible",
-          "declaringType": "ax::ui::WebView",
-          "returnType": "void",
-          "parameterTypes": [
-            "bool"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "stopLoading",
           "luaName": "stopLoading",
           "declaringType": "ax::ui::WebView",

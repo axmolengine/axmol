@@ -174,17 +174,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::Animate3D",
-          "returnType": "ax::Animate3D *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::Animate3D",
@@ -361,17 +350,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::Animate3D",
-          "returnType": "ax::Animate3D *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setOriginInterval",
           "luaName": "setOriginInterval",
           "declaringType": "ax::Animate3D",
@@ -434,62 +412,6 @@
         {
           "nativeName": "setWeight",
           "luaName": "setWeight",
-          "declaringType": "ax::Animate3D",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::Animate3D",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "step",
-          "luaName": "step",
-          "declaringType": "ax::Animate3D",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "stop",
-          "luaName": "stop",
-          "declaringType": "ax::Animate3D",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
           "declaringType": "ax::Animate3D",
           "returnType": "void",
           "parameterTypes": [
@@ -599,39 +521,6 @@
           ],
           "isStatic": true,
           "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getNodeToParentTransform",
-          "luaName": "getNodeToParentTransform",
-          "declaringType": "ax::AttachNode",
-          "returnType": "const ax::Mat4 \u0026",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getNodeToWorldTransform",
-          "luaName": "getNodeToWorldTransform",
-          "declaringType": "ax::AttachNode",
-          "returnType": "ax::Mat4",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getWorldToNodeTransform",
-          "luaName": "getWorldToNodeTransform",
-          "declaringType": "ax::AttachNode",
-          "returnType": "ax::Mat4",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
           "isVariadic": false
         }
       ],
@@ -1194,17 +1083,6 @@
       ],
       "methods": [
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::MeshMaterial",
-          "returnType": "ax::Material *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "createBuiltInMaterial",
           "luaName": "createBuiltInMaterial",
           "declaringType": "ax::MeshMaterial",
@@ -1495,17 +1373,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getBoundingBox",
-          "luaName": "getBoundingBox",
-          "declaringType": "ax::MeshRenderer",
-          "returnType": "ax::Rect",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getLightMask",
           "luaName": "getLightMask",
           "declaringType": "ax::MeshRenderer",
@@ -1682,21 +1549,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "runAction",
-          "luaName": "runAction",
-          "declaringType": "ax::MeshRenderer",
-          "returnType": "ax::Action *",
-          "parameterTypes": [
-            "ax::Action *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setBlendFunc",
           "luaName": "setBlendFunc",
           "declaringType": "ax::MeshRenderer",
@@ -1813,23 +1665,6 @@
           "defaultValues": [
             null,
             null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setProgramState",
-          "luaName": "setProgramState",
-          "declaringType": "ax::MeshRenderer",
-          "returnType": "bool",
-          "parameterTypes": [
-            "rhi::ProgramState *",
-            "bool"
-          ],
-          "defaultValues": [
-            null,
-            "false"
           ],
           "isStatic": false,
           "isConst": false,
@@ -2507,23 +2342,6 @@
           "parameterTypes": [
             "ax::Terrain::TerrainData \u0026",
             "ax::Terrain::CrackFixedType"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "onPointerHitTest",
-          "luaName": "onPointerHitTest",
-          "declaringType": "ax::Terrain",
-          "returnType": "bool",
-          "parameterTypes": [
-            "ax::PointerEvent *",
-            "ax::Vec3 *"
           ],
           "defaultValues": [
             null,

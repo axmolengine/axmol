@@ -72,8 +72,6 @@ void register_ax_physics2d(lua_State* L)
     class_3_ContactEvent2D.method("getColliderB", static_cast<ax::Collider2D * (ax::ContactEvent2D::*)() const>(&ax::ContactEvent2D::getColliderB));
     class_3_ContactEvent2D.method("getEventCode", static_cast<ax::ContactEvent2D::EventCode (ax::ContactEvent2D::*)() const>(&ax::ContactEvent2D::getEventCode));
     class_4_ContactEventListener2D.bases<ax::CustomEventListener, ax::EventListener, ax::Object>();
-    class_4_ContactEventListener2D.method("checkAvailable", static_cast<bool (ax::ContactEventListener2D::*)()>(&ax::ContactEventListener2D::checkAvailable));
-    class_4_ContactEventListener2D.method("clone", static_cast<ax::ContactEventListener2D * (ax::ContactEventListener2D::*)()>(&ax::ContactEventListener2D::clone));
     class_4_ContactEventListener2D.static_method("create", axlua::overload(axlua::overload_candidate<>(static_cast<ax::ContactEventListener2D * (*)()>(&ax::ContactEventListener2D::create)), axlua::overload_candidate<ax::Rigidbody2D *, ax::Rigidbody2D *>(static_cast<ax::ContactEventListener2D * (*)(ax::Rigidbody2D *, ax::Rigidbody2D *)>(&ax::ContactEventListener2D::create))));
     class_4_ContactEventListener2D.field("onCollisionHit", &ax::ContactEventListener2D::onCollisionHit);
     class_4_ContactEventListener2D.field("onContactBegin", &ax::ContactEventListener2D::onContactBegin);
@@ -241,7 +239,6 @@ void register_ax_physics2d(lua_State* L)
     class_18_Rigidbody2D.method("setCollisionDetectionMode", static_cast<void (ax::Rigidbody2D::*)(ax::Rigidbody2D::CollisionDetectionMode)>(&ax::Rigidbody2D::setCollisionDetectionMode));
     class_18_Rigidbody2D.method("setCollisionMaskBits", static_cast<void (ax::Rigidbody2D::*)(int)>(&ax::Rigidbody2D::setCollisionMaskBits));
     class_18_Rigidbody2D.method("setDynamic", static_cast<void (ax::Rigidbody2D::*)()>(&ax::Rigidbody2D::setDynamic));
-    class_18_Rigidbody2D.method("setEnabled", static_cast<void (ax::Rigidbody2D::*)(bool)>(&ax::Rigidbody2D::setEnabled));
     class_18_Rigidbody2D.method("setEventEnabled", static_cast<void (ax::Rigidbody2D::*)(ax::ContactEventBits, bool)>(&ax::Rigidbody2D::setEventEnabled));
     class_18_Rigidbody2D.method("setGravityEnabled", static_cast<void (ax::Rigidbody2D::*)(bool)>(&ax::Rigidbody2D::setGravityEnabled));
     class_18_Rigidbody2D.method("setGravityScale", static_cast<void (ax::Rigidbody2D::*)(float)>(&ax::Rigidbody2D::setGravityScale));

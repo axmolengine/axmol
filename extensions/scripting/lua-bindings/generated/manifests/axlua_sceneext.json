@@ -980,17 +980,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getAnchorPointInPoints",
-          "luaName": "getAnchorPointInPoints",
-          "declaringType": "ax::ext::Armature",
-          "returnType": "const ax::Vec2 \u0026",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getAnimationController",
           "luaName": "getAnimationController",
           "declaringType": "ax::ext::Armature",
@@ -1082,28 +1071,6 @@
           "luaName": "getBoneDic",
           "declaringType": "ax::ext::Armature",
           "returnType": "const ax::StringMap\u003Cax::ext::Bone *\u003E \u0026",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getBoundingBox",
-          "luaName": "getBoundingBox",
-          "declaringType": "ax::ext::Armature",
-          "returnType": "ax::Rect",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getNodeToParentTransform",
-          "luaName": "getNodeToParentTransform",
-          "declaringType": "ax::ext::Armature",
-          "returnType": "const ax::Mat4 \u0026",
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": false,
@@ -1311,21 +1278,6 @@
         {
           "nativeName": "setVersion",
           "luaName": "setVersion",
-          "declaringType": "ax::ext::Armature",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
           "declaringType": "ax::ext::Armature",
           "returnType": "void",
           "parameterTypes": [
@@ -2237,34 +2189,6 @@
           "isStatic": true,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::ext::BatchNode",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "removeChild",
-          "luaName": "removeChild",
-          "declaringType": "ax::ext::BatchNode",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *",
-            "bool"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -2497,17 +2421,6 @@
         {
           "nativeName": "getNodeToArmatureTransform",
           "luaName": "getNodeToArmatureTransform",
-          "declaringType": "ax::ext::Bone",
-          "returnType": "ax::Mat4",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getNodeToWorldTransform",
-          "luaName": "getNodeToWorldTransform",
           "declaringType": "ax::ext::Bone",
           "returnType": "ax::Mat4",
           "parameterTypes": [],
@@ -2783,21 +2696,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "setLocalZOrder",
-          "luaName": "setLocalZOrder",
-          "declaringType": "ax::ext::Bone",
-          "returnType": "void",
-          "parameterTypes": [
-            "int"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setParentBone",
           "luaName": "setParentBone",
           "declaringType": "ax::ext::Bone",
@@ -2828,57 +2726,12 @@
           "isVariadic": false
         },
         {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::ext::Bone",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "updateColor",
           "luaName": "updateColor",
           "declaringType": "ax::ext::Bone",
           "returnType": "void",
           "parameterTypes": [],
           "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "updateDisplayedColor",
-          "luaName": "updateDisplayedColor",
-          "declaringType": "ax::ext::Bone",
-          "returnType": "void",
-          "parameterTypes": [
-            "const ax::Color32 \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "updateDisplayedOpacity",
-          "luaName": "updateDisplayedOpacity",
-          "declaringType": "ax::ext::Bone",
-          "returnType": "void",
-          "parameterTypes": [
-            "uint8_t"
-          ],
-          "defaultValues": [
-            null
-          ],
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
@@ -3222,17 +3075,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::ext::ComAttribute",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "parse",
           "luaName": "parse",
           "declaringType": "ax::ext::ComAttribute",
@@ -3387,17 +3229,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::ext::ComAudio",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "isBackgroundMusicPlaying",
           "luaName": "isBackgroundMusicPlaying",
           "declaringType": "ax::ext::ComAudio",
@@ -3413,28 +3244,6 @@
           "luaName": "isLoop",
           "declaringType": "ax::ext::ComAudio",
           "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "onAdd",
-          "luaName": "onAdd",
-          "declaringType": "ax::ext::ComAudio",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "onRemove",
-          "luaName": "onRemove",
-          "declaringType": "ax::ext::ComAudio",
-          "returnType": "void",
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": false,
@@ -3732,17 +3541,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::ext::ComController",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "isAccelerometerEnabled",
           "luaName": "isAccelerometerEnabled",
           "declaringType": "ax::ext::ComController",
@@ -3773,28 +3571,6 @@
           "defaultValues": [],
           "isStatic": false,
           "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "onAdd",
-          "luaName": "onAdd",
-          "declaringType": "ax::ext::ComController",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "onRemove",
-          "luaName": "onRemove",
-          "declaringType": "ax::ext::ComController",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
           "isVariadic": false
         },
         {
@@ -3849,21 +3625,6 @@
           "returnType": "void",
           "parameterTypes": [
             "int"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::ext::ComController",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
           ],
           "defaultValues": [
             null
@@ -3934,39 +3695,6 @@
           "defaultValues": [],
           "isStatic": false,
           "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::ext::ComExtensionData",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "onAdd",
-          "luaName": "onAdd",
-          "declaringType": "ax::ext::ComExtensionData",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "onRemove",
-          "luaName": "onRemove",
-          "declaringType": "ax::ext::ComExtensionData",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
           "isVariadic": false
         },
         {
@@ -4041,28 +3769,6 @@
           "luaName": "getNode",
           "declaringType": "ax::ext::ComRender",
           "returnType": "ax::Node *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "onAdd",
-          "luaName": "onAdd",
-          "declaringType": "ax::ext::ComRender",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "onRemove",
-          "luaName": "onRemove",
-          "declaringType": "ax::ext::ComRender",
-          "returnType": "void",
           "parameterTypes": [],
           "defaultValues": [],
           "isStatic": false,
@@ -4949,17 +4655,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getNodeToWorldTransform",
-          "luaName": "getNodeToWorldTransform",
-          "declaringType": "ax::ext::Skin",
-          "returnType": "ax::Mat4",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getNodeToWorldTransformAR",
           "luaName": "getNodeToWorldTransformAR",
           "declaringType": "ax::ext::Skin",
@@ -4968,36 +4663,6 @@
           "defaultValues": [],
           "isStatic": false,
           "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "initWithFile",
-          "luaName": "initWithFile",
-          "declaringType": "ax::ext::Skin",
-          "returnType": "bool",
-          "parameterTypes": [
-            "std::string_view"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "initWithSpriteFrameName",
-          "luaName": "initWithSpriteFrameName",
-          "declaringType": "ax::ext::Skin",
-          "returnType": "bool",
-          "parameterTypes": [
-            "std::string_view"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
           "isVariadic": false
         },
         {
@@ -5018,17 +4683,6 @@
         {
           "nativeName": "updateArmatureTransform",
           "luaName": "updateArmatureTransform",
-          "declaringType": "ax::ext::Skin",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "updateTransform",
-          "luaName": "updateTransform",
           "declaringType": "ax::ext::Skin",
           "returnType": "void",
           "parameterTypes": [],
@@ -5259,17 +4913,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::ext::timeline::ActionTimeline",
-          "returnType": "ax::ext::timeline::ActionTimeline *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::ext::timeline::ActionTimeline",
@@ -5460,17 +5103,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "isDone",
-          "luaName": "isDone",
-          "declaringType": "ax::ext::timeline::ActionTimeline",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "isPlaying",
           "luaName": "isPlaying",
           "declaringType": "ax::ext::timeline::ActionTimeline",
@@ -5583,17 +5215,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "reverse",
-          "luaName": "reverse",
-          "declaringType": "ax::ext::timeline::ActionTimeline",
-          "returnType": "ax::ext::timeline::ActionTimeline *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setAnimationEndCallFunc",
           "luaName": "setAnimationEndCallFunc",
           "declaringType": "ax::ext::timeline::ActionTimeline",
@@ -5673,47 +5294,6 @@
         {
           "nativeName": "start",
           "luaName": "start",
-          "declaringType": "ax::ext::timeline::ActionTimeline",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "startWithTarget",
-          "luaName": "startWithTarget",
-          "declaringType": "ax::ext::timeline::ActionTimeline",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "step",
-          "luaName": "step",
-          "declaringType": "ax::ext::timeline::ActionTimeline",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "stop",
-          "luaName": "stop",
           "declaringType": "ax::ext::timeline::ActionTimeline",
           "returnType": "void",
           "parameterTypes": [],
@@ -6306,17 +5886,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getBoundingBox",
-          "luaName": "getBoundingBox",
-          "declaringType": "ax::ext::timeline::BoneNode",
-          "returnType": "ax::Rect",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getChildBones",
           "luaName": "getChildBones",
           "declaringType": "ax::ext::timeline::BoneNode",
@@ -6427,17 +5996,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::ext::timeline::BoneNode",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "isDebugDrawEnabled",
           "luaName": "isDebugDrawEnabled",
           "declaringType": "ax::ext::timeline::BoneNode",
@@ -6446,23 +6004,6 @@
           "defaultValues": [],
           "isStatic": false,
           "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "removeChild",
-          "luaName": "removeChild",
-          "declaringType": "ax::ext::timeline::BoneNode",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *",
-            "bool"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
           "isVariadic": false
         },
         {
@@ -6487,21 +6028,6 @@
           "returnType": "void",
           "parameterTypes": [
             "const ax::BlendFunc \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setContentSize",
-          "luaName": "setContentSize",
-          "declaringType": "ax::ext::timeline::BoneNode",
-          "returnType": "void",
-          "parameterTypes": [
-            "const ax::Size \u0026"
           ],
           "defaultValues": [
             null
@@ -6562,51 +6088,6 @@
           "returnType": "void",
           "parameterTypes": [
             "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setLocalZOrder",
-          "luaName": "setLocalZOrder",
-          "declaringType": "ax::ext::timeline::BoneNode",
-          "returnType": "void",
-          "parameterTypes": [
-            "int"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setName",
-          "luaName": "setName",
-          "declaringType": "ax::ext::timeline::BoneNode",
-          "returnType": "void",
-          "parameterTypes": [
-            "std::string_view"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setVisible",
-          "luaName": "setVisible",
-          "declaringType": "ax::ext::timeline::BoneNode",
-          "returnType": "void",
-          "parameterTypes": [
-            "bool"
           ],
           "defaultValues": [
             null

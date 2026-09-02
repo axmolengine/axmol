@@ -178,21 +178,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "setEnabled",
-          "luaName": "setEnabled",
-          "declaringType": "ax::Collider3D",
-          "returnType": "void",
-          "parameterTypes": [
-            "bool"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setMaterial",
           "luaName": "setMaterial",
           "declaringType": "ax::Collider3D",
@@ -584,28 +569,6 @@
         "ax::Object"
       ],
       "methods": [
-        {
-          "nativeName": "checkAvailable",
-          "luaName": "checkAvailable",
-          "declaringType": "ax::ContactEventListener3D",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "clone",
-          "luaName": "clone",
-          "declaringType": "ax::ContactEventListener3D",
-          "returnType": "ax::ContactEventListener3D *",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
         {
           "nativeName": "create",
           "luaName": "create",
@@ -2053,21 +2016,6 @@
           "returnType": "void",
           "parameterTypes": [],
           "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setEnabled",
-          "luaName": "setEnabled",
-          "declaringType": "ax::Rigidbody3D",
-          "returnType": "void",
-          "parameterTypes": [
-            "bool"
-          ],
-          "defaultValues": [
-            null
-          ],
           "isStatic": false,
           "isConst": false,
           "isVariadic": false

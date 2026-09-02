@@ -153,17 +153,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getBoundingBox",
-          "luaName": "getBoundingBox",
-          "declaringType": "spine::SkeletonAnimation",
-          "returnType": "ax::Rect",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getDebugBonesEnabled",
           "luaName": "getDebugBonesEnabled",
           "declaringType": "spine::SkeletonAnimation",
@@ -329,17 +318,6 @@
           "defaultValues": [
             "0"
           ],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "isOpacityModifyRGB",
-          "luaName": "isOpacityModifyRGB",
-          "declaringType": "spine::SkeletonAnimation",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
           "isStatic": false,
           "isConst": true,
           "isVariadic": false
@@ -616,21 +594,6 @@
           "defaultValues": [
             null,
             null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setOpacityModifyRGB",
-          "luaName": "setOpacityModifyRGB",
-          "declaringType": "spine::SkeletonAnimation",
-          "returnType": "void",
-          "parameterTypes": [
-            "bool"
-          ],
-          "defaultValues": [
             null
           ],
           "isStatic": false,

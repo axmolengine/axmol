@@ -23,12 +23,21 @@ public sealed class GenerationRequest
     public IReadOnlyList<BindingRenameRule> RenameRules { get; init; } = Array.Empty<BindingRenameRule>();
     public IReadOnlyList<BindingClassRename> ClassRenames { get; init; } = Array.Empty<BindingClassRename>();
     public IReadOnlyList<string> FastBindings { get; init; } = Array.Empty<string>();
+    public IReadOnlyList<BindingClassSelection> BindingClassSelections { get; init; } = Array.Empty<BindingClassSelection>();
     public string LuaNamespace { get; init; } = "ax";
     public string LuaTypeNamespace { get; init; } = "ax";
     public string? ConditionalExpression { get; init; }
     public int CppChunkCount { get; init; } = 1;
     public bool EmitCpp { get; init; } = true;
     public bool EmitManifest { get; init; } = true;
+}
+
+public sealed class BindingClassSelection
+{
+    public IReadOnlyList<string> NativeNamespaces { get; init; } = Array.Empty<string>();
+    public IReadOnlyList<string> ClassPatterns { get; init; } = Array.Empty<string>();
+    public IReadOnlyList<BindingSkipRule> SkipRules { get; init; } = Array.Empty<BindingSkipRule>();
+    public IReadOnlyList<BindingRenameRule> RenameRules { get; init; } = Array.Empty<BindingRenameRule>();
 }
 
 public sealed class GenerationResult

@@ -42,7 +42,6 @@ void register_ax_3d(lua_State* L)
     class_0_AABB.field("_min", &ax::AABB::_min);
     class_1_Animate3D.bases<ax::ActionInterval, ax::FiniteTimeAction, ax::Action, ax::Object>();
     class_1_Animate3D.constructors<ax::Animate3D()>();
-    class_1_Animate3D.method("clone", static_cast<ax::Animate3D * (ax::Animate3D::*)() const>(&ax::Animate3D::clone));
     class_1_Animate3D.static_method("create", axlua::overload(axlua::overload_candidate<ax::Animation3D *>(static_cast<ax::Animate3D * (*)(ax::Animation3D *)>(&ax::Animate3D::create)), axlua::overload_candidate<ax::Animation3D *, float, float>(static_cast<ax::Animate3D * (*)(ax::Animation3D *, float, float)>(&ax::Animate3D::create))));
     class_1_Animate3D.static_method("createWithFrames", axlua::overload(axlua::overload_candidate<ax::Animation3D *, int, int, float>(static_cast<ax::Animate3D * (*)(ax::Animation3D *, int, int, float)>(&ax::Animate3D::createWithFrames)), axlua::overload_candidate<ax::Animation3D *, int, int>([](ax::Animation3D * arg0, int arg1, int arg2) -> ax::Animate3D * { return ax::Animate3D::createWithFrames(arg0, arg1, arg2, 30.f); })));
     class_1_Animate3D.method("getOriginInterval", static_cast<float (ax::Animate3D::*)() const>(&ax::Animate3D::getOriginInterval));
@@ -53,16 +52,11 @@ void register_ax_3d(lua_State* L)
     class_1_Animate3D.method("init", axlua::overload(axlua::overload_candidate<ax::Animation3D *>(static_cast<bool (ax::Animate3D::*)(ax::Animation3D *)>(&ax::Animate3D::init)), axlua::overload_candidate<ax::Animation3D *, float, float>(static_cast<bool (ax::Animate3D::*)(ax::Animation3D *, float, float)>(&ax::Animate3D::init))));
     class_1_Animate3D.method("initWithFrames", static_cast<bool (ax::Animate3D::*)(ax::Animation3D *, int, int, float)>(&ax::Animate3D::initWithFrames));
     class_1_Animate3D.method("removeFromMap", static_cast<void (ax::Animate3D::*)()>(&ax::Animate3D::removeFromMap));
-    class_1_Animate3D.method("reverse", static_cast<ax::Animate3D * (ax::Animate3D::*)() const>(&ax::Animate3D::reverse));
     class_1_Animate3D.method("setOriginInterval", static_cast<void (ax::Animate3D::*)(float)>(&ax::Animate3D::setOriginInterval));
     class_1_Animate3D.method("setQuality", static_cast<void (ax::Animate3D::*)(ax::Animate3DQuality)>(&ax::Animate3D::setQuality));
     class_1_Animate3D.method("setSpeed", static_cast<void (ax::Animate3D::*)(float)>(&ax::Animate3D::setSpeed));
     class_1_Animate3D.static_method("setTransitionTime", static_cast<void (*)(float)>(&ax::Animate3D::setTransitionTime));
     class_1_Animate3D.method("setWeight", static_cast<void (ax::Animate3D::*)(float)>(&ax::Animate3D::setWeight));
-    class_1_Animate3D.method("startWithTarget", static_cast<void (ax::Animate3D::*)(ax::Node *)>(&ax::Animate3D::startWithTarget));
-    class_1_Animate3D.method("step", static_cast<void (ax::Animate3D::*)(float)>(&ax::Animate3D::step));
-    class_1_Animate3D.method("stop", static_cast<void (ax::Animate3D::*)()>(&ax::Animate3D::stop));
-    class_1_Animate3D.method("update", static_cast<void (ax::Animate3D::*)(float)>(&ax::Animate3D::update));
     class_2_Animation3D.bases<ax::Object>();
     class_2_Animation3D.constructors<ax::Animation3D()>();
     class_2_Animation3D.static_method("create", axlua::overload(axlua::overload_candidate<std::string_view, std::string_view>(static_cast<ax::Animation3D * (*)(std::string_view, std::string_view)>(&ax::Animation3D::create)), axlua::overload_candidate<std::string_view>([](std::string_view arg0) -> ax::Animation3D * { return ax::Animation3D::create(arg0, ""); })));
@@ -71,9 +65,6 @@ void register_ax_3d(lua_State* L)
     class_3_AttachNode.bases<ax::Node, ax::Object>();
     class_3_AttachNode.constructors<ax::AttachNode()>();
     class_3_AttachNode.static_method("create", static_cast<ax::AttachNode * (*)(ax::Bone3D *)>(&ax::AttachNode::create));
-    class_3_AttachNode.method("getNodeToParentTransform", static_cast<const ax::Mat4 & (ax::AttachNode::*)() const>(&ax::AttachNode::getNodeToParentTransform));
-    class_3_AttachNode.method("getNodeToWorldTransform", static_cast<ax::Mat4 (ax::AttachNode::*)() const>(&ax::AttachNode::getNodeToWorldTransform));
-    class_3_AttachNode.method("getWorldToNodeTransform", static_cast<ax::Mat4 (ax::AttachNode::*)() const>(&ax::AttachNode::getWorldToNodeTransform));
     class_4_BillBoard.bases<ax::Sprite, ax::Node, ax::Object, ax::TextureProtocol, ax::BlendProtocol>();
     class_4_BillBoard.constructors<ax::BillBoard()>();
     class_4_BillBoard.static_method("create", axlua::overload(axlua::overload_candidate<ax::BillBoard::Mode>(static_cast<ax::BillBoard * (*)(ax::BillBoard::Mode)>(&ax::BillBoard::create)), axlua::overload_candidate<>([]() -> ax::BillBoard * { return ax::BillBoard::create(ax::BillBoard::Mode::VIEW_POINT_ORIENTED); }), axlua::overload_candidate<std::string_view, ax::BillBoard::Mode>(static_cast<ax::BillBoard * (*)(std::string_view, ax::BillBoard::Mode)>(&ax::BillBoard::create)), axlua::overload_candidate<std::string_view>([](std::string_view arg0) -> ax::BillBoard * { return ax::BillBoard::create(arg0, ax::BillBoard::Mode::VIEW_POINT_ORIENTED); }), axlua::overload_candidate<std::string_view, const ax::Rect &, ax::BillBoard::Mode>(static_cast<ax::BillBoard * (*)(std::string_view, const ax::Rect &, ax::BillBoard::Mode)>(&ax::BillBoard::create)), axlua::overload_candidate<std::string_view, const ax::Rect &>([](std::string_view arg0, const ax::Rect & arg1) -> ax::BillBoard * { return ax::BillBoard::create(arg0, arg1, ax::BillBoard::Mode::VIEW_POINT_ORIENTED); })));
@@ -113,7 +104,6 @@ void register_ax_3d(lua_State* L)
     class_6_Mesh.method("setVisible", static_cast<void (ax::Mesh::*)(bool)>(&ax::Mesh::setVisible));
     class_6_Mesh.method("shrinkToFitInstances", static_cast<void (ax::Mesh::*)()>(&ax::Mesh::shrinkToFitInstances));
     class_7_MeshMaterial.bases<ax::Material, ax::Object>();
-    class_7_MeshMaterial.method("clone", static_cast<ax::Material * (ax::MeshMaterial::*)() const>(&ax::MeshMaterial::clone));
     class_7_MeshMaterial.static_method("createBuiltInMaterial", axlua::overload(axlua::overload_candidate<>(static_cast<void (*)()>(&ax::MeshMaterial::createBuiltInMaterial)), axlua::overload_candidate<ax::MeshMaterial::MaterialType, bool>(static_cast<ax::MeshMaterial * (*)(ax::MeshMaterial::MaterialType, bool)>(&ax::MeshMaterial::createBuiltInMaterial))));
     class_7_MeshMaterial.static_method("createWithFilename", static_cast<ax::MeshMaterial * (*)(std::string_view)>(&ax::MeshMaterial::createWithFilename));
     class_7_MeshMaterial.static_method("createWithProgramState", static_cast<ax::MeshMaterial * (*)(rhi::ProgramState *)>(&ax::MeshMaterial::createWithProgramState));
@@ -131,7 +121,6 @@ void register_ax_3d(lua_State* L)
     class_8_MeshRenderer.static_method("getAABBRecursivelyImp", static_cast<ax::AABB (*)(ax::Node *)>(&ax::MeshRenderer::getAABBRecursivelyImp));
     class_8_MeshRenderer.method("getAttachNode", static_cast<ax::AttachNode * (ax::MeshRenderer::*)(std::string_view)>(&ax::MeshRenderer::getAttachNode));
     class_8_MeshRenderer.method("getBlendFunc", static_cast<const ax::BlendFunc & (ax::MeshRenderer::*)() const>(&ax::MeshRenderer::getBlendFunc));
-    class_8_MeshRenderer.method("getBoundingBox", static_cast<ax::Rect (ax::MeshRenderer::*)() const>(&ax::MeshRenderer::getBoundingBox));
     class_8_MeshRenderer.method("getLightMask", static_cast<unsigned int (ax::MeshRenderer::*)() const>(&ax::MeshRenderer::getLightMask));
     class_8_MeshRenderer.method("getMaterial", axlua::overload(axlua::overload_candidate<int>(static_cast<ax::Material * (ax::MeshRenderer::*)(int) const>(&ax::MeshRenderer::getMaterial)), axlua::overload_candidate<>([](const ax::MeshRenderer& self) -> ax::Material * { return static_cast<const ax::MeshRenderer&>(self).getMaterial(0); })));
     class_8_MeshRenderer.method("getMesh", static_cast<ax::Mesh * (ax::MeshRenderer::*)() const>(&ax::MeshRenderer::getMesh));
@@ -146,7 +135,6 @@ void register_ax_3d(lua_State* L)
     class_8_MeshRenderer.method("rebuildInstances", static_cast<void (ax::MeshRenderer::*)()>(&ax::MeshRenderer::rebuildInstances));
     class_8_MeshRenderer.method("removeAllAttachNode", static_cast<void (ax::MeshRenderer::*)()>(&ax::MeshRenderer::removeAllAttachNode));
     class_8_MeshRenderer.method("removeAttachNode", static_cast<void (ax::MeshRenderer::*)(std::string_view)>(&ax::MeshRenderer::removeAttachNode));
-    class_8_MeshRenderer.method("runAction", static_cast<ax::Action * (ax::MeshRenderer::*)(ax::Action *)>(&ax::MeshRenderer::runAction));
     class_8_MeshRenderer.method("setBlendFunc", static_cast<void (ax::MeshRenderer::*)(const ax::BlendFunc &)>(&ax::MeshRenderer::setBlendFunc));
     class_8_MeshRenderer.method("setCullFace", static_cast<void (ax::MeshRenderer::*)(ax::CullFaceSide)>(&ax::MeshRenderer::setCullFace));
     class_8_MeshRenderer.method("setCullFaceEnabled", static_cast<void (ax::MeshRenderer::*)(bool)>(&ax::MeshRenderer::setCullFaceEnabled));
@@ -154,7 +142,6 @@ void register_ax_3d(lua_State* L)
     class_8_MeshRenderer.method("setForceDepthWrite", static_cast<void (ax::MeshRenderer::*)(bool)>(&ax::MeshRenderer::setForceDepthWrite));
     class_8_MeshRenderer.method("setLightMask", static_cast<void (ax::MeshRenderer::*)(unsigned int)>(&ax::MeshRenderer::setLightMask));
     class_8_MeshRenderer.method("setMaterial", axlua::overload(axlua::overload_candidate<ax::Material *>(static_cast<void (ax::MeshRenderer::*)(ax::Material *)>(&ax::MeshRenderer::setMaterial)), axlua::overload_candidate<ax::Material *, int>(static_cast<void (ax::MeshRenderer::*)(ax::Material *, int)>(&ax::MeshRenderer::setMaterial))));
-    class_8_MeshRenderer.method("setProgramState", axlua::overload(axlua::overload_candidate<rhi::ProgramState *, bool>(static_cast<bool (ax::MeshRenderer::*)(rhi::ProgramState *, bool)>(&ax::MeshRenderer::setProgramState)), axlua::overload_candidate<rhi::ProgramState *>([](ax::MeshRenderer& self, rhi::ProgramState * arg0) -> bool { return static_cast<ax::MeshRenderer&>(self).setProgramState(arg0, false); })));
     class_8_MeshRenderer.method("setTexture", axlua::overload(axlua::overload_candidate<std::string_view>(static_cast<void (ax::MeshRenderer::*)(std::string_view)>(&ax::MeshRenderer::setTexture)), axlua::overload_candidate<ax::Texture2D *>(static_cast<void (ax::MeshRenderer::*)(ax::Texture2D *)>(&ax::MeshRenderer::setTexture))));
     class_8_MeshRenderer.method("setWireframe", static_cast<void (ax::MeshRenderer::*)(bool)>(&ax::MeshRenderer::setWireframe));
     class_8_MeshRenderer.method("shrinkToFitInstances", static_cast<void (ax::MeshRenderer::*)()>(&ax::MeshRenderer::shrinkToFitInstances));
@@ -206,7 +193,6 @@ void register_ax_3d(lua_State* L)
     class_13_Terrain.method("initProperties", static_cast<bool (ax::Terrain::*)()>(&ax::Terrain::initProperties));
     class_13_Terrain.method("initTextures", static_cast<bool (ax::Terrain::*)()>(&ax::Terrain::initTextures));
     class_13_Terrain.method("initWithTerrainData", [](ax::Terrain& self, ax::Terrain::TerrainData arg0, ax::Terrain::CrackFixedType arg1) -> bool { return static_cast<ax::Terrain&>(self).initWithTerrainData(arg0, arg1); });
-    class_13_Terrain.method("onPointerHitTest", static_cast<bool (ax::Terrain::*)(ax::PointerEvent *, ax::Vec3 *)>(&ax::Terrain::onPointerHitTest));
     class_13_Terrain.method("reload", static_cast<void (ax::Terrain::*)()>(&ax::Terrain::reload));
     class_13_Terrain.method("resetHeightMap", static_cast<void (ax::Terrain::*)(std::string_view)>(&ax::Terrain::resetHeightMap));
     class_13_Terrain.method("setAlphaMap", static_cast<void (ax::Terrain::*)(ax::Texture2D *)>(&ax::Terrain::setAlphaMap));

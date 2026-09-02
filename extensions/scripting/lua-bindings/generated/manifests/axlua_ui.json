@@ -1702,21 +1702,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "setContentSize",
-          "luaName": "setContentSize",
-          "declaringType": "ax::ui::EditBox",
-          "returnType": "void",
-          "parameterTypes": [
-            "const ax::Size \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setFont",
           "luaName": "setFont",
           "declaringType": "ax::ui::EditBox",
@@ -1770,21 +1755,6 @@
           "returnType": "void",
           "parameterTypes": [
             "int"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setGlobalZOrder",
-          "luaName": "setGlobalZOrder",
-          "declaringType": "ax::ui::EditBox",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
           ],
           "defaultValues": [
             null
@@ -1952,21 +1922,6 @@
           "returnType": "void",
           "parameterTypes": [
             "ax::TextHAlignment"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setVisible",
-          "luaName": "setVisible",
-          "declaringType": "ax::ui::EditBox",
-          "returnType": "void",
-          "parameterTypes": [
-            "bool"
           ],
           "defaultValues": [
             null
@@ -3370,17 +3325,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::ui::LayoutComponent",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "isPercentHeightEnabled",
           "luaName": "isPercentHeightEnabled",
           "declaringType": "ax::ui::LayoutComponent",
@@ -3857,76 +3801,6 @@
       ],
       "methods": [
         {
-          "nativeName": "addChild",
-          "luaName": "addChild",
-          "declaringType": "ax::ui::LayoutGroup",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "addChild",
-          "luaName": "addChild",
-          "declaringType": "ax::ui::LayoutGroup",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *",
-            "int"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "addChild",
-          "luaName": "addChild",
-          "declaringType": "ax::ui::LayoutGroup",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *",
-            "int",
-            "int"
-          ],
-          "defaultValues": [
-            null,
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "addChild",
-          "luaName": "addChild",
-          "declaringType": "ax::ui::LayoutGroup",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *",
-            "int",
-            "std::string_view"
-          ],
-          "defaultValues": [
-            null,
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "create",
           "luaName": "create",
           "declaringType": "ax::ui::LayoutGroup",
@@ -4147,17 +4021,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "removeAllChildren",
-          "luaName": "removeAllChildren",
-          "declaringType": "ax::ui::LayoutGroup",
-          "returnType": "void",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "removeAllChildrenWithCleanup",
           "luaName": "removeAllChildrenWithCleanup",
           "declaringType": "ax::ui::LayoutGroup",
@@ -4179,23 +4042,6 @@
           "returnType": "void",
           "parameterTypes": [],
           "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "removeChild",
-          "luaName": "removeChild",
-          "declaringType": "ax::ui::LayoutGroup",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::Node *",
-            "bool"
-          ],
-          "defaultValues": [
-            null,
-            "true"
-          ],
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
@@ -4366,23 +4212,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "setCameraMask",
-          "luaName": "setCameraMask",
-          "declaringType": "ax::ui::LayoutGroup",
-          "returnType": "void",
-          "parameterTypes": [
-            "unsigned short",
-            "bool"
-          ],
-          "defaultValues": [
-            null,
-            "true"
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setClippingEnabled",
           "luaName": "setClippingEnabled",
           "declaringType": "ax::ui::LayoutGroup",
@@ -4404,21 +4233,6 @@
           "returnType": "void",
           "parameterTypes": [
             "ax::ui::LayoutGroup::ClippingType"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setGlobalZOrder",
-          "luaName": "setGlobalZOrder",
-          "declaringType": "ax::ui::LayoutGroup",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
           ],
           "defaultValues": [
             null
@@ -5588,17 +5402,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getDescription",
-          "luaName": "getDescription",
-          "declaringType": "ax::ui::PageView",
-          "returnType": "std::string",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getIndicatorEnabled",
           "luaName": "getIndicatorEnabled",
           "declaringType": "ax::ui::PageView",
@@ -5695,17 +5498,6 @@
           "defaultValues": [],
           "isStatic": false,
           "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::ui::PageView",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
           "isVariadic": false
         },
         {
@@ -5852,21 +5644,6 @@
           "returnType": "void",
           "parameterTypes": [
             "ssize_t"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setDirection",
-          "luaName": "setDirection",
-          "declaringType": "ax::ui::PageView",
-          "returnType": "void",
-          "parameterTypes": [
-            "ax::ui::ScrollView::Direction"
           ],
           "defaultValues": [
             null
@@ -8485,97 +8262,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "findNextFocusedWidget",
-          "luaName": "findNextFocusedWidget",
-          "declaringType": "ax::ui::ScrollView",
-          "returnType": "ax::ui::Widget *",
-          "parameterTypes": [
-            "ax::ui::Widget::FocusDirection",
-            "ax::ui::Widget *"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getChildByName",
-          "luaName": "getChildByName",
-          "declaringType": "ax::ui::ScrollView",
-          "returnType": "ax::Node *",
-          "parameterTypes": [
-            "std::string_view"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getChildByTag",
-          "luaName": "getChildByTag",
-          "declaringType": "ax::ui::ScrollView",
-          "returnType": "ax::Node *",
-          "parameterTypes": [
-            "int"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getChildren",
-          "luaName": "getChildren",
-          "declaringType": "ax::ui::ScrollView",
-          "returnType": "Vector\u003Cax::Node *\u003E \u0026",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getChildren",
-          "luaName": "getChildren",
-          "declaringType": "ax::ui::ScrollView",
-          "returnType": "const Vector\u003Cax::Node *\u003E \u0026",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getChildrenCount",
-          "luaName": "getChildrenCount",
-          "declaringType": "ax::ui::ScrollView",
-          "returnType": "ssize_t",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getDescription",
-          "luaName": "getDescription",
-          "declaringType": "ax::ui::ScrollView",
-          "returnType": "std::string",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getDirection",
           "luaName": "getDirection",
           "declaringType": "ax::ui::ScrollView",
@@ -8738,17 +8424,6 @@
           "defaultValues": [],
           "isStatic": false,
           "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::ui::ScrollView",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
           "isVariadic": false
         },
         {
@@ -9530,21 +9205,6 @@
           "isStatic": false,
           "isConst": false,
           "isVariadic": false
-        },
-        {
-          "nativeName": "update",
-          "luaName": "update",
-          "declaringType": "ax::ui::ScrollView",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
         }
       ],
       "fields": []
@@ -10025,21 +9685,6 @@
           "returnType": "void",
           "parameterTypes": [
             "const ax::Rect \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setGlobalZOrder",
-          "luaName": "setGlobalZOrder",
-          "declaringType": "ax::ui::Slider",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
           ],
           "defaultValues": [
             null
@@ -11542,17 +11187,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::ui::VBox",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "initWithSize",
           "luaName": "initWithSize",
           "declaringType": "ax::ui::VBox",
@@ -11798,17 +11432,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getDescription",
-          "luaName": "getDescription",
-          "declaringType": "ax::ui::Widget",
-          "returnType": "std::string",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getLayoutParameter",
           "luaName": "getLayoutParameter",
           "declaringType": "ax::ui::Widget",
@@ -11897,39 +11520,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "getScale",
-          "luaName": "getScale",
-          "declaringType": "ax::ui::Widget",
-          "returnType": "float",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getScaleX",
-          "luaName": "getScaleX",
-          "declaringType": "ax::ui::Widget",
-          "returnType": "float",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "getScaleY",
-          "luaName": "getScaleY",
-          "declaringType": "ax::ui::Widget",
-          "returnType": "float",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": true,
-          "isVariadic": false
-        },
-        {
           "nativeName": "getScaleZ",
           "luaName": "getScaleZ",
           "declaringType": "ax::Node",
@@ -12004,17 +11594,6 @@
           "defaultValues": [],
           "isStatic": false,
           "isConst": true,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "init",
-          "luaName": "init",
-          "declaringType": "ax::ui::Widget",
-          "returnType": "bool",
-          "parameterTypes": [],
-          "defaultValues": [],
-          "isStatic": false,
-          "isConst": false,
           "isVariadic": false
         },
         {
@@ -12317,21 +11896,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "setContentSize",
-          "luaName": "setContentSize",
-          "declaringType": "ax::ui::Widget",
-          "returnType": "void",
-          "parameterTypes": [
-            "const ax::Vec2 \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setEnabled",
           "luaName": "setEnabled",
           "declaringType": "ax::ui::Widget",
@@ -12467,36 +12031,6 @@
           "isVariadic": false
         },
         {
-          "nativeName": "setPosition",
-          "luaName": "setPosition",
-          "declaringType": "ax::ui::Widget",
-          "returnType": "void",
-          "parameterTypes": [
-            "const ax::Vec2 \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setPositionNormalized",
-          "luaName": "setPositionNormalized",
-          "declaringType": "ax::ui::Widget",
-          "returnType": "void",
-          "parameterTypes": [
-            "const ax::Vec2 \u0026"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
           "nativeName": "setPositionPercent",
           "luaName": "setPositionPercent",
           "declaringType": "ax::ui::Widget",
@@ -12533,68 +12067,6 @@
           "returnType": "void",
           "parameterTypes": [
             "bool"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setScale",
-          "luaName": "setScale",
-          "declaringType": "ax::ui::Widget",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setScale",
-          "luaName": "setScale",
-          "declaringType": "ax::ui::Widget",
-          "returnType": "void",
-          "parameterTypes": [
-            "float",
-            "float"
-          ],
-          "defaultValues": [
-            null,
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setScaleX",
-          "luaName": "setScaleX",
-          "declaringType": "ax::ui::Widget",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
-          ],
-          "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "setScaleY",
-          "luaName": "setScaleY",
-          "declaringType": "ax::ui::Widget",
-          "returnType": "void",
-          "parameterTypes": [
-            "float"
           ],
           "defaultValues": [
             null

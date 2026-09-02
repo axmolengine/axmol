@@ -162,12 +162,6 @@ void register_ax_ui_members_2(lua_State* L)
     class_9_ScrollView.static_method("calculateItemPositionWithAnchor", static_cast<ax::Vec2 (*)(const ax::Node *, const ax::Vec2 &)>(&ax::ui::ScrollView::calculateItemPositionWithAnchor));
     class_9_ScrollView.static_method("create", static_cast<ax::ui::ScrollView * (*)()>(&ax::ui::ScrollView::create));
     class_9_ScrollView.static_method("createInstance", static_cast<ax::Object * (*)()>(&ax::ui::ScrollView::createInstance));
-    class_9_ScrollView.method("findNextFocusedWidget", static_cast<ax::ui::Widget * (ax::ui::ScrollView::*)(ax::ui::Widget::FocusDirection, ax::ui::Widget *)>(&ax::ui::ScrollView::findNextFocusedWidget));
-    class_9_ScrollView.method("getChildByName", static_cast<ax::Node * (ax::ui::ScrollView::*)(std::string_view) const>(&ax::ui::ScrollView::getChildByName));
-    class_9_ScrollView.method("getChildByTag", static_cast<ax::Node * (ax::ui::ScrollView::*)(int) const>(&ax::ui::ScrollView::getChildByTag));
-    class_9_ScrollView.method("getChildren", axlua::overload(axlua::overload_candidate<>([](ax::ui::ScrollView& self) -> auto { return sol::as_table(static_cast<ax::ui::ScrollView&>(self).getChildren()); }), axlua::overload_candidate<>([](const ax::ui::ScrollView& self) -> auto { return sol::as_table(static_cast<const ax::ui::ScrollView&>(self).getChildren()); })));
-    class_9_ScrollView.method("getChildrenCount", static_cast<ssize_t (ax::ui::ScrollView::*)() const>(&ax::ui::ScrollView::getChildrenCount));
-    class_9_ScrollView.method("getDescription", static_cast<std::string (ax::ui::ScrollView::*)() const>(&ax::ui::ScrollView::getDescription));
     class_9_ScrollView.method("getDirection", static_cast<ax::ui::ScrollView::Direction (ax::ui::ScrollView::*)() const>(&ax::ui::ScrollView::getDirection));
     class_9_ScrollView.method("getInnerContainer", static_cast<ax::ui::LayoutGroup * (ax::ui::ScrollView::*)() const>(&ax::ui::ScrollView::getInnerContainer));
     class_9_ScrollView.method("getInnerContainerPosition", static_cast<const ax::Vec2 & (ax::ui::ScrollView::*)() const>(&ax::ui::ScrollView::getInnerContainerPosition));
@@ -183,7 +177,6 @@ void register_ax_ui_members_2(lua_State* L)
     class_9_ScrollView.method("getScrolledPercentHorizontal", static_cast<float (ax::ui::ScrollView::*)() const>(&ax::ui::ScrollView::getScrolledPercentHorizontal));
     class_9_ScrollView.method("getScrolledPercentVertical", static_cast<float (ax::ui::ScrollView::*)() const>(&ax::ui::ScrollView::getScrolledPercentVertical));
     class_9_ScrollView.method("getTouchTotalTimeThreshold", static_cast<float (ax::ui::ScrollView::*)() const>(&ax::ui::ScrollView::getTouchTotalTimeThreshold));
-    class_9_ScrollView.method("init", static_cast<bool (ax::ui::ScrollView::*)()>(&ax::ui::ScrollView::init));
     class_9_ScrollView.method("isAutoScrolling", static_cast<bool (ax::ui::ScrollView::*)() const>(&ax::ui::ScrollView::isAutoScrolling));
     class_9_ScrollView.method("isBounceEnabled", static_cast<bool (ax::ui::ScrollView::*)() const>(&ax::ui::ScrollView::isBounceEnabled));
     class_9_ScrollView.method("isInertiaScrollEnabled", static_cast<bool (ax::ui::ScrollView::*)() const>(&ax::ui::ScrollView::isInertiaScrollEnabled));
@@ -237,7 +230,6 @@ void register_ax_ui_members_2(lua_State* L)
     class_9_ScrollView.method("stopAutoScroll", static_cast<void (ax::ui::ScrollView::*)()>(&ax::ui::ScrollView::stopAutoScroll));
     class_9_ScrollView.method("stopOverallScroll", static_cast<void (ax::ui::ScrollView::*)()>(&ax::ui::ScrollView::stopOverallScroll));
     class_9_ScrollView.method("stopScroll", static_cast<void (ax::ui::ScrollView::*)()>(&ax::ui::ScrollView::stopScroll));
-    class_9_ScrollView.method("update", static_cast<void (ax::ui::ScrollView::*)(float)>(&ax::ui::ScrollView::update));
     auto class_10_Slider = module.class_<ax::ui::Slider>("Slider");
     class_10_Slider.bases<ax::ui::Widget, ax::ProtectedNode, ax::Node, ax::Object, ax::ui::LayoutParameterProtocol>();
     class_10_Slider.constructors<ax::ui::Slider()>();
@@ -274,7 +266,6 @@ void register_ax_ui_members_2(lua_State* L)
     class_10_Slider.method("setCapInsetProgressBarRenderer", static_cast<void (ax::ui::Slider::*)(const ax::Rect &)>(&ax::ui::Slider::setCapInsetProgressBarRenderer));
     class_10_Slider.method("setCapInsets", static_cast<void (ax::ui::Slider::*)(const ax::Rect &)>(&ax::ui::Slider::setCapInsets));
     class_10_Slider.method("setCapInsetsBarRenderer", static_cast<void (ax::ui::Slider::*)(const ax::Rect &)>(&ax::ui::Slider::setCapInsetsBarRenderer));
-    class_10_Slider.method("setGlobalZOrder", static_cast<void (ax::ui::Slider::*)(float)>(&ax::ui::Slider::setGlobalZOrder));
     class_10_Slider.method("setMaxPercent", static_cast<void (ax::ui::Slider::*)(int)>(&ax::ui::Slider::setMaxPercent));
     class_10_Slider.method("setPercent", static_cast<void (ax::ui::Slider::*)(int)>(&ax::ui::Slider::setPercent));
     class_10_Slider.method("setScale9Enabled", static_cast<void (ax::ui::Slider::*)(bool)>(&ax::ui::Slider::setScale9Enabled));

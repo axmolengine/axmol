@@ -92,7 +92,6 @@ void register_ax_physics3d_members_1(lua_State* L)
     class_4_Rigidbody3D.method("setAngularVelocity", static_cast<void (ax::Rigidbody3D::*)(const ax::Vec3 &)>(&ax::Rigidbody3D::setAngularVelocity));
     class_4_Rigidbody3D.method("setCollisionDetectionMode", static_cast<void (ax::Rigidbody3D::*)(ax::Rigidbody3D::CollisionDetectionMode)>(&ax::Rigidbody3D::setCollisionDetectionMode));
     class_4_Rigidbody3D.method("setDynamic", static_cast<void (ax::Rigidbody3D::*)()>(&ax::Rigidbody3D::setDynamic));
-    class_4_Rigidbody3D.method("setEnabled", static_cast<void (ax::Rigidbody3D::*)(bool)>(&ax::Rigidbody3D::setEnabled));
     class_4_Rigidbody3D.method("setGravityScale", static_cast<void (ax::Rigidbody3D::*)(float)>(&ax::Rigidbody3D::setGravityScale));
     class_4_Rigidbody3D.method("setInertia", static_cast<void (ax::Rigidbody3D::*)(const ax::Vec3 &)>(&ax::Rigidbody3D::setInertia));
     class_4_Rigidbody3D.method("setKinematic", static_cast<void (ax::Rigidbody3D::*)()>(&ax::Rigidbody3D::setKinematic));
