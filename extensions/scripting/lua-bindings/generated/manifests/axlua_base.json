@@ -5295,6 +5295,37 @@
           "isVariadic": false
         },
         {
+          "nativeName": "drawCornerRect",
+          "luaName": "drawCornerRect",
+          "declaringType": "ax::DrawNode",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec2 \u0026",
+            "const ax::Vec2 \u0026",
+            "const ax::Color \u0026",
+            "float",
+            "float",
+            "float",
+            "float",
+            "float",
+            "ax::DrawNode::CornerMode"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            null,
+            "1.0f",
+            "5.0f",
+            "5.0f",
+            "5.0f",
+            "5.0f",
+            "ax::DrawNode::CornerMode::ROUND"
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
           "nativeName": "drawCubicBezier",
           "luaName": "drawCubicBezier",
           "declaringType": "ax::DrawNode",
@@ -5358,8 +5389,8 @@
             null,
             null,
             "1.0f",
-            "ax::DrawNode::EndType::Round",
-            "ax::DrawNode::EndType::Round"
+            "ax::DrawNode::EndType::ROUND",
+            "ax::DrawNode::EndType::ROUND"
           ],
           "isStatic": false,
           "isConst": false,
@@ -5390,7 +5421,7 @@
             null,
             null,
             null,
-            "ax::DrawNode::DrawMode::Outline"
+            "ax::DrawNode::DrawMode::OUTLINE"
           ],
           "isStatic": false,
           "isConst": false,
@@ -5424,7 +5455,7 @@
             null,
             null,
             null,
-            "ax::DrawNode::DrawMode::Outline",
+            "ax::DrawNode::DrawMode::OUTLINE",
             "1.0f"
           ],
           "isStatic": false,
@@ -5446,7 +5477,7 @@
             null,
             null,
             null,
-            "ax::DrawNode::PointType::Rect"
+            "ax::DrawNode::PointType::RECT"
           ],
           "isStatic": false,
           "isConst": false,
@@ -5541,8 +5572,8 @@
             null,
             null,
             null,
-            "ax::DrawNode::EndType::Round",
-            "ax::DrawNode::EndType::Round"
+            "ax::DrawNode::EndType::ROUND",
+            "ax::DrawNode::EndType::ROUND"
           ],
           "isStatic": false,
           "isConst": false,
@@ -5691,6 +5722,39 @@
             null,
             null,
             "false"
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "drawSolidCornerRect",
+          "luaName": "drawSolidCornerRect",
+          "declaringType": "ax::DrawNode",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec2 \u0026",
+            "const ax::Vec2 \u0026",
+            "const ax::Color \u0026",
+            "const ax::Color \u0026",
+            "float",
+            "float",
+            "float",
+            "float",
+            "float",
+            "ax::DrawNode::CornerMode"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            null,
+            null,
+            "1.0f",
+            "5.0f",
+            "5.0f",
+            "5.0f",
+            "5.0f",
+            "ax::DrawNode::CornerMode::ROUND"
           ],
           "isStatic": false,
           "isConst": false,
@@ -35827,32 +35891,57 @@
       ]
     },
     {
-      "nativeName": "DrawMode",
-      "qualifiedName": "ax::DrawNode::DrawMode",
+      "nativeName": "CornerMode",
+      "qualifiedName": "ax::DrawNode::CornerMode",
       "ownerQualifiedName": "ax::DrawNode",
       "values": [
         {
-          "name": "Fill",
+          "name": "ROUND",
           "signedValue": 0,
           "unsignedValue": 0,
           "isUnsigned": false
         },
         {
-          "name": "Outline",
+          "name": "BEVEL",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "DrawMode",
+      "qualifiedName": "ax::DrawNode::DrawMode",
+      "ownerQualifiedName": "ax::DrawNode",
+      "values": [
+        {
+          "name": "FILL",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "OUTLINE",
           "signedValue": 1,
           "unsignedValue": 1,
           "isUnsigned": false
         },
         {
-          "name": "Line",
+          "name": "LINE",
           "signedValue": 2,
           "unsignedValue": 2,
           "isUnsigned": false
         },
         {
-          "name": "Semi",
+          "name": "SEMI",
           "signedValue": 3,
           "unsignedValue": 3,
+          "isUnsigned": false
+        },
+        {
+          "name": "FILL_NO_OUTLINE",
+          "signedValue": 4,
+          "unsignedValue": 4,
           "isUnsigned": false
         }
       ]
@@ -35863,19 +35952,19 @@
       "ownerQualifiedName": "ax::DrawNode",
       "values": [
         {
-          "name": "Square",
+          "name": "SQUARE",
           "signedValue": 0,
           "unsignedValue": 0,
           "isUnsigned": false
         },
         {
-          "name": "Round",
+          "name": "ROUND",
           "signedValue": 1,
           "unsignedValue": 1,
           "isUnsigned": false
         },
         {
-          "name": "Butt",
+          "name": "BUTT",
           "signedValue": 2,
           "unsignedValue": 2,
           "isUnsigned": false
@@ -35888,13 +35977,13 @@
       "ownerQualifiedName": "ax::DrawNode",
       "values": [
         {
-          "name": "Circle",
+          "name": "CIRCLE",
           "signedValue": 0,
           "unsignedValue": 0,
           "isUnsigned": false
         },
         {
-          "name": "Rect",
+          "name": "RECT",
           "signedValue": 1,
           "unsignedValue": 1,
           "isUnsigned": false
