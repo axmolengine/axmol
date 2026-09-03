@@ -116,6 +116,7 @@ public:
      * @return A Buffer object.
      */
     Buffer* createBuffer(size_t size, BufferType type, BufferUsage usage, const void* initial) override;
+    Buffer* createBuffer(const BufferDesc& desc, const void* initial) override;
 
     /**
      * New a Texture object.
@@ -138,8 +139,11 @@ public:
      * @return A RenderPipeline object.
      */
     RenderPipeline* createRenderPipeline() override;
+    ComputePipeline* createComputePipeline(Program* program) override;
 
     Program* createProgram(Data vsData, Data fsData) override;
+
+    Program* createComputeProgram(Data csData) override;
 
     /**
      * Get a MTLDevice object.

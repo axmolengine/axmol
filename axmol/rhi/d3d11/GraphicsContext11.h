@@ -135,6 +135,8 @@ public:
     bool copyTexture(RenderTarget* src, Texture* dst) override;
     bool copyTexture(Texture* src, Texture* dst) override;
 
+    bool dispatch(const ComputeDispatchDesc& desc) override;
+
 protected:
     void readPixels(RenderTarget* rt, UINT x, UINT y, UINT width, UINT height, PixelBufferDesc& pbd);
 
@@ -164,6 +166,7 @@ protected:
 
     tlx::pod_vector<ID3D11ShaderResourceView*> _nullSRVs;
     UINT _textureBounds{0};
+    UINT _storageSrvMaxSlot{0};
 
     UINT _swapChainFlags{0};
     UINT _syncInterval{0};

@@ -37,6 +37,15 @@ ProgramImpl::ProgramImpl(Data& vsData, Data& fsData) : Program(vsData, fsData)
     }
 }
 
+ProgramImpl::ProgramImpl(Data& csData) : Program(csData)
+{
+    auto driver = axdrv;
+    for (auto& uboInfo : _activeUniformBlockInfos)
+    {
+        _uniformBuffers.push_back(driver->createBuffer(uboInfo.sizeBytes, BufferType::UNIFORM, BufferUsage::DYNAMIC));
+    }
+}
+
 ProgramImpl ::~ProgramImpl()
 {
     if (_uniformBuffers.empty())
@@ -67,6 +76,9 @@ void ProgramImpl::bindUniformBuffers(ID3D11DeviceContext* context, const uint8_t
             break;
         case ShaderStage::FRAGMENT:
             context->PSSetConstantBuffers(info.binding, 1, &nativeUbo);
+            break;
+        case ShaderStage::COMPUTE:
+            context->CSSetConstantBuffers(info.binding, 1, &nativeUbo);
             break;
         default:
             break;

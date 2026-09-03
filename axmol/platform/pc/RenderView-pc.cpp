@@ -983,11 +983,24 @@ bool RenderView::initWithRect(std::string_view viewName, const ax::Rect& rect, f
 #if AX_GLES_PROFILE
         glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
         glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
+#    if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+        // Prefer GLES 3.1 for compute and fall back to the engine minimum.
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+#    else
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, AX_GLES_PROFILE / AX_GLES_PROFILE_DEN);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, (AX_GLES_PROFILE % AX_GLES_PROFILE_DEN) / 10);
+#    endif
 #else
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);  // We want OpenGL 3.3
+#    if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
+        // Prefer a compute-capable context. Window creation retries with the
+        // engine minimum (GL 3.3) below when GL 4.3 is unavailable.
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+#    else
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+#    endif
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // We don't want the old OpenGL
 #endif
     }
@@ -1024,9 +1037,33 @@ bool RenderView::initWithRect(std::string_view viewName, const ax::Rect& rect, f
     glfwWindowHint(GLFW_SCALE_TO_MONITOR, _renderScaleMode == RenderScaleMode::Physical ? GLFW_TRUE : GLFW_FALSE);
 #endif
 
-    _mainWindow =
-        glfwCreateWindow(static_cast<int>(std::lround(requestWinSize.width)),
-                         static_cast<int>(std::lround(requestWinSize.height)), _viewName.c_str(), _monitor, nullptr);
+    const auto createMainWindow = [&]() {
+        return glfwCreateWindow(static_cast<int>(std::lround(requestWinSize.width)),
+                                static_cast<int>(std::lround(requestWinSize.height)), _viewName.c_str(), _monitor,
+                                nullptr);
+    };
+
+    _mainWindow = createMainWindow();
+#if AX_ENABLE_GL && !AX_GLES_PROFILE && \
+    (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
+    if (!_mainWindow && fallbackGL)
+    {
+        AXLOGD("OpenGL 4.3 context is unavailable; falling back to OpenGL 3.3");
+        _glfwError.clear();
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        _mainWindow = createMainWindow();
+    }
+#elif AX_ENABLE_GL && AX_GLES_PROFILE && AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+    if (!_mainWindow && fallbackGL)
+    {
+        AXLOGD("OpenGL ES 3.1 context is unavailable; falling back to OpenGL ES 3.0");
+        _glfwError.clear();
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+        _mainWindow = createMainWindow();
+    }
+#endif
     if (_mainWindow == nullptr)
     {
         std::string message = "Can't create window";

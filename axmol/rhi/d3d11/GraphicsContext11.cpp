@@ -29,12 +29,14 @@
 #include "axmol/rhi/d3d11/Program11.h"
 #include "axmol/rhi/d3d11/VertexLayout11.h"
 #include "axmol/rhi/d3d11/Texture11.h"
+#include "axmol/rhi/ComputePipeline.h"
 #include "axmol/rhi/GraphicsCore.h"
 #include "axmol/rhi/SamplerRegistry.h"
 #include <dxgi1_2.h>
 #include <dxgi1_3.h>
 #include <dxgi1_5.h>
 #include <VersionHelpers.h>
+#include <algorithm>
 #include "axmol/base/Logging.h"
 #include "axmol/platform/Application.h"
 
@@ -556,8 +558,12 @@ void GraphicsContextImpl::setIndexBuffer(Buffer* buffer)
 
 void GraphicsContextImpl::setInstanceBuffer(Buffer* buffer)
 {
-    assert(buffer != nullptr);
-    if (buffer == nullptr || _instanceBuffer == buffer)
+    if (buffer == nullptr)
+    {
+        AX_SAFE_RELEASE_NULL(_instanceBuffer);
+        return;
+    }
+    if (_instanceBuffer == buffer)
         return;
 
     buffer->retain();
@@ -630,6 +636,158 @@ void GraphicsContextImpl::endRenderPass()
         _d3d11Context->PSSetShaderResources(0, _textureBounds, _nullSRVs.data());
         _textureBounds = 0;
     }
+    if (_storageSrvMaxSlot)
+    {
+        _nullSRVs.resize(_storageSrvMaxSlot, nullptr);
+        _d3d11Context->PSSetShaderResources(0, _storageSrvMaxSlot, _nullSRVs.data());
+        _d3d11Context->VSSetShaderResources(0, _storageSrvMaxSlot, _nullSRVs.data());
+        _storageSrvMaxSlot = 0;
+    }
+}
+
+bool GraphicsContextImpl::dispatch(const ComputeDispatchDesc& desc)
+{
+    if (!desc.programState || !desc.pipeline)
+        return false;
+
+    auto* pipelineProgram = desc.pipeline->getProgram();
+    if (!pipelineProgram || pipelineProgram != desc.programState->getProgram())
+    {
+        AXASSERT(false, "ComputePipeline and ProgramState program mismatch");
+        return false;
+    }
+
+    auto program = static_cast<ProgramImpl*>(pipelineProgram);
+    if (!program || !program->getCSModule())
+        return false;
+
+    const auto& storageBindings = desc.programState->getStorageBufferBindingSets();
+    for (const auto& storageInfo : program->getActiveStorageBufferInfos())
+    {
+        auto binding = storageBindings.find(storageInfo.binding);
+        if (binding == storageBindings.end() || !binding->second.buffer)
+        {
+            AXLOGE("Missing D3D11 compute storage buffer binding {} ({})", storageInfo.binding, storageInfo.name);
+            AXASSERT(false, "Missing D3D11 compute storage buffer binding");
+            return false;
+        }
+        if (binding->second.access != storageInfo.access)
+        {
+            AXLOGE("D3D11 compute storage buffer binding {} has incompatible access", storageInfo.binding);
+            AXASSERT(false, "D3D11 compute storage buffer access mismatch");
+            return false;
+        }
+
+        auto bufferImpl = static_cast<BufferImpl*>(binding->second.buffer);
+        if ((storageInfo.sizeBytes != 0 && bufferImpl->getSize() < storageInfo.sizeBytes) ||
+            (storageInfo.arrayStride != 0 && bufferImpl->getStride() != storageInfo.arrayStride))
+        {
+            AXLOGE("D3D11 compute storage buffer binding {} does not match reflected size/stride", storageInfo.binding);
+            AXASSERT(false, "D3D11 compute storage buffer layout mismatch");
+            return false;
+        }
+
+        const bool hasView = storageInfo.access == BufferAccess::READ_WRITE ? bufferImpl->getUAV() != nullptr
+                                                                            : bufferImpl->getSRV() != nullptr;
+        if (!hasView)
+        {
+            AXLOGE("D3D11 compute storage buffer binding {} has no native view", storageInfo.binding);
+            AXASSERT(false, "D3D11 compute storage buffer has no native view");
+            return false;
+        }
+    }
+
+    auto context = _d3d11Context;
+    _programState = desc.programState;
+
+    program->applyCompute(context);
+
+    auto& callbackUniforms = desc.programState->getCallbackUniforms();
+    for (auto& cb : callbackUniforms)
+        cb.second(_programState, cb.first);
+
+    auto& cpuBuffer = desc.programState->getUniformBuffer();
+    program->bindUniformBuffers(context, cpuBuffer.data(), cpuBuffer.size());
+
+    // Phase 1: bind textures to CS stage at their reflected t# slots.
+    for (const auto& [bindingIndex, bindingSet] : desc.programState->getTextureBindingSets())
+    {
+        auto& texs = bindingSet.texs;
+        for (size_t k = 0; k < texs.size(); ++k)
+        {
+            auto textureImpl = static_cast<TextureImpl*>(texs[k]);
+            context->CSSetShaderResources(static_cast<UINT>(bindingIndex + k), 1, &textureImpl->internalHandle().srv);
+        }
+    }
+
+    // Phase 2: bind samplers to CS stage (honoring custom sampler overrides).
+    auto samplerRegistry = SamplerRegistry::getInstance();
+    for (const auto& samplerInfo : program->getActiveSamplerInfos())
+    {
+        if (!samplerInfo.samplerId || samplerInfo.count == 0)
+            continue;
+
+        auto samplerId = samplerInfo.samplerId;
+        if (samplerInfo.presetIndex < 0)
+        {
+            if (auto overrideId = _programState->getSamplerOverride(samplerInfo.binding))
+                samplerId = overrideId;
+        }
+
+        auto sampler = static_cast<ID3D11SamplerState*>(samplerRegistry->getSampler(samplerId));
+        if (!sampler)
+            continue;
+
+        for (uint16_t i = 0; i < samplerInfo.count; ++i)
+            context->CSSetSamplers(static_cast<UINT>(samplerInfo.binding + i), 1, &sampler);
+    }
+
+    // Phase 3: bind storage buffers — RW -> UAV (u#), RO -> SRV (t#).
+    std::vector<UINT> boundUAVs;
+    std::vector<UINT> boundSRVs;
+    for (const auto& [binding, bindingSet] : desc.programState->getStorageBufferBindingSets())
+    {
+        if (!bindingSet.buffer)
+            continue;
+        auto bufferImpl = static_cast<BufferImpl*>(bindingSet.buffer);
+        if (bindingSet.access == BufferAccess::READ_WRITE)
+        {
+            auto uav = bufferImpl->getUAV();
+            if (!uav)
+                continue;
+            context->CSSetUnorderedAccessViews(static_cast<UINT>(binding), 1, &uav, nullptr);
+            boundUAVs.push_back(static_cast<UINT>(binding));
+        }
+        else
+        {
+            auto srv = bufferImpl->getSRV();
+            if (!srv)
+                continue;
+            context->CSSetShaderResources(static_cast<UINT>(binding), 1, &srv);
+            boundSRVs.push_back(static_cast<UINT>(binding));
+        }
+    }
+
+    context->Dispatch(desc.groupCountX, desc.groupCountY, desc.groupCountZ);
+
+    // Unbind CS resources to avoid D3D11 SRV/UAV conflicts with later draws.
+    ID3D11UnorderedAccessView* nullUAV = nullptr;
+    ID3D11ShaderResourceView* nullSRV  = nullptr;
+    for (UINT slot : boundUAVs)
+        context->CSSetUnorderedAccessViews(slot, 1, &nullUAV, nullptr);
+    for (UINT slot : boundSRVs)
+        context->CSSetShaderResources(slot, 1, &nullSRV);
+    for (const auto& [bindingIndex, bindingSet] : desc.programState->getTextureBindingSets())
+    {
+        for (size_t k = 0; k < bindingSet.texs.size(); ++k)
+        {
+            const UINT slot = static_cast<UINT>(bindingIndex + k);
+            context->CSSetShaderResources(slot, 1, &nullSRV);
+        }
+    }
+
+    _programState = nullptr;
+    return true;
 }
 
 void GraphicsContextImpl::prepareDrawing()
@@ -684,7 +842,7 @@ void GraphicsContextImpl::prepareDrawing()
             const auto slot  = bindingIndex + k;
             auto textureImpl = static_cast<TextureImpl*>(texs[k]);
             context->PSSetShaderResources(slot, 1, &textureImpl->internalHandle().srv);
-            ++_textureBounds;
+            _textureBounds = (std::max)(_textureBounds, static_cast<UINT>(slot + 1));
         }
     }
 
@@ -703,12 +861,34 @@ void GraphicsContextImpl::prepareDrawing()
             continue;
         }
 
-        auto sampler = static_cast<ID3D11SamplerState*>(samplerRegistry->getSampler(samplerInfo.samplerId));
+        auto samplerId = samplerInfo.samplerId;
+        if (samplerInfo.presetIndex < 0)
+        {
+            if (auto overrideId = _programState->getSamplerOverride(samplerInfo.binding))
+                samplerId = overrideId;
+        }
+
+        auto sampler = static_cast<ID3D11SamplerState*>(samplerRegistry->getSampler(samplerId));
         if (!sampler)
             continue;
 
         for (uint16_t i = 0; i < samplerInfo.count; ++i)
             context->PSSetSamplers(static_cast<UINT>(samplerInfo.binding + i), 1, &sampler);
+    }
+
+    // Phase 3: bind read-only storage buffers (GPU render VS/PS) as SRVs on all stages.
+    for (const auto& [binding, bindingSet] : _programState->getStorageBufferBindingSets())
+    {
+        if (!bindingSet.buffer)
+            continue;
+        auto bufferImpl = static_cast<BufferImpl*>(bindingSet.buffer);
+        auto srv        = bufferImpl->getSRV();
+        if (!srv)
+            continue;
+        context->VSSetShaderResources(static_cast<UINT>(binding), 1, &srv);
+        context->PSSetShaderResources(static_cast<UINT>(binding), 1, &srv);
+        if (static_cast<UINT>(binding + 1) > _storageSrvMaxSlot)
+            _storageSrvMaxSlot = static_cast<UINT>(binding + 1);
     }
 
     // depth stencil
@@ -872,8 +1052,8 @@ bool GraphicsContextImpl::copyTexture(Texture* src, Texture* dst)
 
     D3D11_TEXTURE2D_DESC srcDesc{};
     D3D11_TEXTURE2D_DESC dstDesc{};
-    srcResource->GetDesc(&srcDesc);
-    dstResource->GetDesc(&dstDesc);
+    static_cast<ID3D11Texture2D*>(srcResource)->GetDesc(&srcDesc);
+    static_cast<ID3D11Texture2D*>(dstResource)->GetDesc(&dstDesc);
 
     if (srcDesc.Width != dstDesc.Width || srcDesc.Height != dstDesc.Height || srcDesc.Format != dstDesc.Format ||
         srcDesc.SampleDesc.Count != 1 || dstDesc.SampleDesc.Count != 1 || srcDesc.ArraySize != 1 ||

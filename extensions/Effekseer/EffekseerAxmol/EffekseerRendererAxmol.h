@@ -39,7 +39,7 @@ public:
     Effekseer::TrackRendererRef CreateTrackRenderer() override;
     Effekseer::GpuTimerRef CreateGpuTimer() override { return nullptr; }
     Effekseer::GpuParticleSystemRef CreateGpuParticleSystem(const Effekseer::GpuParticleSystem::Settings& settings = {}) override;
-    Effekseer::GpuParticleFactoryRef CreateGpuParticleFactory() override { return nullptr; }
+    Effekseer::GpuParticleFactoryRef CreateGpuParticleFactory() override;
 
     Effekseer::TextureLoaderRef CreateTextureLoader(Effekseer::FileInterfaceRef fileInterface = nullptr) override;
     Effekseer::ModelLoaderRef CreateModelLoader(Effekseer::FileInterfaceRef fileInterface = nullptr) override;
@@ -69,7 +69,9 @@ public:
 
     void BeginFrame(ax::Renderer* renderer);
     void ReleaseCachedCommands();
-    void SetGlobalZOrder(float globalZOrder) { _globalZOrder = globalZOrder; }
+    void SetGlobalZOrder(float globalZOrder);
+
+    ax::Renderer* getAxRenderer() const { return _axRenderer; }
 
     int GetRef() override { return Effekseer::ReferenceObject::GetRef(); }
     int AddRef() override { return Effekseer::ReferenceObject::AddRef(); }

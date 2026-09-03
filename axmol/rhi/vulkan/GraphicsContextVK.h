@@ -24,6 +24,8 @@
 #pragma once
 #include "axmol/rhi/GraphicsContext.h"
 #include "axmol/rhi/vulkan/RenderPipelineVK.h"
+#include "axmol/rhi/vulkan/ComputePipelineVK.h"
+#include "axmol/base/RefPtr.h"
 #include <glad/vulkan.h>
 
 namespace ax::rhi::vk
@@ -34,6 +36,15 @@ class RenderPipelineImpl;
 class RenderTargetImpl;
 class GraphicsDeviceImpl;
 class SemaphorePool;
+
+// Holds a strong reference to the compute pipeline so it stays alive until the
+// frame fence completes (Vulkan requires recorded objects to outlive command
+// buffer execution).
+struct InFlightComputeDescriptorState
+{
+    RefPtr<ComputePipelineImpl> pipeline;
+    DescriptorState* descriptorState = nullptr;
+};
 
 enum class DynamicStateBits : uint32_t
 {
@@ -131,6 +142,8 @@ public:
     bool copyTexture(RenderTarget* src, Texture* dst) override;
     bool copyTexture(Texture* src, Texture* dst) override;
 
+    bool dispatch(const ComputeDispatchDesc& desc) override;
+
     void setStencilReferenceValue(uint32_t value) override;
 
     void prepareDrawing();
@@ -191,6 +204,7 @@ private:
     uint64_t _frameFenceValue{0};
 
     std::array<tlx::pod_vector<DescriptorState*>, MAX_FRAMES_IN_FLIGHT> _inFlightDescriptorStates;
+    std::array<std::vector<InFlightComputeDescriptorState>, MAX_FRAMES_IN_FLIGHT> _inFlightComputeDescriptorStates;
 
     tlx::pod_vector<VkSemaphore> _presentCompleteSemaphores;
     tlx::pod_vector<VkSemaphore> _renderFinishedSemaphores;

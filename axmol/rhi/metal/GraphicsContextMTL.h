@@ -189,6 +189,8 @@ public:
     bool copyTexture(RenderTarget* src, Texture* dst) override;
     bool copyTexture(Texture* src, Texture* dst) override;
 
+    bool dispatch(const ComputeDispatchDesc& desc) override;
+
     /**
      * Copies the contents of one MTLTexture into another via a synchronous blit command.
      * @param src Source texture.
@@ -267,6 +269,7 @@ private:
 
     dispatch_semaphore_t _frameBoundarySemaphore;
     RenderPassDesc _currentRenderPassDesc;
+    bool _renderPassInterrupted = false;
     NSAutoreleasePool* _autoReleasePool = nil;
 
     std::vector<std::pair<Texture*, std::function<void(const PixelBufferDesc&)>>> _captureCallbacks;

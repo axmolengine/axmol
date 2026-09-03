@@ -60,6 +60,11 @@ public:
      */
     ProgramImpl(Data& vsData, Data& fsData);
 
+    /**
+     * @param csData Specifies the compute shader source.
+     */
+    explicit ProgramImpl(Data& csData);
+
     ~ProgramImpl();
 
     /**

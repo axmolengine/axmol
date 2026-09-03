@@ -67,6 +67,8 @@ public:
      */
     rhi::ShaderModule* acquireFragmentShaderModule(Data& payload);
 
+    rhi::ShaderModule* acquireComputeShaderModule(Data& payload);
+
     /**
      * Remove all unused shaders.
      */

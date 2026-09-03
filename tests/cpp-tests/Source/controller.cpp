@@ -124,6 +124,7 @@ public:
         addTest("Scheduler", []() { return new SchedulerTests(); });
         addTest("Shader - Basic", []() { return new ShaderTests(); });
         addTest("Shader - Sprite", []() { return new Shader2Tests(); });
+        addTest("Shader - Compute", []() { return new ComputeShaderTests(); });
         addTest("TextureCache", []() { return new TextureCacheTests(); });
         addTest("TexturePacker Encryption", []() { return new TextureAtlasEncryptionTests(); });
         addTest("Touches", []() { return new TouchesTests(); });

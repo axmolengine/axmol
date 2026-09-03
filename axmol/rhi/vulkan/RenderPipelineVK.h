@@ -59,16 +59,19 @@ using VkDescriptorSetLayoutArray = std::array<VkDescriptorSetLayout, MAX_DESCRIP
 
 class DescriptorPool;
 class DescriptorAllocator;
+class ComputePipelineImpl;
 struct DescriptorState
 {
     DescriptorPool* pool{nullptr};
     VkDescriptorSetArray sets{};  // Allocated VkDescriptorSets
     uint8_t descriptorSetCount{0};
     uint64_t progId{0};  // progId associated with this descriptor set
+    ComputePipelineImpl* computePipeline{nullptr};  // owning compute pipeline (compute path)
     uint16_t uniformDescriptorCount{0};
     uint16_t imageDescriptorCount{0};
     uint16_t samplerDescriptorCount{0};
     uint16_t combinedDescriptorCount{0};
+    uint16_t storageDescriptorCount{0};
 };
 
 using DescriptorList = tlx::pod_vector<DescriptorState*>;
@@ -83,6 +86,7 @@ struct PipelineLayoutState
     uint32_t samplerDescriptorCount{0};
     uint32_t combinedDescriptorCount{0};
     uint32_t uniformDescriptorCount{0};
+    uint32_t storageDescriptorCount{0};
 
     DescriptorList descriptorFreeList;  // recycled descriptor sets
 };
@@ -100,7 +104,8 @@ public:
                _freeUniformDescriptorCount >= layoutState->uniformDescriptorCount &&
                _freeImageDescriptorCount >= layoutState->imageDescriptorCount &&
                _freeSamplerDescriptorCount >= layoutState->samplerDescriptorCount &&
-               _freeCombinedDescriptorCount >= layoutState->combinedDescriptorCount;
+               _freeCombinedDescriptorCount >= layoutState->combinedDescriptorCount &&
+               _freeStorageDescriptorCount >= layoutState->storageDescriptorCount;
     }
     int available() const { return _freeSetCount > 0; }
     void allocateDescriptorSets(const PipelineLayoutState* layoutState, DescriptorState* descriptorState);
@@ -124,6 +129,8 @@ protected:
     int _freeImageDescriptorCount{0};
     int _maxCombinedDescriptorCount{0};
     int _freeCombinedDescriptorCount{0};
+    int _maxStorageDescriptorCount{0};
+    int _freeStorageDescriptorCount{0};
 };
 
 class DescriptorAllocator

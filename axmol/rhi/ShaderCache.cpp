@@ -70,6 +70,11 @@ rhi::ShaderModule* ShaderCache::acquireFragmentShaderModule(Data& shaderSource)
     return acquireShaderModule(rhi::ShaderStage::FRAGMENT, shaderSource);
 }
 
+rhi::ShaderModule* ShaderCache::acquireComputeShaderModule(Data& shaderSource)
+{
+    return acquireShaderModule(rhi::ShaderStage::COMPUTE, shaderSource);
+}
+
 rhi::ShaderModule* ShaderCache::acquireShaderModule(rhi::ShaderStage stage, Data& data)
 {
     const auto key  = XXH64(data.data(), data.size(), 0);

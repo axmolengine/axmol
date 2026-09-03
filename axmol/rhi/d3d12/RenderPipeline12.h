@@ -27,7 +27,14 @@
 #include "axmol/rhi/DXUtils.h"
 #include "axmol/tlx/hlookup.hpp"
 #include <d3d12.h>
+#include <map>
 #include <unordered_map>
+#include <vector>
+
+namespace ax::rhi
+{
+class ProgramState;
+}
 
 namespace ax::rhi::d3d12
 {
@@ -49,9 +56,9 @@ struct RootSignatureEntry
     UINT samplerRootIndex       = UINT_MAX;
     UINT customSamplerRootIndex = UINT_MAX;
 
-    // Custom sampler descriptor batch
-    DescriptorHandle* customSamplerBatch = nullptr;
-    uint32_t customSamplerBatchCount     = 0;
+    // Custom sampler descriptor batches, keyed by the effective sampler IDs.
+    uint32_t customSamplerBatchCount = 0;
+    std::map<std::vector<uint16_t>, DescriptorHandle*> customSamplerBatches;
 };
 
 /**
@@ -87,6 +94,7 @@ public:
 
     ID3D12PipelineState* getPipelineState() const { return _activePSO.Get(); }
     RootSignatureEntry* getRootSignature() const { return _activeRootSignature; }
+    const DescriptorHandle* getCustomSamplerBatch(const ::ax::rhi::ProgramState* programState);
 
     void removeCachedObjects(Program* key);
 

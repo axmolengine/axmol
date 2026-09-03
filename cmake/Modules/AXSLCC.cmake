@@ -46,6 +46,13 @@ define_property(SOURCE PROPERTY AXSLCC_OUTPUT
   BRIEF_DOCS "The compiled sources shader output path list"
   FULL_DOCS "The compiled shaders output list, seperated with comma")
 
+# PROPERTY: per-shader axslcc targets override (optional)
+# If set, overrides the backend-derived target list (e.g. gl-430;gles-310;d3d11)
+# for a specific shader source file.
+define_property(SOURCE PROPERTY AXSLCC_TARGETS
+  BRIEF_DOCS "Per-shader axslcc target override"
+  FULL_DOCS "Semicolon-separated axslcc target specs (e.g. gl-430;gles-310;d3d11) overriding the default target list for this shader")
+
 define_property(TARGET PROPERTY SHADER_DEPENDS
   BRIEF_DOCS "The shader depends of normal target"
   FULL_DOCS "The shader depends of normal target, seperated with comma")
@@ -146,7 +153,15 @@ function(ax_add_shader_target target_name)
 
     separate_arguments(AXSLCC_FLAGS_LIST NATIVE_COMMAND "${AXSLCC_FLAGS}")
     list(APPEND SC_FLAGS ${AXSLCC_FLAGS_LIST})
-    foreach(TARG ${TARGET_LIST})
+
+    # Per-shader target override, otherwise use the backend-derived target list.
+    set(SC_TARGET_LIST ${TARGET_LIST})
+    get_source_file_property(SOURCE_SC_TARGETS ${SC_FILE} AXSLCC_TARGETS)
+    if(NOT SOURCE_SC_TARGETS STREQUAL "NOTFOUND")
+      set(SC_TARGET_LIST ${SOURCE_SC_TARGETS})
+    endif()
+
+    foreach(TARG ${SC_TARGET_LIST})
       list(APPEND SC_FLAGS "-t" "${TARG}")
     endforeach()
 

@@ -190,6 +190,8 @@ void DescriptorPool::init(DescriptorAllocator* allocator, std::span<const VkDesc
             _freeSamplerDescriptorCount = _maxSamplerDescriptorCount = poolSize.descriptorCount;
         else if (poolSize.type == VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER)
             _freeCombinedDescriptorCount = _maxCombinedDescriptorCount = poolSize.descriptorCount;
+        else if (poolSize.type == VK_DESCRIPTOR_TYPE_STORAGE_BUFFER)
+            _freeStorageDescriptorCount = _maxStorageDescriptorCount = poolSize.descriptorCount;
     }
 }
 
@@ -205,6 +207,7 @@ void DescriptorPool::dispose()
     _freeImageDescriptorCount = _maxImageDescriptorCount = 0;
     _freeSamplerDescriptorCount = _maxSamplerDescriptorCount = 0;
     _freeCombinedDescriptorCount = _maxCombinedDescriptorCount = 0;
+    _freeStorageDescriptorCount = _maxStorageDescriptorCount = 0;
 }
 
 void DescriptorPool::allocateDescriptorSets(const PipelineLayoutState* layoutState, DescriptorState* descriptorState)
@@ -224,6 +227,7 @@ void DescriptorPool::allocateDescriptorSets(const PipelineLayoutState* layoutSta
     descriptorState->imageDescriptorCount    = static_cast<uint16_t>(layoutState->imageDescriptorCount);
     descriptorState->samplerDescriptorCount  = static_cast<uint16_t>(layoutState->samplerDescriptorCount);
     descriptorState->combinedDescriptorCount = static_cast<uint16_t>(layoutState->combinedDescriptorCount);
+    descriptorState->storageDescriptorCount  = static_cast<uint16_t>(layoutState->storageDescriptorCount);
 
     _freeSetCount -= layoutState->descriptorSetLayoutCount;
     _freeUniformDescriptorCount -= layoutState->uniformDescriptorCount;
@@ -232,6 +236,8 @@ void DescriptorPool::allocateDescriptorSets(const PipelineLayoutState* layoutSta
         _freeSamplerDescriptorCount -= layoutState->samplerDescriptorCount;
     if (layoutState->combinedDescriptorCount > 0)
         _freeCombinedDescriptorCount -= layoutState->combinedDescriptorCount;
+    if (layoutState->storageDescriptorCount > 0)
+        _freeStorageDescriptorCount -= layoutState->storageDescriptorCount;
 }
 
 void DescriptorPool::freeDescriptorSets(uint32_t descriptorSetCount, DescriptorState* descriptorState)
@@ -244,11 +250,13 @@ void DescriptorPool::freeDescriptorSets(uint32_t descriptorSetCount, DescriptorS
     _freeImageDescriptorCount += descriptorState->imageDescriptorCount;
     _freeSamplerDescriptorCount += descriptorState->samplerDescriptorCount;
     _freeCombinedDescriptorCount += descriptorState->combinedDescriptorCount;
+    _freeStorageDescriptorCount += descriptorState->storageDescriptorCount;
 
     descriptorState->uniformDescriptorCount  = 0;
     descriptorState->imageDescriptorCount    = 0;
     descriptorState->samplerDescriptorCount  = 0;
     descriptorState->combinedDescriptorCount = 0;
+    descriptorState->storageDescriptorCount  = 0;
     descriptorState->descriptorSetCount      = 0;
     descriptorState->progId                  = 0;
     descriptorState->pool                    = nullptr;
@@ -334,6 +342,7 @@ RenderPipelineImpl::RenderPipelineImpl(GraphicsDeviceImpl* driver) : _driver(dri
         {VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, DESCRIPTOR_POOL_MAX_SETS * DESCRIPTOR_POOL_SAMPLER_MULTIPLIER},
         {VK_DESCRIPTOR_TYPE_SAMPLER, DESCRIPTOR_POOL_MAX_SETS * DESCRIPTOR_POOL_SAMPLER_MULTIPLIER},
         {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, DESCRIPTOR_POOL_MAX_SETS * DESCRIPTOR_POOL_SAMPLER_MULTIPLIER},
+        {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, DESCRIPTOR_POOL_MAX_SETS * DESCRIPTOR_POOL_SAMPLER_MULTIPLIER},
     };
     _descriptorAllocator2.init(_device, poolSizes2);
 }
@@ -487,6 +496,18 @@ void RenderPipelineImpl::updatePipelineLayoutState(ProgramImpl* program)
         b.pImmutableSamplers            = nullptr;
 
         ++state.uniformDescriptorCount;
+    }
+
+    // Storage buffers (read by the GPU render VS/PS) share set 1 with textures.
+    for (auto& sb : program->getActiveStorageBufferInfos())
+    {
+        VkDescriptorSetLayoutBinding& b = resourceBindings.emplace_back();
+        b.binding                       = sb.binding;
+        b.descriptorType                = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+        b.descriptorCount               = 1;
+        b.stageFlags                    = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
+        b.pImmutableSamplers            = nullptr;
+        ++state.storageDescriptorCount;
     }
 
     const bool separateSamplers = !program->getActiveSamplerInfos().empty();

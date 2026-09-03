@@ -85,4 +85,10 @@ uint64_t GraphicsContext::getCompletedFenceValue() const
     return (std::numeric_limits<uint64_t>::max)();
 }
 
+bool GraphicsContext::dispatch(const ComputeDispatchDesc& desc)
+{
+    AX_UNUSED_PARAM(desc);
+    return false;
+}
+
 }  // namespace ax::rhi

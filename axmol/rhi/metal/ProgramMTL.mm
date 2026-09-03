@@ -37,4 +37,6 @@ namespace
 
 ProgramImpl::ProgramImpl(Data& vsData, Data& fsData) : Program(vsData, fsData) {}
 
+ProgramImpl::ProgramImpl(Data& csData) : Program(csData) {}
+
 }  // namespace ax::rhi::mtl

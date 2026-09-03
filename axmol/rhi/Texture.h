@@ -82,6 +82,7 @@ public:
 
     int getWidth() const { return static_cast<int>(_desc.width); }
     int getHeight() const { return static_cast<int>(_desc.height); }
+    int getDepth() const { return static_cast<int>(_desc.depth); }
     int getArraySize() const { return static_cast<int>(_desc.arraySize); }
     int getMipLevels() const { return static_cast<int>(_desc.mipLevels); }
 
@@ -126,6 +127,17 @@ public:
      */
     virtual void
     updateSubData(int xoffset, int yoffset, int width, int height, int level, const void* data, int layerIndex) = 0;
+
+    virtual void updateData3D(const void* data, int width, int height, int depth, int level);
+
+    virtual void updateSubData3D(int xoffset,
+                                 int yoffset,
+                                 int zoffset,
+                                 int width,
+                                 int height,
+                                 int depth,
+                                 int level,
+                                 const void* data);
 
     /**
      * Update a two-dimensional texture subimage in a compressed format

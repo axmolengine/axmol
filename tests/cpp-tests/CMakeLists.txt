@@ -4,6 +4,15 @@ set(APP_NAME cpp-tests)
 
 project(${APP_NAME})
 
+# Compute dispatch test shaders read storage buffers and need compute-capable GLSL/ESSL profiles.
+set_source_files_properties(
+  "${CMAKE_CURRENT_SOURCE_DIR}/Source/Shaders/compute_dispatch_cs.hlsl"
+  "${CMAKE_CURRENT_SOURCE_DIR}/Source/Shaders/compute_dispatch_vs.hlsl"
+  "${CMAKE_CURRENT_SOURCE_DIR}/Source/Shaders/compute_dispatch_ps.hlsl"
+  PROPERTIES
+    AXSLCC_TARGETS "gl-430;gles-310;d3d11;d3d12;vk;mtl"
+)
+
 if(NOT DEFINED BUILD_ENGINE_DONE)
   if(XCODE)
     set(CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY TRUE)
@@ -214,8 +223,9 @@ list(APPEND GAME_HEADER
   Source/SchedulerTest/SchedulerTest.h
   Source/MultiTouchTest/MultiTouchTest.h
   Source/testResource.h
-  Source/ShaderTest/ShaderTest.h
-  Source/ShaderTest/ShaderTest2.h
+Source/ShaderTest/ShaderTest.h
+Source/ShaderTest/ShaderTest2.h
+Source/ShaderTest/ComputeShaderTest.h
   Source/RendererTest/RendererTest.h
   Source/SpritePolygonTest/SpritePolygonTest.h
   Source/TexturePackerEncryptionTest/TextureAtlasEncryptionTest.h
@@ -300,8 +310,9 @@ list(APPEND GAME_SOURCE
   Source/RotateWorldTest/RotateWorldTest.cpp
   Source/SceneTest/SceneTest.cpp
   Source/SchedulerTest/SchedulerTest.cpp
-  Source/ShaderTest/ShaderTest.cpp
-  Source/ShaderTest/ShaderTest2.cpp
+Source/ShaderTest/ShaderTest.cpp
+Source/ShaderTest/ShaderTest2.cpp
+Source/ShaderTest/ComputeShaderTest.cpp
   Source/SpineTest/SpineTest.cpp
   Source/Scene3DTest/Scene3DTest.cpp
   Source/MeshRendererTest/DrawNode3D.cpp

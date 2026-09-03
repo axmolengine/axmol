@@ -32,12 +32,18 @@ namespace ax::rhi
 {
 using namespace ::axslc;
 
-static bool matchLang(int currentLang, int currentProfile, int lang, int profile)
+static bool isCompatibleTarget(int currentLang, int currentProfile, int lang, int profile)
 {
-    if (currentLang == ShaderLang::SHADER_LANG_HLSL)
-        return currentLang == lang && currentProfile == profile;
+    if (currentLang != lang)
+        return false;
 
-    return currentLang == lang;
+    if (currentLang == ShaderLang::SHADER_LANG_HLSL)
+        return currentProfile == profile;
+
+    // Source-based backends can consume an older profile on a newer device.
+    // This keeps ordinary GLSL 330 / ESSL 300 archives usable on compute-capable
+    // GL 4.3 / GLES 3.1 contexts while rejecting profiles the context cannot run.
+    return profile <= currentProfile;
 }
 
 ShaderStage ShaderModule::getShaderStage() const
@@ -81,6 +87,8 @@ void ShaderModule::parseShaderCode(void)
     const auto currentProfileVer = GraphicsCore::shaderProfile();
     const auto bcProfile         = GraphicsCore::shaderILProfile();
 
+    int selectedProfile = -1;
+    bool selectedPrecompiled = false;
     for (int i = 0; i < chunk.num_targets; ++i)
     {
         auto lang        = ibs.read<int>();
@@ -88,20 +96,22 @@ void ShaderModule::parseShaderCode(void)
         bool precompiled = (profile_ver & SC_BYTECODE_FLAG) != 0;
         int profile      = profile_ver & ~SC_BYTECODE_FLAG;
         int expect       = precompiled ? bcProfile : currentProfileVer;
+        auto stageOffset = ibs.read<uint32_t>();
 
-        if (matchLang(shaderLanguage, expect, lang, profile))
+        if (isCompatibleTarget(shaderLanguage, expect, lang, profile) &&
+            (profile > selectedProfile || (profile == selectedProfile && precompiled && !selectedPrecompiled)))
         {
-            _stageOffset = ibs.read<uint32_t>();
-            _precompiled = precompiled;
-            break;
+            _stageOffset         = stageOffset;
+            _precompiled         = precompiled;
+            selectedProfile      = profile;
+            selectedPrecompiled  = precompiled;
         }
-        else
-            ibs.advance(static_cast<ptrdiff_t>(sizeof(uint32_t)));
     }
     if (!_stageOffset)
     {
         AXLOGE("Can't find stag chunk, lang={}, profile_ver={}", shaderLanguage, currentProfileVer);
         assert(false && "axmol: Can't find stag chunk");
+        return;
     }
 
     ibs.seek(_stageOffset, SEEK_SET);
@@ -119,6 +129,8 @@ void ShaderModule::parseShaderCode(void)
         ref_stage = ShaderStage::VERTEX;
     else if (stage_id == SC_STAGE_FRAGMENT)
         ref_stage = ShaderStage::FRAGMENT;
+    else if (stage_id == SC_STAGE_COMPUTE)
+        ref_stage = ShaderStage::COMPUTE;
 
     assert(ref_stage == _stage && "Shader stage mismatch in axslc chunk");
 

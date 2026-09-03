@@ -31,6 +31,7 @@
 #include "axmol/rhi/vulkan/TextureVK.h"
 #include "axmol/rhi/vulkan/UtilsVK.h"
 #include "axmol/rhi/vulkan/GraphicsDeviceVK.h"
+#include "axmol/rhi/vulkan/ComputePipelineVK.h"
 #include "axmol/rhi/vulkan/SemaphorePoolVK.h"
 #include "axmol/rhi/GraphicsCore.h"
 #include "axmol/rhi/SamplerRegistry.h"
@@ -159,7 +160,9 @@ GraphicsContextImpl::GraphicsContextImpl(GraphicsDeviceImpl* driver, SurfaceHand
     _descriptorImageInfosPerFrame.reserve(16);
 
     // Create per-frame uniform ring buffers (capacity can be tuned)
-    createUniformRingBuffers(2 * 1024 * 1024);  // 2 MB per frame
+    // Match the D3D12 per-frame budget. Effekseer's default GPU particle
+    // settings can consume over 1 MB of aligned uniform slices on their own.
+    createUniformRingBuffers(4 * 1024 * 1024);  // 4 MB per frame
 }
 
 GraphicsContextImpl::~GraphicsContextImpl()
@@ -171,6 +174,16 @@ GraphicsContextImpl::~GraphicsContextImpl()
     {
         _renderPipeline->recycleDescriptorStates(descriptorStates, false);
         descriptorStates.clear();
+    }
+    for (auto& computeDescriptorStates : _inFlightComputeDescriptorStates)
+    {
+        for (auto& entry : computeDescriptorStates)
+        {
+            auto descriptorState = entry.descriptorState;
+            if (descriptorState && descriptorState->pool)
+                descriptorState->pool->getAllocator()->freeDescriptorSets(descriptorState);
+        }
+        computeDescriptorStates.clear();
     }
 
     AX_SAFE_RELEASE_NULL(_screenRT);
@@ -583,6 +596,19 @@ bool GraphicsContextImpl::beginFrame()
     _renderPipeline->recycleDescriptorStates(descriptorStates, true);
     descriptorStates.clear();
 
+    auto& computeDescriptorStates = _inFlightComputeDescriptorStates[_frameIndex];
+    for (auto& entry : computeDescriptorStates)
+    {
+        auto descriptorState = entry.descriptorState;
+        if (!descriptorState)
+            continue;
+        if (entry.pipeline)
+            entry.pipeline->recycleDescriptorState(descriptorState);
+        else if (descriptorState->pool)
+            descriptorState->pool->getAllocator()->freeDescriptorSets(descriptorState);
+    }
+    computeDescriptorStates.clear();
+
     VkCommandBufferBeginInfo const binfo{
         .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
         .flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT,
@@ -951,7 +977,12 @@ void GraphicsContextImpl::setIndexBuffer(Buffer* buffer)
 
 void GraphicsContextImpl::setInstanceBuffer(Buffer* buffer)
 {
-    if (!buffer || _instanceBuffer == buffer)
+    if (!buffer)
+    {
+        AX_SAFE_RELEASE_NULL(_instanceBuffer);
+        return;
+    }
+    if (_instanceBuffer == buffer)
         return;
     buffer->retain();
     AX_SAFE_RELEASE(_instanceBuffer);
@@ -1062,19 +1093,27 @@ void GraphicsContextImpl::prepareDrawing()
     auto& descriptorSets = descriptorState->sets;
 
     assert(descriptorSets[SET_INDEX_UBO]);
-    if (descriptorState->imageDescriptorCount || descriptorState->combinedDescriptorCount)
+    if (descriptorState->imageDescriptorCount || descriptorState->combinedDescriptorCount ||
+        descriptorState->storageDescriptorCount)
         assert(descriptorSets[SET_INDEX_RESOURCE]);
     if (descriptorState->samplerDescriptorCount)
         assert(descriptorSets[SET_INDEX_RESOURCE]);
+    const auto& activeSamplerInfos = _programState->getProgram()->getActiveSamplerInfos();
+    if (std::any_of(activeSamplerInfos.begin(), activeSamplerInfos.end(), [](const SamplerBindingInfo& sampler) {
+            return sampler.presetIndex < 0;
+        }))
+        assert(descriptorSets[SET_INDEX_CUSTOM_SAMPLER]);
 
-    // Prepare write lists sized to expected UBO + sampler descriptors
+    // Descriptor writes keep pointers into the buffer/image info vectors.
+    // Reserve the complete reflected count up front so those pointers remain stable.
     auto& writes = _descriptorWritesPerFrame;
     writes.clear();
     writes.reserve(descriptorState->uniformDescriptorCount + descriptorState->imageDescriptorCount +
-                   descriptorState->samplerDescriptorCount + descriptorState->combinedDescriptorCount);
+                   descriptorState->samplerDescriptorCount + descriptorState->combinedDescriptorCount +
+                   descriptorState->storageDescriptorCount);
 
     _descriptorBufferInfos.clear();
-    _descriptorBufferInfos.reserve(descriptorState->uniformDescriptorCount);
+    _descriptorBufferInfos.reserve(descriptorState->uniformDescriptorCount + descriptorState->storageDescriptorCount);
 
     auto& cpuBuffer = _programState->getUniformBuffer();
     if (!cpuBuffer.empty())
@@ -1101,7 +1140,28 @@ void GraphicsContextImpl::prepareDrawing()
         }
     }
 
-    const auto& activeSamplerInfos = _programState->getProgram()->getActiveSamplerInfos();
+    // Storage buffers (read by the GPU render VS/PS) -> set 1, STORAGE_BUFFER.
+    for (const auto& [binding, bindingSet] : _programState->getStorageBufferBindingSets())
+    {
+        if (!bindingSet.buffer)
+            continue;
+        auto bufferImpl = static_cast<BufferImpl*>(bindingSet.buffer);
+        bufferImpl->setLastFenceValue(_frameFenceValue);
+
+        VkWriteDescriptorSet& write        = writes.emplace_back();
+        VkDescriptorBufferInfo& bufferInfo = _descriptorBufferInfos.emplace_back();
+        bufferInfo.buffer = bufferImpl->internalHandle();
+        bufferInfo.offset = 0;
+        bufferInfo.range  = VK_WHOLE_SIZE;
+
+        write.sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+        write.dstSet          = descriptorSets[SET_INDEX_RESOURCE];
+        write.dstBinding      = static_cast<uint32_t>(binding);
+        write.descriptorType  = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+        write.descriptorCount = 1;
+        write.pBufferInfo     = &bufferInfo;
+    }
+
     const bool separateSamplers    = !activeSamplerInfos.empty();
 
     // --- Sampled images / combined image samplers (set=1, binding=N) ---
@@ -1161,7 +1221,14 @@ void GraphicsContextImpl::prepareDrawing()
             if (!samplerInfo.samplerId)
                 continue;
 
-            auto samplerHandle = SamplerRegistry::getInstance()->getSampler(samplerInfo.samplerId);
+            auto samplerId = samplerInfo.samplerId;
+            if (samplerInfo.presetIndex < 0)
+            {
+                if (auto overrideId = _programState->getSamplerOverride(samplerInfo.binding))
+                    samplerId = overrideId;
+            }
+
+            auto samplerHandle = SamplerRegistry::getInstance()->getSampler(samplerId);
             if (!samplerHandle)
                 continue;
 
@@ -1180,6 +1247,11 @@ void GraphicsContextImpl::prepareDrawing()
             // Both have DXC-shifted bindings from SPIR-V.
             auto dstSet = samplerInfo.presetIndex >= 0 ? descriptorSets[SET_INDEX_RESOURCE]
                                                        : descriptorSets[SET_INDEX_CUSTOM_SAMPLER];
+            if (!dstSet)
+            {
+                AXASSERT(false, "Missing Vulkan sampler descriptor set");
+                continue;
+            }
 
             VkWriteDescriptorSet& write = writes.emplace_back();
             write.sType                 = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
@@ -1221,6 +1293,283 @@ void GraphicsContextImpl::drawArrays(size_t start, size_t count, bool /*wirefram
 {
     prepareDrawing();
     vkCmdDraw(_currentCmdBuffer, static_cast<uint32_t>(count), 1, static_cast<uint32_t>(start), 0);
+}
+
+bool GraphicsContextImpl::dispatch(const ComputeDispatchDesc& desc)
+{
+    if (!desc.programState || !desc.pipeline)
+        return false;
+
+    auto* pipelineProgram = desc.pipeline->getProgram();
+    if (!pipelineProgram || pipelineProgram != desc.programState->getProgram())
+    {
+        AXASSERT(false, "ComputePipeline and ProgramState program mismatch");
+        return false;
+    }
+
+    auto program = static_cast<ProgramImpl*>(pipelineProgram);
+    if (!program || !program->getCSModule())
+        return false;
+
+    const auto& storageBindings = desc.programState->getStorageBufferBindingSets();
+    for (const auto& storageInfo : program->getActiveStorageBufferInfos())
+    {
+        auto binding = storageBindings.find(storageInfo.binding);
+        if (binding == storageBindings.end() || !binding->second.buffer)
+        {
+            AXLOGE("Missing Vulkan compute storage buffer binding {} ({})", storageInfo.binding, storageInfo.name);
+            AXASSERT(false, "Missing Vulkan compute storage buffer binding");
+            return false;
+        }
+        if (binding->second.access != storageInfo.access)
+        {
+            AXLOGE("Vulkan compute storage buffer binding {} has incompatible access", storageInfo.binding);
+            AXASSERT(false, "Vulkan compute storage buffer access mismatch");
+            return false;
+        }
+
+        auto bufferImpl = static_cast<BufferImpl*>(binding->second.buffer);
+        if (storageInfo.access == BufferAccess::READ_WRITE)
+            bufferImpl->updateIndex();
+        if (bufferImpl->internalHandle() == VK_NULL_HANDLE)
+        {
+            AXLOGE("Vulkan compute storage buffer binding {} has no native buffer", storageInfo.binding);
+            AXASSERT(false, "Vulkan compute storage buffer has no native buffer");
+            return false;
+        }
+        if (storageInfo.sizeBytes != 0 && bufferImpl->getSize() < storageInfo.sizeBytes)
+        {
+            AXLOGE("Vulkan compute storage buffer binding {} is smaller than reflected size {}", storageInfo.binding,
+                   storageInfo.sizeBytes);
+            AXASSERT(false, "Vulkan compute storage buffer is too small");
+            return false;
+        }
+    }
+
+    auto* computePipeline = static_cast<ComputePipelineImpl*>(desc.pipeline);
+    if (computePipeline->getPipeline() == VK_NULL_HANDLE)
+        return false;
+
+    _programState = desc.programState;
+
+    // A particle buffer is read by the render VS and written again by compute
+    // on the next frame. Order that read-to-write transition explicitly; the
+    // post-dispatch barrier below handles compute writes consumed later.
+    tlx::pod_vector<VkBufferMemoryBarrier> preBarriers;
+    for (const auto& [binding, bindingSet] : storageBindings)
+    {
+        if (!bindingSet.buffer || bindingSet.access != BufferAccess::READ_WRITE)
+            continue;
+        auto bufferImpl = static_cast<BufferImpl*>(bindingSet.buffer);
+        VkBufferMemoryBarrier& barrier = preBarriers.emplace_back();
+        barrier.sType               = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
+        barrier.srcAccessMask       = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;
+        barrier.dstAccessMask       = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;
+        barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+        barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+        barrier.buffer              = bufferImpl->internalHandle();
+        barrier.offset              = 0;
+        barrier.size                = VK_WHOLE_SIZE;
+    }
+    if (!preBarriers.empty())
+    {
+        vkCmdPipelineBarrier(_currentCmdBuffer,
+                             VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT | VK_PIPELINE_STAGE_VERTEX_SHADER_BIT |
+                                 VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+                             VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 0, 0, nullptr,
+                             static_cast<uint32_t>(preBarriers.size()), preBarriers.data(), 0, nullptr);
+    }
+
+    auto descriptorState = computePipeline->acquireDescriptorState();
+    _inFlightComputeDescriptorStates[_frameIndex].emplace_back(
+        InFlightComputeDescriptorState{RefPtr<ComputePipelineImpl>(computePipeline), descriptorState});
+    auto& descriptorSets = descriptorState->sets;
+
+    if (descriptorState->uniformDescriptorCount)
+        AXASSERT(descriptorSets[SET_INDEX_UBO], "Missing Vulkan compute uniform descriptor set");
+    if (descriptorState->imageDescriptorCount || descriptorState->combinedDescriptorCount ||
+        descriptorState->storageDescriptorCount)
+        AXASSERT(descriptorSets[SET_INDEX_RESOURCE], "Missing Vulkan compute resource descriptor set");
+    const auto& computeSamplerInfos = program->getActiveSamplerInfos();
+    if (std::any_of(computeSamplerInfos.begin(), computeSamplerInfos.end(), [](const SamplerBindingInfo& sampler) {
+            return sampler.presetIndex < 0;
+        }))
+        AXASSERT(descriptorSets[SET_INDEX_CUSTOM_SAMPLER], "Missing Vulkan compute custom sampler descriptor set");
+
+    _descriptorWritesPerFrame.clear();
+    _descriptorWritesPerFrame.reserve(descriptorState->uniformDescriptorCount + descriptorState->imageDescriptorCount +
+                                      descriptorState->samplerDescriptorCount +
+                                      descriptorState->combinedDescriptorCount +
+                                      descriptorState->storageDescriptorCount);
+    _descriptorBufferInfos.clear();
+    _descriptorBufferInfos.reserve(descriptorState->uniformDescriptorCount +
+                                   descriptorState->storageDescriptorCount);
+    auto& writes = _descriptorWritesPerFrame;
+
+    // UBOs from the uniform ring buffer.
+    auto& cpuBuffer = desc.programState->getUniformBuffer();
+    if (!cpuBuffer.empty())
+    {
+        auto bufferPtr = cpuBuffer.data();
+        for (auto& uboInfo : desc.programState->getActiveUniformBlockInfos())
+        {
+            UniformSlice s = allocateUniformSlice(uboInfo.sizeBytes);
+            ::memcpy(s.cpuPtr, bufferPtr + uboInfo.cpuOffset, uboInfo.sizeBytes);
+
+            VkWriteDescriptorSet& write        = writes.emplace_back();
+            VkDescriptorBufferInfo& bufferInfo = _descriptorBufferInfos.emplace_back();
+            bufferInfo.buffer = _uniformRings[_frameIndex].buffer;
+            bufferInfo.offset = static_cast<VkDeviceSize>(s.offset);
+            bufferInfo.range  = static_cast<VkDeviceSize>(uboInfo.sizeBytes);
+
+            write.sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+            write.dstSet          = descriptorSets[SET_INDEX_UBO];
+            write.dstBinding      = uboInfo.binding;
+            write.descriptorType  = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+            write.descriptorCount = 1;
+            write.pBufferInfo     = &bufferInfo;
+        }
+    }
+
+    // Storage buffers -> set 1, STORAGE_BUFFER.
+    for (const auto& [binding, bindingSet] : desc.programState->getStorageBufferBindingSets())
+    {
+        if (!bindingSet.buffer)
+            continue;
+        auto bufferImpl = static_cast<BufferImpl*>(bindingSet.buffer);
+        bufferImpl->setLastFenceValue(_frameFenceValue);
+
+        VkWriteDescriptorSet& write        = writes.emplace_back();
+        VkDescriptorBufferInfo& bufferInfo = _descriptorBufferInfos.emplace_back();
+        bufferInfo.buffer = bufferImpl->internalHandle();
+        bufferInfo.offset = 0;
+        bufferInfo.range  = VK_WHOLE_SIZE;
+
+        write.sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+        write.dstSet          = descriptorSets[SET_INDEX_RESOURCE];
+        write.dstBinding      = static_cast<uint32_t>(binding);
+        write.descriptorType  = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+        write.descriptorCount = 1;
+        write.pBufferInfo     = &bufferInfo;
+    }
+
+    // Textures -> set 1, SAMPLED_IMAGE / COMBINED_IMAGE_SAMPLER.
+    const auto& activeSamplerInfos = computeSamplerInfos;
+    const bool separateSamplers    = !activeSamplerInfos.empty();
+    auto& imageInfos               = _descriptorImageInfosPerFrame;
+    imageInfos.clear();
+    imageInfos.reserve(descriptorState->imageDescriptorCount + descriptorState->samplerDescriptorCount +
+                       descriptorState->combinedDescriptorCount);
+
+    for (const auto& [bindingIndex, bindingSet] : desc.programState->getTextureBindingSets())
+    {
+        const auto& texs = bindingSet.texs;
+        if (texs.empty())
+            continue;
+
+        const size_t offset = imageInfos.size();
+        for (auto tex : texs)
+        {
+            auto textureImpl      = static_cast<TextureImpl*>(tex);
+            auto& imageInfo       = imageInfos.emplace_back();
+            imageInfo.sampler     = separateSamplers ? VK_NULL_HANDLE : textureImpl->getSampler();
+            imageInfo.imageView   = textureImpl->internalHandle().view;
+            imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            textureImpl->setLastFenceValue(_frameFenceValue);
+        }
+
+        VkWriteDescriptorSet& write = writes.emplace_back();
+        write.sType                 = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+        write.dstSet                = descriptorSets[SET_INDEX_RESOURCE];
+        write.dstBinding            = bindingIndex;
+        write.descriptorType =
+            separateSamplers ? VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE : VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+        write.descriptorCount = static_cast<uint32_t>(texs.size());
+        write.pImageInfo      = imageInfos.data() + offset;
+    }
+
+    // Samplers.
+    if (separateSamplers)
+    {
+        for (const auto& samplerInfo : activeSamplerInfos)
+        {
+            if (!samplerInfo.samplerId)
+                continue;
+
+            auto samplerId = samplerInfo.samplerId;
+            if (samplerInfo.presetIndex < 0)
+            {
+                if (auto overrideId = _programState->getSamplerOverride(samplerInfo.binding))
+                    samplerId = overrideId;
+            }
+
+            auto samplerHandle = SamplerRegistry::getInstance()->getSampler(samplerId);
+            if (!samplerHandle)
+                continue;
+            auto sampler = static_cast<VkSampler>(samplerHandle);
+
+            const size_t offset = imageInfos.size();
+            for (uint16_t i = 0; i < samplerInfo.count; ++i)
+            {
+                auto& imageInfo   = imageInfos.emplace_back();
+                imageInfo.sampler = sampler;
+            }
+
+            auto dstSet = samplerInfo.presetIndex >= 0 ? descriptorSets[SET_INDEX_RESOURCE]
+                                                       : descriptorSets[SET_INDEX_CUSTOM_SAMPLER];
+            if (!dstSet)
+                continue;
+
+            VkWriteDescriptorSet& write = writes.emplace_back();
+            write.sType                 = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+            write.dstSet                = dstSet;
+            write.dstBinding            = samplerInfo.binding;
+            write.descriptorType        = VK_DESCRIPTOR_TYPE_SAMPLER;
+            write.descriptorCount       = static_cast<uint32_t>(samplerInfo.count);
+            write.pImageInfo            = imageInfos.data() + offset;
+        }
+    }
+
+    if (!writes.empty())
+        vkUpdateDescriptorSets(_device, static_cast<uint32_t>(writes.size()), writes.data(), 0, nullptr);
+
+    vkCmdBindPipeline(_currentCmdBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, computePipeline->getPipeline());
+    // Compute uses the same command buffer: invalidate the graphics pipeline
+    // cache so a later draw re-binds its graphics pipeline.
+    _boundPipeline = VK_NULL_HANDLE;
+    auto layoutState = computePipeline->getLayoutState();
+    vkCmdBindDescriptorSets(_currentCmdBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, layoutState->layout, 0,
+                            layoutState->descriptorSetLayoutCount, descriptorSets.data(), 0, nullptr);
+
+    vkCmdDispatch(_currentCmdBuffer, desc.groupCountX, desc.groupCountY, desc.groupCountZ);
+
+    // Make compute writes visible to subsequent compute/vertex/fragment reads.
+    tlx::pod_vector<VkBufferMemoryBarrier> barriers;
+    for (const auto& [binding, bindingSet] : desc.programState->getStorageBufferBindingSets())
+    {
+        if (!bindingSet.buffer || bindingSet.access != BufferAccess::READ_WRITE)
+            continue;
+        auto bufferImpl  = static_cast<BufferImpl*>(bindingSet.buffer);
+        VkBufferMemoryBarrier& barrier = barriers.emplace_back();
+        barrier.sType               = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
+        barrier.srcAccessMask       = VK_ACCESS_SHADER_WRITE_BIT;
+        barrier.dstAccessMask       = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;
+        barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+        barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+        barrier.buffer              = bufferImpl->internalHandle();
+        barrier.offset              = 0;
+        barrier.size                = VK_WHOLE_SIZE;
+    }
+    if (!barriers.empty())
+    {
+        vkCmdPipelineBarrier(_currentCmdBuffer, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+                             VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT | VK_PIPELINE_STAGE_VERTEX_SHADER_BIT |
+                                 VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+                             0, 0, nullptr, static_cast<uint32_t>(barriers.size()), barriers.data(), 0, nullptr);
+    }
+
+    _programState = nullptr;
+    return true;
 }
 
 void GraphicsContextImpl::drawArraysInstanced(size_t start, size_t count, int instanceCount, bool /*wireframe*/)

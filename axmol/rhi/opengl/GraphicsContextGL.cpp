@@ -34,6 +34,7 @@
 #include "axmol/rhi/opengl/RenderTargetGL.h"
 #include "axmol/rhi/opengl/GraphicsDeviceGL.h"
 #include "axmol/rhi/opengl/VertexLayoutGL.h"
+#include "axmol/rhi/opengl/ComputePipelineGL.h"
 #include "axmol/rhi/SamplerRegistry.h"
 #include "axmol/rhi/RHIUtils.h"
 
@@ -219,8 +220,12 @@ void GraphicsContextImpl::setIndexBuffer(Buffer* buffer)
 
 void GraphicsContextImpl::setInstanceBuffer(Buffer* buffer)
 {
-    assert(buffer != nullptr);
-    if (buffer == nullptr || _instanceBuffer == buffer)
+    if (buffer == nullptr)
+    {
+        AX_SAFE_RELEASE_NULL(_instanceBuffer);
+        return;
+    }
+    if (_instanceBuffer == buffer)
         return;
 
     buffer->retain();
@@ -405,6 +410,12 @@ void GraphicsContextImpl::bindUniforms(ProgramImpl* program) const
             for (const auto& [bindingIndex, bindingSet] : _programState->getTextureBindingSets())
             {
                 auto samplerId = program->getTextureSampler(bindingIndex);
+                auto samplerLocation = program->getTextureSamplerLocation(bindingIndex);
+                if (samplerLocation && samplerLocation.space == axslc::kCustomSamplerDescriptorSet)
+                {
+                    if (auto overrideId = _programState->getSamplerOverride(samplerLocation.binding))
+                        samplerId = overrideId;
+                }
                 if (!samplerId)
                     continue;
 
@@ -417,6 +428,17 @@ void GraphicsContextImpl::bindUniforms(ProgramImpl* program) const
                     __state->bindSampler(slot, glSampler);
             }
         }
+
+#if AX_GL_HAS_COMPUTE
+        // Bind storage buffers (SSBO) read by the GPU render vertex/fragment stages.
+        for (const auto& [binding, bindingSet] : _programState->getStorageBufferBindingSets())
+        {
+            if (!bindingSet.buffer)
+                continue;
+            auto ssbo = static_cast<BufferImpl*>(bindingSet.buffer)->internalHandle();
+            glBindBufferBase(GL_SHADER_STORAGE_BUFFER, binding, ssbo);
+        }
+#endif
     }
 }
 
@@ -637,6 +659,64 @@ bool GraphicsContextImpl::copyTexture(RenderTarget* src, Texture* dst)
     CHECK_GL_ERROR_DEBUG();
 
     return framebufferComplete;
+}
+
+bool GraphicsContextImpl::dispatch(const ComputeDispatchDesc& desc)
+{
+#if AX_GL_HAS_COMPUTE
+    if (!desc.programState || !desc.pipeline)
+        return false;
+
+    auto* pipelineProgram = desc.pipeline->getProgram();
+    if (!pipelineProgram || pipelineProgram != desc.programState->getProgram())
+    {
+        AXASSERT(false, "ComputePipeline and ProgramState program mismatch");
+        return false;
+    }
+
+    auto program = static_cast<ProgramImpl*>(pipelineProgram);
+    if (!program || !program->getCSModule())
+        return false;
+
+    _programState = desc.programState;
+
+    __state->useProgram(program->internalHandle());
+
+    // Uniform buffers + textures + samplers (reuses the ProgramState bound above)
+    bindUniforms(program);
+
+    // Bind storage buffers (SSBO) at their reflected binding indices.
+    for (const auto& [binding, bindingSet] : desc.programState->getStorageBufferBindingSets())
+    {
+        if (!bindingSet.buffer)
+            continue;
+        auto ssbo = static_cast<BufferImpl*>(bindingSet.buffer)->internalHandle();
+        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, binding, ssbo);
+    }
+
+    CHECK_GL_ERROR_DEBUG();
+
+    dispatchCompute(desc.groupCountX, desc.groupCountY, desc.groupCountZ);
+
+    // Make compute writes visible to subsequent compute/vertex/fragment reads.
+    memoryBarrier(GL_ALL_BARRIER_BITS);
+
+    // Unbind storage buffers to avoid stale SSBO bindings leaking into later draws.
+    for (const auto& [binding, bindingSet] : desc.programState->getStorageBufferBindingSets())
+    {
+        if (!bindingSet.buffer)
+            continue;
+        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, binding, 0);
+    }
+
+    CHECK_GL_ERROR_DEBUG();
+
+    cleanResources();
+    return true;
+#else
+    AX_UNUSED_PARAM(desc);
+    return false;
+#endif
 }
 
 }  // namespace ax::rhi::gl

@@ -28,6 +28,7 @@
 #include "axmol/platform/PlatformMacros.h"
 #include "axmol/base/Macros.h"
 #include "axmol/tlx/utility.hpp"
+#include "axmol/rhi/opengl/OpenGLState.h"
 
 namespace ax::rhi::gl
 {
@@ -49,7 +50,9 @@ void ShaderModuleImpl::recompileShader()
 
 void ShaderModuleImpl::compileShader()
 {
-    GLenum shaderType = _stage == ShaderStage::VERTEX ? GL_VERTEX_SHADER : GL_FRAGMENT_SHADER;
+    GLenum shaderType = _stage == ShaderStage::VERTEX   ? GL_VERTEX_SHADER
+                        : _stage == ShaderStage::FRAGMENT ? GL_FRAGMENT_SHADER
+                                                          : GL_COMPUTE_SHADER;
     _shader           = glCreateShader(shaderType);
     if (!_shader)
         return;

@@ -16,9 +16,15 @@ target_include_directories(${PROJECT_NAME}
     ${CMAKE_CURRENT_SOURCE_DIR}/../EffekseerRendererAxmol
 )
 
+if(ANDROID)
+  set(_LINK_SCOPE PUBLIC)
+else()
+  set(_LINK_SCOPE)
+endif()
 target_link_libraries(${PROJECT_NAME}
-    Effekseer
-    EffekseerRendererCommon
+  ${_LINK_SCOPE}
+  Effekseer
+  EffekseerRendererCommon
 )
 
 ax_add_shader_dependencies(${PROJECT_NAME} Effekseer_shaders)

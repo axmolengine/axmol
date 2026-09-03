@@ -45,6 +45,31 @@ void Texture::updateTextureDesc(const TextureDesc& desc)
 
 void Texture::invalidate() {}
 
+void Texture::updateData3D(const void* data, int width, int height, int depth, int level)
+{
+    updateSubData3D(0, 0, 0, width, height, depth, level, data);
+}
+
+void Texture::updateSubData3D(int xoffset,
+                              int yoffset,
+                              int zoffset,
+                              int width,
+                              int height,
+                              int depth,
+                              int level,
+                              const void* data)
+{
+    AX_UNUSED_PARAM(xoffset);
+    AX_UNUSED_PARAM(yoffset);
+    AX_UNUSED_PARAM(zoffset);
+    AX_UNUSED_PARAM(width);
+    AX_UNUSED_PARAM(height);
+    AX_UNUSED_PARAM(depth);
+    AX_UNUSED_PARAM(level);
+    AX_UNUSED_PARAM(data);
+    AXASSERT(false, "Texture3D upload is not implemented by this backend");
+}
+
 void Texture::zeroTexData()
 {
     if (!RHIUtils::isCompressed(_desc.pixelFormat))

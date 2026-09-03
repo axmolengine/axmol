@@ -168,6 +168,8 @@ public:
     bool copyTexture(RenderTarget* src, Texture* dst) override;
     bool copyTexture(Texture* src, Texture* dst) override;
 
+    bool dispatch(const ComputeDispatchDesc& desc) override;
+
     void readPixels(RenderTarget* rt,
                     int x,
                     int y,
