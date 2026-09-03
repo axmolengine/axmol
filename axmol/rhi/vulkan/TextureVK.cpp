@@ -444,10 +444,9 @@ void TextureImpl::updateSubData3D(int xoffset,
     if (!data)
         return;
 
-    const uint32_t rowPitch   = ax::rhi::RHIUtils::computeRowPitch(_desc.pixelFormat, width);
-    const uint32_t slicePitch = rowPitch * static_cast<uint32_t>(height);
-    const VkDeviceSize uploadSize =
-        static_cast<VkDeviceSize>(slicePitch) * static_cast<VkDeviceSize>(depth);
+    const uint32_t rowPitch       = ax::rhi::RHIUtils::computeRowPitch(_desc.pixelFormat, width);
+    const uint32_t slicePitch     = rowPitch * static_cast<uint32_t>(height);
+    const VkDeviceSize uploadSize = static_cast<VkDeviceSize>(slicePitch) * static_cast<VkDeviceSize>(depth);
 
     VkBuffer stagingBuffer{};
     VkDeviceMemory stagingMemory{};
@@ -485,17 +484,15 @@ void TextureImpl::updateSubData3D(int xoffset,
     transitionImageLayout(submission, _nativeTexture.image, oldLayout, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, range);
 
     VkBufferImageCopy region{};
-    region.bufferOffset              = 0;
-    region.bufferRowLength           = 0;
-    region.bufferImageHeight         = 0;
+    region.bufferOffset                    = 0;
+    region.bufferRowLength                 = 0;
+    region.bufferImageHeight               = 0;
     region.imageSubresource.aspectMask     = range.aspectMask;
     region.imageSubresource.mipLevel       = range.baseMipLevel;
     region.imageSubresource.baseArrayLayer = 0;
     region.imageSubresource.layerCount     = 1;
-    region.imageOffset = {static_cast<int32_t>(xoffset), static_cast<int32_t>(yoffset),
-                          static_cast<int32_t>(zoffset)};
-    region.imageExtent = {static_cast<uint32_t>(width), static_cast<uint32_t>(height),
-                          static_cast<uint32_t>(depth)};
+    region.imageOffset = {static_cast<int32_t>(xoffset), static_cast<int32_t>(yoffset), static_cast<int32_t>(zoffset)};
+    region.imageExtent = {static_cast<uint32_t>(width), static_cast<uint32_t>(height), static_cast<uint32_t>(depth)};
 
     vkCmdCopyBufferToImage(submission, stagingBuffer, _nativeTexture.image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1,
                            &region);

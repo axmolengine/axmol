@@ -43,7 +43,7 @@ ComputePipelineImpl::ComputePipelineImpl(id<MTLDevice> mtlDevice, ProgramImpl* p
     if (function == nil)
         return;
 
-    NSError* error = nil;
+    NSError* error           = nil;
     _mtlComputePipelineState = [mtlDevice newComputePipelineStateWithFunction:function error:&error];
     if (_mtlComputePipelineState == nil)
     {
@@ -70,4 +70,4 @@ ComputePipelineImpl::~ComputePipelineImpl()
     }
 }
 
-}  // namespace ax::rhi::metal
+}  // namespace ax::rhi::mtl

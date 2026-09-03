@@ -99,8 +99,8 @@ bool ComputeDispatchTest::init()
     _computeState->setStorageBuffer(0, nullptr, rhi::BufferAccess::READ_WRITE);
 
     // Render program: vertex shader reads the storage buffer to color a quad.
-    _renderProgram = ProgramManager::getInstance()->loadProgram("custom/compute_dispatch_vs",
-                                                                "custom/compute_dispatch_ps");
+    _renderProgram =
+        ProgramManager::getInstance()->loadProgram("custom/compute_dispatch_vs", "custom/compute_dispatch_ps");
     if (!_renderProgram || !_renderProgram->isValid())
         return failInitialization("render program creation failed");
     _renderState = new rhi::ProgramState(_renderProgram);
@@ -122,10 +122,7 @@ bool ComputeDispatchTest::init()
 
     // Fullscreen quad: pos (float3) + id (float).
     const float verts[] = {
-        -1.0f, -1.0f, 0.0f, 0.0f,
-         1.0f, -1.0f, 0.0f, 4.0f,
-         1.0f,  1.0f, 0.0f, 8.0f,
-        -1.0f,  1.0f, 0.0f, 12.0f,
+        -1.0f, -1.0f, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 4.0f, 1.0f, 1.0f, 0.0f, 8.0f, -1.0f, 1.0f, 0.0f, 12.0f,
     };
     _vertexBuffer = device->createBuffer(sizeof(verts), rhi::BufferType::VERTEX, rhi::BufferUsage::STATIC, verts);
     if (!_vertexBuffer)
@@ -160,7 +157,9 @@ std::string ComputeDispatchTest::title() const
     return "Compute Dispatch (storage buffer write -> vertex read)";
 }
 
-void ComputeDispatchTest::visit(const ax::SceneRenderState& state, const ax::Mat4& parentTransform, uint32_t parentFlags)
+void ComputeDispatchTest::visit(const ax::SceneRenderState& state,
+                                const ax::Mat4& parentTransform,
+                                uint32_t parentFlags)
 {
     auto renderer = state.getRenderer();
     if (renderer && _computeState && _storageBuffer && _renderState && _vertexLayout)
@@ -200,7 +199,7 @@ void ComputeDispatchTest::setupDrawCommand(ax::Renderer* renderer)
         int colorCount;
     } cb{};
     cb.mvp[0] = cb.mvp[5] = cb.mvp[10] = cb.mvp[15] = 1.0f;
-    cb.colorCount = kColorCount;
+    cb.colorCount                                   = kColorCount;
     // Match by name: on Metal, axslcc shifts the UBO binding past the storage
     // buffer slot (0), so the integer-binding overload would silently fail.
     _renderState->setUniformBlock(rhi::ShaderStage::VERTEX, "VSConstants", &cb, sizeof(cb));

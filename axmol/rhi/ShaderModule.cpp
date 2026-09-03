@@ -87,7 +87,7 @@ void ShaderModule::parseShaderCode(void)
     const auto currentProfileVer = GraphicsCore::shaderProfile();
     const auto bcProfile         = GraphicsCore::shaderILProfile();
 
-    int selectedProfile = -1;
+    int selectedProfile      = -1;
     bool selectedPrecompiled = false;
     for (int i = 0; i < chunk.num_targets; ++i)
     {
@@ -101,10 +101,10 @@ void ShaderModule::parseShaderCode(void)
         if (isCompatibleTarget(shaderLanguage, expect, lang, profile) &&
             (profile > selectedProfile || (profile == selectedProfile && precompiled && !selectedPrecompiled)))
         {
-            _stageOffset         = stageOffset;
-            _precompiled         = precompiled;
-            selectedProfile      = profile;
-            selectedPrecompiled  = precompiled;
+            _stageOffset        = stageOffset;
+            _precompiled        = precompiled;
+            selectedProfile     = profile;
+            selectedPrecompiled = precompiled;
         }
     }
     if (!_stageOffset)

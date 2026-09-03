@@ -1223,9 +1223,9 @@ bool GraphicsContextImpl::dispatch(const ComputeDispatchDesc& desc)
         }
     }
 
-    auto srvHeap     = _srvHeaps[_frameIndex].Get();
-    auto srvCpuStart = srvHeap->GetCPUDescriptorHandleForHeapStart();
-    auto srvGpuStart = srvHeap->GetGPUDescriptorHandleForHeapStart();
+    auto srvHeap         = _srvHeaps[_frameIndex].Get();
+    auto srvCpuStart     = srvHeap->GetCPUDescriptorHandleForHeapStart();
+    auto srvGpuStart     = srvHeap->GetGPUDescriptorHandleForHeapStart();
     const auto srvStride = _driver->getSrvDescriptorStride();
 
     const UINT bindingStart = _srvOffset[_frameIndex];
@@ -1284,7 +1284,7 @@ bool GraphicsContextImpl::dispatch(const ComputeDispatchDesc& desc)
             continue;
         auto bufferImpl = static_cast<BufferImpl*>(binding->second.buffer);
         bufferImpl->setLastFenceValue(_frameFenceValue);
-        auto uavHandle  = bufferImpl->getUAV();
+        auto uavHandle = bufferImpl->getUAV();
         if (!uavHandle)
             continue;
 
@@ -1347,9 +1347,10 @@ bool GraphicsContextImpl::dispatch(const ComputeDispatchDesc& desc)
     {
         if (!bindingSet.buffer)
             continue;
-        auto bufferImpl    = static_cast<BufferImpl*>(bindingSet.buffer);
-        auto targetState   = bindingSet.access == BufferAccess::READ_WRITE ? D3D12_RESOURCE_STATE_UNORDERED_ACCESS
-                                                                           : D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
+        auto bufferImpl  = static_cast<BufferImpl*>(bindingSet.buffer);
+        auto targetState = bindingSet.access == BufferAccess::READ_WRITE
+                               ? D3D12_RESOURCE_STATE_UNORDERED_ACCESS
+                               : D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
         if (bufferImpl->currentState() != targetState)
         {
             D3D12_RESOURCE_BARRIER& bar = barriers.emplace_back();
@@ -1372,7 +1373,7 @@ bool GraphicsContextImpl::dispatch(const ComputeDispatchDesc& desc)
     {
         if (!bindingSet.buffer || bindingSet.access != BufferAccess::READ_WRITE)
             continue;
-        auto bufferImpl = static_cast<BufferImpl*>(bindingSet.buffer);
+        auto bufferImpl             = static_cast<BufferImpl*>(bindingSet.buffer);
         D3D12_RESOURCE_BARRIER& bar = postBarriers.emplace_back();
         bar.Type                    = D3D12_RESOURCE_BARRIER_TYPE_UAV;
         bar.UAV.pResource           = bufferImpl->internalResource();

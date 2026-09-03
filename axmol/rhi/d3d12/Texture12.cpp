@@ -244,7 +244,7 @@ void TextureImpl::updateSubData3D(int xoffset,
     if (!prepareForCopyDest || !resourceState)
         return;
 
-    auto device = _driver->getDevice();
+    auto device        = _driver->getDevice();
     const auto texDesc = _nativeTexture.resource->GetDesc();
 
     D3D12_PLACED_SUBRESOURCE_FOOTPRINT footprint{};

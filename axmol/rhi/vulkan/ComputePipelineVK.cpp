@@ -146,8 +146,8 @@ void ComputePipelineImpl::createLayout(ProgramImpl* program)
         dslCustom.sType        = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
         dslCustom.bindingCount = static_cast<uint32_t>(customSamplerBindings.size());
         dslCustom.pBindings    = customSamplerBindings.data();
-        auto vr = vkCreateDescriptorSetLayout(_device, &dslCustom, nullptr,
-                                              &_layoutState.descriptorSetLayouts[SET_INDEX_CUSTOM_SAMPLER]);
+        auto vr                = vkCreateDescriptorSetLayout(_device, &dslCustom, nullptr,
+                                                             &_layoutState.descriptorSetLayouts[SET_INDEX_CUSTOM_SAMPLER]);
         VK_REQUIRE(vr, "vkCreateDescriptorSetLayout for compute custom samplers (set 2) failed");
     }
 
@@ -163,12 +163,12 @@ void ComputePipelineImpl::createLayout(ProgramImpl* program)
         dsl1.sType        = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
         dsl1.bindingCount = static_cast<uint32_t>(resourceBindings.size());
         dsl1.pBindings    = resourceBindings.data();
-        auto vr = vkCreateDescriptorSetLayout(_device, &dsl1, nullptr,
-                                              &_layoutState.descriptorSetLayouts[SET_INDEX_RESOURCE]);
+        auto vr           = vkCreateDescriptorSetLayout(_device, &dsl1, nullptr,
+                                                        &_layoutState.descriptorSetLayouts[SET_INDEX_RESOURCE]);
         VK_REQUIRE(vr, "vkCreateDescriptorSetLayout for compute resources (set 1) failed");
     }
 
-    const bool hasCustomSet = !customSamplerBindings.empty();
+    const bool hasCustomSet               = !customSamplerBindings.empty();
     _layoutState.descriptorSetLayoutCount = hasCustomSet ? 3u : !resourceBindings.empty() ? 2u : 1u;
 
     VkPipelineLayoutCreateInfo plc{};
@@ -226,9 +226,9 @@ DescriptorState* ComputePipelineImpl::acquireDescriptorState()
         return descriptorState;
     }
 
-    auto descriptorState = _descriptorStatePool.construt();
-    descriptorState->progId           = getProgram()->getProgramId();
-    descriptorState->computePipeline  = this;
+    auto descriptorState             = _descriptorStatePool.construt();
+    descriptorState->progId          = getProgram()->getProgramId();
+    descriptorState->computePipeline = this;
     _descriptorAllocator.allocateDescriptorSets(&_layoutState, descriptorState);
     return descriptorState;
 }

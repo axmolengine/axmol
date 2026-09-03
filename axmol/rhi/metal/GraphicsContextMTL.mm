@@ -341,9 +341,7 @@ void GraphicsContextImpl::setInstanceBuffer(Buffer* buffer)
     }
     else
     {
-        [_mtlRenderEncoder setVertexBuffer:nil
-                                    offset:0
-                                   atIndex:GraphicsDeviceImpl::VBO_INSTANCING_BINDING_INDEX];
+        [_mtlRenderEncoder setVertexBuffer:nil offset:0 atIndex:GraphicsDeviceImpl::VBO_INSTANCING_BINDING_INDEX];
     }
 }
 
@@ -418,7 +416,7 @@ bool GraphicsContextImpl::dispatch(const ComputeDispatchDesc& desc)
     if (!program || !program->getCSModule())
         return false;
 
-    auto* computePipeline = static_cast<ComputePipelineImpl*>(desc.pipeline);
+    auto* computePipeline                     = static_cast<ComputePipelineImpl*>(desc.pipeline);
     id<MTLComputePipelineState> pipelineState = computePipeline->getMTLComputePipelineState();
     if (pipelineState == nil)
         return false;
@@ -437,7 +435,7 @@ bool GraphicsContextImpl::dispatch(const ComputeDispatchDesc& desc)
         }
         [_mtlRenderEncoder endEncoding];
         [_mtlRenderEncoder release];
-        _mtlRenderEncoder = nil;
+        _mtlRenderEncoder      = nil;
         _renderPassInterrupted = true;
     }
 
@@ -499,14 +497,14 @@ bool GraphicsContextImpl::dispatch(const ComputeDispatchDesc& desc)
     {
         if (!bindingSet.buffer)
             continue;
-        auto bufferImpl = static_cast<BufferImpl*>(bindingSet.buffer);
+        auto bufferImpl         = static_cast<BufferImpl*>(bindingSet.buffer);
         id<MTLBuffer> mtlBuffer = bufferImpl->getMTLBuffer();
         if (mtlBuffer == nil)
             continue;
         [computeEncoder setBuffer:mtlBuffer offset:0 atIndex:binding];
     }
 
-    const auto& localSize = desc.programState->getProgram()->getComputeLocalSize();
+    const auto& localSize       = desc.programState->getProgram()->getComputeLocalSize();
     MTLSize threadgroupsPerGrid = MTLSizeMake(desc.groupCountX, desc.groupCountY, desc.groupCountZ);
     MTLSize threadsPerThreadgroup =
         MTLSizeMake(std::max(localSize[0], 1), std::max(localSize[1], 1), std::max(localSize[2], 1));
@@ -532,7 +530,7 @@ void GraphicsContextImpl::endFrame()
 {
     [_mtlRenderEncoder endEncoding];
     [_mtlRenderEncoder release];
-    _mtlRenderEncoder = nil;
+    _mtlRenderEncoder      = nil;
     _renderPassInterrupted = false;
 
     auto drawable = acquireDrawable();
@@ -745,7 +743,7 @@ void GraphicsContextImpl::setUniformBuffer() const
         {
             if (!bindingSet.buffer)
                 continue;
-            auto bufferImpl = static_cast<BufferImpl*>(bindingSet.buffer);
+            auto bufferImpl         = static_cast<BufferImpl*>(bindingSet.buffer);
             id<MTLBuffer> mtlBuffer = bufferImpl->getMTLBuffer();
             if (mtlBuffer == nil)
                 continue;

@@ -697,7 +697,7 @@ bool GraphicsContextImpl::dispatch(const ComputeDispatchDesc& desc)
         }
     }
 
-    auto context = _d3d11Context;
+    auto context  = _d3d11Context;
     _programState = desc.programState;
 
     program->applyCompute(context);

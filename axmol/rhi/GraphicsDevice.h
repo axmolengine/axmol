@@ -87,8 +87,8 @@ struct DriverCaps
     int maxSamplesAllowed = 0;  ///< Maximum sampler count.
     int maxTexture3DSize  = 0;  ///< Maximum 3D texture size.
 
-    int maxComputeWorkGroupCount[3] = {};
-    int maxComputeWorkGroupSize[3]  = {};
+    int maxComputeWorkGroupCount[3]    = {};
+    int maxComputeWorkGroupSize[3]     = {};
     int maxComputeWorkGroupInvocations = 0;
     int maxStorageBufferBindings       = 0;
     size_t maxStorageBufferSize        = 0;

@@ -47,4 +47,4 @@ private:
     id<MTLComputePipelineState> _mtlComputePipelineState = nil;
 };
 
-}  // namespace ax::rhi::metal
+}  // namespace ax::rhi::mtl

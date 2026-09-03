@@ -67,7 +67,7 @@ using DispatchComputeProc = void(GLAD_API_PTR*)(GLuint, GLuint, GLuint);
 using MemoryBarrierProc   = void(GLAD_API_PTR*)(GLbitfield);
 
 DispatchComputeProc s_dispatchCompute = nullptr;
-MemoryBarrierProc s_memoryBarrier      = nullptr;
+MemoryBarrierProc s_memoryBarrier     = nullptr;
 }  // namespace
 #    endif
 

@@ -426,20 +426,20 @@ bool GraphicsDeviceImpl::init()
 
     UtilsMTL::initGPUTextureFormats();
 
-    _caps.maxAttributes     = getMaxVertexAttributes(_featureSet);
-    _caps.maxSamplesAllowed = getMaxSamplerEntries(_featureSet);
-    _caps.maxTextureUnits   = getMaxTextureEntries(_featureSet);
-    _caps.maxTextureSize    = getMaxTextureWidthHeight(_featureSet);
-    _caps.maxTexture3DSize  = _caps.maxTextureSize;
-    _caps.maxComputeWorkGroupCount[0] = 65535;
-    _caps.maxComputeWorkGroupCount[1] = 65535;
-    _caps.maxComputeWorkGroupCount[2] = 65535;
-    _caps.maxComputeWorkGroupSize[0] = 1024;
-    _caps.maxComputeWorkGroupSize[1] = 1024;
-    _caps.maxComputeWorkGroupSize[2] = 64;
+    _caps.maxAttributes                  = getMaxVertexAttributes(_featureSet);
+    _caps.maxSamplesAllowed              = getMaxSamplerEntries(_featureSet);
+    _caps.maxTextureUnits                = getMaxTextureEntries(_featureSet);
+    _caps.maxTextureSize                 = getMaxTextureWidthHeight(_featureSet);
+    _caps.maxTexture3DSize               = _caps.maxTextureSize;
+    _caps.maxComputeWorkGroupCount[0]    = 65535;
+    _caps.maxComputeWorkGroupCount[1]    = 65535;
+    _caps.maxComputeWorkGroupCount[2]    = 65535;
+    _caps.maxComputeWorkGroupSize[0]     = 1024;
+    _caps.maxComputeWorkGroupSize[1]     = 1024;
+    _caps.maxComputeWorkGroupSize[2]     = 64;
     _caps.maxComputeWorkGroupInvocations = 1024;
-    _caps.maxStorageBufferBindings = 31;
-    _caps.maxStorageBufferSize = static_cast<size_t>(_mtlDevice.maxBufferLength);
+    _caps.maxStorageBufferBindings       = 31;
+    _caps.maxStorageBufferSize           = static_cast<size_t>(_mtlDevice.maxBufferLength);
 
     return true;
 }

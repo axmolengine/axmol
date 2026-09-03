@@ -296,7 +296,7 @@ void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
             {
                 if (sampler.presetIndex >= 0)
                     continue;
-                auto& range                              = customSamplerRanges.emplace_back();
+                auto& range                             = customSamplerRanges.emplace_back();
                 range.RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER;
                 range.NumDescriptors                    = sampler.count;
                 range.BaseShaderRegister                = sampler.binding;
@@ -306,9 +306,8 @@ void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
 
             D3D12_ROOT_PARAMETER& customSamplerParam               = rootParams.emplace_back();
             customSamplerParam.ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-            customSamplerParam.DescriptorTable.NumDescriptorRanges =
-                static_cast<UINT>(customSamplerRanges.size());
-            customSamplerParam.DescriptorTable.pDescriptorRanges = customSamplerRanges.data();
+            customSamplerParam.DescriptorTable.NumDescriptorRanges = static_cast<UINT>(customSamplerRanges.size());
+            customSamplerParam.DescriptorTable.pDescriptorRanges   = customSamplerRanges.data();
             customSamplerParam.ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
             entry.customSamplerRootIndex                           = rootIndex++;
         }

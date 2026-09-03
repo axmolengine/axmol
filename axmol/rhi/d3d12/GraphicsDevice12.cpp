@@ -355,19 +355,19 @@ bool GraphicsDeviceImpl::init()
     _adapter->GetDesc(&_adapterDesc);
 
     // caps
-    _caps.maxAttributes   = D3D12_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT;     // 32
-    _caps.maxTextureUnits = D3D12_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;  // 128
-    _caps.maxTextureSize  = dxutils::evalulateMaxTexSize(_featureLevel);
-    _caps.maxTexture3DSize = D3D12_REQ_TEXTURE3D_U_V_OR_W_DIMENSION;
-    _caps.maxComputeWorkGroupCount[0] = D3D12_CS_DISPATCH_MAX_THREAD_GROUPS_PER_DIMENSION;
-    _caps.maxComputeWorkGroupCount[1] = D3D12_CS_DISPATCH_MAX_THREAD_GROUPS_PER_DIMENSION;
-    _caps.maxComputeWorkGroupCount[2] = D3D12_CS_DISPATCH_MAX_THREAD_GROUPS_PER_DIMENSION;
-    _caps.maxComputeWorkGroupSize[0] = D3D12_CS_THREAD_GROUP_MAX_X;
-    _caps.maxComputeWorkGroupSize[1] = D3D12_CS_THREAD_GROUP_MAX_Y;
-    _caps.maxComputeWorkGroupSize[2] = D3D12_CS_THREAD_GROUP_MAX_Z;
+    _caps.maxAttributes                  = D3D12_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT;     // 32
+    _caps.maxTextureUnits                = D3D12_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;  // 128
+    _caps.maxTextureSize                 = dxutils::evalulateMaxTexSize(_featureLevel);
+    _caps.maxTexture3DSize               = D3D12_REQ_TEXTURE3D_U_V_OR_W_DIMENSION;
+    _caps.maxComputeWorkGroupCount[0]    = D3D12_CS_DISPATCH_MAX_THREAD_GROUPS_PER_DIMENSION;
+    _caps.maxComputeWorkGroupCount[1]    = D3D12_CS_DISPATCH_MAX_THREAD_GROUPS_PER_DIMENSION;
+    _caps.maxComputeWorkGroupCount[2]    = D3D12_CS_DISPATCH_MAX_THREAD_GROUPS_PER_DIMENSION;
+    _caps.maxComputeWorkGroupSize[0]     = D3D12_CS_THREAD_GROUP_MAX_X;
+    _caps.maxComputeWorkGroupSize[1]     = D3D12_CS_THREAD_GROUP_MAX_Y;
+    _caps.maxComputeWorkGroupSize[2]     = D3D12_CS_THREAD_GROUP_MAX_Z;
     _caps.maxComputeWorkGroupInvocations = D3D12_CS_THREAD_GROUP_MAX_THREADS_PER_GROUP;
-    _caps.maxStorageBufferBindings = D3D12_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;
-    _caps.maxStorageBufferSize = 128ull * 1024ull * 1024ull;
+    _caps.maxStorageBufferBindings       = D3D12_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;
+    _caps.maxStorageBufferSize           = 128ull * 1024ull * 1024ull;
 
     _caps.maxSamplesAllowed = evalulateMaxMsaaSamples(_device.Get(), DXGI_FORMAT_R8G8B8A8_UNORM);
 

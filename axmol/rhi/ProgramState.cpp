@@ -271,10 +271,10 @@ ProgramState::~ProgramState()
 
 ProgramState* ProgramState::clone() const
 {
-    ProgramState* cp        = new ProgramState(_program);
-    cp->_textureBindingSets = _textureBindingSets;
+    ProgramState* cp              = new ProgramState(_program);
+    cp->_textureBindingSets       = _textureBindingSets;
     cp->_storageBufferBindingSets = _storageBufferBindingSets;
-    cp->_samplerOverrides = _samplerOverrides;
+    cp->_samplerOverrides         = _samplerOverrides;
 
     cp->_uniformBuffer = _uniformBuffer;
     cp->_batchId       = this->_batchId;
@@ -321,9 +321,8 @@ void ProgramState::setUniformBlock(int binding, const void* data, size_t size)
         return;
 
     const auto& blocks = _program->getActiveUniformBlockInfos();
-    auto it = std::find_if(blocks.begin(), blocks.end(), [binding](const UniformBlockInfo& info) {
-        return info.binding == binding;
-    });
+    auto it            = std::find_if(blocks.begin(), blocks.end(),
+                                      [binding](const UniformBlockInfo& info) { return info.binding == binding; });
     if (it == blocks.end())
         return;
 
@@ -342,7 +341,7 @@ bool ProgramState::setUniformBlock(ShaderStage stage, std::string_view blockName
         if (block.stage != stage)
             continue;
 
-        auto reflectedName = block.name;
+        auto reflectedName                             = block.name;
         constexpr std::string_view generatedPrefixes[] = {"type_", "type."};
         for (const auto prefix : generatedPrefixes)
         {
@@ -420,7 +419,7 @@ void ProgramState::setSampler(const rhi::SamplerLocation& samplerLocation, const
     if (it == samplers.end() || it->presetIndex >= 0)
         return;
 
-    auto samplerId = SamplerRegistry::getInstance()->registerSampler(desc);
+    auto samplerId                             = SamplerRegistry::getInstance()->registerSampler(desc);
     _samplerOverrides[samplerLocation.binding] = SamplerId{static_cast<uint16_t>(samplerId)};
 }
 

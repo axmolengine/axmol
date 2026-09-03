@@ -49,15 +49,15 @@ private:
     bool dispatchCompute(ax::Renderer* renderer);
     void setupDrawCommand(ax::Renderer* renderer);
 
-    ax::rhi::Program* _computeProgram  = nullptr;
-    ax::rhi::ProgramState* _computeState = nullptr;
+    ax::rhi::Program* _computeProgram          = nullptr;
+    ax::rhi::ProgramState* _computeState       = nullptr;
     ax::rhi::ComputePipeline* _computePipeline = nullptr;
-    ax::rhi::Program* _renderProgram   = nullptr;
-    ax::rhi::ProgramState* _renderState  = nullptr;
-    ax::rhi::Buffer* _storageBuffer    = nullptr;
-    ax::rhi::Buffer* _vertexBuffer     = nullptr;
-    ax::rhi::Buffer* _indexBuffer      = nullptr;
-    ax::rhi::VertexLayout* _vertexLayout = nullptr;
+    ax::rhi::Program* _renderProgram           = nullptr;
+    ax::rhi::ProgramState* _renderState        = nullptr;
+    ax::rhi::Buffer* _storageBuffer            = nullptr;
+    ax::rhi::Buffer* _vertexBuffer             = nullptr;
+    ax::rhi::Buffer* _indexBuffer              = nullptr;
+    ax::rhi::VertexLayout* _vertexLayout       = nullptr;
 
     ax::CustomCommand _dispatchCommand;
     ax::CustomCommand _drawCommand;

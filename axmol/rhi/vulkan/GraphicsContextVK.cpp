@@ -1099,9 +1099,8 @@ void GraphicsContextImpl::prepareDrawing()
     if (descriptorState->samplerDescriptorCount)
         assert(descriptorSets[SET_INDEX_RESOURCE]);
     const auto& activeSamplerInfos = _programState->getProgram()->getActiveSamplerInfos();
-    if (std::any_of(activeSamplerInfos.begin(), activeSamplerInfos.end(), [](const SamplerBindingInfo& sampler) {
-            return sampler.presetIndex < 0;
-        }))
+    if (std::any_of(activeSamplerInfos.begin(), activeSamplerInfos.end(),
+                    [](const SamplerBindingInfo& sampler) { return sampler.presetIndex < 0; }))
         assert(descriptorSets[SET_INDEX_CUSTOM_SAMPLER]);
 
     // Descriptor writes keep pointers into the buffer/image info vectors.
@@ -1150,9 +1149,9 @@ void GraphicsContextImpl::prepareDrawing()
 
         VkWriteDescriptorSet& write        = writes.emplace_back();
         VkDescriptorBufferInfo& bufferInfo = _descriptorBufferInfos.emplace_back();
-        bufferInfo.buffer = bufferImpl->internalHandle();
-        bufferInfo.offset = 0;
-        bufferInfo.range  = VK_WHOLE_SIZE;
+        bufferInfo.buffer                  = bufferImpl->internalHandle();
+        bufferInfo.offset                  = 0;
+        bufferInfo.range                   = VK_WHOLE_SIZE;
 
         write.sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
         write.dstSet          = descriptorSets[SET_INDEX_RESOURCE];
@@ -1162,7 +1161,7 @@ void GraphicsContextImpl::prepareDrawing()
         write.pBufferInfo     = &bufferInfo;
     }
 
-    const bool separateSamplers    = !activeSamplerInfos.empty();
+    const bool separateSamplers = !activeSamplerInfos.empty();
 
     // --- Sampled images / combined image samplers (set=1, binding=N) ---
     auto& imageInfos = _descriptorImageInfosPerFrame;
@@ -1360,16 +1359,16 @@ bool GraphicsContextImpl::dispatch(const ComputeDispatchDesc& desc)
     {
         if (!bindingSet.buffer || bindingSet.access != BufferAccess::READ_WRITE)
             continue;
-        auto bufferImpl = static_cast<BufferImpl*>(bindingSet.buffer);
+        auto bufferImpl                = static_cast<BufferImpl*>(bindingSet.buffer);
         VkBufferMemoryBarrier& barrier = preBarriers.emplace_back();
-        barrier.sType               = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
-        barrier.srcAccessMask       = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;
-        barrier.dstAccessMask       = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;
-        barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-        barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-        barrier.buffer              = bufferImpl->internalHandle();
-        barrier.offset              = 0;
-        barrier.size                = VK_WHOLE_SIZE;
+        barrier.sType                  = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
+        barrier.srcAccessMask          = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;
+        barrier.dstAccessMask          = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;
+        barrier.srcQueueFamilyIndex    = VK_QUEUE_FAMILY_IGNORED;
+        barrier.dstQueueFamilyIndex    = VK_QUEUE_FAMILY_IGNORED;
+        barrier.buffer                 = bufferImpl->internalHandle();
+        barrier.offset                 = 0;
+        barrier.size                   = VK_WHOLE_SIZE;
     }
     if (!preBarriers.empty())
     {
@@ -1391,9 +1390,8 @@ bool GraphicsContextImpl::dispatch(const ComputeDispatchDesc& desc)
         descriptorState->storageDescriptorCount)
         AXASSERT(descriptorSets[SET_INDEX_RESOURCE], "Missing Vulkan compute resource descriptor set");
     const auto& computeSamplerInfos = program->getActiveSamplerInfos();
-    if (std::any_of(computeSamplerInfos.begin(), computeSamplerInfos.end(), [](const SamplerBindingInfo& sampler) {
-            return sampler.presetIndex < 0;
-        }))
+    if (std::any_of(computeSamplerInfos.begin(), computeSamplerInfos.end(),
+                    [](const SamplerBindingInfo& sampler) { return sampler.presetIndex < 0; }))
         AXASSERT(descriptorSets[SET_INDEX_CUSTOM_SAMPLER], "Missing Vulkan compute custom sampler descriptor set");
 
     _descriptorWritesPerFrame.clear();
@@ -1402,8 +1400,7 @@ bool GraphicsContextImpl::dispatch(const ComputeDispatchDesc& desc)
                                       descriptorState->combinedDescriptorCount +
                                       descriptorState->storageDescriptorCount);
     _descriptorBufferInfos.clear();
-    _descriptorBufferInfos.reserve(descriptorState->uniformDescriptorCount +
-                                   descriptorState->storageDescriptorCount);
+    _descriptorBufferInfos.reserve(descriptorState->uniformDescriptorCount + descriptorState->storageDescriptorCount);
     auto& writes = _descriptorWritesPerFrame;
 
     // UBOs from the uniform ring buffer.
@@ -1418,9 +1415,9 @@ bool GraphicsContextImpl::dispatch(const ComputeDispatchDesc& desc)
 
             VkWriteDescriptorSet& write        = writes.emplace_back();
             VkDescriptorBufferInfo& bufferInfo = _descriptorBufferInfos.emplace_back();
-            bufferInfo.buffer = _uniformRings[_frameIndex].buffer;
-            bufferInfo.offset = static_cast<VkDeviceSize>(s.offset);
-            bufferInfo.range  = static_cast<VkDeviceSize>(uboInfo.sizeBytes);
+            bufferInfo.buffer                  = _uniformRings[_frameIndex].buffer;
+            bufferInfo.offset                  = static_cast<VkDeviceSize>(s.offset);
+            bufferInfo.range                   = static_cast<VkDeviceSize>(uboInfo.sizeBytes);
 
             write.sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
             write.dstSet          = descriptorSets[SET_INDEX_UBO];
@@ -1441,9 +1438,9 @@ bool GraphicsContextImpl::dispatch(const ComputeDispatchDesc& desc)
 
         VkWriteDescriptorSet& write        = writes.emplace_back();
         VkDescriptorBufferInfo& bufferInfo = _descriptorBufferInfos.emplace_back();
-        bufferInfo.buffer = bufferImpl->internalHandle();
-        bufferInfo.offset = 0;
-        bufferInfo.range  = VK_WHOLE_SIZE;
+        bufferInfo.buffer                  = bufferImpl->internalHandle();
+        bufferInfo.offset                  = 0;
+        bufferInfo.range                   = VK_WHOLE_SIZE;
 
         write.sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
         write.dstSet          = descriptorSets[SET_INDEX_RESOURCE];
@@ -1536,7 +1533,7 @@ bool GraphicsContextImpl::dispatch(const ComputeDispatchDesc& desc)
     vkCmdBindPipeline(_currentCmdBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, computePipeline->getPipeline());
     // Compute uses the same command buffer: invalidate the graphics pipeline
     // cache so a later draw re-binds its graphics pipeline.
-    _boundPipeline = VK_NULL_HANDLE;
+    _boundPipeline   = VK_NULL_HANDLE;
     auto layoutState = computePipeline->getLayoutState();
     vkCmdBindDescriptorSets(_currentCmdBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, layoutState->layout, 0,
                             layoutState->descriptorSetLayoutCount, descriptorSets.data(), 0, nullptr);
@@ -1549,16 +1546,16 @@ bool GraphicsContextImpl::dispatch(const ComputeDispatchDesc& desc)
     {
         if (!bindingSet.buffer || bindingSet.access != BufferAccess::READ_WRITE)
             continue;
-        auto bufferImpl  = static_cast<BufferImpl*>(bindingSet.buffer);
+        auto bufferImpl                = static_cast<BufferImpl*>(bindingSet.buffer);
         VkBufferMemoryBarrier& barrier = barriers.emplace_back();
-        barrier.sType               = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
-        barrier.srcAccessMask       = VK_ACCESS_SHADER_WRITE_BIT;
-        barrier.dstAccessMask       = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;
-        barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-        barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-        barrier.buffer              = bufferImpl->internalHandle();
-        barrier.offset              = 0;
-        barrier.size                = VK_WHOLE_SIZE;
+        barrier.sType                  = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
+        barrier.srcAccessMask          = VK_ACCESS_SHADER_WRITE_BIT;
+        barrier.dstAccessMask          = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;
+        barrier.srcQueueFamilyIndex    = VK_QUEUE_FAMILY_IGNORED;
+        barrier.dstQueueFamilyIndex    = VK_QUEUE_FAMILY_IGNORED;
+        barrier.buffer                 = bufferImpl->internalHandle();
+        barrier.offset                 = 0;
+        barrier.size                   = VK_WHOLE_SIZE;
     }
     if (!barriers.empty())
     {

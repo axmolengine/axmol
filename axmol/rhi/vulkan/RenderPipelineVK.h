@@ -65,7 +65,7 @@ struct DescriptorState
     DescriptorPool* pool{nullptr};
     VkDescriptorSetArray sets{};  // Allocated VkDescriptorSets
     uint8_t descriptorSetCount{0};
-    uint64_t progId{0};  // progId associated with this descriptor set
+    uint64_t progId{0};                             // progId associated with this descriptor set
     ComputePipelineImpl* computePipeline{nullptr};  // owning compute pipeline (compute path)
     uint16_t uniformDescriptorCount{0};
     uint16_t imageDescriptorCount{0};

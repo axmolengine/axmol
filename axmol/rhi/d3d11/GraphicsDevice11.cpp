@@ -213,20 +213,20 @@ L_DeviceCreated:
     _dxgiAdapter->GetDesc(&_adapterDesc);
 
     // Device caps
-    _caps.maxAttributes     = D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT;     // 16
-    _caps.maxTextureUnits   = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;  // 128
-    _caps.maxTextureSize    = EstimateMaxTexSize(_device->GetFeatureLevel());
-    _caps.maxSamplesAllowed = static_cast<int32_t>(FindMaxMsaaSamples(_device, DXGI_FORMAT_R8G8B8A8_UNORM));
-    _caps.maxTexture3DSize  = D3D11_REQ_TEXTURE3D_U_V_OR_W_DIMENSION;
+    _caps.maxAttributes               = D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT;     // 16
+    _caps.maxTextureUnits             = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;  // 128
+    _caps.maxTextureSize              = EstimateMaxTexSize(_device->GetFeatureLevel());
+    _caps.maxSamplesAllowed           = static_cast<int32_t>(FindMaxMsaaSamples(_device, DXGI_FORMAT_R8G8B8A8_UNORM));
+    _caps.maxTexture3DSize            = D3D11_REQ_TEXTURE3D_U_V_OR_W_DIMENSION;
     _caps.maxComputeWorkGroupCount[0] = D3D11_CS_DISPATCH_MAX_THREAD_GROUPS_PER_DIMENSION;
     _caps.maxComputeWorkGroupCount[1] = D3D11_CS_DISPATCH_MAX_THREAD_GROUPS_PER_DIMENSION;
     _caps.maxComputeWorkGroupCount[2] = D3D11_CS_DISPATCH_MAX_THREAD_GROUPS_PER_DIMENSION;
-    _caps.maxComputeWorkGroupSize[0] = D3D11_CS_THREAD_GROUP_MAX_X;
-    _caps.maxComputeWorkGroupSize[1] = D3D11_CS_THREAD_GROUP_MAX_Y;
-    _caps.maxComputeWorkGroupSize[2] = D3D11_CS_THREAD_GROUP_MAX_Z;
+    _caps.maxComputeWorkGroupSize[0]  = D3D11_CS_THREAD_GROUP_MAX_X;
+    _caps.maxComputeWorkGroupSize[1]  = D3D11_CS_THREAD_GROUP_MAX_Y;
+    _caps.maxComputeWorkGroupSize[2]  = D3D11_CS_THREAD_GROUP_MAX_Z;
     _caps.maxComputeWorkGroupInvocations = D3D11_CS_THREAD_GROUP_MAX_THREADS_PER_GROUP;
-    _caps.maxStorageBufferBindings = 8;
-    _caps.maxStorageBufferSize = 128ull * 1024ull * 1024ull;
+    _caps.maxStorageBufferBindings       = 8;
+    _caps.maxStorageBufferSize           = 128ull * 1024ull * 1024ull;
 }
 
 void GraphicsDeviceImpl::selectAdapter(PowerPreference powerPreference)

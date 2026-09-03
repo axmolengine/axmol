@@ -529,20 +529,20 @@ bool GraphicsDeviceImpl::initializeDevice()
                                  VK_API_VERSION_MINOR(props.apiVersion), VK_API_VERSION_PATCH(props.apiVersion));
     _shaderVersion = "SPIR-V 1.x";
 
-    _caps.maxAttributes     = static_cast<int32_t>(MAX_VERTEX_ATTRIBS);  // pipeline-defined
-    _caps.maxTextureUnits   = 32;  // conservative default; descriptor count varies per layout
-    _caps.maxTextureSize    = static_cast<int32_t>(props.limits.maxImageDimension2D);
-    _caps.maxTexture3DSize  = static_cast<int32_t>(props.limits.maxImageDimension3D);
-    _caps.maxSamplesAllowed = static_cast<int32_t>(props.limits.framebufferColorSampleCounts);
-    _caps.maxComputeWorkGroupCount[0] = static_cast<int>(props.limits.maxComputeWorkGroupCount[0]);
-    _caps.maxComputeWorkGroupCount[1] = static_cast<int>(props.limits.maxComputeWorkGroupCount[1]);
-    _caps.maxComputeWorkGroupCount[2] = static_cast<int>(props.limits.maxComputeWorkGroupCount[2]);
-    _caps.maxComputeWorkGroupSize[0] = static_cast<int>(props.limits.maxComputeWorkGroupSize[0]);
-    _caps.maxComputeWorkGroupSize[1] = static_cast<int>(props.limits.maxComputeWorkGroupSize[1]);
-    _caps.maxComputeWorkGroupSize[2] = static_cast<int>(props.limits.maxComputeWorkGroupSize[2]);
+    _caps.maxAttributes                  = static_cast<int32_t>(MAX_VERTEX_ATTRIBS);  // pipeline-defined
+    _caps.maxTextureUnits                = 32;  // conservative default; descriptor count varies per layout
+    _caps.maxTextureSize                 = static_cast<int32_t>(props.limits.maxImageDimension2D);
+    _caps.maxTexture3DSize               = static_cast<int32_t>(props.limits.maxImageDimension3D);
+    _caps.maxSamplesAllowed              = static_cast<int32_t>(props.limits.framebufferColorSampleCounts);
+    _caps.maxComputeWorkGroupCount[0]    = static_cast<int>(props.limits.maxComputeWorkGroupCount[0]);
+    _caps.maxComputeWorkGroupCount[1]    = static_cast<int>(props.limits.maxComputeWorkGroupCount[1]);
+    _caps.maxComputeWorkGroupCount[2]    = static_cast<int>(props.limits.maxComputeWorkGroupCount[2]);
+    _caps.maxComputeWorkGroupSize[0]     = static_cast<int>(props.limits.maxComputeWorkGroupSize[0]);
+    _caps.maxComputeWorkGroupSize[1]     = static_cast<int>(props.limits.maxComputeWorkGroupSize[1]);
+    _caps.maxComputeWorkGroupSize[2]     = static_cast<int>(props.limits.maxComputeWorkGroupSize[2]);
     _caps.maxComputeWorkGroupInvocations = static_cast<int>(props.limits.maxComputeWorkGroupInvocations);
-    _caps.maxStorageBufferBindings = static_cast<int>(props.limits.maxPerStageDescriptorStorageBuffers);
-    _caps.maxStorageBufferSize = static_cast<size_t>(props.limits.maxStorageBufferRange);
+    _caps.maxStorageBufferBindings       = static_cast<int>(props.limits.maxPerStageDescriptorStorageBuffers);
+    _caps.maxStorageBufferSize           = static_cast<size_t>(props.limits.maxStorageBufferRange);
 
     // Query device properties
     // Optional: query extended dynamic state 3 properties only if extension is supported

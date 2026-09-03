@@ -181,7 +181,7 @@ void TextureImpl::updateSubData3D(int xoffset,
         {(NSUInteger)width, (NSUInteger)height, (NSUInteger)depth}        // MTLSize
     };
 
-    auto bytesPerRow  = RHIUtils::computeRowPitch(_desc.pixelFormat, static_cast<uint32_t>(width));
+    auto bytesPerRow   = RHIUtils::computeRowPitch(_desc.pixelFormat, static_cast<uint32_t>(width));
     auto bytesPerImage = bytesPerRow * static_cast<uint32_t>(height);
     [_mtlTexture replaceRegion:region
                    mipmapLevel:level
@@ -268,7 +268,7 @@ void TextureImpl::ensureNativeTexture()
         // MTLTextureDescriptor has no texture3DDescriptorWithPixelFormat
         // convenience method; create a 2D descriptor and promote it to a 3D
         // texture via the mutable textureType/depth properties.
-        textureDesc = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:pixelFormat
+        textureDesc             = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:pixelFormat
                                                                          width:_desc.width
                                                                         height:_desc.height
                                                                      mipmapped:needMipmaps];

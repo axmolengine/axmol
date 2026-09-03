@@ -53,7 +53,7 @@ class RenderTarget;
 struct DepthStencilDesc;
 struct ComputeDispatchDesc
 {
-    ComputePipeline* pipeline = nullptr;
+    ComputePipeline* pipeline  = nullptr;
     ProgramState* programState = nullptr;
     uint32_t groupCountX       = 1;
     uint32_t groupCountY       = 1;

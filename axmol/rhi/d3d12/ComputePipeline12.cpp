@@ -73,20 +73,20 @@ bool ComputePipelineImpl::createRootSignature(ProgramImpl* program)
     {
         if (sb.access == BufferAccess::READ_WRITE)
         {
-            D3D12_DESCRIPTOR_RANGE& r = uavRanges.emplace_back();
-            r.RangeType               = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
-            r.NumDescriptors          = 1;
-            r.BaseShaderRegister      = sb.binding;
-            r.RegisterSpace           = 1;
+            D3D12_DESCRIPTOR_RANGE& r           = uavRanges.emplace_back();
+            r.RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
+            r.NumDescriptors                    = 1;
+            r.BaseShaderRegister                = sb.binding;
+            r.RegisterSpace                     = 1;
             r.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
         }
         else
         {
-            D3D12_DESCRIPTOR_RANGE& r = srvRanges.emplace_back();
-            r.RangeType               = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-            r.NumDescriptors          = 1;
-            r.BaseShaderRegister      = sb.binding;
-            r.RegisterSpace           = 1;
+            D3D12_DESCRIPTOR_RANGE& r           = srvRanges.emplace_back();
+            r.RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+            r.NumDescriptors                    = 1;
+            r.BaseShaderRegister                = sb.binding;
+            r.RegisterSpace                     = 1;
             r.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
         }
     }
@@ -131,7 +131,7 @@ bool ComputePipelineImpl::createRootSignature(ProgramImpl* program)
             {
                 if (sampler.presetIndex >= 0)
                     continue;
-                auto& range                              = customSamplerRanges.emplace_back();
+                auto& range                             = customSamplerRanges.emplace_back();
                 range.RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER;
                 range.NumDescriptors                    = sampler.count;
                 range.BaseShaderRegister                = sampler.binding;

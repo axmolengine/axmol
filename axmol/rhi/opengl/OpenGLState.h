@@ -44,10 +44,8 @@
 // the GL 4.3 entry points. The GLES 3.0 glad loader does not expose the two
 // GLES 3.1 compute commands, so supported EGL platforms resolve them at
 // runtime. iOS OpenGLES and WebGL remain on the CPU fallback.
-#if (!AX_GLES_PROFILE &&                                                                                 \
-     (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)) ||          \
-    (AX_GLES_PROFILE &&                                                                                  \
-     (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID))
+#if (!AX_GLES_PROFILE && (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)) || \
+    (AX_GLES_PROFILE && (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID))
 #    define AX_GL_HAS_COMPUTE 1
 #else
 #    define AX_GL_HAS_COMPUTE 0
@@ -165,11 +163,11 @@ struct UniformBufferBaseBindState
 struct AX_DLL OpenGLState
 {
     constexpr static GLenum BufferTargets[] = {
-        GL_ARRAY_BUFFER,          // VERTEX of VAO
-        GL_ELEMENT_ARRAY_BUFFER,  // INDEX of VAO
-        GL_UNIFORM_BUFFER,        // UNIFORM
-        GL_PIXEL_PACK_BUFFER,     // PIXEL
-        GL_SHADER_STORAGE_BUFFER, // STORAGE
+        GL_ARRAY_BUFFER,           // VERTEX of VAO
+        GL_ELEMENT_ARRAY_BUFFER,   // INDEX of VAO
+        GL_UNIFORM_BUFFER,         // UNIFORM
+        GL_PIXEL_PACK_BUFFER,      // PIXEL
+        GL_SHADER_STORAGE_BUFFER,  // STORAGE
     };
 
     constexpr static int MAX_VERTEX_ATTRIBS = 16;

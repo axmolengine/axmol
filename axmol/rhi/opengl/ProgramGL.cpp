@@ -131,8 +131,10 @@ void ProgramImpl::compileProgram()
         {
             auto errorInfo = tlx::make_unique_for_overwrite<char[]>(static_cast<size_t>(errorInfoLen));
             glGetProgramInfoLog(_program, errorInfoLen, NULL, errorInfo.get());
-            AXLOGE("axmol:ERROR: {}: failed to link program: {} \n--- vsSource ---\n{}\n --- fsSource ---\n{}\n --- csSource ---\n{}",
-                   __FUNCTION__, errorInfo.get(), vsSource, fsSource, csSource);
+            AXLOGE(
+                "axmol:ERROR: {}: failed to link program: {} \n--- vsSource ---\n{}\n --- fsSource ---\n{}\n --- "
+                "csSource ---\n{}",
+                __FUNCTION__, errorInfo.get(), vsSource, fsSource, csSource);
         }
         else
             AXLOGE("axmol:ERROR: {}: failed to link program", __FUNCTION__);

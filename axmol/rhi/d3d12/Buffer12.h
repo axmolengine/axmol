@@ -61,7 +61,11 @@ class BufferImpl final : public Buffer
     friend class GraphicsContextImpl;
 
 public:
-    BufferImpl(GraphicsDeviceImpl* driver, size_t size, BufferType type, BufferUsage usage, const void* initial,
+    BufferImpl(GraphicsDeviceImpl* driver,
+               size_t size,
+               BufferType type,
+               BufferUsage usage,
+               const void* initial,
                uint32_t stride = 0);
     ~BufferImpl();
 

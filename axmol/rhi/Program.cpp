@@ -202,7 +202,8 @@ size_t Program::getUniformBufferSize() const
 
 void Program::parseStageReflection(ShaderStage stage, SLCReflectContext* context)
 {
-    auto shaderModule      = stage == ShaderStage::VERTEX ? _vsModule : (stage == ShaderStage::FRAGMENT ? _fsModule : _csModule);
+    auto shaderModule =
+        stage == ShaderStage::VERTEX ? _vsModule : (stage == ShaderStage::FRAGMENT ? _fsModule : _csModule);
     if (!shaderModule)
         return;
     const auto& shaderData = shaderModule->getChunkData();
@@ -493,11 +494,11 @@ void Program::reflectStorageBuffers(SLCReflectContext* context)
     for (int i = 0; i < context->refl->num_storage_buffers; ++i)
     {
         StorageBufferInfo info;
-        info.name        = _sc_read_name(ibs);
-        info.binding     = ibs->read<int32_t>();
-        info.sizeBytes   = ibs->read<uint32_t>();
-        info.arrayStride = ibs->read<uint32_t>();
-        info.space       = ibs->read<uint16_t>();
+        info.name         = _sc_read_name(ibs);
+        info.binding      = ibs->read<int32_t>();
+        info.sizeBytes    = ibs->read<uint32_t>();
+        info.arrayStride  = ibs->read<uint32_t>();
+        info.space        = ibs->read<uint16_t>();
         const auto access = ibs->read<uint8_t>();
         ibs->read<uint8_t>();  // reserved
         info.access     = access == SC_BUFFER_ACCESS_READ_WRITE ? BufferAccess::READ_WRITE : BufferAccess::READ_ONLY;
@@ -520,9 +521,8 @@ SamplerLocation Program::getTextureSamplerLocation(int textureBinding) const
 
 SamplerLocation Program::getSamplerLocation(std::string_view name) const
 {
-    auto it = std::find_if(_activeSamplerInfos.begin(), _activeSamplerInfos.end(), [name](const SamplerBindingInfo& info) {
-        return info.name == name;
-    });
+    auto it = std::find_if(_activeSamplerInfos.begin(), _activeSamplerInfos.end(),
+                           [name](const SamplerBindingInfo& info) { return info.name == name; });
     if (it == _activeSamplerInfos.end())
         return {};
     return SamplerLocation{.binding = static_cast<int16_t>(it->binding), .space = it->space};
