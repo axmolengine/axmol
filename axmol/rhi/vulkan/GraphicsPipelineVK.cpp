@@ -614,9 +614,9 @@ void GraphicsPipelineImpl::updatePipelineLayoutState(ProgramImpl* program)
 }
 
 void GraphicsPipelineImpl::updateGraphicsPipeline(ProgramImpl* program,
-                                                const PipelineDesc& desc,
-                                                const ExtendedDynamicState& state,
-                                                VkRenderPass renderPass)
+                                                  const PipelineDesc& desc,
+                                                  const ExtendedDynamicState& state,
+                                                  VkRenderPass renderPass)
 {
     static_assert(sizeof(state) == 4, "ExtendedDynamicState size must be 4 bytes");
 
@@ -827,8 +827,8 @@ void GraphicsPipelineImpl::removeCachedObjects(Program* key)
 }
 
 void GraphicsPipelineImpl::freeDescriptorStates(DescriptorAllocator& allocator,
-                                              DescriptorList& descriptorStates,
-                                              bool needResortPools)
+                                                DescriptorList& descriptorStates,
+                                                bool needResortPools)
 {
     for (auto descriptorState : descriptorStates)
     {

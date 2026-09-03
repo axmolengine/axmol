@@ -648,7 +648,7 @@ void GraphicsContextImpl::updatePipelineState(const RenderTarget* rt,
     GraphicsContext::updatePipelineState(rt, pipelineDesc, primitiveType);
     AXASSERT(_graphicsPipeline, "GraphicsPipelineImpl not set");
     _graphicsPipeline->prepareUpdate(_depthStencilState, _cachedCullMode, _cachedFrontCounterClockwise,
-                                   toPrimitiveGroup(primitiveType));
+                                     toPrimitiveGroup(primitiveType));
     _graphicsPipeline->update(rt, pipelineDesc);
 
     _currentCmdList->IASetPrimitiveTopology(toD3DTopology(primitiveType));

@@ -296,7 +296,7 @@ void GraphicsPipelineImpl::setVertexLayout(MTLRenderPipelineDescriptor* mtlDesc,
 }
 
 void GraphicsPipelineImpl::setBlendState(MTLRenderPipelineColorAttachmentDescriptor* colorAttachmentDesc,
-                                       const BlendDesc& blendDesc)
+                                         const BlendDesc& blendDesc)
 {
     colorAttachmentDesc.blendingEnabled = blendDesc.blendEnabled;
     colorAttachmentDesc.writeMask       = toMTLColorWriteMask(blendDesc.writeMask);
