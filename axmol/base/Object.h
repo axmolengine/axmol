@@ -30,6 +30,8 @@ THE SOFTWARE.
 #include "axmol/platform/PlatformMacros.h"
 #include "axmol/base/Config.h"
 
+#include <stdint.h>
+
 #define AX_OBJECT_LEAK_DETECTION 0
 
 /**
@@ -64,6 +66,11 @@ public:
 class AX_DLL Object
 {
 public:
+    Object(const Object&)            = delete;
+    Object& operator=(const Object&) = delete;
+    Object(Object&&)                 = delete;
+    Object& operator=(Object&&)      = delete;
+
     /*
      * Take ownership newValue with retain
      */
@@ -126,6 +133,20 @@ public:
      */
     unsigned int getReferenceCount() const;
 
+    /**
+     * Returns the process-local diagnostic identifier assigned at construction.
+     *
+     * This value is for logging and debugging only. It is not an object
+     * identity key and must not be used for ownership, lifetime, or scripting
+     * registries.
+     */
+    uint64_t getObjectID() const noexcept { return _ID; }
+
+#if AX_ENABLE_SCRIPT_BINDING
+    void markScriptBindingExposed() noexcept { _scriptBindingExposed = true; }
+    bool hasScriptBindingExposure() const noexcept { return _scriptBindingExposed; }
+#endif
+
 protected:
     /**
      * Constructor
@@ -172,14 +193,6 @@ protected:
 
     friend class AutoreleasePool;
 
-#if AX_ENABLE_SCRIPT_BINDING
-public:
-    /// object id, ScriptSupport need public _ID
-    unsigned int _ID;
-    /// Lua reference id
-    int _luaID;
-#endif
-
     // Memory leak diagnostic data (only included when AX_OBJECT_LEAK_DETECTION is defined and its value isn't zero)
 #if AX_OBJECT_LEAK_DETECTION
 public:
@@ -187,6 +200,13 @@ public:
 #endif
 
 private:
+    // Process-local diagnostic identifier. Never use this as runtime identity.
+    uint64_t _ID;
+
+#if AX_ENABLE_SCRIPT_BINDING
+    bool _scriptBindingExposed{false};
+#endif
+
     // A memory slot identifier specifically for WeakObjectRegistry. -1 indicates that it is not allocated.
     int _internalIndex = -1;
 

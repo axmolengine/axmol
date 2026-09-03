@@ -1,0 +1,132 @@
+{
+  "module": "ax_fairygui",
+  "target_namespace": "fgui",
+  "cpp_namespace": "fairygui",
+  "macro_judgement": null,
+  "headers": [
+    "%(axdir)s/extensions/fairygui/src/fairygui/FairyGUI.h",
+    "%(axdir)s/extensions/fairygui/src/fairygui/FairyGUIMacros.h",
+    "%(axdir)s/extensions/fairygui/src/fairygui/utils/html/HtmlObject.h",
+    "%(axdir)s/extensions/scripting/lua-bindings/adapters/fairygui/axlua_fairygui_conversions.h"
+  ],
+  "clang_flags": [],
+  "classes": [
+    "UIPackage",
+    "GRoot",
+    "GObject",
+    "GComponent",
+    "UIEventDispatcher",
+    "GImage",
+    "GMovieClip",
+    "GTextField",
+    "GBasicTextField",
+    "GRichTextField",
+    "GTextInput",
+    "GGraph",
+    "GLoader",
+    "GGroup",
+    "GButton",
+    "GComboBox",
+    "GProgressBar",
+    "GSlider",
+    "GScrollBar",
+    "GList",
+    "Window",
+    "PopupMenu",
+    "UIObjectFactory",
+    "GObjectPool",
+    "DragDropManager",
+    "FairyGUIMacros",
+    "EventContext",
+    "Transition",
+    "GController",
+    "ScrollPane",
+    "InputEvent",
+    "GTween",
+    "GTweener"
+  ],
+  "abstract_classes": [
+    "ArmatureDataManager",
+    "Manifest",
+    "GTextField"
+  ],
+  "classes_have_no_parents": [],
+  "base_classes_to_skip": [],
+  "skip": [
+    {
+      "class": "EventContext",
+      "methods": [
+        "getData"
+      ]
+    },
+    {
+      "class": "UIEventDispatcher",
+      "methods": [
+        "removeEventListener",
+        "removeEventListeners",
+        "hasEventListener"
+      ]
+    },
+    {
+      "class": "GTween",
+      "methods": [
+        "^to$"
+      ]
+    },
+    {
+      "class": "GTweener",
+      "methods": [
+        "onUpdate",
+        "onStart",
+        "onComplete",
+        "onComplete1"
+      ]
+    },
+    {
+      "class": "GController",
+      "methods": [
+        "setup"
+      ]
+    },
+    {
+      "class": "GComponent",
+      "methods": [
+        "^constructFromResource$"
+      ]
+    },
+    {
+      "class": "GMovieClip",
+      "methods": [
+        "setPlaySettings"
+      ]
+    },
+    {
+      "class": "GObject",
+      "methods": [
+        "removeClickListener",
+        "getData"
+      ]
+    },
+    {
+      "class": "Transition",
+      "methods": [
+        "^play$",
+        "setup"
+      ]
+    },
+    {
+      "class": "UIObjectFactory",
+      "methods": [
+        "setPackageItemExtension"
+      ]
+    },
+    {
+      "class": "UIPackage",
+      "methods": [
+        "getItemAsset"
+      ]
+    }
+  ],
+  "rename_functions": [],
+  "rename_classes": []
+}

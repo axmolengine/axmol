@@ -118,7 +118,7 @@ function AMTestScene1.create()
             am:release()
         end
     end
-    layer:registerScriptHandler(onNodeEvent)
+    layer:setLifecycleCallback(onNodeEvent)
 
     return layer
 end
@@ -215,7 +215,7 @@ function AMTestScene2.create()
             am:release()
         end
     end
-    layer:registerScriptHandler(onNodeEvent)
+    layer:setLifecycleCallback(onNodeEvent)
 
     return layer
 end
@@ -311,7 +311,7 @@ function AMTestScene3.create()
             am:release()
         end
     end
-    layer:registerScriptHandler(onNodeEvent)
+    layer:setLifecycleCallback(onNodeEvent)
 
     return layer
 end

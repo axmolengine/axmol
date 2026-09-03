@@ -23,7 +23,7 @@ THE SOFTWARE.
 
 ]]
 
-local ListView = ccui.ListView
+local ListView = axui.ListView
 
 function ListView:onEvent(callback)
     self:addEventListener(function(sender, eventType)

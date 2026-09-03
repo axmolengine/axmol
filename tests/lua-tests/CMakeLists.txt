@@ -72,8 +72,43 @@ _1kfetch(sample-assets)
 
 set(content_folder "${CMAKE_CURRENT_SOURCE_DIR}/Content")
 
-_1klink("${sample-assets_SOURCE_DIR}/cpp-tests/Content" "${CMAKE_CURRENT_LIST_DIR}/Content/res")
-_1klink("${_AX_ROOT}/extensions/scripting/lua-bindings/script" "${CMAKE_CURRENT_LIST_DIR}/Content/src/axmol")
+# Emscripten's file packager does not follow directory symlinks.  Native
+# targets can keep the fast source-tree links, while WASM must materialize
+# both the sample assets and framework scripts before the Content tree is
+# packaged so fonts/textures and axmol/init.lua are included in the virtual
+# filesystem.
+if(WASM)
+    file(TO_NATIVE_PATH "${sample-assets_SOURCE_DIR}/cpp-tests/Content" _sample_content_src)
+    file(TO_NATIVE_PATH "${CMAKE_CURRENT_LIST_DIR}/Content/res" _sample_content_dst)
+    if(IS_SYMLINK "${_sample_content_dst}")
+        file(REMOVE "${_sample_content_dst}")
+    endif()
+    execute_process(
+        COMMAND ${PWSH_EXECUTABLE} "${_AX_ROOT}/1k/fsync.ps1"
+                -s "${_sample_content_src}" -d "${_sample_content_dst}" -l 0
+        RESULT_VARIABLE _sample_content_sync_result
+    )
+    if(NOT _sample_content_sync_result EQUAL 0)
+        message(FATAL_ERROR "Failed to copy sample assets for WASM")
+    endif()
+
+    file(TO_NATIVE_PATH "${_AX_ROOT}/extensions/scripting/lua-bindings/script" _lua_script_src)
+    file(TO_NATIVE_PATH "${CMAKE_CURRENT_LIST_DIR}/Content/src/axmol" _lua_script_dst)
+    if(IS_SYMLINK "${_lua_script_dst}")
+        file(REMOVE "${_lua_script_dst}")
+    endif()
+    execute_process(
+        COMMAND ${PWSH_EXECUTABLE} "${_AX_ROOT}/1k/fsync.ps1"
+                -s "${_lua_script_src}" -d "${_lua_script_dst}" -l 0
+        RESULT_VARIABLE _lua_script_sync_result
+    )
+    if(NOT _lua_script_sync_result EQUAL 0)
+        message(FATAL_ERROR "Failed to copy Lua framework scripts for WASM")
+    endif()
+else()
+    _1klink("${sample-assets_SOURCE_DIR}/cpp-tests/Content" "${CMAKE_CURRENT_LIST_DIR}/Content/res")
+    _1klink("${_AX_ROOT}/extensions/scripting/lua-bindings/script" "${CMAKE_CURRENT_LIST_DIR}/Content/src/axmol")
+endif()
 
 set(content_folder
     "${CMAKE_CURRENT_SOURCE_DIR}/Content"
@@ -196,6 +231,28 @@ endif()
 
 target_include_directories(${APP_NAME} PRIVATE ${GAME_INC_DIRS})
 
+target_compile_definitions(${APP_NAME} PRIVATE
+    SOL_NO_CHECK_NUMBER_PRECISION=1
+    AXMOL_LUA_BINDINGS=1)
+
+if(WASM)
+    # Keep the framework tree in sync immediately before Emscripten packages
+    # Content.  The configure-time copy above fixes fresh trees, while this
+    # pre-link sync also repairs existing build directories whose resource
+    # archive predates the copied axmol/init.lua files.
+    # --preload-file packages Lua at link time. Lua-only changes must also
+    # relink; PRE_LINK alone otherwise leaves stale scripts in lua-tests.data.
+    file(GLOB_RECURSE _lua_preload_sources CONFIGURE_DEPENDS
+        "${content_folder}/src/*.lua"
+        "${_AX_ROOT}/extensions/scripting/lua-bindings/script/*.lua")
+    set_property(TARGET ${APP_NAME} APPEND PROPERTY LINK_DEPENDS ${_lua_preload_sources})
+    add_custom_command(TARGET ${APP_NAME} PRE_LINK
+        COMMAND ${PWSH_EXECUTABLE} ARGS ${_AX_ROOT}/1k/fsync.ps1
+            -s ${_AX_ROOT}/extensions/scripting/lua-bindings/script
+            -d ${CMAKE_CURRENT_SOURCE_DIR}/Content/src/axmol -l 0
+        VERBATIM)
+endif()
+
 # mark app resources, resource will be copy auto after mark
 ax_setup_app_config(${APP_NAME} CONSOLE)
 
@@ -250,3 +307,13 @@ if (_AX_USE_PREBUILT) # support windows and linux
 endif()
 
 ax_setup_app_props(${APP_NAME})
+
+# Reuse the Lua test application for the headless binding ABI check. The
+# AppDelegate exits before loading controller.lua when this flag is present.
+if(WASM)
+    add_test(NAME lua-binding-smoke
+        COMMAND ${CMAKE_CROSSCOMPILING_EMULATOR} "${CMAKE_BINARY_DIR}/bin/lua-tests/lua-tests.js")
+    set_tests_properties(lua-binding-smoke PROPERTIES
+        ENVIRONMENT "AXMOL_LUA_BINDING_SMOKE=1"
+        WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/bin/lua-tests")
+endif()

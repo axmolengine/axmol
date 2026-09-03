@@ -13,14 +13,14 @@ local function createTileDemoLayer(title, subtitle)
     Helper.subtitleLabel:setString(subTitleStr)
 
     local function onPointerMove(event)
-        local diff = event:getDelta()
+        local diff = ax.pSub(event:getPoint(), event:getPrevPoint())
         local node = layer:getChildByTag(kTagTileMap)
         local currentPosX, currentPosY= node:getPosition()
         node:setPosition(ax.p(currentPosX + diff.x, currentPosY + diff.y))
     end
 
     local listener = ax.PointerEventListener:create()
-    listener:registerScriptHandler(onPointerMove,ax.Handler.EVENT_POINTER_MOVE )
+    listener.onPointerMove = onPointerMove
     local eventDispatcher = layer:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, layer)
 
@@ -117,7 +117,7 @@ local function TileMapEditTest()
         end
     end
 
-    layer:registerScriptHandler(onNodeEvent)
+    layer:setLifecycleCallback(onNodeEvent)
 
     layer:addChild(map, 0, kTagTileMap)
 
@@ -171,17 +171,6 @@ local function TMXOrthoTest()
     -- map:getCamera():setEye(x-200, y, z+300)
     -- x, y, z = map:getCamera():getEye()
     -- cclog("after eye x="..x..",y="..y..",z="..z)
-
-
-    local function onNodeEvent(event)
-        if event == "enter" then
-            ax.Director:getInstance():setProjection(ax.DIRECTOR_PROJECTION3_D )
-        elseif event == "exit" then
-            ax.Director:getInstance():setProjection(ax.DIRECTOR_PROJECTION_DEFAULT )
-        end
-    end
-
-    layer:registerScriptHandler(onNodeEvent)
 
 
     return layer
@@ -315,7 +304,7 @@ local function TMXOrthoTest4()
         end
     end
 
-    ret:registerScriptHandler(onNodeEvent)
+    ret:setLifecycleCallback(onNodeEvent)
     return ret
 end
 
@@ -455,7 +444,7 @@ local function TMXReadWriteTest()
         end
     end
 
-    ret:registerScriptHandler(onNodeEvent)
+    ret:setLifecycleCallback(onNodeEvent)
     --------cclog("++++atlas quantity: %d", layer:textureAtlas():getTotalQuads())
     --------cclog("++++children: %d", layer:getChildren():count() )
 
@@ -682,7 +671,7 @@ local function TMXIsoObjectsTest()
     local  i = 0
     local  len = #(objects)
     for i = 0, len-1, 1 do
-        dict = tolua.cast(objects[i + 1], "ax.Dictionary")
+        dict = axlua.cast(objects[i + 1], "ax.Dictionary")
 
         if dict == nil then
             break
@@ -690,13 +679,13 @@ local function TMXIsoObjectsTest()
         --------cclog("object: %x", dict)
 
         local key = "x"
-        local x = (tolua.cast(dict:objectForKey(key), "ax.String")):intValue()--dynamic_cast<NSNumber*>(dict:objectForKey("x")):getNumber()
+    local x = (axlua.cast(dict:objectForKey(key), "ax.String")):intValue()--dynamic_cast<NSNumber*>(dict:objectForKey("x")):getNumber()
         key = "y"
-        local y = (tolua.cast(dict:objectForKey(key), "ax.String")):intValue()--dynamic_cast<NSNumber*>(dict:objectForKey("y")):getNumber()
+    local y = (axlua.cast(dict:objectForKey(key), "ax.String")):intValue()--dynamic_cast<NSNumber*>(dict:objectForKey("y")):getNumber()
         key = "width"
-        local width = (tolua.cast(dict:objectForKey(key), "ax.String")):intValue()--dynamic_cast<NSNumber*>(dict:objectForKey("width")):getNumber()
+    local width = (axlua.cast(dict:objectForKey(key), "ax.String")):intValue()--dynamic_cast<NSNumber*>(dict:objectForKey("width")):getNumber()
         key = "height"
-        local height = (tolua.cast(dict:objectForKey(key), "ax.String")):intValue()--dynamic_cast<NSNumber*>(dict:objectForKey("height")):getNumber()
+    local height = (axlua.cast(dict:objectForKey(key), "ax.String")):intValue()--dynamic_cast<NSNumber*>(dict:objectForKey("height")):getNumber()
 
         local color = ax.color(1,1,1,1)
         drawNode:drawLine( ax.p(x, y), ax.p((x+width), y), color)
@@ -789,7 +778,7 @@ local function TMXIsoZorder()
         end
     end
 
-    ret:registerScriptHandler(onNodeEvent)
+    ret:setLifecycleCallback(onNodeEvent)
 
     return ret
 end
@@ -847,7 +836,7 @@ local function TMXOrthoZorder()
         end
     end
 
-    ret:registerScriptHandler(onNodeEvent)
+    ret:setLifecycleCallback(onNodeEvent)
 
     return ret
 end
@@ -890,14 +879,10 @@ local function TMXIsoVertexZ()
     local schedulerEntry = nil
     local function onNodeEvent(event)
         if event == "enter" then
-            -- TIP: 2d projection should be used
-            ax.Director:getInstance():setProjection(ax.DIRECTOR_PROJECTION2_D )
             schedulerEntry = scheduler:scheduleScriptFunc(repositionSprite, 0, false)
             ax.Director:getInstance():getRenderer():setDepthTest(true)
             ax.Director:getInstance():getRenderer():setDepthWrite(true)
         elseif event == "exit" then
-            -- At exit use any other projection.
-            ax.Director:getInstance():setProjection(ax.DIRECTOR_PROJECTION_DEFAULT )
             if m_tamara ~= nil then
                 m_tamara:release()
             end
@@ -907,7 +892,7 @@ local function TMXIsoVertexZ()
         end
     end
 
-    ret:registerScriptHandler(onNodeEvent)
+    ret:setLifecycleCallback(onNodeEvent)
     return ret
 end
 
@@ -948,14 +933,10 @@ local function TMXOrthoVertexZ()
     local schedulerEntry = nil
     local function onNodeEvent(event)
         if event == "enter" then
-            -- TIP: 2d projection should be used
-            ax.Director:getInstance():setProjection(ax.DIRECTOR_PROJECTION2_D )
             schedulerEntry = scheduler:scheduleScriptFunc(repositionSprite, 0, false)
             ax.Director:getInstance():getRenderer():setDepthTest(true)
             ax.Director:getInstance():getRenderer():setDepthWrite(true)
         elseif event == "exit" then
-            -- At exit use any other projection.
-            ax.Director:getInstance():setProjection(ax.DIRECTOR_PROJECTION_DEFAULT )
             if m_tamara ~= nil then
                 m_tamara:release()
             end
@@ -965,7 +946,7 @@ local function TMXOrthoVertexZ()
         end
     end
 
-    ret:registerScriptHandler(onNodeEvent)
+    ret:setLifecycleCallback(onNodeEvent)
 
     return ret
 end
@@ -1099,7 +1080,7 @@ local function TMXOrthoFlipRunTimeTest()
         end
     end
 
-    ret:registerScriptHandler(onNodeEvent)
+    ret:setLifecycleCallback(onNodeEvent)
 
     return ret
 end

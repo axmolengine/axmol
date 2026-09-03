@@ -26,7 +26,7 @@ SOFTWARE.
 #include "yasio/impl/fp16.hpp"
 
 #if YASIO__HAS_CXX17
-#  include "sol/sol.hpp" // sol2-3.x
+#  include "lua-bindings/runtime/axlua_sol_config.h"
 #else
 #  include "sol2/sol.hpp" // sol2-2.x
 #endif

@@ -23,7 +23,7 @@ THE SOFTWARE.
 
 ]]
 
-local EditBox = ccui.EditBox
+local EditBox = axui.EditBox
 
 function EditBox:onEditHandler(callback)
     self:registerScriptEditBoxHandler(function(name, sender)

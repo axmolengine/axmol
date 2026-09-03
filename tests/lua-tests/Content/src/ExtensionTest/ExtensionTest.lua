@@ -87,7 +87,7 @@ local function runEditBoxTest()
 		end
 	end
     -- top
-    EditName = ccui.EditBox:create(editBoxSize, ccui.Scale9Sprite:create("extensions/green_edit.png"))
+    EditName = axui.EditBox:create(editBoxSize, axui.Scale9Sprite:create("extensions/green_edit.png"))
     EditName:setPosition(ax.p(visibleOrigin.x+visibleSize.width/2, visibleOrigin.y+visibleSize.height*3/4))
     local targetPlatform = ax.Application:getInstance():getTargetPlatform()
     if kTargetIphone == targetPlatform or kTargetIpad == targetPlatform then
@@ -106,7 +106,7 @@ local function runEditBoxTest()
     newLayer:addChild(EditName)
 
     --middle
-    EditPassword = ccui.EditBox:create(editBoxSize, ccui.Scale9Sprite:create("extensions/orange_edit.png"))
+    EditPassword = axui.EditBox:create(editBoxSize, axui.Scale9Sprite:create("extensions/orange_edit.png"))
     EditPassword:setPosition(ax.p(visibleOrigin.x+visibleSize.width/2, visibleOrigin.y+visibleSize.height/2))
 	if kTargetIphone == targetPlatform or kTargetIpad == targetPlatform then
 		EditPassword:setFont("American Typewriter", 30)
@@ -124,7 +124,7 @@ local function runEditBoxTest()
     newLayer:addChild(EditPassword)
 
     --bottom
-    EditEmail = ccui.EditBox:create(ax.size(editBoxSize.width, editBoxSize.height), ccui.Scale9Sprite:create("extensions/yellow_edit.png"))
+    EditEmail = axui.EditBox:create(ax.size(editBoxSize.width, editBoxSize.height), axui.Scale9Sprite:create("extensions/yellow_edit.png"))
     EditEmail:setPosition(ax.p(visibleOrigin.x+visibleSize.width/2, visibleOrigin.y+visibleSize.height/4))
     EditEmail:setAnchorPoint(ax.p(0.5, 1.0))
     EditEmail:setPlaceHolder("Email:")

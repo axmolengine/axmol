@@ -315,8 +315,8 @@ local function LayerTest1()
     end
 
     local listener = ax.PointerEventListener:create()
-    listener:registerScriptHandler(onTouchesBegan,ax.Handler.EVENT_POINTER_DOWN )
-    listener:registerScriptHandler(onPointerMove,ax.Handler.EVENT_POINTER_MOVE )
+    listener.onPointerDown = onTouchesBegan
+    listener.onPointerMove = onPointerMove
 
     local eventDispatcher = ret:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, ret)
@@ -386,11 +386,11 @@ local function LayerTestBlend()
         local dst = 0
 
         if  blend  then
-            src = ccb.BlendFactor.SRC_ALPHA
-            dst = ccb.BlendFactor.ONE_MINUS_SRC_ALPHA
+            src = axr.BlendFactor.SRC_ALPHA
+            dst = axr.BlendFactor.ONE_MINUS_SRC_ALPHA
         else
-            src = ccb.BlendFactor.ONE_MINUS_DST_COLOR
-            dst = ccb.BlendFactor.ZERO
+            src = axr.BlendFactor.ONE_MINUS_DST_COLOR
+            dst = axr.BlendFactor.ZERO
         end
 
         layer:setBlendFunc(ax.blendFunc(src, dst))
@@ -407,7 +407,7 @@ local function LayerTestBlend()
         end
     end
 
-    ret:registerScriptHandler(onNodeEvent)
+    ret:setLifecycleCallback(onNodeEvent)
     return ret
 end
 
@@ -455,7 +455,7 @@ local function LayerGradient()
     end
 
     local listener = ax.PointerEventListener:create()
-    listener:registerScriptHandler(onPointerMove,ax.Handler.EVENT_POINTER_MOVE )
+    listener.onPointerMove = onPointerMove
 
     local eventDispatcher = ret:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, ret)
@@ -605,7 +605,7 @@ local function LayerExtendedBlendOpacityTest()
     layer3:setEndColor(ax.color32(255, 0, 255))
     layer3:setStartOpacity(255)
     layer3:setEndOpacity(255)
-    layer3:setBlendFunc(ax.blendFunc(ccb.BlendFactor.SRC_ALPHA, ccb.BlendFactor.ONE_MINUS_SRC_ALPHA))
+    layer3:setBlendFunc(ax.blendFunc(axr.BlendFactor.SRC_ALPHA, axr.BlendFactor.ONE_MINUS_SRC_ALPHA))
     ret:addChild(layer3)
     return ret
 end

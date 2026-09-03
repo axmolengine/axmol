@@ -12,7 +12,7 @@ function LightTest:ctor()
       end
   end
 
-  self:registerScriptHandler(onNodeEvent)
+  self:setLifecycleCallback(onNodeEvent)
 end
 
 function LightTest:init()
@@ -124,7 +124,7 @@ function LightTest:init()
         angleDelta = angleDelta + delta
     end
 
-    self:scheduleUpdateWithPriorityLua(update,0)
+    self:onUpdate(update)
 end
 
 function LightTest:addSprite()

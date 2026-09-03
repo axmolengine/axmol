@@ -1,0 +1,3863 @@
+{
+  "formatVersion": 1,
+  "module": "physics2d",
+  "registrationName": "ax_physics2d",
+  "luaNamespace": "ax",
+  "luaTypeNamespace": "ax",
+  "conditionalExpression": "defined(AX_ENABLE_PHYSICS_2D)",
+  "classes": [
+    {
+      "nativeName": "BoxCollider2D",
+      "qualifiedName": "ax::BoxCollider2D",
+      "luaName": "ax.BoxCollider2D",
+      "luaClassName": "BoxCollider2D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Collider2D",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::BoxCollider2D",
+          "returnType": "ax::BoxCollider2D *",
+          "parameterTypes": [
+            "const ax::Vec2 \u0026",
+            "const ax::PhysicsMaterial2D \u0026",
+            "const ax::Vec2 \u0026",
+            "float"
+          ],
+          "defaultValues": [
+            null,
+            "ax::PHYSICS_MATERIAL_2D_DEFAULT",
+            "ax::Vec2::zero",
+            "0.0f"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getSize",
+          "luaName": "getSize",
+          "declaringType": "ax::BoxCollider2D",
+          "returnType": "ax::Vec2",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "CircleCollider2D",
+      "qualifiedName": "ax::CircleCollider2D",
+      "luaName": "ax.CircleCollider2D",
+      "luaClassName": "CircleCollider2D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Collider2D",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::CircleCollider2D",
+          "returnType": "ax::CircleCollider2D *",
+          "parameterTypes": [
+            "float",
+            "const ax::PhysicsMaterial2D \u0026",
+            "const ax::Vec2 \u0026"
+          ],
+          "defaultValues": [
+            null,
+            "ax::PHYSICS_MATERIAL_2D_DEFAULT",
+            "ax::Vec2(0.0f, 0.0f)"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getRadius",
+          "luaName": "getRadius",
+          "declaringType": "ax::CircleCollider2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "Collider2D",
+      "qualifiedName": "ax::Collider2D",
+      "luaName": "ax.Collider2D",
+      "luaClassName": "Collider2D",
+      "isAbstract": true,
+      "constructors": [],
+      "bases": [
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "containsPoint",
+          "luaName": "containsPoint",
+          "declaringType": "ax::Collider2D",
+          "returnType": "bool",
+          "parameterTypes": [
+            "const ax::Vec2 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "deatchFromBody",
+          "luaName": "deatchFromBody",
+          "declaringType": "ax::Collider2D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getAttachedBody",
+          "luaName": "getAttachedBody",
+          "declaringType": "ax::Collider2D",
+          "returnType": "ax::Rigidbody2D *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getCategoryBits",
+          "luaName": "getCategoryBits",
+          "declaringType": "ax::Collider2D",
+          "returnType": "uint64_t",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getCenter",
+          "luaName": "getCenter",
+          "declaringType": "ax::Collider2D",
+          "returnType": "ax::Vec2",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getDensity",
+          "luaName": "getDensity",
+          "declaringType": "ax::Collider2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getFriction",
+          "luaName": "getFriction",
+          "declaringType": "ax::Collider2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getGroup",
+          "luaName": "getGroup",
+          "declaringType": "ax::Collider2D",
+          "returnType": "int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMaskBits",
+          "luaName": "getMaskBits",
+          "declaringType": "ax::Collider2D",
+          "returnType": "uint64_t",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMaterial",
+          "luaName": "getMaterial",
+          "declaringType": "ax::Collider2D",
+          "returnType": "const ax::PhysicsMaterial2D \u0026",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getOffset",
+          "luaName": "getOffset",
+          "declaringType": "ax::Collider2D",
+          "returnType": "ax::Vec2",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getRestitution",
+          "luaName": "getRestitution",
+          "declaringType": "ax::Collider2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getTag",
+          "luaName": "getTag",
+          "declaringType": "ax::Collider2D",
+          "returnType": "unsigned int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getType",
+          "luaName": "getType",
+          "declaringType": "ax::Collider2D",
+          "returnType": "ax::Collider2D::Type",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isAttached",
+          "luaName": "isAttached",
+          "declaringType": "ax::Collider2D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isEventEnabled",
+          "luaName": "isEventEnabled",
+          "declaringType": "ax::Collider2D",
+          "returnType": "bool",
+          "parameterTypes": [
+            "ax::ContactEventBits"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isSensor",
+          "luaName": "isSensor",
+          "declaringType": "ax::Collider2D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setCategoryBits",
+          "luaName": "setCategoryBits",
+          "declaringType": "ax::Collider2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "uint64_t"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setDensity",
+          "luaName": "setDensity",
+          "declaringType": "ax::Collider2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float",
+            "bool"
+          ],
+          "defaultValues": [
+            null,
+            "true"
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setEventEnabled",
+          "luaName": "setEventEnabled",
+          "declaringType": "ax::Collider2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::ContactEventBits",
+            "bool"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setFriction",
+          "luaName": "setFriction",
+          "declaringType": "ax::Collider2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float",
+            "bool"
+          ],
+          "defaultValues": [
+            null,
+            "true"
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setGroup",
+          "luaName": "setGroup",
+          "declaringType": "ax::Collider2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "int"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setMaskBits",
+          "luaName": "setMaskBits",
+          "declaringType": "ax::Collider2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "uint64_t"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setMaterial",
+          "luaName": "setMaterial",
+          "declaringType": "ax::Collider2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::PhysicsMaterial2D \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setRestitution",
+          "luaName": "setRestitution",
+          "declaringType": "ax::Collider2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float",
+            "bool"
+          ],
+          "defaultValues": [
+            null,
+            "true"
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setSensor",
+          "luaName": "setSensor",
+          "declaringType": "ax::Collider2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setTag",
+          "luaName": "setTag",
+          "declaringType": "ax::Collider2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "unsigned int"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "ContactEvent2D",
+      "qualifiedName": "ax::ContactEvent2D",
+      "luaName": "ax.ContactEvent2D",
+      "luaClassName": "ContactEvent2D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::CustomEvent",
+        "ax::Event",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "getColliderA",
+          "luaName": "getColliderA",
+          "declaringType": "ax::ContactEvent2D",
+          "returnType": "ax::Collider2D *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getColliderB",
+          "luaName": "getColliderB",
+          "declaringType": "ax::ContactEvent2D",
+          "returnType": "ax::Collider2D *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getEventCode",
+          "luaName": "getEventCode",
+          "declaringType": "ax::ContactEvent2D",
+          "returnType": "ax::ContactEvent2D::EventCode",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "ContactEventListener2D",
+      "qualifiedName": "ax::ContactEventListener2D",
+      "luaName": "ax.ContactEventListener2D",
+      "luaClassName": "ContactEventListener2D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::CustomEventListener",
+        "ax::EventListener",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::ContactEventListener2D",
+          "returnType": "ax::ContactEventListener2D *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::ContactEventListener2D",
+          "returnType": "ax::ContactEventListener2D *",
+          "parameterTypes": [
+            "ax::Rigidbody2D *",
+            "ax::Rigidbody2D *"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": [
+        {
+          "nativeName": "onCollisionHit",
+          "luaName": "onCollisionHit",
+          "fieldType": "std::function\u003Cvoid (ax::ContactEvent2D *)\u003E"
+        },
+        {
+          "nativeName": "onContactBegin",
+          "luaName": "onContactBegin",
+          "fieldType": "std::function\u003Cvoid (ax::ContactEvent2D *)\u003E"
+        },
+        {
+          "nativeName": "onContactEnd",
+          "luaName": "onContactEnd",
+          "fieldType": "std::function\u003Cvoid (ax::ContactEvent2D *)\u003E"
+        },
+        {
+          "nativeName": "onContactFilter",
+          "luaName": "onContactFilter",
+          "fieldType": "std::function\u003Cbool (ax::ContactEvent2D *)\u003E"
+        },
+        {
+          "nativeName": "onSensorBegin",
+          "luaName": "onSensorBegin",
+          "fieldType": "std::function\u003Cvoid (ax::ContactEvent2D *)\u003E"
+        },
+        {
+          "nativeName": "onSensorEnd",
+          "luaName": "onSensorEnd",
+          "fieldType": "std::function\u003Cvoid (ax::ContactEvent2D *)\u003E"
+        }
+      ]
+    },
+    {
+      "nativeName": "DistanceJoint2D",
+      "qualifiedName": "ax::DistanceJoint2D",
+      "luaName": "ax.DistanceJoint2D",
+      "luaClassName": "DistanceJoint2D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Joint2D",
+        "ax::Component",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::DistanceJoint2D",
+          "returnType": "ax::DistanceJoint2D *",
+          "parameterTypes": [
+            "ax::Rigidbody2D *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getDamping",
+          "luaName": "getDamping",
+          "declaringType": "ax::DistanceJoint2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getLength",
+          "luaName": "getLength",
+          "declaringType": "ax::DistanceJoint2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getLimits",
+          "luaName": "getLimits",
+          "declaringType": "ax::DistanceJoint2D",
+          "returnType": "const ax::JointLengthLimit2D \u0026",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isUseLimits",
+          "luaName": "isUseLimits",
+          "declaringType": "ax::DistanceJoint2D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setDamping",
+          "luaName": "setDamping",
+          "declaringType": "ax::DistanceJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setLength",
+          "luaName": "setLength",
+          "declaringType": "ax::DistanceJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setLimits",
+          "luaName": "setLimits",
+          "declaringType": "ax::DistanceJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::JointLengthLimit2D \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setUseLimits",
+          "luaName": "setUseLimits",
+          "declaringType": "ax::DistanceJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "EdgeBoxCollider2D",
+      "qualifiedName": "ax::EdgeBoxCollider2D",
+      "luaName": "ax.EdgeBoxCollider2D",
+      "luaClassName": "EdgeBoxCollider2D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Collider2D",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::EdgeBoxCollider2D",
+          "returnType": "ax::EdgeBoxCollider2D *",
+          "parameterTypes": [
+            "const ax::Vec2 \u0026",
+            "const ax::PhysicsMaterial2D \u0026",
+            "const ax::Vec2 \u0026"
+          ],
+          "defaultValues": [
+            null,
+            "ax::PHYSICS_MATERIAL_2D_DEFAULT",
+            "ax::Vec2::zero"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "EdgeChainCollider2D",
+      "qualifiedName": "ax::EdgeChainCollider2D",
+      "luaName": "ax.EdgeChainCollider2D",
+      "luaClassName": "EdgeChainCollider2D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Collider2D",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "getPointsCount",
+          "luaName": "getPointsCount",
+          "declaringType": "ax::EdgeChainCollider2D",
+          "returnType": "int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "EdgePolygonCollider2D",
+      "qualifiedName": "ax::EdgePolygonCollider2D",
+      "luaName": "ax.EdgePolygonCollider2D",
+      "luaClassName": "EdgePolygonCollider2D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Collider2D",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "getPointsCount",
+          "luaName": "getPointsCount",
+          "declaringType": "ax::EdgePolygonCollider2D",
+          "returnType": "int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "EdgeSegmentCollider2D",
+      "qualifiedName": "ax::EdgeSegmentCollider2D",
+      "luaName": "ax.EdgeSegmentCollider2D",
+      "luaClassName": "EdgeSegmentCollider2D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Collider2D",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::EdgeSegmentCollider2D",
+          "returnType": "ax::EdgeSegmentCollider2D *",
+          "parameterTypes": [
+            "const ax::Vec2 \u0026",
+            "const ax::Vec2 \u0026",
+            "const ax::PhysicsMaterial2D \u0026"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            "ax::PHYSICS_MATERIAL_2D_DEFAULT"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getPointA",
+          "luaName": "getPointA",
+          "declaringType": "ax::EdgeSegmentCollider2D",
+          "returnType": "ax::Vec2",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getPointB",
+          "luaName": "getPointB",
+          "declaringType": "ax::EdgeSegmentCollider2D",
+          "returnType": "ax::Vec2",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "FilterJoint2D",
+      "qualifiedName": "ax::FilterJoint2D",
+      "luaName": "ax.FilterJoint2D",
+      "luaClassName": "FilterJoint2D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Joint2D",
+        "ax::Component",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::FilterJoint2D",
+          "returnType": "ax::FilterJoint2D *",
+          "parameterTypes": [
+            "ax::Rigidbody2D *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "FixedJoint2D",
+      "qualifiedName": "ax::FixedJoint2D",
+      "luaName": "ax.FixedJoint2D",
+      "luaClassName": "FixedJoint2D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Joint2D",
+        "ax::Component",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::FixedJoint2D",
+          "returnType": "ax::FixedJoint2D *",
+          "parameterTypes": [
+            "ax::Rigidbody2D *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getDamping",
+          "luaName": "getDamping",
+          "declaringType": "ax::FixedJoint2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getFrequency",
+          "luaName": "getFrequency",
+          "declaringType": "ax::FixedJoint2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setDamping",
+          "luaName": "setDamping",
+          "declaringType": "ax::FixedJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setFrequency",
+          "luaName": "setFrequency",
+          "declaringType": "ax::FixedJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "Joint2D",
+      "qualifiedName": "ax::Joint2D",
+      "luaName": "ax.Joint2D",
+      "luaClassName": "Joint2D",
+      "isAbstract": true,
+      "constructors": [],
+      "bases": [
+        "ax::Component",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "getAnchor",
+          "luaName": "getAnchor",
+          "declaringType": "ax::Joint2D",
+          "returnType": "ax::Vec2",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getAnchorSpace",
+          "luaName": "getAnchorSpace",
+          "declaringType": "ax::Joint2D",
+          "returnType": "ax::Joint2D::AnchorSpace",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getAttachedBody",
+          "luaName": "getAttachedBody",
+          "declaringType": "ax::Joint2D",
+          "returnType": "ax::Rigidbody2D *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getConnectedAnchor",
+          "luaName": "getConnectedAnchor",
+          "declaringType": "ax::Joint2D",
+          "returnType": "ax::Vec2",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getConnectedBody",
+          "luaName": "getConnectedBody",
+          "declaringType": "ax::Joint2D",
+          "returnType": "ax::Rigidbody2D *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getTag",
+          "luaName": "getTag",
+          "declaringType": "ax::Joint2D",
+          "returnType": "int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getWorld",
+          "luaName": "getWorld",
+          "declaringType": "ax::Joint2D",
+          "returnType": "ax::PhysicsWorld2D *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isAttached",
+          "luaName": "isAttached",
+          "declaringType": "ax::Joint2D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isAutoConfigureConnectedAnchor",
+          "luaName": "isAutoConfigureConnectedAnchor",
+          "declaringType": "ax::Joint2D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isCollisionEnabled",
+          "luaName": "isCollisionEnabled",
+          "declaringType": "ax::Joint2D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setAnchor",
+          "luaName": "setAnchor",
+          "declaringType": "ax::Joint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec2 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setAnchorSpace",
+          "luaName": "setAnchorSpace",
+          "declaringType": "ax::Joint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::Joint2D::AnchorSpace"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setAnchors",
+          "luaName": "setAnchors",
+          "declaringType": "ax::Joint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec2 \u0026",
+            "const ax::Vec2 \u0026"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setAnchorsInWorldSpace",
+          "luaName": "setAnchorsInWorldSpace",
+          "declaringType": "ax::Joint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec2 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setAutoConfigureConnectedAnchor",
+          "luaName": "setAutoConfigureConnectedAnchor",
+          "declaringType": "ax::Joint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setCollisionEnabled",
+          "luaName": "setCollisionEnabled",
+          "declaringType": "ax::Joint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setConnectedAnchor",
+          "luaName": "setConnectedAnchor",
+          "declaringType": "ax::Joint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec2 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setConnectedBody",
+          "luaName": "setConnectedBody",
+          "declaringType": "ax::Joint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::Rigidbody2D *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setDrawScale",
+          "luaName": "setDrawScale",
+          "declaringType": "ax::Joint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setTag",
+          "luaName": "setTag",
+          "declaringType": "ax::Joint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "int"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "MotorJoint2D",
+      "qualifiedName": "ax::MotorJoint2D",
+      "luaName": "ax.MotorJoint2D",
+      "luaClassName": "MotorJoint2D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Joint2D",
+        "ax::Component",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::MotorJoint2D",
+          "returnType": "ax::MotorJoint2D *",
+          "parameterTypes": [
+            "ax::Rigidbody2D *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getAngularDamping",
+          "luaName": "getAngularDamping",
+          "declaringType": "ax::MotorJoint2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getAngularFrequency",
+          "luaName": "getAngularFrequency",
+          "declaringType": "ax::MotorJoint2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getAngularVelocity",
+          "luaName": "getAngularVelocity",
+          "declaringType": "ax::MotorJoint2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getLinearDamping",
+          "luaName": "getLinearDamping",
+          "declaringType": "ax::MotorJoint2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getLinearFrequency",
+          "luaName": "getLinearFrequency",
+          "declaringType": "ax::MotorJoint2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getLinearVelocity",
+          "luaName": "getLinearVelocity",
+          "declaringType": "ax::MotorJoint2D",
+          "returnType": "ax::Vec2",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setAngularDamping",
+          "luaName": "setAngularDamping",
+          "declaringType": "ax::MotorJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setAngularFrequency",
+          "luaName": "setAngularFrequency",
+          "declaringType": "ax::MotorJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setAngularVelocity",
+          "luaName": "setAngularVelocity",
+          "declaringType": "ax::MotorJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setLinearDamping",
+          "luaName": "setLinearDamping",
+          "declaringType": "ax::MotorJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setLinearFrequency",
+          "luaName": "setLinearFrequency",
+          "declaringType": "ax::MotorJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setLinearVelocity",
+          "luaName": "setLinearVelocity",
+          "declaringType": "ax::MotorJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec2 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "PhysicsWorld2D",
+      "qualifiedName": "ax::PhysicsWorld2D",
+      "luaName": "ax.PhysicsWorld2D",
+      "luaClassName": "PhysicsWorld2D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [],
+      "methods": [
+        {
+          "nativeName": "getGravity",
+          "luaName": "getGravity",
+          "declaringType": "ax::PhysicsWorld2D",
+          "returnType": "ax::Vec2",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getSpeed",
+          "luaName": "getSpeed",
+          "declaringType": "ax::PhysicsWorld2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getSubsteps",
+          "luaName": "getSubsteps",
+          "declaringType": "ax::PhysicsWorld2D",
+          "returnType": "int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isAutoStep",
+          "luaName": "isAutoStep",
+          "declaringType": "ax::PhysicsWorld2D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isGlobalEventEnabled",
+          "luaName": "isGlobalEventEnabled",
+          "declaringType": "ax::PhysicsWorld2D",
+          "returnType": "bool",
+          "parameterTypes": [
+            "ax::ContactEventBits"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "overlapBox",
+          "luaName": "overlapBox",
+          "declaringType": "ax::PhysicsWorld2D",
+          "returnType": "ax::Collider2D *",
+          "parameterTypes": [
+            "const ax::Rect \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "overlapBoxAll",
+          "luaName": "overlapBoxAll",
+          "declaringType": "ax::PhysicsWorld2D",
+          "returnType": "Vector\u003Cax::Collider2D *\u003E",
+          "parameterTypes": [
+            "const ax::Rect \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "overlapPoint",
+          "luaName": "overlapPoint",
+          "declaringType": "ax::PhysicsWorld2D",
+          "returnType": "ax::Collider2D *",
+          "parameterTypes": [
+            "const ax::Vec2 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "overlapPointAll",
+          "luaName": "overlapPointAll",
+          "declaringType": "ax::PhysicsWorld2D",
+          "returnType": "Vector\u003Cax::Collider2D *\u003E",
+          "parameterTypes": [
+            "const ax::Vec2 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setAutoStep",
+          "luaName": "setAutoStep",
+          "declaringType": "ax::PhysicsWorld2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setGlobalEventEnabled",
+          "luaName": "setGlobalEventEnabled",
+          "declaringType": "ax::PhysicsWorld2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::ContactEventBits",
+            "bool"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setGravity",
+          "luaName": "setGravity",
+          "declaringType": "ax::PhysicsWorld2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec2 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setPostUpdateCallback",
+          "luaName": "setPostUpdateCallback",
+          "declaringType": "ax::PhysicsWorld2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const std::function\u003Cvoid ()\u003E \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setPreUpdateCallback",
+          "luaName": "setPreUpdateCallback",
+          "declaringType": "ax::PhysicsWorld2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const std::function\u003Cvoid ()\u003E \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setSpeed",
+          "luaName": "setSpeed",
+          "declaringType": "ax::PhysicsWorld2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setSubsteps",
+          "luaName": "setSubsteps",
+          "declaringType": "ax::PhysicsWorld2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "int"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "stepSimulation",
+          "luaName": "stepSimulation",
+          "declaringType": "ax::PhysicsWorld2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "PinJoint2D",
+      "qualifiedName": "ax::PinJoint2D",
+      "luaName": "ax.PinJoint2D",
+      "luaClassName": "PinJoint2D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::PivotJoint2D",
+        "ax::Joint2D",
+        "ax::Component",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::PinJoint2D",
+          "returnType": "ax::PinJoint2D *",
+          "parameterTypes": [
+            "const ax::Vec2 \u0026",
+            "ax::Rigidbody2D *"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "PivotJoint2D",
+      "qualifiedName": "ax::PivotJoint2D",
+      "luaName": "ax.PivotJoint2D",
+      "luaClassName": "PivotJoint2D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Joint2D",
+        "ax::Component",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::PivotJoint2D",
+          "returnType": "ax::PivotJoint2D *",
+          "parameterTypes": [
+            "ax::Rigidbody2D *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getLimits",
+          "luaName": "getLimits",
+          "declaringType": "ax::PivotJoint2D",
+          "returnType": "ax::JointAngleLimits2D",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMotor",
+          "luaName": "getMotor",
+          "declaringType": "ax::PivotJoint2D",
+          "returnType": "ax::JointMotor2D",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMotorTorque",
+          "luaName": "getMotorTorque",
+          "declaringType": "ax::PivotJoint2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getReferenceAngle",
+          "luaName": "getReferenceAngle",
+          "declaringType": "ax::PivotJoint2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getSpringDamping",
+          "luaName": "getSpringDamping",
+          "declaringType": "ax::PivotJoint2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getSpringFrequency",
+          "luaName": "getSpringFrequency",
+          "declaringType": "ax::PivotJoint2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isUseLimits",
+          "luaName": "isUseLimits",
+          "declaringType": "ax::PivotJoint2D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isUseMotor",
+          "luaName": "isUseMotor",
+          "declaringType": "ax::PivotJoint2D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isUseSpring",
+          "luaName": "isUseSpring",
+          "declaringType": "ax::PivotJoint2D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setLimits",
+          "luaName": "setLimits",
+          "declaringType": "ax::PivotJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::JointAngleLimits2D \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setMotor",
+          "luaName": "setMotor",
+          "declaringType": "ax::PivotJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::JointMotor2D \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setSpringDamping",
+          "luaName": "setSpringDamping",
+          "declaringType": "ax::PivotJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setSpringFrequency",
+          "luaName": "setSpringFrequency",
+          "declaringType": "ax::PivotJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setUseLimits",
+          "luaName": "setUseLimits",
+          "declaringType": "ax::PivotJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setUseMotor",
+          "luaName": "setUseMotor",
+          "declaringType": "ax::PivotJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setUseSpring",
+          "luaName": "setUseSpring",
+          "declaringType": "ax::PivotJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "PolygonCollider2D",
+      "qualifiedName": "ax::PolygonCollider2D",
+      "luaName": "ax.PolygonCollider2D",
+      "luaClassName": "PolygonCollider2D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Collider2D",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "getPoint",
+          "luaName": "getPoint",
+          "declaringType": "ax::PolygonCollider2D",
+          "returnType": "ax::Vec2",
+          "parameterTypes": [
+            "int"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getPointsCount",
+          "luaName": "getPointsCount",
+          "declaringType": "ax::PolygonCollider2D",
+          "returnType": "int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "Rigidbody2D",
+      "qualifiedName": "ax::Rigidbody2D",
+      "luaName": "ax.Rigidbody2D",
+      "luaClassName": "Rigidbody2D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Component",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "addCollider",
+          "luaName": "addCollider",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "ax::Collider2D *",
+          "parameterTypes": [
+            "ax::Collider2D *",
+            "bool"
+          ],
+          "defaultValues": [
+            null,
+            "true"
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "applyForce",
+          "luaName": "applyForce",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec2 \u0026",
+            "const ax::Vec2 \u0026"
+          ],
+          "defaultValues": [
+            null,
+            "ax::Vec2::zero"
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "applyImpulse",
+          "luaName": "applyImpulse",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec2 \u0026",
+            "const ax::Vec2 \u0026"
+          ],
+          "defaultValues": [
+            null,
+            "ax::Vec2::zero"
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "applyTorque",
+          "luaName": "applyTorque",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "ax::Rigidbody2D *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "createBox",
+          "luaName": "createBox",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "ax::Rigidbody2D *",
+          "parameterTypes": [
+            "const ax::Vec2 \u0026",
+            "const ax::PhysicsMaterial2D \u0026",
+            "const ax::Vec2 \u0026"
+          ],
+          "defaultValues": [
+            null,
+            "ax::PHYSICS_MATERIAL_2D_DEFAULT",
+            "ax::Vec2::zero"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "createCircle",
+          "luaName": "createCircle",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "ax::Rigidbody2D *",
+          "parameterTypes": [
+            "float",
+            "const ax::PhysicsMaterial2D \u0026",
+            "const ax::Vec2 \u0026"
+          ],
+          "defaultValues": [
+            null,
+            "ax::PHYSICS_MATERIAL_2D_DEFAULT",
+            "ax::Vec2::zero"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "createEdgeBox",
+          "luaName": "createEdgeBox",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "ax::Rigidbody2D *",
+          "parameterTypes": [
+            "const ax::Vec2 \u0026",
+            "const ax::PhysicsMaterial2D \u0026",
+            "const ax::Vec2 \u0026"
+          ],
+          "defaultValues": [
+            null,
+            "ax::PHYSICS_MATERIAL_2D_DEFAULT",
+            "ax::Vec2::zero"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "createEdgeSegment",
+          "luaName": "createEdgeSegment",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "ax::Rigidbody2D *",
+          "parameterTypes": [
+            "const ax::Vec2 \u0026",
+            "const ax::Vec2 \u0026",
+            "const ax::PhysicsMaterial2D \u0026"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            "ax::PHYSICS_MATERIAL_2D_DEFAULT"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getAngleRadians",
+          "luaName": "getAngleRadians",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getAngularDamping",
+          "luaName": "getAngularDamping",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getAngularVelocity",
+          "luaName": "getAngularVelocity",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getAngularVelocityLimit",
+          "luaName": "getAngularVelocityLimit",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getBodyType",
+          "luaName": "getBodyType",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getCategoryBits",
+          "luaName": "getCategoryBits",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "uint64_t",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getCollider",
+          "luaName": "getCollider",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "ax::Collider2D *",
+          "parameterTypes": [
+            "int"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getColliders",
+          "luaName": "getColliders",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "const Vector\u003Cax::Collider2D *\u003E \u0026",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getCollisionDetectionMode",
+          "luaName": "getCollisionDetectionMode",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "ax::Rigidbody2D::CollisionDetectionMode",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getCollisionMaskBits",
+          "luaName": "getCollisionMaskBits",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getFirstCollider",
+          "luaName": "getFirstCollider",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "ax::Collider2D *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getGravityScale",
+          "luaName": "getGravityScale",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getGroup",
+          "luaName": "getGroup",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getLinearDamping",
+          "luaName": "getLinearDamping",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMass",
+          "luaName": "getMass",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMoment",
+          "luaName": "getMoment",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getPosition",
+          "luaName": "getPosition",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "ax::Vec2",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getPositionOffset",
+          "luaName": "getPositionOffset",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "const ax::Vec2 \u0026",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getRotation",
+          "luaName": "getRotation",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getRotationOffset",
+          "luaName": "getRotationOffset",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getTag",
+          "luaName": "getTag",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "unsigned int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getVelocity",
+          "luaName": "getVelocity",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "ax::Vec2",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getVelocityAtLocalPoint",
+          "luaName": "getVelocityAtLocalPoint",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "ax::Vec2",
+          "parameterTypes": [
+            "const ax::Vec2 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getVelocityAtWorldPoint",
+          "luaName": "getVelocityAtWorldPoint",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "ax::Vec2",
+          "parameterTypes": [
+            "const ax::Vec2 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getVelocityLimit",
+          "luaName": "getVelocityLimit",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getWorld",
+          "luaName": "getWorld",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "ax::PhysicsWorld2D *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isAttached",
+          "luaName": "isAttached",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isAutoMass",
+          "luaName": "isAutoMass",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isDynamic",
+          "luaName": "isDynamic",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isGravityEnabled",
+          "luaName": "isGravityEnabled",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isKinematic",
+          "luaName": "isKinematic",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isRotationEnabled",
+          "luaName": "isRotationEnabled",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isSleeping",
+          "luaName": "isSleeping",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "local2World",
+          "luaName": "local2World",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "ax::Vec2",
+          "parameterTypes": [
+            "const ax::Vec2 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "removeAllColliders",
+          "luaName": "removeAllColliders",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            "true"
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "removeCollider",
+          "luaName": "removeCollider",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::Collider2D *",
+            "bool"
+          ],
+          "defaultValues": [
+            null,
+            "true"
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "removeCollider",
+          "luaName": "removeCollider",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "int",
+            "bool"
+          ],
+          "defaultValues": [
+            null,
+            "true"
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "removeFromWorld",
+          "luaName": "removeFromWorld",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "resetForces",
+          "luaName": "resetForces",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setAngularDamping",
+          "luaName": "setAngularDamping",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setAngularVelocity",
+          "luaName": "setAngularVelocity",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setAngularVelocityLimit",
+          "luaName": "setAngularVelocityLimit",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setAutoMass",
+          "luaName": "setAutoMass",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setBodyType",
+          "luaName": "setBodyType",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::Rigidbody2D::BodyType"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setCategoryBits",
+          "luaName": "setCategoryBits",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "uint64_t"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setCollisionDetectionMode",
+          "luaName": "setCollisionDetectionMode",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::Rigidbody2D::CollisionDetectionMode"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setCollisionMaskBits",
+          "luaName": "setCollisionMaskBits",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "int"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setDynamic",
+          "luaName": "setDynamic",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setEventEnabled",
+          "luaName": "setEventEnabled",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::ContactEventBits",
+            "bool"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setGravityEnabled",
+          "luaName": "setGravityEnabled",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setGravityScale",
+          "luaName": "setGravityScale",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setGroup",
+          "luaName": "setGroup",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "int"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setKinematic",
+          "luaName": "setKinematic",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setLinearDamping",
+          "luaName": "setLinearDamping",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setMass",
+          "luaName": "setMass",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setMoment",
+          "luaName": "setMoment",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setPositionOffset",
+          "luaName": "setPositionOffset",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec2 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setRotationEnabled",
+          "luaName": "setRotationEnabled",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setRotationOffset",
+          "luaName": "setRotationOffset",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setSleeping",
+          "luaName": "setSleeping",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setTag",
+          "luaName": "setTag",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "unsigned int"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setVelocity",
+          "luaName": "setVelocity",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec2 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setVelocityLimit",
+          "luaName": "setVelocityLimit",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "world2Local",
+          "luaName": "world2Local",
+          "declaringType": "ax::Rigidbody2D",
+          "returnType": "ax::Vec2",
+          "parameterTypes": [
+            "const ax::Vec2 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "SliderJoint2D",
+      "qualifiedName": "ax::SliderJoint2D",
+      "luaName": "ax.SliderJoint2D",
+      "luaClassName": "SliderJoint2D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Joint2D",
+        "ax::Component",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "GetLimits",
+          "luaName": "GetLimits",
+          "declaringType": "ax::SliderJoint2D",
+          "returnType": "ax::JointTranslationLimits2D",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::SliderJoint2D",
+          "returnType": "ax::SliderJoint2D *",
+          "parameterTypes": [
+            "ax::Rigidbody2D *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getAngle",
+          "luaName": "getAngle",
+          "declaringType": "ax::SliderJoint2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getJointSpeed",
+          "luaName": "getJointSpeed",
+          "declaringType": "ax::SliderJoint2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getJointTranslation",
+          "luaName": "getJointTranslation",
+          "declaringType": "ax::SliderJoint2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMotor",
+          "luaName": "getMotor",
+          "declaringType": "ax::SliderJoint2D",
+          "returnType": "ax::JointMotor2D",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMotorForce",
+          "luaName": "getMotorForce",
+          "declaringType": "ax::SliderJoint2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isUseLimits",
+          "luaName": "isUseLimits",
+          "declaringType": "ax::SliderJoint2D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isUseMotor",
+          "luaName": "isUseMotor",
+          "declaringType": "ax::SliderJoint2D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setAngle",
+          "luaName": "setAngle",
+          "declaringType": "ax::SliderJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setAngleInRadians",
+          "luaName": "setAngleInRadians",
+          "declaringType": "ax::SliderJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setLimits",
+          "luaName": "setLimits",
+          "declaringType": "ax::SliderJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::JointTranslationLimits2D \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setMotor",
+          "luaName": "setMotor",
+          "declaringType": "ax::SliderJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::JointMotor2D \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setUseLimits",
+          "luaName": "setUseLimits",
+          "declaringType": "ax::SliderJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setUseMotor",
+          "luaName": "setUseMotor",
+          "declaringType": "ax::SliderJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "SpringJoint2D",
+      "qualifiedName": "ax::SpringJoint2D",
+      "luaName": "ax.SpringJoint2D",
+      "luaClassName": "SpringJoint2D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Joint2D",
+        "ax::Component",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::SpringJoint2D",
+          "returnType": "ax::SpringJoint2D *",
+          "parameterTypes": [
+            "float",
+            "float",
+            "ax::Rigidbody2D *"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getDamping",
+          "luaName": "getDamping",
+          "declaringType": "ax::SpringJoint2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getRestLength",
+          "luaName": "getRestLength",
+          "declaringType": "ax::SpringJoint2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getStiffness",
+          "luaName": "getStiffness",
+          "declaringType": "ax::SpringJoint2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setDamping",
+          "luaName": "setDamping",
+          "declaringType": "ax::SpringJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setRestLength",
+          "luaName": "setRestLength",
+          "declaringType": "ax::SpringJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setStiffness",
+          "luaName": "setStiffness",
+          "declaringType": "ax::SpringJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "TargetJoint2D",
+      "qualifiedName": "ax::TargetJoint2D",
+      "luaName": "ax.TargetJoint2D",
+      "luaClassName": "TargetJoint2D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Joint2D",
+        "ax::Component",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::TargetJoint2D",
+          "returnType": "ax::TargetJoint2D *",
+          "parameterTypes": [
+            "const ax::Vec2 \u0026",
+            "ax::Rigidbody2D *"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getDamping",
+          "luaName": "getDamping",
+          "declaringType": "ax::TargetJoint2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getFrequency",
+          "luaName": "getFrequency",
+          "declaringType": "ax::TargetJoint2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMaxForce",
+          "luaName": "getMaxForce",
+          "declaringType": "ax::TargetJoint2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMaxForceScale",
+          "luaName": "getMaxForceScale",
+          "declaringType": "ax::TargetJoint2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setDamping",
+          "luaName": "setDamping",
+          "declaringType": "ax::TargetJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setFrequency",
+          "luaName": "setFrequency",
+          "declaringType": "ax::TargetJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setMaxForceScale",
+          "luaName": "setMaxForceScale",
+          "declaringType": "ax::TargetJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "WheelJoint2D",
+      "qualifiedName": "ax::WheelJoint2D",
+      "luaName": "ax.WheelJoint2D",
+      "luaClassName": "WheelJoint2D",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Joint2D",
+        "ax::Component",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::WheelJoint2D",
+          "returnType": "ax::WheelJoint2D *",
+          "parameterTypes": [
+            "ax::Rigidbody2D *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getDamping",
+          "luaName": "getDamping",
+          "declaringType": "ax::WheelJoint2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getLimits",
+          "luaName": "getLimits",
+          "declaringType": "ax::WheelJoint2D",
+          "returnType": "ax::JointTranslationLimits2D",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMotor",
+          "luaName": "getMotor",
+          "declaringType": "ax::WheelJoint2D",
+          "returnType": "ax::JointMotor2D",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMotorTorque",
+          "luaName": "getMotorTorque",
+          "declaringType": "ax::WheelJoint2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getStiffness",
+          "luaName": "getStiffness",
+          "declaringType": "ax::WheelJoint2D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isUseLimits",
+          "luaName": "isUseLimits",
+          "declaringType": "ax::WheelJoint2D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isUseMotor",
+          "luaName": "isUseMotor",
+          "declaringType": "ax::WheelJoint2D",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setDamping",
+          "luaName": "setDamping",
+          "declaringType": "ax::WheelJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setLimits",
+          "luaName": "setLimits",
+          "declaringType": "ax::WheelJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::JointTranslationLimits2D \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setMotor",
+          "luaName": "setMotor",
+          "declaringType": "ax::WheelJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::JointMotor2D \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setStiffness",
+          "luaName": "setStiffness",
+          "declaringType": "ax::WheelJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setUseLimits",
+          "luaName": "setUseLimits",
+          "declaringType": "ax::WheelJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setUseMotor",
+          "luaName": "setUseMotor",
+          "declaringType": "ax::WheelJoint2D",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    }
+  ],
+  "enums": [
+    {
+      "nativeName": "CategoryBits",
+      "qualifiedName": "ax::Collider2D::CategoryBits",
+      "ownerQualifiedName": "ax::Collider2D",
+      "values": [
+        {
+          "name": "kStaticBit",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "kDynamicBit",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        },
+        {
+          "name": "kDebrisBit",
+          "signedValue": 4,
+          "unsignedValue": 4,
+          "isUnsigned": false
+        },
+        {
+          "name": "kPlayerBit",
+          "signedValue": 8,
+          "unsignedValue": 8,
+          "isUnsigned": false
+        },
+        {
+          "name": "kAllCategoryBits",
+          "signedValue": -1,
+          "unsignedValue": 18446744073709551615,
+          "isUnsigned": true
+        }
+      ]
+    },
+    {
+      "nativeName": "Type",
+      "qualifiedName": "ax::Collider2D::Type",
+      "ownerQualifiedName": "ax::Collider2D",
+      "values": [
+        {
+          "name": "UNKNOWN",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "CIRCLE",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "BOX",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        },
+        {
+          "name": "POLYGON",
+          "signedValue": 3,
+          "unsignedValue": 3,
+          "isUnsigned": false
+        },
+        {
+          "name": "EDGESEGMENT",
+          "signedValue": 4,
+          "unsignedValue": 4,
+          "isUnsigned": false
+        },
+        {
+          "name": "EDGEBOX",
+          "signedValue": 5,
+          "unsignedValue": 5,
+          "isUnsigned": false
+        },
+        {
+          "name": "EDGEPOLYGON",
+          "signedValue": 6,
+          "unsignedValue": 6,
+          "isUnsigned": false
+        },
+        {
+          "name": "EDGECHAIN",
+          "signedValue": 7,
+          "unsignedValue": 7,
+          "isUnsigned": false
+        },
+        {
+          "name": "POLYGEN",
+          "signedValue": 3,
+          "unsignedValue": 3,
+          "isUnsigned": false
+        },
+        {
+          "name": "EDGEPOLYGEN",
+          "signedValue": 6,
+          "unsignedValue": 6,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "EventCode",
+      "qualifiedName": "ax::ContactEvent2D::EventCode",
+      "ownerQualifiedName": "ax::ContactEvent2D",
+      "values": [
+        {
+          "name": "None",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "ContactBegin",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "ContactEnd",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        },
+        {
+          "name": "CollisionHit",
+          "signedValue": 3,
+          "unsignedValue": 3,
+          "isUnsigned": false
+        },
+        {
+          "name": "SensorBegin",
+          "signedValue": 4,
+          "unsignedValue": 4,
+          "isUnsigned": false
+        },
+        {
+          "name": "SensorEnd",
+          "signedValue": 5,
+          "unsignedValue": 5,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "AnchorSpace",
+      "qualifiedName": "ax::Joint2D::AnchorSpace",
+      "ownerQualifiedName": "ax::Joint2D",
+      "values": [
+        {
+          "name": "Local",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "World",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "BodyType",
+      "qualifiedName": "ax::Rigidbody2D::BodyType",
+      "ownerQualifiedName": "ax::Rigidbody2D",
+      "values": [
+        {
+          "name": "StaticBody",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "DynamicBody",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        },
+        {
+          "name": "KinematicBody",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "CollisionDetectionMode",
+      "qualifiedName": "ax::Rigidbody2D::CollisionDetectionMode",
+      "ownerQualifiedName": "ax::Rigidbody2D",
+      "values": [
+        {
+          "name": "Discrete",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "Continuous",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        }
+      ]
+    }
+  ]
+}

@@ -91,7 +91,7 @@ local function PauseTest()
         end
     end
 
-    ret:registerScriptHandler(onNodeEvent)
+    ret:setLifecycleCallback(onNodeEvent)
     return ret
 end
 
@@ -171,7 +171,7 @@ local function ResumeTest()
         end
     end
 
-    ret:registerScriptHandler(onNodeEvent)
+    ret:setLifecycleCallback(onNodeEvent)
 
     return ret
 end

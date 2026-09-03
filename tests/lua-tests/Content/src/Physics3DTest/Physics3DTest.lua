@@ -69,7 +69,7 @@ function Physics3DTestDemo:ctor()
         end
     end
 
-    self:registerScriptHandler(onNodeEvent)
+    self:setLifecycleCallback(onNodeEvent)
 end
 
 function Physics3DTestDemo:title()
@@ -108,6 +108,7 @@ function Physics3DTestDemo:onEnter()
     end
 
     self._physicsScene = scene
+    self._pointerDown = false
     local physics3DWorld = scene:getPhysicsWorld3D()
     physics3DWorld:setDebugDrawEnabled(false)
 
@@ -120,13 +121,15 @@ function Physics3DTestDemo:onEnter()
 
     if Helper.index ~= 2 then
         local listener = ax.PointerEventListener:create()
-        listener:registerScriptHandler(function(event)
+        listener.onPointerDown = function(event)
+            self._pointerDown = true
             self._needShootBox = true
-        end, ax.Handler.EVENT_POINTER_DOWN)
+            return true
+        end
 
-        listener:registerScriptHandler(function(event)
-            if event ~= nil and self._camera ~= nil then
-                local delta = event:getDelta()
+        listener.onPointerMove = function(event)
+            if self._pointerDown and event ~= nil and self._camera ~= nil then
+                local delta = ax.pSub(event:getPoint(), event:getPrevPoint())
 
                 self._angle = self._angle - delta.x * math.pi / 180.0
                 self._camera:setPosition3D(ax.vec3(100.0 * math.sin(self._angle), 50.0, 100.0 * math.cos(self._angle)))
@@ -136,9 +139,10 @@ function Physics3DTestDemo:onEnter()
                     self._needShootBox = false
                 end
             end
-        end, ax.Handler.EVENT_POINTER_MOVE)
+        end
 
-        listener:registerScriptHandler(function(event)
+        listener.onPointerUp = function(event)
+            self._pointerDown = false
             if self._needShootBox == false then
                 return
             end
@@ -154,7 +158,11 @@ function Physics3DTestDemo:onEnter()
                 local cameraPosition = self._camera:getPosition3D()
                 self:shootBox(ax.vec3add(cameraPosition, ax.vec3mul(dir, 10)))
             end
-        end, ax.Handler.EVENT_POINTER_UP)
+        end
+
+        listener.onPointerCancel = function(event)
+            self._pointerDown = false
+        end
 
         self:getEventDispatcher():addEventListenerWithSceneGraphPriority(listener, self)
     end
@@ -282,14 +290,16 @@ end
 
 function Joint3DDemo:extend()
     local listener = ax.PointerEventListener:create()
-    listener:registerScriptHandler(function(event)
+    listener.onPointerDown = function(event)
+        self._pointerDown = true
         if self:onPickBegan(event) then
-            return
+            return true
         end
         self._needShootBox = false
-    end, ax.Handler.EVENT_POINTER_DOWN)
+        return true
+    end
 
-    listener:registerScriptHandler(function(event)
+    listener.onPointerMove = function(event)
         if self._constraint ~= nil and event ~= nil then
             local location = event:getPoint()
             local nearP = ax.vec3(location.x, location.y, 0.0)
@@ -303,8 +313,8 @@ function Joint3DDemo:extend()
             return
         end
 
-        if event ~= nil and self._camera ~= nil then
-            local delta = event:getDelta()
+        if self._pointerDown and event ~= nil and self._camera ~= nil then
+            local delta = ax.pSub(event:getPoint(), event:getPrevPoint())
             self._angle = self._angle - delta.x * math.pi / 180.0
             self._camera:setPosition3D(ax.vec3(100.0 * math.sin(self._angle), 50.0, 100.0 * math.cos(self._angle)))
             self._camera:lookAt(ax.vec3(0.0, 0.0, 0.0), ax.vec3(0.0, 1.0, 0.0))
@@ -313,9 +323,10 @@ function Joint3DDemo:extend()
                 self._needShootBox = false
             end
         end
-    end, ax.Handler.EVENT_POINTER_MOVE)
+    end
 
-    listener:registerScriptHandler(function(event)
+    listener.onPointerUp = function(event)
+        self._pointerDown = false
         if self._constraint ~= nil then
             if self._constraintOwner ~= nil then
                 self._constraintOwner:removeComponent(self._constraint)
@@ -340,7 +351,18 @@ function Joint3DDemo:extend()
             local cameraPosition = self._camera:getPosition3D()
             self:shootBox(ax.vec3add(cameraPosition, ax.vec3mul(dir, 10)))
         end
-    end, ax.Handler.EVENT_POINTER_UP)
+    end
+
+    listener.onPointerCancel = function(event)
+        self._pointerDown = false
+        if self._constraint ~= nil then
+            if self._constraintOwner ~= nil then
+                self._constraintOwner:removeComponent(self._constraint)
+            end
+            self._constraint = nil
+            self._constraintOwner = nil
+        end
+    end
 
     self:getEventDispatcher():addEventListenerWithSceneGraphPriority(listener, self)
     self._physicsScene:setDebugCamera(self._camera)
@@ -542,7 +564,7 @@ function Physics3DCollisionCallbackDemo:extend()
     
     local contactListener = ax.ContactEventListener3D:create()
     
-    contactListener:registerScriptHandler(onHit, ax.Handler.EVENT_PHYSICS_3D_HIT)
+    contactListener.onCollisionHit = onHit
     
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(contactListener, self)

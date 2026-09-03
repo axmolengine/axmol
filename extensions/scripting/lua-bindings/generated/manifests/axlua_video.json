@@ -1,0 +1,543 @@
+{
+  "formatVersion": 1,
+  "module": "video",
+  "registrationName": "ax_video",
+  "luaNamespace": "axui",
+  "luaTypeNamespace": "axui",
+  "conditionalExpression": "defined(AX_ENABLE_VIDEO)",
+  "classes": [
+    {
+      "nativeName": "VideoPlayer",
+      "qualifiedName": "ax::ui::VideoPlayer",
+      "luaName": "axui.VideoPlayer",
+      "luaClassName": "VideoPlayer",
+      "isAbstract": false,
+      "constructors": [
+        {
+          "parameterTypes": [],
+          "defaultValues": []
+        }
+      ],
+      "bases": [
+        "ax::ui::Widget",
+        "ax::ProtectedNode",
+        "ax::Node",
+        "ax::Object",
+        "ax::ui::LayoutParameterProtocol"
+      ],
+      "methods": [
+        {
+          "nativeName": "addEventListener",
+          "luaName": "addEventListener",
+          "declaringType": "ax::ui::VideoPlayer",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::ui::VideoPlayer::VideoPlayerCallback \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::ui::VideoPlayer",
+          "returnType": "ax::ui::VideoPlayer *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getCurrentTime",
+          "luaName": "getCurrentTime",
+          "declaringType": "ax::ui::VideoPlayer",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getDuration",
+          "luaName": "getDuration",
+          "declaringType": "ax::ui::VideoPlayer",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getFileName",
+          "luaName": "getFileName",
+          "declaringType": "ax::ui::VideoPlayer",
+          "returnType": "std::string_view",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getState",
+          "luaName": "getState",
+          "declaringType": "ax::ui::VideoPlayer",
+          "returnType": "ax::ui::VideoPlayer::State",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getURL",
+          "luaName": "getURL",
+          "declaringType": "ax::ui::VideoPlayer",
+          "returnType": "std::string_view",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getVideoController",
+          "luaName": "getVideoController",
+          "declaringType": "ax::ui::VideoPlayer",
+          "returnType": "ax::ui::VideoController *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isFullscreen",
+          "luaName": "isFullscreen",
+          "declaringType": "ax::ui::VideoPlayer",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isKeepAspectRatio",
+          "luaName": "isKeepAspectRatio",
+          "declaringType": "ax::ui::VideoPlayer",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isLooping",
+          "luaName": "isLooping",
+          "declaringType": "ax::ui::VideoPlayer",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isPlaying",
+          "luaName": "isPlaying",
+          "declaringType": "ax::ui::VideoPlayer",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isUserInputEnabled",
+          "luaName": "isUserInputEnabled",
+          "declaringType": "ax::ui::VideoPlayer",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "onEnter",
+          "luaName": "onEnter",
+          "declaringType": "ax::ui::VideoPlayer",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "onExit",
+          "luaName": "onExit",
+          "declaringType": "ax::ui::VideoPlayer",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "onPlayEvent",
+          "luaName": "onPlayEvent",
+          "declaringType": "ax::ui::VideoPlayer",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::ui::VideoPlayer::EventType"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "pausePlayback",
+          "luaName": "pausePlayback",
+          "declaringType": "ax::ui::VideoPlayer",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "play",
+          "luaName": "play",
+          "declaringType": "ax::ui::VideoPlayer",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "resumePlayback",
+          "luaName": "resumePlayback",
+          "declaringType": "ax::ui::VideoPlayer",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "seekTo",
+          "luaName": "seekTo",
+          "declaringType": "ax::ui::VideoPlayer",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setFileName",
+          "luaName": "setFileName",
+          "declaringType": "ax::ui::VideoPlayer",
+          "returnType": "void",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setFullscreen",
+          "luaName": "setFullscreen",
+          "declaringType": "ax::ui::VideoPlayer",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setKeepAspectRatio",
+          "luaName": "setKeepAspectRatio",
+          "declaringType": "ax::ui::VideoPlayer",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setLooping",
+          "luaName": "setLooping",
+          "declaringType": "ax::ui::VideoPlayer",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setPlayRate",
+          "luaName": "setPlayRate",
+          "declaringType": "ax::ui::VideoPlayer",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setStyle",
+          "luaName": "setStyle",
+          "declaringType": "ax::ui::VideoPlayer",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::ui::VideoPlayer::StyleType"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setURL",
+          "luaName": "setURL",
+          "declaringType": "ax::ui::VideoPlayer",
+          "returnType": "void",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setUserInputEnabled",
+          "luaName": "setUserInputEnabled",
+          "declaringType": "ax::ui::VideoPlayer",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setVideoController",
+          "luaName": "setVideoController",
+          "declaringType": "ax::ui::VideoPlayer",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::ui::VideoController *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "stop",
+          "luaName": "stop",
+          "declaringType": "ax::ui::VideoPlayer",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    }
+  ],
+  "enums": [
+    {
+      "nativeName": "EventType",
+      "qualifiedName": "ax::ui::VideoPlayer::EventType",
+      "ownerQualifiedName": "ax::ui::VideoPlayer",
+      "values": [
+        {
+          "name": "PLAYING",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "PAUSED",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "STOPPED",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        },
+        {
+          "name": "COMPLETED",
+          "signedValue": 3,
+          "unsignedValue": 3,
+          "isUnsigned": false
+        },
+        {
+          "name": "ERROR",
+          "signedValue": 4,
+          "unsignedValue": 4,
+          "isUnsigned": false
+        },
+        {
+          "name": "FULLSCREEN_SWITCH",
+          "signedValue": 5,
+          "unsignedValue": 5,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "Source",
+      "qualifiedName": "ax::ui::VideoPlayer::Source",
+      "ownerQualifiedName": "ax::ui::VideoPlayer",
+      "values": [
+        {
+          "name": "FILENAME",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "URL",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "State",
+      "qualifiedName": "ax::ui::VideoPlayer::State",
+      "ownerQualifiedName": "ax::ui::VideoPlayer",
+      "values": [
+        {
+          "name": "CLOSED",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "LOADING",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "PLAYING",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        },
+        {
+          "name": "PAUSED",
+          "signedValue": 3,
+          "unsignedValue": 3,
+          "isUnsigned": false
+        },
+        {
+          "name": "STOPPED",
+          "signedValue": 4,
+          "unsignedValue": 4,
+          "isUnsigned": false
+        },
+        {
+          "name": "FINISHED",
+          "signedValue": 5,
+          "unsignedValue": 5,
+          "isUnsigned": false
+        },
+        {
+          "name": "ERROR",
+          "signedValue": 6,
+          "unsignedValue": 6,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "StyleType",
+      "qualifiedName": "ax::ui::VideoPlayer::StyleType",
+      "ownerQualifiedName": "ax::ui::VideoPlayer",
+      "values": [
+        {
+          "name": "DEFAULT",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "NONE",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        }
+      ]
+    }
+  ]
+}

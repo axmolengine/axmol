@@ -23,7 +23,7 @@ THE SOFTWARE.
 
 ]]
 
-local ScrollView = ccui.ScrollView
+local ScrollView = axui.ScrollView
 
 function ScrollView:onEvent(callback)
     self:addEventListener(function(sender, eventType)

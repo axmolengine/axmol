@@ -30,7 +30,7 @@ function LabelFNTColorAndOpacity.onNodeEvent(tag)
         LabelFNTColorAndOpacity.layer:unscheduleUpdate()
     elseif tag == "enter" then
         if nil ~= LabelFNTColorAndOpacity.layer then
-            LabelFNTColorAndOpacity.layer:scheduleUpdateWithPriorityLua(LabelFNTColorAndOpacity.step, 0)
+            LabelFNTColorAndOpacity.layer:onUpdate(LabelFNTColorAndOpacity.step)
         end
     end
 end
@@ -76,7 +76,7 @@ function LabelFNTColorAndOpacity.create()
     label2:setPosition( VisibleRect:center() )
     label3:setPosition( VisibleRect:rightTop() )
 
-    layer:registerScriptHandler(LabelFNTColorAndOpacity.onNodeEvent)
+    layer:setLifecycleCallback(LabelFNTColorAndOpacity.onNodeEvent)
 
     Helper.titleLabel:setString( "New Label + .FNT file" )
     Helper.subtitleLabel:setString( "Testing opacity + tint" )
@@ -176,7 +176,7 @@ function LabelFNTSpriteActions.create()
     local lastChar = label2:getLetter(3)
     lastChar:runAction(rot_4ever:clone())
 
-    layer:registerScriptHandler(LabelFNTSpriteActions.onNodeEvent)
+    layer:setLifecycleCallback(LabelFNTSpriteActions.onNodeEvent)
 
     Helper.titleLabel:setString("New Label + .FNT file")
     Helper.subtitleLabel:setString( "Using fonts as Sprite objects. Some characters should rotate.")
@@ -452,7 +452,7 @@ function LabelFNTandTTFEmpty.create()
     label2:setAnchorPoint(ax.p(0.5, 0.5))
     label2:setPosition(ax.p(s.width/2, s.height/2))
 
-    layer:registerScriptHandler(LabelFNTandTTFEmpty.onNodeEvent)
+    layer:setLifecycleCallback(LabelFNTandTTFEmpty.onNodeEvent)
 
     LabelFNTandTTFEmpty.setEmpty = false
     Helper.titleLabel:setString("New Label : .FNT file & .TTF file")
@@ -673,7 +673,7 @@ function LabelFNTMultiLineAlignment.create()
     layer:addChild(LabelFNTMultiLineAlignment._pArrowsShouldRetain)
     layer:addChild(stringMenu)
     layer:addChild(alignmentMenu)
-    layer:registerScriptHandler(LabelFNTMultiLineAlignment.onNodeEvent)
+    layer:setLifecycleCallback(LabelFNTMultiLineAlignment.onNodeEvent)
 
     local function onTouchesBegan(event)
         local location = event:getPoint()
@@ -707,9 +707,9 @@ function LabelFNTMultiLineAlignment.create()
     end
 
     local listener = ax.PointerEventListener:create()
-    listener:registerScriptHandler(onTouchesBegan,ax.Handler.EVENT_POINTER_DOWN )
-    listener:registerScriptHandler(onPointerMove,ax.Handler.EVENT_POINTER_MOVE )
-    listener:registerScriptHandler(onTouchesEnded,ax.Handler.EVENT_POINTER_UP )
+    listener.onPointerDown = onTouchesBegan
+    listener.onPointerMove = onPointerMove
+    listener.onPointerUp = onTouchesEnded
 
     local eventDispatcher = layer:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, layer)
@@ -1257,7 +1257,7 @@ function LabelCharMapTest.create()
         label2:setString(info)
     end
 
-    layer:scheduleUpdateWithPriorityLua(step, 0)
+    layer:onUpdate(step)
 
     function onNodeEvent(tag)
         if tag == "exit" then
@@ -1265,7 +1265,7 @@ function LabelCharMapTest.create()
         end
     end
 
-    layer:registerScriptHandler(onNodeEvent)
+    layer:setLifecycleCallback(onNodeEvent)
 
     return layer
 end
@@ -1338,7 +1338,7 @@ function LabelShadowTest.create()
     layer:addChild(shadowLabelBMFont)
 
     local function sliderEvent(sender, eventType)
-        if eventType == ccui.SliderEventType.percentChanged then
+        if eventType == axui.SliderEventType.percentChanged then
             local  slider = layer:getChildByTag(1)
             local  slider2 = layer:getChildByTag(2)
             local offset = ax.size(slider:getPercent() - 50,50 - slider2:getPercent())
@@ -1348,7 +1348,7 @@ function LabelShadowTest.create()
         end
     end
 
-    local slider = ccui.Slider:create()
+    local slider = axui.Slider:create()
     slider:setTag(1)
     slider:setTouchEnabled(true)
     slider:loadBarTexture("cocosui/sliderTrack.png")
@@ -1359,7 +1359,7 @@ function LabelShadowTest.create()
     slider:addEventListener(sliderEvent)
     layer:addChild(slider)
 
-    local slider2 = ccui.Slider:create()
+    local slider2 = axui.Slider:create()
     slider2:setTag(2)
     slider2:setTouchEnabled(true)
     slider2:loadBarTexture("cocosui/sliderTrack.png")
@@ -1426,8 +1426,8 @@ function LabelCharMapColorTest.create()
     end
 
 
-    layer:registerScriptHandler(onNodeEvent)
-    layer:scheduleUpdateWithPriorityLua(step, 0)
+    layer:setLifecycleCallback(onNodeEvent)
+    layer:onUpdate(step)
 
     return layer
 end
@@ -1622,7 +1622,7 @@ function LabelIssue4428Test.create()
     label:setAnchorPoint(ax.p(0.5, 0.5))
     layer:addChild(label)
 
-    local len = label:getStringLength()
+    local len = label:getCharCount()
     for i = 0, len -1 do
         local sprite = label:getLetter(i)
         if nil ~= sprite then

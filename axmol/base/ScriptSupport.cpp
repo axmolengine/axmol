@@ -58,7 +58,8 @@ ScriptHandlerEntry::~ScriptHandlerEntry()
 {
     if (_handler != 0)
     {
-        ScriptEngineManager::getInstance()->getScriptEngine()->removeScriptHandler(_handler);
+        if (auto* engine = ScriptEngineManager::getScriptEngineIfExists())
+            engine->removeScriptHandler(_handler);
         AXLOGD("[LUA] Remove event handler: {}", _handler);
         _handler = 0;
     }
@@ -75,12 +76,30 @@ SchedulerScriptHandlerEntry* SchedulerScriptHandlerEntry::create(int handler, fl
     return entry;
 }
 
+SchedulerScriptHandlerEntry* SchedulerScriptHandlerEntry::create(const std::function<void(float)>& callback,
+                                                                 float interval,
+                                                                 bool paused)
+{
+    SchedulerScriptHandlerEntry* entry = new SchedulerScriptHandlerEntry(0);
+    entry->init(callback, interval, paused);
+    entry->autorelease();
+    return entry;
+}
+
 bool SchedulerScriptHandlerEntry::init(float interval, bool paused)
 {
     _timer = new TimerScriptHandler();
     _timer->initWithScriptHandler(_handler, interval);
     _paused = paused;
     AXLOGD("[LUA] ADD script schedule: {}, entryID: {}", _handler, _entryId);
+    return true;
+}
+
+bool SchedulerScriptHandlerEntry::init(const std::function<void(float)>& callback, float interval, bool paused)
+{
+    _timer = new TimerScriptHandler();
+    _timer->initWithCallback(callback, interval);
+    _paused = paused;
     return true;
 }
 
@@ -136,11 +155,13 @@ void ScriptEngineManager::setScriptEngine(ScriptEngineProtocol* scriptEngine)
 
 void ScriptEngineManager::removeScriptEngine()
 {
-    if (_scriptEngine)
-    {
-        delete _scriptEngine;
-        _scriptEngine = nullptr;
-    }
+    // Clear the published pointer before destruction.  Object destructors
+    // can run from inside a script engine destructor; they must observe that
+    // no script backend is available instead of calling the half-destroyed
+    // engine through a dangling manager pointer.
+    auto* scriptEngine = _scriptEngine;
+    _scriptEngine      = nullptr;
+    delete scriptEngine;
 }
 
 ScriptEngineManager* ScriptEngineManager::getInstance()
@@ -152,25 +173,17 @@ ScriptEngineManager* ScriptEngineManager::getInstance()
     return s_pSharedScriptEngineManager;
 }
 
+ScriptEngineProtocol* ScriptEngineManager::getScriptEngineIfExists()
+{
+    return s_pSharedScriptEngineManager != nullptr ? s_pSharedScriptEngineManager->_scriptEngine : nullptr;
+}
+
 void ScriptEngineManager::destroyInstance()
 {
     if (s_pSharedScriptEngineManager)
     {
         delete s_pSharedScriptEngineManager;
         s_pSharedScriptEngineManager = nullptr;
-    }
-}
-
-void ScriptEngineManager::sendNodeEventToLua(Node* node, int action)
-{
-    auto scriptEngine = getInstance()->getScriptEngine();
-    if (scriptEngine)
-    {
-
-        BasicScriptData data(node, (void*)&action);
-        ScriptEvent scriptEvent(kNodeEvent, (void*)&data);
-
-        scriptEngine->sendEvent(scriptEvent);
     }
 }
 

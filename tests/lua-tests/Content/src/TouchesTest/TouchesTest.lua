@@ -65,7 +65,7 @@ local function CreateTouchesLayer()
 
     local paddlesM = {}
 
-    local paddleStep =( VisibleRect:getVisibleRect().height - kStatusBarHeight - 30 - 3 * paddleTexture:getPixelsHigh() ) / 3 + paddleTexture:getPixelsHigh()
+    local paddleStep =( VisibleRect:getVisibleRect().height - kStatusBarHeight - 30 - 3 * paddleTexture:getHeight() ) / 3 + paddleTexture:getHeight()
     local nextPaddlePos = VisibleRect:bottom().y + 15
 
     local paddle = Paddle:paddleWithTexture(paddleTexture)
@@ -100,7 +100,7 @@ local function CreateTouchesLayer()
     end
 
     -- schedule
-    layer:scheduleUpdateWithPriorityLua(doStep, 0)
+    layer:onUpdate(doStep)
     return layer
 end
 
@@ -114,4 +114,3 @@ function TouchesTest()
 	scene:addChild(CreateBackMenuItem())
     return scene
 end
-

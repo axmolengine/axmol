@@ -56,6 +56,7 @@ add_subdirectory(${_AX_ROOT}/axmol ${ENGINE_BINARY_PATH}/axmol)
 set(BUILD_ENGINE_DONE ON)
 
 if(AX_BUILD_TESTS)
+  enable_testing()
   message(STATUS "CMAKE_BINARY_DIR=${CMAKE_BINARY_DIR}")
 
   macro(add_test_target target_name dir)

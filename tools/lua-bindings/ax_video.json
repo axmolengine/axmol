@@ -1,0 +1,26 @@
+{
+  "module": "ax_video",
+  "target_namespace": "axui",
+  "cpp_namespace": "ax::ui",
+  "macro_judgement": "#if defined(AX_ENABLE_VIDEO)",
+  "headers": [
+    "%(axdir)s/axmol/ui/VideoPlayer.h"
+  ],
+  "clang_flags": [
+    "-DAX_ENABLE_VIDEO=1"
+  ],
+  "classes": [
+    "VideoPlayer"
+  ],
+  "abstract_classes": [],
+  "classes_have_no_parents": [],
+  "base_classes_to_skip": [],
+  "skip": [
+    {
+      "class": "VideoPlayer",
+      "methods": []
+    }
+  ],
+  "rename_functions": [],
+  "rename_classes": []
+}

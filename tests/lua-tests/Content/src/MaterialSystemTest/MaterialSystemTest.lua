@@ -53,7 +53,7 @@ function MaterialSystemBaseTest:ctor()
         end
     end
 
-    self:registerScriptHandler(onNodeEvent)
+    self:setLifecycleCallback(onNodeEvent)
 end
 
 function MaterialSystemBaseTest:title()

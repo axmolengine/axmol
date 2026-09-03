@@ -10,13 +10,13 @@ function TextInput.create()
     local res = "Images/CyanSquare.png"
     local width = 200
     local height = 40
-    local back = ccui.Scale9Sprite:create(res)
-    local edit = ccui.EditBox:create(ax.size(width,height),back)
+    local back = axui.Scale9Sprite:create(res)
+    local edit = axui.EditBox:create(ax.size(width,height),back)
     layer:addChild(edit)
     edit:setPosition( ax.p(250,200) )
     edit:setPlaceHolder("click to input text")
 
-    local editPasswd = ccui.EditBox:create(ax.size(width,height),res)
+    local editPasswd = axui.EditBox:create(ax.size(width,height),res)
     editPasswd:setInputFlag(ax.EDITBOX_INPUT_FLAG_PASSWORD)
     layer:addChild(editPasswd)
     editPasswd:setPosition( ax.p(250,100) )
@@ -37,4 +37,3 @@ function TextInputTestMain()
     scene:addChild(CreateBackMenuItem())
     return scene
 end
-

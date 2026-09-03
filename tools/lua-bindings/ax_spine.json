@@ -1,0 +1,46 @@
+{
+  "module": "ax_spine",
+  "target_namespace": "sp",
+  "cpp_namespace": "spine",
+  "macro_judgement": null,
+  "headers": [
+    "%(axdir)s/extensions/spine/src/spine/spine-axmol.h"
+  ],
+  "clang_flags": [],
+  "classes": [
+    "SkeletonAsset",
+    "SkeletonAnimation"
+  ],
+  "abstract_classes": [
+    "Skeleton",
+    "SkeletonAsset",
+    "SkeletonAnimation"
+  ],
+  "classes_have_no_parents": [],
+  "base_classes_to_skip": [],
+  "skip": [
+    {
+      "class": "SkeletonAnimation",
+      "methods": [
+        "findBone",
+        "findSlot",
+        "getAttachment",
+        "update",
+        "draw",
+        "addAnimation",
+        "setAnimation",
+        "onAnimationStateEvent",
+        "onTrackEntryEvent"
+      ]
+    },
+    {
+      "class": "*",
+      "methods": [
+        "update",
+        "draw"
+      ]
+    }
+  ],
+  "rename_functions": [],
+  "rename_classes": []
+}

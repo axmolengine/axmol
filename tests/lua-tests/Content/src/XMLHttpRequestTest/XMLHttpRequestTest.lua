@@ -29,7 +29,7 @@ local function XMLHttpRequestLayer()
             xhr:open("GET", "https://httpbin.org/get")
 
             local function onReadyStateChanged()
-                if not tolua.isnull(labelStatusCode) then
+                if not axlua.isnull(labelStatusCode) then
                     labelStatusCode:setString("Http Status:" .. xhr.statusText)
                 else
                     print("ERROR: labelStatusCode is invalid!")
@@ -62,7 +62,7 @@ local function XMLHttpRequestLayer()
             xhr:open("POST", "https://httpbin.org/post")
             local function onReadyStateChanged()
                 if xhr.readyState == 4 and (xhr.status >= 200 and xhr.status < 207) then
-                    if not tolua.isnull(labelStatusCode) then
+                    if not axlua.isnull(labelStatusCode) then
                         labelStatusCode:setString("Http Status:" .. xhr.statusText)
                     else
                         print("ERROR: labelStatusCode is invalid!")
@@ -106,7 +106,7 @@ local function XMLHttpRequestLayer()
                         end
                     end
 
-                    if not tolua.isnull(labelStatusCode) then
+                    if not axlua.isnull(labelStatusCode) then
                         labelStatusCode:setString("Http Status:" .. xhr.statusText)
                     else
                         print("ERROR: labelStatusCode is invalid!")
@@ -141,7 +141,7 @@ local function XMLHttpRequestLayer()
 
             local function onReadyStateChanged()
                 if xhr.readyState == 4 and (xhr.status >= 200 and xhr.status < 207) then
-                    if not tolua.isnull(labelStatusCode) then
+                    if not axlua.isnull(labelStatusCode) then
                         labelStatusCode:setString("Http Status:" .. xhr.statusText)
                     else
                         print("ERROR: labelStatusCode is invalid!")
@@ -183,7 +183,7 @@ local function XMLHttpRequestLayer()
         end
     end
 
-    layer:registerScriptHandler(onNodeEvent)
+    layer:setLifecycleCallback(onNodeEvent)
 
     return layer
 end

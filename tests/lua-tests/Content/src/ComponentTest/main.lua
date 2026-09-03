@@ -40,7 +40,7 @@ local function ComponentTestLayer()
     local eventDispatcher = ax.Director:getInstance():getEventDispatcher()
     eventDispatcher:addEventListenerWithFixedPriority(layer._listener1, 1)
 
-    layer:registerScriptHandler(onNodeEvent)
+    layer:setLifecycleCallback(onNodeEvent)
 
     return layer
 end
