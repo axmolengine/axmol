@@ -1,0 +1,2799 @@
+{
+  "formatVersion": 1,
+  "module": "3d",
+  "registrationName": "ax_3d",
+  "luaNamespace": "ax",
+  "luaTypeNamespace": "ax",
+  "conditionalExpression": "defined(AX_ENABLE_3D)",
+  "classes": [
+    {
+      "nativeName": "AABB",
+      "qualifiedName": "ax::AABB",
+      "luaName": "ax.AABB",
+      "luaClassName": "AABB",
+      "isAbstract": false,
+      "constructors": [
+        {
+          "parameterTypes": [],
+          "defaultValues": []
+        },
+        {
+          "parameterTypes": [
+            "const ax::Vec3 \u0026",
+            "const ax::Vec3 \u0026"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ]
+        }
+      ],
+      "bases": [],
+      "methods": [
+        {
+          "nativeName": "containPoint",
+          "luaName": "containPoint",
+          "declaringType": "ax::AABB",
+          "returnType": "bool",
+          "parameterTypes": [
+            "const ax::Vec3 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getCenter",
+          "luaName": "getCenter",
+          "declaringType": "ax::AABB",
+          "returnType": "ax::Vec3",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "intersects",
+          "luaName": "intersects",
+          "declaringType": "ax::AABB",
+          "returnType": "bool",
+          "parameterTypes": [
+            "const ax::AABB \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isEmpty",
+          "luaName": "isEmpty",
+          "declaringType": "ax::AABB",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "merge",
+          "luaName": "merge",
+          "declaringType": "ax::AABB",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::AABB \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "reset",
+          "luaName": "reset",
+          "declaringType": "ax::AABB",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "set",
+          "luaName": "set",
+          "declaringType": "ax::AABB",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec3 \u0026",
+            "const ax::Vec3 \u0026"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "transform",
+          "luaName": "transform",
+          "declaringType": "ax::AABB",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Mat4 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": [
+        {
+          "nativeName": "_max",
+          "luaName": "_max",
+          "fieldType": "ax::Vec3"
+        },
+        {
+          "nativeName": "_min",
+          "luaName": "_min",
+          "fieldType": "ax::Vec3"
+        }
+      ]
+    },
+    {
+      "nativeName": "Animate3D",
+      "qualifiedName": "ax::Animate3D",
+      "luaName": "ax.Animate3D",
+      "luaClassName": "Animate3D",
+      "isAbstract": false,
+      "constructors": [
+        {
+          "parameterTypes": [],
+          "defaultValues": []
+        }
+      ],
+      "bases": [
+        "ax::ActionInterval",
+        "ax::FiniteTimeAction",
+        "ax::Action",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::Animate3D",
+          "returnType": "ax::Animate3D *",
+          "parameterTypes": [
+            "ax::Animation3D *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::Animate3D",
+          "returnType": "ax::Animate3D *",
+          "parameterTypes": [
+            "ax::Animation3D *",
+            "float",
+            "float"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "createWithFrames",
+          "luaName": "createWithFrames",
+          "declaringType": "ax::Animate3D",
+          "returnType": "ax::Animate3D *",
+          "parameterTypes": [
+            "ax::Animation3D *",
+            "int",
+            "int",
+            "float"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            null,
+            "30.f"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getOriginInterval",
+          "luaName": "getOriginInterval",
+          "declaringType": "ax::Animate3D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getQuality",
+          "luaName": "getQuality",
+          "declaringType": "ax::Animate3D",
+          "returnType": "ax::Animate3DQuality",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getSpeed",
+          "luaName": "getSpeed",
+          "declaringType": "ax::Animate3D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getTransitionTime",
+          "luaName": "getTransitionTime",
+          "declaringType": "ax::Animate3D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getWeight",
+          "luaName": "getWeight",
+          "declaringType": "ax::Animate3D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "init",
+          "luaName": "init",
+          "declaringType": "ax::Animate3D",
+          "returnType": "bool",
+          "parameterTypes": [
+            "ax::Animation3D *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "init",
+          "luaName": "init",
+          "declaringType": "ax::Animate3D",
+          "returnType": "bool",
+          "parameterTypes": [
+            "ax::Animation3D *",
+            "float",
+            "float"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "initWithFrames",
+          "luaName": "initWithFrames",
+          "declaringType": "ax::Animate3D",
+          "returnType": "bool",
+          "parameterTypes": [
+            "ax::Animation3D *",
+            "int",
+            "int",
+            "float"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "removeFromMap",
+          "luaName": "removeFromMap",
+          "declaringType": "ax::Animate3D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setOriginInterval",
+          "luaName": "setOriginInterval",
+          "declaringType": "ax::Animate3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setQuality",
+          "luaName": "setQuality",
+          "declaringType": "ax::Animate3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::Animate3DQuality"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setSpeed",
+          "luaName": "setSpeed",
+          "declaringType": "ax::Animate3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setTransitionTime",
+          "luaName": "setTransitionTime",
+          "declaringType": "ax::Animate3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setWeight",
+          "luaName": "setWeight",
+          "declaringType": "ax::Animate3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "Animation3D",
+      "qualifiedName": "ax::Animation3D",
+      "luaName": "ax.Animation3D",
+      "luaClassName": "Animation3D",
+      "isAbstract": false,
+      "constructors": [
+        {
+          "parameterTypes": [],
+          "defaultValues": []
+        }
+      ],
+      "bases": [
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::Animation3D",
+          "returnType": "ax::Animation3D *",
+          "parameterTypes": [
+            "std::string_view",
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null,
+            "\u0022\u0022"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getDuration",
+          "luaName": "getDuration",
+          "declaringType": "ax::Animation3D",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "initWithFile",
+          "luaName": "initWithFile",
+          "declaringType": "ax::Animation3D",
+          "returnType": "bool",
+          "parameterTypes": [
+            "std::string_view",
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "AttachNode",
+      "qualifiedName": "ax::AttachNode",
+      "luaName": "ax.AttachNode",
+      "luaClassName": "AttachNode",
+      "isAbstract": false,
+      "constructors": [
+        {
+          "parameterTypes": [],
+          "defaultValues": []
+        }
+      ],
+      "bases": [
+        "ax::Node",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::AttachNode",
+          "returnType": "ax::AttachNode *",
+          "parameterTypes": [
+            "ax::Bone3D *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "BillBoard",
+      "qualifiedName": "ax::BillBoard",
+      "luaName": "ax.BillBoard",
+      "luaClassName": "BillBoard",
+      "isAbstract": false,
+      "constructors": [
+        {
+          "parameterTypes": [],
+          "defaultValues": []
+        }
+      ],
+      "bases": [
+        "ax::Sprite",
+        "ax::Node",
+        "ax::Object",
+        "ax::TextureProtocol",
+        "ax::BlendProtocol"
+      ],
+      "methods": [
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::BillBoard",
+          "returnType": "ax::BillBoard *",
+          "parameterTypes": [
+            "ax::BillBoard::Mode"
+          ],
+          "defaultValues": [
+            "ax::BillBoard::Mode::VIEW_POINT_ORIENTED"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::BillBoard",
+          "returnType": "ax::BillBoard *",
+          "parameterTypes": [
+            "std::string_view",
+            "ax::BillBoard::Mode"
+          ],
+          "defaultValues": [
+            null,
+            "ax::BillBoard::Mode::VIEW_POINT_ORIENTED"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::BillBoard",
+          "returnType": "ax::BillBoard *",
+          "parameterTypes": [
+            "std::string_view",
+            "const ax::Rect \u0026",
+            "ax::BillBoard::Mode"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            "ax::BillBoard::Mode::VIEW_POINT_ORIENTED"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "createWithTexture",
+          "luaName": "createWithTexture",
+          "declaringType": "ax::BillBoard",
+          "returnType": "ax::BillBoard *",
+          "parameterTypes": [
+            "ax::Texture2D *",
+            "ax::BillBoard::Mode"
+          ],
+          "defaultValues": [
+            null,
+            "ax::BillBoard::Mode::VIEW_POINT_ORIENTED"
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMode",
+          "luaName": "getMode",
+          "declaringType": "ax::BillBoard",
+          "returnType": "ax::BillBoard::Mode",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setMode",
+          "luaName": "setMode",
+          "declaringType": "ax::BillBoard",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::BillBoard::Mode"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "Bundle3D",
+      "qualifiedName": "ax::Bundle3D",
+      "luaName": "ax.Bundle3D",
+      "luaClassName": "Bundle3D",
+      "isAbstract": false,
+      "constructors": [
+        {
+          "parameterTypes": [],
+          "defaultValues": []
+        }
+      ],
+      "bases": [],
+      "methods": [
+        {
+          "nativeName": "clear",
+          "luaName": "clear",
+          "declaringType": "ax::Bundle3D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "createBundle",
+          "luaName": "createBundle",
+          "declaringType": "ax::Bundle3D",
+          "returnType": "ax::Bundle3D *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "destroyBundle",
+          "luaName": "destroyBundle",
+          "declaringType": "ax::Bundle3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::Bundle3D *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "load",
+          "luaName": "load",
+          "declaringType": "ax::Bundle3D",
+          "returnType": "bool",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "parseGLDataType",
+          "luaName": "parseGLDataType",
+          "declaringType": "ax::Bundle3D",
+          "returnType": "rhi::VertexElementType",
+          "parameterTypes": [
+            "std::string_view",
+            "int"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "parseSamplerAddressMode",
+          "luaName": "parseSamplerAddressMode",
+          "declaringType": "ax::Bundle3D",
+          "returnType": "rhi::SamplerAddressMode",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "Mesh",
+      "qualifiedName": "ax::Mesh",
+      "luaName": "ax.Mesh",
+      "luaClassName": "Mesh",
+      "isAbstract": false,
+      "constructors": [
+        {
+          "parameterTypes": [],
+          "defaultValues": []
+        }
+      ],
+      "bases": [
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "addInstanceChild",
+          "luaName": "addInstanceChild",
+          "declaringType": "ax::Mesh",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::Node *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "calculateAABB",
+          "luaName": "calculateAABB",
+          "declaringType": "ax::Mesh",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "enableInstancing",
+          "luaName": "enableInstancing",
+          "declaringType": "ax::Mesh",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool",
+            "int"
+          ],
+          "defaultValues": [
+            null,
+            "0"
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getBlendFunc",
+          "luaName": "getBlendFunc",
+          "declaringType": "ax::Mesh",
+          "returnType": "const ax::BlendFunc \u0026",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMaterial",
+          "luaName": "getMaterial",
+          "declaringType": "ax::Mesh",
+          "returnType": "ax::Material *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMeshVertexAttribCount",
+          "luaName": "getMeshVertexAttribCount",
+          "declaringType": "ax::Mesh",
+          "returnType": "ssize_t",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMeshVertexAttribute",
+          "luaName": "getMeshVertexAttribute",
+          "declaringType": "ax::Mesh",
+          "returnType": "const ax::MeshVertexAttrib \u0026",
+          "parameterTypes": [
+            "int"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getName",
+          "luaName": "getName",
+          "declaringType": "ax::Mesh",
+          "returnType": "std::string_view",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getProgramState",
+          "luaName": "getProgramState",
+          "declaringType": "ax::Mesh",
+          "returnType": "rhi::ProgramState *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getVertexSizeInBytes",
+          "luaName": "getVertexSizeInBytes",
+          "declaringType": "ax::Mesh",
+          "returnType": "int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isVisible",
+          "luaName": "isVisible",
+          "declaringType": "ax::Mesh",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "rebuildInstances",
+          "luaName": "rebuildInstances",
+          "declaringType": "ax::Mesh",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setBlendFunc",
+          "luaName": "setBlendFunc",
+          "declaringType": "ax::Mesh",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::BlendFunc \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setDynamicInstancing",
+          "luaName": "setDynamicInstancing",
+          "declaringType": "ax::Mesh",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setIndexFormat",
+          "luaName": "setIndexFormat",
+          "declaringType": "ax::Mesh",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::CustomCommand::IndexFormat"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setInstanceCount",
+          "luaName": "setInstanceCount",
+          "declaringType": "ax::Mesh",
+          "returnType": "void",
+          "parameterTypes": [
+            "int"
+          ],
+          "defaultValues": [
+            "0"
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setMaterial",
+          "luaName": "setMaterial",
+          "declaringType": "ax::Mesh",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::Material *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setMeshIndexData",
+          "luaName": "setMeshIndexData",
+          "declaringType": "ax::Mesh",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::MeshIndexData *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setName",
+          "luaName": "setName",
+          "declaringType": "ax::Mesh",
+          "returnType": "void",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setProgramState",
+          "luaName": "setProgramState",
+          "declaringType": "ax::Mesh",
+          "returnType": "void",
+          "parameterTypes": [
+            "rhi::ProgramState *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setSkin",
+          "luaName": "setSkin",
+          "declaringType": "ax::Mesh",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::MeshSkin *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setVisible",
+          "luaName": "setVisible",
+          "declaringType": "ax::Mesh",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "shrinkToFitInstances",
+          "luaName": "shrinkToFitInstances",
+          "declaringType": "ax::Mesh",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "MeshMaterial",
+      "qualifiedName": "ax::MeshMaterial",
+      "luaName": "ax.MeshMaterial",
+      "luaClassName": "MeshMaterial",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Material",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "createBuiltInMaterial",
+          "luaName": "createBuiltInMaterial",
+          "declaringType": "ax::MeshMaterial",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "createBuiltInMaterial",
+          "luaName": "createBuiltInMaterial",
+          "declaringType": "ax::MeshMaterial",
+          "returnType": "ax::MeshMaterial *",
+          "parameterTypes": [
+            "ax::MeshMaterial::MaterialType",
+            "bool"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "createWithFilename",
+          "luaName": "createWithFilename",
+          "declaringType": "ax::MeshMaterial",
+          "returnType": "ax::MeshMaterial *",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "createWithProgramState",
+          "luaName": "createWithProgramState",
+          "declaringType": "ax::MeshMaterial",
+          "returnType": "ax::MeshMaterial *",
+          "parameterTypes": [
+            "rhi::ProgramState *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMaterialType",
+          "luaName": "getMaterialType",
+          "declaringType": "ax::MeshMaterial",
+          "returnType": "ax::MeshMaterial::MaterialType",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "releaseBuiltInMaterial",
+          "luaName": "releaseBuiltInMaterial",
+          "declaringType": "ax::MeshMaterial",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "releaseCachedMaterial",
+          "luaName": "releaseCachedMaterial",
+          "declaringType": "ax::MeshMaterial",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "MeshRenderer",
+      "qualifiedName": "ax::MeshRenderer",
+      "luaName": "ax.MeshRenderer",
+      "luaClassName": "MeshRenderer",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [
+        "ax::Node",
+        "ax::Object",
+        "ax::BlendProtocol"
+      ],
+      "methods": [
+        {
+          "nativeName": "addInstanceChild",
+          "luaName": "addInstanceChild",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::Node *",
+            "bool"
+          ],
+          "defaultValues": [
+            null,
+            "false"
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "ax::MeshRenderer *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "ax::MeshRenderer *",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "ax::MeshRenderer *",
+          "parameterTypes": [
+            "std::string_view",
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "disableInstancing",
+          "luaName": "disableInstancing",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "enableInstancing",
+          "luaName": "enableInstancing",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::MeshMaterial::InstanceMaterialType",
+            "int"
+          ],
+          "defaultValues": [
+            null,
+            "0"
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "enableInstancing",
+          "luaName": "enableInstancing",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::MeshMaterial *",
+            "int"
+          ],
+          "defaultValues": [
+            null,
+            "0"
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "genMaterial",
+          "luaName": "genMaterial",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            "false"
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getAABB",
+          "luaName": "getAABB",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "const ax::AABB \u0026",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getAABBRecursively",
+          "luaName": "getAABBRecursively",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "ax::AABB",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getAABBRecursivelyImp",
+          "luaName": "getAABBRecursivelyImp",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "ax::AABB",
+          "parameterTypes": [
+            "ax::Node *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getAttachNode",
+          "luaName": "getAttachNode",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "ax::AttachNode *",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getBlendFunc",
+          "luaName": "getBlendFunc",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "const ax::BlendFunc \u0026",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getLightMask",
+          "luaName": "getLightMask",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "unsigned int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMaterial",
+          "luaName": "getMaterial",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "ax::Material *",
+          "parameterTypes": [
+            "int"
+          ],
+          "defaultValues": [
+            "0"
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMesh",
+          "luaName": "getMesh",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "ax::Mesh *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMeshByIndex",
+          "luaName": "getMeshByIndex",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "ax::Mesh *",
+          "parameterTypes": [
+            "int"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMeshByName",
+          "luaName": "getMeshByName",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "ax::Mesh *",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMeshCount",
+          "luaName": "getMeshCount",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "ssize_t",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMeshes",
+          "luaName": "getMeshes",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "const Vector\u003Cax::Mesh *\u003E \u0026",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getSkeleton",
+          "luaName": "getSkeleton",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "ax::Skeleton3D *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getSubMeshMaterial",
+          "luaName": "getSubMeshMaterial",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "ax::Material *",
+          "parameterTypes": [
+            "size_t",
+            "size_t"
+          ],
+          "defaultValues": [
+            null,
+            "0"
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isForceDepthWrite",
+          "luaName": "isForceDepthWrite",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isWireframe",
+          "luaName": "isWireframe",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "rebuildInstances",
+          "luaName": "rebuildInstances",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "removeAllAttachNode",
+          "luaName": "removeAllAttachNode",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "removeAttachNode",
+          "luaName": "removeAttachNode",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "void",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setBlendFunc",
+          "luaName": "setBlendFunc",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::BlendFunc \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setCullFace",
+          "luaName": "setCullFace",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::CullFaceSide"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setCullFaceEnabled",
+          "luaName": "setCullFaceEnabled",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setDynamicInstancing",
+          "luaName": "setDynamicInstancing",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setForceDepthWrite",
+          "luaName": "setForceDepthWrite",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setLightMask",
+          "luaName": "setLightMask",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "void",
+          "parameterTypes": [
+            "unsigned int"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setMaterial",
+          "luaName": "setMaterial",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::Material *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setMaterial",
+          "luaName": "setMaterial",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::Material *",
+            "int"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setTexture",
+          "luaName": "setTexture",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "void",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setTexture",
+          "luaName": "setTexture",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::Texture2D *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setWireframe",
+          "luaName": "setWireframe",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "shrinkToFitInstances",
+          "luaName": "shrinkToFitInstances",
+          "declaringType": "ax::MeshRenderer",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "OBB",
+      "qualifiedName": "ax::OBB",
+      "luaName": "ax.OBB",
+      "luaClassName": "OBB",
+      "isAbstract": false,
+      "constructors": [],
+      "bases": [],
+      "methods": [
+        {
+          "nativeName": "containPoint",
+          "luaName": "containPoint",
+          "declaringType": "ax::OBB",
+          "returnType": "bool",
+          "parameterTypes": [
+            "const ax::Vec3 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "intersects",
+          "luaName": "intersects",
+          "declaringType": "ax::OBB",
+          "returnType": "bool",
+          "parameterTypes": [
+            "const ax::OBB \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "reset",
+          "luaName": "reset",
+          "declaringType": "ax::OBB",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "set",
+          "luaName": "set",
+          "declaringType": "ax::OBB",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec3 \u0026",
+            "const ax::Vec3 \u0026",
+            "const ax::Vec3 \u0026",
+            "const ax::Vec3 \u0026",
+            "const ax::Vec3 \u0026"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "transform",
+          "luaName": "transform",
+          "declaringType": "ax::OBB",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Mat4 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": [
+        {
+          "nativeName": "_center",
+          "luaName": "_center",
+          "fieldType": "ax::Vec3"
+        },
+        {
+          "nativeName": "_extentX",
+          "luaName": "_extentX",
+          "fieldType": "ax::Vec3"
+        },
+        {
+          "nativeName": "_extentY",
+          "luaName": "_extentY",
+          "fieldType": "ax::Vec3"
+        },
+        {
+          "nativeName": "_extentZ",
+          "luaName": "_extentZ",
+          "fieldType": "ax::Vec3"
+        },
+        {
+          "nativeName": "_extents",
+          "luaName": "_extents",
+          "fieldType": "ax::Vec3"
+        },
+        {
+          "nativeName": "_xAxis",
+          "luaName": "_xAxis",
+          "fieldType": "ax::Vec3"
+        },
+        {
+          "nativeName": "_yAxis",
+          "luaName": "_yAxis",
+          "fieldType": "ax::Vec3"
+        },
+        {
+          "nativeName": "_zAxis",
+          "luaName": "_zAxis",
+          "fieldType": "ax::Vec3"
+        }
+      ]
+    },
+    {
+      "nativeName": "Ray",
+      "qualifiedName": "ax::Ray",
+      "luaName": "ax.Ray",
+      "luaClassName": "Ray",
+      "isAbstract": false,
+      "constructors": [
+        {
+          "parameterTypes": [],
+          "defaultValues": []
+        },
+        {
+          "parameterTypes": [
+            "const ax::Vec3 \u0026",
+            "const ax::Vec3 \u0026"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ]
+        }
+      ],
+      "bases": [],
+      "methods": [
+        {
+          "nativeName": "set",
+          "luaName": "set",
+          "declaringType": "ax::Ray",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec3 \u0026",
+            "const ax::Vec3 \u0026"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "transform",
+          "luaName": "transform",
+          "declaringType": "ax::Ray",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Mat4 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": [
+        {
+          "nativeName": "direction",
+          "luaName": "direction",
+          "fieldType": "ax::Vec3"
+        },
+        {
+          "nativeName": "origin",
+          "luaName": "origin",
+          "fieldType": "ax::Vec3"
+        }
+      ]
+    },
+    {
+      "nativeName": "Skeleton3D",
+      "qualifiedName": "ax::Skeleton3D",
+      "luaName": "ax.Skeleton3D",
+      "luaClassName": "Skeleton3D",
+      "isAbstract": false,
+      "constructors": [
+        {
+          "parameterTypes": [],
+          "defaultValues": []
+        }
+      ],
+      "bases": [
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "addBone",
+          "luaName": "addBone",
+          "declaringType": "ax::Skeleton3D",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::Bone3D *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getBoneByIndex",
+          "luaName": "getBoneByIndex",
+          "declaringType": "ax::Skeleton3D",
+          "returnType": "ax::Bone3D *",
+          "parameterTypes": [
+            "unsigned int"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getBoneByName",
+          "luaName": "getBoneByName",
+          "declaringType": "ax::Skeleton3D",
+          "returnType": "ax::Bone3D *",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getBoneCount",
+          "luaName": "getBoneCount",
+          "declaringType": "ax::Skeleton3D",
+          "returnType": "ssize_t",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getBoneIndex",
+          "luaName": "getBoneIndex",
+          "declaringType": "ax::Skeleton3D",
+          "returnType": "int",
+          "parameterTypes": [
+            "ax::Bone3D *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getRootBone",
+          "luaName": "getRootBone",
+          "declaringType": "ax::Skeleton3D",
+          "returnType": "ax::Bone3D *",
+          "parameterTypes": [
+            "int"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getRootCount",
+          "luaName": "getRootCount",
+          "declaringType": "ax::Skeleton3D",
+          "returnType": "ssize_t",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "removeAllBones",
+          "luaName": "removeAllBones",
+          "declaringType": "ax::Skeleton3D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "updateBoneMatrix",
+          "luaName": "updateBoneMatrix",
+          "declaringType": "ax::Skeleton3D",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "Skybox",
+      "qualifiedName": "ax::Skybox",
+      "luaName": "ax.Skybox",
+      "luaClassName": "Skybox",
+      "isAbstract": false,
+      "constructors": [
+        {
+          "parameterTypes": [],
+          "defaultValues": []
+        }
+      ],
+      "bases": [
+        "ax::Node",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::Skybox",
+          "returnType": "ax::Skybox *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::Skybox",
+          "returnType": "ax::Skybox *",
+          "parameterTypes": [
+            "std::string_view",
+            "std::string_view",
+            "std::string_view",
+            "std::string_view",
+            "std::string_view",
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "init",
+          "luaName": "init",
+          "declaringType": "ax::Skybox",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "init",
+          "luaName": "init",
+          "declaringType": "ax::Skybox",
+          "returnType": "bool",
+          "parameterTypes": [
+            "std::string_view",
+            "std::string_view",
+            "std::string_view",
+            "std::string_view",
+            "std::string_view",
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "reload",
+          "luaName": "reload",
+          "declaringType": "ax::Skybox",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setTexture",
+          "luaName": "setTexture",
+          "declaringType": "ax::Skybox",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::TextureCube *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "Terrain",
+      "qualifiedName": "ax::Terrain",
+      "luaName": "ax.Terrain",
+      "luaClassName": "Terrain",
+      "isAbstract": false,
+      "constructors": [
+        {
+          "parameterTypes": [],
+          "defaultValues": []
+        }
+      ],
+      "bases": [
+        "ax::Node",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "convertToTerrainSpace",
+          "luaName": "convertToTerrainSpace",
+          "declaringType": "ax::Terrain",
+          "returnType": "ax::Vec2",
+          "parameterTypes": [
+            "const ax::Vec2 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getHeightData",
+          "luaName": "getHeightData",
+          "declaringType": "ax::Terrain",
+          "returnType": "std::vector\u003Cfloat\u003E",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getImageHeight",
+          "luaName": "getImageHeight",
+          "declaringType": "ax::Terrain",
+          "returnType": "float",
+          "parameterTypes": [
+            "int",
+            "int"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMaxHeight",
+          "luaName": "getMaxHeight",
+          "declaringType": "ax::Terrain",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMinHeight",
+          "luaName": "getMinHeight",
+          "declaringType": "ax::Terrain",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getNormal",
+          "luaName": "getNormal",
+          "declaringType": "ax::Terrain",
+          "returnType": "ax::Vec3",
+          "parameterTypes": [
+            "int",
+            "int"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getTerrainSize",
+          "luaName": "getTerrainSize",
+          "declaringType": "ax::Terrain",
+          "returnType": "ax::Vec2",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "initHeightMap",
+          "luaName": "initHeightMap",
+          "declaringType": "ax::Terrain",
+          "returnType": "bool",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "initProperties",
+          "luaName": "initProperties",
+          "declaringType": "ax::Terrain",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "initTextures",
+          "luaName": "initTextures",
+          "declaringType": "ax::Terrain",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "initWithTerrainData",
+          "luaName": "initWithTerrainData",
+          "declaringType": "ax::Terrain",
+          "returnType": "bool",
+          "parameterTypes": [
+            "ax::Terrain::TerrainData \u0026",
+            "ax::Terrain::CrackFixedType"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "reload",
+          "luaName": "reload",
+          "declaringType": "ax::Terrain",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "resetHeightMap",
+          "luaName": "resetHeightMap",
+          "declaringType": "ax::Terrain",
+          "returnType": "void",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setAlphaMap",
+          "luaName": "setAlphaMap",
+          "declaringType": "ax::Terrain",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::Texture2D *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setDetailMap",
+          "luaName": "setDetailMap",
+          "declaringType": "ax::Terrain",
+          "returnType": "void",
+          "parameterTypes": [
+            "unsigned int",
+            "ax::Terrain::DetailMap"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setDrawWire",
+          "luaName": "setDrawWire",
+          "declaringType": "ax::Terrain",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setIsEnableFrustumCull",
+          "luaName": "setIsEnableFrustumCull",
+          "declaringType": "ax::Terrain",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setLODDistance",
+          "luaName": "setLODDistance",
+          "declaringType": "ax::Terrain",
+          "returnType": "void",
+          "parameterTypes": [
+            "float",
+            "float",
+            "float"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setLightDir",
+          "luaName": "setLightDir",
+          "declaringType": "ax::Terrain",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec3 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setLightMap",
+          "luaName": "setLightMap",
+          "declaringType": "ax::Terrain",
+          "returnType": "void",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setMaxDetailMapAmount",
+          "luaName": "setMaxDetailMapAmount",
+          "declaringType": "ax::Terrain",
+          "returnType": "void",
+          "parameterTypes": [
+            "int"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setSkirtHeightRatio",
+          "luaName": "setSkirtHeightRatio",
+          "declaringType": "ax::Terrain",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "TextureCube",
+      "qualifiedName": "ax::TextureCube",
+      "luaName": "ax.TextureCube",
+      "luaClassName": "TextureCube",
+      "isAbstract": false,
+      "constructors": [
+        {
+          "parameterTypes": [],
+          "defaultValues": []
+        }
+      ],
+      "bases": [
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::TextureCube",
+          "returnType": "ax::TextureCube *",
+          "parameterTypes": [
+            "std::string_view",
+            "std::string_view",
+            "std::string_view",
+            "std::string_view",
+            "std::string_view",
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getImagePaths",
+          "luaName": "getImagePaths",
+          "declaringType": "ax::TextureCube",
+          "returnType": "const std::vector\u003Cstd::string\u003E \u0026",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getRHITexture",
+          "luaName": "getRHITexture",
+          "declaringType": "ax::TextureCube",
+          "returnType": "rhi::Texture *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "reloadTexture",
+          "luaName": "reloadTexture",
+          "declaringType": "ax::TextureCube",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setTexParameters",
+          "luaName": "setTexParameters",
+          "declaringType": "ax::TextureCube",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Texture2D::TexParams \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    }
+  ],
+  "enums": [
+    {
+      "nativeName": "Animate3DState",
+      "qualifiedName": "ax::Animate3D::Animate3DState",
+      "ownerQualifiedName": "ax::Animate3D",
+      "values": [
+        {
+          "name": "FadeIn",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "FadeOut",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "Running",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "Mode",
+      "qualifiedName": "ax::BillBoard::Mode",
+      "ownerQualifiedName": "ax::BillBoard",
+      "values": [
+        {
+          "name": "VIEW_POINT_ORIENTED",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "VIEW_PLANE_ORIENTED",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "InstanceMaterialType",
+      "qualifiedName": "ax::MeshMaterial::InstanceMaterialType",
+      "ownerQualifiedName": "ax::MeshMaterial",
+      "values": [
+        {
+          "name": "NO_INSTANCING",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "UNLIT_INSTANCE",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "CUSTOM",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "MaterialType",
+      "qualifiedName": "ax::MeshMaterial::MaterialType",
+      "ownerQualifiedName": "ax::MeshMaterial",
+      "values": [
+        {
+          "name": "UNLIT",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "UNLIT_INSTANCE",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "UNLIT_NOTEX",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        },
+        {
+          "name": "VERTEX_LIT",
+          "signedValue": 3,
+          "unsignedValue": 3,
+          "isUnsigned": false
+        },
+        {
+          "name": "DIFFUSE",
+          "signedValue": 4,
+          "unsignedValue": 4,
+          "isUnsigned": false
+        },
+        {
+          "name": "DIFFUSE_NOTEX",
+          "signedValue": 5,
+          "unsignedValue": 5,
+          "isUnsigned": false
+        },
+        {
+          "name": "BUMPED_DIFFUSE",
+          "signedValue": 6,
+          "unsignedValue": 6,
+          "isUnsigned": false
+        },
+        {
+          "name": "QUAD_TEXTURE",
+          "signedValue": 7,
+          "unsignedValue": 7,
+          "isUnsigned": false
+        },
+        {
+          "name": "QUAD_COLOR",
+          "signedValue": 8,
+          "unsignedValue": 8,
+          "isUnsigned": false
+        },
+        {
+          "name": "CUSTOM",
+          "signedValue": 9,
+          "unsignedValue": 9,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "CrackFixedType",
+      "qualifiedName": "ax::Terrain::CrackFixedType",
+      "ownerQualifiedName": "ax::Terrain",
+      "values": [
+        {
+          "name": "SKIRT",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "INCREASE_LOWER",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "TextureBindingSlot",
+      "qualifiedName": "ax::Terrain::TextureBindingSlot",
+      "ownerQualifiedName": "ax::Terrain",
+      "values": [
+        {
+          "name": "BINDING_SLOT_DETAIL_BASE",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "BINDING_SLOT_ALPHA_MAP",
+          "signedValue": 4,
+          "unsignedValue": 4,
+          "isUnsigned": false
+        },
+        {
+          "name": "BINDING_SLOT_LIGHT_MAP",
+          "signedValue": 5,
+          "unsignedValue": 5,
+          "isUnsigned": false
+        }
+      ]
+    }
+  ]
+}

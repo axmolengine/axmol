@@ -58,7 +58,7 @@ local function AccelerometerMainLayer()
         end
     end
 
-    layer:registerScriptHandler(onNodeEvent)
+    layer:setLifecycleCallback(onNodeEvent)
 
     return layer
 end

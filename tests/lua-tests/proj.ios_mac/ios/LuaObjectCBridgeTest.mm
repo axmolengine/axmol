@@ -25,8 +25,8 @@
 #import "LuaObjectCBridgeTest.h"
 
 #include "axmol/cocos2d.h"
-#include "lua-bindings/manual/LuaEngine.h"
-#include "lua-bindings/manual/LuaBridge.h"
+#include "lua-bindings/runtime/LuaEngine.h"
+#include "lua-bindings/runtime/LuaBridge.h"
 
 using namespace ax;
 

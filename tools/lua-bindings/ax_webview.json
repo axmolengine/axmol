@@ -1,0 +1,31 @@
+{
+  "module": "ax_webview",
+  "target_namespace": "axui",
+  "cpp_namespace": "ax::ui",
+  "macro_judgement": "#if (defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX && defined(AX_HAVE_WEBKIT2GTK)))",
+  "headers": [
+    "%(axdir)s/axmol/ui/WebView/WebView.h"
+  ],
+  "clang_flags": [],
+  "classes": [
+    "WebView"
+  ],
+  "abstract_classes": [],
+  "classes_have_no_parents": [],
+  "base_classes_to_skip": [],
+  "skip": [
+    {
+      "class": "WebView",
+      "methods": [
+        "getOnShouldStartLoading",
+        "getOnDidFinishLoading",
+        "getOnDidFailLoading",
+        "setOnJSCallback",
+        "draw",
+        "loadData"
+      ]
+    }
+  ],
+  "rename_functions": [],
+  "rename_classes": []
+}

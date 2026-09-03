@@ -64,7 +64,7 @@ if(IOS)
   target_compile_definitions(${lib_name} PUBLIC LUA_USE_IOS=1)
 endif()
 
-if(${_LUA_VERSION} VERSION_GREATER_EQUAL "5.4.0") # !important: traditional lua bindings solution tolua++ not support yet
+if(${_LUA_VERSION} VERSION_GREATER_EQUAL "5.4.0") # Axmol's sol2/axlua bindings support Lua 5.4+
   target_compile_definitions(${lib_name}
     PUBLIC LUA_COMPAT_APIINTCASTS=1
     PUBLIC LUA_COMPAT_MATHLIB=1

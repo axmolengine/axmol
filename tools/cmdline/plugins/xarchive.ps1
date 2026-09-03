@@ -60,7 +60,6 @@ $excludes = @(
     'tmp'
     'temp'
     'tools/external'
-    'tools/bindings-generator/clang/prebuilt'
     'axmol-*.zip'
     'out'
     '*/_x/*'

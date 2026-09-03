@@ -14,7 +14,7 @@ function SpritePolygonTestDemo:registerNodeEvent()
         end
     end
 
-    self:registerScriptHandler(onNodeEvent)
+    self:setLifecycleCallback(onNodeEvent)
 end
 
 function SpritePolygonTestDemo:onEnter()
@@ -182,7 +182,7 @@ function SpritePolygonTest3:ctor()
 
     local vsize = ax.Director:getInstance():getVisibleSize()
 
-    local slider = ccui.Slider:create()
+    local slider = axui.Slider:create()
     slider:loadBarTexture("cocosui/sliderTrack.png")
     slider:loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "")
     slider:loadProgressBarTexture("cocosui/sliderProgress.png")
@@ -193,7 +193,7 @@ function SpritePolygonTest3:ctor()
     self._epsilonLabel:setPosition(ax.p(vsize.width/2, vsize.height/4 + 15))
 
     local function percentChangedEvent(sender,eventType)
-        if eventType == ccui.SliderEventType.percentChanged then
+        if eventType == axui.SliderEventType.percentChanged then
             local slider = sender
             local percent = "Percent " .. slider:getPercent()
             self._displayValueLabel:setString(percent)
@@ -264,15 +264,21 @@ function SpritePolygonTest4:ctor()
 
     local vsize = ax.Director:getInstance():getVisibleSize()
 
-    local slider = ccui.Slider:create()
+    local slider = axui.Slider:create()
     slider:loadBarTexture("cocosui/sliderTrack.png")
     slider:loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "")
     slider:loadProgressBarTexture("cocosui/sliderProgress.png")
     slider:setPosition(ax.p(vsize.width/2, vsize.height/4))
 
+    -- setPercent dispatches the registered callback immediately. Create the
+    -- label before installing the callback so the initial value update cannot
+    -- dereference a nil field.
+    self._epsilonLabel = ax.Label:createWithTTF(self._ttfConfig, "Epsilon: 2.0")
+    self:addChild(self._epsilonLabel)
+    self._epsilonLabel:setPosition(ax.p(vsize.width/2, vsize.height/4 + 15))
 
     local function percentChangedEvent(sender,eventType)
-        if eventType == ccui.SliderEventType.percentChanged then
+        if eventType == axui.SliderEventType.percentChanged then
             local slider = sender
             local percent = "Percent " .. slider:getPercent()
             self._displayValueLabel:setString(percent)
@@ -296,9 +302,6 @@ function SpritePolygonTest4:ctor()
         end)
     slider:setPercent(math.sqrt(1.0 /19.0 )*100)
 
-    self._epsilonLabel = ax.Label:createWithTTF(self._ttfConfig, "Epsilon: 2.0")
-    self:addChild(self._epsilonLabel)
-    self._epsilonLabel:setPosition(ax.p(vsize.width/2, vsize.height/4 + 15))
     self:addChild(slider)
 
     local list = {
@@ -427,7 +430,7 @@ function SpritePolygonPerformance:init()
     self._continuousHighDtTime = 0.0
     self._waitingTime = 0.0
 
-    self:scheduleUpdateWithPriorityLua(function (dt)
+    self:onUpdate(function (dt)
             dt = dt * 0.3 + self._prevDt * 0.7
             self._prevDt = dt
             self._elapsedTime = self._elapsedTime + dt
@@ -471,7 +474,7 @@ function SpritePolygonPerformance:init()
             else
                 self._waitingTime = self._waitingTime + dt
             end
-        end, 0)
+        end)
 end
 
 function SpritePolygonPerformance:initExtend()

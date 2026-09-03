@@ -377,7 +377,7 @@ function CreateEffectsTestLayer()
 
     testLayer:addChild(menu, 1)
 
-    testLayer:registerScriptHandler(onEnterOrExit)
+    testLayer:setLifecycleCallback(onEnterOrExit)
 
     return testLayer
 end

@@ -37,3 +37,6 @@ jobs:
     - name: Build
       shell: pwsh
       run: ./tools/cmdline/axmol -p linux -a x64 -t 'cpp-tests,lua-tests' && ./tools/cmdline/axmol run -p linux -a x64 -t unit-tests -wait
+    - name: Run Lua binding smoke
+      shell: pwsh
+      run: $env:AXMOL_LUA_BINDING_SMOKE='1'; ./tools/cmdline/axmol run -p linux -a x64 -t lua-tests -wait

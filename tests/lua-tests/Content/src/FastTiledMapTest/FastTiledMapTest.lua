@@ -13,14 +13,14 @@ local function createTileDemoLayer(title, subtitle)
     Helper.subtitleLabel:setString(subTitleStr)
 
     local function onPointerMove(event)
-        local diff = event:getDelta()
+        local diff = ax.pSub(event:getPoint(), event:getPrevPoint())
         local node = layer:getChildByTag(kTagTileMap)
         local currentPosX, currentPosY= node:getPosition()
         node:setPosition(ax.p(currentPosX + diff.x, currentPosY + diff.y))
     end
 
     local listener = ax.PointerEventListener:create()
-    listener:registerScriptHandler(onPointerMove,ax.Handler.EVENT_POINTER_MOVE )
+    listener.onPointerMove = onPointerMove
     local eventDispatcher = layer:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, layer)
 
@@ -118,7 +118,7 @@ local function TileMapEditTest()
         end
     end
 
-    layer:registerScriptHandler(onNodeEvent)
+    layer:setLifecycleCallback(onNodeEvent)
 
     layer:addChild(map, 0, kTagTileMap)
 
@@ -155,17 +155,6 @@ local function TMXOrthoTest()
     local  seq   = ax.Sequence:create(scale, back)
     local  repeatAction = ax.RepeatForever:create(seq)
     map:runAction(repeatAction)
-
-    local function onNodeEvent(event)
-        if event == "enter" then
-            ax.Director:getInstance():setProjection(ax.DIRECTOR_PROJECTION3_D )
-        elseif event == "exit" then
-            ax.Director:getInstance():setProjection(ax.DIRECTOR_PROJECTION_DEFAULT )
-        end
-    end
-
-    layer:registerScriptHandler(onNodeEvent)
-
 
     return layer
 end
@@ -260,7 +249,7 @@ local function TMXOrthoTest4()
         end
     end
 
-    ret:registerScriptHandler(onNodeEvent)
+    ret:setLifecycleCallback(onNodeEvent)
     return ret
 end
 
@@ -400,7 +389,7 @@ local function TMXReadWriteTest()
         end
     end
 
-    ret:registerScriptHandler(onNodeEvent)
+    ret:setLifecycleCallback(onNodeEvent)
     --------cclog("++++atlas quantity: %d", layer:textureAtlas():getTotalQuads())
     --------cclog("++++children: %d", layer:getChildren():count() )
 
@@ -613,7 +602,7 @@ local function TMXIsoObjectsTest()
     local  i = 0
     local  len = #(objects)
     for i = 0, len-1, 1 do
-        dict = tolua.cast(objects[i + 1], "ax.Dictionary")
+        dict = axlua.cast(objects[i + 1], "ax.Dictionary")
 
         if dict == nil then
             break
@@ -720,7 +709,7 @@ local function TMXIsoZorder()
         end
     end
 
-    ret:registerScriptHandler(onNodeEvent)
+    ret:setLifecycleCallback(onNodeEvent)
 
     return ret
 end
@@ -778,7 +767,7 @@ local function TMXOrthoZorder()
         end
     end
 
-    ret:registerScriptHandler(onNodeEvent)
+    ret:setLifecycleCallback(onNodeEvent)
 
     return ret
 end
@@ -821,14 +810,10 @@ local function TMXIsoVertexZ()
     local schedulerEntry = nil
     local function onNodeEvent(event)
         if event == "enter" then
-            -- TIP: 2d projection should be used
-            ax.Director:getInstance():setProjection(ax.DIRECTOR_PROJECTION2_D )
             schedulerEntry = scheduler:scheduleScriptFunc(repositionSprite, 0, false)
             ax.Director:getInstance():getRenderer():setDepthTest(true)
             ax.Director:getInstance():getRenderer():setDepthWrite(true)
         elseif event == "exit" then
-            -- At exit use any other projection.
-            ax.Director:getInstance():setProjection(ax.DIRECTOR_PROJECTION_DEFAULT )
             if m_tamara ~= nil then
                 m_tamara:release()
             end
@@ -838,7 +823,7 @@ local function TMXIsoVertexZ()
         end
     end
 
-    ret:registerScriptHandler(onNodeEvent)
+    ret:setLifecycleCallback(onNodeEvent)
     return ret
 end
 
@@ -879,14 +864,10 @@ local function TMXOrthoVertexZ()
     local schedulerEntry = nil
     local function onNodeEvent(event)
         if event == "enter" then
-            -- TIP: 2d projection should be used
-            ax.Director:getInstance():setProjection(ax.DIRECTOR_PROJECTION2_D )
             schedulerEntry = scheduler:scheduleScriptFunc(repositionSprite, 0, false)
             ax.Director:getInstance():getRenderer():setDepthTest(true)
             ax.Director:getInstance():getRenderer():setDepthWrite(true)
         elseif event == "exit" then
-            -- At exit use any other projection.
-            ax.Director:getInstance():setProjection(ax.DIRECTOR_PROJECTION_DEFAULT )
             if m_tamara ~= nil then
                 m_tamara:release()
             end
@@ -896,7 +877,7 @@ local function TMXOrthoVertexZ()
         end
     end
 
-    ret:registerScriptHandler(onNodeEvent)
+    ret:setLifecycleCallback(onNodeEvent)
 
     return ret
 end
@@ -1029,7 +1010,7 @@ local function TMXOrthoFlipRunTimeTest()
         end
     end
 
-    ret:registerScriptHandler(onNodeEvent)
+    ret:setLifecycleCallback(onNodeEvent)
 
     return ret
 end

@@ -1,238 +1,238 @@
-if nil == ccui then
+if nil == axui then
     return
 end
 
-ccui.TextField = axui.InputField
+axui.TextField = axui.InputField
 
 --tip
 local function deprecatedTip(old_name,new_name)
     print("\n********** \n"..old_name.." was deprecated please use ".. new_name .. " instead.\n**********")
 end
 
---functions of ccui.Text will be deprecated begin
+--functions of axui.Text will be deprecated begin
 local TextDeprecated = { }
 function TextDeprecated.setText(self, str)
-    deprecatedTip("ccui.Text:setText","ccui.Text:setString")
+    deprecatedTip("axui.Text:setText","axui.Text:setString")
     return self:setString(str)
 end
-ccui.Text.setText = TextDeprecated.setText
+axui.Text.setText = TextDeprecated.setText
 
 function TextDeprecated.getStringValue(self)
-    deprecatedTip("ccui.Text:getStringValue","ccui.Text:getString")
+    deprecatedTip("axui.Text:getStringValue","axui.Text:getString")
     return self:getString()
 end
-ccui.Text.getStringValue = TextDeprecated.getStringValue
+axui.Text.getStringValue = TextDeprecated.getStringValue
 
---functions of ccui.Text will be deprecated begin
+--functions of axui.Text will be deprecated begin
 
---functions of ccui.TextAtlas will be deprecated begin
+--functions of axui.TextAtlas will be deprecated begin
 local TextAtlasDeprecated = { }
 function TextAtlasDeprecated.setStringValue(self, str)
-    deprecatedTip("ccui.TextAtlas:setStringValue","ccui.TextAtlas:setString")
+    deprecatedTip("axui.TextAtlas:setStringValue","axui.TextAtlas:setString")
     return self:setString(str)
 end
-ccui.TextAtlas.setStringValue = TextAtlasDeprecated.setStringValue
+axui.TextAtlas.setStringValue = TextAtlasDeprecated.setStringValue
 
 function TextAtlasDeprecated.getStringValue(self)
-    deprecatedTip("ccui.TextAtlas:getStringValue","ccui.TextAtlas:getString")
+    deprecatedTip("axui.TextAtlas:getStringValue","axui.TextAtlas:getString")
     return self:getString()
 end
-ccui.TextAtlas.getStringValue = TextAtlasDeprecated.getStringValue
---functions of ccui.TextAtlas will be deprecated begin
+axui.TextAtlas.getStringValue = TextAtlasDeprecated.getStringValue
+--functions of axui.TextAtlas will be deprecated begin
 
 
---functions of ccui.TextBMFont will be deprecated begin
+--functions of axui.TextBMFont will be deprecated begin
 local TextBMFontDeprecated = { }
 function TextBMFontDeprecated.setText(self, str)
-    deprecatedTip("ccui.TextBMFont:setText","ccui.TextBMFont:setString")
+    deprecatedTip("axui.TextBMFont:setText","axui.TextBMFont:setString")
     return self:setString(str)
 end
-ccui.TextBMFont.setText =  TextBMFontDeprecated.setText
+axui.TextBMFont.setText =  TextBMFontDeprecated.setText
 
 function TextBMFontDeprecated.getStringValue(self)
-    deprecatedTip("ccui.Text:getStringValue","ccui.TextBMFont:getString")
+    deprecatedTip("axui.Text:getStringValue","axui.TextBMFont:getString")
     return self:getString()
 end
-ccui.Text.getStringValue = TextBMFontDeprecated.getStringValue
---functions of ccui.TextBMFont will be deprecated begin
+axui.Text.getStringValue = TextBMFontDeprecated.getStringValue
+--functions of axui.TextBMFont will be deprecated begin
 
---functions of ccui.Widget will be deprecated begin
+--functions of axui.Widget will be deprecated begin
 local UIWidgetDeprecated = { }
 function UIWidgetDeprecated.getLeftInParent(self)
-    deprecatedTip("ccui.Widget:getLeftInParent","ccui.Widget:getLeftBoundary")
+    deprecatedTip("axui.Widget:getLeftInParent","axui.Widget:getLeftBoundary")
     return self:getLeftBoundary()
 end
-ccui.Widget.getLeftInParent = UIWidgetDeprecated.getLeftInParent
+axui.Widget.getLeftInParent = UIWidgetDeprecated.getLeftInParent
 
 function UIWidgetDeprecated.getBottomInParent(self)
-    deprecatedTip("ccui.Widget:getBottomInParent","ccui.Widget:getBottomBoundary")
+    deprecatedTip("axui.Widget:getBottomInParent","axui.Widget:getBottomBoundary")
     return self:getBottomBoundary()
 end
-ccui.Widget.getBottomInParent = UIWidgetDeprecated.getBottomInParent
+axui.Widget.getBottomInParent = UIWidgetDeprecated.getBottomInParent
 
 function UIWidgetDeprecated.getRightInParent(self)
-    deprecatedTip("ccui.Widget:getRightInParent","ccui.Widget:getRightBoundary")
+    deprecatedTip("axui.Widget:getRightInParent","axui.Widget:getRightBoundary")
     return self:getRightBoundary()
 end
-ccui.Widget.getRightInParent = UIWidgetDeprecated.getRightInParent
+axui.Widget.getRightInParent = UIWidgetDeprecated.getRightInParent
 
 function UIWidgetDeprecated.getTopInParent(self)
-    deprecatedTip("ccui.Widget:getTopInParent","ccui.Widget:getTopBoundary")
+    deprecatedTip("axui.Widget:getTopInParent","axui.Widget:getTopBoundary")
     return self:getTopBoundary()
 end
-ccui.Widget.getTopInParent = UIWidgetDeprecated.getTopInParent
+axui.Widget.getTopInParent = UIWidgetDeprecated.getTopInParent
 
 function UIWidgetDeprecated.getSize(self)
-    deprecatedTip("ccui.Widget:getSize","ccui.Widget:getContentSize")
+    deprecatedTip("axui.Widget:getSize","axui.Widget:getContentSize")
     return self:getContentSize()
 end
-ccui.Widget.getSize = UIWidgetDeprecated.getSize
+axui.Widget.getSize = UIWidgetDeprecated.getSize
 
 function UIWidgetDeprecated.setSize(self, ...)
-    deprecatedTip("ccui.Widget:setSize","ccui.Widget:setContentSize")
+    deprecatedTip("axui.Widget:setSize","axui.Widget:setContentSize")
     return self:setContentSize(...)
 end
-ccui.Widget.setSize = UIWidgetDeprecated.setSize
+axui.Widget.setSize = UIWidgetDeprecated.setSize
 
---functions of ccui.Widget will be deprecated end
+--functions of axui.Widget will be deprecated end
 
---functions of ccui.CheckBox will be deprecated begin
+--functions of axui.CheckBox will be deprecated begin
 local UICheckBoxDeprecated = { }
 function UICheckBoxDeprecated.addEventListenerCheckBox(self,handler)
-    deprecatedTip("ccui.CheckBox:addEventListenerCheckBox","ccui.CheckBox:addEventListener")
+    deprecatedTip("axui.CheckBox:addEventListenerCheckBox","axui.CheckBox:addEventListener")
     return self:addEventListener(handler)
 end
-ccui.CheckBox.addEventListenerCheckBox = UICheckBoxDeprecated.addEventListenerCheckBox
+axui.CheckBox.addEventListenerCheckBox = UICheckBoxDeprecated.addEventListenerCheckBox
 
 function UICheckBoxDeprecated.setSelectedState(self,flag)
-   deprecatedTip("ccui.CheckBox:setSelectedState", "ccui.CheckBox:setSelected")
+   deprecatedTip("axui.CheckBox:setSelectedState", "axui.CheckBox:setSelected")
    return self:setSelected(flag)
 end
-ccui.CheckBox.setSelectedState = UICheckBoxDeprecated.setSelectedState
+axui.CheckBox.setSelectedState = UICheckBoxDeprecated.setSelectedState
 
 function UICheckBoxDeprecated.getSelectedState(self)
-   deprecatedTip("ccui.CheckBox:getSelectedState", "ccui.CheckBox:getSelected")
+   deprecatedTip("axui.CheckBox:getSelectedState", "axui.CheckBox:getSelected")
    return self:getSelected()
 end
-ccui.CheckBox.getSelectedState = UICheckBoxDeprecated.setSelectedState
+axui.CheckBox.getSelectedState = UICheckBoxDeprecated.setSelectedState
 
---functions of ccui.CheckBox will be deprecated end
+--functions of axui.CheckBox will be deprecated end
 
---functions of ccui.Slider will be deprecated begin
+--functions of axui.Slider will be deprecated begin
 local UISliderDeprecated = { }
 function UISliderDeprecated.addEventListenerSlider(self,handler)
-    deprecatedTip("ccui.Slider:addEventListenerSlider","ccui.Slider:addEventListener")
+    deprecatedTip("axui.Slider:addEventListenerSlider","axui.Slider:addEventListener")
     return self:addEventListener(handler)
 end
-ccui.Slider.addEventListenerSlider = UISliderDeprecated.addEventListenerSlider
---functions of ccui.Slider will be deprecated end
+axui.Slider.addEventListenerSlider = UISliderDeprecated.addEventListenerSlider
+--functions of axui.Slider will be deprecated end
 
---functions of ccui.TextField will be deprecated begin
+--functions of axui.TextField will be deprecated begin
 local UITextFieldDeprecated = { }
 function UITextFieldDeprecated.addEventListenerTextField(self,handler)
-    deprecatedTip("ccui.TextField:addEventListenerTextField","ccui.TextField:addEventListener")
+    deprecatedTip("axui.TextField:addEventListenerTextField","axui.TextField:addEventListener")
     return self:addEventListener(handler)
 end
-ccui.TextField.addEventListenerTextField = UITextFieldDeprecated.addEventListenerTextField
+axui.TextField.addEventListenerTextField = UITextFieldDeprecated.addEventListenerTextField
 
 function UITextFieldDeprecated.setText(self, str)
-    deprecatedTip("ccui.TextField:setText","ccui.TextField:setString")
+    deprecatedTip("axui.TextField:setText","axui.TextField:setString")
     return self:setString(str)
 end
-ccui.TextField.setText = UITextFieldDeprecated.setText
+axui.TextField.setText = UITextFieldDeprecated.setText
 
 function UITextFieldDeprecated.getStringValue(self)
-    deprecatedTip("ccui.TextField:getStringValue","ccui.TextField:getString")
+    deprecatedTip("axui.TextField:getStringValue","axui.TextField:getString")
     return self:getString()
 end
-ccui.TextField.getStringValue = UITextFieldDeprecated.getStringValue
---functions of ccui.TextField will be deprecated end
+axui.TextField.getStringValue = UITextFieldDeprecated.getStringValue
+--functions of axui.TextField will be deprecated end
 
---functions of ccui.PageView will be deprecated begin
+--functions of axui.PageView will be deprecated begin
 local UIPageViewDeprecated = { }
 function UIPageViewDeprecated.addEventListenerPageView(self,handler)
-    deprecatedTip("ccui.PageView:addEventListenerPageView","ccui.PageView:addEventListener")
+    deprecatedTip("axui.PageView:addEventListenerPageView","axui.PageView:addEventListener")
     return self:addEventListener(handler)
 end
-ccui.PageView.addEventListenerPageView = UIPageViewDeprecated.addEventListenerPageView
+axui.PageView.addEventListenerPageView = UIPageViewDeprecated.addEventListenerPageView
 
 function UIPageViewDeprecated.addWidgetToPage(self, widget, pageIdx)
-    deprecatedTip("ccui.PageView:addWidgetToPage","ccui.PageView:insertPage")
+    deprecatedTip("axui.PageView:addWidgetToPage","axui.PageView:insertPage")
     return self:insertPage(widget, pageIdx)
 end
-ccui.PageView.addWidgetToPage = UIPageViewDeprecated.addWidgetToPage
+axui.PageView.addWidgetToPage = UIPageViewDeprecated.addWidgetToPage
 
 function UIPageViewDeprecated.getCurPageIndex(self)
-    deprecatedTip("ccui.PageView:getCurPageIndex","ccui.PageView:getCurrentPageIndex")
+    deprecatedTip("axui.PageView:getCurPageIndex","axui.PageView:getCurrentPageIndex")
     return self:getCurrentPageIndex()
 end
-ccui.PageView.getCurPageIndex = UIPageViewDeprecated.getCurPageIndex
+axui.PageView.getCurPageIndex = UIPageViewDeprecated.getCurPageIndex
 
 function UIPageViewDeprecated.setCurPageIndex(self, index)
-    deprecatedTip("ccui.PageView:setCurPageIndex","ccui.PageView:setCurrentPageIndex")
+    deprecatedTip("axui.PageView:setCurPageIndex","axui.PageView:setCurrentPageIndex")
     return self:setCurrentPageIndex(index)
 end
-ccui.PageView.setCurPageIndex = UIPageViewDeprecated.setCurPageIndex
+axui.PageView.setCurPageIndex = UIPageViewDeprecated.setCurPageIndex
 
 function UIPageViewDeprecated.getPages(self)
-    deprecatedTip("ccui.PageView:getPages","ccui.PageView:getItems")
+    deprecatedTip("axui.PageView:getPages","axui.PageView:getItems")
     return self:getItems()
 end
-ccui.PageView.getPages = UIPageViewDeprecated.getPages
+axui.PageView.getPages = UIPageViewDeprecated.getPages
 
 function UIPageViewDeprecated.getPage(self, index)
-    deprecatedTip("ccui.PageView:getPage","ccui.PageView:getItem")
+    deprecatedTip("axui.PageView:getPage","axui.PageView:getItem")
     return self:getItem(index)
 end
-ccui.PageView.getPage = UIPageViewDeprecated.getPage
+axui.PageView.getPage = UIPageViewDeprecated.getPage
 
 function UIPageViewDeprecated.setCustomScrollThreshold(self)
     print("Since v3.9, this method has no effect.")
 end
-ccui.PageView.setCustomScrollThreshold = UIPageViewDeprecated.setCustomScrollThreshold
+axui.PageView.setCustomScrollThreshold = UIPageViewDeprecated.setCustomScrollThreshold
 
 function UIPageViewDeprecated.getCustomScrollThreshold(self)
     print("Since v3.9, this method has no effect.")
 end
-ccui.PageView.getCustomScrollThreshold = UIPageViewDeprecated.getCustomScrollThreshold
+axui.PageView.getCustomScrollThreshold = UIPageViewDeprecated.getCustomScrollThreshold
 
 function UIPageViewDeprecated.isUsingCustomScrollThreshold(self)
     print("Since v3.9, this method has no effect.")
 end
-ccui.PageView.isUsingCustomScrollThreshold = UIPageViewDeprecated.isUsingCustomScrollThreshold
+axui.PageView.isUsingCustomScrollThreshold = UIPageViewDeprecated.isUsingCustomScrollThreshold
 
 function UIPageViewDeprecated.setUsingCustomScrollThreshold(self)
     print("Since v3.9, this method has no effect.")
 end
-ccui.PageView.setUsingCustomScrollThreshold = UIPageViewDeprecated.setUsingCustomScrollThreshold
---functions of ccui.PageView will be deprecated end
+axui.PageView.setUsingCustomScrollThreshold = UIPageViewDeprecated.setUsingCustomScrollThreshold
+--functions of axui.PageView will be deprecated end
 
---functions of ccui.ScrollView will be deprecated begin
+--functions of axui.ScrollView will be deprecated begin
 local UIScrollViewDeprecated = { }
 function UIScrollViewDeprecated.addEventListenerScrollView(self,handler)
-    deprecatedTip("ccui.ScrollView:addEventListenerScrollView","ccui.ScrollView:addEventListener")
+    deprecatedTip("axui.ScrollView:addEventListenerScrollView","axui.ScrollView:addEventListener")
     return self:addEventListener(handler)
 end
-ccui.ScrollView.addEventListenerScrollView = UIScrollViewDeprecated.addEventListenerScrollView
---functions of ccui.ScrollView will be deprecated end
+axui.ScrollView.addEventListenerScrollView = UIScrollViewDeprecated.addEventListenerScrollView
+--functions of axui.ScrollView will be deprecated end
 
---functions of ccui.ListView will be deprecated begin
+--functions of axui.ListView will be deprecated begin
 local UIListViewDeprecated = { }
 function UIListViewDeprecated.addEventListenerListView(self,handler)
-    deprecatedTip("ccui.ListView:addEventListenerListView","ccui.ListView:addEventListener")
+    deprecatedTip("axui.ListView:addEventListenerListView","axui.ListView:addEventListener")
     return self:addEventListener(handler)
 end
-ccui.ListView.addEventListenerListView = UIListViewDeprecated.addEventListenerListView
+axui.ListView.addEventListenerListView = UIListViewDeprecated.addEventListenerListView
 
 function UIListViewDeprecated.requestRefreshView(self)
-    deprecatedTip("ccui.ListView:requestRefreshView","ccui.ListView:forceDoLayout")
+    deprecatedTip("axui.ListView:requestRefreshView","axui.ListView:forceDoLayout")
     return self:forceDoLayout()
 end
-ccui.ListView.requestRefreshView = UIListViewDeprecated.requestRefreshView
+axui.ListView.requestRefreshView = UIListViewDeprecated.requestRefreshView
 
 function UIListViewDeprecated.refreshView(self)
-    deprecatedTip("ccui.ListView:refreshView","ccui.ListView:refreshView")
+    deprecatedTip("axui.ListView:refreshView","axui.ListView:refreshView")
     return self:forceDoLayout()
 end
-ccui.ListView.refreshView = UIListViewDeprecated.refreshView
---functions of ccui.ListView will be deprecated end
+axui.ListView.refreshView = UIListViewDeprecated.refreshView
+--functions of axui.ListView will be deprecated end

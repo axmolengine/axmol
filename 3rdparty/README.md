@@ -121,8 +121,8 @@
   - License: MIT (http://www.lua.org/license.html)
   
 - sol2
-  - [![Upstream](https://img.shields.io/github/v/tag/ThePhD/sol2?label=Upstream)](https://github.com/ThePhD/sol2)
-  - Version: 3.5.0, with modified for lua-5.5 support
+  - [![Maintained fork](https://img.shields.io/github/v/tag/simdsoft/sol2?label=Maintained%20fork)](https://github.com/simdsoft/sol2)
+  - Version: 3.5.0 (`00fad669`), maintained fork with Lua 5.5 support
   - License: MIT
 
 - luajit
@@ -130,11 +130,6 @@
   - Version: 2.1-acb2234
   - License: MIT
 
-- tolua
-  - Upstream: https://github.com/LuaDist/toluapp
-  - Version: 1.0.93
-  - License: MIT
-  
 - lua-cjson
   - Upstream: https://github.com/simdsoft/lua-cjson
   - Version: 2.1.1

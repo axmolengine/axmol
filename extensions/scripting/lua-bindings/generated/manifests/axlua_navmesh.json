@@ -1,0 +1,747 @@
+{
+  "formatVersion": 1,
+  "module": "navmesh",
+  "registrationName": "ax_navmesh",
+  "luaNamespace": "ax",
+  "luaTypeNamespace": "ax",
+  "conditionalExpression": "defined(AX_ENABLE_NAVMESH)",
+  "classes": [
+    {
+      "nativeName": "NavMesh",
+      "qualifiedName": "ax::NavMesh",
+      "luaName": "ax.NavMesh",
+      "luaClassName": "NavMesh",
+      "isAbstract": false,
+      "constructors": [
+        {
+          "parameterTypes": [],
+          "defaultValues": []
+        }
+      ],
+      "bases": [
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "addNavMeshAgent",
+          "luaName": "addNavMeshAgent",
+          "declaringType": "ax::NavMesh",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::NavMeshAgent *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "addNavMeshObstacle",
+          "luaName": "addNavMeshObstacle",
+          "declaringType": "ax::NavMesh",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::NavMeshObstacle *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::NavMesh",
+          "returnType": "ax::NavMesh *",
+          "parameterTypes": [
+            "std::string_view",
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isDebugDrawEnabled",
+          "luaName": "isDebugDrawEnabled",
+          "declaringType": "ax::NavMesh",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "removeNavMeshAgent",
+          "luaName": "removeNavMeshAgent",
+          "declaringType": "ax::NavMesh",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::NavMeshAgent *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "removeNavMeshObstacle",
+          "luaName": "removeNavMeshObstacle",
+          "declaringType": "ax::NavMesh",
+          "returnType": "void",
+          "parameterTypes": [
+            "ax::NavMeshObstacle *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setDebugDrawEnabled",
+          "luaName": "setDebugDrawEnabled",
+          "declaringType": "ax::NavMesh",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "update",
+          "luaName": "update",
+          "declaringType": "ax::NavMesh",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "NavMeshAgent",
+      "qualifiedName": "ax::NavMeshAgent",
+      "luaName": "ax.NavMeshAgent",
+      "luaClassName": "NavMeshAgent",
+      "isAbstract": false,
+      "constructors": [
+        {
+          "parameterTypes": [],
+          "defaultValues": []
+        }
+      ],
+      "bases": [
+        "ax::Component",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "completeOffMeshLink",
+          "luaName": "completeOffMeshLink",
+          "declaringType": "ax::NavMeshAgent",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getCurrentVelocity",
+          "luaName": "getCurrentVelocity",
+          "declaringType": "ax::NavMeshAgent",
+          "returnType": "ax::Vec3",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getHeight",
+          "luaName": "getHeight",
+          "declaringType": "ax::NavMeshAgent",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMaxAcceleration",
+          "luaName": "getMaxAcceleration",
+          "declaringType": "ax::NavMeshAgent",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMaxSpeed",
+          "luaName": "getMaxSpeed",
+          "declaringType": "ax::NavMeshAgent",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getNavMeshAgentComponentName",
+          "luaName": "getNavMeshAgentComponentName",
+          "declaringType": "ax::NavMeshAgent",
+          "returnType": "std::string_view",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getObstacleAvoidanceType",
+          "luaName": "getObstacleAvoidanceType",
+          "declaringType": "ax::NavMeshAgent",
+          "returnType": "unsigned char",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getRadius",
+          "luaName": "getRadius",
+          "declaringType": "ax::NavMeshAgent",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getSeparationWeight",
+          "luaName": "getSeparationWeight",
+          "declaringType": "ax::NavMeshAgent",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getSyncFlag",
+          "luaName": "getSyncFlag",
+          "declaringType": "ax::NavMeshAgent",
+          "returnType": "ax::NavMeshAgent::NavMeshAgentSyncFlag",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getVelocity",
+          "luaName": "getVelocity",
+          "declaringType": "ax::NavMeshAgent",
+          "returnType": "ax::Vec3",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "isOnOffMeshLink",
+          "luaName": "isOnOffMeshLink",
+          "declaringType": "ax::NavMeshAgent",
+          "returnType": "bool",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "onEnter",
+          "luaName": "onEnter",
+          "declaringType": "ax::NavMeshAgent",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "onExit",
+          "luaName": "onExit",
+          "declaringType": "ax::NavMeshAgent",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "pause",
+          "luaName": "pause",
+          "declaringType": "ax::NavMeshAgent",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "resume",
+          "luaName": "resume",
+          "declaringType": "ax::NavMeshAgent",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setAutoOrientation",
+          "luaName": "setAutoOrientation",
+          "declaringType": "ax::NavMeshAgent",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setAutoTraverseOffMeshLink",
+          "luaName": "setAutoTraverseOffMeshLink",
+          "declaringType": "ax::NavMeshAgent",
+          "returnType": "void",
+          "parameterTypes": [
+            "bool"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setHeight",
+          "luaName": "setHeight",
+          "declaringType": "ax::NavMeshAgent",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setMaxAcceleration",
+          "luaName": "setMaxAcceleration",
+          "declaringType": "ax::NavMeshAgent",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setMaxSpeed",
+          "luaName": "setMaxSpeed",
+          "declaringType": "ax::NavMeshAgent",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setObstacleAvoidanceType",
+          "luaName": "setObstacleAvoidanceType",
+          "declaringType": "ax::NavMeshAgent",
+          "returnType": "void",
+          "parameterTypes": [
+            "unsigned char"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setOrientationRefAxes",
+          "luaName": "setOrientationRefAxes",
+          "declaringType": "ax::NavMeshAgent",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::Vec3 \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setRadius",
+          "luaName": "setRadius",
+          "declaringType": "ax::NavMeshAgent",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setSeparationWeight",
+          "luaName": "setSeparationWeight",
+          "declaringType": "ax::NavMeshAgent",
+          "returnType": "void",
+          "parameterTypes": [
+            "float"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setSyncFlag",
+          "luaName": "setSyncFlag",
+          "declaringType": "ax::NavMeshAgent",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::NavMeshAgent::NavMeshAgentSyncFlag \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "stop",
+          "luaName": "stop",
+          "declaringType": "ax::NavMeshAgent",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "syncToAgent",
+          "luaName": "syncToAgent",
+          "declaringType": "ax::NavMeshAgent",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "syncToNode",
+          "luaName": "syncToNode",
+          "declaringType": "ax::NavMeshAgent",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    },
+    {
+      "nativeName": "NavMeshObstacle",
+      "qualifiedName": "ax::NavMeshObstacle",
+      "luaName": "ax.NavMeshObstacle",
+      "luaClassName": "NavMeshObstacle",
+      "isAbstract": false,
+      "constructors": [
+        {
+          "parameterTypes": [],
+          "defaultValues": []
+        }
+      ],
+      "bases": [
+        "ax::Component",
+        "ax::Object"
+      ],
+      "methods": [
+        {
+          "nativeName": "create",
+          "luaName": "create",
+          "declaringType": "ax::NavMeshObstacle",
+          "returnType": "ax::NavMeshObstacle *",
+          "parameterTypes": [
+            "float",
+            "float"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getHeight",
+          "luaName": "getHeight",
+          "declaringType": "ax::NavMeshObstacle",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getNavMeshObstacleComponentName",
+          "luaName": "getNavMeshObstacleComponentName",
+          "declaringType": "ax::NavMeshObstacle",
+          "returnType": "std::string_view",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": true,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getRadius",
+          "luaName": "getRadius",
+          "declaringType": "ax::NavMeshObstacle",
+          "returnType": "float",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getSyncFlag",
+          "luaName": "getSyncFlag",
+          "declaringType": "ax::NavMeshObstacle",
+          "returnType": "ax::NavMeshObstacle::NavMeshObstacleSyncFlag",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "initWith",
+          "luaName": "initWith",
+          "declaringType": "ax::NavMeshObstacle",
+          "returnType": "bool",
+          "parameterTypes": [
+            "float",
+            "float"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "onEnter",
+          "luaName": "onEnter",
+          "declaringType": "ax::NavMeshObstacle",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "onExit",
+          "luaName": "onExit",
+          "declaringType": "ax::NavMeshObstacle",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setSyncFlag",
+          "luaName": "setSyncFlag",
+          "declaringType": "ax::NavMeshObstacle",
+          "returnType": "void",
+          "parameterTypes": [
+            "const ax::NavMeshObstacle::NavMeshObstacleSyncFlag \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "syncToNode",
+          "luaName": "syncToNode",
+          "declaringType": "ax::NavMeshObstacle",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "syncToObstacle",
+          "luaName": "syncToObstacle",
+          "declaringType": "ax::NavMeshObstacle",
+          "returnType": "void",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        }
+      ],
+      "fields": []
+    }
+  ],
+  "enums": [
+    {
+      "nativeName": "NavMeshAgentSyncFlag",
+      "qualifiedName": "ax::NavMeshAgent::NavMeshAgentSyncFlag",
+      "ownerQualifiedName": "ax::NavMeshAgent",
+      "values": [
+        {
+          "name": "NONE",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "NODE_TO_AGENT",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "AGENT_TO_NODE",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        },
+        {
+          "name": "NODE_AND_NODE",
+          "signedValue": 3,
+          "unsignedValue": 3,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "NavMeshObstacleSyncFlag",
+      "qualifiedName": "ax::NavMeshObstacle::NavMeshObstacleSyncFlag",
+      "ownerQualifiedName": "ax::NavMeshObstacle",
+      "values": [
+        {
+          "name": "NONE",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "NODE_TO_OBSTACLE",
+          "signedValue": 1,
+          "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "OBSTACLE_TO_NODE",
+          "signedValue": 2,
+          "unsignedValue": 2,
+          "isUnsigned": false
+        },
+        {
+          "name": "NODE_AND_NODE",
+          "signedValue": 3,
+          "unsignedValue": 3,
+          "isUnsigned": false
+        }
+      ]
+    }
+  ]
+}

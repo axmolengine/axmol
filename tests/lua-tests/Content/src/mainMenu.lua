@@ -9,6 +9,7 @@ require "ActionsProgressTest/ActionsProgressTest"
 require "ActionsTest/ActionsTest"
 require "AssetsManagerTest/AssetsManagerTest"
 require "AssetsManagerExTest/AssetsManagerExTest"
+require "BindingBenchmarkTest/BindingBenchmarkTest"
 require "BillBoardTest/BillBoardTest"
 require "BugsTest/BugsTest"
 require "Camera3DTest/Camera3DTest"
@@ -78,6 +79,7 @@ local _allTests = {
     { isSupported = true,  name = "AssetsManagerTest"      , create_func   =         AssetsManagerTestMain      },
     { isSupported = true,  name = "AssetsManagerExTest"      , create_func   =         AssetsManagerExTestMain  },
     { isSupported = true, name = "AudioEngineTest", create_func = AudioEngineTest},
+    { isSupported = true,  name = "BindingBenchmarkTest"   ,  create_func=       BindingBenchmarkTest      },
     { isSupported = true,  name = "BillBoardTest"           , create_func=              BillBoardTestMain},
     { isSupported = true,  name = "BugsTest"               , create_func=              BugsTestMain      },
     { isSupported = true,  name = "Camera3DTest"     ,        create_func=       Camera3DTestMain  },
@@ -174,6 +176,7 @@ function CreateTestMenu()
 
     -- add menu items for tests
     local MainMenu = ax.Menu:create()
+    local menuItems = {}
     local index = 0
     local obj = nil
     for index, obj in pairs(_allTests) do
@@ -184,12 +187,17 @@ function CreateTestMenu()
             testMenuItem:setEnabled(false)
         end
 
-        if obj.name == "WebViewTest"
-        or obj.name == "VibrateTest"
-        or obj.name == "VideoPlayerTest" then
-            if ax.PLATFORM_LINUX == targetPlatform then
-                testMenuItem:setEnabled(false)
-            end
+        if obj.name == "WebViewTest" and (axui == nil or axui.WebView == nil) then
+            testMenuItem:setEnabled(false)
+        end
+
+        if obj.name == "VideoPlayerTest" and
+            (axui == nil or axui.VideoPlayer == nil) then
+            testMenuItem:setEnabled(false)
+        end
+
+        if obj.name == "VibrateTest" and ax.PLATFORM_LINUX == targetPlatform then
+            testMenuItem:setEnabled(false)
         end
 
         if obj.name == "Physics3DTest" and nil == ax.Rigidbody3D then
@@ -203,15 +211,49 @@ function CreateTestMenu()
         testMenuItem:registerScriptTapHandler(menuCallback)
         testMenuItem:setPosition(ax.p(s.width / 2, (s.height - (index) * LINE_SPACE)))
         MainMenu:addChild(testMenuItem, index + 10000, index + 10000)
+        menuItems[#menuItems + 1] = testMenuItem
     end
 
     MainMenu:setContentSize(ax.size(s.width, (TESTS_COUNT + 1) * (LINE_SPACE)))
     MainMenu:setPosition(CurPos.x, CurPos.y)
+    -- Menu captures a pointer as soon as it hits an item.  The scrolling
+    -- listener below owns click-versus-drag arbitration, so keep Menu's native
+    -- pointer listener passive while retaining its layout and item callbacks.
+    MainMenu:setEnabled(false)
     menuLayer:addChild(MainMenu)
 
     -- handling pointer events
+    local dragThreshold = 8
+    local pointerStart = nil
+    local pressedItem = nil
+    local isDragging = false
+
+    local function menuItemAt(worldPoint)
+        local menuPoint = MainMenu:convertToNodeSpace(worldPoint)
+        for _, item in ipairs(menuItems) do
+            if item:isVisible() and item:isEnabled()
+            and ax.rectContainsPoint(item:getBoundingBox(), menuPoint) then
+                return item
+            end
+        end
+        return nil
+    end
+
+    local function clearPressedItem()
+        if pressedItem then
+            pressedItem:unselected()
+            pressedItem = nil
+        end
+    end
+
     local function onPointerDown(event)
         BeginPos = event:getWorldPoint()
+        pointerStart = BeginPos
+        isDragging = false
+        pressedItem = menuItemAt(BeginPos)
+        if pressedItem then
+            pressedItem:selected()
+        end
         return true
     end
 
@@ -223,6 +265,16 @@ function CreateTestMenu()
         event:stopPropagation();
 
         local location = event:getWorldPoint()
+        if not isDragging then
+            local dx = location.x - pointerStart.x
+            local dy = location.y - pointerStart.y
+            if dx * dx + dy * dy < dragThreshold * dragThreshold then
+                return
+            end
+            isDragging = true
+            clearPressedItem()
+        end
+
         local nMoveY = location.y - BeginPos.y
         local curPosx, curPosy = MainMenu:getPosition()
         local nextPosy = curPosy + nMoveY
@@ -242,9 +294,29 @@ function CreateTestMenu()
         CurPos = {x = curPosx, y = nextPosy}
     end
 
+    local function onPointerUp(event)
+        local itemToActivate = pressedItem
+        local shouldActivate = itemToActivate ~= nil and not isDragging
+            and itemToActivate == menuItemAt(event:getWorldPoint())
+        clearPressedItem()
+        pointerStart = nil
+        isDragging = false
+        if shouldActivate then
+            itemToActivate:activate()
+        end
+    end
+
+    local function onPointerCancelled()
+        clearPressedItem()
+        pointerStart = nil
+        isDragging = false
+    end
+
     local listener = ax.PointerEventListener:create()
-    listener:registerScriptHandler(onPointerDown,ax.Handler.EVENT_POINTER_DOWN )
-    listener:registerScriptHandler(onPointerMove,ax.Handler.EVENT_POINTER_MOVE )
+    listener.onPointerDown = onPointerDown
+    listener.onPointerMove = onPointerMove
+    listener.onPointerUp = onPointerUp
+    listener.onPointerCancel = onPointerCancelled
     local eventDispatcher = menuLayer:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, menuLayer)
 

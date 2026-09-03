@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <!-- Optional Visual Studio debugging project.  genbindings.ps1 never
+         invokes the .NET SDK or this project; production generation uses
+         PowerShell Add-Type so a clean host needs no SDK. -->
+    <GeneratorTargetFramework>net8.0</GeneratorTargetFramework>
+    <TargetFramework>$(GeneratorTargetFramework)</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <ClangSharpInteropVersion>21.1.8.3</ClangSharpInteropVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="src/**/*.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(ClangSharpRoot)' == ''">
+    <!-- Development-only reference for Visual Studio debugging. -->
+    <PackageDownload Include="ClangSharp.Interop" Version="[$(ClangSharpInteropVersion)]" />
+    <Reference Include="ClangSharp.Interop">
+      <HintPath>$(NuGetPackageRoot)\clangsharp.interop\$(ClangSharpInteropVersion)\lib\net8.0\ClangSharp.Interop.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(ClangSharpRoot)' != ''">
+    <Compile Include="$(ClangSharpRoot)/sources/ClangSharp.Interop/**/*.cs" />
+  </ItemGroup>
+
+</Project>

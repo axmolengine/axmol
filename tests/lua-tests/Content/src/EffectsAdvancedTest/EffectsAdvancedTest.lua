@@ -193,14 +193,6 @@ local function Effect5()
     local  stopEffect = ax.Sequence:create(effect, ax.DelayTime:create(2), ax.StopGrid:create())
     local  bg = ret:getChildByTag(kTagBackground)
     bg:runAction(stopEffect)
-    local function onNodeEvent(event)
-        if event == "exit" then
-            ax.Director:getInstance():setProjection(ax.DIRECTOR_PROJECTION_3D)
-        end
-    end
-
-    ret:registerScriptHandler(onNodeEvent)
-
     return ret
 end
 
@@ -235,7 +227,7 @@ local function Issue631()
     --bf.src = GL_SRC_ALPHA
     --bf.dst = GL_ONE_MINUS_SRC_ALPHA
 
-    fog:setBlendFunc(ax.blendFunc(ccb.BlendFactor.SRC_ALPHA , ccb.BlendFactor.ONE_MINUS_SRC_ALPHA))
+    fog:setBlendFunc(ax.blendFunc(axr.BlendFactor.SRC_ALPHA , axr.BlendFactor.ONE_MINUS_SRC_ALPHA))
     layer2:addChild(fog, 1)
     ret:addChild(layer2BaseGrid, 1)
     layer2BaseGrid:addChild(layer2)

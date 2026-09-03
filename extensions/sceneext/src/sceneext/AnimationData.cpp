@@ -52,6 +52,27 @@ BaseData::BaseData()
 
 BaseData::~BaseData() {}
 
+BaseData& BaseData::operator=(const BaseData& other)
+{
+    if (this != &other)
+    {
+        x              = other.x;
+        y              = other.y;
+        zOrder         = other.zOrder;
+        skewX          = other.skewX;
+        skewY          = other.skewY;
+        scaleX         = other.scaleX;
+        scaleY         = other.scaleY;
+        tweenRotate    = other.tweenRotate;
+        isUseColorInfo = other.isUseColorInfo;
+        a              = other.a;
+        r              = other.r;
+        g              = other.g;
+        b              = other.b;
+    }
+    return *this;
+}
+
 void BaseData::copy(const BaseData* node)
 {
     x      = node->x;
@@ -172,7 +193,7 @@ void SpriteDisplayData::copy(DisplayData* displayData)
 
     if (SpriteDisplayData* sdd = dynamic_cast<SpriteDisplayData*>(displayData))
     {
-        skinData = sdd->skinData;
+        skinData.copy(&sdd->skinData);
     }
 }
 

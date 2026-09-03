@@ -385,12 +385,22 @@ options:
     genbindings = @{
         proc  = (Join-Path $PSScriptRoot 'plugins/genbindings.ps1');
         usage = @"
-usage: axmol genbindings
+usage: axmol genbindings [-m <module>]
 
 Generate Lua bindings for axmol engine.
 
 options:
-  -h    Show this help message.
+  -m <module>      Generate one module; default is all. Use -m all to generate all modules.
+                   Both short names (base) and configured names (ax_base) are accepted.
+  -Verify          Parse and validate without writing generated files.
+  -ClangSharpRoot  Local ClangSharp checkout (optional).
+  -LibClangRoot    Directory containing the libclang runtime downloaded by 1kiss.
+  -GeneratorAssembly Prebuilt C# generator DLL (or AXMOL_LUA_GENERATOR_ASSEMBLY).
+  -ExtraClangArguments Additional target/platform defines, e.g. -DAX_ENABLE_VIDEO=1 or -DANDROID=1.
+  -OutputDirectory  Override generated-file directory for staged verification.
+  -NdkRoot         Android NDK root; defaults to ANDROID_NDK. If omitted,
+                   genbindings invokes setup.ps1 -p android as the legacy flow did.
+  -h               Show this help message.
 "@
     };
     'build-docs' = @{

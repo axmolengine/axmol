@@ -1,0 +1,46 @@
+{
+  "module": "ax_navmesh",
+  "target_namespace": "ax",
+  "cpp_namespace": "ax",
+  "macro_judgement": "#if defined(AX_ENABLE_NAVMESH)",
+  "headers": [
+    "%(axdir)s/axmol/navmesh/NavMesh.h",
+    "%(axdir)s/extensions/scripting/lua-bindings/adapters/navmesh/axlua_navmesh_conversions.h"
+  ],
+  "clang_flags": [
+    "-DAX_ENABLE_NAVMESH"
+  ],
+  "classes": [
+    "NavMesh",
+    "NavMeshAgent",
+    "NavMeshObstacle"
+  ],
+  "abstract_classes": [],
+  "classes_have_no_parents": [],
+  "base_classes_to_skip": [],
+  "skip": [
+    {
+      "class": "NavMesh",
+      "methods": [
+        "findPath"
+      ]
+    },
+    {
+      "class": "NavMeshObstacle",
+      "methods": [
+        "setRadius",
+        "setHeight"
+      ]
+    },
+    {
+      "class": "NavMeshAgent",
+      "methods": [
+        "create",
+        "getCurrentOffMeshLinkData",
+        "move"
+      ]
+    }
+  ],
+  "rename_functions": [],
+  "rename_classes": []
+}

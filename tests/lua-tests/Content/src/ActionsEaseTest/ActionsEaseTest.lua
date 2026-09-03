@@ -83,7 +83,7 @@ local function SpriteEase()
     local a = kathia:runAction(ax.RepeatForever:create(seq3))
     a:setTag(1)
 
-	layer:registerScriptHandler(SpriteEase_onEnterOrExit)
+	layer:setLifecycleCallback(SpriteEase_onEnterOrExit)
 
 	Helper.titleLabel:setString("EaseIn - EaseOut - Stop")
 	return layer
@@ -435,7 +435,7 @@ local function SpeedTest()
     tamara:runAction(SpeedTest_action3)
     kathia:runAction(SpeedTest_action1)
 
-	layer:registerScriptHandler(SpeedTest_onEnterOrExit)
+	layer:setLifecycleCallback(SpeedTest_onEnterOrExit)
 
 	Helper.titleLabel:setString("Speed action")
 	return layer

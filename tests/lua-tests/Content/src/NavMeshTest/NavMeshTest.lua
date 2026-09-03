@@ -32,14 +32,16 @@ function NavMeshBaseTestDemo:ctor()
     self:init()
 
     local function onNodeEvent(event)
-        if "enter" == event then
-            self:onEnter()
+        -- Native onEnter hooks run before child components enter. Wait until
+        -- the ground Rigidbody3D is attached before raycasting the spawn.
+        if "enterTransitionFinish" == event then
+            self:spawnInitialAgent()
         elseif "exit" == event then
             self:onExit()
         end
     end
 
-    self:registerScriptHandler(onNodeEvent)
+    self:setLifecycleCallback(onNodeEvent)
 end
 
 function NavMeshBaseTestDemo:title()
@@ -52,6 +54,7 @@ end
 
 function NavMeshBaseTestDemo:init()
     self._angle = 0.0
+    self._pointerDown = false
     self._agents = {}
     local size = ax.Director:getInstance():getCanvasSize()
     self._camera = ax.Camera:createPerspective(30.0, size.width / size.height, 1.0, 1000.0)
@@ -64,7 +67,7 @@ function NavMeshBaseTestDemo:init()
 
     self:initScene()
 
-    self:scheduleUpdateWithPriorityLua(function(dt)
+    self:onUpdate(function(dt)
         if #self._agents == 0 then
             return
         end
@@ -84,16 +87,20 @@ function NavMeshBaseTestDemo:init()
             end
             self._agents[i][2]:setSpeed(speed)
         end
-    end, 0)
+    end)
 
     self:extend()
 end
 
-function NavMeshBaseTestDemo:onEnter()
+function NavMeshBaseTestDemo:spawnInitialAgent()
+    if #self._agents > 0 then
+        return
+    end
     local hitResult = {}
     local ret = false
     local physicsWorld = self:getPhysicsWorld3D()
     ret, hitResult = physicsWorld:rayCast(ax.vec3(0.0, 50.0, 0.0), ax.vec3(0.0, -50.0, 0.0), hitResult)
+    assert(ret, "NavMesh initial agent ray missed the ground")
     self:createAgent(hitResult.hitPosition)
 end
 
@@ -115,7 +122,8 @@ function NavMeshBaseTestDemo:initScene()
     local trianglesList = ax.Bundle3D:getTrianglesList("NavMesh/scene.obj")
 
     local sprite = ax.Sprite3D:create("NavMesh/scene.obj")
-    local rigidBody = ax.Rigidbody3D:create(ax.MeshCollider3D:create(trianglesList), 0.0)
+    local collider = assert(ax.MeshCollider3D:create(trianglesList), "NavMesh ground collider creation failed")
+    local rigidBody = ax.Rigidbody3D:create(collider, 0.0)
     sprite:addComponent(rigidBody)
     sprite:setCameraMask(ax.CameraFlag.USER1)
     self:addChild(sprite)
@@ -235,15 +243,19 @@ end
 
 function NavMeshBasicTestDemo:registerTouchEvent()
     local listener = ax.PointerEventListener:create()
-    listener:registerScriptHandler(function(event)
+    listener.onPointerDown = function(event)
+        self._pointerDown = true
         self._needMoveAgents = true
-    end,ax.Handler.EVENT_POINTER_DOWN)
+        return true
+    end
 
-    listener:registerScriptHandler(function(event)
+    listener.onPointerMove = function(event)
 
-        if event ~= nil and self._camera ~= nil then
-            local touch = event
-            local delta = event:getDelta()
+        if self._pointerDown and event ~= nil and self._camera ~= nil then
+            -- Match the native NavMesh sample: camera orbit uses the pointer's
+            -- world-space delta, while the release position remains screen-space
+            -- for deprojection below.
+            local delta = ax.pSub(event:getWorldPoint(), event:getPrevWorldPoint())
 
             self._angle = self._angle - delta.x * math.pi / 180.0
             self._camera:setPosition3D(ax.vec3(100.0 * math.sin(self._angle), 50.0, 100.0 * math.cos(self._angle)))
@@ -253,9 +265,10 @@ function NavMeshBasicTestDemo:registerTouchEvent()
                 self._needMoveAgents = false
             end
         end
-    end, ax.Handler.EVENT_POINTER_MOVE)
+    end
 
-    listener:registerScriptHandler(function(event)
+    listener.onPointerUp = function(event)
+        self._pointerDown = false
         if not self._needMoveAgents then
             return
         end
@@ -273,9 +286,15 @@ function NavMeshBasicTestDemo:registerTouchEvent()
             local hitResult = {}
             local ret = false
             ret, hitResult = physicsWorld:rayCast(nearP, farP, hitResult)
-            self:moveAgents(hitResult.hitPosition)
+            if ret then
+                self:moveAgents(hitResult.hitPosition)
+            end
         end
-    end, ax.Handler.EVENT_POINTER_UP)
+    end
+
+    listener.onPointerCancel = function(event)
+        self._pointerDown = false
+    end
 
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)
@@ -321,15 +340,16 @@ end
 
 function NavMeshAdvanceTestDemo:registerTouchEvent()
     local listener = ax.PointerEventListener:create()
-    listener:registerScriptHandler(function(event)
+    listener.onPointerDown = function(event)
+        self._pointerDown = true
         self._needMoveAgents = true
-    end,ax.Handler.EVENT_POINTER_DOWN)
+        return true
+    end
 
-    listener:registerScriptHandler(function(event)
+    listener.onPointerMove = function(event)
 
-        if event ~= nil and self._camera ~= nil then
-            local touch = event
-            local delta = event:getDelta()
+        if self._pointerDown and event ~= nil and self._camera ~= nil then
+            local delta = ax.pSub(event:getWorldPoint(), event:getPrevWorldPoint())
 
             self._angle = self._angle - delta.x * math.pi / 180.0
             self._camera:setPosition3D(ax.vec3(100.0 * math.sin(self._angle), 50.0, 100.0 * math.cos(self._angle)))
@@ -339,9 +359,10 @@ function NavMeshAdvanceTestDemo:registerTouchEvent()
                 self._needMoveAgents = false
             end
         end
-    end, ax.Handler.EVENT_POINTER_MOVE)
+    end
 
-    listener:registerScriptHandler(function(event)
+    listener.onPointerUp = function(event)
+        self._pointerDown = false
         if not self._needMoveAgents then
             return
         end
@@ -359,9 +380,15 @@ function NavMeshAdvanceTestDemo:registerTouchEvent()
             local hitResult = {}
             local ret = false
             ret, hitResult = physicsWorld:rayCast(nearP, farP, hitResult)
-            self:moveAgents(hitResult.hitPosition)
+            if ret then
+                self:moveAgents(hitResult.hitPosition)
+            end
         end
-    end, ax.Handler.EVENT_POINTER_UP)
+    end
+
+    listener.onPointerCancel = function(event)
+        self._pointerDown = false
+    end
 
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)
@@ -439,4 +466,3 @@ function NavMeshTest()
 
     return scene
 end
-

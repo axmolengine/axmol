@@ -1035,7 +1035,7 @@ local function PauseResumeActions()
     tamara:runAction(ax.RepeatForever:create(ax.RotateBy:create(3, 360)))
     kathia:runAction(ax.RepeatForever:create(ax.RotateBy:create(3, 360)))
 
-	layer:registerScriptHandler(PauseResumeActions_onEnterOrExit)
+	layer:setLifecycleCallback(PauseResumeActions_onEnterOrExit)
 
 	Helper.titleLabel:setString("PauseResumeActions")
 	Helper.subtitleLabel:setString("All actions pause at 3s and resume at 5s")
@@ -1086,7 +1086,7 @@ local function ActionIssue1305()
 
 	centerSprites(0)
 
-    Issue1305_layer:registerScriptHandler(Issue1305_onEnterOrExit)
+    Issue1305_layer:setLifecycleCallback(Issue1305_onEnterOrExit)
 
 	Helper.titleLabel:setString("Issue 1305")
 	Helper.subtitleLabel:setString("In two seconds you should see a message on the console. NOT BEFORE.")

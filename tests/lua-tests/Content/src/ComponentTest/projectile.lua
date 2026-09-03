@@ -4,7 +4,7 @@ local projectile = {
     sceneLua = nil,
 
     onEnter = function(self)
-        local sceneScriptComponent = tolua.cast(self:getOwner():getParent():getComponent("sceneLuaComponent"), "ax.ComponentLua")
+        local sceneScriptComponent = axlua.cast(self:getOwner():getParent():getComponent("sceneLuaComponent"), "ax.ComponentLua")
         self.sceneLua  = sceneScriptComponent:getScriptObject()
     end,
 

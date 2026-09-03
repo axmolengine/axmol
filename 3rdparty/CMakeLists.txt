@@ -241,10 +241,9 @@ endif()
 # use lua/js specific libs by property to prevent conflict
 if(AX_ENABLE_EXT_LUA)
   add_subdirectory(lua/${AX_LUA_ENGINE})
-  add_subdirectory(lua/tolua)
   add_subdirectory(lua/lua-cjson)
   set_property(TARGET 3rdparty APPEND PROPERTY
-    AX_LUA_DEPEND ${AX_LUA_ENGINE} tolua lua-cjson
+    AX_LUA_DEPEND ${AX_LUA_ENGINE} lua-cjson
   )
 
   if(AX_USE_LUAJIT)

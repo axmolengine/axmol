@@ -141,7 +141,7 @@ local function updateLayer()
         end
     end
 
-    layer:registerScriptHandler(onNodeEvent)
+    layer:setLifecycleCallback(onNodeEvent)
 
     layer:addChild(menu)
 

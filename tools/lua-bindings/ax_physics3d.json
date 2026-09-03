@@ -1,0 +1,89 @@
+{
+  "module": "ax_physics3d",
+  "target_namespace": "ax",
+  "cpp_namespace": "ax",
+  "cpp_chunks": 2,
+  "macro_judgement": "#if defined(AX_ENABLE_PHYSICS_3D)",
+  "headers": [
+    "%(axdir)s/axmol/physics/physics-3d.h"
+  ],
+  "clang_flags": [
+    "-DAX_ENABLE_PHYSICS_3D",
+    "-DJPH_DEBUG_RENDERER=1"
+  ],
+  "classes": [
+    "PhysicsActor",
+    "ContactEvent3D",
+    "ContactEventListener3D",
+    "PhysicsWorld3D",
+    "Rigidbody3D",
+    "Collider3D",
+    "BoxCollider3D",
+    "SphereCollider3D",
+    "CylinderCollider3D",
+    "CapsuleCollider3D",
+    "ConvexCollider3D",
+    "MeshCollider3D",
+    "HeightFieldCollider3D",
+    "Joint3D",
+    "PivotJoint3D",
+    "HingeJoint3D",
+    "SliderJoint3D",
+    "ConeTwistJoint3D",
+    "SixDofJoint3D"
+  ],
+  "abstract_classes": [
+    "Collider3D",
+    "Joint3D"
+  ],
+  "classes_have_no_parents": [],
+  "base_classes_to_skip": [],
+  "fields": [
+    {
+      "class": "ContactEventListener3D",
+      "names": [
+        "onContactFilter",
+        "onContactBegin",
+        "onContactEnd",
+        "onCollisionHit",
+        "onSensorBegin",
+        "onSensorEnd"
+      ]
+    }
+  ],
+  "skip": [
+    {
+      "class": "PhysicsWorld3D",
+      "methods": [
+        "rayCast",
+        "sweepTest",
+        "internalHandle",
+        "setPreSolveCallback"
+      ]
+    },
+    {
+      "class": "Rigidbody3D",
+      "methods": [
+        "getUserData",
+        "setTransformInPhysics",
+        "internalHandle"
+      ]
+    },
+    {
+      "class": "Collider3D",
+      "methods": [
+        "getUserData",
+        "setTransformInPhysics"
+      ]
+    },
+    {
+      "class": "Joint3D",
+      "methods": [
+        "internalHandle",
+        "getUserData"
+      ]
+    }
+  ],
+  "rename_functions": [],
+  "rename_classes": []
+}
