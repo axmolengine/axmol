@@ -63,6 +63,9 @@ static D3D11_BIND_FLAG translateBindFlag(BufferType t)
     case BufferType::UNIFORM:
         return D3D11_BIND_CONSTANT_BUFFER;
 
+    case BufferType::STORAGE:
+        return static_cast<D3D11_BIND_FLAG>(D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS);
+
     case BufferType::PIXEL_PACK_BUFFER:
         // read backbuffer，map as staging or copy target
         return D3D11_BIND_SHADER_RESOURCE;  // FIXME:
@@ -84,11 +87,24 @@ BufferImpl::BufferImpl(ID3D11Device* device,
                        size_t size,
                        BufferType type,
                        BufferUsage usage,
-                       const void* initial)
-    : Buffer(size, type, usage), _device(device), _context(context)
+                       const void* initial,
+                       uint32_t stride)
+    : Buffer(size, type, usage, stride), _device(device), _context(context)
 {
     translateUsage(usage, _nativeUsage, _cpuAccess);
     _bindFlag = translateBindFlag(type);
+
+    if (type == BufferType::STORAGE)
+    {
+        AXASSERT(size > 0 && (size % sizeof(uint32_t)) == 0,
+                 "D3D storage buffer size must be a non-zero multiple of 4 bytes");
+        AXASSERT(stride == 0 || (size % stride) == 0, "Storage buffer size must be divisible by its logical stride");
+
+        // D3D11 forbids D3D11_BIND_UNORDERED_ACCESS with D3D11_USAGE_DYNAMIC;
+        // use DEFAULT usage and update via UpdateSubresource.
+        _nativeUsage = D3D11_USAGE_DEFAULT;
+        _cpuAccess   = 0;
+    }
 
     _capacity = _bindFlag == D3D11_BIND_CONSTANT_BUFFER ? alignTo(size, 16) : size;
 
@@ -108,6 +124,12 @@ void BufferImpl::createNativeBuffer(const void* initial)
     desc.BindFlags      = _bindFlag;
     desc.CPUAccessFlags = _cpuAccess;
     desc.MiscFlags      = 0;
+    if (_type == BufferType::STORAGE)
+    {
+        // axslcc lowers portable storage buffers to ByteAddressBuffer/RWByteAddressBuffer on D3D.
+        desc.MiscFlags           = D3D11_RESOURCE_MISC_BUFFER_ALLOW_RAW_VIEWS;
+        desc.StructureByteStride = 0;
+    }
 
     D3D11_SUBRESOURCE_DATA initData{};
     initData.pSysMem = initial;
@@ -120,6 +142,69 @@ void BufferImpl::createNativeBuffer(const void* initial)
                static_cast<unsigned int>(hr));
         assert(false && "Failed to create ID3D11Buffer");
     }
+}
+
+/* -------------------------------------------------- createViews */
+void BufferImpl::createViews() const
+{
+    if (!_buffer)
+        return;
+
+    if (_bindFlag & D3D11_BIND_SHADER_RESOURCE)
+    {
+        HRESULT hr = S_OK;
+        if (_type == BufferType::STORAGE)
+        {
+            D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+            srvDesc.Format                = DXGI_FORMAT_R32_TYPELESS;
+            srvDesc.ViewDimension         = D3D11_SRV_DIMENSION_BUFFEREX;
+            srvDesc.BufferEx.FirstElement = 0;
+            srvDesc.BufferEx.NumElements  = static_cast<UINT>(_capacity / sizeof(uint32_t));
+            srvDesc.BufferEx.Flags        = D3D11_BUFFEREX_SRV_FLAG_RAW;
+            hr                            = _device->CreateShaderResourceView(_buffer.Get(), &srvDesc, &_srv);
+        }
+        else
+        {
+            hr = _device->CreateShaderResourceView(_buffer.Get(), nullptr, &_srv);
+        }
+
+        AXASSERT(SUCCEEDED(hr) && _srv, "Failed to create D3D11 buffer SRV");
+    }
+
+    if (_bindFlag & D3D11_BIND_UNORDERED_ACCESS)
+    {
+        HRESULT hr = S_OK;
+        if (_type == BufferType::STORAGE)
+        {
+            D3D11_UNORDERED_ACCESS_VIEW_DESC uavDesc{};
+            uavDesc.Format              = DXGI_FORMAT_R32_TYPELESS;
+            uavDesc.ViewDimension       = D3D11_UAV_DIMENSION_BUFFER;
+            uavDesc.Buffer.FirstElement = 0;
+            uavDesc.Buffer.NumElements  = static_cast<UINT>(_capacity / sizeof(uint32_t));
+            uavDesc.Buffer.Flags        = D3D11_BUFFER_UAV_FLAG_RAW;
+            hr                          = _device->CreateUnorderedAccessView(_buffer.Get(), &uavDesc, &_uav);
+        }
+        else
+        {
+            hr = _device->CreateUnorderedAccessView(_buffer.Get(), nullptr, &_uav);
+        }
+
+        AXASSERT(SUCCEEDED(hr) && _uav, "Failed to create D3D11 buffer UAV");
+    }
+}
+
+ID3D11ShaderResourceView* BufferImpl::getSRV() const noexcept
+{
+    if (!_srv && _bindFlag & D3D11_BIND_SHADER_RESOURCE)
+        createViews();
+    return _srv.Get();
+}
+
+ID3D11UnorderedAccessView* BufferImpl::getUAV() const noexcept
+{
+    if (!_uav && _bindFlag & D3D11_BIND_UNORDERED_ACCESS)
+        createViews();
+    return _uav.Get();
 }
 
 /* -------------------------------------------------- updateData */

@@ -81,16 +81,34 @@ Program::Program(Data& vsData, Data& fsData)
     }
 }
 
+Program::Program(Data& csData)
+{
+    auto shaderCache = ShaderCache::getInstance();
+    _csModule        = shaderCache->acquireComputeShaderModule(csData);
+
+    SLCReflectContext context{};
+    parseStageReflection(ShaderStage::COMPUTE, &context);
+
+    resolveBuiltinUniforms();
+}
+
 Program::~Program()
 {
     AX_SAFE_RELEASE(_vsModule);
     AX_SAFE_RELEASE(_fsModule);
+    AX_SAFE_RELEASE(_csModule);
     AX_SAFE_RELEASE(_vertexLayout);
 }
 
 bool Program::isValid() const
 {
-    return _samplersResolved && _vsModule && _fsModule && _vsModule->isCompiled() && _fsModule->isCompiled();
+    if (!_samplersResolved)
+        return false;
+
+    if (_csModule)
+        return _csModule->isCompiled();
+
+    return _vsModule && _fsModule && _vsModule->isCompiled() && _fsModule->isCompiled();
 }
 
 void Program::setProgramIds(uint32_t progType, uint64_t progId)
@@ -184,7 +202,10 @@ size_t Program::getUniformBufferSize() const
 
 void Program::parseStageReflection(ShaderStage stage, SLCReflectContext* context)
 {
-    auto shaderModule      = stage == ShaderStage::VERTEX ? _vsModule : _fsModule;
+    auto shaderModule =
+        stage == ShaderStage::VERTEX ? _vsModule : (stage == ShaderStage::FRAGMENT ? _fsModule : _csModule);
+    if (!shaderModule)
+        return;
     const auto& shaderData = shaderModule->getChunkData();
     yasio::fast_ibstream_view ibs(shaderData.data(), shaderData.size());
     context->ibs   = &ibs;
@@ -205,6 +226,8 @@ void Program::parseStageReflection(ShaderStage stage, SLCReflectContext* context
         ref_stage = ShaderStage::VERTEX;
     else if (stage_id == SC_STAGE_FRAGMENT)
         ref_stage = ShaderStage::FRAGMENT;
+    else if (stage_id == SC_STAGE_COMPUTE)
+        ref_stage = ShaderStage::COMPUTE;
 
     assert(ref_stage == stage && "Shader stage mismatch in axslc chunk");
 
@@ -244,6 +267,13 @@ void Program::parseStageReflection(ShaderStage stage, SLCReflectContext* context
             // context
             context->refl = &refl;
 
+            if (stage == ShaderStage::COMPUTE)
+            {
+                _computeLocalSize[0] = refl.compute_local_size[0];
+                _computeLocalSize[1] = refl.compute_local_size[1];
+                _computeLocalSize[2] = refl.compute_local_size[2];
+            }
+
             // refl_inputs
             reflectVertexInputs(context);
 
@@ -256,8 +286,8 @@ void Program::parseStageReflection(ShaderStage stage, SLCReflectContext* context
             // refl_storage_images: ignore
             ibs.advance(refl.num_storage_images * sizeof(sc_refl_texture));
 
-            // refl_storage_buffers: ignore
-            ibs.advance(refl.num_storage_buffers * sizeof(sc_refl_buffer));
+            // refl_storage_buffers
+            reflectStorageBuffers(context);
 
             assert(ibs.tell() - refl_data_offset == refl_size && "Reflection chunk size mismatch");
         }
@@ -453,6 +483,27 @@ void Program::reflectSamplers(SLCReflectContext* context)
         }
 
         _textureSamplerIds[textureBinding] = samplerIt->samplerId;
+        _textureSamplerLocations[textureBinding] =
+            SamplerLocation{.binding = static_cast<int16_t>(samplerIt->binding), .space = samplerIt->space};
+    }
+}
+
+void Program::reflectStorageBuffers(SLCReflectContext* context)
+{
+    auto ibs = context->ibs;
+    for (int i = 0; i < context->refl->num_storage_buffers; ++i)
+    {
+        StorageBufferInfo info;
+        info.name         = _sc_read_name(ibs);
+        info.binding      = ibs->read<int32_t>();
+        info.sizeBytes    = ibs->read<uint32_t>();
+        info.arrayStride  = ibs->read<uint32_t>();
+        info.space        = ibs->read<uint16_t>();
+        const auto access = ibs->read<uint8_t>();
+        ibs->read<uint8_t>();  // reserved
+        info.access     = access == SC_BUFFER_ACCESS_READ_WRITE ? BufferAccess::READ_WRITE : BufferAccess::READ_ONLY;
+        info.stageFlags = static_cast<uint16_t>(1u << static_cast<uint16_t>(context->stage));
+        _activeStorageBufferInfos.emplace_back(info);
     }
 }
 
@@ -460,6 +511,21 @@ SamplerId Program::getTextureSampler(int textureBinding) const
 {
     auto it = _textureSamplerIds.find(textureBinding);
     return it != _textureSamplerIds.end() ? it->second : SamplerId{};
+}
+
+SamplerLocation Program::getTextureSamplerLocation(int textureBinding) const
+{
+    auto it = _textureSamplerLocations.find(textureBinding);
+    return it != _textureSamplerLocations.end() ? it->second : SamplerLocation{};
+}
+
+SamplerLocation Program::getSamplerLocation(std::string_view name) const
+{
+    auto it = std::find_if(_activeSamplerInfos.begin(), _activeSamplerInfos.end(),
+                           [name](const SamplerBindingInfo& info) { return info.name == name; });
+    if (it == _activeSamplerInfos.end())
+        return {};
+    return SamplerLocation{.binding = static_cast<int16_t>(it->binding), .space = it->space};
 }
 
 void Program::resolveBuiltinUniforms()

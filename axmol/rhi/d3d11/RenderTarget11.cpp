@@ -96,7 +96,7 @@ void RenderTargetImpl::beginRenderPass(ID3D11DeviceContext* context)
                             auto fmtInfo = dxutils::toDxgiFormatInfo(texture->getPixelFormat());
                             auto handle  = texture->internalHandle();
                             D3D11_TEXTURE2D_DESC texDesc{};
-                            handle.resource->GetDesc(&texDesc);
+                            static_cast<ID3D11Texture2D*>(handle.resource)->GetDesc(&texDesc);
 
                             D3D11_RENDER_TARGET_VIEW_DESC rtvDesc{};
                             // The texture created by openxr will be: DXGI_FORMAT_R8G8B8A8_TYPELESS

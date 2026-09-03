@@ -21,12 +21,13 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "axmol/rhi/d3d12/RenderPipeline12.h"
+#include "axmol/rhi/d3d12/GraphicsPipeline12.h"
 #include "axmol/rhi/d3d12/VertexLayout12.h"
 #include "axmol/rhi/d3d12/DepthStencilState12.h"
 #include "axmol/rhi/d3d12/Program12.h"
 #include "axmol/rhi/d3d12/GraphicsContext12.h"
 #include "axmol/rhi/d3d12/GraphicsDevice12.h"
+#include "axmol/rhi/ProgramState.h"
 #include "axmol/base/Logging.h"
 #include "axmol/tlx/hash.hpp"
 
@@ -124,12 +125,12 @@ static inline uintptr_t makePSOKey(const rhi::BlendDesc& blendDesc,
     }
 }
 
-RenderPipelineImpl::RenderPipelineImpl(GraphicsDeviceImpl* driver) : _driver(driver)
+GraphicsPipelineImpl::GraphicsPipelineImpl(GraphicsDeviceImpl* driver) : _driver(driver)
 {
     initializePipelineDefaults();
 }
 
-RenderPipelineImpl::~RenderPipelineImpl()
+GraphicsPipelineImpl::~GraphicsPipelineImpl()
 {
     _driver->waitForGPU();
 
@@ -138,16 +139,14 @@ RenderPipelineImpl::~RenderPipelineImpl()
 
     for (auto& [progId, entry] : _rootSigCache)
     {
-        if (entry.customSamplerBatch)
-        {
-            _driver->getSamplerAllocator()->deallocateBatch(entry.customSamplerBatch, entry.customSamplerBatchCount);
-        }
+        for (auto& [_, batch] : entry.customSamplerBatches)
+            _driver->getSamplerAllocator()->deallocateBatch(batch, entry.customSamplerBatchCount);
     }
     _psoCache.clear();
     _rootSigCache.clear();
 }
 
-void RenderPipelineImpl::initializePipelineDefaults()
+void GraphicsPipelineImpl::initializePipelineDefaults()
 {
     // Blend
     _blendDesc                        = {};
@@ -165,11 +164,11 @@ void RenderPipelineImpl::initializePipelineDefaults()
     _rasterDesc.DepthClipEnable       = TRUE;
 }
 
-void RenderPipelineImpl::update(const RenderTarget* /*rt*/, const PipelineDesc& desc)
+void GraphicsPipelineImpl::update(const RenderTarget* /*rt*/, const PipelineDesc& desc)
 {
     if (!desc.programState || !desc.vertexLayout)
     {
-        AXASSERT(false, "RenderPipelineImpl::update: invalid inputs");
+        AXASSERT(false, "GraphicsPipelineImpl::update: invalid inputs");
         return;
     }
 
@@ -180,7 +179,7 @@ void RenderPipelineImpl::update(const RenderTarget* /*rt*/, const PipelineDesc& 
     updateGraphicsPipeline(desc, program);
 }
 
-void RenderPipelineImpl::updateBlendState(const BlendDesc& blendDesc)
+void GraphicsPipelineImpl::updateBlendState(const BlendDesc& blendDesc)
 {
     auto& rt = _blendDesc.RenderTarget[0];
 
@@ -202,7 +201,7 @@ void RenderPipelineImpl::updateBlendState(const BlendDesc& blendDesc)
     rt.LogicOp       = D3D12_LOGIC_OP_NOOP;
 }
 
-void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
+void GraphicsPipelineImpl::updateRootSignature(ProgramImpl* program)
 {
     auto progId = program->getProgramId();
     if (auto it = _rootSigCache.find(progId); it != _rootSigCache.end())
@@ -232,12 +231,25 @@ void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
         rootIndex++;
     }
 
-    // --- FS SRVs (textures) -> descriptor table, space = SET_INDEX_SRV ---
+    // --- FS SRVs (textures) + storage buffers -> descriptor table, space = SET_INDEX_SRV ---
     tlx::pod_vector<D3D12_DESCRIPTOR_RANGE> srvRanges;
+    tlx::pod_vector<D3D12_DESCRIPTOR_RANGE> customSamplerRanges;
 
     // --- Sampler descriptor table (global heap) ---
     D3D12_DESCRIPTOR_RANGE samplerRange{};
     uint32_t customSamplerCount = 0;
+
+    // Storage buffers (read by the GPU render VS/PS) become SRVs in the table
+    // first, matching the unified logical resource slot sequence.
+    for (const auto& sb : program->getActiveStorageBufferInfos())
+    {
+        D3D12_DESCRIPTOR_RANGE& r           = srvRanges.emplace_back();
+        r.RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+        r.NumDescriptors                    = 1;
+        r.BaseShaderRegister                = sb.binding;
+        r.RegisterSpace                     = SET_INDEX_SRV;
+        r.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+    }
 
     auto& fsSamplers = program->getActiveTextureInfos();
     if (!fsSamplers.empty())
@@ -279,27 +291,36 @@ void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
 
         if (customSamplerCount > 0)
         {
-            D3D12_DESCRIPTOR_RANGE customSamplerRange{};
-            customSamplerRange.RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER;
-            customSamplerRange.NumDescriptors                    = customSamplerCount;
-            customSamplerRange.BaseShaderRegister                = 0;
-            customSamplerRange.RegisterSpace                     = SET_INDEX_CUSTOM_SAMPLER;
-            customSamplerRange.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+            customSamplerRanges.reserve(program->getActiveSamplerInfos().size());
+            for (const auto& sampler : program->getActiveSamplerInfos())
+            {
+                if (sampler.presetIndex >= 0)
+                    continue;
+                auto& range                             = customSamplerRanges.emplace_back();
+                range.RangeType                         = D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER;
+                range.NumDescriptors                    = sampler.count;
+                range.BaseShaderRegister                = sampler.binding;
+                range.RegisterSpace                     = SET_INDEX_CUSTOM_SAMPLER;
+                range.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+            }
 
             D3D12_ROOT_PARAMETER& customSamplerParam               = rootParams.emplace_back();
             customSamplerParam.ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-            customSamplerParam.DescriptorTable.NumDescriptorRanges = 1;
-            customSamplerParam.DescriptorTable.pDescriptorRanges   = &customSamplerRange;
+            customSamplerParam.DescriptorTable.NumDescriptorRanges = static_cast<UINT>(customSamplerRanges.size());
+            customSamplerParam.DescriptorTable.pDescriptorRanges   = customSamplerRanges.data();
             customSamplerParam.ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
             entry.customSamplerRootIndex                           = rootIndex++;
         }
+    }
 
-        // Add SRV descriptor table root parameter
+    // Add SRV descriptor table root parameter (textures + storage buffers).
+    if (!srvRanges.empty())
+    {
         D3D12_ROOT_PARAMETER& srvParam               = rootParams.emplace_back();
         srvParam.ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
         srvParam.DescriptorTable.NumDescriptorRanges = static_cast<UINT>(srvRanges.size());
         srvParam.DescriptorTable.pDescriptorRanges   = srvRanges.data();
-        srvParam.ShaderVisibility                    = D3D12_SHADER_VISIBILITY_PIXEL;
+        srvParam.ShaderVisibility                    = D3D12_SHADER_VISIBILITY_ALL;
         entry.srvRootIndex                           = rootIndex++;
     }
 
@@ -321,42 +342,57 @@ void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
 
     entry.rootSig = std::move(rootSig);
 
-    // Allocate contiguous custom sampler descriptor batch and copy native descriptors into it.
-    if (customSamplerCount > 0)
-    {
-        auto samplerAlloc = _driver->getSamplerAllocator();
-        auto batchHandle  = samplerAlloc->allocateBatch(customSamplerCount);
-        if (batchHandle)
-        {
-            auto device           = _driver->getDevice();
-            auto descriptorStride = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER);
-            auto samplerReg       = SamplerRegistry::getInstance();
-
-            uint32_t slot = 0;
-            for (const auto& smp : program->getActiveSamplerInfos())
-            {
-                if (smp.presetIndex >= 0 || !smp.samplerId)
-                    continue;
-
-                AXASSERT(smp.count == 1, "Custom sampler arrays are not supported");
-
-                D3D12_CPU_DESCRIPTOR_HANDLE dstCpu = batchHandle->cpu;
-                dstCpu.ptr += static_cast<SIZE_T>(slot) * static_cast<SIZE_T>(descriptorStride);
-
-                _driver->writeSamplerDescriptor(samplerReg->getSamplerDesc(smp.samplerId), dstCpu);
-
-                ++slot;
-            }
-
-            entry.customSamplerBatch      = batchHandle;
-            entry.customSamplerBatchCount = customSamplerCount;
-        }
-    }
+    entry.customSamplerBatchCount = customSamplerCount;
 
     _activeRootSignature = &_rootSigCache.emplace(progId, std::move(entry)).first->second;
 }
 
-void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc, ProgramImpl* program)
+const DescriptorHandle* GraphicsPipelineImpl::getCustomSamplerBatch(const ::ax::rhi::ProgramState* programState)
+{
+    if (!programState || !_activeRootSignature || _activeRootSignature->customSamplerBatchCount == 0)
+        return nullptr;
+
+    std::vector<uint16_t> key;
+    key.reserve(_activeRootSignature->customSamplerBatchCount);
+    for (const auto& sampler : programState->getProgram()->getActiveSamplerInfos())
+    {
+        if (sampler.presetIndex >= 0)
+            continue;
+        auto samplerId = programState->getSamplerOverride(sampler.binding);
+        if (!samplerId)
+            samplerId = sampler.samplerId;
+        if (!samplerId)
+            return nullptr;
+        for (uint16_t i = 0; i < sampler.count; ++i)
+            key.push_back(samplerId.value);
+    }
+    AXASSERT(key.size() == _activeRootSignature->customSamplerBatchCount,
+             "D3D12 graphics custom sampler descriptor count mismatch");
+    if (key.size() != _activeRootSignature->customSamplerBatchCount)
+        return nullptr;
+
+    auto& batches = _activeRootSignature->customSamplerBatches;
+    if (auto it = batches.find(key); it != batches.end())
+        return it->second;
+
+    auto* batch = _driver->getSamplerAllocator()->allocateBatch(_activeRootSignature->customSamplerBatchCount);
+    if (!batch)
+        return nullptr;
+
+    const auto descriptorStride = _driver->getSamplerDescriptorStride();
+    auto* registry              = SamplerRegistry::getInstance();
+    for (size_t i = 0; i < key.size(); ++i)
+    {
+        D3D12_CPU_DESCRIPTOR_HANDLE dst = batch->cpu;
+        dst.ptr += static_cast<SIZE_T>(i) * static_cast<SIZE_T>(descriptorStride);
+        _driver->writeSamplerDescriptor(registry->getSamplerDesc(SamplerId{key[i]}), dst);
+    }
+
+    batches.emplace(std::move(key), batch);
+    return batch;
+}
+
+void GraphicsPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc, ProgramImpl* program)
 {
     const auto progId = program->getProgramId();
     auto key = makePSOKey(desc.blendDesc, _dsState, progId, desc.vertexLayout->getHash(), _rasterDesc, _primitiveGroup);
@@ -403,18 +439,16 @@ void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc, Progra
     _programToPSOMap.emplace(progId, key);
 }
 
-void RenderPipelineImpl::removeCachedObjects(Program* key)
+void GraphicsPipelineImpl::removeCachedObjects(Program* key)
 {
     auto progId = key->getProgramId();
     if (auto it = _rootSigCache.find(progId); it != _rootSigCache.end())
     {
         auto& entry = it->second;
-        if (entry.customSamplerBatch)
-        {
-            _driver->getSamplerAllocator()->deallocateBatch(entry.customSamplerBatch, entry.customSamplerBatchCount);
-            entry.customSamplerBatch      = nullptr;
-            entry.customSamplerBatchCount = 0;
-        }
+        for (auto& [_, batch] : entry.customSamplerBatches)
+            _driver->getSamplerAllocator()->deallocateBatch(batch, entry.customSamplerBatchCount);
+        entry.customSamplerBatches.clear();
+        entry.customSamplerBatchCount = 0;
         _rootSigCache.erase(it);
     }
 

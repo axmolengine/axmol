@@ -28,7 +28,8 @@
 #include "axmol/rhi/vulkan/ProgramVK.h"
 #include "axmol/rhi/vulkan/ShaderModuleVK.h"
 #include "axmol/rhi/vulkan/RenderTargetVK.h"
-#include "axmol/rhi/vulkan/RenderPipelineVK.h"
+#include "axmol/rhi/vulkan/GraphicsPipelineVK.h"
+#include "axmol/rhi/vulkan/ComputePipelineVK.h"
 #include "axmol/rhi/vulkan/DepthStencilStateVK.h"
 #include "axmol/rhi/vulkan/VertexLayoutVK.h"
 #include "axmol/rhi/vulkan/UtilsVK.h"
@@ -73,6 +74,16 @@ static uint32_t findGraphicsQueueFamily(VkPhysicalDevice physicalDevice)
     vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &qCount, nullptr);
     std::vector<VkQueueFamilyProperties> qprops(qCount);
     vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &qCount, qprops.data());
+
+    // Compute work is deliberately submitted on the graphics queue. Prefer a
+    // family that supports both so the regular renderer still works on devices
+    // whose first graphics family is graphics-only.
+    for (uint32_t i = 0; i < qCount; ++i)
+    {
+        constexpr auto required = VK_QUEUE_GRAPHICS_BIT | VK_QUEUE_COMPUTE_BIT;
+        if (qprops[i].queueCount > 0 && (qprops[i].queueFlags & required) == required)
+            return i;
+    }
 
     for (uint32_t i = 0; i < qCount; ++i)
     {
@@ -414,6 +425,14 @@ bool GraphicsDeviceImpl::initializeDevice()
 
     VK_VERIFY_EXPR(_physical != VK_NULL_HANDLE && _graphicsQueueFamily != UINT32_MAX, "No available GPU");
 
+    uint32_t queueFamilyCount = 0;
+    vkGetPhysicalDeviceQueueFamilyProperties(_physical, &queueFamilyCount, nullptr);
+    std::vector<VkQueueFamilyProperties> queueFamilyProperties(queueFamilyCount);
+    vkGetPhysicalDeviceQueueFamilyProperties(_physical, &queueFamilyCount, queueFamilyProperties.data());
+    _vkCaps.computeQueueSupported =
+        _graphicsQueueFamily < queueFamilyProperties.size() &&
+        (queueFamilyProperties[_graphicsQueueFamily].queueFlags & VK_QUEUE_COMPUTE_BIT) != 0;
+
     // Enumerate available device extensions
     uint32_t extCount = 0;
     vkEnumerateDeviceExtensionProperties(_physical, nullptr, &extCount, nullptr);
@@ -510,10 +529,20 @@ bool GraphicsDeviceImpl::initializeDevice()
                                  VK_API_VERSION_MINOR(props.apiVersion), VK_API_VERSION_PATCH(props.apiVersion));
     _shaderVersion = "SPIR-V 1.x";
 
-    _caps.maxAttributes     = static_cast<int32_t>(MAX_VERTEX_ATTRIBS);  // pipeline-defined
-    _caps.maxTextureUnits   = 32;  // conservative default; descriptor count varies per layout
-    _caps.maxTextureSize    = static_cast<int32_t>(props.limits.maxImageDimension2D);
-    _caps.maxSamplesAllowed = static_cast<int32_t>(props.limits.framebufferColorSampleCounts);
+    _caps.maxAttributes                  = static_cast<int32_t>(MAX_VERTEX_ATTRIBS);  // pipeline-defined
+    _caps.maxTextureUnits                = 32;  // conservative default; descriptor count varies per layout
+    _caps.maxTextureSize                 = static_cast<int32_t>(props.limits.maxImageDimension2D);
+    _caps.maxTexture3DSize               = static_cast<int32_t>(props.limits.maxImageDimension3D);
+    _caps.maxSamplesAllowed              = static_cast<int32_t>(props.limits.framebufferColorSampleCounts);
+    _caps.maxComputeWorkGroupCount[0]    = static_cast<int>(props.limits.maxComputeWorkGroupCount[0]);
+    _caps.maxComputeWorkGroupCount[1]    = static_cast<int>(props.limits.maxComputeWorkGroupCount[1]);
+    _caps.maxComputeWorkGroupCount[2]    = static_cast<int>(props.limits.maxComputeWorkGroupCount[2]);
+    _caps.maxComputeWorkGroupSize[0]     = static_cast<int>(props.limits.maxComputeWorkGroupSize[0]);
+    _caps.maxComputeWorkGroupSize[1]     = static_cast<int>(props.limits.maxComputeWorkGroupSize[1]);
+    _caps.maxComputeWorkGroupSize[2]     = static_cast<int>(props.limits.maxComputeWorkGroupSize[2]);
+    _caps.maxComputeWorkGroupInvocations = static_cast<int>(props.limits.maxComputeWorkGroupInvocations);
+    _caps.maxStorageBufferBindings       = static_cast<int>(props.limits.maxPerStageDescriptorStorageBuffers);
+    _caps.maxStorageBufferSize           = static_cast<size_t>(props.limits.maxStorageBufferRange);
 
     // Query device properties
     // Optional: query extended dynamic state 3 properties only if extension is supported
@@ -724,6 +753,11 @@ Buffer* GraphicsDeviceImpl::createBuffer(size_t size, BufferType type, BufferUsa
     return new BufferImpl(this, size, type, usage, initial);
 }
 
+Buffer* GraphicsDeviceImpl::createBuffer(const BufferDesc& desc, const void* initial)
+{
+    return new BufferImpl(this, desc.size, desc.type, desc.usage, initial, desc.stride);
+}
+
 Texture* GraphicsDeviceImpl::createTexture(const TextureDesc& descriptor, std::optional<Color>)
 {
     return new TextureImpl(this, descriptor);
@@ -757,14 +791,33 @@ DepthStencilState* GraphicsDeviceImpl::createDepthStencilState()
     return new DepthStencilStateImpl();
 }
 
-RenderPipeline* GraphicsDeviceImpl::createRenderPipeline()
+GraphicsPipeline* GraphicsDeviceImpl::createGraphicsPipeline()
 {
-    return new RenderPipelineImpl(this);
+    return new GraphicsPipelineImpl(this);
+}
+
+ComputePipeline* GraphicsDeviceImpl::createComputePipeline(Program* program)
+{
+    if (!program || !program->isValid() || !program->getCSModule())
+        return nullptr;
+
+    auto* pipeline = new ComputePipelineImpl(this, static_cast<ProgramImpl*>(program));
+    if (!pipeline->isValid())
+    {
+        pipeline->release();
+        return nullptr;
+    }
+    return pipeline;
 }
 
 Program* GraphicsDeviceImpl::createProgram(Data vsData, Data fsData)
 {
     return new ProgramImpl(vsData, fsData);
+}
+
+Program* GraphicsDeviceImpl::createComputeProgram(Data csData)
+{
+    return new ProgramImpl(csData);
 }
 
 ShaderModule* GraphicsDeviceImpl::createShaderModule(ShaderStage stage, Data& chunk)
@@ -926,6 +979,15 @@ bool GraphicsDeviceImpl::checkForFeatureSupported(FeatureType feature)
         vkGetPhysicalDeviceFormatProperties(_physical, VK_FORMAT_ASTC_4x4_UNORM_BLOCK, &fp);
         return (fp.optimalTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT) != 0;
     }
+
+    case FeatureType::COMPUTE_SHADER:
+        return _vkCaps.computeQueueSupported && _caps.maxComputeWorkGroupInvocations > 0;
+
+    case FeatureType::STORAGE_BUFFER:
+        return _caps.maxStorageBufferBindings > 0 && _caps.maxStorageBufferSize > 0;
+
+    case FeatureType::TEXTURE_3D:
+        return _caps.maxTexture3DSize > 0;
 
     default:
         return false;

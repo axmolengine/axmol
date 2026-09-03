@@ -42,7 +42,8 @@ namespace ax::rhi
 class GraphicsContext;
 class Buffer;
 class ShaderModule;
-class RenderPipeline;
+class GraphicsPipeline;
+class ComputePipeline;
 class RenderPass;
 class RenderTarget;
 
@@ -68,6 +69,9 @@ enum class FeatureType : uint32_t
     DEPTH24,
     ASTC,
     VERTEX_ATTRIB_BINDING,  // GL330 / GLES30, need detect
+    COMPUTE_SHADER,
+    STORAGE_BUFFER,
+    TEXTURE_3D,
 };
 
 /**
@@ -81,6 +85,13 @@ struct DriverCaps
     int maxTextureSize    = 0;  ///< Maximum texture size.
     int maxTextureUnits   = 0;  ///< Maximum texture unit.
     int maxSamplesAllowed = 0;  ///< Maximum sampler count.
+    int maxTexture3DSize  = 0;  ///< Maximum 3D texture size.
+
+    int maxComputeWorkGroupCount[3]    = {};
+    int maxComputeWorkGroupSize[3]     = {};
+    int maxComputeWorkGroupInvocations = 0;
+    int maxStorageBufferBindings       = 0;
+    size_t maxStorageBufferSize        = 0;
 };
 
 /**
@@ -120,6 +131,11 @@ public:
      */
     virtual Buffer* createBuffer(size_t size, BufferType type, BufferUsage usage, const void* inital = nullptr) = 0;
 
+    virtual Buffer* createBuffer(const BufferDesc& desc, const void* initial = nullptr)
+    {
+        return createBuffer(desc.size, desc.type, desc.usage, initial);
+    }
+
     /**
      * New a Texture object with a render-target clear color hint, not auto released.
      * @param descriptor Specifies texture description.
@@ -141,11 +157,18 @@ public:
     virtual DepthStencilState* createDepthStencilState() = 0;
 
     /**
-     * New a RenderPipeline object, not auto released.
+     * New a GraphicsPipeline object, not auto released.
      * @param descriptor Specifies render pipeline description.
-     * @return A RenderPipeline object.
+     * @return A GraphicsPipeline object.
      */
-    virtual RenderPipeline* createRenderPipeline() = 0;
+    virtual GraphicsPipeline* createGraphicsPipeline() = 0;
+
+    /**
+     * Create a compute pipeline from a compute program, not auto released.
+     * @param program Specifies the compute program.
+     * @return A ComputePipeline object.
+     */
+    virtual ComputePipeline* createComputePipeline(Program* program) = 0;
 
     /**
      * Create an auto released Program.
@@ -154,6 +177,8 @@ public:
      * @return A Program instance.
      */
     virtual Program* createProgram(Data vsData, Data fsData) = 0;
+
+    virtual Program* createComputeProgram(Data csData);
 
     virtual VertexLayout* createVertexLayout(VertexLayoutDesc&& desc);
 
@@ -220,6 +245,10 @@ public:
      * @return Maximum sampler count.
      */
     inline int getMaxSamplesAllowed() const { return _caps.maxSamplesAllowed; }
+
+    inline int getMaxTexture3DSize() const { return _caps.maxTexture3DSize; }
+
+    inline const DriverCaps& getCaps() const { return _caps; }
 
     virtual void destroyStaleResources() {}
 

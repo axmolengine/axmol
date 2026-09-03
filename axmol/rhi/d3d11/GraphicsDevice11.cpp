@@ -28,7 +28,8 @@
 #include "axmol/rhi/d3d11/Program11.h"
 #include "axmol/rhi/d3d11/ShaderModule11.h"
 #include "axmol/rhi/d3d11/RenderTarget11.h"
-#include "axmol/rhi/d3d11/RenderPipeline11.h"
+#include "axmol/rhi/d3d11/GraphicsPipeline11.h"
+#include "axmol/rhi/d3d11/ComputePipeline11.h"
 #include "axmol/rhi/d3d11/DepthStencilState11.h"
 #include "axmol/rhi/d3d11/VertexLayout11.h"
 #include "axmol/rhi/RHIUtils.h"
@@ -212,10 +213,20 @@ L_DeviceCreated:
     _dxgiAdapter->GetDesc(&_adapterDesc);
 
     // Device caps
-    _caps.maxAttributes     = D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT;     // 16
-    _caps.maxTextureUnits   = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;  // 128
-    _caps.maxTextureSize    = EstimateMaxTexSize(_device->GetFeatureLevel());
-    _caps.maxSamplesAllowed = static_cast<int32_t>(FindMaxMsaaSamples(_device, DXGI_FORMAT_R8G8B8A8_UNORM));
+    _caps.maxAttributes               = D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT;     // 16
+    _caps.maxTextureUnits             = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;  // 128
+    _caps.maxTextureSize              = EstimateMaxTexSize(_device->GetFeatureLevel());
+    _caps.maxSamplesAllowed           = static_cast<int32_t>(FindMaxMsaaSamples(_device, DXGI_FORMAT_R8G8B8A8_UNORM));
+    _caps.maxTexture3DSize            = D3D11_REQ_TEXTURE3D_U_V_OR_W_DIMENSION;
+    _caps.maxComputeWorkGroupCount[0] = D3D11_CS_DISPATCH_MAX_THREAD_GROUPS_PER_DIMENSION;
+    _caps.maxComputeWorkGroupCount[1] = D3D11_CS_DISPATCH_MAX_THREAD_GROUPS_PER_DIMENSION;
+    _caps.maxComputeWorkGroupCount[2] = D3D11_CS_DISPATCH_MAX_THREAD_GROUPS_PER_DIMENSION;
+    _caps.maxComputeWorkGroupSize[0]  = D3D11_CS_THREAD_GROUP_MAX_X;
+    _caps.maxComputeWorkGroupSize[1]  = D3D11_CS_THREAD_GROUP_MAX_Y;
+    _caps.maxComputeWorkGroupSize[2]  = D3D11_CS_THREAD_GROUP_MAX_Z;
+    _caps.maxComputeWorkGroupInvocations = D3D11_CS_THREAD_GROUP_MAX_THREADS_PER_GROUP;
+    _caps.maxStorageBufferBindings       = 8;
+    _caps.maxStorageBufferSize           = 128ull * 1024ull * 1024ull;
 }
 
 void GraphicsDeviceImpl::selectAdapter(PowerPreference powerPreference)
@@ -299,6 +310,11 @@ Buffer* GraphicsDeviceImpl::createBuffer(size_t size, BufferType type, BufferUsa
     return new BufferImpl(_device, _context, size, type, usage, initial);
 }
 
+Buffer* GraphicsDeviceImpl::createBuffer(const BufferDesc& desc, const void* initial)
+{
+    return new BufferImpl(_device, _context, desc.size, desc.type, desc.usage, initial, desc.stride);
+}
+
 /**
  * New a Texture object.
  * @param descriptor Specifies texture description.
@@ -337,18 +353,30 @@ DepthStencilState* GraphicsDeviceImpl::createDepthStencilState()
 }
 
 /**
- * New a RenderPipeline object.
+ * New a GraphicsPipeline object.
  * @param descriptor Specifies render pipeline description.
- * @return A RenderPipeline object.
+ * @return A GraphicsPipeline object.
  */
-RenderPipeline* GraphicsDeviceImpl::createRenderPipeline()
+GraphicsPipeline* GraphicsDeviceImpl::createGraphicsPipeline()
 {
-    return new RenderPipelineImpl(_device, _context);
+    return new GraphicsPipelineImpl(_device, _context);
+}
+
+ComputePipeline* GraphicsDeviceImpl::createComputePipeline(Program* program)
+{
+    if (!program || !program->isValid() || !program->getCSModule())
+        return nullptr;
+    return new ComputePipelineImpl(static_cast<ProgramImpl*>(program));
 }
 
 Program* GraphicsDeviceImpl::createProgram(Data vsData, Data fsData)
 {
     return new ProgramImpl(vsData, fsData);
+}
+
+Program* GraphicsDeviceImpl::createComputeProgram(Data csData)
+{
+    return new ProgramImpl(csData);
 }
 
 ShaderModule* GraphicsDeviceImpl::createShaderModule(ShaderStage stage, Data& chunk)
@@ -365,13 +393,26 @@ IUnknown* GraphicsDeviceImpl::compileShader(std::span<uint8_t> shaderCode, Shade
 #endif
 
     const char* stageProfile{nullptr};
-    if (_featureLevel >= D3D_FEATURE_LEVEL_11_0)
+    switch (stage)
     {
-        stageProfile = (stage == ShaderStage::VERTEX) ? "vs_5_0" : "ps_5_0";
-    }
-    else
-    {
-        stageProfile = (stage == ShaderStage::VERTEX) ? "vs_4_1" : "ps_4_1";
+    case ShaderStage::VERTEX:
+        stageProfile = _featureLevel >= D3D_FEATURE_LEVEL_11_0 ? "vs_5_0" : "vs_4_1";
+        break;
+    case ShaderStage::FRAGMENT:
+        stageProfile = _featureLevel >= D3D_FEATURE_LEVEL_11_0 ? "ps_5_0" : "ps_4_1";
+        break;
+    case ShaderStage::COMPUTE:
+        if (_featureLevel < D3D_FEATURE_LEVEL_11_0)
+        {
+            AXLOGE("axmol:ERROR: Compute shaders require D3D feature level 11.0 or newer");
+            AXASSERT(false, "Compute shader is unsupported by this D3D11 device");
+            return nullptr;
+        }
+        stageProfile = "cs_5_0";
+        break;
+    default:
+        AXASSERT(false, "Unsupported D3D11 shader stage");
+        return nullptr;
     }
 
     HRESULT hr = D3DCompile(shaderCode.data(), shaderCode.size(), nullptr, nullptr, nullptr, "main", stageProfile,
@@ -387,27 +428,44 @@ IUnknown* GraphicsDeviceImpl::compileShader(std::span<uint8_t> shaderCode, Shade
     }
 
     IUnknown* shader{nullptr};
-    if (stage == ShaderStage::VERTEX)
+    switch (stage)
+    {
+    case ShaderStage::VERTEX:
     {
         ComPtr<ID3D11VertexShader> vs;
         hr = _device->CreateVertexShader(outBlob->GetBufferPointer(), outBlob->GetBufferSize(), nullptr,
                                          vs.GetAddressOf());
         if (SUCCEEDED(hr))
             shader = vs.Detach();
+        break;
     }
-    else
+    case ShaderStage::FRAGMENT:
     {
         ComPtr<ID3D11PixelShader> ps;
         hr = _device->CreatePixelShader(outBlob->GetBufferPointer(), outBlob->GetBufferSize(), nullptr,
                                         ps.GetAddressOf());
         if (SUCCEEDED(hr))
             shader = ps.Detach();
+        break;
+    }
+    case ShaderStage::COMPUTE:
+    {
+        ComPtr<ID3D11ComputeShader> cs;
+        hr = _device->CreateComputeShader(outBlob->GetBufferPointer(), outBlob->GetBufferSize(), nullptr,
+                                          cs.GetAddressOf());
+        if (SUCCEEDED(hr))
+            shader = cs.Detach();
+        break;
+    }
+    default:
+        break;
     }
 
     if (!shader)
     {
         AXLOGE("axmol:ERROR: Failed to create shader, hr:{}", hr);
         AXASSERT(false, "Shader compile failed!");
+        SafeRelease(outBlob);
     }
 
     return shader;
@@ -416,18 +474,41 @@ IUnknown* GraphicsDeviceImpl::compileShader(std::span<uint8_t> shaderCode, Shade
 IUnknown* GraphicsDeviceImpl::createShaderFromBytecode(std::span<uint8_t> bytecode, ShaderStage stage)
 {
     IUnknown* shader = nullptr;
-    if (stage == ShaderStage::VERTEX)
+    HRESULT hr       = E_INVALIDARG;
+    switch (stage)
+    {
+    case ShaderStage::VERTEX:
     {
         ComPtr<ID3D11VertexShader> vs;
-        _device->CreateVertexShader(bytecode.data(), bytecode.size(), nullptr, vs.GetAddressOf());
-        shader = vs.Detach();
+        hr = _device->CreateVertexShader(bytecode.data(), bytecode.size(), nullptr, vs.GetAddressOf());
+        if (SUCCEEDED(hr))
+            shader = vs.Detach();
+        break;
     }
-    else
+    case ShaderStage::FRAGMENT:
     {
         ComPtr<ID3D11PixelShader> ps;
-        _device->CreatePixelShader(bytecode.data(), bytecode.size(), nullptr, ps.GetAddressOf());
-        shader = ps.Detach();
+        hr = _device->CreatePixelShader(bytecode.data(), bytecode.size(), nullptr, ps.GetAddressOf());
+        if (SUCCEEDED(hr))
+            shader = ps.Detach();
+        break;
     }
+    case ShaderStage::COMPUTE:
+    {
+        if (_featureLevel < D3D_FEATURE_LEVEL_11_0)
+            break;
+        ComPtr<ID3D11ComputeShader> cs;
+        hr = _device->CreateComputeShader(bytecode.data(), bytecode.size(), nullptr, cs.GetAddressOf());
+        if (SUCCEEDED(hr))
+            shader = cs.Detach();
+        break;
+    }
+    default:
+        break;
+    }
+
+    if (!shader)
+        AXLOGE("axmol:ERROR: Failed to create precompiled D3D11 shader, stage={}, hr:{}", static_cast<int>(stage), hr);
     return shader;
 }
 
@@ -586,6 +667,11 @@ bool GraphicsDeviceImpl::checkForFeatureSupported(FeatureType feature)
     case FeatureType::ASTC:
 #define DXGI_FORMAT_ASTC_4X4_UNORM DXGI_FORMAT(134)
         return checkFormatSupport(DXGI_FORMAT_ASTC_4X4_UNORM);
+    case FeatureType::COMPUTE_SHADER:
+    case FeatureType::STORAGE_BUFFER:
+        return _device->GetFeatureLevel() >= D3D_FEATURE_LEVEL_11_0;
+    case FeatureType::TEXTURE_3D:
+        return true;
     }
     return false;
 }

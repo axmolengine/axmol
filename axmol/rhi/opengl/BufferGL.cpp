@@ -49,11 +49,15 @@ GLenum toGLUsage(const BufferUsage& usage)
 }
 }  // namespace
 
-BufferImpl::BufferImpl(size_t size, BufferType type, BufferUsage usage, const void* initial) : Buffer(size, type, usage)
+BufferImpl::BufferImpl(size_t size, BufferType type, BufferUsage usage, const void* initial, uint32_t stride)
+    : Buffer(size, type, usage, stride)
 {
     glGenBuffers(1, &_buffer);
 
-    if (initial)
+    // A storage buffer may be initialized entirely by a compute shader. It
+    // still needs native storage before the first dispatch when no CPU data
+    // was supplied at creation time.
+    if (size > 0)
         updateData(initial, size);
 
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY

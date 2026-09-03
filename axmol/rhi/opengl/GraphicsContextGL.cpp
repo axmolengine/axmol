@@ -25,7 +25,7 @@
 
 #include "axmol/rhi/opengl/GraphicsContextGL.h"
 #include "axmol/rhi/opengl/BufferGL.h"
-#include "axmol/rhi/opengl/RenderPipelineGL.h"
+#include "axmol/rhi/opengl/GraphicsPipelineGL.h"
 #include "axmol/rhi/opengl/TextureGL.h"
 #include "axmol/rhi/opengl/DepthStencilStateGL.h"
 #include "axmol/rhi/opengl/ProgramGL.h"
@@ -34,6 +34,7 @@
 #include "axmol/rhi/opengl/RenderTargetGL.h"
 #include "axmol/rhi/opengl/GraphicsDeviceGL.h"
 #include "axmol/rhi/opengl/VertexLayoutGL.h"
+#include "axmol/rhi/opengl/ComputePipelineGL.h"
 #include "axmol/rhi/SamplerRegistry.h"
 #include "axmol/rhi/RHIUtils.h"
 
@@ -63,7 +64,7 @@ GraphicsContextImpl::~GraphicsContextImpl()
     cleanResources();
 
     AX_SAFE_RELEASE_NULL(_screenRT);
-    AX_SAFE_RELEASE_NULL(_renderPipeline);
+    AX_SAFE_RELEASE_NULL(_graphicsPipeline);
 }
 
 bool GraphicsContextImpl::beginFrame()
@@ -151,9 +152,9 @@ void GraphicsContextImpl::setDepthStencilState(DepthStencilState* depthStencilSt
     _depthStencilStateImpl = static_cast<DepthStencilStateImpl*>(depthStencilState);
 }
 
-void GraphicsContextImpl::setRenderPipeline(RenderPipeline* renderPipeline)
+void GraphicsContextImpl::setGraphicsPipeline(GraphicsPipeline* graphicsPipeline)
 {
-    Object::assign(_renderPipeline, static_cast<RenderPipelineImpl*>(renderPipeline));
+    Object::assign(_graphicsPipeline, static_cast<GraphicsPipelineImpl*>(graphicsPipeline));
 }
 
 /**
@@ -175,7 +176,7 @@ void GraphicsContextImpl::updatePipelineState(const RenderTarget* rt,
 {
     GraphicsContext::updatePipelineState(rt, desc, primitiveType);
 
-    _renderPipeline->update(rt, desc);
+    _graphicsPipeline->update(rt, desc);
 
     _primitiveType = UtilsGL::toGLPrimitiveType(primitiveType);
 }
@@ -219,8 +220,12 @@ void GraphicsContextImpl::setIndexBuffer(Buffer* buffer)
 
 void GraphicsContextImpl::setInstanceBuffer(Buffer* buffer)
 {
-    assert(buffer != nullptr);
-    if (buffer == nullptr || _instanceBuffer == buffer)
+    if (buffer == nullptr)
+    {
+        AX_SAFE_RELEASE_NULL(_instanceBuffer);
+        return;
+    }
+    if (_instanceBuffer == buffer)
         return;
 
     buffer->retain();
@@ -327,7 +332,7 @@ void GraphicsContextImpl::submitCurrentFrameCommands(bool waitForCompletion)
 
 void GraphicsContextImpl::prepareDrawing() const
 {
-    const auto& program = _renderPipeline->getProgram();
+    const auto& program = _graphicsPipeline->getProgram();
     __state->useProgram(program->internalHandle());
 
     uint32_t usedBits{0};
@@ -404,7 +409,13 @@ void GraphicsContextImpl::bindUniforms(ProgramImpl* program) const
             auto samplerReg = SamplerRegistry::getInstance();
             for (const auto& [bindingIndex, bindingSet] : _programState->getTextureBindingSets())
             {
-                auto samplerId = program->getTextureSampler(bindingIndex);
+                auto samplerId       = program->getTextureSampler(bindingIndex);
+                auto samplerLocation = program->getTextureSamplerLocation(bindingIndex);
+                if (samplerLocation && samplerLocation.space == axslc::kCustomSamplerDescriptorSet)
+                {
+                    if (auto overrideId = _programState->getSamplerOverride(samplerLocation.binding))
+                        samplerId = overrideId;
+                }
                 if (!samplerId)
                     continue;
 
@@ -417,6 +428,17 @@ void GraphicsContextImpl::bindUniforms(ProgramImpl* program) const
                     __state->bindSampler(slot, glSampler);
             }
         }
+
+#if AX_GL_HAS_COMPUTE
+        // Bind storage buffers (SSBO) read by the GPU render vertex/fragment stages.
+        for (const auto& [binding, bindingSet] : _programState->getStorageBufferBindingSets())
+        {
+            if (!bindingSet.buffer)
+                continue;
+            auto ssbo = static_cast<BufferImpl*>(bindingSet.buffer)->internalHandle();
+            glBindBufferBase(GL_SHADER_STORAGE_BUFFER, binding, ssbo);
+        }
+#endif
     }
 }
 
@@ -637,6 +659,64 @@ bool GraphicsContextImpl::copyTexture(RenderTarget* src, Texture* dst)
     CHECK_GL_ERROR_DEBUG();
 
     return framebufferComplete;
+}
+
+bool GraphicsContextImpl::dispatch(const ComputeDispatchDesc& desc)
+{
+#if AX_GL_HAS_COMPUTE
+    if (!desc.programState || !desc.pipeline)
+        return false;
+
+    auto* pipelineProgram = desc.pipeline->getProgram();
+    if (!pipelineProgram || pipelineProgram != desc.programState->getProgram())
+    {
+        AXASSERT(false, "ComputePipeline and ProgramState program mismatch");
+        return false;
+    }
+
+    auto program = static_cast<ProgramImpl*>(pipelineProgram);
+    if (!program || !program->getCSModule())
+        return false;
+
+    _programState = desc.programState;
+
+    __state->useProgram(program->internalHandle());
+
+    // Uniform buffers + textures + samplers (reuses the ProgramState bound above)
+    bindUniforms(program);
+
+    // Bind storage buffers (SSBO) at their reflected binding indices.
+    for (const auto& [binding, bindingSet] : desc.programState->getStorageBufferBindingSets())
+    {
+        if (!bindingSet.buffer)
+            continue;
+        auto ssbo = static_cast<BufferImpl*>(bindingSet.buffer)->internalHandle();
+        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, binding, ssbo);
+    }
+
+    CHECK_GL_ERROR_DEBUG();
+
+    dispatchCompute(desc.groupCountX, desc.groupCountY, desc.groupCountZ);
+
+    // Make compute writes visible to subsequent compute/vertex/fragment reads.
+    memoryBarrier(GL_ALL_BARRIER_BITS);
+
+    // Unbind storage buffers to avoid stale SSBO bindings leaking into later draws.
+    for (const auto& [binding, bindingSet] : desc.programState->getStorageBufferBindingSets())
+    {
+        if (!bindingSet.buffer)
+            continue;
+        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, binding, 0);
+    }
+
+    CHECK_GL_ERROR_DEBUG();
+
+    cleanResources();
+    return true;
+#else
+    AX_UNUSED_PARAM(desc);
+    return false;
+#endif
 }
 
 }  // namespace ax::rhi::gl

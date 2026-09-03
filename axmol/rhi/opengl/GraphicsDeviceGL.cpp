@@ -25,7 +25,8 @@
 
 #include "axmol/rhi/opengl/GraphicsDeviceGL.h"
 #include "axmol/platform/Common.h"
-#include "axmol/rhi/opengl/RenderPipelineGL.h"
+#include "axmol/rhi/opengl/GraphicsPipelineGL.h"
+#include "axmol/rhi/opengl/ComputePipelineGL.h"
 #include "axmol/rhi/opengl/BufferGL.h"
 #include "axmol/rhi/opengl/ShaderModuleGL.h"
 #include "axmol/rhi/opengl/GraphicsContextGL.h"
@@ -47,12 +48,71 @@
 #    define _AX_USE_GLAD 0
 #endif
 
-#if _AX_USE_GLAD && AX_GLES_PROFILE && !defined(GLAD_GLES2_USE_SYSTEM_EGL)
-#    include "glad/egl.h"
+#if _AX_USE_GLAD && AX_GLES_PROFILE
+#    if defined(GLAD_GLES2_USE_SYSTEM_EGL)
+#        include <EGL/egl.h>
+#    else
+#        include "glad/egl.h"
+#    endif
 #endif
 
 namespace ax::rhi::gl
 {
+
+#if AX_GL_HAS_COMPUTE
+#    if AX_GLES_PROFILE
+namespace
+{
+using DispatchComputeProc = void(GLAD_API_PTR*)(GLuint, GLuint, GLuint);
+using MemoryBarrierProc   = void(GLAD_API_PTR*)(GLbitfield);
+
+DispatchComputeProc s_dispatchCompute = nullptr;
+MemoryBarrierProc s_memoryBarrier     = nullptr;
+}  // namespace
+#    endif
+
+bool loadComputeEntryPoints()
+{
+#    if AX_GLES_PROFILE
+    auto getProcAddress = eglGetProcAddress;
+    if (!getProcAddress)
+        return false;
+
+    s_dispatchCompute = reinterpret_cast<DispatchComputeProc>(getProcAddress("glDispatchCompute"));
+    s_memoryBarrier   = reinterpret_cast<MemoryBarrierProc>(getProcAddress("glMemoryBarrier"));
+    return s_dispatchCompute && s_memoryBarrier;
+#    else
+    return glDispatchCompute && glMemoryBarrier;
+#    endif
+}
+
+bool hasComputeEntryPoints()
+{
+#    if AX_GLES_PROFILE
+    return s_dispatchCompute && s_memoryBarrier;
+#    else
+    return glDispatchCompute && glMemoryBarrier;
+#    endif
+}
+
+void dispatchCompute(GLuint groupCountX, GLuint groupCountY, GLuint groupCountZ)
+{
+#    if AX_GLES_PROFILE
+    s_dispatchCompute(groupCountX, groupCountY, groupCountZ);
+#    else
+    glDispatchCompute(groupCountX, groupCountY, groupCountZ);
+#    endif
+}
+
+void memoryBarrier(GLbitfield barriers)
+{
+#    if AX_GLES_PROFILE
+    s_memoryBarrier(barriers);
+#    else
+    glMemoryBarrier(barriers);
+#    endif
+}
+#endif
 
 template <typename _Fty>
 static void GL_EnumAllExtensions(_Fty&& func)
@@ -116,6 +176,17 @@ bool GraphicsDeviceImpl::init()
 
     _version = pszVersion;
 
+#if AX_GL_HAS_COMPUTE
+#    if !AX_GLES_PROFILE
+    const bool computeProfile = _verInfo.major > 4 || (_verInfo.major == 4 && _verInfo.minor >= 3);
+#    else
+    const bool computeProfile = _verInfo.major > 3 || (_verInfo.major == 3 && _verInfo.minor >= 1);
+#    endif
+    _computeEntryPoints = computeProfile && loadComputeEntryPoints();
+    if (computeProfile && !_computeEntryPoints)
+        AXLOGW("OpenGL compute profile is available, but required compute entry points could not be loaded");
+#endif
+
 #if !AX_GLES_PROFILE
     // check Desktop GL version at first
     if (_verInfo.major < 3 || (_verInfo.major == 3 && _verInfo.minor < 3))
@@ -127,12 +198,41 @@ bool GraphicsDeviceImpl::init()
         showAlert(msg, "OpenGL init failed, version too old", AlertStyle::RequireSync);
         throw std::runtime_error("OpenGL init failed, version too old");
     }
+#else
+    // Axmol v3 requires GLES 3.0 as the minimum profile.  Compute support is
+    // still detected separately below, so GLES 3.0 can run ordinary shaders
+    // while safely opting out of compute-only programs.
+    if (_verInfo.major < 3)
+    {
+        auto msg = fmt::format(
+            "OpenGL ES 3.0+ is required. Current version:{} incompatible (update driver or make current context).",
+            _version);
+        AXLOGE("{}", msg);
+        showAlert(msg, "OpenGL ES init failed, version too old", AlertStyle::RequireSync);
+        throw std::runtime_error("OpenGL ES init failed, version too old");
+    }
 #endif
 
     // caps
     glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &_caps.maxAttributes);
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &_caps.maxTextureSize);
     glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &_caps.maxTextureUnits);
+    glGetIntegerv(GL_MAX_3D_TEXTURE_SIZE, &_caps.maxTexture3DSize);
+
+    if (_computeEntryPoints)
+    {
+        glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 0, &_caps.maxComputeWorkGroupCount[0]);
+        glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 1, &_caps.maxComputeWorkGroupCount[1]);
+        glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 2, &_caps.maxComputeWorkGroupCount[2]);
+        glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 0, &_caps.maxComputeWorkGroupSize[0]);
+        glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 1, &_caps.maxComputeWorkGroupSize[1]);
+        glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 2, &_caps.maxComputeWorkGroupSize[2]);
+        glGetIntegerv(GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS, &_caps.maxComputeWorkGroupInvocations);
+        glGetIntegerv(GL_MAX_SHADER_STORAGE_BUFFER_BINDINGS, &_caps.maxStorageBufferBindings);
+        GLint64 maxStorageBlockSize = 0;
+        glGetInteger64v(GL_MAX_SHADER_STORAGE_BLOCK_SIZE, &maxStorageBlockSize);
+        _caps.maxStorageBufferSize = static_cast<size_t>(maxStorageBlockSize);
+    }
 
     // exts
     GL_EnumAllExtensions([this](const std::string_view& ext) {
@@ -200,6 +300,11 @@ GraphicsContext* GraphicsDeviceImpl::createGraphicsContext(SurfaceHandle)
 Buffer* GraphicsDeviceImpl::createBuffer(size_t size, BufferType type, BufferUsage usage, const void* initial)
 {
     return new BufferImpl(size, type, usage, initial);
+}
+
+Buffer* GraphicsDeviceImpl::createBuffer(const BufferDesc& desc, const void* initial)
+{
+    return new BufferImpl(desc.size, desc.type, desc.usage, initial, desc.stride);
 }
 
 Texture* GraphicsDeviceImpl::createTexture(const TextureDesc& desc, std::optional<Color>)
@@ -371,14 +476,26 @@ DepthStencilState* GraphicsDeviceImpl::createDepthStencilState()
     return new DepthStencilStateImpl();
 }
 
-RenderPipeline* GraphicsDeviceImpl::createRenderPipeline()
+GraphicsPipeline* GraphicsDeviceImpl::createGraphicsPipeline()
 {
-    return new RenderPipelineImpl();
+    return new GraphicsPipelineImpl();
+}
+
+ComputePipeline* GraphicsDeviceImpl::createComputePipeline(Program* program)
+{
+    if (!program || !program->isValid() || !program->getCSModule())
+        return nullptr;
+    return new ComputePipelineImpl(static_cast<ProgramImpl*>(program));
 }
 
 Program* GraphicsDeviceImpl::createProgram(Data vsData, Data fsData)
 {
     return new ProgramImpl(vsData, fsData);
+}
+
+Program* GraphicsDeviceImpl::createComputeProgram(Data csData)
+{
+    return new ProgramImpl(csData);
 }
 
 VertexLayout* GraphicsDeviceImpl::createVertexLayout(VertexLayoutDesc&& desc)
@@ -684,6 +801,23 @@ bool GraphicsDeviceImpl::checkForFeatureSupported(FeatureType feature)
         break;
     case FeatureType::VERTEX_ATTRIB_BINDING:
         featureSupported = _cap.vertexAttribBinding;
+        break;
+    case FeatureType::COMPUTE_SHADER:
+#if AX_GL_HAS_COMPUTE && !AX_GLES_PROFILE
+        featureSupported = (_verInfo.major > 4 || (_verInfo.major == 4 && _verInfo.minor >= 3)) &&
+                           _computeEntryPoints && _caps.maxComputeWorkGroupInvocations > 0;
+#elif AX_GL_HAS_COMPUTE
+        featureSupported = (_verInfo.major > 3 || (_verInfo.major == 3 && _verInfo.minor >= 1)) &&
+                           _computeEntryPoints && _caps.maxComputeWorkGroupInvocations > 0;
+#else
+        featureSupported = false;
+#endif
+        break;
+    case FeatureType::STORAGE_BUFFER:
+        featureSupported = checkForFeatureSupported(FeatureType::COMPUTE_SHADER) && _caps.maxStorageBufferBindings > 0;
+        break;
+    case FeatureType::TEXTURE_3D:
+        featureSupported = _caps.maxTexture3DSize > 0;
         break;
     default:
         break;

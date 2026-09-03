@@ -1,5 +1,5 @@
 /****************************************************************************
- Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
 
@@ -21,30 +21,30 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-
 #pragma once
 
-#include "axmol/rhi/RHITypes.h"
-#include "axmol/base/Object.h"
-#include "axmol/rhi/PipelineDesc.h"
-#include "axmol/rhi/RenderPassDesc.h"
+#include "axmol/rhi/ComputePipeline.h"
+#include <Metal/Metal.h>
 
-namespace ax::rhi
+namespace ax::rhi::mtl
 {
-/**
- * @addtogroup _rhi
- * @{
- */
-class RenderTarget;
+class ProgramImpl;
 
 /**
- * Render pipeline
+ * @brief A Metal compute pipeline (MTLComputePipelineState) for a compute program.
  */
-class RenderPipeline : public ax::Object
+class ComputePipelineImpl : public ComputePipeline
 {
-protected:
-    virtual ~RenderPipeline() = default;
+public:
+    ComputePipelineImpl(id<MTLDevice> mtlDevice, ProgramImpl* program);
+    ~ComputePipelineImpl();
+
+    bool isValid() const override { return _mtlComputePipelineState != nil; }
+
+    id<MTLComputePipelineState> getMTLComputePipelineState() const { return _mtlComputePipelineState; }
+
+private:
+    id<MTLComputePipelineState> _mtlComputePipelineState = nil;
 };
-// end of _rhi group
-/// @}
-}  // namespace ax::rhi
+
+}  // namespace ax::rhi::mtl

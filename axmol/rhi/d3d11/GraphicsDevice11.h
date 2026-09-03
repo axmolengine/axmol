@@ -70,6 +70,8 @@ public:
      */
     Buffer* createBuffer(size_t size, BufferType type, BufferUsage usage, const void* initial) override;
 
+    Buffer* createBuffer(const BufferDesc& desc, const void* initial) override;
+
     /**
      * Create a Texture object.
      * @param descriptor Specifies texture description.
@@ -86,11 +88,12 @@ public:
     DepthStencilState* createDepthStencilState() override;
 
     /**
-     * Create a RenderPipeline object.
+     * Create a GraphicsPipeline object.
      * @param descriptor Specifies render pipeline description.
-     * @return A RenderPipeline object.
+     * @return A GraphicsPipeline object.
      */
-    RenderPipeline* createRenderPipeline() override;
+    GraphicsPipeline* createGraphicsPipeline() override;
+    ComputePipeline* createComputePipeline(Program* program) override;
 
     /**
      * Create an auto released Program.
@@ -99,6 +102,8 @@ public:
      * @return A Program instance.
      */
     Program* createProgram(Data vsData, Data fsData) override;
+
+    Program* createComputeProgram(Data csData) override;
 
     VertexLayout* createVertexLayout(VertexLayoutDesc&& desc) override;
 

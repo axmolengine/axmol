@@ -148,6 +148,9 @@ static VkBufferUsageFlags translateBindFlag(BufferType t)
     case BufferType::UNIFORM:
         return VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
 
+    case BufferType::STORAGE:
+        return VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
+
     case BufferType::PIXEL_PACK_BUFFER:
         // read backbuffer, map as staging or copy target
         return VK_BUFFER_USAGE_TRANSFER_DST_BIT;
@@ -164,8 +167,13 @@ static inline size_t alignTo(size_t value, size_t alignment)
 }
 
 /* -------------------------------------------------- ctor */
-BufferImpl::BufferImpl(GraphicsDeviceImpl* driver, size_t size, BufferType type, BufferUsage usage, const void* initial)
-    : Buffer(size, type, usage), _driver(driver)
+BufferImpl::BufferImpl(GraphicsDeviceImpl* driver,
+                       size_t size,
+                       BufferType type,
+                       BufferUsage usage,
+                       const void* initial,
+                       uint32_t stride)
+    : Buffer(size, type, usage, stride), _driver(driver)
 {
     translateUsage(usage, _usageFlags, _memoryProperties);
     _usageFlags |= translateBindFlag(type);
@@ -253,11 +261,14 @@ void BufferImpl::createNativeBuffer(const void* initial)
             }
         }
 
-        // Set active handle to nothing yet (will lazily switch on first write)
+        // A newly created buffer must be bindable even when the GPU performs the
+        // first write and no CPU updateData() call is needed.
         _buffer            = VK_NULL_HANDLE;
         _memory            = nullptr;
         _currentMappedData = nullptr;
         _currentFrameIndex = -1;
+        updateIndex();
+        AXASSERT(_buffer != VK_NULL_HANDLE && _memory != nullptr, "Failed to select initial dynamic buffer backing");
     }
     else
     {
@@ -401,6 +412,23 @@ void BufferImpl::updateSubData(const void* data, size_t offset, size_t size)
         copyRegion.dstOffset = offset;
         copyRegion.size      = size;
         vkCmdCopyBuffer(submission.cmd, stagingBuffer, _buffer, 1, &copyRegion);
+
+        if (_type == BufferType::STORAGE)
+        {
+            VkBufferMemoryBarrier barrier{};
+            barrier.sType               = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
+            barrier.srcAccessMask       = VK_ACCESS_TRANSFER_WRITE_BIT;
+            barrier.dstAccessMask       = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;
+            barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+            barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+            barrier.buffer              = _buffer;
+            barrier.offset              = 0;
+            barrier.size                = VK_WHOLE_SIZE;
+            vkCmdPipelineBarrier(submission.cmd, VK_PIPELINE_STAGE_TRANSFER_BIT,
+                                 VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT | VK_PIPELINE_STAGE_VERTEX_SHADER_BIT |
+                                     VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+                                 0, 0, nullptr, 1, &barrier, 0, nullptr);
+        }
         _driver->finishIsolateSubmission(submission);
 
         // Destroy staging buffer using VMA

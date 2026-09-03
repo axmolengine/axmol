@@ -23,11 +23,18 @@
  ****************************************************************************/
 #pragma once
 
-#include "axmol/rhi/RenderPipeline.h"
+#include "axmol/rhi/GraphicsPipeline.h"
 #include "axmol/rhi/DXUtils.h"
 #include "axmol/tlx/hlookup.hpp"
 #include <d3d12.h>
+#include <map>
 #include <unordered_map>
+#include <vector>
+
+namespace ax::rhi
+{
+class ProgramState;
+}
 
 namespace ax::rhi::d3d12
 {
@@ -49,17 +56,17 @@ struct RootSignatureEntry
     UINT samplerRootIndex       = UINT_MAX;
     UINT customSamplerRootIndex = UINT_MAX;
 
-    // Custom sampler descriptor batch
-    DescriptorHandle* customSamplerBatch = nullptr;
-    uint32_t customSamplerBatchCount     = 0;
+    // Custom sampler descriptor batches, keyed by the effective sampler IDs.
+    uint32_t customSamplerBatchCount = 0;
+    std::map<std::vector<uint16_t>, DescriptorHandle*> customSamplerBatches;
 };
 
 /**
- * @brief D3D12-based RenderPipeline implementation
+ * @brief D3D12-based graphics pipeline implementation
  *
  * Manage PSO And RootSignature
  */
-class RenderPipelineImpl : public RenderPipeline
+class GraphicsPipelineImpl : public GraphicsPipeline
 {
 public:
     static constexpr int MAX_DESCRIPTOR_SETS      = 2;
@@ -69,8 +76,8 @@ public:
     static constexpr int SET_INDEX_SRV            = 1;
     static constexpr int SAMPLER_ROOT_INDEX       = 0;
 
-    explicit RenderPipelineImpl(GraphicsDeviceImpl* driver);
-    ~RenderPipelineImpl();
+    explicit GraphicsPipelineImpl(GraphicsDeviceImpl* driver);
+    ~GraphicsPipelineImpl();
 
     void prepareUpdate(DepthStencilStateImpl* ds,
                        D3D12_CULL_MODE cullMode,
@@ -87,6 +94,7 @@ public:
 
     ID3D12PipelineState* getPipelineState() const { return _activePSO.Get(); }
     RootSignatureEntry* getRootSignature() const { return _activeRootSignature; }
+    const DescriptorHandle* getCustomSamplerBatch(const ::ax::rhi::ProgramState* programState);
 
     void removeCachedObjects(Program* key);
 

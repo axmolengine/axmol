@@ -47,6 +47,12 @@ public:
      * @param fragmentShader Specifes the fragment shader source.
      */
     ProgramImpl(Data& vsData, Data& fsData);
+
+    /**
+     * @param csData Specifies the compute shader source.
+     */
+    explicit ProgramImpl(Data& csData);
+
     ~ProgramImpl() override;
 
     std::span<uint8_t> getVSBlob() const;
@@ -57,6 +63,12 @@ public:
             static_cast<ID3D11VertexShader*>(static_cast<ShaderModuleImpl*>(_vsModule)->internalHandle()), nullptr, 0);
         context->PSSetShader(
             static_cast<ID3D11PixelShader*>(static_cast<ShaderModuleImpl*>(_fsModule)->internalHandle()), nullptr, 0);
+    }
+
+    inline void applyCompute(ID3D11DeviceContext* context)
+    {
+        context->CSSetShader(
+            static_cast<ID3D11ComputeShader*>(static_cast<ShaderModuleImpl*>(_csModule)->internalHandle()), nullptr, 0);
     }
 
     void bindUniformBuffers(ID3D11DeviceContext*, const uint8_t* buffer, size_t bufferSize);

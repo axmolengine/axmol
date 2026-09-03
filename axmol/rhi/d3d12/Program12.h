@@ -37,10 +37,17 @@ class ProgramImpl : public Program
 {
 public:
     ProgramImpl(Data& vsData, Data& fsData);
+
+    /**
+     * @param csData Specifies the compute shader source.
+     */
+    explicit ProgramImpl(Data& csData);
+
     ~ProgramImpl() override;
 
     std::span<uint8_t> getVSBlob() const { return static_cast<ShaderModuleImpl*>(_vsModule)->getBlob(); }
     std::span<uint8_t> getPSBlob() const { return static_cast<ShaderModuleImpl*>(_fsModule)->getBlob(); }
+    std::span<uint8_t> getCSBlob() const { return static_cast<ShaderModuleImpl*>(_csModule)->getBlob(); }
 };
 
 }  // namespace ax::rhi::d3d12

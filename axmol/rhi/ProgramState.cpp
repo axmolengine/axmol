@@ -26,6 +26,7 @@
 #include "axmol/rhi/ProgramState.h"
 #include "axmol/rhi/Program.h"
 #include "axmol/rhi/Texture.h"
+#include "axmol/rhi/SamplerRegistry.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/EventType.h"
 #include "axmol/base/Director.h"
@@ -148,6 +149,65 @@ void TextureBindingSet::releaseTextures()
     this->runtimeLocation = -1;
 }
 
+StorageBufferBindingSet::StorageBufferBindingSet(const StorageBufferBindingSet& other)
+{
+    assign(other);
+}
+
+StorageBufferBindingSet::StorageBufferBindingSet(StorageBufferBindingSet&& other) noexcept
+{
+    swap(other);
+}
+
+StorageBufferBindingSet& StorageBufferBindingSet::operator=(const StorageBufferBindingSet& other) noexcept
+{
+    assign(other);
+    return *this;
+}
+
+StorageBufferBindingSet& StorageBufferBindingSet::operator=(StorageBufferBindingSet&& other) noexcept
+{
+    swap(other);
+    return *this;
+}
+
+StorageBufferBindingSet::~StorageBufferBindingSet()
+{
+    releaseBuffer();
+}
+
+void StorageBufferBindingSet::assign(const StorageBufferBindingSet& other)
+{
+    if (this != &other)
+        setBuffer(other.runtimeLocation, other.buffer, other.access);
+}
+
+void StorageBufferBindingSet::swap(StorageBufferBindingSet& other)
+{
+    if (this != &other)
+    {
+        std::swap(runtimeLocation, other.runtimeLocation);
+        std::swap(buffer, other.buffer);
+        std::swap(access, other.access);
+    }
+}
+
+void StorageBufferBindingSet::setBuffer(int slot, rhi::Buffer* newBuffer, BufferAccess newAccess)
+{
+    AX_SAFE_RETAIN(newBuffer);
+    releaseBuffer();
+    runtimeLocation = slot;
+    buffer          = newBuffer;
+    access          = newAccess;
+}
+
+void StorageBufferBindingSet::releaseBuffer()
+{
+    AX_SAFE_RELEASE(buffer);
+    runtimeLocation = -1;
+    access          = BufferAccess::READ_ONLY;
+}
+
 /* CLASS ProgramState */
 ProgramState::ProgramState(Program* program)
 {
@@ -211,8 +271,10 @@ ProgramState::~ProgramState()
 
 ProgramState* ProgramState::clone() const
 {
-    ProgramState* cp        = new ProgramState(_program);
-    cp->_textureBindingSets = _textureBindingSets;
+    ProgramState* cp              = new ProgramState(_program);
+    cp->_textureBindingSets       = _textureBindingSets;
+    cp->_storageBufferBindingSets = _storageBufferBindingSets;
+    cp->_samplerOverrides         = _samplerOverrides;
 
     cp->_uniformBuffer = _uniformBuffer;
     cp->_batchId       = this->_batchId;
@@ -253,6 +315,54 @@ void ProgramState::setUniform(const rhi::UniformLocation& uniformLocation, const
     }
 }
 
+void ProgramState::setUniformBlock(int binding, const void* data, size_t size)
+{
+    if (!data || size == 0)
+        return;
+
+    const auto& blocks = _program->getActiveUniformBlockInfos();
+    auto it            = std::find_if(blocks.begin(), blocks.end(),
+                                      [binding](const UniformBlockInfo& info) { return info.binding == binding; });
+    if (it == blocks.end())
+        return;
+
+    const auto copySize = (std::min)(size, static_cast<size_t>(it->sizeBytes));
+    assert(it->cpuOffset + copySize <= _uniformBuffer.size());
+    memcpy(_uniformBuffer.data() + it->cpuOffset, data, copySize);
+}
+
+bool ProgramState::setUniformBlock(ShaderStage stage, std::string_view blockName, const void* data, size_t size)
+{
+    if (!data || size == 0 || blockName.empty())
+        return false;
+
+    for (const auto& block : _program->getActiveUniformBlockInfos())
+    {
+        if (block.stage != stage)
+            continue;
+
+        auto reflectedName                             = block.name;
+        constexpr std::string_view generatedPrefixes[] = {"type_", "type."};
+        for (const auto prefix : generatedPrefixes)
+        {
+            if (reflectedName.starts_with(prefix))
+            {
+                reflectedName.remove_prefix(prefix.size());
+                break;
+            }
+        }
+        if (reflectedName != blockName)
+            continue;
+
+        const auto copySize = (std::min)(size, static_cast<size_t>(block.sizeBytes));
+        assert(block.cpuOffset + copySize <= _uniformBuffer.size());
+        memcpy(_uniformBuffer.data() + block.cpuOffset, data, copySize);
+        return true;
+    }
+
+    return false;
+}
+
 void ProgramState::setTexture(rhi::Texture* texture)
 {
     auto location = getUniformLocation(rhi::Uniform::TEXTURE);
@@ -286,6 +396,42 @@ void ProgramState::setTextureArray(const rhi::UniformLocation& uniformLocation,
         auto& bindingSet = _textureBindingSets[uniformLocation.location];
         bindingSet.setTextureArray(uniformLocation.runtimeLocation, slots, textures);
     }
+}
+
+void ProgramState::setStorageBuffer(int binding, rhi::Buffer* buffer, BufferAccess access)
+{
+    if (binding < 0)
+        return;
+
+    auto& bindingSet = _storageBufferBindingSets[binding];
+    bindingSet.setBuffer(binding, buffer, access);
+}
+
+void ProgramState::setSampler(const rhi::SamplerLocation& samplerLocation, const SamplerDesc& desc)
+{
+    if (!samplerLocation)
+        return;
+
+    const auto& samplers = _program->getActiveSamplerInfos();
+    auto it = std::find_if(samplers.begin(), samplers.end(), [samplerLocation](const SamplerBindingInfo& info) {
+        return info.binding == samplerLocation.binding && info.space == samplerLocation.space;
+    });
+    if (it == samplers.end() || it->presetIndex >= 0)
+        return;
+
+    auto samplerId                             = SamplerRegistry::getInstance()->registerSampler(desc);
+    _samplerOverrides[samplerLocation.binding] = SamplerId{static_cast<uint16_t>(samplerId)};
+}
+
+void ProgramState::setSampler(std::string_view name, const SamplerDesc& desc)
+{
+    setSampler(_program->getSamplerLocation(name), desc);
+}
+
+SamplerId ProgramState::getSamplerOverride(int binding) const
+{
+    auto it = _samplerOverrides.find(binding);
+    return it != _samplerOverrides.end() ? it->second : SamplerId{};
 }
 
 void ProgramState::setParameterAutoBinding(std::string_view uniform, std::string_view autoBinding)

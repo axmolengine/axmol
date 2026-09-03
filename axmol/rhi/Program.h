@@ -85,11 +85,30 @@ struct SamplerBindingInfo
     std::string_view name;
 };
 
+struct SamplerLocation
+{
+    int16_t binding{-1};
+    uint16_t space{0};
+
+    operator bool() const { return binding >= 0; }
+};
+
 struct ProgramSamplerBinding
 {
     uint16_t space{0};
     uint16_t binding{0};
     SamplerId samplerId{};
+};
+
+struct StorageBufferInfo
+{
+    int binding{-1};
+    uint16_t space{1};
+    uint16_t stageFlags{0};
+    uint32_t sizeBytes{0};
+    uint32_t arrayStride{0};
+    BufferAccess access{BufferAccess::READ_ONLY};
+    std::string_view name;
 };
 
 struct SLCReflectContext;
@@ -113,6 +132,7 @@ class AX_DLL Program : public Object
 
 protected:
     Program(Data& vsData, Data& fsData);
+    explicit Program(Data& csData);
 
 public:
     using UniformMap          = std::map<uint64_t, UniformInfo>;
@@ -177,6 +197,11 @@ public:
     const std::vector<SamplerBindingInfo>& getActiveSamplerInfos() const { return _activeSamplerInfos; }
     const std::vector<ProgramSamplerBinding>& getSamplerBindings() const { return _samplerBindings; }
     [[internal]] SamplerId getTextureSampler(int textureBinding) const;
+    [[internal]] SamplerLocation getTextureSamplerLocation(int textureBinding) const;
+    SamplerLocation getSamplerLocation(std::string_view name) const;
+    const std::vector<StorageBufferInfo>& getActiveStorageBufferInfos() const { return _activeStorageBufferInfos; }
+
+    const std::array<int, 3>& getComputeLocalSize() const { return _computeLocalSize; }
 
     /**
      * Get engine built-in program type.
@@ -202,6 +227,7 @@ public:
 
     ShaderModule* getVSModule() const { return _vsModule; }
     ShaderModule* getFSModule() const { return _fsModule; }
+    ShaderModule* getCSModule() const { return _csModule; }
 
     virtual bool isValid() const;
 
@@ -223,6 +249,7 @@ protected:
     void reflectVertexInputs(SLCReflectContext* context);
     void reflectUniforms(SLCReflectContext* context);
     void reflectSamplers(SLCReflectContext* context);
+    void reflectStorageBuffers(SLCReflectContext* context);
 
     void addShortNameMapping(std::string_view shortName, uint64_t reflectedId);
 
@@ -232,6 +259,7 @@ protected:
 
     ShaderModule* _vsModule = nullptr;
     ShaderModule* _fsModule = nullptr;
+    ShaderModule* _csModule = nullptr;
 
     // vertex inputs
     VertexInputMap _activeVertexInputs;
@@ -245,8 +273,11 @@ protected:
     std::vector<TextureUniformEntry> _activeTextureInfos;
     std::vector<SamplerBindingInfo> _activeSamplerInfos;
     std::vector<ProgramSamplerBinding> _samplerBindings;
+    std::vector<StorageBufferInfo> _activeStorageBufferInfos;
+    std::array<int, 3> _computeLocalSize{};  // compute stage local workgroup size, else {0,0,0}
     // GL/GLES need this reflection mapping to bind sampler objects per combined texture uniform.
     std::unordered_map<int, SamplerId> _textureSamplerIds;
+    std::unordered_map<int, SamplerLocation> _textureSamplerLocations;
     bool _samplersResolved{true};
 
     // Populated once from ShaderModule reflection at program creation.
