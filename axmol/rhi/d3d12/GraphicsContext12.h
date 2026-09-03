@@ -23,7 +23,7 @@
  ****************************************************************************/
 #pragma once
 #include "axmol/rhi/GraphicsContext.h"
-#include "axmol/rhi/d3d12/RenderPipeline12.h"
+#include "axmol/rhi/d3d12/GraphicsPipeline12.h"
 #include "axmol/rhi/d3d12/ComputePipeline12.h"
 #include "axmol/rhi/d3d12/DepthStencilState12.h"
 #include "axmol/rhi/d3d12/VertexLayout12.h"
@@ -95,7 +95,7 @@ public:
     bool updateSurface(SurfaceHandle surface, uint32_t width, uint32_t height) override;
 
     void setDepthStencilState(DepthStencilState* depthStencilState) override;
-    void setRenderPipeline(RenderPipeline* renderPipeline) override;
+    void setGraphicsPipeline(GraphicsPipeline* graphicsPipeline) override;
 
     bool beginFrame() override;
     void beginRenderPass(RenderTarget* renderTarget, const RenderPassDesc& renderPassDesc) override;
@@ -233,7 +233,7 @@ private:
 #pragma endregion
 
     DepthStencilStateImpl* _depthStencilState{nullptr};
-    RenderPipelineImpl* _renderPipeline{nullptr};
+    GraphicsPipelineImpl* _graphicsPipeline{nullptr};
     BufferImpl* _vertexBuffer{nullptr};
     BufferImpl* _indexBuffer{nullptr};
     BufferImpl* _instanceBuffer{nullptr};

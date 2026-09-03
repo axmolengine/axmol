@@ -44,7 +44,7 @@ namespace ax::rhi
 {
 struct PipelineDesc;
 class RenderPass;
-class RenderPipeline;
+class GraphicsPipeline;
 class ComputePipeline;
 class Buffer;
 class DepthStencilState;
@@ -97,10 +97,10 @@ public:
 
     /**
      * Sets the current render pipeline state object once
-     * @param renderPipeline An object that contains the graphics functions and configuration state used in a render
+     * @param graphicsPipeline An object that contains the graphics functions and configuration state used in a render
      * pass.
      */
-    virtual void setRenderPipeline(RenderPipeline* renderPipeline) = 0;
+    virtual void setGraphicsPipeline(GraphicsPipeline* graphicsPipeline) = 0;
 
     /// @name Setters & Getters
     /**

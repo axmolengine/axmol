@@ -38,7 +38,7 @@ class Program;
 /**
  * @brief Compute pipeline (backed by a backend compute PSO / dispatch pipeline).
  *
- * Mirrors RenderPipeline for the graphics pipeline: a dispatch carries a
+ * Mirrors GraphicsPipeline for the graphics pipeline: a dispatch carries a
  * ComputePipeline (the compiled compute pipeline state) together with a
  * ProgramState (bound resources). The local workgroup size belongs to the
  * program (shader reflection), never to the dispatch.

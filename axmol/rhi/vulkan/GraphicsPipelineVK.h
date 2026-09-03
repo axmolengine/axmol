@@ -23,7 +23,7 @@
  ****************************************************************************/
 #pragma once
 
-#include "axmol/rhi/RenderPipeline.h"
+#include "axmol/rhi/GraphicsPipeline.h"
 #include "axmol/tlx/hlookup.hpp"
 #include <glad/vulkan.h>
 #include <unordered_map>
@@ -156,7 +156,7 @@ protected:
 };
 
 /**
- * @brief Vulkan-based RenderPipeline implementation
+ * @brief Vulkan-based graphics pipeline implementation
  *
  * This class manages pipeline creation and caching for Vulkan.
  * It converts Axmol's PipelineDesc into Vulkan pipeline states,
@@ -164,11 +164,11 @@ protected:
  * to avoid redundant Vulkan object creation.
  */
 
-class RenderPipelineImpl : public RenderPipeline
+class GraphicsPipelineImpl : public GraphicsPipeline
 {
 public:
-    explicit RenderPipelineImpl(GraphicsDeviceImpl* driver);
-    ~RenderPipelineImpl();
+    explicit GraphicsPipelineImpl(GraphicsDeviceImpl* driver);
+    ~GraphicsPipelineImpl();
 
     void prepareUpdate(DepthStencilStateImpl* ds) { _dsState = ds; }
 

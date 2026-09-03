@@ -26,7 +26,7 @@
 #include "axmol/rhi/metal/GraphicsDeviceMTL.h"
 #include "axmol/rhi/metal/GraphicsContextMTL.h"
 #include "axmol/rhi/metal/BufferMTL.h"
-#include "axmol/rhi/metal/RenderPipelineMTL.h"
+#include "axmol/rhi/metal/GraphicsPipelineMTL.h"
 #include "axmol/rhi/metal/ComputePipelineMTL.h"
 #include "axmol/rhi/metal/ShaderModuleMTL.h"
 #include "axmol/rhi/metal/DepthStencilStateMTL.h"
@@ -488,9 +488,9 @@ DepthStencilState* GraphicsDeviceImpl::createDepthStencilState()
     return new DepthStencilStateImpl(_mtlDevice);
 }
 
-RenderPipeline* GraphicsDeviceImpl::createRenderPipeline()
+GraphicsPipeline* GraphicsDeviceImpl::createGraphicsPipeline()
 {
-    return new RenderPipelineImpl(_mtlDevice);
+    return new GraphicsPipelineImpl(_mtlDevice);
 }
 
 ComputePipeline* GraphicsDeviceImpl::createComputePipeline(Program* program)

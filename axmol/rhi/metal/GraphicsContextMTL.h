@@ -32,7 +32,7 @@
 namespace ax::rhi::mtl
 {
 
-class RenderPipelineImpl;
+class GraphicsPipelineImpl;
 class DepthStencilStateImpl;
 class RenderTargetImpl;
 
@@ -67,10 +67,10 @@ public:
 
     /**
      * Sets the current render pipeline state object once
-     * @param renderPipeline An object that contains the graphics functions and configuration state used in a render
+     * @param graphicsPipeline An object that contains the graphics functions and configuration state used in a render
      * pass.
      */
-    void setRenderPipeline(RenderPipeline* renderPipeline) override;
+    void setGraphicsPipeline(GraphicsPipeline* graphicsPipeline) override;
 
     /// @name Setters & Getters
     /**
@@ -260,7 +260,7 @@ private:
     id<MTLBuffer> _mtlIndexBuffer                 = nil;
 
     DepthStencilStateImpl* _depthStencilState = nullptr;
-    RenderPipelineImpl* _renderPipeline       = nullptr;
+    GraphicsPipelineImpl* _graphicsPipeline   = nullptr;
 
     MTLPrimitiveType _primitiveType = MTLPrimitiveTypeTriangle;
 

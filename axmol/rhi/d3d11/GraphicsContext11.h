@@ -36,7 +36,7 @@ namespace ax::rhi::d3d11
 
 class BufferImpl;
 class DepthStencilStateImpl;
-class RenderPipelineImpl;
+class GraphicsPipelineImpl;
 class RenderTargetImpl;
 
 enum class RenderStateFlag : uint32_t
@@ -88,7 +88,7 @@ public:
 
     void setDepthStencilState(DepthStencilState* depthStencilState) override;
 
-    void setRenderPipeline(RenderPipeline* renderPipeline) override;
+    void setGraphicsPipeline(GraphicsPipeline* graphicsPipeline) override;
 
     bool beginFrame() override;
 
@@ -157,7 +157,7 @@ protected:
     BufferImpl* _indexBuffer{nullptr};
     BufferImpl* _instanceBuffer{nullptr};
     DepthStencilStateImpl* _depthStencilState{nullptr};
-    RenderPipelineImpl* _renderPipeline{nullptr};
+    GraphicsPipelineImpl* _graphicsPipeline{nullptr};
     UINT _renderTargetWidth{0};
     UINT _renderTargetHeight{0};
     UINT _screenWidth{0};

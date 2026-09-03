@@ -28,7 +28,7 @@
 #include "axmol/rhi/vulkan/ProgramVK.h"
 #include "axmol/rhi/vulkan/ShaderModuleVK.h"
 #include "axmol/rhi/vulkan/RenderTargetVK.h"
-#include "axmol/rhi/vulkan/RenderPipelineVK.h"
+#include "axmol/rhi/vulkan/GraphicsPipelineVK.h"
 #include "axmol/rhi/vulkan/ComputePipelineVK.h"
 #include "axmol/rhi/vulkan/DepthStencilStateVK.h"
 #include "axmol/rhi/vulkan/VertexLayoutVK.h"
@@ -791,9 +791,9 @@ DepthStencilState* GraphicsDeviceImpl::createDepthStencilState()
     return new DepthStencilStateImpl();
 }
 
-RenderPipeline* GraphicsDeviceImpl::createRenderPipeline()
+GraphicsPipeline* GraphicsDeviceImpl::createGraphicsPipeline()
 {
-    return new RenderPipelineImpl(this);
+    return new GraphicsPipelineImpl(this);
 }
 
 ComputePipeline* GraphicsDeviceImpl::createComputePipeline(Program* program)

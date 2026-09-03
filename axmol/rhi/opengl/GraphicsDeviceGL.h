@@ -100,11 +100,11 @@ public:
     DepthStencilState* createDepthStencilState() override;
 
     /**
-     * New a RenderPipeline object, not auto released.
+     * New a GraphicsPipeline object, not auto released.
      * @param descriptor Specifies render pipeline description.
-     * @return A RenderPipeline object.
+     * @return A GraphicsPipeline object.
      */
-    RenderPipeline* createRenderPipeline() override;
+    GraphicsPipeline* createGraphicsPipeline() override;
     ComputePipeline* createComputePipeline(Program* program) override;
 
     /**

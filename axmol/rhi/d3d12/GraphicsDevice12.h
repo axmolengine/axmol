@@ -128,7 +128,7 @@ public:
     Texture* createTextureFromNativeHandle(const ExternalTextureDesc& descriptor) override;
     RenderTarget* createRenderTarget(Texture* colorAttachment, Texture* depthStencilAttachment) override;
     DepthStencilState* createDepthStencilState() override;
-    RenderPipeline* createRenderPipeline() override;
+    GraphicsPipeline* createGraphicsPipeline() override;
     ComputePipeline* createComputePipeline(Program* program) override;
     Program* createProgram(Data vsData, Data fsData) override;
 

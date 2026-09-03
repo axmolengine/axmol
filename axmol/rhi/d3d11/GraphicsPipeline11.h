@@ -23,7 +23,7 @@
  ****************************************************************************/
 #pragma once
 
-#include "axmol/rhi/RenderPipeline.h"
+#include "axmol/rhi/GraphicsPipeline.h"
 #include "axmol/rhi/DXUtils.h"
 
 #include <d3d11.h>
@@ -36,13 +36,13 @@ namespace ax::rhi::d3d11
  */
 
 /**
- * @brief A D3D11-based Shader RenderPipeline implementation
+ * @brief A D3D11-based graphics pipeline implementation
  *
  */
-class RenderPipelineImpl : public RenderPipeline
+class GraphicsPipelineImpl : public GraphicsPipeline
 {
 public:
-    RenderPipelineImpl(ID3D11Device* device, ID3D11DeviceContext* context) : _device(device), _context(context) {}
+    GraphicsPipelineImpl(ID3D11Device* device, ID3D11DeviceContext* context) : _device(device), _context(context) {}
     void update(const RenderTarget*, const PipelineDesc& desc);
 
 private:

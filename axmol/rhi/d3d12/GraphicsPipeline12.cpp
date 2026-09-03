@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "axmol/rhi/d3d12/RenderPipeline12.h"
+#include "axmol/rhi/d3d12/GraphicsPipeline12.h"
 #include "axmol/rhi/d3d12/VertexLayout12.h"
 #include "axmol/rhi/d3d12/DepthStencilState12.h"
 #include "axmol/rhi/d3d12/Program12.h"
@@ -125,12 +125,12 @@ static inline uintptr_t makePSOKey(const rhi::BlendDesc& blendDesc,
     }
 }
 
-RenderPipelineImpl::RenderPipelineImpl(GraphicsDeviceImpl* driver) : _driver(driver)
+GraphicsPipelineImpl::GraphicsPipelineImpl(GraphicsDeviceImpl* driver) : _driver(driver)
 {
     initializePipelineDefaults();
 }
 
-RenderPipelineImpl::~RenderPipelineImpl()
+GraphicsPipelineImpl::~GraphicsPipelineImpl()
 {
     _driver->waitForGPU();
 
@@ -146,7 +146,7 @@ RenderPipelineImpl::~RenderPipelineImpl()
     _rootSigCache.clear();
 }
 
-void RenderPipelineImpl::initializePipelineDefaults()
+void GraphicsPipelineImpl::initializePipelineDefaults()
 {
     // Blend
     _blendDesc                        = {};
@@ -164,11 +164,11 @@ void RenderPipelineImpl::initializePipelineDefaults()
     _rasterDesc.DepthClipEnable       = TRUE;
 }
 
-void RenderPipelineImpl::update(const RenderTarget* /*rt*/, const PipelineDesc& desc)
+void GraphicsPipelineImpl::update(const RenderTarget* /*rt*/, const PipelineDesc& desc)
 {
     if (!desc.programState || !desc.vertexLayout)
     {
-        AXASSERT(false, "RenderPipelineImpl::update: invalid inputs");
+        AXASSERT(false, "GraphicsPipelineImpl::update: invalid inputs");
         return;
     }
 
@@ -179,7 +179,7 @@ void RenderPipelineImpl::update(const RenderTarget* /*rt*/, const PipelineDesc& 
     updateGraphicsPipeline(desc, program);
 }
 
-void RenderPipelineImpl::updateBlendState(const BlendDesc& blendDesc)
+void GraphicsPipelineImpl::updateBlendState(const BlendDesc& blendDesc)
 {
     auto& rt = _blendDesc.RenderTarget[0];
 
@@ -201,7 +201,7 @@ void RenderPipelineImpl::updateBlendState(const BlendDesc& blendDesc)
     rt.LogicOp       = D3D12_LOGIC_OP_NOOP;
 }
 
-void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
+void GraphicsPipelineImpl::updateRootSignature(ProgramImpl* program)
 {
     auto progId = program->getProgramId();
     if (auto it = _rootSigCache.find(progId); it != _rootSigCache.end())
@@ -347,7 +347,7 @@ void RenderPipelineImpl::updateRootSignature(ProgramImpl* program)
     _activeRootSignature = &_rootSigCache.emplace(progId, std::move(entry)).first->second;
 }
 
-const DescriptorHandle* RenderPipelineImpl::getCustomSamplerBatch(const ::ax::rhi::ProgramState* programState)
+const DescriptorHandle* GraphicsPipelineImpl::getCustomSamplerBatch(const ::ax::rhi::ProgramState* programState)
 {
     if (!programState || !_activeRootSignature || _activeRootSignature->customSamplerBatchCount == 0)
         return nullptr;
@@ -392,7 +392,7 @@ const DescriptorHandle* RenderPipelineImpl::getCustomSamplerBatch(const ::ax::rh
     return batch;
 }
 
-void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc, ProgramImpl* program)
+void GraphicsPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc, ProgramImpl* program)
 {
     const auto progId = program->getProgramId();
     auto key = makePSOKey(desc.blendDesc, _dsState, progId, desc.vertexLayout->getHash(), _rasterDesc, _primitiveGroup);
@@ -439,7 +439,7 @@ void RenderPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc, Progra
     _programToPSOMap.emplace(progId, key);
 }
 
-void RenderPipelineImpl::removeCachedObjects(Program* key)
+void GraphicsPipelineImpl::removeCachedObjects(Program* key)
 {
     auto progId = key->getProgramId();
     if (auto it = _rootSigCache.find(progId); it != _rootSigCache.end())

@@ -25,7 +25,7 @@
 
 #include "axmol/rhi/opengl/GraphicsContextGL.h"
 #include "axmol/rhi/opengl/BufferGL.h"
-#include "axmol/rhi/opengl/RenderPipelineGL.h"
+#include "axmol/rhi/opengl/GraphicsPipelineGL.h"
 #include "axmol/rhi/opengl/TextureGL.h"
 #include "axmol/rhi/opengl/DepthStencilStateGL.h"
 #include "axmol/rhi/opengl/ProgramGL.h"
@@ -64,7 +64,7 @@ GraphicsContextImpl::~GraphicsContextImpl()
     cleanResources();
 
     AX_SAFE_RELEASE_NULL(_screenRT);
-    AX_SAFE_RELEASE_NULL(_renderPipeline);
+    AX_SAFE_RELEASE_NULL(_graphicsPipeline);
 }
 
 bool GraphicsContextImpl::beginFrame()
@@ -152,9 +152,9 @@ void GraphicsContextImpl::setDepthStencilState(DepthStencilState* depthStencilSt
     _depthStencilStateImpl = static_cast<DepthStencilStateImpl*>(depthStencilState);
 }
 
-void GraphicsContextImpl::setRenderPipeline(RenderPipeline* renderPipeline)
+void GraphicsContextImpl::setGraphicsPipeline(GraphicsPipeline* graphicsPipeline)
 {
-    Object::assign(_renderPipeline, static_cast<RenderPipelineImpl*>(renderPipeline));
+    Object::assign(_graphicsPipeline, static_cast<GraphicsPipelineImpl*>(graphicsPipeline));
 }
 
 /**
@@ -176,7 +176,7 @@ void GraphicsContextImpl::updatePipelineState(const RenderTarget* rt,
 {
     GraphicsContext::updatePipelineState(rt, desc, primitiveType);
 
-    _renderPipeline->update(rt, desc);
+    _graphicsPipeline->update(rt, desc);
 
     _primitiveType = UtilsGL::toGLPrimitiveType(primitiveType);
 }
@@ -332,7 +332,7 @@ void GraphicsContextImpl::submitCurrentFrameCommands(bool waitForCompletion)
 
 void GraphicsContextImpl::prepareDrawing() const
 {
-    const auto& program = _renderPipeline->getProgram();
+    const auto& program = _graphicsPipeline->getProgram();
     __state->useProgram(program->internalHandle());
 
     uint32_t usedBits{0};

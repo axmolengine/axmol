@@ -134,11 +134,11 @@ public:
     DepthStencilState* createDepthStencilState() override;
 
     /**
-     * New a RenderPipeline object.
+     * New a GraphicsPipeline object.
      * @param descriptor Specifies render pipeline description.
-     * @return A RenderPipeline object.
+     * @return A GraphicsPipeline object.
      */
-    RenderPipeline* createRenderPipeline() override;
+    GraphicsPipeline* createGraphicsPipeline() override;
     ComputePipeline* createComputePipeline(Program* program) override;
 
     Program* createProgram(Data vsData, Data fsData) override;

@@ -24,7 +24,7 @@
 #include "axmol/rhi/d3d12/GraphicsContext12.h"
 #include "axmol/rhi/d3d12/GraphicsDevice12.h"
 #include "axmol/rhi/d3d12/RenderTarget12.h"
-#include "axmol/rhi/d3d12/RenderPipeline12.h"
+#include "axmol/rhi/d3d12/GraphicsPipeline12.h"
 #include "axmol/rhi/d3d12/DepthStencilState12.h"
 #include "axmol/rhi/d3d12/VertexLayout12.h"
 #include "axmol/rhi/d3d12/Program12.h"
@@ -270,7 +270,7 @@ GraphicsContextImpl::~GraphicsContextImpl()
     }
 
     AX_SAFE_RELEASE_NULL(_screenRT);
-    AX_SAFE_RELEASE_NULL(_renderPipeline);
+    AX_SAFE_RELEASE_NULL(_graphicsPipeline);
 
     for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
     {
@@ -350,9 +350,9 @@ void GraphicsContextImpl::setDepthStencilState(DepthStencilState* depthStencilSt
     _depthStencilState = static_cast<DepthStencilStateImpl*>(depthStencilState);
 }
 
-void GraphicsContextImpl::setRenderPipeline(RenderPipeline* renderPipeline)
+void GraphicsContextImpl::setGraphicsPipeline(GraphicsPipeline* graphicsPipeline)
 {
-    Object::assign(_renderPipeline, static_cast<RenderPipelineImpl*>(renderPipeline));
+    Object::assign(_graphicsPipeline, static_cast<GraphicsPipelineImpl*>(graphicsPipeline));
 }
 
 uint64_t GraphicsContextImpl::getCompletedFenceValue() const
@@ -646,16 +646,16 @@ void GraphicsContextImpl::updatePipelineState(const RenderTarget* rt,
                                               PrimitiveType primitiveType)
 {
     GraphicsContext::updatePipelineState(rt, pipelineDesc, primitiveType);
-    AXASSERT(_renderPipeline, "RenderPipelineImpl not set");
-    _renderPipeline->prepareUpdate(_depthStencilState, _cachedCullMode, _cachedFrontCounterClockwise,
+    AXASSERT(_graphicsPipeline, "GraphicsPipelineImpl not set");
+    _graphicsPipeline->prepareUpdate(_depthStencilState, _cachedCullMode, _cachedFrontCounterClockwise,
                                    toPrimitiveGroup(primitiveType));
-    _renderPipeline->update(rt, pipelineDesc);
+    _graphicsPipeline->update(rt, pipelineDesc);
 
     _currentCmdList->IASetPrimitiveTopology(toD3DTopology(primitiveType));
 
     // Bind PSO & RootSignature
     uint32_t dirtyFlags = 0;
-    auto rootSigInfo    = _renderPipeline->getRootSignature();
+    auto rootSigInfo    = _graphicsPipeline->getRootSignature();
     auto rootSig        = rootSigInfo->rootSig.Get();
     if (_boundRootSig != rootSig)
     {
@@ -664,7 +664,7 @@ void GraphicsContextImpl::updatePipelineState(const RenderTarget* rt,
         dirtyFlags |= 1;
     }
 
-    auto pso = _renderPipeline->getPipelineState();
+    auto pso = _graphicsPipeline->getPipelineState();
     if (pso != _boundPSO)
     {
         _currentCmdList->SetPipelineState(pso);
@@ -682,7 +682,7 @@ void GraphicsContextImpl::updatePipelineState(const RenderTarget* rt,
     const auto customSamplerRootIndex = rootSigInfo->customSamplerRootIndex;
     if (customSamplerRootIndex != UINT_MAX)
     {
-        auto* batch = _renderPipeline->getCustomSamplerBatch(_programState);
+        auto* batch = _graphicsPipeline->getCustomSamplerBatch(_programState);
         AXASSERT(batch, "Failed to resolve D3D12 custom sampler descriptors");
         if (batch)
             _currentCmdList->SetGraphicsRootDescriptorTable(customSamplerRootIndex, batch->gpu);
@@ -723,7 +723,7 @@ void GraphicsContextImpl::setInstanceBuffer(Buffer* buffer)
 
 void GraphicsContextImpl::drawArrays(size_t start, size_t count, bool /*wireframe*/)
 {
-    AXASSERT(_renderPipeline && _vertexBuffer, "Pipeline and vertex buffer must be set");
+    AXASSERT(_graphicsPipeline && _vertexBuffer, "Pipeline and vertex buffer must be set");
 
     prepareDrawing(_currentCmdList);
 
@@ -732,7 +732,7 @@ void GraphicsContextImpl::drawArrays(size_t start, size_t count, bool /*wirefram
 
 void GraphicsContextImpl::drawArraysInstanced(size_t start, size_t count, int instanceCount, bool /*wireframe*/)
 {
-    AXASSERT(_renderPipeline && _vertexBuffer, "Pipeline and vertex buffer must be set");
+    AXASSERT(_graphicsPipeline && _vertexBuffer, "Pipeline and vertex buffer must be set");
 
     prepareDrawing(_currentCmdList);
 
@@ -742,7 +742,7 @@ void GraphicsContextImpl::drawArraysInstanced(size_t start, size_t count, int in
 
 void GraphicsContextImpl::drawElements(IndexFormat indexType, size_t count, size_t offset, bool /*wireframe*/)
 {
-    AXASSERT(_renderPipeline && _vertexBuffer && _indexBuffer, "Pipeline, vertex and index buffers must be set");
+    AXASSERT(_graphicsPipeline && _vertexBuffer && _indexBuffer, "Pipeline, vertex and index buffers must be set");
 
     prepareDrawing(_currentCmdList);
 
@@ -764,7 +764,7 @@ void GraphicsContextImpl::drawElementsInstanced(IndexFormat indexType,
                                                 int instanceCount,
                                                 bool /*wireframe*/)
 {
-    AXASSERT(_renderPipeline && _vertexBuffer && _indexBuffer, "Pipeline, vertex and index buffers must be set");
+    AXASSERT(_graphicsPipeline && _vertexBuffer && _indexBuffer, "Pipeline, vertex and index buffers must be set");
 
     prepareDrawing(_currentCmdList);
 
@@ -787,7 +787,7 @@ void GraphicsContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
     for (auto& cb : callbackUniforms)
         cb.second(_programState, cb.first);
 
-    auto rootSigInfo = _renderPipeline->getRootSignature();
+    auto rootSigInfo = _graphicsPipeline->getRootSignature();
 
     applyPendingDynamicStates();
 
@@ -1129,8 +1129,8 @@ void GraphicsContextImpl::readPixelsInternal(RenderTarget* rt, std::function<voi
 
 void GraphicsContextImpl::removeCachedPipelineObjects(Program* key)
 {
-    if (_renderPipeline)
-        _renderPipeline->removeCachedObjects(key);
+    if (_graphicsPipeline)
+        _graphicsPipeline->removeCachedObjects(key);
 }
 
 bool GraphicsContextImpl::dispatch(const ComputeDispatchDesc& desc)

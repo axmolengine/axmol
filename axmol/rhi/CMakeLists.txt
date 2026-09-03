@@ -11,7 +11,7 @@ set(_AX_RHI_HEADER
   rhi/Program.h
   rhi/ProgramState.h
   rhi/RenderPassDesc.h
-  rhi/RenderPipeline.h
+  rhi/GraphicsPipeline.h
   rhi/ComputePipeline.h
   rhi/RenderTarget.h
   rhi/ShaderCache.h
@@ -52,7 +52,7 @@ if(AX_ENABLE_GL)
     rhi/opengl/GraphicsDeviceGL.h
     rhi/opengl/MacrosGL.h
     rhi/opengl/ProgramGL.h
-    rhi/opengl/RenderPipelineGL.h
+    rhi/opengl/GraphicsPipelineGL.h
     rhi/opengl/ComputePipelineGL.h
     rhi/opengl/RenderTargetGL.h
     rhi/opengl/ShaderModuleGL.h
@@ -68,7 +68,7 @@ if(AX_ENABLE_GL)
     rhi/opengl/DepthStencilStateGL.cpp
     rhi/opengl/GraphicsDeviceGL.cpp
     rhi/opengl/ProgramGL.cpp
-    rhi/opengl/RenderPipelineGL.cpp
+    rhi/opengl/GraphicsPipelineGL.cpp
     rhi/opengl/ShaderModuleGL.cpp
     rhi/opengl/TextureGL.cpp
     rhi/opengl/UtilsGL.cpp
@@ -85,7 +85,7 @@ if(AX_ENABLE_MTL)
     rhi/metal/RenderTargetMTL.h
     rhi/metal/DepthStencilStateMTL.h
     rhi/metal/GraphicsDeviceMTL.h
-    rhi/metal/RenderPipelineMTL.h
+    rhi/metal/GraphicsPipelineMTL.h
     rhi/metal/ComputePipelineMTL.h
     rhi/metal/ShaderModuleMTL.h
     rhi/metal/TextureMTL.h
@@ -100,7 +100,7 @@ if(AX_ENABLE_MTL)
     rhi/metal/RenderTargetMTL.mm
     rhi/metal/DepthStencilStateMTL.mm
     rhi/metal/GraphicsDeviceMTL.mm
-    rhi/metal/RenderPipelineMTL.mm
+    rhi/metal/GraphicsPipelineMTL.mm
     rhi/metal/ComputePipelineMTL.mm
     rhi/metal/ShaderModuleMTL.mm
     rhi/metal/TextureMTL.mm
@@ -116,7 +116,7 @@ if(AX_ENABLE_D3D11)
     rhi/d3d11/RenderTarget11.h
     rhi/d3d11/DepthStencilState11.h
     rhi/d3d11/GraphicsDevice11.h
-    rhi/d3d11/RenderPipeline11.h
+    rhi/d3d11/GraphicsPipeline11.h
     rhi/d3d11/ComputePipeline11.h
     rhi/d3d11/ShaderModule11.h
     rhi/d3d11/Texture11.h
@@ -131,7 +131,7 @@ if(AX_ENABLE_D3D11)
     rhi/d3d11/RenderTarget11.cpp
     rhi/d3d11/DepthStencilState11.cpp
     rhi/d3d11/GraphicsDevice11.cpp
-    rhi/d3d11/RenderPipeline11.cpp
+    rhi/d3d11/GraphicsPipeline11.cpp
     rhi/d3d11/ShaderModule11.cpp
     rhi/d3d11/Texture11.cpp
     rhi/d3d11/Program11.cpp
@@ -147,7 +147,7 @@ if(AX_ENABLE_D3D12)
     rhi/d3d12/RenderTarget12.h
     rhi/d3d12/DepthStencilState12.h
     rhi/d3d12/GraphicsDevice12.h
-    rhi/d3d12/RenderPipeline12.h
+    rhi/d3d12/GraphicsPipeline12.h
     rhi/d3d12/ShaderModule12.h
     rhi/d3d12/Texture12.h
     rhi/d3d12/Program12.h
@@ -164,7 +164,7 @@ rhi/d3d12/ComputePipeline12.h
     rhi/d3d12/RenderTarget12.cpp
     rhi/d3d12/DepthStencilState12.cpp
     rhi/d3d12/GraphicsDevice12.cpp
-    rhi/d3d12/RenderPipeline12.cpp
+    rhi/d3d12/GraphicsPipeline12.cpp
     rhi/d3d12/ShaderModule12.cpp
     rhi/d3d12/Texture12.cpp
     rhi/d3d12/Program12.cpp
@@ -183,7 +183,7 @@ if(AX_ENABLE_VK)
     rhi/vulkan/RenderTargetVK.h
     rhi/vulkan/DepthStencilStateVK.h
     rhi/vulkan/GraphicsDeviceVK.h
-    rhi/vulkan/RenderPipelineVK.h
+    rhi/vulkan/GraphicsPipelineVK.h
     rhi/vulkan/ShaderModuleVK.h
     rhi/vulkan/TextureVK.h
     rhi/vulkan/UtilsVK.h
@@ -199,7 +199,7 @@ if(AX_ENABLE_VK)
     rhi/vulkan/RenderTargetVK.cpp
     rhi/vulkan/DepthStencilStateVK.cpp
     rhi/vulkan/GraphicsDeviceVK.cpp
-    rhi/vulkan/RenderPipelineVK.cpp
+    rhi/vulkan/GraphicsPipelineVK.cpp
     rhi/vulkan/ShaderModuleVK.cpp
     rhi/vulkan/TextureVK.cpp
     rhi/vulkan/UtilsVK.cpp

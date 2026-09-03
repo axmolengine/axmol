@@ -23,7 +23,7 @@
  ****************************************************************************/
 #include "axmol/rhi/d3d11/GraphicsContext11.h"
 #include "axmol/rhi/d3d11/RenderTarget11.h"
-#include "axmol/rhi/d3d11/RenderPipeline11.h"
+#include "axmol/rhi/d3d11/GraphicsPipeline11.h"
 #include "axmol/rhi/d3d11/DepthStencilState11.h"
 #include "axmol/rhi/d3d11/Buffer11.h"
 #include "axmol/rhi/d3d11/Program11.h"
@@ -312,7 +312,7 @@ GraphicsContextImpl::~GraphicsContextImpl()
     _d3d11Context->OMSetRenderTargets(0, nullptr, nullptr);
 
     AX_SAFE_RELEASE_NULL(_screenRT);
-    AX_SAFE_RELEASE_NULL(_renderPipeline);
+    AX_SAFE_RELEASE_NULL(_graphicsPipeline);
 
     SafeRelease(_swapChain);
     _rasterStateCache.clear();
@@ -347,9 +347,9 @@ void GraphicsContextImpl::setDepthStencilState(DepthStencilState* depthStencilSt
     _depthStencilState = static_cast<DepthStencilStateImpl*>(depthStencilState);
 }
 
-void GraphicsContextImpl::setRenderPipeline(RenderPipeline* renderPipeline)
+void GraphicsContextImpl::setGraphicsPipeline(GraphicsPipeline* graphicsPipeline)
 {
-    Object::assign(_renderPipeline, static_cast<RenderPipelineImpl*>(renderPipeline));
+    Object::assign(_graphicsPipeline, static_cast<GraphicsPipelineImpl*>(graphicsPipeline));
 }
 
 bool GraphicsContextImpl::beginFrame()
@@ -400,7 +400,7 @@ void GraphicsContextImpl::updatePipelineState(const RenderTarget* rt,
                                               PrimitiveType primitiveType)
 {
     GraphicsContext::updatePipelineState(rt, desc, primitiveType);
-    _renderPipeline->update(rt, desc);
+    _graphicsPipeline->update(rt, desc);
 
     _d3d11Context->IASetPrimitiveTopology(toD3DPrimitiveTopology(primitiveType));
 }

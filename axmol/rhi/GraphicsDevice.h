@@ -42,7 +42,7 @@ namespace ax::rhi
 class GraphicsContext;
 class Buffer;
 class ShaderModule;
-class RenderPipeline;
+class GraphicsPipeline;
 class ComputePipeline;
 class RenderPass;
 class RenderTarget;
@@ -157,11 +157,11 @@ public:
     virtual DepthStencilState* createDepthStencilState() = 0;
 
     /**
-     * New a RenderPipeline object, not auto released.
+     * New a GraphicsPipeline object, not auto released.
      * @param descriptor Specifies render pipeline description.
-     * @return A RenderPipeline object.
+     * @return A GraphicsPipeline object.
      */
-    virtual RenderPipeline* createRenderPipeline() = 0;
+    virtual GraphicsPipeline* createGraphicsPipeline() = 0;
 
     /**
      * Create a compute pipeline from a compute program, not auto released.

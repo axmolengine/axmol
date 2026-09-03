@@ -23,7 +23,7 @@
  ****************************************************************************/
 #include "axmol/rhi/vulkan/GraphicsContextVK.h"
 #include "axmol/rhi/vulkan/RenderTargetVK.h"
-#include "axmol/rhi/vulkan/RenderPipelineVK.h"
+#include "axmol/rhi/vulkan/GraphicsPipelineVK.h"
 #include "axmol/rhi/vulkan/DepthStencilStateVK.h"
 #include "axmol/rhi/vulkan/VertexLayoutVK.h"
 #include "axmol/rhi/vulkan/ProgramVK.h"
@@ -172,7 +172,7 @@ GraphicsContextImpl::~GraphicsContextImpl()
 
     for (auto& descriptorStates : _inFlightDescriptorStates)
     {
-        _renderPipeline->recycleDescriptorStates(descriptorStates, false);
+        _graphicsPipeline->recycleDescriptorStates(descriptorStates, false);
         descriptorStates.clear();
     }
     for (auto& computeDescriptorStates : _inFlightComputeDescriptorStates)
@@ -188,7 +188,7 @@ GraphicsContextImpl::~GraphicsContextImpl()
 
     AX_SAFE_RELEASE_NULL(_screenRT);
     _driver->destroyStaleResources();
-    AX_SAFE_RELEASE_NULL(_renderPipeline);
+    AX_SAFE_RELEASE_NULL(_graphicsPipeline);
 
     destroyUniformRingBuffers();
 
@@ -543,9 +543,9 @@ void GraphicsContextImpl::setDepthStencilState(DepthStencilState* depthStencilSt
     _depthStencilState = static_cast<DepthStencilStateImpl*>(depthStencilState);
 }
 
-void GraphicsContextImpl::setRenderPipeline(RenderPipeline* renderPipeline)
+void GraphicsContextImpl::setGraphicsPipeline(GraphicsPipeline* graphicsPipeline)
 {
-    Object::assign(_renderPipeline, static_cast<RenderPipelineImpl*>(renderPipeline));
+    Object::assign(_graphicsPipeline, static_cast<GraphicsPipelineImpl*>(graphicsPipeline));
 }
 
 uint64_t GraphicsContextImpl::getCompletedFenceValue() const
@@ -593,7 +593,7 @@ bool GraphicsContextImpl::beginFrame()
     vkResetCommandBuffer(_currentCmdBuffer, 0);
 
     auto& descriptorStates = _inFlightDescriptorStates[_frameIndex];
-    _renderPipeline->recycleDescriptorStates(descriptorStates, true);
+    _graphicsPipeline->recycleDescriptorStates(descriptorStates, true);
     descriptorStates.clear();
 
     auto& computeDescriptorStates = _inFlightComputeDescriptorStates[_frameIndex];
@@ -1001,12 +1001,12 @@ void GraphicsContextImpl::updatePipelineState(const RenderTarget* rt,
     }
 
     GraphicsContext::updatePipelineState(rt, desc, primitiveType);
-    AXASSERT(_renderPipeline, "RenderPipelineImpl not set");
-    _renderPipeline->prepareUpdate(_depthStencilState);
-    _renderPipeline->update(rt, desc, _extendedDynamicState);
+    AXASSERT(_graphicsPipeline, "GraphicsPipelineImpl not set");
+    _graphicsPipeline->prepareUpdate(_depthStencilState);
+    _graphicsPipeline->update(rt, desc, _extendedDynamicState);
 
     // Bind pipeline
-    auto pipeline = _renderPipeline->getVkPipeline();
+    auto pipeline = _graphicsPipeline->getVkPipeline();
     if (_boundPipeline != pipeline)
     {
         vkCmdBindPipeline(_currentCmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
@@ -1065,20 +1065,20 @@ void GraphicsContextImpl::applyPendingDynamicStates()
 
 void GraphicsContextImpl::removeCachedPipelineObjects(VkRenderPass key)
 {
-    if (_renderPipeline)
-        _renderPipeline->removeCachedObjects(key);
+    if (_graphicsPipeline)
+        _graphicsPipeline->removeCachedObjects(key);
 }
 
 void GraphicsContextImpl::removeCachedPipelineObjects(Program* key)
 {
-    if (_renderPipeline)
-        _renderPipeline->removeCachedObjects(key);
+    if (_graphicsPipeline)
+        _graphicsPipeline->removeCachedObjects(key);
 }
 
 void GraphicsContextImpl::prepareDrawing()
 {
     AXASSERT(_programState, "ProgramState must be set before drawing");
-    AXASSERT(_renderPipeline, "RenderPipelineImpl must be set before drawing");
+    AXASSERT(_graphicsPipeline, "GraphicsPipelineImpl must be set before drawing");
     AXASSERT(_boundPipeline, "boundPipeline must be set before drawing");
 
     applyPendingDynamicStates();
@@ -1088,7 +1088,7 @@ void GraphicsContextImpl::prepareDrawing()
         cb.second(_programState, cb.first);
 
     // Acquire descriptor state, matching current pipeline layout
-    auto descriptorState = _renderPipeline->acquireDescriptorState();
+    auto descriptorState = _graphicsPipeline->acquireDescriptorState();
     _inFlightDescriptorStates[_frameIndex].emplace_back(descriptorState);
     auto& descriptorSets = descriptorState->sets;
 
@@ -1267,7 +1267,7 @@ void GraphicsContextImpl::prepareDrawing()
         vkUpdateDescriptorSets(_device, static_cast<uint32_t>(writes.size()), writes.data(), 0, nullptr);
 
     // Bind descriptor sets: bind only the sets that exist
-    auto layoutState = _renderPipeline->getPipelineLayoutState();
+    auto layoutState = _graphicsPipeline->getPipelineLayoutState();
     vkCmdBindDescriptorSets(_currentCmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, layoutState->layout, 0,
                             layoutState->descriptorSetLayoutCount, descriptorSets.data(), 0, nullptr);
 

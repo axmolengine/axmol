@@ -24,7 +24,7 @@
 #pragma once
 
 #include "axmol/rhi/ComputePipeline.h"
-#include "axmol/rhi/vulkan/RenderPipelineVK.h"
+#include "axmol/rhi/vulkan/GraphicsPipelineVK.h"
 #include <glad/vulkan.h>
 
 namespace ax::rhi::vk

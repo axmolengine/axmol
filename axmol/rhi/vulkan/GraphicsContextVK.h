@@ -23,7 +23,7 @@
  ****************************************************************************/
 #pragma once
 #include "axmol/rhi/GraphicsContext.h"
-#include "axmol/rhi/vulkan/RenderPipelineVK.h"
+#include "axmol/rhi/vulkan/GraphicsPipelineVK.h"
 #include "axmol/rhi/vulkan/ComputePipelineVK.h"
 #include "axmol/base/RefPtr.h"
 #include <glad/vulkan.h>
@@ -32,7 +32,7 @@ namespace ax::rhi::vk
 {
 class BufferImpl;
 class DepthStencilStateImpl;
-class RenderPipelineImpl;
+class GraphicsPipelineImpl;
 class RenderTargetImpl;
 class GraphicsDeviceImpl;
 class SemaphorePool;
@@ -108,7 +108,7 @@ public:
     bool updateSurface(SurfaceHandle surface, uint32_t width, uint32_t height) override;
 
     void setDepthStencilState(DepthStencilState* depthStencilState) override;
-    void setRenderPipeline(RenderPipeline* renderPipeline) override;
+    void setGraphicsPipeline(GraphicsPipeline* graphicsPipeline) override;
 
     bool beginFrame() override;
     void beginRenderPass(RenderTarget* renderTarget, const RenderPassDesc& descriptor) override;
@@ -215,7 +215,7 @@ private:
     VkCommandBuffer _currentCmdBuffer{VK_NULL_HANDLE};  // weak pointer
 
     DepthStencilStateImpl* _depthStencilState{nullptr};
-    RenderPipelineImpl* _renderPipeline{nullptr};
+    GraphicsPipelineImpl* _graphicsPipeline{nullptr};
     BufferImpl* _vertexBuffer{nullptr};
     BufferImpl* _indexBuffer{nullptr};
     BufferImpl* _instanceBuffer{nullptr};

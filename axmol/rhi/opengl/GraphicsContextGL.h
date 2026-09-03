@@ -38,7 +38,7 @@ namespace ax::rhi::gl
 {
 
 class BufferImpl;
-class RenderPipelineImpl;
+class GraphicsPipelineImpl;
 class ProgramImpl;
 class DepthStencilStateImpl;
 class RenderTargetImpl;
@@ -69,10 +69,10 @@ public:
 
     /**
      * Sets the current render pipeline state object once
-     * @param renderPipeline An object that contains the graphics functions and configuration state used in a render
+     * @param graphicsPipeline An object that contains the graphics functions and configuration state used in a render
      * pass.
      */
-    void setRenderPipeline(RenderPipeline* renderPipeline) override;
+    void setGraphicsPipeline(GraphicsPipeline* graphicsPipeline) override;
 
     /// @name Setters & Getters
     /**
@@ -189,7 +189,7 @@ protected:
     BufferImpl* _vertexBuffer                     = nullptr;
     BufferImpl* _indexBuffer                      = nullptr;
     BufferImpl* _instanceBuffer                   = nullptr;
-    RenderPipelineImpl* _renderPipeline           = nullptr;
+    GraphicsPipelineImpl* _graphicsPipeline       = nullptr;
     CullMode _cullMode                            = CullMode::NONE;
     DepthStencilStateImpl* _depthStencilStateImpl = nullptr;
     GLenum _primitiveType                         = GL_TRIANGLES;

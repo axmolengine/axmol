@@ -25,7 +25,7 @@
 
 #include "axmol/rhi/opengl/GraphicsDeviceGL.h"
 #include "axmol/platform/Common.h"
-#include "axmol/rhi/opengl/RenderPipelineGL.h"
+#include "axmol/rhi/opengl/GraphicsPipelineGL.h"
 #include "axmol/rhi/opengl/ComputePipelineGL.h"
 #include "axmol/rhi/opengl/BufferGL.h"
 #include "axmol/rhi/opengl/ShaderModuleGL.h"
@@ -476,9 +476,9 @@ DepthStencilState* GraphicsDeviceImpl::createDepthStencilState()
     return new DepthStencilStateImpl();
 }
 
-RenderPipeline* GraphicsDeviceImpl::createRenderPipeline()
+GraphicsPipeline* GraphicsDeviceImpl::createGraphicsPipeline()
 {
-    return new RenderPipelineImpl();
+    return new GraphicsPipelineImpl();
 }
 
 ComputePipeline* GraphicsDeviceImpl::createComputePipeline(Program* program)

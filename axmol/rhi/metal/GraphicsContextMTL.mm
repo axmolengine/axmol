@@ -26,7 +26,7 @@
 #include "axmol/rhi/metal/GraphicsContextMTL.h"
 #include "axmol/rhi/metal/BufferMTL.h"
 #include "axmol/rhi/metal/GraphicsDeviceMTL.h"
-#include "axmol/rhi/metal/RenderPipelineMTL.h"
+#include "axmol/rhi/metal/GraphicsPipelineMTL.h"
 #include "axmol/rhi/metal/ComputePipelineMTL.h"
 #include "axmol/rhi/metal/TextureMTL.h"
 #include "axmol/rhi/metal/UtilsMTL.h"
@@ -196,7 +196,7 @@ GraphicsContextImpl::~GraphicsContextImpl()
     [oneOffBuffer waitUntilCompleted];
 
     AX_SAFE_RELEASE_NULL(_screenRT);
-    AX_SAFE_RELEASE_NULL(_renderPipeline);
+    AX_SAFE_RELEASE_NULL(_graphicsPipeline);
 
     [oneOffBuffer release];
 
@@ -215,9 +215,9 @@ void GraphicsContextImpl::setDepthStencilState(DepthStencilState* depthStencilSt
     _depthStencilState = static_cast<DepthStencilStateImpl*>(depthStencilState);
 }
 
-void GraphicsContextImpl::setRenderPipeline(RenderPipeline* renderPipeline)
+void GraphicsContextImpl::setGraphicsPipeline(GraphicsPipeline* graphicsPipeline)
 {
-    Object::assign(_renderPipeline, static_cast<RenderPipelineImpl*>(renderPipeline));
+    Object::assign(_graphicsPipeline, static_cast<GraphicsPipelineImpl*>(graphicsPipeline));
 }
 
 id<CAMetalDrawable> GraphicsContextImpl::acquireDrawable()
@@ -295,8 +295,8 @@ void GraphicsContextImpl::updatePipelineState(const RenderTarget* rt,
 {
     _primitiveType = toMTLPrimitive(primitiveType);
     GraphicsContext::updatePipelineState(rt, desc, primitiveType);
-    _renderPipeline->update(rt, desc);
-    [_mtlRenderEncoder setRenderPipelineState:_renderPipeline->getMTLRenderPipelineState()];
+    _graphicsPipeline->update(rt, desc);
+    [_mtlRenderEncoder setRenderPipelineState:_graphicsPipeline->getMTLRenderPipelineState()];
 }
 
 void GraphicsContextImpl::setViewport(int x, int y, unsigned int w, unsigned int h)
