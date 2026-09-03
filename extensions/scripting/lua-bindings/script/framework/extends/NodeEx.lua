@@ -23,6 +23,8 @@ THE SOFTWARE.
 ]]
 
 local Node = ax.Node
+local nodeUpdateKey = "axlua.node.update"
+local nativeUnscheduleUpdate = Node.unscheduleUpdate
 
 function Node:add(child, zorder, tag)
     if tag then
@@ -121,11 +123,37 @@ function Node:scaleTo(args)
 end
 
 function Node:onUpdate(callback)
-    self:scheduleUpdateWithPriorityLua(callback, 0)
+    self:schedule(callback, 0, nodeUpdateKey)
     return self
 end
 
 Node.scheduleUpdate = Node.onUpdate
+
+function Node:unscheduleUpdate()
+    self:unschedule(nodeUpdateKey)
+    nativeUnscheduleUpdate(self)
+end
+
+-- Compatibility-shaped lifecycle bridge for migrated Lua code.  It keeps the
+-- old callback's event names but stores the callable directly in Node's native
+-- std::function hooks instead of allocating a ScriptHandler id.
+function Node:setLifecycleCallback(callback)
+    if callback == nil then
+        self:setOnEnterCallback(nil)
+        self:setOnExitCallback(nil)
+        self:setOnEnterTransitionDidFinishCallback(nil)
+        self:setOnExitTransitionDidStartCallback(nil)
+        self:setOnCleanupCallback(nil)
+        return self
+    end
+
+    self:setOnEnterCallback(function() callback("enter") end)
+    self:setOnExitCallback(function() callback("exit") end)
+    self:setOnEnterTransitionDidFinishCallback(function() callback("enterTransitionFinish") end)
+    self:setOnExitTransitionDidStartCallback(function() callback("exitTransitionStart") end)
+    self:setOnCleanupCallback(function() callback("cleanup") end)
+    return self
+end
 
 function Node:onNodeEvent(eventName, callback)
     if "enter" == eventName then
@@ -147,26 +175,22 @@ function Node:enableNodeEvents()
         return self
     end
 
-    self:registerScriptHandler(function(state)
-        if state == "enter" then
-            self:onEnter_()
-        elseif state == "exit" then
-            self:onExit_()
-        elseif state == "enterTransitionFinish" then
-            self:onEnterTransitionFinish_()
-        elseif state == "exitTransitionStart" then
-            self:onExitTransitionStart_()
-        elseif state == "cleanup" then
-            self:onCleanup_()
-        end
-    end)
+    self:setOnEnterCallback(function() self:onEnter_() end)
+    self:setOnExitCallback(function() self:onExit_() end)
+    self:setOnEnterTransitionDidFinishCallback(function() self:onEnterTransitionFinish_() end)
+    self:setOnExitTransitionDidStartCallback(function() self:onExitTransitionStart_() end)
+    self:setOnCleanupCallback(function() self:onCleanup_() end)
     self.isNodeEventEnabled_ = true
 
     return self
 end
 
 function Node:disableNodeEvents()
-    self:unregisterScriptHandler()
+    self:setOnEnterCallback(nil)
+    self:setOnExitCallback(nil)
+    self:setOnEnterTransitionDidFinishCallback(nil)
+    self:setOnExitTransitionDidStartCallback(nil)
+    self:setOnCleanupCallback(nil)
     self.isNodeEventEnabled_ = false
     return self
 end

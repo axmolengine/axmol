@@ -66,17 +66,20 @@
 #include "BugsTest/BugsTest.h"
 #include "Camera3DTest/Camera3DTest.h"
 #include "ClickAndMoveTest/ClickAndMoveTest.h"
-#include "EnvironmentTest/EnvironmentTest.h"
 #include "CurrentLanguageTest/CurrentLanguageTest.h"
 #include "DataVisitorTest/DataVisitorTest.h"
-#include "NetworkTest/NetworkTest.h"
 #if AX_ENABLE_EXT_IMGUI
 #    include "DrawNodeTest/DrawNodeTest.h"
 #endif
 #include "EffectsAdvancedTest/EffectsAdvancedTest.h"
 #include "EffectsTest/EffectsTest.h"
+#include "EnvironmentTest/EnvironmentTest.h"
+#include "EventDispatcherTest/EventDispatcherTest.h"
 #include "ExtensionsTest/ExtensionsTest.h"
 #include "FontTest/FontTest.h"
+#if AX_ENABLE_EXT_IMGUI
+#    include "ImGuiTest/ImGuiTest.h"
+#endif
 #include "InputTest/MouseTest.h"
 #include "IntervalTest/IntervalTest.h"
 #include "LabelTest/LabelTest.h"
@@ -84,11 +87,11 @@
 #include "LightTest/LightTest.h"
 #include "MaterialSystemTest/MaterialSystemTest.h"
 #include "MenuTest/MenuTest.h"
+#include "MeshRendererTest/MeshRendererTest.h"
 #include "MotionStreakTest/MotionStreakTest.h"
 #include "MultiTouchTest/MultiTouchTest.h"
 #include "NavMeshTest/NavMeshTest.h"
-#include "EventDispatcherTest/EventDispatcherTest.h"
-#include "RendererTest/RendererTest.h"
+#include "NetworkTest/NetworkTest.h"
 #include "NodeTest/NodeTest.h"
 #include "OpenURLTest/OpenURLTest.h"
 #include "ParallaxTest/ParallaxTest.h"
@@ -97,6 +100,7 @@
 #include "Physics3DTest/Physics3DTest.h"
 #include "PhysicsTest/PhysicsTest.h"
 #include "ReleasePoolTest/ReleasePoolTest.h"
+#include "RendererTest/RendererTest.h"
 #include "RenderTextureTest/RenderTextureTest.h"
 #include "RotateWorldTest/RotateWorldTest.h"
 #include "Scene3DTest/Scene3DTest.h"
@@ -106,9 +110,12 @@
 #include "ShaderTest/ShaderTest2.h"
 #include "ShaderTest/ComputeShaderTest.h"
 #include "SpineTest/SpineTest.h"
-#include "MeshRendererTest/MeshRendererTest.h"
+#include "SpriteFrameCacheTest/SpriteFrameCacheTest.h"
 #include "SpritePolygonTest/SpritePolygonTest.h"
 #include "SpriteTest/SpriteTest.h"
+#ifdef AX_ENABLE_EXT_SVG
+#    include "SVGTest/SVGTest.h"
+#endif
 #include "TerrainTest/TerrainTest.h"
 #include "Texture2dTest/Texture2dTest.h"
 #include "TextureCacheTest/TextureCacheTest.h"
@@ -119,12 +126,8 @@
 #include "UITest/UITest.h"
 #include "UserDefaultTest/UserDefaultTest.h"
 #include "VibrateTest/VibrateTest.h"
-#include "SpriteFrameCacheTest/SpriteFrameCacheTest.h"
-#include "ZipTest/ZipTests.h"
-#if AX_ENABLE_EXT_IMGUI
-#    include "ImGuiTest/ImGuiTest.h"
-#endif
 #ifdef AX_ENABLE_VR
 #    include "VRTest/VRTest.h"
 #endif
+#include "ZipTest/ZipTests.h"
 #endif

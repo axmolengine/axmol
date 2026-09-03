@@ -19,8 +19,8 @@ local function KeypadMainLayer()
             label:setString("key: " .. event:getKeyCode() .. " was clicked")
         end
 
-        local listener = ax.EventListenerKeyboard:create()
-        listener:registerScriptHandler(onKeyReleased, ax.Handler.EVENT_KEYBOARD_RELEASED )
+        local listener = ax.KeyboardEventListener:create()
+        listener.onKeyReleased = onKeyReleased
 
         local eventDispatcher = layer:getEventDispatcher()
         eventDispatcher:addEventListenerWithSceneGraphPriority(listener, labelTip)
@@ -32,7 +32,7 @@ local function KeypadMainLayer()
         end
     end
 
-    layer:registerScriptHandler(onNodeEvent)
+    layer:setLifecycleCallback(onNodeEvent)
 
     return layer
 end

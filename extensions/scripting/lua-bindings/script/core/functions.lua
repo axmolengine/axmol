@@ -135,10 +135,10 @@ end
 local setmetatableindex_
 setmetatableindex_ = function(t, index)
     if type(t) == "userdata" then
-        local peer = tolua.getpeer(t)
+        local peer = axlua.getpeer(t)
         if not peer then
             peer = {}
-            tolua.setpeer(t, peer)
+            axlua.setpeer(t, peer)
         end
         setmetatableindex_(peer, index)
     else
@@ -266,8 +266,8 @@ function iskindof(obj, classname)
 
     local mt
     if t == "userdata" then
-        if tolua.iskindof(obj, classname) then return true end
-        mt = getmetatable(tolua.getpeer(obj))
+        if axlua.iskindof(obj, classname) then return true end
+        mt = getmetatable(axlua.getpeer(obj))
     else
         mt = getmetatable(obj)
     end

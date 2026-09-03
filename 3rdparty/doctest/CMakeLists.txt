@@ -7,4 +7,4 @@ add_library(${target_name} STATIC
   doctest.cpp
 )
 
-target_include_directories(${target_name} PUBLIC ${CMAKE_CURRENT_LIST_DIR})
+target_include_directories(${target_name} PUBLIC ${CMAKE_CURRENT_LIST_DIR} PRIVATE ${CMAKE_CURRENT_LIST_DIR}/../)

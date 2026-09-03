@@ -23,7 +23,7 @@ THE SOFTWARE.
 
 ]]
 
-local Slider = ccui.Slider
+local Slider = axui.Slider
 
 function Slider:onEvent(callback)
     self:addEventListener(function(sender, eventType)

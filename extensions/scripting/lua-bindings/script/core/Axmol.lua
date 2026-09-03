@@ -1,6 +1,46 @@
 
 ax = ax or {}
 
+-- Compatibility for the Camera factory API that predates CameraMode and the
+-- configure* methods. Keep this in Lua so the native Camera surface stays
+-- small while existing scripts retain the old interface.
+function ax.Camera:createPerspective(fieldOfView, aspectRatio, nearPlane, farPlane)
+    local camera = self:create()
+    if camera:configurePerspective(fieldOfView, aspectRatio, nearPlane, farPlane) then
+        return camera
+    end
+end
+
+function ax.Camera:createOrthographic(zoomX, zoomY, nearPlane, farPlane)
+    local camera = self:create()
+    if camera:configureOrthographic(zoomX, zoomY, nearPlane, farPlane) then
+        return camera
+    end
+end
+
+function ax.Camera:createOrthographicView(size, nearPlane, farPlane)
+    local camera = self:create()
+    if camera:configureOrthographicView(size, nearPlane, farPlane) then
+        return camera
+    end
+end
+
+-- PointerEvent replaced the old Touch API, but existing scripts still use
+-- Touch's getPreviousLocation name. Both methods describe the previous point
+-- in world coordinates, so retain the established Lua spelling as an alias.
+ax.PointerEvent.getPreviousLocation = ax.PointerEvent.getPrevWorldPoint
+
+-- Properties iteration historically used nil as the Lua end sentinel. The
+-- native API now returns an empty string_view, which would otherwise make old
+-- `while name ~= nil` loops run forever.
+local propertiesGetNextProperty = ax.Properties.getNextProperty
+function ax.Properties:getNextProperty()
+    local name = propertiesGetNextProperty(self)
+    if name ~= "" then
+        return name
+    end
+end
+
 -- Native vec2_new use array[2] to store x,y w,h u,v performance is better
 -- p[1] alias: x w u width
 -- p[2] alias: y h v height

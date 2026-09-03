@@ -38,7 +38,10 @@ if not view then
             height = AX_DESIGN_RESOLUTION.height
         end
     end
-    view = ax.RenderView:createWithRect("Axmol-Lua", ax.rect(0, 0, width, height))
+    -- Keep all native arguments explicit.  The generated sol2 overload
+    -- dispatcher must not infer the historical default scale/fullscreen
+    -- arguments from a shortened Lua call.
+    view = ax.RenderView:createWithRect("Axmol-Lua", ax.rect(0, 0, width, height), 1.0, false)
     director:setRenderView(view)
 end
 
@@ -342,7 +345,7 @@ function display.newSprite(source, x, y, params)
 
     local params = params or PARAMS_EMPTY
     if params.scale9 or params.capInsets then
-        spriteClass = ccui.Scale9Sprite
+        spriteClass = axui.Scale9Sprite
         scale9 = true
         params.capInsets = params.capInsets or RECT_ZERO
         params.rect = params.rect or RECT_ZERO
@@ -378,7 +381,7 @@ function display.newSprite(source, x, y, params)
         elseif sourceType ~= "userdata" then
             error(string.format("display.newSprite() - invalid source type \"%s\"", sourceType), 0)
         else
-            sourceType = tolua.type(source)
+            sourceType = axlua.type(source)
             if sourceType == "ax.SpriteFrame" then
                 if not scale9 then
                     sprite = spriteClass:createWithSpriteFrame(source)
@@ -414,7 +417,7 @@ function display.newSpriteFrame(source, ...)
         if not frame then
             error(string.format("display.newSpriteFrame() - invalid frame name \"%s\"", tostring(source)), 0)
         end
-    elseif tolua.type(source) == "ax.Texture2D" then
+    elseif axlua.type(source) == "ax.Texture2D" then
         frame = ax.SpriteFrame:createWithTexture(source, ...)
     else
         error("display.newSpriteFrame() - invalid parameters", 0)

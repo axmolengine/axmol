@@ -23,7 +23,7 @@ $excludes = @(
     'extensions/fairygui',
     'extensions/Live2D',
     'extensions/Effekseer',
-    'extensions/scripting/lua-bindings/auto',
+    'extensions/scripting/lua-bindings/generated',
     'extensions/spine',
     'tests/cpp-tests/Source/Box2DTestBed/samples',
     'tests/fairygui-tests',

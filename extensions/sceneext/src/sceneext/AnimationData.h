@@ -73,6 +73,12 @@ public:
     /**
      */
     BaseData();
+
+    // BaseData is a value payload carried by display data. Object itself is
+    // non-copyable, so assignment must copy only this payload and preserve
+    // the destination's diagnostic Object state.
+    BaseData& operator=(const BaseData& other);
+
     /**
      * @lua NA
      */

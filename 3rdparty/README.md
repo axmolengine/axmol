@@ -41,7 +41,7 @@
 
 ## doctest
 - [![Upstream](https://img.shields.io/github/v/release/doctest/doctest?label=Upstream)](https://github.com/doctest/doctest)
-- Version: 2.4.12
+- Version: 2.5.3
 - License: MIT
 
 ## FastLZ
@@ -117,12 +117,12 @@
 ## lua
 - plainlua
   - [![Upstream](https://img.shields.io/github/v/release/lua/lua?label=Upstream)](https://github.com/lua/lua) http://www.lua.org/
-  - Version: 5.5.0
+  - Version: 5.5.1 with Axmol-specific API extensions (`lspec.h` / `lspec.cpp`)
   - License: MIT (http://www.lua.org/license.html)
   
 - sol2
-  - [![Upstream](https://img.shields.io/github/v/tag/ThePhD/sol2?label=Upstream)](https://github.com/ThePhD/sol2)
-  - Version: 3.5.0, with modified for lua-5.5 support
+  - [![Maintained fork](https://img.shields.io/github/v/tag/simdsoft/sol2?label=Maintained%20fork)](https://github.com/simdsoft/sol2)
+  - Version: 3.5.0 (`00fad669`), maintained fork with Lua 5.5 support
   - License: MIT
 
 - luajit
@@ -130,11 +130,6 @@
   - Version: 2.1-acb2234
   - License: MIT
 
-- tolua
-  - Upstream: https://github.com/LuaDist/toluapp
-  - Version: 1.0.93
-  - License: MIT
-  
 - lua-cjson
   - Upstream: https://github.com/simdsoft/lua-cjson
   - Version: 2.1.1
@@ -203,6 +198,11 @@
 - [![Upstream](https://img.shields.io/github/v/release/openssl/openssl?label=Upstream)](https://github.com/openssl/openssl)
 - Version: 3.0.21
 - License: Apache-2.0
+
+## lunasvg
+- [![Upstream](https://img.shields.io/github/v/tag/sammycage/lunasvg?label=Upstream)](https://github.com/sammycage/lunasvg)
+- Version: managed by `1k/build.profiles` and fetched only when `AX_ENABLE_EXT_SVG=ON`
+- License: MIT
 
 ## png
 - [![Upstream](https://img.shields.io/github/v/tag/glennrp/libpng?label=Upstream)](https://github.com/glennrp/libpng)
@@ -283,4 +283,3 @@
 - [![Upstream](https://img.shields.io/github/v/tag/madler/zlib?label=Upstream)](https://github.com/madler/zlib)
 - Version: 1.3.2
 - License: zlib
-

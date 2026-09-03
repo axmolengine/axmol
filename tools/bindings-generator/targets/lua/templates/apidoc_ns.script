@@ -1,5 +1,0 @@
-#if $target_ns
---------------------------------
--- @module ${target_ns}
-#end if
-

@@ -58,11 +58,11 @@ end
 
 function BillBoardTest:init()
     local listener = ax.PointerEventListener:create()
-    listener:registerScriptHandler(function(event)
+    listener.onPointerMove = function(event)
         if event:isPrimaryPressed() then
             local touch = event
             local location = event:getWorldPoint()
-            local previousLocation = event:getPreviousLocation()
+            local previousLocation = event:getPrevWorldPoint()
             local newPos = ax.pSub(previousLocation, location)
 
             local cameraDir = {}
@@ -86,7 +86,7 @@ function BillBoardTest:init()
             cameraPos = ax.vec3add(cameraPos, ax.vec3mul(cameraRightDir, newPos.x * 0.5))
             self._camera:setPosition3D(cameraPos)
         end
-    end, ax.Handler.EVENT_POINTER_MOVE)
+    end
 
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)

@@ -39,6 +39,7 @@
 #    include "axmol/tlx/inlined_vector.hpp"
 #    include <functional>
 #    include <vector>
+#    include <optional>
 
 namespace ax
 {
@@ -57,11 +58,14 @@ struct ContactInfo3D
     // Contact points in world coordinates.
     struct ContactPoint
     {
-        // Contact points on the surface of actor A
-        Vec3 pointA;
+        struct Side
+        {
+            Vec3 point;
+            std::optional<Vec3> velocity;
+        };
 
-        // Contact points on the surface of actor B
-        Vec3 pointB;
+        Side sideA;
+        Side sideB;
     };
 
     tlx::inlined_vector<ContactPoint, 4> points;

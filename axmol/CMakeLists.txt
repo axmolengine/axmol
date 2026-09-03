@@ -217,6 +217,7 @@ cmake_dependent_option(AX_ENABLE_EXT_INSPECTOR "Build extension Inspector" ${AX_
 cmake_dependent_option(AX_ENABLE_EXT_SDFGEN "Build extension SDFGen" ${AX_EXT_HINT} "AX_ENABLE_EXT_IMGUI" OFF)
 
 option(AX_ENABLE_EXT_JSONDEFAULT "Build extension JSONDefault" ${AX_EXT_HINT})
+option(AX_ENABLE_EXT_SVG "Build extension SVG" OFF)
 set(_AX_THIRDPARTY_NAME "3rdparty" CACHE INTERNAL "")
 
 if(WIN32)

@@ -24,8 +24,8 @@
  ****************************************************************************/
 
 #include "AppDelegate.h"
-#include "lua-bindings/manual/LuaEngine.h"
-#include "lua-bindings/manual/lua_module_register.h"
+#include "lua-bindings/runtime/LuaEngine.h"
+#include "lua-bindings/runtime/lua_module_register.h"
 
 #define USE_VR_RENDERER  0
 #define USE_AUDIO_ENGINE 1

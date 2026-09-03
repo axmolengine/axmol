@@ -87,6 +87,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
   ax_config_pred(${APP_NAME} AX_ENABLE_AUDIO)
   ax_config_pred(${APP_NAME} AX_ENABLE_VR)
   ax_config_pred(${APP_NAME} AX_ENABLE_OPENXR)
+  ax_config_pred(${APP_NAME} AX_ENABLE_EXT_SVG)
   # compile defines can't inherit when link prebuilts, so need to apply the
   # profiler backend define manually — mirrors the logic in axmol/CMakeLists.txt
   ax_apply_profiler_backend(${APP_NAME} PRIVATE)
@@ -105,7 +106,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
   target_include_directories(${APP_NAME}
     PRIVATE ${AX_ROOT_DIR}/3rdparty/lua
     PRIVATE ${AX_ROOT_DIR}/extensions/scripting
-    PRIVATE ${AX_ROOT_DIR}/extensions/scripting/lua-bindings/manual
+    PRIVATE ${AX_ROOT_DIR}/extensions/scripting/lua-bindings
     PRIVATE ${AX_ROOT_DIR}
     PRIVATE ${AX_ROOT_DIR}/3rdparty
     PRIVATE ${AX_ROOT_DIR}/extensions
@@ -132,7 +133,6 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     PRIVATE ${AX_ROOT_DIR}/3rdparty/unzip/.
     PRIVATE ${AX_ROOT_DIR}/3rdparty/llhttp/include
     PRIVATE ${AX_ROOT_DIR}/3rdparty/lua/plainlua
-    PRIVATE ${AX_ROOT_DIR}/3rdparty/lua/tolua/.
     PRIVATE ${AX_ROOT_DIR}/3rdparty/lua/lua-cjson/.
     PRIVATE ${AX_ROOT_DIR}/3rdparty/zlib/_x/include
     PRIVATE ${AX_ROOT_DIR}/3rdparty/jpeg-turbo/_x/include
@@ -201,6 +201,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
   ax_link_pred(AX_ENABLE_EXT_INSPECTOR LIBS Inspector INCLUDES "${AX_ROOT_DIR}/extensions/Inspector/src")
   ax_link_pred(AX_ENABLE_EXT_SDFGEN LIBS SDFGen INCLUDES "${AX_ROOT_DIR}/extensions/SDFGen/src")
   ax_link_pred(AX_ENABLE_EXT_GUI LIBS GUI INCLUDES "${AX_ROOT_DIR}/extensions/GUI/src" "${AX_ROOT_DIR}/extensions/GUI/src/GUI")
+  ax_link_pred(AX_ENABLE_EXT_SVG LIBS svg lunasvg plutovg INCLUDES "${AX_ROOT_DIR}/extensions/svg/src")
   ax_link_pred(AX_ENABLE_EXT_FAIRYGUI LIBS fairygui INCLUDES "${AX_ROOT_DIR}/extensions/fairygui/src" "${AX_ROOT_DIR}/extensions/fairygui/src/fairygui")
   ax_link_pred(AX_ENABLE_EXT_LIVE2D LIBS Live2D Live2DCubismCore INCLUDES "${AX_ROOT_DIR}/extensions/Live2D/Framework/src" "${AX_ROOT_DIR}/extensions/Live2D/Core/include")
   ax_link_pred(AX_ENABLE_EXT_EFFEKSEER LIBS EffekseerAxmol Effekseer EffekseerRendererCommon INCLUDES
@@ -333,7 +334,7 @@ function(ax_link_lua_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     )
   endif()
 
-  target_link_libraries(${APP_NAME} axlua lua-cjson tolua plainlua)
+  target_link_libraries(${APP_NAME} axlua lua-cjson plainlua)
 
   ax_link_cxx_prebuilt(${APP_NAME} ${AX_ROOT_DIR} ${AX_PREBUILT_DIR})
 

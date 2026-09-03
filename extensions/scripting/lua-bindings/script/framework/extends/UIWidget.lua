@@ -22,7 +22,7 @@ THE SOFTWARE.
 
 ]]
 
-local Widget = ccui.Widget
+local Widget = axui.Widget
 
 function Widget:onTouch(callback)
     self:addTouchEventListener(function(sender, state)

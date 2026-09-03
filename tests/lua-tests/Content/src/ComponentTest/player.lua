@@ -44,7 +44,7 @@ local player = {
         end
 
         local listener = ax.PointerEventListener:create()
-        listener:registerScriptHandler(onTouchesEnded, ax.Handler.EVENT_POINTER_UP)
+        listener.onPointerUp = onTouchesEnded
         local eventDispatcher = ax.Director:getInstance():getEventDispatcher()
         eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self:getOwner())
     end,

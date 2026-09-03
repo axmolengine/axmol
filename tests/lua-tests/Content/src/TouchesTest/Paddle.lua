@@ -28,7 +28,7 @@ end
 function Paddle:paddleWithTexture(aTexture)
     local pPaddle = Paddle.new(aTexture)
     pPaddle._state = kPaddleStateUngrabbed
-    pPaddle:registerScriptHandler(function(tag)
+    pPaddle:setLifecycleCallback(function(tag)
     if "enter" == tag then
         pPaddle:onEnter()
     elseif "exit" == tag then
@@ -39,7 +39,7 @@ end
 
 function Paddle:onEnter()
     local  listenner = ax.PointerEventListener:create()
-    listenner:registerScriptHandler(function(event)
+    listenner.onPointerDown = function(event)
             local worldPos = event:getWorldPoint()
             print(string.format("Paddle::onTouchBegan id = %d, x = %f, y = %f", event:getPointerId(), worldPos.x, worldPos.y))
             if (self._state ~= kPaddleStateUngrabbed) then
@@ -52,18 +52,18 @@ function Paddle:onEnter()
 
             self._state = kPaddleStateGrabbed
             return true
-        end,ax.Handler.EVENT_POINTER_DOWN )
-    listenner:registerScriptHandler(function(event)
+        end
+    listenner.onPointerMove = function(event)
             local touchPoint = event:getWorldPoint()
             print(string.format("Paddle::onPointerMove id = %d, x = %f, y = %f", event:getPointerId(), touchPoint.x, touchPoint.y))
             assert(self._state == kPaddleStateGrabbed, "Paddle - Unexpected state!")
             local curPosX,curPosY = self:getPosition()
             self:setPosition(ax.p(touchPoint.x,curPosY))
-        end,ax.Handler.EVENT_POINTER_MOVE )
-    listenner:registerScriptHandler(function(event)
+        end
+    listenner.onPointerUp = function(event)
             assert(self._state == kPaddleStateGrabbed, "Paddle - Unexpected state!")
             self._state = kPaddleStateUngrabbed
-        end,ax.Handler.EVENT_POINTER_UP )
+        end
     local eventDispatcher = self:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listenner, self)
 end

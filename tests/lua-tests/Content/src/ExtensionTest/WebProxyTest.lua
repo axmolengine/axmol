@@ -228,7 +228,7 @@ local function WebSocketTestLayer()
         end
     end
 
-    layer:registerScriptHandler(OnExit)
+    layer:setLifecycleCallback(OnExit)
 
     return layer
 end

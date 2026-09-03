@@ -1,21 +1,21 @@
-if nil == ccui then
+if nil == axui then
     return
 end
 
-ccui.BrightStyle =
+axui.BrightStyle =
 {
     none = -1,
     normal = 0,
     highlight = 1,
 }
 
-ccui.TextureResType =
+axui.TextureResType =
 {
     localType = 0,
     plistType = 1,
 }
 
-ccui.TouchEventType =
+axui.TouchEventType =
 {
     began = 0,
     moved = 1,
@@ -23,35 +23,35 @@ ccui.TouchEventType =
     canceled = 3,
 }
 
-ccui.SizeType =
+axui.SizeType =
 {
     absolute = 0,
     percent = 1,
 }
 
-ccui.PositionType = {
+axui.PositionType = {
     absolute = 0,
     percent = 1,
 }
 
-ccui.CheckBoxEventType =
+axui.CheckBoxEventType =
 {
     selected = 0,
     unselected = 1,
 }
 
-ccui.RadioButtonEventType=
+axui.RadioButtonEventType=
 {
         selected = 0,
         unselected = 1
 }
 
-ccui.RadioButtonGroupEventType=
+axui.RadioButtonGroupEventType=
 {
     select_changed = 0
 }
 
-ccui.TextFiledEventType =
+axui.TextFiledEventType =
 {
     attach_with_ime = 0,
     detach_with_ime = 1,
@@ -59,14 +59,14 @@ ccui.TextFiledEventType =
     delete_backward = 3,
 }
 
-ccui.LayoutBackGroundColorType =
+axui.LayoutBackGroundColorType =
 {
     none = 0,
     solid = 1,
     gradient = 2,
 }
 
-ccui.LayoutType =
+axui.LayoutType =
 {
     ABSOLUTE = 0,
     VERTICAL = 1,
@@ -74,14 +74,14 @@ ccui.LayoutType =
     RELATIVE = 3,
 }
 
-ccui.LayoutParameterType =
+axui.LayoutParameterType =
 {
     none = 0,
     linear = 1,
     relative = 2,
 }
 
-ccui.LinearGravity =
+axui.LinearGravity =
 {
     none = 0,
     left = 1,
@@ -92,7 +92,7 @@ ccui.LinearGravity =
     centerHorizontal = 6,
 }
 
-ccui.RelativeAlign =
+axui.RelativeAlign =
 {
     alignNone = 0,
     alignParentTopLeft = 1,
@@ -118,23 +118,23 @@ ccui.RelativeAlign =
     locationBelowRightAlign = 21,
 }
 
-ccui.SliderEventType = {
+axui.SliderEventType = {
     percentChanged = 0,
     slideBallDown = 1,
     slideBallUp = 2,
     slideBallCancel = 3
 }
 
-ccui.LoadingBarDirection = { LEFT = 0, RIGHT = 1}
+axui.LoadingBarDirection = { LEFT = 0, RIGHT = 1}
 
-ccui.ScrollViewDir = {
+axui.ScrollViewDir = {
     none = 0,
     vertical = 1,
     horizontal = 2,
     both = 3,
 }
 
-ccui.ScrollViewMoveDir = {
+axui.ScrollViewMoveDir = {
     none = 0,
     up = 1,
     down = 2,
@@ -142,7 +142,7 @@ ccui.ScrollViewMoveDir = {
     right = 4,
 }
 
-ccui.ScrollviewEventType = {
+axui.ScrollviewEventType = {
     scrollToTop =  0,
     scrollToBottom =  1,
     scrollToLeft = 2,
@@ -156,13 +156,13 @@ ccui.ScrollviewEventType = {
     autoscrollEnded = 10,
 }
 
-ccui.ListViewDirection = {
+axui.ListViewDirection = {
     none = 0,
     vertical = 1,
     horizontal = 2,
 }
 
-ccui.ListViewMoveDirection = {
+axui.ListViewMoveDirection = {
     none = 0,
     up = 1,
     down = 2,
@@ -170,30 +170,30 @@ ccui.ListViewMoveDirection = {
     right = 4,
 }
 
-ccui.ListViewEventType = {
+axui.ListViewEventType = {
     ONSELECTEDITEM_START = 0,
     ONSELECTEDITEM_END   = 1,
 }
 
-ccui.PageViewEventType = {
+axui.PageViewEventType = {
    turning = 0,
 }
 
-ccui.PageViewDirection = {
+axui.PageViewDirection = {
   NONE = 0,
   VERTICAL = 1,
   HORIZONTAL = 2,
   BOTH = 3
 }
 
-ccui.PVTouchDir = {
+axui.PVTouchDir = {
     touchLeft = 0,
     touchRight = 1,
     touchUp = 2,
     touchDown = 3
 }
 
-ccui.ListViewGravity = {
+axui.ListViewGravity = {
     left = 0,
     right = 1,
     centerHorizontal = 2,
@@ -202,26 +202,26 @@ ccui.ListViewGravity = {
     centerVertical = 5,
 }
 
-ccui.TextType = {
+axui.TextType = {
     SYSTEM = 0,
     TTF    = 1,
 }
 
-ccui.LayoutComponent.HorizontalEdge = {
+axui.LayoutComponent.HorizontalEdge = {
     None = 0,
     Left = 1,
     Right = 2,
     Center = 3,
 }
 
-ccui.LayoutComponent.VerticalEdge = {
+axui.LayoutComponent.VerticalEdge = {
     None = 0,
     Bottom = 1,
     Top = 2,
     Center = 3,
 }
 
-ccui.VideoPlayerEvent = {
+axui.VideoPlayerEvent = {
     PLAYING = 0,
     PAUSED = 1,
     STOPPED= 2,

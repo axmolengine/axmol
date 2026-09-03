@@ -19,7 +19,7 @@ local enemy = {
         local rangeDuration = maxDuration - minDuration
         local actualDuration = math.random(1000) % rangeDuration + minDuration
         local actionMove = ax.MoveTo:create(actualDuration * 2, ax.p(0 - contentSize.width/2, actualY))
-        local sceneScriptComponent = tolua.cast(owner:getParent():getComponent("sceneLuaComponent"), "ax.ComponentLua")
+        local sceneScriptComponent = axlua.cast(owner:getParent():getComponent("sceneLuaComponent"), "ax.ComponentLua")
         local sceneScript = sceneScriptComponent:getScriptObject()
         local actionMoveDone = ax.CallFunc:create(sceneScript.looseGame)
         owner:runAction(ax.Sequence:create(actionMove, actionMoveDone))

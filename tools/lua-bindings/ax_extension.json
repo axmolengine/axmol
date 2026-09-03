@@ -1,0 +1,137 @@
+{
+  "module": "ax_extension",
+  "target_namespace": "ax",
+  "cpp_namespace": [
+    "ax",
+    "ax::ext"
+  ],
+  "macro_judgement": null,
+  "headers": [
+    "%(axdir)s/extensions/axmol-ext.h"
+  ],
+  "clang_flags": [],
+  "classes": [
+    "ScrollView$",
+    "TableView$",
+    "TableViewCell$",
+    "AssetsManager",
+    "AssetsManagerEx",
+    "Manifest",
+    "EventAssetsManagerEx",
+    "EventListenerAssetsManagerEx",
+    "PUParticleSystem3D",
+    "ParticleSystem3D",
+    "ParticlePool"
+  ],
+  "abstract_classes": [
+    "ArmatureDataManager",
+    "Manifest"
+  ],
+  "classes_have_no_parents": [],
+  "base_classes_to_skip": [],
+  "skip": [
+    {
+      "class": ".*Delegate",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": ".*Loader.*",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "*",
+      "methods": [
+        "^visit$",
+        "(g|s)etDelegate"
+      ]
+    },
+    {
+      "class": "EditBox",
+      "methods": [
+        "(g|s)etDelegate",
+        "^keyboard.*",
+        "touchDownAction",
+        "getScriptEditBoxHandler",
+        "registerScriptEditBoxHandler",
+        "unregisterScriptEditBoxHandler"
+      ]
+    },
+    {
+      "class": "ControlUtils",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "ControlSwitchSprite",
+      "methods": [
+        "*"
+      ]
+    },
+    {
+      "class": "ScrollView",
+      "methods": [
+        "(g|s)etDelegate$"
+      ]
+    },
+    {
+      "class": "TableView",
+      "methods": [
+        "create",
+        "(g|s)etDataSource$",
+        "(g|s)etDelegate"
+      ]
+    },
+    {
+      "class": "Manifest",
+      "methods": [
+        "getAssets"
+      ]
+    },
+    {
+      "class": "EventListenerAssetsManagerEx",
+      "methods": [
+        "create"
+      ]
+    },
+    {
+      "class": "PUParticleSystem3D",
+      "methods": [
+        "getDerivedOrientation",
+        "getEmittedEmitterParticlePool",
+        "getEmittedSystemParticlePool",
+        "getAffector",
+        "getEmitter",
+        "getObserver"
+      ]
+    },
+    {
+      "class": "ParticlePool",
+      "methods": [
+        "getActiveParticleList",
+        "createParticle",
+        "getNext",
+        "getFirst"
+      ]
+    },
+    {
+      "class": "ParticleSystem3D",
+      "methods": [
+        "getParticlePool",
+        "getAffector"
+      ]
+    },
+    {
+      "class": "Controller",
+      "methods": [
+        "*"
+      ]
+    }
+  ],
+  "rename_functions": [],
+  "rename_classes": []
+}

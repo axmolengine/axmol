@@ -71,15 +71,6 @@ class VertexLayout;
  * @{
  */
 
-enum
-{
-    kNodeOnEnter,
-    kNodeOnExit,
-    kNodeOnEnterTransitionDidFinish,
-    kNodeOnExitTransitionDidStart,
-    kNodeOnCleanup
-};
-
 class EventListener;
 class EventDispatcher;
 
@@ -1088,16 +1079,6 @@ public:
      */
     virtual bool isRunning() const;
 
-    /**
-     * Schedules for lua script.
-     *
-     * @param handler The key to search lua function.
-     * @param priority A given priority value.
-     */
-    void scheduleUpdateWithPriorityLua(int handler, int priority);
-
-    /// @}  end Script Bindings
-
     /// @{
     /// @name Event Callbacks
 
@@ -1855,6 +1836,12 @@ public:
     {
         return _onExitTransitionDidStartCallback;
     }
+    /**
+     * Set the callback invoked by cleanup before actions and scheduled
+     * callbacks are released.
+     */
+    void setOnCleanupCallback(const std::function<void()>& callback) { _onCleanupCallback = callback; }
+    const std::function<void()>& getOnCleanupCallback() const { return _onCleanupCallback; }
 
     /**
      * get & set camera mask, the node is visible by the camera whose camera flag & node's camera mask is true
@@ -2088,12 +2075,6 @@ protected:
     // camera mask, it is visible only when _cameraMask & current camera' camera flag is true
     unsigned short _cameraMask;
 
-#if AX_ENABLE_SCRIPT_BINDING
-    int _scriptHandler;        ///< script handler for onEnter() & onExit(), used in Javascript binding and Lua binding.
-    int _updateScriptHandler;  ///< script handler for update() callback per frame, which is invoked from lua &
-                               ///< javascript.
-#endif
-
     ComponentContainer* _componentContainer;  ///< Dictionary of components
 
     // opacity controls
@@ -2104,6 +2085,7 @@ protected:
     std::function<void()> _onExitCallback;
     std::function<void()> _onEnterTransitionDidFinishCallback;
     std::function<void()> _onExitTransitionDidStartCallback;
+    std::function<void()> _onCleanupCallback;
 
     rhi::ProgramState* _programState = nullptr;
 

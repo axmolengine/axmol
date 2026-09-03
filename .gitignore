@@ -96,7 +96,6 @@ projects/
 tools/tojs/user.cfg
 # ... userconf.ini generated if running from tools/tojs
 tools/tojs/userconf.ini
-tools/tolua/userconf.ini
 # ... userconf.ini generated if running from tools/jenkins_scripts/mac/android/
 tools/jenkins_scripts/mac/android/userconf.ini
 
@@ -112,6 +111,7 @@ CMakeSettings.json
 # ignore all build
 /build
 /build_*
+/build*
 
 # ignore ninja build dir
 /out

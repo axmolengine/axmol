@@ -210,6 +210,10 @@ if ($IsWin) {
     }
 }
 else {
+    # fixup axmol cmdline tool main script executable permission
+    $cmdline_main = Join-Path $AX_ROOT 'tools/cmdline/axmol'
+    chmod +x $cmdline_main
+
     # update pwsh profile
     if (Test-Path $PROFILE -PathType Leaf) {
         $profileContent = "$(Get-Content $PROFILE -raw)"

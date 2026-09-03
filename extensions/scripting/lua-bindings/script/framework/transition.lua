@@ -99,14 +99,14 @@ function transition.create(action, args)
 end
 
 function transition.execute(target, action, args)
-    assert(not tolua.isnull(target), "transition.execute() - target is not ax.Node")
+    assert(not axlua.isnull(target), "transition.execute() - target is not ax.Node")
     local action = transition.create(action, args)
     target:runAction(action)
     return action
 end
 
 function transition.moveTo(target, args)
-    assert(not tolua.isnull(target), "transition.moveTo() - target is not ax.Node")
+    assert(not axlua.isnull(target), "transition.moveTo() - target is not ax.Node")
     local x = args.x or target:getPositionX()
     local y = args.y or target:getPositionY()
     local action = ax.MoveTo:create(args.time, ax.p(x, y))
@@ -114,7 +114,7 @@ function transition.moveTo(target, args)
 end
 
 function transition.moveBy(target, args)
-    assert(not tolua.isnull(target), "transition.moveBy() - target is not ax.Node")
+    assert(not axlua.isnull(target), "transition.moveBy() - target is not ax.Node")
     local x = args.x or 0
     local y = args.y or 0
     local action = ax.MoveBy:create(args.time, ax.p(x, y))
@@ -122,19 +122,19 @@ function transition.moveBy(target, args)
 end
 
 function transition.fadeIn(target, args)
-    assert(not tolua.isnull(target), "transition.fadeIn() - target is not ax.Node")
+    assert(not axlua.isnull(target), "transition.fadeIn() - target is not ax.Node")
     local action = ax.FadeIn:create(args.time)
     return transition.execute(target, action, args)
 end
 
 function transition.fadeOut(target, args)
-    assert(not tolua.isnull(target), "transition.fadeOut() - target is not ax.Node")
+    assert(not axlua.isnull(target), "transition.fadeOut() - target is not ax.Node")
     local action = ax.FadeOut:create(args.time)
     return transition.execute(target, action, args)
 end
 
 function transition.fadeTo(target, args)
-    assert(not tolua.isnull(target), "transition.fadeTo() - target is not ax.Node")
+    assert(not axlua.isnull(target), "transition.fadeTo() - target is not ax.Node")
     local opacity = checkint(args.opacity)
     if opacity < 0 then
         opacity = 0
@@ -146,7 +146,7 @@ function transition.fadeTo(target, args)
 end
 
 function transition.scaleTo(target, args)
-    assert(not tolua.isnull(target), "transition.scaleTo() - target is not ax.Node")
+    assert(not axlua.isnull(target), "transition.scaleTo() - target is not ax.Node")
     local action
     if args.scale then
         action = ax.ScaleTo:create(checknumber(args.time), checknumber(args.scale))
@@ -168,14 +168,14 @@ function transition.scaleTo(target, args)
 end
 
 function transition.rotateTo(target, args)
-    assert(not tolua.isnull(target), "transition.rotateTo() - target is not ax.Node")
+    assert(not axlua.isnull(target), "transition.rotateTo() - target is not ax.Node")
     local rotation = args.rotation or target:getRotation()
     local action = ax.RotateTo:create(args.time, rotation)
     return transition.execute(target, action, args)
 end
 
 function transition.rotateBy(target, args)
-    assert(not tolua.isnull(target), "transition.rotateTo() - target is not ax.Node")
+    assert(not axlua.isnull(target), "transition.rotateTo() - target is not ax.Node")
     local rotation = args.rotation or 0
     local action = ax.RotateBy:create(args.time, rotation)
     return transition.execute(target, action, args)
@@ -188,25 +188,25 @@ function transition.sequence(actions)
 end
 
 function transition.removeAction(action)
-    if not tolua.isnull(action) then
+    if not axlua.isnull(action) then
         actionManager:removeAction(action)
     end
 end
 
 function transition.stopTarget(target)
-    if not tolua.isnull(target) then
+    if not axlua.isnull(target) then
         actionManager:removeAllActionsFromTarget(target)
     end
 end
 
 function transition.pauseTarget(target)
-    if not tolua.isnull(target) then
+    if not axlua.isnull(target) then
         actionManager:pauseTarget(target)
     end
 end
 
 function transition.resumeTarget(target)
-    if not tolua.isnull(target) then
+    if not axlua.isnull(target) then
         actionManager:resumeTarget(target)
     end
 end

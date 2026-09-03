@@ -23,7 +23,7 @@ THE SOFTWARE.
 
 ]]
 
-local CheckBox = ccui.CheckBox
+local CheckBox = axui.CheckBox
 
 function CheckBox:onEvent(callback)
     self:addEventListener(function(sender, eventType)

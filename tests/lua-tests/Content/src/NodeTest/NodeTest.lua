@@ -146,7 +146,7 @@ local function Test4()
     Test4_layer:addChild(sp1, 0, 2)
     Test4_layer:addChild(sp2, 0, 3)
 
-    Test4_layer:registerScriptHandler(Test4_onEnterOrExit)
+    Test4_layer:setLifecycleCallback(Test4_onEnterOrExit)
 
 	Helper.titleLabel:setString("tags")
 	return Test4_layer
@@ -209,7 +209,7 @@ local function Test5()
     sp1:runAction(forever)
     sp2:runAction(forever2)
 
-    Test5_layer:registerScriptHandler(Test5_onEnterOrExit)
+    Test5_layer:setLifecycleCallback(Test5_onEnterOrExit)
 
 	Helper.titleLabel:setString("remove and cleanup")
 	return Test5_layer
@@ -276,7 +276,7 @@ local function Test6()
     sp2:runAction(forever2)
     sp21:runAction(forever21)
 
-	Test6_layer:registerScriptHandler(Test6_onEnterOrExit)
+	Test6_layer:setLifecycleCallback(Test6_onEnterOrExit)
 
 	Helper.titleLabel:setString("remove/cleanup with children")
 	return Test6_layer
@@ -326,7 +326,7 @@ local function StressTest1()
 
     sp1:setPosition(ax.p(s.width / 2, s.height / 2))
 
-    StressTest1_layer:registerScriptHandler(StressTest1_onEnterOrExit)
+    StressTest1_layer:setLifecycleCallback(StressTest1_onEnterOrExit)
 
 	Helper.titleLabel:setString("stress test #1: no crashes")
 	return StressTest1_layer
@@ -377,7 +377,7 @@ local function StressTest2()
     fire:runAction(ax.RepeatForever:create(copy_seq3))
     sublayer:addChild(fire, 2)
 
-    StressTest2_layer:registerScriptHandler(StressTest2_onEnterOrExit)
+    StressTest2_layer:setLifecycleCallback(StressTest2_onEnterOrExit)
 
     StressTest2_layer:addChild(sublayer, 0, kTagSprite1)
 
@@ -426,11 +426,9 @@ end
 -----------------------------------
 local function CameraOrbitTest_onEnterOrExit(tag)
 	if tag == "enter" then
-		ax.Director:getInstance():setProjection(ax.DIRECTOR_PROJECTION3_D)
         ax.Director:getInstance():getRenderer():setDepthTest(true)
         ax.Director:getInstance():getRenderer():setDepthWrite(true)
 	elseif tag == "exit" then
-		ax.Director:getInstance():setProjection(ax.DIRECTOR_PROJECTION_DEFAULT)
         ax.Director:getInstance():getRenderer():setDepthTest(false)
         ax.Director:getInstance():getRenderer():setDepthWrite(false)
 	end
@@ -475,7 +473,7 @@ local function CameraOrbitTest()
     p:runAction(ax.RepeatForever:create(orbit))
 
     layer:setScale(1)
-    layer:registerScriptHandler(CameraOrbitTest_onEnterOrExit)
+    layer:setLifecycleCallback(CameraOrbitTest_onEnterOrExit)
 	Helper.titleLabel:setString("Camera Orbit test")
 	return layer
 end
@@ -501,10 +499,8 @@ end
 
 local function CameraZoomTest_onEnterOrExit(tag)
 	if tag == "enter" then
-		ax.Director:getInstance():setProjection(ax.DIRECTOR_PROJECTION3_D)
 		CameraZoomTest_entry = scheduler:scheduleScriptFunc(CameraZoomTest_update, 0.0, false)
 	elseif tag == "exit" then
-		ax.Director:getInstance():setProjection(ax.DIRECTOR_PROJECTION_DEFAULT)
 		scheduler:unscheduleScriptEntry(CameraZoomTest_entry)
 	end
 end
@@ -532,8 +528,8 @@ local function CameraZoomTest()
     CameraZoomTest_layer:addChild(sprite, 0, 20)
     sprite:setPosition(ax.p(s.width / 4 * 3, s.height / 2))
 
-	CameraZoomTest_layer:scheduleUpdateWithPriorityLua(CameraZoomTest_update, 0)
-	CameraZoomTest_layer:registerScriptHandler(CameraZoomTest_onEnterOrExit)
+	CameraZoomTest_layer:onUpdate(CameraZoomTest_update)
+	CameraZoomTest_layer:setLifecycleCallback(CameraZoomTest_onEnterOrExit)
 
 	Helper.titleLabel:setString("Camera Zoom test")
 	return CameraZoomTest_layer
@@ -586,7 +582,7 @@ local function ConvertToNode()
     end
 
     local listener = ax.PointerEventListener:create()
-    listener:registerScriptHandler(onTouchesEnded,ax.Handler.EVENT_POINTER_UP )
+    listener.onPointerUp = onTouchesEnded
     local eventDispatcher = ConvertToNode_layer:getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener, ConvertToNode_layer)
 
@@ -603,7 +599,7 @@ local function NodeOpaqueTest()
 
     for i = 0, 49 do
         local background = ax.Sprite:create("Images/background1.png")
-        background:setBlendFunc(ax.blendFunc(ccb.BlendFactor.ONE, ccb.BlendFactor.ONE_MINUS_SRC_ALPHA))
+        background:setBlendFunc(ax.blendFunc(axr.BlendFactor.ONE, axr.BlendFactor.ONE_MINUS_SRC_ALPHA))
         background:setAnchorPoint(ax.p(0, 0))
         layer:addChild(background)
     end
@@ -621,7 +617,7 @@ local function NodeNonOpaqueTest()
 
     for i = 0, 49 do
         background = ax.Sprite:create("Images/background1.jpg")
-        background:setBlendFunc(ax.blendFunc(ccb.BlendFactor.ONE, ccb.BlendFactor.ZERO))
+        background:setBlendFunc(ax.blendFunc(axr.BlendFactor.ONE, axr.BlendFactor.ZERO))
         background:setAnchorPoint(ax.p(0, 0))
         layer:addChild(background)
     end
@@ -674,8 +670,8 @@ local function NodeGlobalZValueTest()
             layer:unscheduleUpdate()
         end
     end
-    layer:scheduleUpdateWithPriorityLua(update,0)
-    layer:registerScriptHandler(onNodeEvent)
+    layer:onUpdate(update)
+    layer:setLifecycleCallback(onNodeEvent)
 
     return layer
 end

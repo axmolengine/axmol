@@ -1,0 +1,193 @@
+{
+  "module": "ax_3d",
+  "target_namespace": "ax",
+  "cpp_namespace": "ax",
+  "macro_judgement": "#if defined(AX_ENABLE_3D)",
+  "headers": [
+    "%(axdir)s/axmol/axmol.h",
+    "%(axdir)s/axmol/3d/Bundle3D.h",
+    "%(axdir)s/axmol/math/AABB.h",
+    "%(axdir)s/axmol/math/OBB.h",
+    "%(axdir)s/axmol/math/Ray.h"
+  ],
+  "clang_flags": [],
+  "classes": [
+    "Animate3D",
+    "MeshRenderer",
+    "Animation3D",
+    "Skeleton3D",
+    "^Mesh$",
+    "AttachNode",
+    "BillBoard",
+    "MeshRendererCache",
+    "TextureCube",
+    "Skybox",
+    "Terrain",
+    "Bundle3D",
+    "MeshMaterial",
+    "AABB",
+    "OBB",
+    "Ray"
+  ],
+  "abstract_classes": [
+    "MeshRenderer"
+  ],
+  "no_constructors": [
+    "OBB"
+  ],
+  "classes_have_no_parents": [],
+  "fields": [
+    {
+      "class": "AABB",
+      "names": [
+        "_min",
+        "_max"
+      ]
+    },
+    {
+      "class": "OBB",
+      "names": [
+        "_center",
+        "_xAxis",
+        "_yAxis",
+        "_zAxis",
+        "_extentX",
+        "_extentY",
+        "_extentZ",
+        "_extents"
+      ]
+    },
+    {
+      "class": "Ray",
+      "names": [
+        "origin",
+        "direction"
+      ]
+    }
+  ],
+  "base_classes_to_skip": [
+    "Clonable"
+  ],
+  "skip": [
+    {
+      "class": "Mesh",
+      "methods": [
+        "create",
+        "getAABB",
+        "getVertexBuffer",
+        "hasVertexAttrib",
+        "getSkin",
+        "getMeshIndexData",
+        "getPrimitiveType",
+        "getIndexCount",
+        "getIndexFormat",
+        "getIndexBuffer",
+        "getTexture",
+        "setTexture"
+      ]
+    },
+    {
+      "class": "MeshRenderer",
+      "methods": [
+        "getMeshArrayByName",
+        "createAsync",
+        "init",
+        "initWithFile",
+        "initFrom",
+        "loadFromCache",
+        "loadFromFile",
+        "visit",
+        "createNode",
+        "createAttachMeshRendererNode",
+        "createMeshRendererNode",
+        "getMeshIndexData",
+        "addMesh",
+        "onAABBDirty",
+        "afterAsyncLoad"
+      ]
+    },
+    {
+      "class": "Skeleton3D",
+      "methods": [
+        "create"
+      ]
+    },
+    {
+      "class": "Animation3D",
+      "methods": [
+        "getBoneCurveByName",
+        "getBoneCurves"
+      ]
+    },
+    {
+      "class": "Animate3D",
+      "methods": [
+        "getKeyFrameUserInfo"
+      ]
+    },
+    {
+      "class": "BillBoard",
+      "methods": [
+        "draw"
+      ]
+    },
+    {
+      "class": "MeshRendererCache",
+      "methods": [
+        "addMeshRenderData",
+        "getMeshRenderData"
+      ]
+    },
+    {
+      "class": "Terrain",
+      "methods": [
+        "lookForIndicesLODSkrit",
+        "lookForIndicesLOD",
+        "insertIndicesLOD",
+        "insertIndicesLODSkirt",
+        "getIntersectionPoint",
+        "getAABB",
+        "getQuadTree",
+        "create",
+        "^getHeight$"
+      ]
+    },
+    {
+      "class": "Bundle3D",
+      "methods": [
+        "calculateAABB",
+        "loadMeshDatas",
+        "getTrianglesList",
+        "loadObj"
+      ]
+    },
+    {
+      "class": "MeshMaterial",
+      "methods": [
+        "setTexture"
+      ]
+    },
+    {
+      "class": "AABB",
+      "methods": [
+        "getCorners",
+        "updateMinMax"
+      ]
+    },
+    {
+      "class": "OBB",
+      "methods": [
+        "getCorners"
+      ]
+    },
+    {
+      "class": "Ray",
+      "methods": [
+        "intersects",
+        "dist"
+      ]
+    }
+  ],
+  "rename_functions": [],
+  "rename_classes": []
+}

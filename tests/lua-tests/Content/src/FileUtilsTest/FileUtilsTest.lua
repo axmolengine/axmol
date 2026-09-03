@@ -284,7 +284,7 @@ c75d cf62 a30f]]
         end
     end
 
-    self:registerScriptHandler(onNodeEvent)
+    self:setLifecycleCallback(onNodeEvent)
 
     Helper.titleLabel:setString("Test FileUtils.getDataFromFile")
 end

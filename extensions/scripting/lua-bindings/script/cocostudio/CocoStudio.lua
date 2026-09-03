@@ -85,10 +85,10 @@ ax.TriggerObj._id   = 0
 ax.TriggerObj._vInt = {}
 
 function ax.TriggerObj.extend(target)
-    local t = tolua.getpeer(target)
+    local t = axlua.getpeer(target)
     if not t then
         t = {}
-        tolua.setpeer(target, t)
+        axlua.setpeer(target, t)
     end
     setmetatable(t, ax.TriggerObj)
     return target

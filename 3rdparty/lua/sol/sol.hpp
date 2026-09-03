@@ -3634,9 +3634,9 @@ COMPAT53_API void luaL_requiref(lua_State *L, const char *modname,
 /* other Lua versions */
 #if !defined(LUA_VERSION_NUM) || LUA_VERSION_NUM < 501 || LUA_VERSION_NUM > 505
 
-#  error "unsupported Lua version (i.e. not Lua 5.1, 5.2, 5.3, 5.4 or 5.5)"
+#  error "unsupported Lua version (i.e. not Lua 5.1, 5.2, 5.3, 5.4, or 5.5)"
 
-#endif /* other Lua versions except 5.1, 5.2, 5.3, 5.4 and 5.5 */
+#endif /* other Lua versions except 5.1, 5.2, 5.3, 5.4, and 5.5 */
 
 /* helper macro for defining continuation functions (for every version
 * *except* Lua 5.2) */
@@ -7285,7 +7285,8 @@ namespace sol { namespace detail {
 	};
 
 	template <typename T, std::size_t tag>
-	struct ebco<T, tag, std::enable_if_t<!std::is_reference_v<T> && std::is_class_v<T> && !std::is_final_v<T>>> : T {
+	struct ebco<T, tag,
+	     std::enable_if_t<!std::is_reference_v<T> && std::is_class_v<T> && !std::is_final_v<T> && std::is_destructible_v<T>>> : T {
 		ebco() = default;
 		ebco(const ebco&) = default;
 		ebco(ebco&&) = default;
@@ -21565,7 +21566,11 @@ namespace sol {
 				if (t == type::none || t == type::lua_nil) {
 					return nullptr;
 				}
+#if defined(SOL_AXMOL_STD_FUNCTION_GETTER)
+				return SOL_AXMOL_STD_FUNCTION_GETTER(Signature, L, index);
+#else
 				return get_std_func(return_types(), L, index);
+#endif
 			}
 		};
 

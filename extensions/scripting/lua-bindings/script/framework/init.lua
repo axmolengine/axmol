@@ -37,7 +37,7 @@ require("axmol.framework.extends.NodeEx")
 require("axmol.framework.extends.SpriteEx")
 require("axmol.framework.extends.MenuEx")
 
-if ccui then
+if axui ~= nil then
 require("axmol.framework.extends.UIWidget")
 require("axmol.framework.extends.UICheckBox")
 require("axmol.framework.extends.UIEditBox")

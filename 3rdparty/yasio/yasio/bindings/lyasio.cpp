@@ -27,6 +27,7 @@ SOFTWARE.
 
 #include "yasio/yasio.hpp"
 #include "yasio/bindings/lyasio.hpp"
+#include "lua-bindings/runtime/axlua_sol_config.h"
 using namespace yasio;
 
 namespace lyasio

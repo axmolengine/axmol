@@ -32,7 +32,7 @@ function VibrateControlTest.create()
         VibrateControlTest._duration = (sender:getPercent() / 100.0) * 1.9 + 0.1  -- from 0.1ms to 2s
         VibrateControlTest._durationLabel:setString("duration: "..string.format("%.3f", VibrateControlTest._duration).."s")
     end
-    local durationSlider = ccui.Slider:create()
+    local durationSlider = axui.Slider:create()
     durationSlider:setPercent(0)
     durationSlider:setTouchEnabled(true)
     durationSlider:loadBarTexture("cocosui/sliderTrack.png")
@@ -46,7 +46,7 @@ function VibrateControlTest.create()
         if tag == "exit" then
         end
     end
-    layer:registerScriptHandler(onNodeEvent)
+    layer:setLifecycleCallback(onNodeEvent)
 
     return layer
 end

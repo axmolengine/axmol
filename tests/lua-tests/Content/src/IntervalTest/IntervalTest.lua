@@ -40,7 +40,7 @@ local function IntervalLayer()
         m_label0:setString(str)
     end
 
-    ret:scheduleUpdateWithPriorityLua(update, 0)
+    ret:onUpdate(update)
 
     local function step1(dt)
         m_time1 = m_time1 + dt
@@ -88,7 +88,7 @@ local function IntervalLayer()
         end
     end
 
-    ret:registerScriptHandler(onNodeEvent)
+    ret:setLifecycleCallback(onNodeEvent)
 
 
     m_label0:setPosition(ax.p(s.width*1/6, s.height/2))

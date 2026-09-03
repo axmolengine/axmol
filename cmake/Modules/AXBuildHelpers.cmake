@@ -983,6 +983,11 @@ function(ax_collect_sdk_targets dir out_list)
 
   # Filter targets
   foreach(tg IN LISTS local_targets)
+    get_target_property(skip_export ${tg} AX_SKIP_SDK_EXPORT)
+    if(skip_export)
+      continue()
+    endif()
+
     # Check target type (Static, Shared, Interface, Utility, etc.)
     get_target_property(tg_type ${tg} TYPE)
 

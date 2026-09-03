@@ -35,13 +35,9 @@ if (unpack) then
     table.unpack = unpack
 end
 
--- < axmol-1.0
-cc = ax
+-- Axmol v3 exposes the ax namespace directly.
 ax.Director.setDisplayStats = ax.Director.setStatsDisplay
 ax.Sprite3D = ax.MeshRenderer
-ccexp = axexp
-ccui = axui
-ccb = axb
 
 require "axmol.core.Axmol"
 require "axmol.core.Constants"
@@ -58,7 +54,7 @@ if nil ~= ccs then
     require "axmol.cocostudio.CocoStudio"
 end
 -- ui
-if nil ~= ccui then
+if axui ~= nil then
     require "axmol.ui.GuiConstants"
 end
 

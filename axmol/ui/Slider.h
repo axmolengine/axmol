@@ -279,6 +279,8 @@ public:
 
     bool init() override;
 
+    void setGlobalZOrder(float globalZOrder) override;
+
 protected:
     void initRenderNode() override;
     float getPercentWithBallPos(const Vec2& pt) const;

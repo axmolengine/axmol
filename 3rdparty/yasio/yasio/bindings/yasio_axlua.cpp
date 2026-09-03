@@ -26,7 +26,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "sol/sol.hpp"
+#include "lua-bindings/runtime/axlua_sol_config.h"
 #include "yasio/bindings/yasio_axlua.hpp"
 #include "yasio/bindings/lyasio.hpp"
 #include "yasio/object_pool.hpp"
