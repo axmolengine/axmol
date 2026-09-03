@@ -1,5 +1,13 @@
 # The axmol sdk & tools references
 
+## PowerShell
+
+- [![github](https://img.shields.io/github/v/release/PowerShell/PowerShell?label=Upstream)](https://github.com/PowerShell/PowerShell)
+- Version: 7.6.5
+- License: MIT
+- Platform: Win32/macOS/Linux
+- Managed by: `1k/pwshi.sh`
+
 ## Microsoft.Windows.CppWinRT
 
 - [![nuget](https://img.shields.io/nuget/v/Microsoft.Windows.CppWinRT?label=Upstream)](https://www.nuget.org/packages/Microsoft.Windows.CppWinRT)
