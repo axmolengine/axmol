@@ -170,3 +170,23 @@ used again. A `nil` callback becomes an empty `std::function`, so existing code
 that clears callbacks keeps its old meaning. `ax::Coroutine` callbacks remain
 explicitly excluded because their native return/ownership semantics are not
 ordinary Lua callbacks.
+
+## Virtual overrides and lookup fast paths
+
+Generation uses Clang's `OverriddenCursors` to identify an actual C++ virtual
+override. A derived declaration is omitted only when its exported base is also
+selected and the Lua-visible name, return type, constness, parameter types, and
+default arguments are equivalent. A derived method that introduces a same-name
+overload keeps the complete overload group so the base API is not hidden.
+
+At runtime, ordinary member lookup first checks the class and registered bases,
+then falls back to accessor and sol2 lookup. The fast path does not cache a
+closure or bypass runtime class edits. Owner-thread invalidation lets Release
+avoid a repeated weak-pointer lookup while stale userdata still fails safely;
+Debug retains the diagnostic lookup. These choices keep inherited methods fast
+without weakening lifetime, virtual dispatch, or multi-VM behavior.
+
+The Binding Performance Test is the regression signal for this work. Compare
+runs using the same platform, optimization level, scene, and unchanged
+`sprite:setPosition()`/`sprite:setOpacity()` calls. Results are hardware and
+build dependent; the generator does not promise a fixed star count.

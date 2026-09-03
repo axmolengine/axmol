@@ -238,3 +238,30 @@ tracked as compatibility debt rather than expanded into new bindings. Removal
 requires a separately announced breaking release, a migration period, and a
 full Lua application audit. New APIs must use generated bindings and must not
 add another compatibility adapter without documenting its contract.
+
+## Inherited methods and virtual overrides
+
+The C# generator now removes only redundant virtual overrides. It compares the
+Lua-visible name, return type, constness, parameter types, and default arguments
+against an exported base declaration. A derived method with a new overload of
+the same name remains in the generated overload group, so adding a derived
+signature cannot hide the base overloads.
+
+This is transparent to normal Lua code: inherited methods such as
+`Sprite:setPosition` continue to resolve through `Node`, and cached calls such
+as `ax.Node.setPosition(sprite, x, y)` remain valid. Lua subclass overrides and
+native C++ virtual dispatch retain their previous behavior. Custom `rename`,
+`skip`, and platform selection rules are applied conservatively; regenerate and
+review the generated manifest when changing them.
+
+## Performance guidance
+
+The runtime performs a member-only class/base lookup before the full accessor and
+sol2 fallback. Misses still use the generic path, and runtime class changes are
+visible. An owner-thread invalidation fast path reduces Release overhead while
+expired userdata and independent Lua VMs remain protected. Do not add permanent
+closure caches or remove lifetime checks solely to improve a benchmark.
+
+Use the Binding Performance Test with the same build mode and scene when
+comparing revisions. Its star count is a regression indicator, not a portable
+performance guarantee.
