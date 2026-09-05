@@ -5319,7 +5319,7 @@
             "5.0f",
             "5.0f",
             "5.0f",
-            "ax::DrawNode::CornerMode::ROUND"
+            "ax::DrawNode::CornerMode::Round"
           ],
           "isStatic": false,
           "isConst": false,
@@ -5389,8 +5389,8 @@
             null,
             null,
             "1.0f",
-            "ax::DrawNode::EndType::ROUND",
-            "ax::DrawNode::EndType::ROUND"
+            "ax::DrawNode::EndType::Round",
+            "ax::DrawNode::EndType::Round"
           ],
           "isStatic": false,
           "isConst": false,
@@ -5421,7 +5421,7 @@
             null,
             null,
             null,
-            "ax::DrawNode::DrawMode::OUTLINE"
+            "ax::DrawNode::DrawMode::Outline"
           ],
           "isStatic": false,
           "isConst": false,
@@ -5455,7 +5455,7 @@
             null,
             null,
             null,
-            "ax::DrawNode::DrawMode::OUTLINE",
+            "ax::DrawNode::DrawMode::Outline",
             "1.0f"
           ],
           "isStatic": false,
@@ -5477,7 +5477,7 @@
             null,
             null,
             null,
-            "ax::DrawNode::PointType::RECT"
+            "ax::DrawNode::PointType::Rect"
           ],
           "isStatic": false,
           "isConst": false,
@@ -5572,8 +5572,8 @@
             null,
             null,
             null,
-            "ax::DrawNode::EndType::ROUND",
-            "ax::DrawNode::EndType::ROUND"
+            "ax::DrawNode::EndType::Round",
+            "ax::DrawNode::EndType::Round"
           ],
           "isStatic": false,
           "isConst": false,
@@ -5754,7 +5754,7 @@
             "5.0f",
             "5.0f",
             "5.0f",
-            "ax::DrawNode::CornerMode::ROUND"
+            "ax::DrawNode::CornerMode::Round"
           ],
           "isStatic": false,
           "isConst": false,
@@ -35896,13 +35896,13 @@
       "ownerQualifiedName": "ax::DrawNode",
       "values": [
         {
-          "name": "ROUND",
+          "name": "Round",
           "signedValue": 0,
           "unsignedValue": 0,
           "isUnsigned": false
         },
         {
-          "name": "BEVEL",
+          "name": "Bevel",
           "signedValue": 1,
           "unsignedValue": 1,
           "isUnsigned": false
@@ -35915,31 +35915,31 @@
       "ownerQualifiedName": "ax::DrawNode",
       "values": [
         {
-          "name": "FILL",
+          "name": "Fill",
           "signedValue": 0,
           "unsignedValue": 0,
           "isUnsigned": false
         },
         {
-          "name": "OUTLINE",
+          "name": "Outline",
           "signedValue": 1,
           "unsignedValue": 1,
           "isUnsigned": false
         },
         {
-          "name": "LINE",
+          "name": "Line",
           "signedValue": 2,
           "unsignedValue": 2,
           "isUnsigned": false
         },
         {
-          "name": "SEMI",
+          "name": "Semi",
           "signedValue": 3,
           "unsignedValue": 3,
           "isUnsigned": false
         },
         {
-          "name": "FILL_NO_OUTLINE",
+          "name": "Fill_With_Line",
           "signedValue": 4,
           "unsignedValue": 4,
           "isUnsigned": false
@@ -35952,19 +35952,19 @@
       "ownerQualifiedName": "ax::DrawNode",
       "values": [
         {
-          "name": "SQUARE",
+          "name": "Square",
           "signedValue": 0,
           "unsignedValue": 0,
           "isUnsigned": false
         },
         {
-          "name": "ROUND",
+          "name": "Round",
           "signedValue": 1,
           "unsignedValue": 1,
           "isUnsigned": false
         },
         {
-          "name": "BUTT",
+          "name": "Butt",
           "signedValue": 2,
           "unsignedValue": 2,
           "isUnsigned": false
@@ -35977,13 +35977,13 @@
       "ownerQualifiedName": "ax::DrawNode",
       "values": [
         {
-          "name": "CIRCLE",
+          "name": "Circle",
           "signedValue": 0,
           "unsignedValue": 0,
           "isUnsigned": false
         },
         {
-          "name": "RECT",
+          "name": "Rect",
           "signedValue": 1,
           "unsignedValue": 1,
           "isUnsigned": false
