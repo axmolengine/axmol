@@ -974,11 +974,11 @@ void DrawNode::_drawRect(const Vec2& origin, const Vec2& destination, const Colo
         float width      = thickness * _thicknessScale * 0.25f * 0.5f;
         float _thickness = thickness;
         _drawSegment(Vec2(origin.x + width, destination.y), Vec2(destination.x - width, destination.y), color,
-                     _thickness, EndType::BUTT, EndType::BUTT);
+                     _thickness, EndType::Butt, EndType::Butt);
         _drawSegment(Vec2(origin.x + width, origin.y), Vec2(destination.x - width, origin.y), color, _thickness,
-                     EndType::BUTT, EndType::BUTT);
-        _drawSegment(destination, Vec2(destination.x, origin.y), color, _thickness, EndType::SQUARE, EndType::SQUARE);
-        _drawSegment(origin, Vec2(origin.x, destination.y), color, _thickness, EndType::SQUARE, EndType::SQUARE);
+                     EndType::Butt, EndType::Butt);
+        _drawSegment(destination, Vec2(destination.x, origin.y), color, _thickness, EndType::Square, EndType::Square);
+        _drawSegment(origin, Vec2(origin.x, destination.y), color, _thickness, EndType::Square, EndType::Square);
     }
 }
 
@@ -993,16 +993,16 @@ void DrawNode::_drawCornerRect(const Vec2& origin,
                                CornerMode mode)
 {
     //  Draw the four corners
-    if (mode == CornerMode::ROUND)
+    if (mode == CornerMode::Round)
     {
         _drawPie({origin.x + crLB, origin.y + crLB}, crLB, 0.0f, 270.0f, 180.0f, 1.0f, 1.0f, color, color,
-                 DrawMode::LINE, thickness);
+                 DrawMode::Line, thickness);
         _drawPie({origin.x + crLT, destination.y - crLT}, crLT, 0.0f, 90.0f, 180.0f, 1.0f, 1.0f, color, color,
-                 DrawMode::LINE, thickness);
+                 DrawMode::Line, thickness);
         _drawPie({destination.x - crRT, destination.y - crRT}, crRT, 0.0f, 0.0f, 90.0f, 1.0f, 1.0f, color, color,
-                 DrawMode::LINE, thickness);
+                 DrawMode::Line, thickness);
         _drawPie({destination.x - crRB, origin.y + crRB}, crRB, 0.0f, 270.0f, 360.0f, 1.0f, 1.0f, color, color,
-                 DrawMode::LINE, thickness);
+                 DrawMode::Line, thickness);
         // Draw the four edges
         _drawSegment(Vec2(origin.x + crLB, origin.y), Vec2(destination.x - crRB, origin.y), color,
                      thickness);  // Bottom edge
@@ -1047,18 +1047,18 @@ void DrawNode::_drawSolidCornerRect(const Vec2& origin,
                          Vec2(destination.x - crRB, origin.y),
                          origin + Vec2(crLB, 0)};
     _drawPolygon(_vertices8, 8, fillColor, fillColor, false, thickness, false);
-    if (mode == CornerMode::ROUND)
+    if (mode == CornerMode::Round)
     {
-        _drawCornerRect(origin, destination, borderColor, thickness, crLB, crLT, crRT, crRB, CornerMode::ROUND);
+        _drawCornerRect(origin, destination, borderColor, thickness, crLB, crLT, crRT, crRB, CornerMode::Round);
         //  Draw the four corners
         _drawPie({origin.x + crLB, origin.y + crLB}, crLB, 0.0f, 270.0f, 180.0f, 1.0f, 1.0f, fillColor, borderColor,
-                 DrawMode::FILL_NO_OUTLINE, thickness);
+                 DrawMode::Fill_With_Line, thickness);
         _drawPie({origin.x + crLT, destination.y - crLT}, crLT, 0.0f, 90.0f, 180.0f, 1.0f, 1.0f, fillColor, borderColor,
-                 DrawMode::FILL_NO_OUTLINE, thickness);
+                 DrawMode::Fill_With_Line, thickness);
         _drawPie({destination.x - crRT, destination.y - crRT}, crRT, 0.0f, 0.0f, 90.0f, 1.0f, 1.0f, fillColor,
-                 borderColor, DrawMode::FILL_NO_OUTLINE, thickness);
+                 borderColor, DrawMode::Fill_With_Line, thickness);
         _drawPie({destination.x - crRB, origin.y + crRB}, crRB, 0.0f, 270.0f, 360.0f, 1.0f, 1.0f, fillColor,
-                 borderColor, DrawMode::FILL_NO_OUTLINE, thickness);
+                 borderColor, DrawMode::Fill_With_Line, thickness);
     }
 }
 
@@ -1109,18 +1109,18 @@ void DrawNode::_drawSegment(const Vec2& from,
         Vec2 v6 = a - (nw - tw);
         Vec2 v7 = a + (nw + tw);
 
-        unsigned int vertex_count = 3 * ((etStart != DrawNode::EndType::BUTT) ? 2 : 0) + 3 * 2 +
-                                    3 * ((etEnd != DrawNode::EndType::BUTT) ? 2 : 0);
+        unsigned int vertex_count = 3 * ((etStart != DrawNode::EndType::Butt) ? 2 : 0) + 3 * 2 +
+                                    3 * ((etEnd != DrawNode::EndType::Butt) ? 2 : 0);
         auto triangles  = reinterpret_cast<V2F_T2F_C4F_Triangle*>(expandBufferAndGetPointer(_triangles, vertex_count));
         _trianglesDirty = true;
 
         int ii = 0;
         switch (etEnd)
         {
-        case DrawNode::EndType::BUTT:
+        case DrawNode::EndType::Butt:
             break;
 
-        case DrawNode::EndType::SQUARE:
+        case DrawNode::EndType::Square:
             triangles[ii++] = {
                 {v0, Vec2::zero, color},
                 {v1, -n, color},
@@ -1134,7 +1134,7 @@ void DrawNode::_drawSegment(const Vec2& from,
             };
 
             break;
-        case DrawNode::EndType::ROUND:
+        case DrawNode::EndType::Round:
             triangles[ii++] = {
                 {v0, -(n + t), color},
                 {v1, n - t, color},
@@ -1167,10 +1167,10 @@ void DrawNode::_drawSegment(const Vec2& from,
 
         switch (etStart)
         {
-        case DrawNode::EndType::BUTT:
+        case DrawNode::EndType::Butt:
             break;
 
-        case DrawNode::EndType::SQUARE:
+        case DrawNode::EndType::Square:
             triangles[ii++] = {
                 {v6, Vec2::zero, color},
                 {v4, -n, color},
@@ -1184,7 +1184,7 @@ void DrawNode::_drawSegment(const Vec2& from,
             };
             break;
 
-        case DrawNode::EndType::ROUND:
+        case DrawNode::EndType::Round:
             triangles[ii++] = {
                 {v6, t - n, color},
                 {v4, -n, color},
@@ -1451,12 +1451,12 @@ void DrawNode::_drawPoints(const Vec2* position,
         {
             switch (pointType)
             {
-            case PointType::CIRCLE:
+            case PointType::Circle:
             {
                 _drawCircle(position[i], pointSize4, 90, 32, false, 1.0f, 1.0f, Color(), color, true);
                 break;
             }
-            case PointType::RECT:
+            case PointType::Rect:
             {
                 Vec2 origin      = position[i] - vec2Size4;
                 Vec2 destination = position[i] + vec2Size4;
@@ -1493,12 +1493,12 @@ void DrawNode::_drawPoint(const Vec2& position,
 
         switch (pointType)
         {
-        case PointType::CIRCLE:
+        case PointType::Circle:
         {
             _drawCircle(position, pointSize4, 90, 32, false, 1.0f, 1.0f, Color(), color, true);
             break;
         }
-        case PointType::RECT:
+        case PointType::Rect:
         {
             Vec2 origin      = position - vec2Size4;
             Vec2 destination = position + vec2Size4;
@@ -1543,17 +1543,17 @@ void DrawNode::_drawPie(const Vec2& center,
     {
         switch (drawMode)
         {
-        case DrawMode::FILL:
-        case DrawMode::FILL_NO_OUTLINE:
+        case DrawMode::Fill:
+        case DrawMode::Fill_With_Line:
             _drawCircle(center, radius, 0.0f, 360, false, scaleX, scaleY, borderColor, fillColor, true, thickness);
             break;
-        case DrawMode::OUTLINE:
+        case DrawMode::Outline:
             _drawCircle(center, radius, 0.0f, 360, false, scaleX, scaleY, borderColor, Color(), true, thickness);
             break;
-        case DrawMode::LINE:
+        case DrawMode::Line:
             _drawCircle(center, radius, 0.0f, 360, false, scaleX, scaleY, borderColor, Color(), true, thickness);
             break;
-        case DrawMode::SEMI:
+        case DrawMode::Semi:
             _drawCircle(center, radius, 0.0f, 360, false, scaleX, scaleY, borderColor, fillColor, true, thickness);
             break;
         default:
@@ -1592,27 +1592,28 @@ void DrawNode::_drawPie(const Vec2& center,
         }
         switch (drawMode)
         {
-        case DrawMode::FILL:
+        case DrawMode::Fill:
             _vertices[n++] = center;
             _vertices[n++] = _vertices[0];
             _drawPolygon(_vertices.data(), n, fillColor, Color(), true, 0, false);
             _drawPoly(_vertices.data(), n, false, borderColor, thickness, true);
             break;
-        case DrawMode::FILL_NO_OUTLINE:
+        case DrawMode::Fill_With_Line:
             _vertices[n++] = center;
             _vertices[n++] = _vertices[0];
-            _drawPolygon(_vertices.data(), n, fillColor, fillColor, true, 0, false);
-            _drawPoly(_vertices.data(), n - 2, false, borderColor, thickness, false);
+            _drawPolygon(_vertices.data(), n, fillColor, Color(), true, 0, false);
+            _drawPoly(_vertices.data(), n-2, false, borderColor, thickness, true);
             break;
-        case DrawMode::OUTLINE:
+            break;
+        case DrawMode::Outline:
             _vertices[n++] = center;
             _vertices[n++] = _vertices[0];
             _drawPoly(_vertices.data(), n, false, borderColor, thickness, true);
             break;
-        case DrawMode::LINE:
+        case DrawMode::Line:
             _drawPoly(_vertices.data(), n, false, borderColor, thickness, true);
             break;
-        case DrawMode::SEMI:
+        case DrawMode::Semi:
             if (fillColor != Color())
                 _drawPolygon(_vertices.data(), n, fillColor, borderColor, true, 0, false);
             _drawPoly(_vertices.data(), n, true, borderColor, thickness, true);

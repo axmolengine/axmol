@@ -2080,27 +2080,27 @@ void DrawNodePieTest::update(float dt)
 
     // FILL
     drawNode->drawPie(VisibleRect::center() - Vec2(190.0f, -35.0f), 40, _localeRotation, _angelStart, _angelEnd, 1.0f,
-                      1.0f, Color::red, Color::blue, DrawNode::DrawMode::FILL, thickness);
+                      1.0f, Color::red, Color::blue, DrawNode::DrawMode::Fill, thickness);
 
     // OUTLINE
     drawNode->drawPie(VisibleRect::center() - Vec2(95.0f, -35.0f), 40, _localeRotation, _angelStart, _angelEnd, 1.0f,
-                      1.0f, Color(), Color::blue, DrawNode::DrawMode::OUTLINE, thickness);
+                      1.0f, Color(), Color::blue, DrawNode::DrawMode::Outline, thickness);
 
     // LINE
     drawNode->drawPie(VisibleRect::center() + Vec2(0.0f, 35.0f), 40, _localeRotation, _angelStart, _angelEnd, 1.0f,
-                      1.0f, Color(), Color::blue, DrawNode::DrawMode::LINE, thickness);
+                      1.0f, Color(), Color::blue, DrawNode::DrawMode::Line, thickness);
 
     //  SEMI
     drawNode->drawPie(VisibleRect::center() + Vec2(95.0f, 35.0f), 40, _localeRotation, _angelStart, _angelEnd, 1.0f,
-                      1.0f, Color(), Color::blue, DrawNode::DrawMode::SEMI, thickness);
+                      1.0f, Color(), Color::blue, DrawNode::DrawMode::Semi, thickness);
 
     // SEMI (Filled)
     drawNode->drawPie(VisibleRect::center() + Vec2(190.0f, 35.0f), 40, _localeRotation, _angelStart, _angelEnd, 1.0f,
-                      1.0f, Color::red, Color::blue, DrawNode::DrawMode::SEMI, thickness);
+                      1.0f, Color::red, Color::blue, DrawNode::DrawMode::Semi, thickness);
 
     // FILL_NO_OUTLINE
     drawNode->drawPie(VisibleRect::center() + Vec2(-190.0f, -35.0f), 40, _localeRotation, _angelStart, _angelEnd, 1.0f,
-                      1.0f, Color::red, Color::blue, DrawNode::DrawMode::FILL_NO_OUTLINE, thickness);
+                      1.0f, Color::red, Color::blue, DrawNode::DrawMode::Fill_With_Line, thickness);
 }
 
 void DrawNodePieTest::onEnter()
@@ -2115,7 +2115,7 @@ string DrawNodePieTest::title() const
 
 string DrawNodePieTest::subtitle() const
 {
-    return "FILL, OUTLINE, LINE, SEMI, SEMI (FILLED), FILL_NO_OUTLINE";
+    return "Fill, Outline, Line, Semi, Semi (filled), Fill_With_Line";
 }
 
 DrawNodeMethodsTest::DrawNodeMethodsTest()
@@ -2456,20 +2456,20 @@ void DrawNodeMethodsTest::drawAll()
         int yy  = 0;
 
         drawNode->drawSegment(Vec2(-150.0f, yy - yy1 - 40), Vec2(200, yy - yy1 - 40), thickness, Color::magenta,
-                              DrawNode::EndType::ROUND, DrawNode::EndType::ROUND);
+                              DrawNode::EndType::Round, DrawNode::EndType::Round);
 
         drawNode->drawSegment(Vec2(-150.0f, yy - yy1), Vec2(200, yy - yy1), 20 + 5 * thickness, Color::green,
-                              DrawNode::EndType::ROUND, DrawNode::EndType::ROUND);
+                              DrawNode::EndType::Round, DrawNode::EndType::Round);
         //      labelRound->setPosition(Vec2(250.0f, 85));
 
         yy += 170;
         drawNode->drawSegment(Vec2(-150.0f, yy - yy1), Vec2(200, yy - yy1), 20 + 5 * thickness, Color::blue,
-                              DrawNode::EndType::SQUARE, DrawNode::EndType::SQUARE);
+                              DrawNode::EndType::Square, DrawNode::EndType::Square);
         //     labelSquare->setPosition(Vec2(250.0f, 170));
 
         yy += 170;
         drawNode->drawSegment(Vec2(-150.0f, yy - yy1), Vec2(200, yy - yy1), 20 + 5 * thickness, Color::red,
-                              DrawNode::EndType::BUTT, DrawNode::EndType::BUTT);
+                              DrawNode::EndType::Butt, DrawNode::EndType::Butt);
         //    labelButt->setPosition(Vec2(250.0f, 255));
 
         break;
@@ -2879,7 +2879,7 @@ DrawNodeCornerRectTest::DrawNodeCornerRectTest()
     float crRB               = 5.0f;
 
     drawNode->drawCornerRect(origin, destination, Color::green, thickness, crLB, crLT, crRT, crRB,
-                             DrawNode::CornerMode::BEVEL);
+                             DrawNode::CornerMode::Bevel);
     drawNode->drawCornerRect(origin + Vec2(100, 70), destination + Vec2(100, 70), Color::red, 5.0f, 10, 5, 30, 50);
     drawNode->drawCornerRect(origin - Vec2(50, 50), destination - Vec2(50, 50), Color::yellow, 2.0f, 10, 10, 10, 10);
 }
@@ -2891,7 +2891,7 @@ string DrawNodeCornerRectTest::title() const
 
 string DrawNodeCornerRectTest::subtitle() const
 {
-    return "DrawNode::CornerMode::BEVEL/ROUND";
+    return "DrawNode::CornerMode::Bevel/Round";
 }
 
 DrawNodeSolidCornerRectTest::DrawNodeSolidCornerRectTest()
@@ -2907,7 +2907,7 @@ DrawNodeSolidCornerRectTest::DrawNodeSolidCornerRectTest()
     float crRB               = 5.0f;
 
     drawNode->drawSolidCornerRect(origin + Vec2(20, 50), destination + Vec2(20, 50), Color::green, Color::yellow, 0.0f,
-                                  crLB, crLT, crRT, crRB, DrawNode::CornerMode::BEVEL);
+                                  crLB, crLT, crRT, crRB, DrawNode::CornerMode::Bevel);
     drawNode->drawSolidCornerRect(origin + Vec2(160, -50), destination + Vec2(160, -50), Color::yellow, Color::red,
                                   14.0f, 30, 0, 30, 10);
     drawNode->drawSolidCornerRect(origin - Vec2(80, 50), destination - Vec2(80, 50), Color::blue, Color::orange, 10.0f,
@@ -2921,7 +2921,7 @@ string DrawNodeSolidCornerRectTest::title() const
 
 string DrawNodeSolidCornerRectTest::subtitle() const
 {
-    return "DrawNode::CornerMode::BEVEL/ROUND";
+    return "DrawNode::CornerMode::Bevel/Round";
 }
 
 DrawNodeSolidCircleTest::DrawNodeSolidCircleTest()
@@ -3057,7 +3057,7 @@ DrawNodeIssueTester::DrawNodeIssueTester()
         y += thick + 1;
         drawNode->drawLine(Vec2(140, y), Vec2(180, y), Color::random().withAlpha(1.0f), thick);
     }
-    drawNode->drawPie(Vec2(-220, 150), 20, 0, 100, 300, 1, 1, Color(), Color::blue, DrawNode::DrawMode::LINE, 10);
+    drawNode->drawPie(Vec2(-220, 150), 20, 0, 100, 300, 1, 1, Color(), Color::blue, DrawNode::DrawMode::Line, 10);
 
     drawNode->setLocalPosition(Vec2(50, -100));
     for (int i = 2; i < 30; i++)
@@ -3160,7 +3160,7 @@ void DrawNodeSpLinesTest::update(float dt)
     for (int i = 0; i < 10; i++)
     {
         array->addControlPoint(Vec2((i % 2) ? 20 : screen.width - 20, 50 + i * 20));
-        drawNode->drawPoint(array->getControlPointAtIndex(i), 10, Color::blue, DrawNode::PointType::CIRCLE);
+        drawNode->drawPoint(array->getControlPointAtIndex(i), 10, Color::blue, DrawNode::PointType::Circle);
     }
     drawNode->drawCardinalSpline(array, 0.1, 20, Color::orange);
 
