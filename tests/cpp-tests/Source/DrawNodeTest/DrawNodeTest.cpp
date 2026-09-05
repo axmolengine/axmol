@@ -1409,6 +1409,9 @@ DrawNodeTests::DrawNodeTests()
     ADD_TEST_CASE(DrawNodeSolidCircleTest);
     ADD_TEST_CASE(DrawNodePolygonTest);
 
+    ADD_TEST_CASE(DrawNodeCornerRectTest);
+    ADD_TEST_CASE(DrawNodeSolidCornerRectTest);
+
     ADD_TEST_CASE(DrawNodeSpLinesTest);
     ADD_TEST_CASE(DrawNodeSpLinesOpenClosedTest);
     ADD_TEST_CASE(DrawNodeAxmolTest2);
@@ -2075,25 +2078,29 @@ void DrawNodePieTest::update(float dt)
     drawNode->setPreserveDrawOrder(_drawOrder);
     drawNode->setLocalTransformEnabled(_transform);
 
-    // Filled
+    // FILL
     drawNode->drawPie(VisibleRect::center() - Vec2(190.0f, -35.0f), 40, _localeRotation, _angelStart, _angelEnd, 1.0f,
-                      1.0f, Color::red, Color::blue, drawNode->DrawMode::Fill, thickness);
+                      1.0f, Color::red, Color::blue, DrawNode::DrawMode::Fill, thickness);
 
-    // Outlined
+    // OUTLINE
     drawNode->drawPie(VisibleRect::center() - Vec2(95.0f, -35.0f), 40, _localeRotation, _angelStart, _angelEnd, 1.0f,
-                      1.0f, Color(), Color::blue, drawNode->DrawMode::Outline, thickness);
+                      1.0f, Color(), Color::blue, DrawNode::DrawMode::Outline, thickness);
 
-    // Line
+    // LINE
     drawNode->drawPie(VisibleRect::center() + Vec2(0.0f, 35.0f), 40, _localeRotation, _angelStart, _angelEnd, 1.0f,
-                      1.0f, Color(), Color::blue, drawNode->DrawMode::Line, thickness);
+                      1.0f, Color(), Color::blue, DrawNode::DrawMode::Line, thickness);
 
-    //  Semi
+    //  SEMI
     drawNode->drawPie(VisibleRect::center() + Vec2(95.0f, 35.0f), 40, _localeRotation, _angelStart, _angelEnd, 1.0f,
-                      1.0f, Color(), Color::blue, drawNode->DrawMode::Semi, thickness);
+                      1.0f, Color(), Color::blue, DrawNode::DrawMode::Semi, thickness);
 
-    // Semi (Filled)
+    // SEMI (Filled)
     drawNode->drawPie(VisibleRect::center() + Vec2(190.0f, 35.0f), 40, _localeRotation, _angelStart, _angelEnd, 1.0f,
-                      1.0f, Color::red, Color::blue, drawNode->DrawMode::Semi, thickness);
+                      1.0f, Color::red, Color::blue, DrawNode::DrawMode::Semi, thickness);
+
+    // FILL_NO_OUTLINE
+    drawNode->drawPie(VisibleRect::center() + Vec2(-190.0f, -35.0f), 40, _localeRotation, _angelStart, _angelEnd, 1.0f,
+                      1.0f, Color::red, Color::blue, DrawNode::DrawMode::Fill_With_Line, thickness);
 }
 
 void DrawNodePieTest::onEnter()
@@ -2108,7 +2115,7 @@ string DrawNodePieTest::title() const
 
 string DrawNodePieTest::subtitle() const
 {
-    return "Filled, Outlined, Line, Semi, Semi (Filled)";
+    return "Fill, Outline, Line, Semi, Semi (filled), Fill_With_Line";
 }
 
 DrawNodeMethodsTest::DrawNodeMethodsTest()
@@ -2449,20 +2456,20 @@ void DrawNodeMethodsTest::drawAll()
         int yy  = 0;
 
         drawNode->drawSegment(Vec2(-150.0f, yy - yy1 - 40), Vec2(200, yy - yy1 - 40), thickness, Color::magenta,
-                              DrawNode::Round, DrawNode::Round);
+                              DrawNode::EndType::Round, DrawNode::EndType::Round);
 
         drawNode->drawSegment(Vec2(-150.0f, yy - yy1), Vec2(200, yy - yy1), 20 + 5 * thickness, Color::green,
-                              DrawNode::Round, DrawNode::Round);
+                              DrawNode::EndType::Round, DrawNode::EndType::Round);
         //      labelRound->setPosition(Vec2(250.0f, 85));
 
         yy += 170;
         drawNode->drawSegment(Vec2(-150.0f, yy - yy1), Vec2(200, yy - yy1), 20 + 5 * thickness, Color::blue,
-                              DrawNode::Square, DrawNode::Square);
+                              DrawNode::EndType::Square, DrawNode::EndType::Square);
         //     labelSquare->setPosition(Vec2(250.0f, 170));
 
         yy += 170;
         drawNode->drawSegment(Vec2(-150.0f, yy - yy1), Vec2(200, yy - yy1), 20 + 5 * thickness, Color::red,
-                              DrawNode::Butt, DrawNode::Butt);
+                              DrawNode::EndType::Butt, DrawNode::EndType::Butt);
         //    labelButt->setPosition(Vec2(250.0f, 255));
 
         break;
@@ -2859,6 +2866,64 @@ string DrawNodeCircleTest::subtitle() const
     return "Axmol,  '3...20', '48'-Corner";
 }
 
+DrawNodeCornerRectTest::DrawNodeCornerRectTest()
+{
+    const Vec2 origin        = Vec2(100, 100);
+    const Vec2 destination   = Vec2(300, 200);
+    const Color& fillColor   = Color::green;
+    const Color& borderColor = Color::green;
+    float thickness          = 5.0f;
+    float crLB               = 50.0f;
+    float crLT               = 5.0f;
+    float crRT               = 25.0f;
+    float crRB               = 5.0f;
+
+    drawNode->drawCornerRect(origin, destination, Color::green, thickness, crLB, crLT, crRT, crRB,
+                             DrawNode::CornerMode::Bevel);
+    drawNode->drawCornerRect(origin + Vec2(100, 70), destination + Vec2(100, 70), Color::red, 5.0f, 10, 5, 30, 50);
+    drawNode->drawCornerRect(origin - Vec2(50, 50), destination - Vec2(50, 50), Color::yellow, 2.0f, 10, 10, 10, 10);
+}
+
+string DrawNodeCornerRectTest::title() const
+{
+    return "drawCornerRect Test";
+}
+
+string DrawNodeCornerRectTest::subtitle() const
+{
+    return "DrawNode::CornerMode::Bevel/Round";
+}
+
+DrawNodeSolidCornerRectTest::DrawNodeSolidCornerRectTest()
+{
+    const Vec2 origin        = Vec2(100, 100);
+    const Vec2 destination   = Vec2(300, 180);
+    const Color& fillColor   = Color::green;
+    const Color& borderColor = Color::green;
+    float thickness          = 2.0f;
+    float crLB               = 50.0f;
+    float crLT               = 5.0f;
+    float crRT               = 25.0f;
+    float crRB               = 5.0f;
+
+    drawNode->drawSolidCornerRect(origin + Vec2(20, 50), destination + Vec2(20, 50), Color::green, Color::yellow, 0.0f,
+                                  crLB, crLT, crRT, crRB, DrawNode::CornerMode::Bevel);
+    drawNode->drawSolidCornerRect(origin + Vec2(160, -50), destination + Vec2(160, -50), Color::yellow, Color::red,
+                                  14.0f, 30, 0, 30, 10);
+    drawNode->drawSolidCornerRect(origin - Vec2(80, 50), destination - Vec2(80, 50), Color::blue, Color::orange, 10.0f,
+                                  10, 10, 10, 10);
+}
+
+string DrawNodeSolidCornerRectTest::title() const
+{
+    return "drawSolidCornerRect Test";
+}
+
+string DrawNodeSolidCornerRectTest::subtitle() const
+{
+    return "DrawNode::CornerMode::Bevel/Round";
+}
+
 DrawNodeSolidCircleTest::DrawNodeSolidCircleTest()
 {
     static string text = "drawSolidCircle (fast)";
@@ -3129,7 +3194,7 @@ void DrawNodeSpLinesTest::update(float dt)
 DrawNodeSpLinesOpenClosedTest::DrawNodeSpLinesOpenClosedTest()
 {
     auto listener         = PointerEventListener::create();
-    listener->onPointerUp = AX_CALLBACK_1(DrawNodeSpLinesOpenClosedTest::onPointerUp, this);
+    listener->onPointerUp = AX_CALLBACK_1(DrawNodeSpLinesOpenClosedTest::onPointerDown, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     drawNodeCP = DrawNode::create();
@@ -3183,10 +3248,11 @@ void DrawNodeSpLinesOpenClosedTest::addNewControlPoint(Vec2 p)
     points.emplace_back(Vec2(p.x, p.y));
 }
 
-void DrawNodeSpLinesOpenClosedTest::onPointerUp(PointerEvent* event)
+bool DrawNodeSpLinesOpenClosedTest::onPointerDown(PointerEvent* event)
 {
     auto location = event->getWorldPoint();
     addNewControlPoint(location);
+    return true;
 }
 
 string DrawNodeSpLinesOpenClosedTest::title() const

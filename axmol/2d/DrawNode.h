@@ -62,22 +62,29 @@ public:
      *
      *.
      */
-    enum DrawMode
+    enum class DrawMode
     {
         Fill,
         Outline,
         Line,
         Semi,
+        Fill_With_Line,
     };
 
-    enum PointType
+    enum class CornerMode
+    {
+        Round,
+        Bevel,
+    };
+
+    enum class PointType
     {
         Circle,
         Rect,
     };
 
     // See also example on https://www.angusj.com/clipper2/Docs/Units/Clipper/Types/EndType.htm
-    enum EndType
+    enum class EndType
     {
         Square,
         Round,
@@ -317,6 +324,7 @@ public:
      * @param p3 The rectangle vertex point.
      * @param p4 The rectangle vertex point.
      * @param color The rectangle color.
+     * @param thickness The rectangle thickness.
      */
     void drawRect(const Vec2& p1,
                   const Vec2& p2,
@@ -324,6 +332,52 @@ public:
                   const Vec2& p4,
                   const Color& color,
                   float thickness = 1.0f);
+
+    /** Draws a rectangle with 4 rounded corners.
+     *
+     * @param origin The rectangle vertex point.
+     * @param destination The rectangle vertex point.
+     * @param color The rectangle color.
+     * @param thickness The rectangle thickness.
+     * @param crLB The radius of the left-bottom corner.
+     * @param crLT The radius of the left-top corner.
+     * @param crRT The radius of the right-top corner.
+     * @param crRB The radius of the right-bottom corner.
+     * @param mode The mode for drawing the corners.
+     */
+    void drawCornerRect(const Vec2& origin,
+                        const Vec2& destination,
+                        const Color& color,
+                        float thickness = 1.0f,
+                        float crLB      = 5.0f,
+                        float crLT      = 5.0f,
+                        float crRT      = 5.0f,
+                        float crRB      = 5.0f,
+                        CornerMode mode = CornerMode::Round);
+
+    /** Draws a solid rectangle with 4 rounded corners.
+     *
+     * @param origin The rectangle vertex point.
+     * @param destination The rectangle vertex point.
+     * @param fillColor The fill color of the rectangle.
+     * @param borderColor The border color of the rectangle.
+     * @param thickness The rectangle thickness.
+     * @param crLB The radius of the left-bottom corner.
+     * @param crLT The radius of the left-top corner.
+     * @param crRT The radius of the right-top corner.
+     * @param crRB The radius of the right-bottom corner.
+     * @param mode The mode for drawing the corners.
+     */
+    void drawSolidCornerRect(const Vec2& origin,
+                             const Vec2& destination,
+                             const Color& fillColor,
+                             const Color& borderColor,
+                             float thickness = 1.0f,
+                             float crLB      = 5.0f,
+                             float crLT      = 5.0f,
+                             float crRT      = 5.0f,
+                             float crRB      = 5.0f,
+                             CornerMode mode = CornerMode::Round);
 
     /** Draws a solid rectangle given the origin and destination point measured in points.
      * The origin and the destination can not have the same x and y coordinate.
@@ -637,6 +691,29 @@ private:
 
     // Internal function _drawRect
     void _drawRect(const Vec2& origin, const Vec2& destination, const Color& color, float thickness = 1.0f);
+
+    // Internal function _drawCornerRect
+    void _drawCornerRect(const Vec2& origin,
+                         const Vec2& destination,
+                         const Color& color,
+                         float thickness = 1.0f,
+                         float crLB      = 5.0f,
+                         float crLT      = 5.0f,
+                         float crRT      = 5.0f,
+                         float crRB      = 5.0f,
+                         CornerMode mode = CornerMode::Round);
+
+    // Internal function _drawSolidCornerRect
+    void _drawSolidCornerRect(const Vec2& origin,
+                              const Vec2& destination,
+                              const Color& color,
+                              const Color& borderColor,
+                              float thickness = 1.0f,
+                              float crLB      = 5.0f,
+                              float crLT      = 5.0f,
+                              float crRT      = 5.0f,
+                              float crRB      = 5.0f,
+                              CornerMode mode = CornerMode::Round);
 
     // Internal function _drawFilledRect
     void _drawFilledRect(const Vec2& origin, const Vec2& destination, const Color& color);
