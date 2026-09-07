@@ -1806,6 +1806,17 @@
           "isVariadic": false
         },
         {
+          "nativeName": "getPersistedContacts",
+          "luaName": "getPersistedContacts",
+          "declaringType": "ax::Rigidbody3D",
+          "returnType": "const std::vector\u003Cax::ContactInfo3D\u003E \u0026",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
           "nativeName": "getPosition",
           "luaName": "getPosition",
           "declaringType": "ax::Rigidbody3D",
