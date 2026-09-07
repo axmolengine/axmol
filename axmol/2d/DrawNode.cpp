@@ -1054,11 +1054,11 @@ void DrawNode::_drawSolidCornerRect(const Vec2& origin,
         _drawPie({origin.x + crLB, origin.y + crLB}, crLB, 0.0f, 270.0f, 180.0f, 1.0f, 1.0f, fillColor, borderColor,
                  DrawMode::Fill_With_Line, thickness);
         _drawPie({origin.x + crLT, destination.y - crLT}, crLT, 0.0f, 90.0f, 180.0f, 1.0f, 1.0f, fillColor, borderColor,
-                 DrawMode::Fill_With_Line, thickness);
+                 DrawMode::FillWithLine, thickness);
         _drawPie({destination.x - crRT, destination.y - crRT}, crRT, 0.0f, 0.0f, 90.0f, 1.0f, 1.0f, fillColor,
-                 borderColor, DrawMode::Fill_With_Line, thickness);
+                 borderColor, DrawMode::FillWithLine, thickness);
         _drawPie({destination.x - crRB, origin.y + crRB}, crRB, 0.0f, 270.0f, 360.0f, 1.0f, 1.0f, fillColor,
-                 borderColor, DrawMode::Fill_With_Line, thickness);
+                 borderColor, DrawMode::FillWithLine, thickness);
     }
 }
 
@@ -1544,7 +1544,7 @@ void DrawNode::_drawPie(const Vec2& center,
         switch (drawMode)
         {
         case DrawMode::Fill:
-        case DrawMode::Fill_With_Line:
+        case DrawMode::FillWithLine:
             _drawCircle(center, radius, 0.0f, 360, false, scaleX, scaleY, borderColor, fillColor, true, thickness);
             break;
         case DrawMode::Outline:
@@ -1598,7 +1598,7 @@ void DrawNode::_drawPie(const Vec2& center,
             _drawPolygon(_vertices.data(), n, fillColor, Color(), true, 0, false);
             _drawPoly(_vertices.data(), n, false, borderColor, thickness, true);
             break;
-        case DrawMode::Fill_With_Line:
+        case DrawMode::FillWithLine:
             _vertices[n++] = center;
             _vertices[n++] = _vertices[0];
             _drawPolygon(_vertices.data(), n, fillColor, Color(), true, 0, false);

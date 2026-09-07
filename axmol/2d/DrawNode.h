@@ -68,7 +68,7 @@ public:
         Outline,
         Line,
         Semi,
-        Fill_With_Line,
+        FillWithLine,
     };
 
     enum class CornerMode

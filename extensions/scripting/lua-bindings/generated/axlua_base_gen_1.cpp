@@ -322,7 +322,7 @@ void register_ax_base_enums_1(lua_State* L)
     enum_1_DrawMode.set("Outline", 1ll);
     enum_1_DrawMode.set("Line", 2ll);
     enum_1_DrawMode.set("Semi", 3ll);
-    enum_1_DrawMode.set("Fill_With_Line", 4ll);
+    enum_1_DrawMode.set("FillWithLine", 4ll);
     auto enum_2_EndType = class_0_DrawNode.get_or_create_table("EndType");
     enum_2_EndType.set("Square", 0ll);
     enum_2_EndType.set("Round", 1ll);
