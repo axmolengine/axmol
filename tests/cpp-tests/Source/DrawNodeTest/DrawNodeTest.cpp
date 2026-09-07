@@ -2098,9 +2098,9 @@ void DrawNodePieTest::update(float dt)
     drawNode->drawPie(VisibleRect::center() + Vec2(190.0f, 35.0f), 40, _localeRotation, _angelStart, _angelEnd, 1.0f,
                       1.0f, Color::red, Color::blue, DrawNode::DrawMode::Semi, thickness);
 
-    // FILL_NO_OUTLINE
+    // FillWithLine
     drawNode->drawPie(VisibleRect::center() + Vec2(-190.0f, -35.0f), 40, _localeRotation, _angelStart, _angelEnd, 1.0f,
-                      1.0f, Color::red, Color::blue, DrawNode::DrawMode::Fill_With_Line, thickness);
+                      1.0f, Color::red, Color::blue, DrawNode::DrawMode::FillWithLine, thickness);
 }
 
 void DrawNodePieTest::onEnter()
@@ -2115,7 +2115,7 @@ string DrawNodePieTest::title() const
 
 string DrawNodePieTest::subtitle() const
 {
-    return "Fill, Outline, Line, Semi, Semi (filled), Fill_With_Line";
+    return "Fill, Outline, Line, Semi, Semi (filled), FillWithLine";
 }
 
 DrawNodeMethodsTest::DrawNodeMethodsTest()
