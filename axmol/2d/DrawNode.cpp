@@ -1052,7 +1052,7 @@ void DrawNode::_drawSolidCornerRect(const Vec2& origin,
         _drawCornerRect(origin, destination, borderColor, thickness, crLB, crLT, crRT, crRB, CornerMode::Round);
         //  Draw the four corners
         _drawPie({origin.x + crLB, origin.y + crLB}, crLB, 0.0f, 270.0f, 180.0f, 1.0f, 1.0f, fillColor, borderColor,
-                 DrawMode::Fill_With_Line, thickness);
+                 DrawMode::FillWithLine, thickness);
         _drawPie({origin.x + crLT, destination.y - crLT}, crLT, 0.0f, 90.0f, 180.0f, 1.0f, 1.0f, fillColor, borderColor,
                  DrawMode::FillWithLine, thickness);
         _drawPie({destination.x - crRT, destination.y - crRT}, crRT, 0.0f, 0.0f, 90.0f, 1.0f, 1.0f, fillColor,
