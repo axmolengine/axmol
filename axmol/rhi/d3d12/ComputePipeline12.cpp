@@ -38,9 +38,7 @@ ComputePipelineImpl::ComputePipelineImpl(GraphicsDeviceImpl* driver, ProgramImpl
         createPipeline(program);
 }
 
-ComputePipelineImpl::~ComputePipelineImpl()
-{
-}
+ComputePipelineImpl::~ComputePipelineImpl() {}
 
 bool ComputePipelineImpl::createRootSignature(ProgramImpl* program)
 {
