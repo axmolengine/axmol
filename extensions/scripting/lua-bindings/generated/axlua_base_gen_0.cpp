@@ -544,7 +544,8 @@ void register_ax_base_enums_0(lua_State* L)
     enum_6_ContactEventBits.set("Hit", 2ll);
     enum_6_ContactEventBits.set("Contact", 4ll);
     enum_6_ContactEventBits.set("Sensor", 8ll);
-    enum_6_ContactEventBits.set("AllBits", 15ll);
+    enum_6_ContactEventBits.set("Persisted", 16ll);
+    enum_6_ContactEventBits.set("AllBits", 31ll);
     auto enum_7_ControllerEventType = module.get_or_create_table("ControllerEventType");
     enum_7_ControllerEventType.set("CONNECTION", 0ll);
     enum_7_ControllerEventType.set("BUTTON_STATUS_CHANGED", 1ll);
