@@ -25,11 +25,10 @@
 
 #include "axmol/rhi/GraphicsPipeline.h"
 #include "axmol/rhi/DXUtils.h"
+#include "axmol/rhi/d3d12/SamplerBatchCache12.h"
 #include "axmol/tlx/hlookup.hpp"
 #include <d3d12.h>
-#include <map>
 #include <unordered_map>
-#include <vector>
 
 namespace ax::rhi
 {
@@ -56,9 +55,7 @@ struct RootSignatureEntry
     UINT samplerRootIndex       = UINT_MAX;
     UINT customSamplerRootIndex = UINT_MAX;
 
-    // Custom sampler descriptor batches, keyed by the effective sampler IDs.
-    uint32_t customSamplerBatchCount = 0;
-    std::map<std::vector<uint16_t>, DescriptorHandle*> customSamplerBatches;
+    SamplerBatchCache customSamplerBatches;
 };
 
 /**

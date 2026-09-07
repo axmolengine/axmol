@@ -138,10 +138,7 @@ GraphicsPipelineImpl::~GraphicsPipelineImpl()
     _activeRootSignature = nullptr;
 
     for (auto& [progId, entry] : _rootSigCache)
-    {
-        for (auto& [_, batch] : entry.customSamplerBatches)
-            _driver->getSamplerAllocator()->deallocateBatch(batch, entry.customSamplerBatchCount);
-    }
+        entry.customSamplerBatches.reset();
     _psoCache.clear();
     _rootSigCache.clear();
 }
@@ -342,54 +339,15 @@ void GraphicsPipelineImpl::updateRootSignature(ProgramImpl* program)
 
     entry.rootSig = std::move(rootSig);
 
-    entry.customSamplerBatchCount = customSamplerCount;
+    entry.customSamplerBatches.setDriver(_driver);
+    entry.customSamplerBatches.setBatchCount(customSamplerCount);
 
     _activeRootSignature = &_rootSigCache.emplace(progId, std::move(entry)).first->second;
 }
 
 const DescriptorHandle* GraphicsPipelineImpl::getCustomSamplerBatch(const ::ax::rhi::ProgramState* programState)
 {
-    if (!programState || !_activeRootSignature || _activeRootSignature->customSamplerBatchCount == 0)
-        return nullptr;
-
-    std::vector<uint16_t> key;
-    key.reserve(_activeRootSignature->customSamplerBatchCount);
-    for (const auto& sampler : programState->getProgram()->getActiveSamplerInfos())
-    {
-        if (sampler.presetIndex >= 0)
-            continue;
-        auto samplerId = programState->getSamplerOverride(sampler.binding);
-        if (!samplerId)
-            samplerId = sampler.samplerId;
-        if (!samplerId)
-            return nullptr;
-        for (uint16_t i = 0; i < sampler.count; ++i)
-            key.push_back(samplerId.value);
-    }
-    AXASSERT(key.size() == _activeRootSignature->customSamplerBatchCount,
-             "D3D12 graphics custom sampler descriptor count mismatch");
-    if (key.size() != _activeRootSignature->customSamplerBatchCount)
-        return nullptr;
-
-    auto& batches = _activeRootSignature->customSamplerBatches;
-    if (auto it = batches.find(key); it != batches.end())
-        return it->second;
-
-    auto* batch = _driver->getSamplerAllocator()->allocateBatch(_activeRootSignature->customSamplerBatchCount);
-    if (!batch)
-        return nullptr;
-
-    const auto descriptorStride = _driver->getSamplerDescriptorStride();
-    auto* registry              = SamplerRegistry::getInstance();
-    for (size_t i = 0; i < key.size(); ++i)
-    {
-        D3D12_CPU_DESCRIPTOR_HANDLE dst = batch->cpu;
-        dst.ptr += static_cast<SIZE_T>(i) * static_cast<SIZE_T>(descriptorStride);
-        _driver->writeSamplerDescriptor(registry->getSamplerDesc(SamplerId{key[i]}), dst);
-    }
-
-    batches.emplace(std::move(key), batch);
-    return batch;
+    return _activeRootSignature ? _activeRootSignature->customSamplerBatches.get(programState) : nullptr;
 }
 
 void GraphicsPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc, ProgramImpl* program)
@@ -445,10 +403,7 @@ void GraphicsPipelineImpl::removeCachedObjects(Program* key)
     if (auto it = _rootSigCache.find(progId); it != _rootSigCache.end())
     {
         auto& entry = it->second;
-        for (auto& [_, batch] : entry.customSamplerBatches)
-            _driver->getSamplerAllocator()->deallocateBatch(batch, entry.customSamplerBatchCount);
-        entry.customSamplerBatches.clear();
-        entry.customSamplerBatchCount = 0;
+        entry.customSamplerBatches.reset();
         _rootSigCache.erase(it);
     }
 

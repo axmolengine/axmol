@@ -25,7 +25,6 @@
 #include "axmol/rhi/d3d12/GraphicsDevice12.h"
 #include "axmol/rhi/d3d12/Program12.h"
 #include "axmol/rhi/ProgramState.h"
-#include "axmol/rhi/SamplerRegistry.h"
 #include "axmol/base/Logging.h"
 #include <string_view>
 
@@ -41,8 +40,6 @@ ComputePipelineImpl::ComputePipelineImpl(GraphicsDeviceImpl* driver, ProgramImpl
 
 ComputePipelineImpl::~ComputePipelineImpl()
 {
-    for (auto& [_, batch] : _customSamplerBatches)
-        _driver->getSamplerAllocator()->deallocateBatch(batch, _customSamplerBatchCount);
 }
 
 bool ComputePipelineImpl::createRootSignature(ProgramImpl* program)
@@ -202,51 +199,14 @@ bool ComputePipelineImpl::createRootSignature(ProgramImpl* program)
         if (smp.presetIndex < 0)
             customSamplerCount += smp.count;
     }
-    _customSamplerBatchCount = customSamplerCount;
+    _customSamplerBatches.setDriver(_driver);
+    _customSamplerBatches.setBatchCount(customSamplerCount);
     return true;
 }
 
 const DescriptorHandle* ComputePipelineImpl::getCustomSamplerBatch(const ::ax::rhi::ProgramState* programState)
 {
-    if (!programState || _customSamplerBatchCount == 0)
-        return nullptr;
-
-    std::vector<uint16_t> key;
-    key.reserve(_customSamplerBatchCount);
-    for (const auto& sampler : programState->getProgram()->getActiveSamplerInfos())
-    {
-        if (sampler.presetIndex >= 0)
-            continue;
-        auto samplerId = programState->getSamplerOverride(sampler.binding);
-        if (!samplerId)
-            samplerId = sampler.samplerId;
-        if (!samplerId)
-            return nullptr;
-        for (uint16_t i = 0; i < sampler.count; ++i)
-            key.push_back(samplerId.value);
-    }
-    AXASSERT(key.size() == _customSamplerBatchCount, "D3D12 compute custom sampler descriptor count mismatch");
-    if (key.size() != _customSamplerBatchCount)
-        return nullptr;
-
-    if (auto it = _customSamplerBatches.find(key); it != _customSamplerBatches.end())
-        return it->second;
-
-    auto* batch = _driver->getSamplerAllocator()->allocateBatch(_customSamplerBatchCount);
-    if (!batch)
-        return nullptr;
-
-    const auto descriptorStride = _driver->getSamplerDescriptorStride();
-    auto* registry              = SamplerRegistry::getInstance();
-    for (size_t i = 0; i < key.size(); ++i)
-    {
-        D3D12_CPU_DESCRIPTOR_HANDLE dst = batch->cpu;
-        dst.ptr += static_cast<SIZE_T>(i) * static_cast<SIZE_T>(descriptorStride);
-        _driver->writeSamplerDescriptor(registry->getSamplerDesc(SamplerId{key[i]}), dst);
-    }
-
-    _customSamplerBatches.emplace(std::move(key), batch);
-    return batch;
+    return _customSamplerBatches.get(programState);
 }
 
 void ComputePipelineImpl::createPipeline(ProgramImpl* program)

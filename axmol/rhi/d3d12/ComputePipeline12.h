@@ -25,10 +25,9 @@
 
 #include "axmol/rhi/ComputePipeline.h"
 #include "axmol/rhi/d3d12/DescriptorHeapAllocator12.h"
+#include "axmol/rhi/d3d12/SamplerBatchCache12.h"
 #include <d3d12.h>
-#include <map>
 #include <unordered_map>
-#include <vector>
 
 namespace ax::rhi
 {
@@ -85,8 +84,7 @@ private:
     UINT _customSamplerRootIndex = UINT_MAX;
     std::unordered_map<int, UINT> _cbvRootIndices;
 
-    uint32_t _customSamplerBatchCount = 0;
-    std::map<std::vector<uint16_t>, DescriptorHandle*> _customSamplerBatches;
+    SamplerBatchCache _customSamplerBatches;
 };
 
 }  // namespace ax::rhi::d3d12
