@@ -223,9 +223,9 @@ list(APPEND GAME_HEADER
   Source/SchedulerTest/SchedulerTest.h
   Source/MultiTouchTest/MultiTouchTest.h
   Source/testResource.h
-Source/ShaderTest/ShaderTest.h
-Source/ShaderTest/ShaderTest2.h
-Source/ShaderTest/ComputeShaderTest.h
+  Source/ShaderTest/ShaderTest.h
+  Source/ShaderTest/ShaderTest2.h
+  Source/ShaderTest/ComputeShaderTest.h
   Source/RendererTest/RendererTest.h
   Source/SpritePolygonTest/SpritePolygonTest.h
   Source/TexturePackerEncryptionTest/TextureAtlasEncryptionTest.h
@@ -310,9 +310,9 @@ list(APPEND GAME_SOURCE
   Source/RotateWorldTest/RotateWorldTest.cpp
   Source/SceneTest/SceneTest.cpp
   Source/SchedulerTest/SchedulerTest.cpp
-Source/ShaderTest/ShaderTest.cpp
-Source/ShaderTest/ShaderTest2.cpp
-Source/ShaderTest/ComputeShaderTest.cpp
+  Source/ShaderTest/ShaderTest.cpp
+  Source/ShaderTest/ShaderTest2.cpp
+  Source/ShaderTest/ComputeShaderTest.cpp
   Source/SpineTest/SpineTest.cpp
   Source/Scene3DTest/Scene3DTest.cpp
   Source/MeshRendererTest/DrawNode3D.cpp

@@ -22,8 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef _COMPUTESHADERTEST_H_
-#define _COMPUTESHADERTEST_H_
+#pragma once
 
 #include "axmol/axmol.h"
 #include "../BaseTest.h"
@@ -71,5 +70,3 @@ public:
 private:
     std::vector<std::string> _searchPaths;
 };
-
-#endif  // _COMPUTESHADERTEST_H_
