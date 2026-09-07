@@ -137,8 +137,6 @@ GraphicsPipelineImpl::~GraphicsPipelineImpl()
     _activePSO.Reset();
     _activeRootSignature = nullptr;
 
-    for (auto& [progId, entry] : _rootSigCache)
-        entry.customSamplerBatches.reset();
     _psoCache.clear();
     _rootSigCache.clear();
 }
@@ -339,8 +337,7 @@ void GraphicsPipelineImpl::updateRootSignature(ProgramImpl* program)
 
     entry.rootSig = std::move(rootSig);
 
-    entry.customSamplerBatches.setDriver(_driver);
-    entry.customSamplerBatches.setBatchCount(customSamplerCount);
+    entry.customSamplerBatches.initialize(_driver, customSamplerCount);
 
     _activeRootSignature = &_rootSigCache.emplace(progId, std::move(entry)).first->second;
 }
@@ -400,12 +397,7 @@ void GraphicsPipelineImpl::updateGraphicsPipeline(const PipelineDesc& desc, Prog
 void GraphicsPipelineImpl::removeCachedObjects(Program* key)
 {
     auto progId = key->getProgramId();
-    if (auto it = _rootSigCache.find(progId); it != _rootSigCache.end())
-    {
-        auto& entry = it->second;
-        entry.customSamplerBatches.reset();
-        _rootSigCache.erase(it);
-    }
+    _rootSigCache.erase(progId);
 
     auto range = _programToPSOMap.equal_range(progId);
     if (range.first != range.second)

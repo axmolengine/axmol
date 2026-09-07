@@ -40,17 +40,15 @@ class GraphicsDeviceImpl;
 class SamplerBatchCache
 {
 public:
-    explicit SamplerBatchCache(GraphicsDeviceImpl* driver = nullptr) : _driver(driver) {}
+    SamplerBatchCache() = default;
     ~SamplerBatchCache();
 
     SamplerBatchCache(const SamplerBatchCache&)            = delete;
     SamplerBatchCache& operator=(const SamplerBatchCache&) = delete;
-    SamplerBatchCache(SamplerBatchCache&&)                 = default;
-    SamplerBatchCache& operator=(SamplerBatchCache&&)      = default;
+    SamplerBatchCache(SamplerBatchCache&& other) noexcept;
+    SamplerBatchCache& operator=(SamplerBatchCache&& other) noexcept;
 
-    void setDriver(GraphicsDeviceImpl* driver) { _driver = driver; }
-    void setBatchCount(uint32_t count) { _batchCount = count; }
-    uint32_t batchCount() const { return _batchCount; }
+    void initialize(GraphicsDeviceImpl* driver, uint32_t batchCount);
 
     const DescriptorHandle* get(const ::ax::rhi::ProgramState* programState);
     void reset();

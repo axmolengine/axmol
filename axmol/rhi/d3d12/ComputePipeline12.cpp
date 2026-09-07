@@ -197,8 +197,7 @@ bool ComputePipelineImpl::createRootSignature(ProgramImpl* program)
         if (smp.presetIndex < 0)
             customSamplerCount += smp.count;
     }
-    _customSamplerBatches.setDriver(_driver);
-    _customSamplerBatches.setBatchCount(customSamplerCount);
+    _customSamplerBatches.initialize(_driver, customSamplerCount);
     return true;
 }
 

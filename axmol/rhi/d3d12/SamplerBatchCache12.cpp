@@ -28,12 +28,46 @@
 #include "axmol/tlx/hash.hpp"
 #include "axmol/tlx/inlined_vector.hpp"
 #include "axmol/base/Logging.h"
+#include <utility>
 
 namespace ax::rhi::d3d12
 {
 SamplerBatchCache::~SamplerBatchCache()
 {
     reset();
+}
+
+SamplerBatchCache::SamplerBatchCache(SamplerBatchCache&& other) noexcept
+    : _driver(other._driver),
+      _batchCount(other._batchCount),
+      _batchLookup(std::move(other._batchLookup)),
+      _batches(std::move(other._batches))
+{
+    other._driver     = nullptr;
+    other._batchCount = 0;
+}
+
+SamplerBatchCache& SamplerBatchCache::operator=(SamplerBatchCache&& other) noexcept
+{
+    if (this != &other)
+    {
+        reset();
+        _driver     = other._driver;
+        _batchCount = other._batchCount;
+        _batchLookup = std::move(other._batchLookup);
+        _batches     = std::move(other._batches);
+
+        other._driver     = nullptr;
+        other._batchCount = 0;
+    }
+    return *this;
+}
+
+void SamplerBatchCache::initialize(GraphicsDeviceImpl* driver, uint32_t batchCount)
+{
+    AXASSERT(_batches.empty(), "D3D12 sampler batch cache must be initialized before use");
+    _driver     = driver;
+    _batchCount = batchCount;
 }
 
 const DescriptorHandle* SamplerBatchCache::get(const ::ax::rhi::ProgramState* programState)
@@ -92,5 +126,7 @@ void SamplerBatchCache::reset()
     }
     _batches.clear();
     _batchLookup.clear();
+    _driver     = nullptr;
+    _batchCount = 0;
 }
 }  // namespace ax::rhi::d3d12
