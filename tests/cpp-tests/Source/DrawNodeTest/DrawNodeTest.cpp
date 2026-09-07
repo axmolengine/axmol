@@ -2456,20 +2456,20 @@ void DrawNodeMethodsTest::drawAll()
         int yy  = 0;
 
         drawNode->drawSegment(Vec2(-150.0f, yy - yy1 - 40), Vec2(200, yy - yy1 - 40), thickness, Color::magenta,
-                              DrawNode::EndType::Round, DrawNode::EndType::Round);
+                              DrawNode::EndStyle::Round, DrawNode::EndStyle::Round);
 
         drawNode->drawSegment(Vec2(-150.0f, yy - yy1), Vec2(200, yy - yy1), 20 + 5 * thickness, Color::green,
-                              DrawNode::EndType::Round, DrawNode::EndType::Round);
+                              DrawNode::EndStyle::Round, DrawNode::EndStyle::Round);
         //      labelRound->setPosition(Vec2(250.0f, 85));
 
         yy += 170;
         drawNode->drawSegment(Vec2(-150.0f, yy - yy1), Vec2(200, yy - yy1), 20 + 5 * thickness, Color::blue,
-                              DrawNode::EndType::Square, DrawNode::EndType::Square);
+                              DrawNode::EndStyle::Square, DrawNode::EndStyle::Square);
         //     labelSquare->setPosition(Vec2(250.0f, 170));
 
         yy += 170;
         drawNode->drawSegment(Vec2(-150.0f, yy - yy1), Vec2(200, yy - yy1), 20 + 5 * thickness, Color::red,
-                              DrawNode::EndType::Butt, DrawNode::EndType::Butt);
+                              DrawNode::EndStyle::Butt, DrawNode::EndStyle::Butt);
         //    labelButt->setPosition(Vec2(250.0f, 255));
 
         break;
@@ -3160,7 +3160,7 @@ void DrawNodeSpLinesTest::update(float dt)
     for (int i = 0; i < 10; i++)
     {
         array->addControlPoint(Vec2((i % 2) ? 20 : screen.width - 20, 50 + i * 20));
-        drawNode->drawPoint(array->getControlPointAtIndex(i), 10, Color::blue, DrawNode::PointType::Circle);
+        drawNode->drawPoint(array->getControlPointAtIndex(i), 10, Color::blue, DrawNode::PointStyle::Circle);
     }
     drawNode->drawCardinalSpline(array, 0.1, 20, Color::orange);
 

@@ -77,14 +77,14 @@ public:
         Bevel,
     };
 
-    enum class PointType
+    enum class PointStyle
     {
         Circle,
         Rect,
     };
 
     // See also example on https://www.angusj.com/clipper2/Docs/Units/Clipper/Types/EndType.htm
-    enum class EndType
+    enum class EndStyle
     {
         Square,
         Round,
@@ -107,7 +107,7 @@ public:
     void drawPoint(const Vec2& point,
                    const float pointSize,
                    const Color& color,
-                   DrawNode::PointType pointType = DrawNode::PointType::Rect);
+                   DrawNode::PointStyle pointType = DrawNode::PointStyle::Rect);
 
     /** Draw a group point.
      *
@@ -118,7 +118,7 @@ public:
     void drawPoints(const Vec2* position,
                     unsigned int numberOfPoints,
                     const Color& color,
-                    DrawNode::PointType pointType = DrawNode::PointType::Rect);
+                    DrawNode::PointStyle pointType = DrawNode::PointStyle::Rect);
 
     /** Draw a group point.
      *
@@ -131,7 +131,7 @@ public:
                     unsigned int numberOfPoints,
                     const float pointSize,
                     const Color& color,
-                    DrawNode::PointType pointType = DrawNode::PointType::Rect);
+                    DrawNode::PointStyle pointType = DrawNode::PointStyle::Rect);
 
     /** Draw an line from origin to destination with color.
      *
@@ -143,8 +143,8 @@ public:
                   const Vec2& destination,
                   const Color& color,
                   float thickness           = 1.0f,
-                  DrawNode::EndType etStart = DrawNode::EndType::Round,
-                  DrawNode::EndType etEnd   = DrawNode::EndType::Round);
+                  DrawNode::EndStyle etStart = DrawNode::EndStyle::Round,
+                  DrawNode::EndStyle etEnd   = DrawNode::EndStyle::Round);
 
     /** Draws a rectangle given the origin and destination point measured in points.
      * The origin and the destination can not have the same x and y coordinate.
@@ -520,8 +520,8 @@ public:
                      const Vec2& to,
                      float radius,
                      const Color& color,
-                     DrawNode::EndType etStart = DrawNode::EndType::Round,
-                     DrawNode::EndType etEnd   = DrawNode::EndType::Round);
+                     DrawNode::EndStyle etStart = DrawNode::EndStyle::Round,
+                     DrawNode::EndStyle etEnd   = DrawNode::EndStyle::Round);
 
     /** draw a polygon with a fill color and line color
      * @code
@@ -643,14 +643,14 @@ private:
     void _drawPoint(const Vec2& position,
                     const float pointSize,
                     const Color& color,
-                    const DrawNode::PointType pointType);
+                    const DrawNode::PointStyle pointType);
 
     // Internal function _drawPoints
     void _drawPoints(const Vec2* position,
                      unsigned int numberOfPoints,
                      const float pointSize,
                      const Color& color,
-                     const DrawNode::PointType pointType);
+                     const DrawNode::PointStyle pointType);
 
     // Internal function _drawDot
     void _drawDot(const Vec2& pos, float radius, const Color& color);
@@ -723,8 +723,8 @@ private:
                       const Vec2& destination,
                       const Color& color,
                       float thickness           = 1.0f,
-                      DrawNode::EndType etStart = DrawNode::EndType::Square,
-                      DrawNode::EndType etEnd   = DrawNode::EndType::Square);
+                      DrawNode::EndStyle etStart = DrawNode::EndStyle::Square,
+                      DrawNode::EndStyle etEnd   = DrawNode::EndStyle::Square);
 
     // Internal function _drawCircle
     void _drawCircle(const Vec2& center,

@@ -5381,16 +5381,16 @@
             "const ax::Vec2 \u0026",
             "const ax::Color \u0026",
             "float",
-            "ax::DrawNode::EndType",
-            "ax::DrawNode::EndType"
+            "ax::DrawNode::EndStyle",
+            "ax::DrawNode::EndStyle"
           ],
           "defaultValues": [
             null,
             null,
             null,
             "1.0f",
-            "ax::DrawNode::EndType::Round",
-            "ax::DrawNode::EndType::Round"
+            "ax::DrawNode::EndStyle::Round",
+            "ax::DrawNode::EndStyle::Round"
           ],
           "isStatic": false,
           "isConst": false,
@@ -5471,13 +5471,13 @@
             "const ax::Vec2 \u0026",
             "const float",
             "const ax::Color \u0026",
-            "ax::DrawNode::PointType"
+            "ax::DrawNode::PointStyle"
           ],
           "defaultValues": [
             null,
             null,
             null,
-            "ax::DrawNode::PointType::Rect"
+            "ax::DrawNode::PointStyle::Rect"
           ],
           "isStatic": false,
           "isConst": false,
@@ -5564,16 +5564,16 @@
             "const ax::Vec2 \u0026",
             "float",
             "const ax::Color \u0026",
-            "ax::DrawNode::EndType",
-            "ax::DrawNode::EndType"
+            "ax::DrawNode::EndStyle",
+            "ax::DrawNode::EndStyle"
           ],
           "defaultValues": [
             null,
             null,
             null,
             null,
-            "ax::DrawNode::EndType::Round",
-            "ax::DrawNode::EndType::Round"
+            "ax::DrawNode::EndStyle::Round",
+            "ax::DrawNode::EndStyle::Round"
           ],
           "isStatic": false,
           "isConst": false,
@@ -35947,8 +35947,8 @@
       ]
     },
     {
-      "nativeName": "EndType",
-      "qualifiedName": "ax::DrawNode::EndType",
+      "nativeName": "EndStyle",
+      "qualifiedName": "ax::DrawNode::EndStyle",
       "ownerQualifiedName": "ax::DrawNode",
       "values": [
         {
@@ -35972,8 +35972,8 @@
       ]
     },
     {
-      "nativeName": "PointType",
-      "qualifiedName": "ax::DrawNode::PointType",
+      "nativeName": "PointStyle",
+      "qualifiedName": "ax::DrawNode::PointStyle",
       "ownerQualifiedName": "ax::DrawNode",
       "values": [
         {

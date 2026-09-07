@@ -279,7 +279,7 @@ void DrawNode::updateBuffers()
 void DrawNode::drawPoint(const Vec2& position,
                          const float pointSize,
                          const Color& color,
-                         const DrawNode::PointType pointType)
+                         const DrawNode::PointStyle pointType)
 {
     if (pointSize <= 0.0f)
         return;
@@ -290,7 +290,7 @@ void DrawNode::drawPoint(const Vec2& position,
 void DrawNode::drawPoints(const Vec2* position,
                           unsigned int numberOfPoints,
                           const Color& color,
-                          const DrawNode::PointType pointType)
+                          const DrawNode::PointStyle pointType)
 {
     _drawPoints(position, numberOfPoints, 1.0f, color, pointType);
 }
@@ -299,7 +299,7 @@ void DrawNode::drawPoints(const Vec2* position,
                           unsigned int numberOfPoints,
                           const float pointSize,
                           const Color& color,
-                          const DrawNode::PointType pointType)
+                          const DrawNode::PointStyle pointType)
 {
     if (pointSize <= 0.0f)
         return;
@@ -310,8 +310,8 @@ void DrawNode::drawLine(const Vec2& origin,
                         const Vec2& destination,
                         const Color& color,
                         float thickness,
-                        DrawNode::EndType etStart,
-                        DrawNode::EndType etEnd)
+                        DrawNode::EndStyle etStart,
+                        DrawNode::EndStyle etEnd)
 {
     _drawSegment(origin, destination, color, thickness, etStart, etEnd);
 }
@@ -542,8 +542,8 @@ void DrawNode::drawSegment(const Vec2& from,
                            const Vec2& to,
                            float thickness,
                            const Color& color,
-                           DrawNode::EndType etStart,
-                           DrawNode::EndType etEnd)
+                           DrawNode::EndStyle etStart,
+                           DrawNode::EndStyle etEnd)
 {
     _drawSegment(from, to, color, thickness, etStart, etEnd);
 }
@@ -974,11 +974,11 @@ void DrawNode::_drawRect(const Vec2& origin, const Vec2& destination, const Colo
         float width      = thickness * _thicknessScale * 0.25f * 0.5f;
         float _thickness = thickness;
         _drawSegment(Vec2(origin.x + width, destination.y), Vec2(destination.x - width, destination.y), color,
-                     _thickness, EndType::Butt, EndType::Butt);
+                     _thickness, DrawNode::EndStyle::Butt, DrawNode::EndStyle::Butt);
         _drawSegment(Vec2(origin.x + width, origin.y), Vec2(destination.x - width, origin.y), color, _thickness,
-                     EndType::Butt, EndType::Butt);
-        _drawSegment(destination, Vec2(destination.x, origin.y), color, _thickness, EndType::Square, EndType::Square);
-        _drawSegment(origin, Vec2(origin.x, destination.y), color, _thickness, EndType::Square, EndType::Square);
+                     DrawNode::EndStyle::Butt, DrawNode::EndStyle::Butt);
+        _drawSegment(destination, Vec2(destination.x, origin.y), color, _thickness, DrawNode::EndStyle::Square, DrawNode::EndStyle::Square);
+        _drawSegment(origin, Vec2(origin.x, destination.y), color, _thickness, DrawNode::EndStyle::Square, DrawNode::EndStyle::Square);
     }
 }
 
@@ -1081,8 +1081,8 @@ void DrawNode::_drawSegment(const Vec2& from,
                             const Vec2& to,
                             const Color& color,
                             float thickness,
-                            DrawNode::EndType etStart,
-                            DrawNode::EndType etEnd)
+                            DrawNode::EndStyle etStart,
+                            DrawNode::EndStyle etEnd)
 {
     if (thickness == 1.0f && !_preserveDrawOrder)
     {
@@ -1109,18 +1109,18 @@ void DrawNode::_drawSegment(const Vec2& from,
         Vec2 v6 = a - (nw - tw);
         Vec2 v7 = a + (nw + tw);
 
-        unsigned int vertex_count = 3 * ((etStart != DrawNode::EndType::Butt) ? 2 : 0) + 3 * 2 +
-                                    3 * ((etEnd != DrawNode::EndType::Butt) ? 2 : 0);
+        unsigned int vertex_count = 3 * ((etStart != DrawNode::EndStyle::Butt) ? 2 : 0) + 3 * 2 +
+                                    3 * ((etEnd != DrawNode::EndStyle::Butt) ? 2 : 0);
         auto triangles  = reinterpret_cast<V2F_T2F_C4F_Triangle*>(expandBufferAndGetPointer(_triangles, vertex_count));
         _trianglesDirty = true;
 
         int ii = 0;
         switch (etEnd)
         {
-        case DrawNode::EndType::Butt:
+        case DrawNode::EndStyle::Butt:
             break;
 
-        case DrawNode::EndType::Square:
+        case DrawNode::EndStyle::Square:
             triangles[ii++] = {
                 {v0, Vec2::zero, color},
                 {v1, -n, color},
@@ -1134,7 +1134,7 @@ void DrawNode::_drawSegment(const Vec2& from,
             };
 
             break;
-        case DrawNode::EndType::Round:
+        case DrawNode::EndStyle::Round:
             triangles[ii++] = {
                 {v0, -(n + t), color},
                 {v1, n - t, color},
@@ -1167,10 +1167,10 @@ void DrawNode::_drawSegment(const Vec2& from,
 
         switch (etStart)
         {
-        case DrawNode::EndType::Butt:
+        case DrawNode::EndStyle::Butt:
             break;
 
-        case DrawNode::EndType::Square:
+        case DrawNode::EndStyle::Square:
             triangles[ii++] = {
                 {v6, Vec2::zero, color},
                 {v4, -n, color},
@@ -1184,7 +1184,7 @@ void DrawNode::_drawSegment(const Vec2& from,
             };
             break;
 
-        case DrawNode::EndType::Round:
+        case DrawNode::EndStyle::Round:
             triangles[ii++] = {
                 {v6, t - n, color},
                 {v4, -n, color},
@@ -1441,7 +1441,7 @@ void DrawNode::_drawPoints(const Vec2* position,
                            unsigned int numberOfPoints,
                            const float pointSize,
                            const Color& color,
-                           const DrawNode::PointType pointType)
+                           const DrawNode::PointStyle pointType)
 {
     if (_preserveDrawOrder)
     {
@@ -1451,12 +1451,12 @@ void DrawNode::_drawPoints(const Vec2* position,
         {
             switch (pointType)
             {
-            case PointType::Circle:
+            case DrawNode::PointStyle::Circle:
             {
                 _drawCircle(position[i], pointSize4, 90, 32, false, 1.0f, 1.0f, Color(), color, true);
                 break;
             }
-            case PointType::Rect:
+            case DrawNode::PointStyle::Rect:
             {
                 Vec2 origin      = position[i] - vec2Size4;
                 Vec2 destination = position[i] + vec2Size4;
@@ -1484,7 +1484,7 @@ void DrawNode::_drawPoints(const Vec2* position,
 void DrawNode::_drawPoint(const Vec2& position,
                           const float pointSize,
                           const Color& color,
-                          const DrawNode::PointType pointType)
+                          const DrawNode::PointStyle pointType)
 {
     if (_preserveDrawOrder)
     {
@@ -1493,12 +1493,12 @@ void DrawNode::_drawPoint(const Vec2& position,
 
         switch (pointType)
         {
-        case PointType::Circle:
+        case DrawNode::PointStyle::Circle:
         {
             _drawCircle(position, pointSize4, 90, 32, false, 1.0f, 1.0f, Color(), color, true);
             break;
         }
-        case PointType::Rect:
+        case DrawNode::PointStyle::Rect:
         {
             Vec2 origin      = position - vec2Size4;
             Vec2 destination = position + vec2Size4;
