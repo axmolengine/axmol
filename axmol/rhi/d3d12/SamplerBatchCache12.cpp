@@ -38,10 +38,10 @@ SamplerBatchCache::~SamplerBatchCache()
 }
 
 SamplerBatchCache::SamplerBatchCache(SamplerBatchCache&& other) noexcept
-    : _driver(other._driver),
-      _batchCount(other._batchCount),
-      _batchLookup(std::move(other._batchLookup)),
-      _batches(std::move(other._batches))
+    : _driver(other._driver)
+    , _batchCount(other._batchCount)
+    , _batchLookup(std::move(other._batchLookup))
+    , _batches(std::move(other._batches))
 {
     other._driver     = nullptr;
     other._batchCount = 0;
@@ -52,8 +52,8 @@ SamplerBatchCache& SamplerBatchCache::operator=(SamplerBatchCache&& other) noexc
     if (this != &other)
     {
         reset();
-        _driver     = other._driver;
-        _batchCount = other._batchCount;
+        _driver      = other._driver;
+        _batchCount  = other._batchCount;
         _batchLookup = std::move(other._batchLookup);
         _batches     = std::move(other._batches);
 
