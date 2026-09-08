@@ -3193,7 +3193,7 @@ void DrawNodeSpLinesTest::update(float dt)
 
 DrawNodeSpLinesOpenClosedTest::DrawNodeSpLinesOpenClosedTest()
 {
-    auto listener         = PointerEventListener::create();
+    auto listener           = PointerEventListener::create();
     listener->onPointerDown = AX_CALLBACK_1(DrawNodeSpLinesOpenClosedTest::onPointerDown, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
