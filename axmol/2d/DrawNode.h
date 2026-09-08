@@ -142,7 +142,7 @@ public:
     void drawLine(const Vec2& origin,
                   const Vec2& destination,
                   const Color& color,
-                  float thickness           = 1.0f,
+                  float thickness            = 1.0f,
                   DrawNode::EndStyle etStart = DrawNode::EndStyle::Round,
                   DrawNode::EndStyle etEnd   = DrawNode::EndStyle::Round);
 
@@ -722,7 +722,7 @@ private:
     void _drawSegment(const Vec2& origin,
                       const Vec2& destination,
                       const Color& color,
-                      float thickness           = 1.0f,
+                      float thickness            = 1.0f,
                       DrawNode::EndStyle etStart = DrawNode::EndStyle::Square,
                       DrawNode::EndStyle etEnd   = DrawNode::EndStyle::Square);
 

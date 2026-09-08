@@ -977,8 +977,10 @@ void DrawNode::_drawRect(const Vec2& origin, const Vec2& destination, const Colo
                      _thickness, DrawNode::EndStyle::Butt, DrawNode::EndStyle::Butt);
         _drawSegment(Vec2(origin.x + width, origin.y), Vec2(destination.x - width, origin.y), color, _thickness,
                      DrawNode::EndStyle::Butt, DrawNode::EndStyle::Butt);
-        _drawSegment(destination, Vec2(destination.x, origin.y), color, _thickness, DrawNode::EndStyle::Square, DrawNode::EndStyle::Square);
-        _drawSegment(origin, Vec2(origin.x, destination.y), color, _thickness, DrawNode::EndStyle::Square, DrawNode::EndStyle::Square);
+        _drawSegment(destination, Vec2(destination.x, origin.y), color, _thickness, DrawNode::EndStyle::Square,
+                     DrawNode::EndStyle::Square);
+        _drawSegment(origin, Vec2(origin.x, destination.y), color, _thickness, DrawNode::EndStyle::Square,
+                     DrawNode::EndStyle::Square);
     }
 }
 
