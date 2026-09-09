@@ -696,10 +696,10 @@ bool GraphicsContextImpl::dispatch(const ComputeDispatchDesc& desc)
 
     CHECK_GL_ERROR_DEBUG();
 
-    dispatchCompute(desc.groupCountX, desc.groupCountY, desc.groupCountZ);
+    glDispatchCompute(desc.groupCountX, desc.groupCountY, desc.groupCountZ);
 
     // Make compute writes visible to subsequent compute/vertex/fragment reads.
-    memoryBarrier(GL_ALL_BARRIER_BITS);
+    glMemoryBarrier(GL_ALL_BARRIER_BITS);
 
     // Unbind storage buffers to avoid stale SSBO bindings leaking into later draws.
     for (const auto& [binding, bindingSet] : desc.programState->getStorageBufferBindingSets())

@@ -48,72 +48,12 @@
 #    define _AX_USE_GLAD 0
 #endif
 
-#if _AX_USE_GLAD && AX_GLES_PROFILE
-#    if defined(GLAD_GLES2_USE_SYSTEM_EGL)
-#        include <EGL/egl.h>
-#    else
-#        include "glad/egl.h"
-#    endif
+#if _AX_USE_GLAD && AX_GLES_PROFILE && !defined(GLAD_GLES2_USE_SYSTEM_EGL)
+#    include "glad/egl.h"
 #endif
 
 namespace ax::rhi::gl
 {
-
-#if AX_GL_HAS_COMPUTE
-#    if AX_GLES_PROFILE
-namespace
-{
-using DispatchComputeProc = void(GLAD_API_PTR*)(GLuint, GLuint, GLuint);
-using MemoryBarrierProc   = void(GLAD_API_PTR*)(GLbitfield);
-
-DispatchComputeProc s_dispatchCompute = nullptr;
-MemoryBarrierProc s_memoryBarrier     = nullptr;
-}  // namespace
-#    endif
-
-bool loadComputeEntryPoints()
-{
-#    if AX_GLES_PROFILE
-    auto getProcAddress = eglGetProcAddress;
-    if (!getProcAddress)
-        return false;
-
-    s_dispatchCompute = reinterpret_cast<DispatchComputeProc>(getProcAddress("glDispatchCompute"));
-    s_memoryBarrier   = reinterpret_cast<MemoryBarrierProc>(getProcAddress("glMemoryBarrier"));
-    return s_dispatchCompute && s_memoryBarrier;
-#    else
-    return glDispatchCompute && glMemoryBarrier;
-#    endif
-}
-
-bool hasComputeEntryPoints()
-{
-#    if AX_GLES_PROFILE
-    return s_dispatchCompute && s_memoryBarrier;
-#    else
-    return glDispatchCompute && glMemoryBarrier;
-#    endif
-}
-
-void dispatchCompute(GLuint groupCountX, GLuint groupCountY, GLuint groupCountZ)
-{
-#    if AX_GLES_PROFILE
-    s_dispatchCompute(groupCountX, groupCountY, groupCountZ);
-#    else
-    glDispatchCompute(groupCountX, groupCountY, groupCountZ);
-#    endif
-}
-
-void memoryBarrier(GLbitfield barriers)
-{
-#    if AX_GLES_PROFILE
-    s_memoryBarrier(barriers);
-#    else
-    glMemoryBarrier(barriers);
-#    endif
-}
-#endif
-
 template <typename _Fty>
 static void GL_EnumAllExtensions(_Fty&& func)
 {
@@ -182,7 +122,7 @@ bool GraphicsDeviceImpl::init()
 #    else
     const bool computeProfile = _verInfo.major > 3 || (_verInfo.major == 3 && _verInfo.minor >= 1);
 #    endif
-    _computeEntryPoints = computeProfile && loadComputeEntryPoints();
+    _computeEntryPoints = computeProfile && glDispatchCompute && glMemoryBarrier;
     if (computeProfile && !_computeEntryPoints)
         AXLOGW("OpenGL compute profile is available, but required compute entry points could not be loaded");
 #endif
