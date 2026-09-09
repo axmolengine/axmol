@@ -7,7 +7,7 @@
 ## Checklist before requesting a review
 ### For each PR
 - [ ] Add Copyright if it missed:   
-      - `"Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md)."`
+      - `"Copyright (c) 2019-present Simdsoft Limited and other Axmol contributors (see AUTHORS.md)."`
 - [ ] I have performed a self-review of my code.
        
    Optional:

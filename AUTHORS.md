@@ -1,12 +1,12 @@
-# Axmol Engine authors
+# Axmol authors
 
-Axmol Engine is led and maintained by Simdsoft Limited (深圳司脉科技有限公司),
+Axmol is led and maintained by Simdsoft Limited (深圳司脉科技有限公司),
 with contributions from the Axmol community, including code, bug reports,
 documentation, artwork, support, and other work.
 
 It is impossible to list every contributor. This file therefore lists
 individuals and organizations that have made significant contributions to the
-MIT-licensed Axmol Engine project.
+MIT-licensed Axmol project.
 
 GitHub usernames are indicated in parentheses, or as sole entry when no other
 name is available.
