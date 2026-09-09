@@ -225,6 +225,85 @@ void TextureImpl::updateSubData(int xoffset,
     allocator->retireSync(span);
 }
 
+void TextureImpl::updateData3D(const void* data, int width, int height, int depth, int level)
+{
+    updateSubData3D(0, 0, 0, width, height, depth, level, data);
+}
+
+void TextureImpl::updateSubData3D(int xoffset,
+                                  int yoffset,
+                                  int zoffset,
+                                  int width,
+                                  int height,
+                                  int depth,
+                                  int level,
+                                  const void* data)
+{
+    bool prepareForCopyDest = data && width > 0 && height > 0 && depth > 0;
+    auto resourceState      = ensureNativeTexture(prepareForCopyDest);
+    if (!prepareForCopyDest || !resourceState)
+        return;
+
+    auto device        = _driver->getDevice();
+    const auto texDesc = _nativeTexture.resource->GetDesc();
+
+    D3D12_PLACED_SUBRESOURCE_FOOTPRINT footprint{};
+    UINT numRows{0};
+    UINT64 rowSizeInBytes{0};
+    UINT64 totalBytes{0};
+    device->GetCopyableFootprints(&texDesc, level, 1, 0, &footprint, &numRows, &rowSizeInBytes, &totalBytes);
+
+    auto allocator  = _driver->getUploadBufferAllocator();
+    UploadSpan span = allocator->allocTextureFootprint(totalBytes);
+
+    const UINT bytesPerPixel = ax::rhi::RHIUtils::getBitsPerPixel(_desc.pixelFormat) / 8;
+    const UINT rowCopySize   = width * bytesPerPixel;
+    const BYTE* srcData      = reinterpret_cast<const BYTE*>(data);
+    BYTE* dstPtr             = span.cpuPtr;
+
+    const UINT dstSlicePitch = footprint.Footprint.RowPitch * footprint.Footprint.Height;
+    for (UINT slice = 0; slice < static_cast<UINT>(depth); ++slice)
+    {
+        for (UINT row = 0; row < static_cast<UINT>(height); ++row)
+        {
+            memcpy(dstPtr + slice * dstSlicePitch + row * footprint.Footprint.RowPitch,
+                   srcData + (static_cast<UINT64>(slice) * height + row) * rowCopySize, rowCopySize);
+        }
+    }
+
+    auto& submission = _driver->startIsolateSubmission();
+
+    if (resourceState != D3D12_RESOURCE_STATE_COPY_DEST)
+        transitionState(submission, D3D12_RESOURCE_STATE_COPY_DEST);
+
+    D3D12_TEXTURE_COPY_LOCATION dst{};
+    dst.pResource        = _nativeTexture.resource.Get();
+    dst.Type             = D3D12_TEXTURE_COPY_TYPE_SUBRESOURCE_INDEX;
+    dst.SubresourceIndex = D3D12CalcSubresource(level, 0, 0, _desc.mipLevels, 1);
+
+    D3D12_TEXTURE_COPY_LOCATION src{};
+    src.pResource              = span.heap;
+    src.Type                   = D3D12_TEXTURE_COPY_TYPE_PLACED_FOOTPRINT;
+    src.PlacedFootprint        = footprint;
+    src.PlacedFootprint.Offset = span.offset;
+
+    D3D12_BOX srcBox{};
+    srcBox.left   = 0;
+    srcBox.top    = 0;
+    srcBox.front  = 0;
+    srcBox.right  = width;
+    srcBox.bottom = height;
+    srcBox.back   = depth;
+
+    submission->CopyTextureRegion(&dst, xoffset, yoffset, zoffset, &src, &srcBox);
+    transitionState(submission, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+    if (shouldGenMipmaps(level))
+        generateMipmaps(submission);
+
+    _driver->finishIsolateSubmission(submission, true);
+    allocator->retireSync(span);
+}
+
 void TextureImpl::updateCompressedData(const void* data,
                                        int width,
                                        int height,
@@ -420,16 +499,17 @@ D3D12_RESOURCE_STATES TextureImpl::ensureNativeTexture(bool prepareForCopyDest, 
     }
 
     const bool isCube = (_desc.textureType == TextureType::TEXTURE_CUBE);
+    const bool is3D   = (_desc.textureType == TextureType::TEXTURE_3D);
     const UINT mipLevels =
         (_desc.mipLevels != 0) ? _desc.mipLevels : ax::rhi::RHIUtils::computeMipLevels(_desc.width, _desc.height);
     const UINT arrayLayers = isCube ? 6u : static_cast<UINT>(_desc.arraySize);
 
     D3D12_RESOURCE_DESC texDesc{};
-    texDesc.Dimension          = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+    texDesc.Dimension          = is3D ? D3D12_RESOURCE_DIMENSION_TEXTURE3D : D3D12_RESOURCE_DIMENSION_TEXTURE2D;
     texDesc.Alignment          = 0;
     texDesc.Width              = _desc.width;
     texDesc.Height             = _desc.height;
-    texDesc.DepthOrArraySize   = arrayLayers;
+    texDesc.DepthOrArraySize   = is3D ? _desc.depth : arrayLayers;
     texDesc.MipLevels          = mipLevels;
     texDesc.Format             = fmtInfo->format;
     texDesc.SampleDesc.Count   = 1;
@@ -488,7 +568,7 @@ D3D12_RESOURCE_STATES TextureImpl::ensureNativeTexture(bool prepareForCopyDest, 
 
     // non depth-stencil texture, we need create SRV for sampling, even through it's textureUsage=RENDER_TARGET
     if (_desc.pixelFormat != PixelFormat::D24S8)
-        createShaderResourceView(fmtInfo, mipLevels, arrayLayers, isCube, device);
+        createShaderResourceView(fmtInfo, mipLevels, arrayLayers, isCube, is3D, device);
     assert(SUCCEEDED(hr));
 
     setKnownState(initialResourceState);
@@ -500,6 +580,7 @@ void TextureImpl::createShaderResourceView(const dxutils::PixelFormatInfo* fmtIn
                                            uint32_t mipLevels,
                                            uint32_t arrayLayers,
                                            bool isCube,
+                                           bool is3D,
                                            ID3D12Device* device)
 {
     // --- Create SRV for normal texture ---
@@ -513,6 +594,13 @@ void TextureImpl::createShaderResourceView(const dxutils::PixelFormatInfo* fmtIn
         srvDesc.TextureCube.MostDetailedMip     = 0;
         srvDesc.TextureCube.MipLevels           = mipLevels;
         srvDesc.TextureCube.ResourceMinLODClamp = 0.0f;
+    }
+    else if (is3D)
+    {
+        srvDesc.ViewDimension                 = D3D12_SRV_DIMENSION_TEXTURE3D;
+        srvDesc.Texture3D.MostDetailedMip     = 0;
+        srvDesc.Texture3D.MipLevels           = mipLevels;
+        srvDesc.Texture3D.ResourceMinLODClamp = 0.0f;
     }
     else if (arrayLayers > 1)
     {

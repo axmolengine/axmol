@@ -192,7 +192,7 @@ Renderer::~Renderer()
     free(_triBatchesToDraw);
 
     AX_SAFE_RELEASE(_depthStencilState);
-    AX_SAFE_RELEASE(_renderPipeline);
+    AX_SAFE_RELEASE(_graphicsPipeline);
     AX_SAFE_RELEASE(_context);
 }
 
@@ -209,8 +209,8 @@ void Renderer::init()
     _dsDesc.flags      = DepthStencilFlags::ALL;
     _currentRT = _defaultRT = _context->getScreenRenderTarget();
 
-    _renderPipeline = driver->createRenderPipeline();
-    _context->setRenderPipeline(_renderPipeline);
+    _graphicsPipeline = driver->createGraphicsPipeline();
+    _context->setGraphicsPipeline(_graphicsPipeline);
 
     _depthStencilState = driver->createDepthStencilState();
     _context->setDepthStencilState(_depthStencilState);

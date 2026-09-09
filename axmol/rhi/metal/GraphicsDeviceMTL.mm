@@ -26,7 +26,8 @@
 #include "axmol/rhi/metal/GraphicsDeviceMTL.h"
 #include "axmol/rhi/metal/GraphicsContextMTL.h"
 #include "axmol/rhi/metal/BufferMTL.h"
-#include "axmol/rhi/metal/RenderPipelineMTL.h"
+#include "axmol/rhi/metal/GraphicsPipelineMTL.h"
+#include "axmol/rhi/metal/ComputePipelineMTL.h"
 #include "axmol/rhi/metal/ShaderModuleMTL.h"
 #include "axmol/rhi/metal/DepthStencilStateMTL.h"
 #include "axmol/rhi/metal/TextureMTL.h"
@@ -425,10 +426,20 @@ bool GraphicsDeviceImpl::init()
 
     UtilsMTL::initGPUTextureFormats();
 
-    _caps.maxAttributes     = getMaxVertexAttributes(_featureSet);
-    _caps.maxSamplesAllowed = getMaxSamplerEntries(_featureSet);
-    _caps.maxTextureUnits   = getMaxTextureEntries(_featureSet);
-    _caps.maxTextureSize    = getMaxTextureWidthHeight(_featureSet);
+    _caps.maxAttributes                  = getMaxVertexAttributes(_featureSet);
+    _caps.maxSamplesAllowed              = getMaxSamplerEntries(_featureSet);
+    _caps.maxTextureUnits                = getMaxTextureEntries(_featureSet);
+    _caps.maxTextureSize                 = getMaxTextureWidthHeight(_featureSet);
+    _caps.maxTexture3DSize               = _caps.maxTextureSize;
+    _caps.maxComputeWorkGroupCount[0]    = 65535;
+    _caps.maxComputeWorkGroupCount[1]    = 65535;
+    _caps.maxComputeWorkGroupCount[2]    = 65535;
+    _caps.maxComputeWorkGroupSize[0]     = 1024;
+    _caps.maxComputeWorkGroupSize[1]     = 1024;
+    _caps.maxComputeWorkGroupSize[2]     = 64;
+    _caps.maxComputeWorkGroupInvocations = 1024;
+    _caps.maxStorageBufferBindings       = 31;
+    _caps.maxStorageBufferSize           = static_cast<size_t>(_mtlDevice.maxBufferLength);
 
     return true;
 }
@@ -441,6 +452,11 @@ GraphicsContext* GraphicsDeviceImpl::createGraphicsContext(SurfaceHandle surface
 Buffer* GraphicsDeviceImpl::createBuffer(size_t size, BufferType type, BufferUsage usage, const void* initial)
 {
     return new BufferImpl(_mtlDevice, size, type, usage, initial);
+}
+
+Buffer* GraphicsDeviceImpl::createBuffer(const BufferDesc& desc, const void* initial)
+{
+    return new BufferImpl(_mtlDevice, desc.size, desc.type, desc.usage, initial, desc.stride);
 }
 
 Texture* GraphicsDeviceImpl::createTexture(const TextureDesc& descriptor, std::optional<Color>)
@@ -472,14 +488,33 @@ DepthStencilState* GraphicsDeviceImpl::createDepthStencilState()
     return new DepthStencilStateImpl(_mtlDevice);
 }
 
-RenderPipeline* GraphicsDeviceImpl::createRenderPipeline()
+GraphicsPipeline* GraphicsDeviceImpl::createGraphicsPipeline()
 {
-    return new RenderPipelineImpl(_mtlDevice);
+    return new GraphicsPipelineImpl(_mtlDevice);
+}
+
+ComputePipeline* GraphicsDeviceImpl::createComputePipeline(Program* program)
+{
+    if (!program || !program->isValid() || !program->getCSModule())
+        return nullptr;
+
+    auto* pipeline = new ComputePipelineImpl(_mtlDevice, static_cast<ProgramImpl*>(program));
+    if (!pipeline->isValid())
+    {
+        pipeline->release();
+        return nullptr;
+    }
+    return pipeline;
 }
 
 Program* GraphicsDeviceImpl::createProgram(Data vsData, Data fsData)
 {
     return new ProgramImpl(vsData, fsData);
+}
+
+Program* GraphicsDeviceImpl::createComputeProgram(Data csData)
+{
+    return new ProgramImpl(csData);
 }
 
 ShaderModule* GraphicsDeviceImpl::createShaderModule(ShaderStage stage, Data& chunk)
@@ -645,6 +680,11 @@ bool GraphicsDeviceImpl::checkForFeatureSupported(FeatureType feature)
         break;
     case FeatureType::ASTC:
         featureSupported = supportASTC(_featureSet);
+        break;
+    case FeatureType::COMPUTE_SHADER:
+    case FeatureType::STORAGE_BUFFER:
+    case FeatureType::TEXTURE_3D:
+        featureSupported = true;
         break;
     default:
         break;

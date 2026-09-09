@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include "axmol/rhi/RenderPipeline.h"
+#include "axmol/rhi/GraphicsPipeline.h"
 
 #include "axmol/platform/GL.h"
 
@@ -42,14 +42,14 @@ class ProgramImpl;
 /**
  * Set program and blend state.
  */
-class RenderPipelineImpl : public RenderPipeline
+class GraphicsPipelineImpl : public GraphicsPipeline
 {
 public:
     /**
      * @param descriptor Specifies render pipeline descriptor.
      */
-    RenderPipelineImpl() = default;
-    ~RenderPipelineImpl();
+    GraphicsPipelineImpl() = default;
+    ~GraphicsPipelineImpl();
 
     void update(const RenderTarget*, const PipelineDesc& pipelineDesc);
     /**

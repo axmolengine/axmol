@@ -23,17 +23,28 @@
  ****************************************************************************/
 #pragma once
 #include "axmol/rhi/GraphicsContext.h"
-#include "axmol/rhi/vulkan/RenderPipelineVK.h"
+#include "axmol/rhi/vulkan/GraphicsPipelineVK.h"
+#include "axmol/rhi/vulkan/ComputePipelineVK.h"
+#include "axmol/base/RefPtr.h"
 #include <glad/vulkan.h>
 
 namespace ax::rhi::vk
 {
 class BufferImpl;
 class DepthStencilStateImpl;
-class RenderPipelineImpl;
+class GraphicsPipelineImpl;
 class RenderTargetImpl;
 class GraphicsDeviceImpl;
 class SemaphorePool;
+
+// Holds a strong reference to the compute pipeline so it stays alive until the
+// frame fence completes (Vulkan requires recorded objects to outlive command
+// buffer execution).
+struct InFlightComputeDescriptorState
+{
+    RefPtr<ComputePipelineImpl> pipeline;
+    DescriptorState* descriptorState = nullptr;
+};
 
 enum class DynamicStateBits : uint32_t
 {
@@ -97,7 +108,7 @@ public:
     bool updateSurface(SurfaceHandle surface, uint32_t width, uint32_t height) override;
 
     void setDepthStencilState(DepthStencilState* depthStencilState) override;
-    void setRenderPipeline(RenderPipeline* renderPipeline) override;
+    void setGraphicsPipeline(GraphicsPipeline* graphicsPipeline) override;
 
     bool beginFrame() override;
     void beginRenderPass(RenderTarget* renderTarget, const RenderPassDesc& descriptor) override;
@@ -130,6 +141,8 @@ public:
 
     bool copyTexture(RenderTarget* src, Texture* dst) override;
     bool copyTexture(Texture* src, Texture* dst) override;
+
+    bool dispatch(const ComputeDispatchDesc& desc) override;
 
     void setStencilReferenceValue(uint32_t value) override;
 
@@ -191,6 +204,7 @@ private:
     uint64_t _frameFenceValue{0};
 
     std::array<tlx::pod_vector<DescriptorState*>, MAX_FRAMES_IN_FLIGHT> _inFlightDescriptorStates;
+    std::array<std::vector<InFlightComputeDescriptorState>, MAX_FRAMES_IN_FLIGHT> _inFlightComputeDescriptorStates;
 
     tlx::pod_vector<VkSemaphore> _presentCompleteSemaphores;
     tlx::pod_vector<VkSemaphore> _renderFinishedSemaphores;
@@ -201,7 +215,7 @@ private:
     VkCommandBuffer _currentCmdBuffer{VK_NULL_HANDLE};  // weak pointer
 
     DepthStencilStateImpl* _depthStencilState{nullptr};
-    RenderPipelineImpl* _renderPipeline{nullptr};
+    GraphicsPipelineImpl* _graphicsPipeline{nullptr};
     BufferImpl* _vertexBuffer{nullptr};
     BufferImpl* _indexBuffer{nullptr};
     BufferImpl* _instanceBuffer{nullptr};

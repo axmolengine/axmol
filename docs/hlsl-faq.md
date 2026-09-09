@@ -72,6 +72,16 @@ SamplerRegistry::getInstance()->registerSampler("mySampler", desc);
 // Now load the Program - the sampler name will be resolved
 ```
 
+For a sampler whose state changes at runtime, register its name once, then
+override that custom sampler on each `ProgramState`:
+
+```cpp
+auto location = program->getSamplerLocation("mySampler");
+programState->setSampler(location, desc);
+```
+
+Built-in sampler presets are immutable.
+
 **Limits**: custom sampler arrays (`SamplerState arr[4]`) are not supported.
 Each sampler must be a single non-array declaration. Multiple custom sampler
 declarations are supported in one shader; register each sampler name before
@@ -115,6 +125,19 @@ until the engine has portable runtime support for them. Examples include:
 - `Texture2DMS` and `Texture2DMSArray`.
 - `AppendStructuredBuffer<T>` and `ConsumeStructuredBuffer<T>`.
 - rasterizer ordered resources such as `RasterizerOrderedTexture2D<T>`.
+
+## Which compute shaders are portable?
+
+Use `[numthreads(...)]`, ordinary `cbuffer` declarations,
+`StructuredBuffer<T>` / `RWStructuredBuffer<T>`, sampled textures, and
+registered custom samplers. The first RHI compute API does not support storage
+images, indirect dispatch, or asynchronous compute queues.
+
+Compile desktop OpenGL compute shaders as `gl-430` and OpenGL ES compute shaders
+as `gles-310`. The runtime chooses the highest archive profile supported by the
+actual context, so normal GL 330 / ESSL 300 graphics shaders continue to load on
+newer contexts. Always check the RHI compute, storage-buffer, texture, and limit
+capabilities before enabling a GPU-only feature.
 
 ## Do I need to add Y flips?
 

@@ -30,6 +30,12 @@
 namespace ax::rhi
 {
 
+Program* GraphicsDevice::createComputeProgram(Data csData)
+{
+    AX_UNUSED_PARAM(csData);
+    return nullptr;
+}
+
 VertexLayout* GraphicsDevice::createVertexLayout(VertexLayoutDesc&& desc)
 {
     return new VertexLayout(std::forward<VertexLayoutDesc>(desc));

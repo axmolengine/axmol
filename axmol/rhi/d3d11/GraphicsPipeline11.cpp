@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "axmol/rhi/d3d11/RenderPipeline11.h"
+#include "axmol/rhi/d3d11/GraphicsPipeline11.h"
 #include "axmol/rhi/d3d11/Program11.h"
 #include "xxhash/xxhash.h"
 
@@ -195,7 +195,7 @@ static uint32_t hashBlendDesc(const BlendDesc& bd)
     return XXH32(&pod, sizeof(pod), 0);
 }
 
-void RenderPipelineImpl::update(const RenderTarget*, const PipelineDesc& desc)
+void GraphicsPipelineImpl::update(const RenderTarget*, const PipelineDesc& desc)
 {
     ComPtr<ID3D11BlendState> blendState;
 

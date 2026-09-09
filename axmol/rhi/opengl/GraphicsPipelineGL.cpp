@@ -23,7 +23,7 @@ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "axmol/rhi/opengl/RenderPipelineGL.h"
+#include "axmol/rhi/opengl/GraphicsPipelineGL.h"
 #include "axmol/rhi/opengl/ShaderModuleGL.h"
 #include "axmol/rhi/opengl/DepthStencilStateGL.h"
 #include "axmol/rhi/opengl/ProgramGL.h"
@@ -36,7 +36,7 @@ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 namespace ax::rhi::gl
 {
 
-void RenderPipelineImpl::update(const RenderTarget*, const PipelineDesc& pipelineDesc)
+void GraphicsPipelineImpl::update(const RenderTarget*, const PipelineDesc& pipelineDesc)
 {
     if (_programImpl != pipelineDesc.programState->getProgram())
     {
@@ -48,7 +48,7 @@ void RenderPipelineImpl::update(const RenderTarget*, const PipelineDesc& pipelin
     updateBlendState(pipelineDesc.blendDesc);
 }
 
-void RenderPipelineImpl::updateBlendState(const BlendDesc& descriptor)
+void GraphicsPipelineImpl::updateBlendState(const BlendDesc& descriptor)
 {
     auto blendEnabled                = descriptor.blendEnabled;
     auto rgbBlendOp                  = UtilsGL::toGLBlendOp(descriptor.rgbBlendOp);
@@ -76,7 +76,7 @@ void RenderPipelineImpl::updateBlendState(const BlendDesc& descriptor)
     __state->colorMask(writeMaskRed, writeMaskGreen, writeMaskBlue, writeMaskAlpha);
 }
 
-RenderPipelineImpl::~RenderPipelineImpl()
+GraphicsPipelineImpl::~GraphicsPipelineImpl()
 {
     AX_SAFE_RELEASE(_programImpl);
 }

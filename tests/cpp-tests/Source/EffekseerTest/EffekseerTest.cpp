@@ -37,6 +37,14 @@ static const TestEffect _effects[] = {
     {"Laser04.efkefc",            "Laser04",                1.0f},
     {"TriggerLaser.efkefc",       "Trigger Laser",          1.0f},
     {"Simple_Distortion.efkefc",  "Simple Distortion",      1.0f},
+
+    // GPU particles (require compute/storage/Texture3D backend support)
+    {"GpuParticles_sprite_simple.efkefc",    "GPU Sprite Simple",    1.0f},
+    {"GpuParticles_sprite_gradient.efkefc",  "GPU Sprite Gradient",  1.0f},
+    {"GpuParticles_force_turbulence.efkefc", "GPU Force Turbulence", 1.0f},
+    {"GpuParticles_emit_mesh.efkefc",        "GPU Emit Mesh",        1.0f},
+    {"GpuParticles_trails_simple.efkefc",    "GPU Trails Simple",    1.0f},
+    {"GpuParticles_mesh_simple.efkefc",      "GPU Mesh Simple",      1.0f},
 };
 // clang-format on
 

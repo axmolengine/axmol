@@ -44,12 +44,21 @@ namespace ax::rhi
 {
 struct PipelineDesc;
 class RenderPass;
-class RenderPipeline;
+class GraphicsPipeline;
+class ComputePipeline;
 class Buffer;
 class DepthStencilState;
 class Texture;
 class RenderTarget;
 struct DepthStencilDesc;
+struct ComputeDispatchDesc
+{
+    ComputePipeline* pipeline  = nullptr;
+    ProgramState* programState = nullptr;
+    uint32_t groupCountX       = 1;
+    uint32_t groupCountY       = 1;
+    uint32_t groupCountZ       = 1;
+};
 
 /**
  * @addtogroup _rhi
@@ -88,10 +97,10 @@ public:
 
     /**
      * Sets the current render pipeline state object once
-     * @param renderPipeline An object that contains the graphics functions and configuration state used in a render
+     * @param graphicsPipeline An object that contains the graphics functions and configuration state used in a render
      * pass.
      */
-    virtual void setRenderPipeline(RenderPipeline* renderPipeline) = 0;
+    virtual void setGraphicsPipeline(GraphicsPipeline* graphicsPipeline) = 0;
 
     /// @name Setters & Getters
     /**
@@ -157,7 +166,9 @@ public:
 
     /**
      * Set matrix tranform when drawing instances of the same model
-     * @ buffer A buffer object that the device will read matrices from.
+     * @ buffer A buffer object that the device will read matrices from. It may
+     * be null when the shader uses the instance ID and has no per-instance
+     * vertex attributes.
      */
     virtual void setInstanceBuffer(Buffer* buffer) = 0;
 
@@ -256,6 +267,21 @@ public:
      * @return true if the copy command was successfully issued; otherwise false.
      */
     virtual bool copyTexture(RenderTarget* src, Texture* dst) = 0;
+
+    /**
+     * @brief Dispatches a compute pipeline on the graphics queue.
+     *
+     * The pipeline and program state must reference the same compute program.
+     * All resources declared by that program must be bound through the
+     * program state before dispatch. The dispatch is submitted outside an
+     * active render pass; the RHI performs the required synchronization with
+     * subsequent compute and graphics accesses.
+     *
+     * @param desc Compute pipeline, resource bindings, and workgroup counts.
+     * @return true if the dispatch was accepted; otherwise false when compute
+     *         is unsupported or the descriptor is invalid.
+     */
+    virtual bool dispatch(const ComputeDispatchDesc& desc);
 
     /**
      * This property controls whether or not the drawables'

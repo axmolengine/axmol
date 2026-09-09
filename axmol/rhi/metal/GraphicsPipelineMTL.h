@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include "axmol/rhi/RenderPipeline.h"
+#include "axmol/rhi/GraphicsPipeline.h"
 #include <string>
 #include <vector>
 #include <memory>
@@ -44,15 +44,15 @@ class RenderTargetImpl;
 /**
  * Create and compile a new MTLRenderPipelineState object synchronously.
  */
-class RenderPipelineImpl : public RenderPipeline
+class GraphicsPipelineImpl : public GraphicsPipeline
 {
 public:
     /**
      * @param mtlDevice The device for which MTLRenderPipelineState object was created.
      * @param descriptor Specify the render pipeline description.
      */
-    RenderPipelineImpl(id<MTLDevice> mtlDevice);
-    ~RenderPipelineImpl();
+    GraphicsPipelineImpl(id<MTLDevice> mtlDevice);
+    ~GraphicsPipelineImpl();
     void update(const RenderTarget* renderTarget, const PipelineDesc&);
 
     /**

@@ -38,7 +38,7 @@ ShaderModuleImpl::ShaderModuleImpl(GraphicsDeviceImpl* driver, ShaderStage stage
     {
         _blob     = _codeSpan;
         _shader   = driver->createShaderFromBytecode(_codeSpan, stage);
-        _compiled = true;
+        _compiled = _shader != nullptr;
     }
     else
     {

@@ -25,6 +25,7 @@
 #pragma once
 
 #include "axmol/rhi/Program.h"
+#include "axmol/rhi/metal/ShaderModuleMTL.h"
 #import <Metal/Metal.h>
 
 namespace ax::rhi::mtl
@@ -45,6 +46,20 @@ class ProgramImpl : public Program
 public:
     /// @name Constructor, Destructor and Initializers
     ProgramImpl(Data& vsData, Data& fsData);
+
+    /**
+     * @param csData Specifies the compute shader source.
+     */
+    explicit ProgramImpl(Data& csData);
+
+    /**
+     * Get the compute function for this program.
+     * @return The MTLFunction, or nil for graphics programs.
+     */
+    id<MTLFunction> getMTLComputeFunction() const
+    {
+        return _csModule ? static_cast<ShaderModuleImpl*>(_csModule)->getMTLFunction() : nil;
+    }
 };
 
 // end of _metal group

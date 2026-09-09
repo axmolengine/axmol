@@ -50,7 +50,7 @@ namespace rhi
 {
 class Buffer;
 class GraphicsContext;
-class RenderPipeline;
+class GraphicsPipeline;
 class RenderPass;
 class Texture;
 class RenderTarget;
@@ -500,7 +500,7 @@ protected:
 
     void updateSurface(SurfaceHandle surface, uint32_t width, uint32_t height);
 
-    rhi::RenderPipeline* _renderPipeline = nullptr;
+    rhi::GraphicsPipeline* _graphicsPipeline = nullptr;
 
     Viewport _viewport;
     CullMode _cullMode = CullMode::NONE;

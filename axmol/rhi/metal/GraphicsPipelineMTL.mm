@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "axmol/rhi/metal/RenderPipelineMTL.h"
+#include "axmol/rhi/metal/GraphicsPipelineMTL.h"
 #include "axmol/rhi/metal/GraphicsDeviceMTL.h"
 #include "axmol/rhi/metal/RenderTargetMTL.h"
 #include "axmol/rhi/metal/ShaderModuleMTL.h"
@@ -153,9 +153,9 @@ static MTLBlendOperation toMTLBlendOp(BlendOp operation)
 }
 }  // namespace
 
-RenderPipelineImpl::RenderPipelineImpl(id<MTLDevice> mtlDevice) : _mtlDevice(mtlDevice) {}
+GraphicsPipelineImpl::GraphicsPipelineImpl(id<MTLDevice> mtlDevice) : _mtlDevice(mtlDevice) {}
 
-void RenderPipelineImpl::update(const RenderTarget* renderTarget, const PipelineDesc& pipelineDesc)
+void GraphicsPipelineImpl::update(const RenderTarget* renderTarget, const PipelineDesc& pipelineDesc)
 {
     struct
     {
@@ -229,13 +229,13 @@ void RenderPipelineImpl::update(const RenderTarget* renderTarget, const Pipeline
     _mtlStateCache.emplace(hash, _mtlRenderPipelineState);
 }
 
-RenderPipelineImpl::~RenderPipelineImpl()
+GraphicsPipelineImpl::~GraphicsPipelineImpl()
 {
     for (auto& item : _mtlStateCache)
         [item.second release];
 }
 
-void RenderPipelineImpl::setVertexLayout(MTLRenderPipelineDescriptor* mtlDesc, const PipelineDesc& desc)
+void GraphicsPipelineImpl::setVertexLayout(MTLRenderPipelineDescriptor* mtlDesc, const PipelineDesc& desc)
 {
     auto vertexLayout = desc.vertexLayout;
     assert(vertexLayout);
@@ -295,8 +295,8 @@ void RenderPipelineImpl::setVertexLayout(MTLRenderPipelineDescriptor* mtlDesc, c
     }
 }
 
-void RenderPipelineImpl::setBlendState(MTLRenderPipelineColorAttachmentDescriptor* colorAttachmentDesc,
-                                       const BlendDesc& blendDesc)
+void GraphicsPipelineImpl::setBlendState(MTLRenderPipelineColorAttachmentDescriptor* colorAttachmentDesc,
+                                         const BlendDesc& blendDesc)
 {
     colorAttachmentDesc.blendingEnabled = blendDesc.blendEnabled;
     colorAttachmentDesc.writeMask       = toMTLColorWriteMask(blendDesc.writeMask);
@@ -310,7 +310,7 @@ void RenderPipelineImpl::setBlendState(MTLRenderPipelineColorAttachmentDescripto
     colorAttachmentDesc.destinationAlphaBlendFactor = toMTLBlendFactor(blendDesc.destinationAlphaBlendFactor);
 }
 
-void RenderPipelineImpl::setShaderModules(Program* program)
+void GraphicsPipelineImpl::setShaderModules(Program* program)
 {
     auto vsModule                         = static_cast<ShaderModuleImpl*>(program->getVSModule());
     _mtlRenderPipelineDesc.vertexFunction = vsModule->getMTLFunction();
@@ -319,7 +319,7 @@ void RenderPipelineImpl::setShaderModules(Program* program)
     _mtlRenderPipelineDesc.fragmentFunction = fsModule->getMTLFunction();
 }
 
-void RenderPipelineImpl::setBlendStateAndFormat(const BlendDesc& blendDesc, const RenderTargetImpl* rt)
+void GraphicsPipelineImpl::setBlendStateAndFormat(const BlendDesc& blendDesc, const RenderTargetImpl* rt)
 {
     auto& nativeColorFormats = rt->getNativeColorFormats();
     auto formatCount         = nativeColorFormats.size();

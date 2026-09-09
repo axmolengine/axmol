@@ -61,7 +61,8 @@ TextureImpl::TextureImpl(GLuint texture, uint32_t width, uint32_t height)
 
 void TextureImpl::updateTextureDesc(const TextureDesc& desc)
 {
-    assert(desc.textureType == rhi::TextureType::TEXTURE_2D || _desc.width == _desc.height);
+    assert(desc.textureType == rhi::TextureType::TEXTURE_2D || desc.textureType == rhi::TextureType::TEXTURE_3D ||
+           _desc.width == _desc.height);
 
     Texture::updateTextureDesc(desc);
 
@@ -73,6 +74,9 @@ void TextureImpl::updateTextureDesc(const TextureDesc& desc)
         break;
     case TextureType::TEXTURE_CUBE:
         _nativeDesc.target = GL_TEXTURE_CUBE_MAP;
+        break;
+    case TextureType::TEXTURE_3D:
+        _nativeDesc.target = GL_TEXTURE_3D;
         break;
     }
 }
@@ -201,6 +205,37 @@ void TextureImpl::updateCompressedSubData(int xoffset,
         glCompressedTexSubImage3D(GL_TEXTURE_2D_ARRAY, level, xoffset, yoffset, layerIndex, width, height, 1,
                                   _nativeDesc.internalFormat, static_cast<GLsizei>(dataSize), data);
     }
+    CHECK_GL_ERROR_DEBUG();
+}
+
+void TextureImpl::updateData3D(const void* data, int width, int height, int depth, int level)
+{
+    assert(_desc.textureType == TextureType::TEXTURE_3D);
+    ensureNativeTexture();
+
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glTexImage3D(GL_TEXTURE_3D, level, _nativeDesc.internalFormat, width, height, depth, 0, _nativeDesc.format,
+                 _nativeDesc.type, data);
+    CHECK_GL_ERROR_DEBUG();
+}
+
+void TextureImpl::updateSubData3D(int xoffset,
+                                  int yoffset,
+                                  int zoffset,
+                                  int width,
+                                  int height,
+                                  int depth,
+                                  int level,
+                                  const void* data)
+{
+    assert(_desc.textureType == TextureType::TEXTURE_3D);
+    ensureNativeTexture();
+    if (!data) [[unlikely]]
+        return;
+
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glTexSubImage3D(GL_TEXTURE_3D, level, xoffset, yoffset, zoffset, width, height, depth, _nativeDesc.format,
+                    _nativeDesc.type, data);
     CHECK_GL_ERROR_DEBUG();
 }
 

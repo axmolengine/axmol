@@ -94,6 +94,10 @@ public:
         SetModelLoader(renderer->CreateModelLoader(_file));
         SetMaterialLoader(renderer->CreateMaterialLoader(_file));
         SetCurveLoader(Effekseer::MakeRefPtr<Effekseer::CurveLoader>(_file));
+        // GPU particle resources are created while Effect::Create parses the
+        // effect. The factory must therefore be installed on this setting,
+        // not only on the manager used later for simulation.
+        SetGpuParticleFactory(renderer->CreateGpuParticleFactory());
     }
 
 private:
@@ -409,6 +413,7 @@ void EffectEmitter::draw(const ax::SceneRenderState& state, const ax::Mat4& pare
     if (!mgr || !mgr->GetShown(_handle))
         return;
 
+    _manager->markEmitterDrawn();
     auto renderer = _manager->getInternalRenderer();
     static_cast<EffekseerRendererAxmol::Renderer*>(renderer.Get())->SetGlobalZOrder(_globalZOrder);
     renderer->BeginRendering();
@@ -463,6 +468,8 @@ void EffectManager::releaseGraphicsResources()
 
     _manager = nullptr;
     _renderer = nullptr;
+    _lastComputedFrame = ~0u;
+    _didDrawEmitterInPass = false;
 }
 
 bool EffectManager::initialize(ax::Size visibleSize)
@@ -476,6 +483,16 @@ bool EffectManager::initialize(ax::Size visibleSize)
     _manager->SetRibbonRenderer(_renderer->CreateRibbonRenderer());
     _manager->SetRingRenderer(_renderer->CreateRingRenderer());
     _manager->SetTrackRenderer(_renderer->CreateTrackRenderer());
+
+    // Register the GPU particle system when the backend supports compute/storage/Texture3D.
+    Effekseer::GpuParticleSystem::Settings gpuSettings;
+    auto gpuFactory = _renderer->CreateGpuParticleFactory();
+    auto gpuSystem = _renderer->CreateGpuParticleSystem(gpuSettings);
+    if (gpuFactory && gpuSystem)
+    {
+        _manager->SetGpuParticleFactory(gpuFactory);
+        _manager->SetGpuParticleSystem(gpuSystem);
+    }
 
     _renderer->SetProjectionMatrix(Effekseer::Matrix44().OrthographicRH(visibleSize.width, visibleSize.height, 1.0f, 400.0f));
     _renderer->SetCameraMatrix(Effekseer::Matrix44().LookAtRH(Effekseer::Vector3D(visibleSize.width / 2.0f, visibleSize.height / 2.0f, 200.0f),
@@ -508,16 +525,47 @@ void EffectManager::setMatrix(Effekseer::Handle handle, const ax::Mat4& mat)
 
 void EffectManager::begin(const ax::SceneRenderState& state, float globalZOrder)
 {
-    AX_UNUSED_PARAM(globalZOrder);
-    static_cast<EffekseerRendererAxmol::Renderer*>(_renderer.Get())->BeginFrame(state.getRenderer());
+    if (!_manager || !_renderer)
+        return;
+
+    _didDrawEmitterInPass = false;
+    auto renderer = static_cast<EffekseerRendererAxmol::Renderer*>(_renderer.Get());
+    renderer->SetGlobalZOrder(globalZOrder);
+    renderer->BeginFrame(state.getRenderer());
     setCameraMatrix(state.getViewMatrix());
     setProjectionMatrix(state.getProjectionMatrix());
+
+    // SceneCompositor visits the scene once per camera. Simulation advances
+    // once per Director frame, while rendering remains camera-pass specific.
+    const auto frame = ax::Director::getInstance()->getTotalFrames();
+    if (_lastComputedFrame != frame)
+    {
+        _manager->Compute();
+        _lastComputedFrame = frame;
+    }
 }
 
 void EffectManager::end(const ax::SceneRenderState& state, float globalZOrder)
 {
     AX_UNUSED_PARAM(state);
-    AX_UNUSED_PARAM(globalZOrder);
+    if (!_manager || !_renderer)
+        return;
+
+    auto renderer = static_cast<EffekseerRendererAxmol::Renderer*>(_renderer.Get());
+    renderer->SetGlobalZOrder(globalZOrder);
+
+    // Axmol renders CPU effects per node through Manager::DrawHandle(), which
+    // does not invoke Effekseer's global GPU particle render pass. Submit that
+    // pass once after all emitter nodes have enqueued their CPU draw commands.
+    if (_didDrawEmitterInPass)
+    {
+        if (auto gpuParticleSystem = _manager->GetGpuParticleSystem())
+        {
+            Effekseer::GpuParticleSystem::Context context{};
+            context.CoordinateReversed = _manager->GetCoordinateSystem() != Effekseer::CoordinateSystem::RH;
+            gpuParticleSystem->RenderFrame(context);
+        }
+    }
 }
 
 void EffectManager::update(float delta)

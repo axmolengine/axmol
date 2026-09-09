@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2017-2025 Advanced Micro Devices, Inc. All rights reserved.
+// Copyright (c) 2017-2026 Advanced Micro Devices, Inc. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -25,9 +25,9 @@
 
 /** \mainpage Vulkan Memory Allocator
 
-<b>Version 3.4.0-development</b>
+<b>Version 3.4.0</b>
 
-Copyright (c) 2017-2025 Advanced Micro Devices, Inc. All rights reserved. \n
+Copyright (c) 2017-2026 Advanced Micro Devices, Inc. All rights reserved. \n
 License: MIT \n
 See also: [product page on GPUOpen](https://gpuopen.com/vulkan-memory-allocator/),
 [repository on GitHub](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator)
@@ -129,8 +129,10 @@ See documentation chapter: \ref statistics.
 extern "C" {
 #endif
 
-#if !defined(VULKAN_H_)
-#include <vulkan/vulkan.h>
+#ifndef VMA_VULKAN_HEADERS_ALREADY_INCLUDED
+    #if !defined(VULKAN_H_)
+        #include <vulkan/vulkan.h>
+    #endif
 #endif
 
 #define VMA_VERSION (VK_MAKE_VERSION(3, 4, 0))
@@ -194,8 +196,16 @@ extern "C" {
     #endif
 #endif
 
+#if !defined(VMA_GET_PHYSICAL_DEVICE_PROPERTIES2)
+    #if VK_KHR_get_physical_device_properties2 || VMA_VULKAN_VERSION >= 1001000
+        #define VMA_GET_PHYSICAL_DEVICE_PROPERTIES2 1
+    #else
+        #define VMA_GET_PHYSICAL_DEVICE_PROPERTIES2 0
+    #endif
+#endif
+
 #if !defined(VMA_MEMORY_BUDGET)
-    #if VK_EXT_memory_budget && (VK_KHR_get_physical_device_properties2 || VMA_VULKAN_VERSION >= 1001000)
+    #if VK_EXT_memory_budget && VMA_GET_PHYSICAL_DEVICE_PROPERTIES2
         #define VMA_MEMORY_BUDGET 1
     #else
         #define VMA_MEMORY_BUDGET 0
@@ -1049,7 +1059,7 @@ typedef struct VmaVulkanFunctions
     /// Fetch "vkBindImageMemory2" on Vulkan >= 1.1, fetch "vkBindImageMemory2KHR" when using VK_KHR_bind_memory2 extension.
     PFN_vkBindImageMemory2KHR VMA_NULLABLE vkBindImageMemory2KHR;
 #endif
-#if VMA_MEMORY_BUDGET || VMA_VULKAN_VERSION >= 1001000
+#if VMA_GET_PHYSICAL_DEVICE_PROPERTIES2
     /// Fetch from "vkGetPhysicalDeviceMemoryProperties2" on Vulkan >= 1.1, but you can also fetch it from "vkGetPhysicalDeviceMemoryProperties2KHR" if you enabled extension VK_KHR_get_physical_device_properties2.
     PFN_vkGetPhysicalDeviceMemoryProperties2KHR VMA_NULLABLE vkGetPhysicalDeviceMemoryProperties2KHR;
 #endif
@@ -1063,6 +1073,10 @@ typedef struct VmaVulkanFunctions
     PFN_vkGetMemoryWin32HandleKHR VMA_NULLABLE vkGetMemoryWin32HandleKHR;
 #else
     void* VMA_NULLABLE vkGetMemoryWin32HandleKHR;
+#endif
+#if VMA_GET_PHYSICAL_DEVICE_PROPERTIES2
+    /// Fetch from "vkGetPhysicalDeviceProperties2" on Vulkan >= 1.1, but you can also fetch it from "vkGetPhysicalDeviceProperties2KHR" if you enabled extension VK_KHR_get_physical_device_properties2.
+    PFN_vkGetPhysicalDeviceProperties2KHR VMA_NULLABLE vkGetPhysicalDeviceProperties2KHR;
 #endif
 } VmaVulkanFunctions;
 
@@ -1338,6 +1352,19 @@ typedef struct VmaAllocationCreateInfo
     Otherwise, it has the priority of a memory block where it is placed and this variable is ignored.
     */
     float priority;
+    /** \brief Additional minimum alignment to be used for this allocation. Can be 0.
+
+    Leave 0 (default) not to impose any additional alignment. If not 0, it must be a power of two.
+    
+    When creating a buffer or an image, specifying a custom alignment is not needed in most cases,
+    because Vulkan implementation inspects the `CreateInfo` structure (including intended usage flags)
+    and returns required alignment through functions like `vkGetBufferMemoryRequirements2`, which VMA automatically
+    uses and respects.
+    Extra alignment may be needed in some cases, like when using a buffer for acceleration structure scratch
+    (`VkPhysicalDeviceAccelerationStructurePropertiesKHR::minAccelerationStructureScratchOffsetAlignment`, see also issue #523)
+    or when doing interop with OpenGL.
+    */
+    VkDeviceSize minAlignment;
 } VmaAllocationCreateInfo;
 
 /// Describes parameter of created #VmaPool.
@@ -1381,8 +1408,14 @@ typedef struct VmaPoolCreateInfo
     /** \brief Additional minimum alignment to be used for all allocations created from this pool. Can be 0.
 
     Leave 0 (default) not to impose any additional alignment. If not 0, it must be a power of two.
-    It can be useful in cases where alignment returned by Vulkan by functions like `vkGetBufferMemoryRequirements` is not enough,
-    e.g. when doing interop with OpenGL.
+
+    When creating a buffer or an image, specifying a custom alignment is not needed in most cases,
+    because Vulkan implementation inspects the `CreateInfo` structure (including intended usage flags)
+    and returns required alignment through functions like `vkGetBufferMemoryRequirements2`, which VMA automatically
+    uses and respects.
+    Extra alignment may be needed in some cases, like when using a buffer for acceleration structure scratch
+    (`VkPhysicalDeviceAccelerationStructurePropertiesKHR::minAccelerationStructureScratchOffsetAlignment`, see also issue #523)
+    or when doing interop with OpenGL.
     */
     VkDeviceSize minAllocationAlignment;
     /** \brief Additional `pNext` chain to be attached to `VkMemoryAllocateInfo` used for every allocation made by this pool. Optional.
@@ -2667,9 +2700,8 @@ allocation for this buffer, just like when using
 although recommended as a good practice, is out of scope of this library and could be implemented
 by the user as a higher-level logic on top of VMA.
 
-There are also extended versions of this function available:
-- With additional parameter `minAlignment` - see vmaCreateBufferWithAlignment().
-- With additional parameter `pMemoryAllocateNext` - see vmaCreateDedicatedBuffer().
+There is also an extended versions of this function available with additional parameter `pMemoryAllocateNext` -
+see vmaCreateDedicatedBuffer().
 */
 VMA_CALL_PRE VkResult VMA_CALL_POST vmaCreateBuffer(
     VmaAllocator VMA_NOT_NULL allocator,
@@ -2684,6 +2716,10 @@ VMA_CALL_PRE VkResult VMA_CALL_POST vmaCreateBuffer(
 Similar to vmaCreateBuffer() but provides additional parameter `minAlignment` which allows to specify custom,
 minimum alignment to be used when placing the buffer inside a larger memory block, which may be needed e.g.
 for interop with OpenGL.
+
+\deprecated
+This function in obsolete since new VmaAllocationCreateInfo::minAlignment member allows specifying custom
+alignment while using any allocation function, like the standard vmaCreateBuffer().
 */
 VMA_CALL_PRE VkResult VMA_CALL_POST vmaCreateBufferWithAlignment(
     VmaAllocator VMA_NOT_NULL allocator,
@@ -3103,7 +3139,7 @@ remove them if not needed.
 */
 #if !defined(VMA_CONFIGURATION_USER_INCLUDES_H)
     #include <cassert> // for assert
-    #include <algorithm> // for min, max, swap
+    #include <algorithm> // for min, max, swap, sort
     #include <mutex>
 #else
     #include VMA_CONFIGURATION_USER_INCLUDES_H
@@ -3418,6 +3454,11 @@ If providing your own implementation, you need to implement a subset of std::ato
 #ifndef VMA_ATOMIC_UINT64
     #include <atomic>
     #define VMA_ATOMIC_UINT64 std::atomic<uint64_t>
+#endif
+
+#ifndef VMA_ATOMIC_BOOL
+    #include <atomic>
+    #define VMA_ATOMIC_BOOL std::atomic<bool>
 #endif
 
 #ifndef VMA_DEBUG_ALWAYS_DEDICATED_MEMORY
@@ -4243,8 +4284,11 @@ bool FindMemoryPreferences(
             }
             else
             {
-                // Always CPU memory.
-                outRequiredFlags |= VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
+                if(hostAccessAllowTransferInstead)
+                    outPreferredFlags |= VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
+                else
+                    // Always CPU memory.
+                    outRequiredFlags |= VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
             }
         }
         // CPU sequential write - may be CPU or host-visible GPU memory, uncached and write-combined.
@@ -4259,7 +4303,12 @@ bool FindMemoryPreferences(
             }
             else
             {
-                outRequiredFlags |= VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
+                if(hostAccessAllowTransferInstead)
+                    outPreferredFlags |= VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
+                else
+                    // Always CPU memory.
+                    outRequiredFlags |= VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
+
                 // Direct GPU access, CPU sequential write (e.g. a dynamic uniform buffer updated every frame)
                 if(deviceAccess)
                 {
@@ -6519,6 +6568,7 @@ public:
     uint32_t GetMemoryTypeIndex() const { return m_MemoryTypeIndex; }
     uint32_t GetId() const { return m_Id; }
     void* GetMappedData() const { return m_pMappedData; }
+    bool IsMapped() const { return m_IsMapped.load(); }
     uint32_t GetMapRefCount() const { return m_MapCount; }
 
     // Call when allocation/free was made from m_pMetadata.
@@ -6566,12 +6616,18 @@ private:
     /*
     Protects access to m_hMemory so it is not used by multiple threads simultaneously, e.g. vkMapMemory, vkBindBufferMemory.
     Also protects m_MapCount, m_pMappedData.
+    m_IsMapped mirrors whether m_pMappedData is non-null and can be read without this mutex in allocation heuristics.
     Allocations, deallocations, any change in m_pMetadata is protected by parent's VmaBlockVector::m_Mutex.
     */
     VMA_MUTEX m_MapAndBindMutex;
     VmaMappingHysteresis m_MappingHysteresis;
     uint32_t m_MapCount;
     void* m_pMappedData;
+    /*
+    Mirrors `m_pMappedData != VMA_NULL` for allocation heuristics that only need mapped/unmapped state.
+    This is atomic so allocation scans don't race with Map/Unmap while the actual mapped pointer remains protected by m_MapAndBindMutex.
+    */
+    VMA_ATOMIC_BOOL m_IsMapped;
 
     VmaWin32Handle m_Handle;
 };
@@ -7136,6 +7192,14 @@ void VmaBlockMetadata::PrintDetailedMap_End(class VmaJsonWriter& json)
 
 #ifndef _VMA_BLOCK_BUFFER_IMAGE_GRANULARITY
 // Before deleting object of this class remember to call 'Destroy()'
+/*
+Tracks block occupancy at VkPhysicalDeviceLimits::bufferImageGranularity page boundaries.
+For each granularity-sized page in a memory block, m_RegionInfo stores:
+- allocCount: how many allocations touch this page as their first or last page.
+- allocType: the remembered VmaSuballocationType for that page while allocCount > 0.
+Only boundary pages are tracked because buffer-image granularity conflicts matter when
+adjacent allocations share the same granularity page at the start or end of an allocation.
+*/
 class VmaBlockBufferImageGranularity final
 {
 public:
@@ -7158,6 +7222,21 @@ public:
         VkDeviceSize& inOutAllocSize,
         VkDeviceSize& inOutAllocAlignment) const;
 
+    /*
+    Checks whether an allocation placed in a free block would conflict with existing
+    allocations due to buffer-image granularity requirements and, if needed, aligns the
+    allocation start to the next granularity page.
+    
+    Parameters:
+    - inOutAllocOffset: candidate allocation offset inside the block; may be increased.
+    - allocSize: size of the allocation being placed.
+    - blockOffset: start offset of the free block being considered.
+    - blockSize: size of the free block being considered.
+    - allocType: VmaSuballocationType of the allocation being placed.
+    
+    Returns true when the placement conflicts or no longer fits in the free block after alignment.
+    Returns false when the placement is valid, possibly after updating inOutAllocOffset.
+    */
     bool CheckConflictAndAlignUp(VkDeviceSize& inOutAllocOffset,
         VkDeviceSize allocSize,
         VkDeviceSize blockOffset,
@@ -7246,56 +7325,62 @@ bool VmaBlockBufferImageGranularity::CheckConflictAndAlignUp(VkDeviceSize& inOut
     VkDeviceSize blockSize,
     VmaSuballocationType allocType) const
 {
-    if (IsEnabled())
+    if (!IsEnabled())
+        return false;
+
+    uint32_t startPage = GetStartPage(inOutAllocOffset);
+    if (m_RegionInfo[startPage].allocCount > 0 &&
+        VmaIsBufferImageGranularityConflict(static_cast<VmaSuballocationType>(m_RegionInfo[startPage].allocType), allocType))
     {
-        uint32_t startPage = GetStartPage(inOutAllocOffset);
+        inOutAllocOffset = VmaAlignUp(inOutAllocOffset, m_BufferImageGranularity);
+        if (blockSize < allocSize + inOutAllocOffset - blockOffset)
+            return true;
+        startPage = GetStartPage(inOutAllocOffset);
         if (m_RegionInfo[startPage].allocCount > 0 &&
             VmaIsBufferImageGranularityConflict(static_cast<VmaSuballocationType>(m_RegionInfo[startPage].allocType), allocType))
-        {
-            inOutAllocOffset = VmaAlignUp(inOutAllocOffset, m_BufferImageGranularity);
-            if (blockSize < allocSize + inOutAllocOffset - blockOffset)
-                return true;
-            ++startPage;
-        }
-        uint32_t endPage = GetEndPage(inOutAllocOffset, allocSize);
-        if (endPage != startPage &&
-            m_RegionInfo[endPage].allocCount > 0 &&
-            VmaIsBufferImageGranularityConflict(static_cast<VmaSuballocationType>(m_RegionInfo[endPage].allocType), allocType))
         {
             return true;
         }
     }
+    uint32_t endPage = GetEndPage(inOutAllocOffset, allocSize);
+    if (endPage != startPage &&
+        m_RegionInfo[endPage].allocCount > 0 &&
+        VmaIsBufferImageGranularityConflict(static_cast<VmaSuballocationType>(m_RegionInfo[endPage].allocType), allocType))
+    {
+        return true;
+    }
+
     return false;
 }
 
 void VmaBlockBufferImageGranularity::AllocPages(uint8_t allocType, VkDeviceSize offset, VkDeviceSize size)
 {
-    if (IsEnabled())
-    {
-        uint32_t startPage = GetStartPage(offset);
-        AllocPage(m_RegionInfo[startPage], allocType);
+    if (!IsEnabled())
+        return;
 
-        uint32_t endPage = GetEndPage(offset, size);
-        if (startPage != endPage)
-            AllocPage(m_RegionInfo[endPage], allocType);
-    }
+    uint32_t startPage = GetStartPage(offset);
+    AllocPage(m_RegionInfo[startPage], allocType);
+
+    uint32_t endPage = GetEndPage(offset, size);
+    if (startPage != endPage)
+        AllocPage(m_RegionInfo[endPage], allocType);
 }
 
 void VmaBlockBufferImageGranularity::FreePages(VkDeviceSize offset, VkDeviceSize size)
 {
-    if (IsEnabled())
+    if (!IsEnabled())
+        return;
+
+    uint32_t startPage = GetStartPage(offset);
+    --m_RegionInfo[startPage].allocCount;
+    if (m_RegionInfo[startPage].allocCount == 0)
+        m_RegionInfo[startPage].allocType = VMA_SUBALLOCATION_TYPE_FREE;
+    uint32_t endPage = GetEndPage(offset, size);
+    if (startPage != endPage)
     {
-        uint32_t startPage = GetStartPage(offset);
-        --m_RegionInfo[startPage].allocCount;
-        if (m_RegionInfo[startPage].allocCount == 0)
-            m_RegionInfo[startPage].allocType = VMA_SUBALLOCATION_TYPE_FREE;
-        uint32_t endPage = GetEndPage(offset, size);
-        if (startPage != endPage)
-        {
-            --m_RegionInfo[endPage].allocCount;
-            if (m_RegionInfo[endPage].allocCount == 0)
-                m_RegionInfo[endPage].allocType = VMA_SUBALLOCATION_TYPE_FREE;
-        }
+        --m_RegionInfo[endPage].allocCount;
+        if (m_RegionInfo[endPage].allocCount == 0)
+            m_RegionInfo[endPage].allocType = VMA_SUBALLOCATION_TYPE_FREE;
     }
 }
 
@@ -7320,36 +7405,38 @@ VmaBlockBufferImageGranularity::ValidationContext VmaBlockBufferImageGranularity
 bool VmaBlockBufferImageGranularity::Validate(ValidationContext& ctx,
     VkDeviceSize offset, VkDeviceSize size) const
 {
-    if (IsEnabled())
-    {
-        uint32_t start = GetStartPage(offset);
-        ++ctx.pageAllocs[start];
-        VMA_VALIDATE(m_RegionInfo[start].allocCount > 0);
+    if (!IsEnabled())
+        return true;
 
-        uint32_t end = GetEndPage(offset, size);
-        if (start != end)
-        {
-            ++ctx.pageAllocs[end];
-            VMA_VALIDATE(m_RegionInfo[end].allocCount > 0);
-        }
+    uint32_t start = GetStartPage(offset);
+    ++ctx.pageAllocs[start];
+    VMA_VALIDATE(m_RegionInfo[start].allocCount > 0);
+
+    uint32_t end = GetEndPage(offset, size);
+    if (start != end)
+    {
+        ++ctx.pageAllocs[end];
+        VMA_VALIDATE(m_RegionInfo[end].allocCount > 0);
     }
+
     return true;
 }
 
 bool VmaBlockBufferImageGranularity::FinishValidation(ValidationContext& ctx) const
 {
-    // Check proper page structure
-    if (IsEnabled())
-    {
-        VMA_ASSERT(ctx.pageAllocs != VMA_NULL && "Validation context not initialized!");
+    if (!IsEnabled())
+        return true;
 
-        for (uint32_t page = 0; page < m_RegionCount; ++page)
-        {
-            VMA_VALIDATE(ctx.pageAllocs[page] == m_RegionInfo[page].allocCount);
-        }
-        vma_delete_array(ctx.allocCallbacks, ctx.pageAllocs, m_RegionCount);
-        ctx.pageAllocs = VMA_NULL;
+    // Check proper page structure
+    VMA_ASSERT(ctx.pageAllocs != VMA_NULL && "Validation context not initialized!");
+
+    for (uint32_t page = 0; page < m_RegionCount; ++page)
+    {
+        VMA_VALIDATE(ctx.pageAllocs[page] == m_RegionInfo[page].allocCount);
     }
+    vma_delete_array(ctx.allocCallbacks, ctx.pageAllocs, m_RegionCount);
+    ctx.pageAllocs = VMA_NULL;
+
     return true;
 }
 
@@ -10597,7 +10684,6 @@ public:
     VkResult CreateBuffer(
         const VkBufferCreateInfo* pBufferCreateInfo,
         const VmaAllocationCreateInfo* pAllocationCreateInfo,
-        VkDeviceSize minAlignment,
         void* pMemoryAllocateNext, // pNext chain for VkMemoryAllocateInfo.
         VkBuffer* pBuffer,
         VmaAllocation* pAllocation,
@@ -10613,7 +10699,7 @@ public:
 
     // Main allocation function.
     VkResult AllocateMemory(
-        const VkMemoryRequirements& vkMemReq,
+        VkMemoryRequirements vkMemReq,
         bool requiresDedicatedAllocation,
         bool prefersDedicatedAllocation,
         VkBuffer dedicatedBuffer,
@@ -10892,7 +10978,8 @@ VmaDeviceMemoryBlock::VmaDeviceMemoryBlock(VmaAllocator hAllocator)
     m_Id(0),
     m_hMemory(VK_NULL_HANDLE),
     m_MapCount(0),
-    m_pMappedData(VMA_NULL){}
+    m_pMappedData(VMA_NULL),
+    m_IsMapped(false){}
 
 VmaDeviceMemoryBlock::~VmaDeviceMemoryBlock()
 {
@@ -10948,6 +11035,8 @@ void VmaDeviceMemoryBlock::Destroy(VmaAllocator allocator)
     VMA_ASSERT_LEAK(m_hMemory != VK_NULL_HANDLE);
     allocator->FreeVulkanMemory(m_MemoryTypeIndex, m_pMetadata->GetSize(), m_hMemory);
     m_hMemory = VK_NULL_HANDLE;
+    m_pMappedData = VMA_NULL;
+    m_IsMapped.store(false);
 
     vma_delete(allocator, m_pMetadata);
     m_pMetadata = VMA_NULL;
@@ -10968,6 +11057,7 @@ void VmaDeviceMemoryBlock::PostFree(VmaAllocator hAllocator)
         if (m_MapCount == 0)
         {
             m_pMappedData = VMA_NULL;
+            m_IsMapped.store(false);
             (*hAllocator->GetVulkanFunctions().vkUnmapMemory)(hAllocator->m_hDevice, m_hMemory);
         }
     }
@@ -11028,6 +11118,7 @@ VkResult VmaDeviceMemoryBlock::Map(VmaAllocator hAllocator, uint32_t count, void
     if (result == VK_SUCCESS)
     {
         VMA_ASSERT(m_pMappedData != VMA_NULL);
+        m_IsMapped.store(true);
         m_MappingHysteresis.PostMap();
         m_MapCount = count;
         if (ppData != VMA_NULL)
@@ -11053,6 +11144,7 @@ void VmaDeviceMemoryBlock::Unmap(VmaAllocator hAllocator, uint32_t count)
         if (totalMapCount == 0)
         {
             m_pMappedData = VMA_NULL;
+            m_IsMapped.store(false);
             (*hAllocator->GetVulkanFunctions().vkUnmapMemory)(hAllocator->m_hDevice, m_hMemory);
         }
         m_MappingHysteresis.PostUnmap();
@@ -11714,7 +11806,7 @@ VkResult VmaBlockVector::AllocatePage(
                     {
                         VmaDeviceMemoryBlock* const pCurrBlock = m_Blocks[blockIndex];
                         VMA_ASSERT(pCurrBlock);
-                        const bool isBlockMapped = pCurrBlock->GetMappedData() != VMA_NULL;
+                        const bool isBlockMapped = pCurrBlock->IsMapped();
                         if((mappingI == 0) == (isMappingAllowed == isBlockMapped))
                         {
                             VkResult res = AllocateFromBlock(
@@ -12192,6 +12284,8 @@ VmaDefragmentationContext_T::VmaDefragmentationContext_T(
         m_BlockVectorCount = 1;
         m_PoolBlockVector = &info.pool->m_BlockVector;
         m_pBlockVectors = &m_PoolBlockVector;
+
+        VmaMutexLockWrite lock(m_PoolBlockVector->m_Mutex, hAllocator->m_UseMutex);
         m_PoolBlockVector->SetIncrementalSort(false);
         m_PoolBlockVector->SortByFreeSize();
     }
@@ -12205,6 +12299,7 @@ VmaDefragmentationContext_T::VmaDefragmentationContext_T(
             VmaBlockVector* vector = m_pBlockVectors[i];
             if (vector != VMA_NULL)
             {
+                VmaMutexLockWrite lock(vector->m_Mutex, hAllocator->m_UseMutex);
                 vector->SetIncrementalSort(false);
                 vector->SortByFreeSize();
             }
@@ -12235,6 +12330,7 @@ VmaDefragmentationContext_T::~VmaDefragmentationContext_T()
 {
     if (m_PoolBlockVector != VMA_NULL)
     {
+        VmaMutexLockWrite lock(m_PoolBlockVector->m_Mutex, m_PoolBlockVector->m_hAllocator->m_UseMutex);
         m_PoolBlockVector->SetIncrementalSort(true);
     }
     else
@@ -12243,7 +12339,10 @@ VmaDefragmentationContext_T::~VmaDefragmentationContext_T()
         {
             VmaBlockVector* vector = m_pBlockVectors[i];
             if (vector != VMA_NULL)
+            {
+                VmaMutexLockWrite lock(vector->m_Mutex, vector->m_hAllocator->m_UseMutex);
                 vector->SetIncrementalSort(true);
+            }
         }
     }
 
@@ -12341,7 +12440,11 @@ VkResult VmaDefragmentationContext_T::DefragmentPassEnd(VmaDefragmentationPassMo
         {
         case VMA_DEFRAGMENTATION_MOVE_OPERATION_COPY:
         {
-            uint8_t mapCount = move.srcAllocation->SwapBlockAllocation(vector->m_hAllocator, move.dstTmpAllocation);
+            uint8_t mapCount = 0;
+            {
+                VmaMutexLockWrite swapLock(vector->GetMutex(), vector->GetAllocator()->m_UseMutex);
+                mapCount = move.srcAllocation->SwapBlockAllocation(vector->m_hAllocator, move.dstTmpAllocation);
+            }
             if (mapCount > 0)
             {
                 allocator = vector->m_hAllocator;
@@ -13258,7 +13361,7 @@ VmaAllocator_T::VmaAllocator_T(const VmaAllocatorCreateInfo* pCreateInfo) :
         }
 #endif
     }
-#if !(VMA_MEMORY_BUDGET)
+#if !(VMA_MEMORY_BUDGET) || !(VMA_GET_PHYSICAL_DEVICE_PROPERTIES2)
     if((pCreateInfo->flags & VMA_ALLOCATOR_CREATE_EXT_MEMORY_BUDGET_BIT) != 0)
     {
         VMA_ASSERT(0 && "VMA_ALLOCATOR_CREATE_EXT_MEMORY_BUDGET_BIT set but required extension is disabled by preprocessor macros.");
@@ -13334,8 +13437,35 @@ VmaAllocator_T::VmaAllocator_T(const VmaAllocatorCreateInfo* pCreateInfo) :
 
     ImportVulkanFunctions(pCreateInfo->pVulkanFunctions);
 
-    (*m_VulkanFunctions.vkGetPhysicalDeviceProperties)(m_PhysicalDevice, &m_PhysicalDeviceProperties);
-    (*m_VulkanFunctions.vkGetPhysicalDeviceMemoryProperties)(m_PhysicalDevice, &m_MemProps);
+    // Call vkGetPhysicalDeviceProperties[2][KHR].
+#if VMA_GET_PHYSICAL_DEVICE_PROPERTIES2
+    if(m_VulkanFunctions.vkGetPhysicalDeviceProperties2KHR)
+    {
+        VkPhysicalDeviceProperties2KHR props2 = {
+            VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2_KHR };
+        (*m_VulkanFunctions.vkGetPhysicalDeviceProperties2KHR)(m_PhysicalDevice, &props2);
+        memcpy(&m_PhysicalDeviceProperties, &props2.properties, sizeof(m_PhysicalDeviceProperties));
+    }
+    else
+#endif
+    {
+        (*m_VulkanFunctions.vkGetPhysicalDeviceProperties)(m_PhysicalDevice, &m_PhysicalDeviceProperties);
+    }
+
+    // Call vkGetPhysicalDeviceMemoryProperties[2][KHR].
+#if VMA_GET_PHYSICAL_DEVICE_PROPERTIES2
+    if(m_VulkanFunctions.vkGetPhysicalDeviceMemoryProperties2KHR)
+    {
+        VkPhysicalDeviceMemoryProperties2KHR memProps2 = {
+            VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MEMORY_PROPERTIES_2_KHR };
+        (*m_VulkanFunctions.vkGetPhysicalDeviceMemoryProperties2KHR)(m_PhysicalDevice, &memProps2);
+        memcpy(&m_MemProps, &memProps2.memoryProperties, sizeof(m_MemProps));
+    }
+    else
+#endif
+    {
+        (*m_VulkanFunctions.vkGetPhysicalDeviceMemoryProperties)(m_PhysicalDevice, &m_MemProps);
+    }
 
     VMA_ASSERT(VmaIsPow2(VMA_MIN_ALIGNMENT));
     VMA_ASSERT(VmaIsPow2(VMA_DEBUG_MIN_BUFFER_IMAGE_GRANULARITY));
@@ -13478,6 +13608,7 @@ void VmaAllocator_T::ImportVulkanFunctions_Static()
     if(m_VulkanApiVersion >= VK_MAKE_VERSION(1, 1, 0))
     {
         m_VulkanFunctions.vkGetPhysicalDeviceMemoryProperties2KHR = (PFN_vkGetPhysicalDeviceMemoryProperties2)vkGetPhysicalDeviceMemoryProperties2;
+        m_VulkanFunctions.vkGetPhysicalDeviceProperties2KHR = (PFN_vkGetPhysicalDeviceProperties2)vkGetPhysicalDeviceProperties2;
     }
 #endif
 
@@ -13529,8 +13660,9 @@ void VmaAllocator_T::ImportVulkanFunctions_Custom(const VmaVulkanFunctions* pVul
     VMA_COPY_IF_NOT_NULL(vkBindImageMemory2KHR);
 #endif
 
-#if VMA_MEMORY_BUDGET || VMA_VULKAN_VERSION >= 1001000
+#if VMA_GET_PHYSICAL_DEVICE_PROPERTIES2
     VMA_COPY_IF_NOT_NULL(vkGetPhysicalDeviceMemoryProperties2KHR);
+    VMA_COPY_IF_NOT_NULL(vkGetPhysicalDeviceProperties2KHR);
 #endif
 
 #if VMA_KHR_MAINTENANCE4 || VMA_VULKAN_VERSION >= 1003000
@@ -13589,18 +13721,22 @@ void VmaAllocator_T::ImportVulkanFunctions_Dynamic()
     }
 #endif
 
-#if VMA_MEMORY_BUDGET || VMA_VULKAN_VERSION >= 1001000
+#if VMA_GET_PHYSICAL_DEVICE_PROPERTIES2
     if(m_VulkanApiVersion >= VK_MAKE_VERSION(1, 1, 0))
     {
         VMA_FETCH_INSTANCE_FUNC(vkGetPhysicalDeviceMemoryProperties2KHR, PFN_vkGetPhysicalDeviceMemoryProperties2KHR, "vkGetPhysicalDeviceMemoryProperties2");
+        VMA_FETCH_INSTANCE_FUNC(vkGetPhysicalDeviceProperties2KHR, PFN_vkGetPhysicalDeviceProperties2KHR, "vkGetPhysicalDeviceProperties2");
         // Try to fetch the pointer from the other name, based on suspected driver bug - see issue #410.
         VMA_FETCH_INSTANCE_FUNC(vkGetPhysicalDeviceMemoryProperties2KHR, PFN_vkGetPhysicalDeviceMemoryProperties2KHR, "vkGetPhysicalDeviceMemoryProperties2KHR");
+        VMA_FETCH_INSTANCE_FUNC(vkGetPhysicalDeviceProperties2KHR, PFN_vkGetPhysicalDeviceProperties2KHR, "vkGetPhysicalDeviceProperties2KHR");
     }
     else if(m_UseExtMemoryBudget)
     {
         VMA_FETCH_INSTANCE_FUNC(vkGetPhysicalDeviceMemoryProperties2KHR, PFN_vkGetPhysicalDeviceMemoryProperties2KHR, "vkGetPhysicalDeviceMemoryProperties2KHR");
+        VMA_FETCH_INSTANCE_FUNC(vkGetPhysicalDeviceProperties2KHR, PFN_vkGetPhysicalDeviceProperties2KHR, "vkGetPhysicalDeviceProperties2KHR");
         // Try to fetch the pointer from the other name, based on suspected driver bug - see issue #410.
         VMA_FETCH_INSTANCE_FUNC(vkGetPhysicalDeviceMemoryProperties2KHR, PFN_vkGetPhysicalDeviceMemoryProperties2KHR, "vkGetPhysicalDeviceMemoryProperties2");
+        VMA_FETCH_INSTANCE_FUNC(vkGetPhysicalDeviceProperties2KHR, PFN_vkGetPhysicalDeviceProperties2KHR, "vkGetPhysicalDeviceProperties2");
     }
 #endif
 
@@ -13619,17 +13755,6 @@ void VmaAllocator_T::ImportVulkanFunctions_Dynamic()
         VMA_FETCH_DEVICE_FUNC(vkBindImageMemory2KHR, PFN_vkBindImageMemory2KHR, "vkBindImageMemory2KHR");
     }
 #endif // #if VMA_BIND_MEMORY2
-
-#if VMA_MEMORY_BUDGET || VMA_VULKAN_VERSION >= 1001000
-    if(m_VulkanApiVersion >= VK_MAKE_VERSION(1, 1, 0))
-    {
-        VMA_FETCH_INSTANCE_FUNC(vkGetPhysicalDeviceMemoryProperties2KHR, PFN_vkGetPhysicalDeviceMemoryProperties2KHR, "vkGetPhysicalDeviceMemoryProperties2");
-    }
-    else if(m_UseExtMemoryBudget)
-    {
-        VMA_FETCH_INSTANCE_FUNC(vkGetPhysicalDeviceMemoryProperties2KHR, PFN_vkGetPhysicalDeviceMemoryProperties2KHR, "vkGetPhysicalDeviceMemoryProperties2KHR");
-    }
-#endif // #if VMA_MEMORY_BUDGET
 
 #if VMA_VULKAN_VERSION >= 1003000
     if(m_VulkanApiVersion >= VK_MAKE_VERSION(1, 3, 0))
@@ -13693,12 +13818,14 @@ void VmaAllocator_T::ValidateVulkanFunctions() const
     }
 #endif
 
-#if VMA_MEMORY_BUDGET || VMA_VULKAN_VERSION >= 1001000
+#if VMA_GET_PHYSICAL_DEVICE_PROPERTIES2
     if(m_UseExtMemoryBudget || m_VulkanApiVersion >= VK_MAKE_VERSION(1, 1, 0))
     {
         VMA_ASSERT(m_VulkanFunctions.vkGetPhysicalDeviceMemoryProperties2KHR != VMA_NULL);
+        VMA_ASSERT(m_VulkanFunctions.vkGetPhysicalDeviceProperties2KHR != VMA_NULL);
     }
 #endif
+
 #if VMA_EXTERNAL_MEMORY_WIN32
     if (m_UseKhrExternalMemoryWin32)
     {
@@ -14298,7 +14425,6 @@ VkResult VmaAllocator_T::CalcAllocationParams(
 VkResult VmaAllocator_T::CreateBuffer(
     const VkBufferCreateInfo* pBufferCreateInfo,
     const VmaAllocationCreateInfo* pAllocationCreateInfo,
-    VkDeviceSize minAlignment,
     void* pMemoryAllocateNext,
     VkBuffer* pBuffer,
     VmaAllocation* pAllocation,
@@ -14329,9 +14455,6 @@ VkResult VmaAllocator_T::CreateBuffer(
         bool prefersDedicatedAllocation = false;
         GetBufferMemoryRequirements(*pBuffer, vkMemReq,
             requiresDedicatedAllocation, prefersDedicatedAllocation);
-
-        // 2a. Include minAlignment
-        vkMemReq.alignment = VMA_MAX(vkMemReq.alignment, minAlignment);
 
         // 3. Allocate memory using allocator.
         res = AllocateMemory(
@@ -14461,7 +14584,7 @@ VkResult VmaAllocator_T::CreateImage(
 }
 
 VkResult VmaAllocator_T::AllocateMemory(
-    const VkMemoryRequirements& vkMemReq,
+    VkMemoryRequirements vkMemReq,
     bool requiresDedicatedAllocation,
     bool prefersDedicatedAllocation,
     VkBuffer dedicatedBuffer,
@@ -14476,6 +14599,7 @@ VkResult VmaAllocator_T::AllocateMemory(
 {
     memset(pAllocations, 0, sizeof(VmaAllocation) * allocationCount);
 
+    vkMemReq.alignment = VMA_MAX(vkMemReq.alignment, createInfo.minAlignment);
     VMA_ASSERT(VmaIsPow2(vkMemReq.alignment));
 
     // If using custom pNext chain for VkMemoryAllocateInfo, must require dedicated allocations.
@@ -15582,6 +15706,7 @@ VMA_CALL_PRE VkResult VMA_CALL_POST vmaImportVulkanFunctionsFromVolk(
     if (pAllocatorCreateInfo->vulkanApiVersion >= VK_MAKE_VERSION(1, 1, 0))
     {
         COPY_GLOBAL_TO_VMA_FUNC(vkGetPhysicalDeviceMemoryProperties2, vkGetPhysicalDeviceMemoryProperties2KHR)
+        COPY_GLOBAL_TO_VMA_FUNC(vkGetPhysicalDeviceProperties2, vkGetPhysicalDeviceProperties2KHR)
         COPY_DEVICE_TO_VMA_FUNC(vkGetBufferMemoryRequirements2, vkGetBufferMemoryRequirements2KHR)
         COPY_DEVICE_TO_VMA_FUNC(vkGetImageMemoryRequirements2, vkGetImageMemoryRequirements2KHR)
         COPY_DEVICE_TO_VMA_FUNC(vkBindBufferMemory2, vkBindBufferMemory2KHR)
@@ -15620,6 +15745,7 @@ VMA_CALL_PRE VkResult VMA_CALL_POST vmaImportVulkanFunctionsFromVolk(
     if ((pAllocatorCreateInfo->flags & VMA_ALLOCATOR_CREATE_EXT_MEMORY_BUDGET_BIT) != 0)
     {
         COPY_GLOBAL_TO_VMA_FUNC(vkGetPhysicalDeviceMemoryProperties2KHR, vkGetPhysicalDeviceMemoryProperties2KHR)
+        COPY_GLOBAL_TO_VMA_FUNC(vkGetPhysicalDeviceProperties2KHR, vkGetPhysicalDeviceProperties2KHR)
     }
 #endif
 #if VMA_EXTERNAL_MEMORY_WIN32
@@ -16725,7 +16851,6 @@ VMA_CALL_PRE VkResult VMA_CALL_POST vmaCreateBuffer(
     VMA_DEBUG_GLOBAL_MUTEX_LOCK;
 
     return allocator->CreateBuffer(pBufferCreateInfo, pAllocationCreateInfo,
-        1, // minAlignment
         VMA_NULL, // pMemoryAllocateNext
         pBuffer, pAllocation, pAllocationInfo);
 
@@ -16744,8 +16869,10 @@ VMA_CALL_PRE VkResult VMA_CALL_POST vmaCreateBufferWithAlignment(
     VMA_DEBUG_LOG("vmaCreateBufferWithAlignment");
     VMA_DEBUG_GLOBAL_MUTEX_LOCK;
 
-    return allocator->CreateBuffer(pBufferCreateInfo, pAllocationCreateInfo,
-        minAlignment, // minAlignment
+    VmaAllocationCreateInfo allocCreateInfoCopy = *pAllocationCreateInfo;
+    allocCreateInfoCopy.minAlignment = VMA_MAX(allocCreateInfoCopy.minAlignment, minAlignment);
+
+    return allocator->CreateBuffer(pBufferCreateInfo, &allocCreateInfoCopy,
         VMA_NULL, // pMemoryAllocateNext
         pBuffer, pAllocation, pAllocationInfo);
 }
@@ -16767,7 +16894,6 @@ VMA_CALL_PRE VkResult VMA_CALL_POST vmaCreateDedicatedBuffer(
     allocCreateInfoCopy.flags |= VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT;
 
     return allocator->CreateBuffer(pBufferCreateInfo, &allocCreateInfoCopy,
-        1, // minAlignment
         pMemoryAllocateNext, // pMemoryAllocateNext
         pBuffer, pAllocation, pAllocationInfo);
 }
@@ -18298,7 +18424,7 @@ Many of the common concerns can be addressed in a different way than using custo
 - If you want to select specific memory type for your allocation,
   you can set VmaAllocationCreateInfo::memoryTypeBits to `(1U << myMemoryTypeIndex)` instead.
 - If you need to create a buffer with certain minimum alignment, you can still do it
-  using default pools with dedicated function vmaCreateBufferWithAlignment().
+  using default pools by specifying VmaAllocationCreateInfo::minAlignment.
 
 
 \section linear_algorithm Linear allocation algorithm
@@ -19051,6 +19177,10 @@ vmaDestroyBuffer(g_Allocator, buf, alloc);
 If you need each allocation to have its own device memory block and start at offset 0, you can still do 
 by using #VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT flag. It works also with custom pools.
 
+Alternatively, you can use convenient functions vmaCreateDedicatedBuffer(), vmaCreateDedicatedImage() that
+always allocate dedicated memory for the buffer/image created, and also allow specifying custom `pNext` chain
+for the `VkMemoryAllocateInfo` structure.
+
 \subsection other_api_interop_exporting_exporting_win32_handle Exporting Win32 handle
 
 After the allocation is created, you can acquire a Win32 `HANDLE` to the `VkDeviceMemory` block it belongs to.
@@ -19090,8 +19220,8 @@ to be made out of this pool.
 The alignment actually used will be the maximum of this member and the alignment returned for the specific buffer or image
 from a function like `vkGetBufferMemoryRequirements`, which is called by VMA automatically.
 
-If you want to create a buffer with a specific minimum alignment out of default pools,
-you can use special function vmaCreateBufferWithAlignment(), which takes additional parameter `minAlignment`.
+If you want to create a buffer/image/allocate memory with a specific minimum alignment out of default pools,
+you can use VmaAllocationCreateInfo::minAlignment.
 
 Note the problem of alignment affects only resources placed inside bigger `VkDeviceMemory` blocks and not dedicated
 allocations, as these, by definition, always have alignment = 0 because the resource is bound to the beginning of its dedicated block.

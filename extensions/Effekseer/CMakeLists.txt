@@ -58,6 +58,41 @@ set_source_files_properties(
       "DISABLED_SOFT_PARTICLE"
 )
 
+# ── Effekseer GPU particle shaders ──────────────────────────────────────────
+# Compute shaders and the GPU render vertex shader read storage buffers, which
+# requires GL 4.3 / GLES 3.1 on the OpenGL backends. Compile them with the
+# compute-capable GLSL/ESSL profiles; ordinary shaders keep gl-330 / essl-300.
+set(_GP_TARGETS "")
+if(AX_ENABLE_GL)
+  if(AX_GLES_PROFILE)
+    list(APPEND _GP_TARGETS "gles-310")
+  else()
+    list(APPEND _GP_TARGETS "gl-430")
+  endif()
+endif()
+if(AX_ENABLE_D3D11)
+  list(APPEND _GP_TARGETS "d3d11")
+endif()
+if(AX_ENABLE_D3D12)
+  list(APPEND _GP_TARGETS "d3d12")
+endif()
+if(AX_ENABLE_MTL)
+  list(APPEND _GP_TARGETS "mtl")
+endif()
+if(AX_ENABLE_VK)
+  list(APPEND _GP_TARGETS "vk")
+endif()
+
+set_source_files_properties(
+  "${_SHADER_DIR}/gpu_particles_clear_cs.hlsl"
+  "${_SHADER_DIR}/gpu_particles_spawn_cs.hlsl"
+  "${_SHADER_DIR}/gpu_particles_update_cs.hlsl"
+  "${_SHADER_DIR}/gpu_particles_render_vs.hlsl"
+  "${_SHADER_DIR}/gpu_particles_render_ps.hlsl"
+  PROPERTIES
+    AXSLCC_TARGETS "${_GP_TARGETS}"
+)
+
 ax_add_shader_target(Effekseer_shaders FILES ${_shader_src})
 
 add_library(EffekseerAxmolSIMDOptions INTERFACE)

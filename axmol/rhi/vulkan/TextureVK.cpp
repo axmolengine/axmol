@@ -108,7 +108,8 @@ static void transitionImageLayout(VkCommandBuffer cmd,
         break;
     case VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL:
         barrier.srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
-        srcStage              = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+        srcStage              = VK_PIPELINE_STAGE_VERTEX_SHADER_BIT | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT |
+                   VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
         break;
     case VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL:
         barrier.srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
@@ -144,7 +145,8 @@ static void transitionImageLayout(VkCommandBuffer cmd,
         break;
     case VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL:
         barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
-        dstStage              = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+        dstStage              = VK_PIPELINE_STAGE_VERTEX_SHADER_BIT | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT |
+                   VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
         break;
     case VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL:
         barrier.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
@@ -422,6 +424,90 @@ void TextureImpl::updateSubData(int xoffset,
 }
 
 // ------------------------------------------------------------
+// updateData3D / updateSubData3D
+// ------------------------------------------------------------
+void TextureImpl::updateData3D(const void* data, int width, int height, int depth, int level)
+{
+    updateSubData3D(0, 0, 0, width, height, depth, level, data);
+}
+
+void TextureImpl::updateSubData3D(int xoffset,
+                                  int yoffset,
+                                  int zoffset,
+                                  int width,
+                                  int height,
+                                  int depth,
+                                  int level,
+                                  const void* data)
+{
+    ensureNativeTexture();
+    if (!data)
+        return;
+
+    const uint32_t rowPitch       = ax::rhi::RHIUtils::computeRowPitch(_desc.pixelFormat, width);
+    const uint32_t slicePitch     = rowPitch * static_cast<uint32_t>(height);
+    const VkDeviceSize uploadSize = static_cast<VkDeviceSize>(slicePitch) * static_cast<VkDeviceSize>(depth);
+
+    VkBuffer stagingBuffer{};
+    VkDeviceMemory stagingMemory{};
+
+    VkBufferCreateInfo bufInfo{};
+    bufInfo.sType       = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    bufInfo.size        = uploadSize;
+    bufInfo.usage       = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
+    bufInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+
+    auto device = _driver->getDevice();
+
+    VmaAllocation allocation{};
+    VmaAllocationCreateInfo vmaAllocCreateInfo{};
+    vmaAllocCreateInfo.flags =
+        VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT | VMA_ALLOCATION_CREATE_MAPPED_BIT;
+    vmaAllocCreateInfo.usage = VMA_MEMORY_USAGE_AUTO;
+    if (_driver->isMemoryPrioritySupported())
+        vmaAllocCreateInfo.priority = 1.0f;
+    auto res = vmaCreateBuffer(_driver->getVmaAllocator(), &bufInfo, &vmaAllocCreateInfo, &stagingBuffer, &allocation,
+                               nullptr);
+    VK_REQUIRE(res, "vkCreateBuffer (staging 3D) failed");
+    res = vmaCopyMemoryToAllocation(_driver->getVmaAllocator(), data, allocation, 0, static_cast<size_t>(uploadSize));
+
+    auto submission = _driver->startIsolateSubmission();
+
+    VkImageSubresourceRange range{};
+    range.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+    range.baseMipLevel   = static_cast<uint32_t>(level);
+    range.levelCount     = 1;
+    range.baseArrayLayer = 0;
+    range.layerCount     = 1;
+
+    const auto oldLayout = _layoutTracker.getLayout(level, 0);
+    transitionImageLayout(submission, _nativeTexture.image, oldLayout, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, range);
+
+    VkBufferImageCopy region{};
+    region.bufferOffset                    = 0;
+    region.bufferRowLength                 = 0;
+    region.bufferImageHeight               = 0;
+    region.imageSubresource.aspectMask     = range.aspectMask;
+    region.imageSubresource.mipLevel       = range.baseMipLevel;
+    region.imageSubresource.baseArrayLayer = 0;
+    region.imageSubresource.layerCount     = 1;
+    region.imageOffset = {static_cast<int32_t>(xoffset), static_cast<int32_t>(yoffset), static_cast<int32_t>(zoffset)};
+    region.imageExtent = {static_cast<uint32_t>(width), static_cast<uint32_t>(height), static_cast<uint32_t>(depth)};
+
+    vkCmdCopyBufferToImage(submission, stagingBuffer, _nativeTexture.image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1,
+                           &region);
+
+    transitionImageLayout(submission, _nativeTexture.image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                          VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, range);
+
+    _layoutTracker.setLayout(level, 0, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+
+    _driver->finishIsolateSubmission(submission);
+
+    vmaDestroyBuffer(_driver->getVmaAllocator(), stagingBuffer, allocation);
+}
+
+// ------------------------------------------------------------
 // generateMipmaps
 // ------------------------------------------------------------
 void TextureImpl::generateMipmaps(VkCommandBuffer cmd)
@@ -668,6 +754,7 @@ void TextureImpl::ensureNativeTexture()
     }
 
     const bool isCube = (_desc.textureType == TextureType::TEXTURE_CUBE);
+    const bool is3D   = (_desc.textureType == TextureType::TEXTURE_3D);
     const uint32_t mipLevels =
         (_desc.mipLevels != 0) ? _desc.mipLevels : ax::rhi::RHIUtils::computeMipLevels(_desc.width, _desc.height);
     const uint32_t arrayLayers = isCube ? 6u : static_cast<uint32_t>(_desc.arraySize);
@@ -675,12 +762,12 @@ void TextureImpl::ensureNativeTexture()
     VkImageCreateInfo imageInfo{};
     imageInfo.sType         = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
     imageInfo.flags         = isCube ? VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT : 0;
-    imageInfo.imageType     = VK_IMAGE_TYPE_2D;
+    imageInfo.imageType     = is3D ? VK_IMAGE_TYPE_3D : VK_IMAGE_TYPE_2D;
     imageInfo.extent.width  = _desc.width;
     imageInfo.extent.height = _desc.height;
-    imageInfo.extent.depth  = 1;
+    imageInfo.extent.depth  = is3D ? _desc.depth : 1u;
     imageInfo.mipLevels     = mipLevels;
-    imageInfo.arrayLayers   = arrayLayers;
+    imageInfo.arrayLayers   = is3D ? 1u : arrayLayers;
     imageInfo.format        = vkFmt;
     imageInfo.tiling        = VK_IMAGE_TILING_OPTIMAL;
     imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
@@ -748,6 +835,10 @@ void TextureImpl::ensureNativeTexture()
         assert((arrayLayers % 6u) == 0u && "Cube array layers must be multiple of 6");
         // If exactly 6 layers -> single cube, else cube array
         viewInfo.viewType = (arrayLayers == 6u) ? VK_IMAGE_VIEW_TYPE_CUBE : VK_IMAGE_VIEW_TYPE_CUBE_ARRAY;
+    }
+    else if (is3D)
+    {
+        viewInfo.viewType = VK_IMAGE_VIEW_TYPE_3D;
     }
     else
     {

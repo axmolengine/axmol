@@ -77,10 +77,27 @@ enum class BufferType : uint32_t
     ELEMENT_ARRAY_BUFFER,
     UNIFORM_BUFFER,
     PIXEL_PACK_BUFFER,
+    STORAGE_BUFFER,
     COUNT,
     VERTEX  = ARRAY_BUFFER,
     INDEX   = ELEMENT_ARRAY_BUFFER,
-    UNIFORM = UNIFORM_BUFFER
+    UNIFORM = UNIFORM_BUFFER,
+    STORAGE = STORAGE_BUFFER
+};
+
+enum class BufferAccess : uint8_t
+{
+    READ_ONLY,
+    READ_WRITE
+};
+
+struct BufferDesc
+{
+    size_t size         = 0;
+    uint32_t stride     = 0;  ///< Logical storage element stride; native backends may use raw views.
+    BufferType type     = BufferType::VERTEX;
+    BufferUsage usage   = BufferUsage::DYNAMIC;
+    BufferAccess access = BufferAccess::READ_ONLY;
 };
 
 enum class ShaderStage : int16_t
@@ -338,7 +355,8 @@ enum class Winding : uint8_t
 enum class TextureType : uint8_t
 {
     TEXTURE_2D,
-    TEXTURE_CUBE
+    TEXTURE_CUBE,
+    TEXTURE_3D
 };
 
 enum class SamplerAddressMode : uint32_t
@@ -479,6 +497,7 @@ struct TextureDesc
 {
     uint16_t width     = 1;
     uint16_t height    = 1;
+    uint16_t depth     = 1;
     uint16_t arraySize = 1;
     // =1: no mipmaps, =0: generate mipmaps by GPU, >1: mipmaps enabled manually
     uint16_t mipLevels        = 1;

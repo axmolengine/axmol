@@ -108,6 +108,7 @@
 #include "SchedulerTest/SchedulerTest.h"
 #include "ShaderTest/ShaderTest.h"
 #include "ShaderTest/ShaderTest2.h"
+#include "ShaderTest/ComputeShaderTest.h"
 #include "SpineTest/SpineTest.h"
 #include "SpriteFrameCacheTest/SpriteFrameCacheTest.h"
 #include "SpritePolygonTest/SpritePolygonTest.h"

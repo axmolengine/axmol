@@ -271,13 +271,16 @@ void GraphicsCore::initialize()
 
 void GraphicsCore::activate()
 {
+#if AX_ENABLE_GL
     if (state().device && isOpenGL() && !state().shaderProfile)
     {
         state().device->init();
         auto& st           = state();
-        st.shaderProfile   = AX_GLES_PROFILE ? 300 : 330;
+        auto* glDevice     = static_cast<gl::GraphicsDeviceImpl*>(st.device.get());
+        st.shaderProfile   = glDevice->getShaderProfile();
         st.shaderILProfile = st.shaderProfile;
     }
+#endif
 }
 
 void GraphicsCore::shutdown()

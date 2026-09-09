@@ -59,7 +59,12 @@ public:
      * @param usage    BufferUsage::STATIC / DYNAMIC / STREAM
      * @param initial  initial data
      */
-    BufferImpl(GraphicsDeviceImpl*, size_t size, BufferType type, BufferUsage usage, const void* initial);
+    BufferImpl(GraphicsDeviceImpl*,
+               size_t size,
+               BufferType type,
+               BufferUsage usage,
+               const void* initial,
+               uint32_t stride = 0);
 
     ~BufferImpl();
 

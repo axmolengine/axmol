@@ -36,7 +36,7 @@ namespace ax::rhi::d3d11
 
 class BufferImpl;
 class DepthStencilStateImpl;
-class RenderPipelineImpl;
+class GraphicsPipelineImpl;
 class RenderTargetImpl;
 
 enum class RenderStateFlag : uint32_t
@@ -88,7 +88,7 @@ public:
 
     void setDepthStencilState(DepthStencilState* depthStencilState) override;
 
-    void setRenderPipeline(RenderPipeline* renderPipeline) override;
+    void setGraphicsPipeline(GraphicsPipeline* graphicsPipeline) override;
 
     bool beginFrame() override;
 
@@ -135,6 +135,8 @@ public:
     bool copyTexture(RenderTarget* src, Texture* dst) override;
     bool copyTexture(Texture* src, Texture* dst) override;
 
+    bool dispatch(const ComputeDispatchDesc& desc) override;
+
 protected:
     void readPixels(RenderTarget* rt, UINT x, UINT y, UINT width, UINT height, PixelBufferDesc& pbd);
 
@@ -155,7 +157,7 @@ protected:
     BufferImpl* _indexBuffer{nullptr};
     BufferImpl* _instanceBuffer{nullptr};
     DepthStencilStateImpl* _depthStencilState{nullptr};
-    RenderPipelineImpl* _renderPipeline{nullptr};
+    GraphicsPipelineImpl* _graphicsPipeline{nullptr};
     UINT _renderTargetWidth{0};
     UINT _renderTargetHeight{0};
     UINT _screenWidth{0};
@@ -164,6 +166,7 @@ protected:
 
     tlx::pod_vector<ID3D11ShaderResourceView*> _nullSRVs;
     UINT _textureBounds{0};
+    UINT _storageSrvMaxSlot{0};
 
     UINT _swapChainFlags{0};
     UINT _syncInterval{0};

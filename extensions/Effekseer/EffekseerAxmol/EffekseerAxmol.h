@@ -102,6 +102,7 @@ public:
 private:
     bool initialize(ax::Size visibleSize);
     void releaseGraphicsResources();
+    void markEmitterDrawn() { _didDrawEmitterInPass = true; }
     Effekseer::Handle play(Effect* effect, float x, float y, float z, int32_t startTime = 0);
     void setMatrix(Effekseer::Handle handle, const ax::Mat4& mat);
 
@@ -110,6 +111,8 @@ private:
     EffekseerRenderer::DistortingCallback* _distortionCallback = nullptr;
     InternalManager* _internalManager = nullptr;
     float _time = 0.0f;
+    unsigned int _lastComputedFrame = ~0u;
+    bool _didDrawEmitterInPass = false;
 };
 
 class NetworkServer : public ax::Object

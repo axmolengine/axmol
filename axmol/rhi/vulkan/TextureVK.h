@@ -134,6 +134,17 @@ public:
     void updateSubData(int xoffset, int yoffset, int width, int height, int level, const void* data, int layerIndex = 0)
         override;
 
+    void updateData3D(const void* data, int width, int height, int depth, int level) override;
+
+    void updateSubData3D(int xoffset,
+                         int yoffset,
+                         int zoffset,
+                         int width,
+                         int height,
+                         int depth,
+                         int level,
+                         const void* data) override;
+
     void updateCompressedSubData(int xoffset,
                                  int yoffset,
                                  int width,

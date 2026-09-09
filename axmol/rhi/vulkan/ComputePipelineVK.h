@@ -23,35 +23,47 @@
  ****************************************************************************/
 #pragma once
 
-#include "axmol/rhi/RenderPipeline.h"
-#include "axmol/rhi/DXUtils.h"
+#include "axmol/rhi/ComputePipeline.h"
+#include "axmol/rhi/vulkan/GraphicsPipelineVK.h"
+#include <glad/vulkan.h>
 
-#include <d3d11.h>
-
-namespace ax::rhi::d3d11
+namespace ax::rhi::vk
 {
-/**
- * @addtogroup _d3d11
- * @{
- */
+class ProgramImpl;
+class GraphicsDeviceImpl;
 
 /**
- * @brief A D3D11-based Shader RenderPipeline implementation
+ * @brief A Vulkan compute pipeline with its own descriptor layout.
  *
+ * Descriptor sets mirror the graphics model:
+ *   set 0: uniform buffers
+ *   set 1: storage buffers (unshifted binding) + sampled images (unshifted) + preset samplers (shifted)
+ *   set 2: custom samplers (shifted)
  */
-class RenderPipelineImpl : public RenderPipeline
+class ComputePipelineImpl : public ComputePipeline
 {
 public:
-    RenderPipelineImpl(ID3D11Device* device, ID3D11DeviceContext* context) : _device(device), _context(context) {}
-    void update(const RenderTarget*, const PipelineDesc& desc);
+    ComputePipelineImpl(GraphicsDeviceImpl* driver, ProgramImpl* program);
+    ~ComputePipelineImpl();
+
+    bool isValid() const override { return _pipeline != VK_NULL_HANDLE; }
+
+    VkPipeline getPipeline() const { return _pipeline; }
+    PipelineLayoutState* getLayoutState() { return &_layoutState; }
+
+    DescriptorState* acquireDescriptorState();
+    void recycleDescriptorState(DescriptorState* descriptorState);
 
 private:
-    ID3D11Device* _device         = nullptr;
-    ID3D11DeviceContext* _context = nullptr;
+    void createLayout(ProgramImpl* program);
+    void createPipeline(ProgramImpl* program);
 
-    tlx::hash_map<uint32_t, ComPtr<ID3D11BlendState>> _blendCache;
+    GraphicsDeviceImpl* _driver{nullptr};
+    VkDevice _device{VK_NULL_HANDLE};
+    PipelineLayoutState _layoutState{};
+    DescriptorAllocator _descriptorAllocator{};
+    yasio::object_pool<DescriptorState> _descriptorStatePool;
+    VkPipeline _pipeline{VK_NULL_HANDLE};
 };
 
-/** @} */
-
-}  // namespace ax::rhi::d3d11
+}  // namespace ax::rhi::vk

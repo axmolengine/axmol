@@ -85,6 +85,7 @@ public:
      * @return A Buffer object.
      */
     Buffer* createBuffer(size_t size, BufferType type, BufferUsage usage, const void* initial) override;
+    Buffer* createBuffer(const BufferDesc& desc, const void* initial) override;
 
     /**
      * New a Texture object, not auto released.
@@ -99,11 +100,12 @@ public:
     DepthStencilState* createDepthStencilState() override;
 
     /**
-     * New a RenderPipeline object, not auto released.
+     * New a GraphicsPipeline object, not auto released.
      * @param descriptor Specifies render pipeline description.
-     * @return A RenderPipeline object.
+     * @return A GraphicsPipeline object.
      */
-    RenderPipeline* createRenderPipeline() override;
+    GraphicsPipeline* createGraphicsPipeline() override;
+    ComputePipeline* createComputePipeline(Program* program) override;
 
     /**
      * New a Program, not auto released.
@@ -112,6 +114,8 @@ public:
      * @return A Program instance.
      */
     Program* createProgram(Data vsData, Data fsData) override;
+
+    Program* createComputeProgram(Data csData) override;
 
     VertexLayout* createVertexLayout(VertexLayoutDesc&&) override;
 
@@ -138,6 +142,12 @@ public:
     std::string getVersion() const override;
 
     std::string getShaderVersion() const override;
+
+    /** Returns the active GLSL/ESSL profile as 330, 430, 300, 310, etc. */
+    int getShaderProfile() const
+    {
+        return static_cast<int>(_verInfo.major) * 100 + static_cast<int>(_verInfo.minor) * 10;
+    }
 
     /**
      * Check does device has extension.
@@ -189,6 +199,7 @@ private:
     const char* _version{nullptr};
 
     DriverCapImpl _cap{};
+    bool _computeEntryPoints{false};
 };
 // end of _opengl group
 /// @}

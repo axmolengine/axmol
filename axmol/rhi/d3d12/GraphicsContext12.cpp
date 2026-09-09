@@ -24,12 +24,14 @@
 #include "axmol/rhi/d3d12/GraphicsContext12.h"
 #include "axmol/rhi/d3d12/GraphicsDevice12.h"
 #include "axmol/rhi/d3d12/RenderTarget12.h"
-#include "axmol/rhi/d3d12/RenderPipeline12.h"
+#include "axmol/rhi/d3d12/GraphicsPipeline12.h"
 #include "axmol/rhi/d3d12/DepthStencilState12.h"
 #include "axmol/rhi/d3d12/VertexLayout12.h"
 #include "axmol/rhi/d3d12/Program12.h"
 #include "axmol/rhi/d3d12/Buffer12.h"
 #include "axmol/rhi/d3d12/Texture12.h"
+#include "axmol/rhi/d3d12/ComputePipeline12.h"
+#include "axmol/rhi/SamplerRegistry.h"
 #include "axmol/base/Logging.h"
 #include "axmol/math/MathUtil.h"
 
@@ -241,7 +243,11 @@ GraphicsContextImpl::GraphicsContextImpl(GraphicsDeviceImpl* driver, SurfaceHand
     // Build swapchain attachments for screen RT
     _screenRT->rebuildSwapchainBuffers(_swapchain.Get(), _screenWidth, _screenHeight);
 
-    createUniformRingBuffers(1 * 1024 * 1024);  // 1 MB per frame
+    // Effekseer's default GPU particle system can submit clear/spawn/update/render
+    // constants for up to 256 emitters in one frame. Keep enough headroom for
+    // those allocations and the rest of the scene without reusing an in-flight
+    // slice from the same frame.
+    createUniformRingBuffers(4 * 1024 * 1024);  // 4 MB per frame
 
     createDescriptorHeaps();
 
@@ -253,8 +259,18 @@ GraphicsContextImpl::~GraphicsContextImpl()
 {
     _driver->waitForGPU();
 
+    for (auto& pipelines : _inFlightComputePipelines)
+        pipelines.clear();
+
+    if (!_frameCompletionOps.empty())
+    {
+        for (auto&& op : _frameCompletionOps)
+            op(_completedFenceValue);
+        _frameCompletionOps.clear();
+    }
+
     AX_SAFE_RELEASE_NULL(_screenRT);
-    AX_SAFE_RELEASE_NULL(_renderPipeline);
+    AX_SAFE_RELEASE_NULL(_graphicsPipeline);
 
     for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
     {
@@ -334,9 +350,9 @@ void GraphicsContextImpl::setDepthStencilState(DepthStencilState* depthStencilSt
     _depthStencilState = static_cast<DepthStencilStateImpl*>(depthStencilState);
 }
 
-void GraphicsContextImpl::setRenderPipeline(RenderPipeline* renderPipeline)
+void GraphicsContextImpl::setGraphicsPipeline(GraphicsPipeline* graphicsPipeline)
 {
-    Object::assign(_renderPipeline, static_cast<RenderPipelineImpl*>(renderPipeline));
+    Object::assign(_graphicsPipeline, static_cast<GraphicsPipelineImpl*>(graphicsPipeline));
 }
 
 uint64_t GraphicsContextImpl::getCompletedFenceValue() const
@@ -350,6 +366,9 @@ bool GraphicsContextImpl::beginFrame()
     auto& currentFence   = _inflightFences[_frameIndex];
     _completedFenceValue = currentFence.wait();
     _driver->processDisposalQueue(_completedFenceValue);
+
+    // Release compute pipelines retained for this frame now that its fence has completed.
+    _inFlightComputePipelines[_frameIndex].clear();
 
     if (!_frameCompletionOps.empty())
     {
@@ -627,16 +646,16 @@ void GraphicsContextImpl::updatePipelineState(const RenderTarget* rt,
                                               PrimitiveType primitiveType)
 {
     GraphicsContext::updatePipelineState(rt, pipelineDesc, primitiveType);
-    AXASSERT(_renderPipeline, "RenderPipelineImpl not set");
-    _renderPipeline->prepareUpdate(_depthStencilState, _cachedCullMode, _cachedFrontCounterClockwise,
-                                   toPrimitiveGroup(primitiveType));
-    _renderPipeline->update(rt, pipelineDesc);
+    AXASSERT(_graphicsPipeline, "GraphicsPipelineImpl not set");
+    _graphicsPipeline->prepareUpdate(_depthStencilState, _cachedCullMode, _cachedFrontCounterClockwise,
+                                     toPrimitiveGroup(primitiveType));
+    _graphicsPipeline->update(rt, pipelineDesc);
 
     _currentCmdList->IASetPrimitiveTopology(toD3DTopology(primitiveType));
 
     // Bind PSO & RootSignature
     uint32_t dirtyFlags = 0;
-    auto rootSigInfo    = _renderPipeline->getRootSignature();
+    auto rootSigInfo    = _graphicsPipeline->getRootSignature();
     auto rootSig        = rootSigInfo->rootSig.Get();
     if (_boundRootSig != rootSig)
     {
@@ -645,7 +664,7 @@ void GraphicsContextImpl::updatePipelineState(const RenderTarget* rt,
         dirtyFlags |= 1;
     }
 
-    auto pso = _renderPipeline->getPipelineState();
+    auto pso = _graphicsPipeline->getPipelineState();
     if (pso != _boundPSO)
     {
         _currentCmdList->SetPipelineState(pso);
@@ -661,14 +680,12 @@ void GraphicsContextImpl::updatePipelineState(const RenderTarget* rt,
     }
 
     const auto customSamplerRootIndex = rootSigInfo->customSamplerRootIndex;
-    if (dirtyFlags && customSamplerRootIndex != UINT_MAX)
+    if (customSamplerRootIndex != UINT_MAX)
     {
-        D3D12_GPU_DESCRIPTOR_HANDLE customGpuHandle;
-        if (rootSigInfo->customSamplerBatch)
-            customGpuHandle = rootSigInfo->customSamplerBatch->gpu;
-        else
-            customGpuHandle = _driver->getSamplerHeap()->GetGPUDescriptorHandleForHeapStart();
-        _currentCmdList->SetGraphicsRootDescriptorTable(customSamplerRootIndex, customGpuHandle);
+        auto* batch = _graphicsPipeline->getCustomSamplerBatch(_programState);
+        AXASSERT(batch, "Failed to resolve D3D12 custom sampler descriptors");
+        if (batch)
+            _currentCmdList->SetGraphicsRootDescriptorTable(customSamplerRootIndex, batch->gpu);
     }
 }
 
@@ -692,7 +709,12 @@ void GraphicsContextImpl::setIndexBuffer(Buffer* buffer)
 
 void GraphicsContextImpl::setInstanceBuffer(Buffer* buffer)
 {
-    if (!buffer || _instanceBuffer == buffer)
+    if (!buffer)
+    {
+        AX_SAFE_RELEASE_NULL(_instanceBuffer);
+        return;
+    }
+    if (_instanceBuffer == buffer)
         return;
     buffer->retain();
     AX_SAFE_RELEASE(_instanceBuffer);
@@ -701,7 +723,7 @@ void GraphicsContextImpl::setInstanceBuffer(Buffer* buffer)
 
 void GraphicsContextImpl::drawArrays(size_t start, size_t count, bool /*wireframe*/)
 {
-    AXASSERT(_renderPipeline && _vertexBuffer, "Pipeline and vertex buffer must be set");
+    AXASSERT(_graphicsPipeline && _vertexBuffer, "Pipeline and vertex buffer must be set");
 
     prepareDrawing(_currentCmdList);
 
@@ -710,7 +732,7 @@ void GraphicsContextImpl::drawArrays(size_t start, size_t count, bool /*wirefram
 
 void GraphicsContextImpl::drawArraysInstanced(size_t start, size_t count, int instanceCount, bool /*wireframe*/)
 {
-    AXASSERT(_renderPipeline && _vertexBuffer, "Pipeline and vertex buffer must be set");
+    AXASSERT(_graphicsPipeline && _vertexBuffer, "Pipeline and vertex buffer must be set");
 
     prepareDrawing(_currentCmdList);
 
@@ -720,7 +742,7 @@ void GraphicsContextImpl::drawArraysInstanced(size_t start, size_t count, int in
 
 void GraphicsContextImpl::drawElements(IndexFormat indexType, size_t count, size_t offset, bool /*wireframe*/)
 {
-    AXASSERT(_renderPipeline && _vertexBuffer && _indexBuffer, "Pipeline, vertex and index buffers must be set");
+    AXASSERT(_graphicsPipeline && _vertexBuffer && _indexBuffer, "Pipeline, vertex and index buffers must be set");
 
     prepareDrawing(_currentCmdList);
 
@@ -742,7 +764,7 @@ void GraphicsContextImpl::drawElementsInstanced(IndexFormat indexType,
                                                 int instanceCount,
                                                 bool /*wireframe*/)
 {
-    AXASSERT(_renderPipeline && _vertexBuffer && _indexBuffer, "Pipeline, vertex and index buffers must be set");
+    AXASSERT(_graphicsPipeline && _vertexBuffer && _indexBuffer, "Pipeline, vertex and index buffers must be set");
 
     prepareDrawing(_currentCmdList);
 
@@ -765,7 +787,7 @@ void GraphicsContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
     for (auto& cb : callbackUniforms)
         cb.second(_programState, cb.first);
 
-    auto rootSigInfo = _renderPipeline->getRootSignature();
+    auto rootSigInfo = _graphicsPipeline->getRootSignature();
 
     applyPendingDynamicStates();
 
@@ -815,21 +837,65 @@ void GraphicsContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
 
     const auto srvStride     = _driver->getSrvDescriptorStride();
     auto& textureBindingSets = _programState->getTextureBindingSets();
-    if (!textureBindingSets.empty())
+    auto& storageBindingSets = _programState->getStorageBufferBindingSets();
+    if (!textureBindingSets.empty() || !storageBindingSets.empty())
     {
         const auto bindingStart = _srvOffset[_frameIndex];
+        UINT slot               = 0;
 
-        // Copy descriptors for each texture in the binding set
-        int maxSlot = -1;
-        for (auto& [bindingIndex, bindingSet] : textureBindingSets)
+        // Transition storage buffers from compute write state (UAV) to graphics
+        // read state (SRV) before the draw consumes them.
+        tlx::pod_vector<D3D12_RESOURCE_BARRIER> storageBarriers;
+        constexpr D3D12_RESOURCE_STATES storageTargetState =
+            D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE | D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
+        for (auto& [binding, bindingSet] : storageBindingSets)
         {
+            if (!bindingSet.buffer)
+                continue;
+            auto bufferImpl = static_cast<BufferImpl*>(bindingSet.buffer);
+            bufferImpl->setLastFenceValue(_frameFenceValue);
+            if (bufferImpl->currentState() != storageTargetState)
+            {
+                D3D12_RESOURCE_BARRIER& bar = storageBarriers.emplace_back();
+                bar.Type                    = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+                bar.Transition.pResource    = bufferImpl->internalResource();
+                bar.Transition.StateBefore  = bufferImpl->currentState();
+                bar.Transition.StateAfter   = storageTargetState;
+                bar.Transition.Subresource  = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+                bufferImpl->_resourceState  = storageTargetState;
+            }
+        }
+        if (!storageBarriers.empty())
+            cmd->ResourceBarrier(static_cast<UINT>(storageBarriers.size()), storageBarriers.data());
+
+        // Copy resources in exactly the same reflection order used to build
+        // the root-signature descriptor ranges.
+        auto* program = _programState->getProgram();
+        for (const auto& storageInfo : program->getActiveStorageBufferInfos())
+        {
+            auto binding = storageBindingSets.find(storageInfo.binding);
+            if (binding == storageBindingSets.end() || !binding->second.buffer)
+                continue;
+            auto bufferImpl = static_cast<BufferImpl*>(binding->second.buffer);
+            auto srvHandle  = bufferImpl->getSRV();
+            if (!srvHandle)
+                continue;
+
+            auto dstSrv = srvCpuStart;
+            dstSrv.ptr += (bindingStart + slot) * srvStride;
+            _device->CopyDescriptorsSimple(1, dstSrv, srvHandle->cpu, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+            ++slot;
+        }
+
+        for (const auto& [_, textureInfo] : program->getActiveTextureInfos())
+        {
+            auto binding = textureBindingSets.find(textureInfo->location);
+            if (binding == textureBindingSets.end())
+                continue;
+            auto& bindingSet = binding->second;
             const auto count = static_cast<int>(bindingSet.texs.size());
             for (int i = 0; i < count; ++i)
             {
-                const int slot = bindingIndex + i;
-                if (maxSlot < slot)
-                    maxSlot = slot;
-
                 auto textureImpl = static_cast<TextureImpl*>(bindingSet.texs[i]);
                 textureImpl->setLastFenceValue(_frameFenceValue);
                 auto srvHandle = textureImpl->internalHandle().srv;
@@ -838,16 +904,18 @@ void GraphicsContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
                 auto dstSrv = srvCpuStart;
                 dstSrv.ptr += (bindingStart + slot) * srvStride;
                 _device->CopyDescriptorsSimple(1, dstSrv, srvHandle->cpu, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+                ++slot;
             }
         }
 
-        // Bind GPU handles for this batch
-        auto srvGpuStart = srvHeap->GetGPUDescriptorHandleForHeapStart();
-        srvGpuStart.ptr += static_cast<UINT64>(bindingStart) * srvStride;
-        _currentCmdList->SetGraphicsRootDescriptorTable(rootSigInfo->srvRootIndex, srvGpuStart);
+        if (slot > 0 && rootSigInfo->srvRootIndex != UINT_MAX)
+        {
+            auto srvGpuStart = srvHeap->GetGPUDescriptorHandleForHeapStart();
+            srvGpuStart.ptr += static_cast<UINT64>(bindingStart) * srvStride;
+            _currentCmdList->SetGraphicsRootDescriptorTable(rootSigInfo->srvRootIndex, srvGpuStart);
+        }
 
-        // Advance offsets for the next batch
-        _srvOffset[_frameIndex] = bindingStart + static_cast<UINT>(maxSlot + 1);
+        _srvOffset[_frameIndex] = bindingStart + slot;
     }
 }
 
@@ -937,14 +1005,6 @@ GraphicsContextImpl::UniformSlice GraphicsContextImpl::allocateUniformSlice(UINT
     auto alignMask     = ring.align - 1;
     size_t alignedSize = (size + alignMask) & ~alignMask;
     size_t alignedHead = (ring.writeHead + alignMask) & ~alignMask;
-
-    // Simple wrap-around strategy: reset if not enough room
-    if (alignedHead + alignedSize > ring.capacity)
-    {
-        // In a robust system, you'd either assert, grow, or sub-allocate fallback.
-        // Here we wrap to start and expect per-frame reset is used correctly.
-        alignedHead = 0;
-    }
 
     AXASSERT(alignedHead + alignedSize <= ring.capacity, "Uniform ring buffer overflow");
 
@@ -1069,8 +1129,266 @@ void GraphicsContextImpl::readPixelsInternal(RenderTarget* rt, std::function<voi
 
 void GraphicsContextImpl::removeCachedPipelineObjects(Program* key)
 {
-    if (_renderPipeline)
-        _renderPipeline->removeCachedObjects(key);
+    if (_graphicsPipeline)
+        _graphicsPipeline->removeCachedObjects(key);
+}
+
+bool GraphicsContextImpl::dispatch(const ComputeDispatchDesc& desc)
+{
+    if (!_inFrame || !_currentCmdList)
+        return false;
+    if (!desc.programState || !desc.pipeline)
+        return false;
+
+    auto* pipelineProgram = desc.pipeline->getProgram();
+    if (!pipelineProgram || pipelineProgram != desc.programState->getProgram())
+    {
+        AXASSERT(false, "ComputePipeline and ProgramState program mismatch");
+        return false;
+    }
+
+    auto program = static_cast<ProgramImpl*>(pipelineProgram);
+    if (!program || !program->getCSModule())
+        return false;
+
+    const auto& storageBindings = desc.programState->getStorageBufferBindingSets();
+    for (const auto& storageInfo : program->getActiveStorageBufferInfos())
+    {
+        auto binding = storageBindings.find(storageInfo.binding);
+        if (binding == storageBindings.end() || !binding->second.buffer)
+        {
+            AXLOGE("Missing D3D12 compute storage buffer binding {} ({})", storageInfo.binding, storageInfo.name);
+            AXASSERT(false, "Missing D3D12 compute storage buffer binding");
+            return false;
+        }
+        if (binding->second.access != storageInfo.access)
+        {
+            AXLOGE("D3D12 compute storage buffer binding {} has incompatible access", storageInfo.binding);
+            AXASSERT(false, "D3D12 compute storage buffer access mismatch");
+            return false;
+        }
+
+        auto bufferImpl = static_cast<BufferImpl*>(binding->second.buffer);
+        if (!bufferImpl->internalResource() ||
+            (storageInfo.sizeBytes != 0 && bufferImpl->getSize() < storageInfo.sizeBytes) ||
+            (storageInfo.arrayStride != 0 && bufferImpl->getStride() != storageInfo.arrayStride))
+        {
+            AXLOGE("D3D12 compute storage buffer binding {} does not match its reflected resource",
+                   storageInfo.binding);
+            AXASSERT(false, "D3D12 compute storage buffer resource mismatch");
+            return false;
+        }
+
+        const bool hasView = storageInfo.access == BufferAccess::READ_WRITE ? bufferImpl->getUAV() != nullptr
+                                                                            : bufferImpl->getSRV() != nullptr;
+        if (!hasView)
+        {
+            AXLOGE("D3D12 compute storage buffer binding {} has no native view", storageInfo.binding);
+            AXASSERT(false, "D3D12 compute storage buffer has no native view");
+            return false;
+        }
+    }
+
+    auto* computePipeline = static_cast<ComputePipelineImpl*>(desc.pipeline);
+    if (!computePipeline->getPipeline())
+        return false;
+
+    _programState = desc.programState;
+
+    auto* cmd = _currentCmdList;
+    cmd->SetComputeRootSignature(computePipeline->getRootSignature());
+    cmd->SetPipelineState(computePipeline->getPipeline());
+
+    // Compute uses the same command list: invalidate the graphics pipeline
+    // cache so a later draw re-binds its root signature and PSO.
+    _boundRootSig = nullptr;
+    _boundPSO     = nullptr;
+
+    // Bind uniform blocks via CBV root parameters.
+    auto& callbackUniforms = desc.programState->getCallbackUniforms();
+    for (auto& cb : callbackUniforms)
+        cb.second(_programState, cb.first);
+
+    const auto& cpuBuffer = desc.programState->getUniformBuffer();
+    if (!cpuBuffer.empty())
+    {
+        for (auto& uboInfo : desc.programState->getActiveUniformBlockInfos())
+        {
+            auto s = allocateUniformSlice(_frameIndex, uboInfo.sizeBytes);
+            ::memcpy(s.cpuPtr, cpuBuffer.data() + uboInfo.cpuOffset, uboInfo.sizeBytes);
+            const auto rootIndex = computePipeline->cbvRootIndex(uboInfo.binding);
+            AXASSERT(rootIndex != UINT_MAX, "Missing D3D12 compute CBV root parameter");
+            if (rootIndex != UINT_MAX)
+                cmd->SetComputeRootConstantBufferView(rootIndex, s.gpuVA);
+        }
+    }
+
+    auto srvHeap         = _srvHeaps[_frameIndex].Get();
+    auto srvCpuStart     = srvHeap->GetCPUDescriptorHandleForHeapStart();
+    auto srvGpuStart     = srvHeap->GetGPUDescriptorHandleForHeapStart();
+    const auto srvStride = _driver->getSrvDescriptorStride();
+
+    const UINT bindingStart = _srvOffset[_frameIndex];
+    UINT slot               = 0;
+
+    // Copy SRV descriptors (read-only storage buffers, then textures) in
+    // root-signature range order (ComputePipeline12::createRootSignature).
+    for (const auto& storageInfo : program->getActiveStorageBufferInfos())
+    {
+        if (storageInfo.access != BufferAccess::READ_ONLY)
+            continue;
+        auto binding = storageBindings.find(storageInfo.binding);
+        if (binding == storageBindings.end() || !binding->second.buffer)
+            continue;
+        auto bufferImpl = static_cast<BufferImpl*>(binding->second.buffer);
+        bufferImpl->setLastFenceValue(_frameFenceValue);
+        auto srvHandle = bufferImpl->getSRV();
+        if (!srvHandle)
+            continue;
+
+        D3D12_CPU_DESCRIPTOR_HANDLE dst = srvCpuStart;
+        dst.ptr += (bindingStart + slot) * srvStride;
+        _device->CopyDescriptorsSimple(1, dst, srvHandle->cpu, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+        ++slot;
+    }
+    const auto& textureBindings = desc.programState->getTextureBindingSets();
+    for (const auto& [_, textureInfo] : program->getActiveTextureInfos())
+    {
+        auto binding = textureBindings.find(textureInfo->location);
+        if (binding == textureBindings.end())
+            continue;
+        const auto& bindingSet = binding->second;
+        for (auto tex : bindingSet.texs)
+        {
+            auto textureImpl = static_cast<TextureImpl*>(tex);
+            textureImpl->setLastFenceValue(_frameFenceValue);
+            auto srvHandle = textureImpl->internalHandle().srv;
+            if (!srvHandle)
+                continue;
+
+            D3D12_CPU_DESCRIPTOR_HANDLE dst = srvCpuStart;
+            dst.ptr += (bindingStart + slot) * srvStride;
+            _device->CopyDescriptorsSimple(1, dst, srvHandle->cpu, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+            ++slot;
+        }
+    }
+    const UINT srvCount = slot;
+
+    // Copy UAV descriptors (read-write storage buffers).
+    for (const auto& storageInfo : program->getActiveStorageBufferInfos())
+    {
+        if (storageInfo.access != BufferAccess::READ_WRITE)
+            continue;
+        auto binding = storageBindings.find(storageInfo.binding);
+        if (binding == storageBindings.end() || !binding->second.buffer)
+            continue;
+        auto bufferImpl = static_cast<BufferImpl*>(binding->second.buffer);
+        bufferImpl->setLastFenceValue(_frameFenceValue);
+        auto uavHandle = bufferImpl->getUAV();
+        if (!uavHandle)
+            continue;
+
+        D3D12_CPU_DESCRIPTOR_HANDLE dst = srvCpuStart;
+        dst.ptr += (bindingStart + slot) * srvStride;
+        _device->CopyDescriptorsSimple(1, dst, uavHandle->cpu, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+        ++slot;
+    }
+    const UINT uavCount = slot - srvCount;
+
+    D3D12_GPU_DESCRIPTOR_HANDLE gpuBase = srvGpuStart;
+    gpuBase.ptr += static_cast<UINT64>(bindingStart) * srvStride;
+
+    if (computePipeline->srvRootIndex() != UINT_MAX && srvCount > 0)
+        cmd->SetComputeRootDescriptorTable(computePipeline->srvRootIndex(), gpuBase);
+    if (computePipeline->uavRootIndex() != UINT_MAX && uavCount > 0)
+    {
+        D3D12_GPU_DESCRIPTOR_HANDLE uavGpu = gpuBase;
+        uavGpu.ptr += static_cast<UINT64>(srvCount) * srvStride;
+        cmd->SetComputeRootDescriptorTable(computePipeline->uavRootIndex(), uavGpu);
+    }
+
+    // Samplers.
+    if (computePipeline->samplerRootIndex() != UINT_MAX)
+    {
+        const auto samplerGpuStart = _driver->getSamplerHeap()->GetGPUDescriptorHandleForHeapStart();
+        cmd->SetComputeRootDescriptorTable(computePipeline->samplerRootIndex(), samplerGpuStart);
+    }
+    if (computePipeline->customSamplerRootIndex() != UINT_MAX)
+    {
+        auto* batch = computePipeline->getCustomSamplerBatch(desc.programState);
+        AXASSERT(batch, "Failed to resolve D3D12 compute custom sampler descriptors");
+        if (batch)
+            cmd->SetComputeRootDescriptorTable(computePipeline->customSamplerRootIndex(), batch->gpu);
+    }
+
+    // A texture uploaded by the regular texture path starts in pixel-shader
+    // read state. Compute sampling needs the non-pixel bit as well, and the
+    // combined state remains valid when the same texture is rendered later.
+    constexpr D3D12_RESOURCE_STATES textureReadState =
+        D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE | D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
+    for (const auto& [binding, bindingSet] : desc.programState->getTextureBindingSets())
+    {
+        for (auto* texture : bindingSet.texs)
+        {
+            if (!texture)
+                continue;
+            auto* textureImpl = static_cast<TextureImpl*>(texture);
+            if (!textureImpl->internalHandle().resource)
+                continue;
+            textureImpl->setLastFenceValue(_frameFenceValue);
+            if (textureImpl->getCurrentState() != textureReadState)
+                textureImpl->transitionState(cmd, textureReadState);
+        }
+    }
+
+    // Transition storage buffers to their bind state.
+    tlx::pod_vector<D3D12_RESOURCE_BARRIER> barriers;
+    for (const auto& [binding, bindingSet] : desc.programState->getStorageBufferBindingSets())
+    {
+        if (!bindingSet.buffer)
+            continue;
+        auto bufferImpl  = static_cast<BufferImpl*>(bindingSet.buffer);
+        auto targetState = bindingSet.access == BufferAccess::READ_WRITE
+                               ? D3D12_RESOURCE_STATE_UNORDERED_ACCESS
+                               : D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
+        if (bufferImpl->currentState() != targetState)
+        {
+            D3D12_RESOURCE_BARRIER& bar = barriers.emplace_back();
+            bar.Type                    = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+            bar.Transition.pResource    = bufferImpl->internalResource();
+            bar.Transition.StateBefore  = bufferImpl->currentState();
+            bar.Transition.StateAfter   = targetState;
+            bar.Transition.Subresource  = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+            bufferImpl->_resourceState  = targetState;
+        }
+    }
+    if (!barriers.empty())
+        cmd->ResourceBarrier(static_cast<UINT>(barriers.size()), barriers.data());
+
+    cmd->Dispatch(desc.groupCountX, desc.groupCountY, desc.groupCountZ);
+
+    // UAV barrier: make compute writes visible to subsequent compute/vertex/fragment reads.
+    tlx::pod_vector<D3D12_RESOURCE_BARRIER> postBarriers;
+    for (const auto& [binding, bindingSet] : desc.programState->getStorageBufferBindingSets())
+    {
+        if (!bindingSet.buffer || bindingSet.access != BufferAccess::READ_WRITE)
+            continue;
+        auto bufferImpl             = static_cast<BufferImpl*>(bindingSet.buffer);
+        D3D12_RESOURCE_BARRIER& bar = postBarriers.emplace_back();
+        bar.Type                    = D3D12_RESOURCE_BARRIER_TYPE_UAV;
+        bar.UAV.pResource           = bufferImpl->internalResource();
+    }
+    if (!postBarriers.empty())
+        cmd->ResourceBarrier(static_cast<UINT>(postBarriers.size()), postBarriers.data());
+
+    _srvOffset[_frameIndex] = bindingStart + srvCount + uavCount;
+
+    // The D3D12 command list does not retain the PSO; keep the pipeline alive
+    // until the GPU has finished executing this frame.
+    _inFlightComputePipelines[_frameIndex].emplace_back(computePipeline);
+
+    _programState = nullptr;
+    return true;
 }
 
 bool GraphicsContextImpl::copyTexture(Texture* src, Texture* dst)
