@@ -1519,6 +1519,10 @@ function setup_emsdk() {
     else {
         $1k.println("Using emcc: $emcc_prog, version: $emcc_ver")
     }
+
+    # Emscripten 6.0.1 accepts the standard -m64 spelling for wasm64.
+    # Keep the legacy spelling for older emsdk releases supported by Axmol.
+    $Global:EMSCRIPTEN_VERSION = $emcc_ver
 }
 
 function setup_msvc() {
@@ -2000,8 +2004,14 @@ if (!$setupOnly) {
         if (!$is_win_family) {
             $cm_cflags = '-fPIC'
             if ($TARGET_OS -eq 'wasm64') {
-                $cm_cflags += ' -sMEMORY64'
-                $CONFIG_ALL_OPTIONS += '-DEMSCRIPTEN_SYSTEM_PROCESSOR=x86_64', '-DCMAKE_CXX_FLAGS=-sMEMORY64'
+                if (version_ge $Global:EMSCRIPTEN_VERSION '6.0.1') {
+                    $wasm64_flag = '-m64'
+                }
+                else {
+                    $wasm64_flag = '-sMEMORY64'
+                }
+                $cm_cflags += " $wasm64_flag"
+                $CONFIG_ALL_OPTIONS += '-DEMSCRIPTEN_SYSTEM_PROCESSOR=x86_64', "-DCMAKE_CXX_FLAGS=$wasm64_flag"
             }
 
             $CONFIG_ALL_OPTIONS += "-DCMAKE_C_FLAGS=$cm_cflags"
