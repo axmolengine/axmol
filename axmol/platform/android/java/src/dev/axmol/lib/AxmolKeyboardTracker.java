@@ -1,5 +1,5 @@
 /****************************************************************************
- Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+ Copyright (c) 2019-present Simdsoft Limited and other Axmol contributors (see AUTHORS.md).
 
  https://axmol.dev/
  ****************************************************************************/
@@ -15,7 +15,7 @@ import android.view.WindowInsetsAnimation;
 import java.util.List;
 
 /**
- * Unified Keyboard Lifecycle and Geometry Tracker for Axmol Engine.
+ * Unified Keyboard Lifecycle and Geometry Tracker for Axmol.
  * Automatically routes between modern WindowInsets (API 30+) and Legacy Layout fallbacks (API 21+).
  */
 public class AxmolKeyboardTracker {

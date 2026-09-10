@@ -1,6 +1,6 @@
-# Axmol Engine AI Contribution Policy
+# Axmol AI Contribution Policy
 
-To maintain the high quality, performance, and stability of the Axmol Engine, we welcome all meaningful contributions from the community. With the rapid adoption of generative AI tools, we want to **proactively** establish clear boundaries to ensure AI assistance enhances—rather than degrades—the project's development workflow.
+To maintain the high quality, performance, and stability of the Axmol, we welcome all meaningful contributions from the community. With the rapid adoption of generative AI tools, we want to **proactively** establish clear boundaries to ensure AI assistance enhances—rather than degrades—the project's development workflow.
 
 Managing a complex, cross-platform C++17/20 game engine requires significant maintainer time and code-review bandwidth. To prevent future resource drain and avoid notification spam for project watchers, we enforce the following policy regarding AI-assisted and AI-generated content.
 
