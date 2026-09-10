@@ -2,30 +2,14 @@
 # Copyright (c) 2013 cocos2d-x.org
 # Copyright (c) 2014 martell malone
 # Copyright (c) 2015-2017 Chukong Technologies Inc.
-# Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+# Copyright (c) 2019-present Simdsoft Limited and other Axmol contributors (see AUTHORS.md).
 #
 # https://axmol.dev/
 #
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
+# SPDX-License-Identifier: MIT
 # ****************************************************************************/
 
-# this CMakeLists is to generate Axmol Engine Library
+# this CMakeLists is to generate Axmol Library
 # build ax
 # build axlua if AX_ENABLE_EXT_LUA=ON
 
@@ -35,7 +19,7 @@
 set(_AX_VERSION 3.0)
 
 if(NOT DEFINED _AX_CORE_LIB)
-  set(_AX_CORE_LIB axmol CACHE INTERNAL "The axmol engine lib name")
+  set(_AX_CORE_LIB axmol CACHE INTERNAL "The axmol lib name")
 endif()
 
 cmake_policy(SET CMP0127 NEW)

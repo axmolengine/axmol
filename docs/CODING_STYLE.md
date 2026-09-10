@@ -1,6 +1,6 @@
 <p align="center"><a href="https://axmol.dev" target="_blank" rel="noopener noreferrer"><img width="160" src="logo.png" alt="axmol logo"></a></p>
 
-# Axmol Engine - C++ coding style
+# Axmol - C++ coding style
 
 _v0.21 - Last updated February 12, 2024_
 
