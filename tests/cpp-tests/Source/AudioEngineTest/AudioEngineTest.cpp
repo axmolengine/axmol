@@ -44,6 +44,7 @@ AudioEngineTests::AudioEngineTests()
 #if AX_USE_ALSOFT
     ADD_TEST_CASE(AudioReverbTest);
 #endif
+    ADD_TEST_CASE(AudioIssue3317Test);
     // FIXME: Please keep AudioSwitchStateTest to the last position since this test case doesn't work well on each
     // platforms.
     ADD_TEST_CASE(AudioSwitchStateTest);
@@ -1118,6 +1119,61 @@ std::string AudioIssue16938Test::title() const
 std::string AudioIssue16938Test::subtitle() const
 {
     return "Should heard the entire audio frames";
+}
+
+/////////////////////////////////////////////////////////////////////////
+void AudioIssue3317Test::onEnter()
+{
+    AudioEngineTestDemo::onEnter();
+
+    // Start silently, restore the position after the audio is ready, and restore
+    // the volume on the following frame. This reproduces the reported mismatch
+    // between the app's position and the system player's displayed position.
+    _audioID = AudioEngine::play2d("audio/LuckyDay.opus", true, 0.0f);
+    if (_audioID == AudioEngine::INVALID_AUDIO_ID)
+    {
+        AXLOGE("Failed to play audio/LuckyDay.opus");
+        return;
+    }
+
+    _state = 0;
+    Director::getInstance()->getScheduler()->schedule([this](float) {
+        if (_audioID == AudioEngine::INVALID_AUDIO_ID)
+            return;
+
+        if (_state == 0)
+        {
+            // getDuration() is TIME_UNKNOWN until the audio has been prepared.
+            const float duration = AudioEngine::getDuration(_audioID);
+            if (duration > 0.0f)
+            {
+                if (!AudioEngine::setCurrentTime(_audioID, 50.0f))
+                {
+                    AXLOGE("Failed to set current time for audioId {}, maybe the audio is not ready yet", _audioID);
+                }
+                _state = 1;
+            }
+        }
+        else if (_state == 1)
+        {
+            AudioEngine::setVolume(_audioID, 1.0f);
+            _state = 2;
+        }
+        else
+        {
+            AXLOGD("Current time of audioId {}: {}", _audioID, AudioEngine::getCurrentTime(_audioID));
+        }
+    }, this, 0.0f, false, "restore_current_time");
+}
+
+std::string AudioIssue3317Test::title() const
+{
+    return "Issue 3317 Test";
+}
+
+std::string AudioIssue3317Test::subtitle() const
+{
+    return "Starts muted, seeks to 50 seconds, then logs current time";
 }
 
 /////////////////////////////////////////////////////////////////////////

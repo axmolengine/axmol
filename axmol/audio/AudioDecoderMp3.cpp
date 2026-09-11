@@ -274,7 +274,9 @@ uint32_t AudioDecoderMp3::read(uint32_t framesToRead, char* pcmBuf)
 bool AudioDecoderMp3::seek(uint32_t frameOffset)
 {
 #if !AX_USE_MPG123
-    return 0 == mp3dec_ex_seek(&_handle->_dec, frameOffset);
+    // minimp3 is opened with MP3D_SEEK_TO_SAMPLE, so its seek position is an
+    // interleaved sample offset rather than an audio-frame offset.
+    return 0 == mp3dec_ex_seek(&_handle->_dec, frameOffset * _channelCount);
 #else
     off_t offset = mpg123_seek(_handle, frameOffset, SEEK_SET);
     // AXLOGD("mpg123_seek return: {}", (int)offset);
