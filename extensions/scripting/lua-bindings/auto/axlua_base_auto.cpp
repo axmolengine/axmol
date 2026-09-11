@@ -3772,6 +3772,53 @@ int lua_ax_base_EventKeyboard_isRepeat(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_EventKeyboard_getModifiers(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::EventKeyboard* obj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.EventKeyboard",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    obj = (ax::EventKeyboard*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!obj)
+    {
+        tolua_error(tolua_S,"invalid 'obj' in function 'lua_ax_base_EventKeyboard_getModifiers'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_EventKeyboard_getModifiers'", nullptr);
+            return 0;
+        }
+        auto&& ret = obj->getModifiers();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventKeyboard:getModifiers",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_EventKeyboard_getModifiers'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_EventKeyboard_constructor(lua_State* tolua_S)
 {
     int argc = 0;
@@ -3898,6 +3945,7 @@ int lua_register_ax_base_EventKeyboard(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"EventKeyboard");
         tolua_function(tolua_S,"new",lua_ax_base_EventKeyboard_constructor);
         tolua_function(tolua_S,"isRepeat",lua_ax_base_EventKeyboard_isRepeat);
+        tolua_function(tolua_S,"getModifiers",lua_ax_base_EventKeyboard_getModifiers);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::EventKeyboard).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.EventKeyboard";
