@@ -249,7 +249,7 @@ public:
 
     bool isRepeat() const { return _isRepeat; }
 
-    uint32_t getKeyModifiers() const { return _modifiers; }
+    uint32_t getModifiers() const { return _modifiers; }
 
 private:
     KeyCode _keyCode;
