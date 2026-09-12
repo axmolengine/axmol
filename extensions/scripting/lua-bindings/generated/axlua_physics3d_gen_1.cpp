@@ -75,6 +75,7 @@ void register_ax_physics3d_members_1(lua_State* L)
     class_4_Rigidbody3D.method("getMass", static_cast<float (ax::Rigidbody3D::*)() const>(&ax::Rigidbody3D::getMass));
     class_4_Rigidbody3D.method("getMaterial", static_cast<ax::PhysicsMaterial (ax::Rigidbody3D::*)() const>(&ax::Rigidbody3D::getMaterial));
     class_4_Rigidbody3D.method("getMotionType", static_cast<ax::Rigidbody3D::MotionType (ax::Rigidbody3D::*)() const>(&ax::Rigidbody3D::getMotionType));
+    class_4_Rigidbody3D.method("getPersistedContacts", [](const ax::Rigidbody3D& self) -> auto { return sol::as_table(static_cast<const ax::Rigidbody3D&>(self).getPersistedContacts()); });
     class_4_Rigidbody3D.method("getPosition", static_cast<ax::Vec3 (ax::Rigidbody3D::*)() const>(&ax::Rigidbody3D::getPosition));
     class_4_Rigidbody3D.method("getRotation", static_cast<ax::Quat (ax::Rigidbody3D::*)() const>(&ax::Rigidbody3D::getRotation));
     class_4_Rigidbody3D.method("getTotalForce", static_cast<ax::Vec3 (ax::Rigidbody3D::*)() const>(&ax::Rigidbody3D::getTotalForce));

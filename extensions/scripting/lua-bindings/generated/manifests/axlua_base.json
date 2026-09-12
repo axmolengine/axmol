@@ -35566,9 +35566,15 @@
           "isUnsigned": false
         },
         {
+          "name": "Persisted",
+          "signedValue": 16,
+          "unsignedValue": 16,
+          "isUnsigned": false
+        },
+        {
           "name": "AllBits",
-          "signedValue": 15,
-          "unsignedValue": 15,
+          "signedValue": 31,
+          "unsignedValue": 31,
           "isUnsigned": false
         }
       ]
