@@ -6,6 +6,7 @@
  SPDX-License-Identifier: MIT
  ****************************************************************************/
 #import "GameSceneDelegate.h"
+#import "GameViewController.h"
 
 API_AVAILABLE(ios(13.0))
 @implementation GameSceneDelegate
