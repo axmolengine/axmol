@@ -4,7 +4,7 @@
  Copyright (c) 2013 Martell Malone
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2019-2020 simdsoft.com, @HALX99
- Copyright (c) 2019-present Simdsoft Limited and other Axmol contributors (see AUTHORS.md).
+ Copyright (c) 2019-present Simdsoft Limited.
 
  https://axmol.dev/
 

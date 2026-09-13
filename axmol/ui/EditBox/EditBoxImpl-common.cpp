@@ -3,7 +3,7 @@
  Copyright (c) 2012 James Chen
  Copyright (c) 2013-2015 zilongshanren
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2019-present Simdsoft Limited and other Axmol contributors (see AUTHORS.md).
+ Copyright (c) 2019-present Simdsoft Limited.
 
  https://axmol.dev/
 

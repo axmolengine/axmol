@@ -2,7 +2,7 @@
 # Copyright (c) 2013 cocos2d-x.org
 # Copyright (c) 2014 martell malone
 # Copyright (c) 2015-2017 Chukong Technologies Inc.
-# Copyright (c) 2019-present Simdsoft Limited and other Axmol contributors (see AUTHORS.md).
+# Copyright (c) 2019-present Simdsoft Limited.
 #
 # https://axmol.dev/
 #

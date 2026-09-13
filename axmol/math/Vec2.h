@@ -2,7 +2,7 @@
  Copyright 2013 BlackBerry Inc.
  Copyright (c) 2014-2017 Chukong Technologies
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2019-present Simdsoft Limited and other Axmol contributors (see AUTHORS.md).
+ Copyright (c) 2019-present Simdsoft Limited.
 
  https://axmol.dev/
 

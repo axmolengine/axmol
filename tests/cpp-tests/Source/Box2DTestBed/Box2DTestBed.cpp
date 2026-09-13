@@ -1,6 +1,6 @@
 /****************************************************************************
  * Copyright (c) 2021 @aismann; Peter Eismann, Germany; dreifrankensoft
- * Copyright (c) 2019-present Simdsoft Limited and other Axmol contributors (see AUTHORS.md).
+ * Copyright (c) 2019-present Simdsoft Limited.
 
  https://axmol.dev/
 

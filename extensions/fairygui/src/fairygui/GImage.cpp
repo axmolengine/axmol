@@ -1,6 +1,6 @@
 /****************************************************************************
  Copyright (c) 2015 fairygui.com
- Copyright (c) 2019-present Simdsoft Limited and other Axmol contributors (see AUTHORS.md).
+ Copyright (c) 2019-present Simdsoft Limited.
 
 SPDX-License-Identifier: MIT
  ****************************************************************************/

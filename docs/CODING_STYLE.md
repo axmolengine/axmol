@@ -2,7 +2,7 @@
 
 # Axmol - C++ coding style
 
-_v0.21 - Last updated February 12, 2024_
+_Axmol v3 baseline - Last updated September 13, 2026_
 
 _Forked from [Google's C++ coding style](http://google-styleguide.googlecode.com/svn/trunk/cppguide.xml) rev. 3.274_
 
@@ -63,7 +63,7 @@ _Forked from [Google's C++ coding style](http://google-styleguide.googlecode.com
 	- [Brace Initialization](#brace-initialization)
 	- [Lambda expressions](#lambda-expressions)
 	- [Boost](#boost)
-	- [C++11](#c11)
+	- [C++23](#c23)
 	- [General Naming Rules](#general-naming-rules)
 	- [File Names](#file-names)
 	- [Type Names](#type-names)
@@ -132,7 +132,20 @@ _Forked from [Google's C++ coding style](http://google-styleguide.googlecode.com
 - [Exceptions to the Rules](#exceptions-to-the-rules)
 	- [Existing Non-conformant Code](#existing-non-conformant-code)
 	- [Windows Code](#windows-code)
+- [Axmol v3 baseline](#axmol-v3-baseline)
 - [Parting Words](#parting-words)
+
+## Axmol v3 baseline
+
+This guide adapts the Google/Chromium conventions to current Axmol v3 development. When a rule conflicts with the repository's `.clang-format`, `.editorconfig`, or a local module convention, follow the repository configuration and keep the surrounding code consistent.
+
+- Axmol v3 `dev` requires C++23. The CMake configuration sets `CMAKE_CXX_STANDARD` to 23, requires it, and disables compiler extensions.
+- New code uses the `ax::` namespace and current `AX_*` platform/build macros. Do not introduce legacy `cocos2d::` or `CC_*` names in new APIs.
+- Header files use `#pragma once`. Keep platform-specific code behind the existing Axmol platform/configuration macros.
+- Use the repository `.clang-format`: four-space indentation, spaces only, and a 120-column limit. Format changed code rather than reformatting an entire file.
+- Keep source comments in English unless another language is required by the data or user-facing content. Source files are UTF-8 without a BOM.
+- Objects derived from `ax::Ref` and scene-graph objects use Axmol reference counting and autorelease conventions; do not wrap them in `std::unique_ptr` or `std::shared_ptr`.
+- For non-scene resources, prefer clear ownership with standard-library containers and smart pointers where appropriate. Public C++ APIs should use Doxygen comments, and changes should include relevant tests or validation.
 
 # Header Files
 
@@ -142,16 +155,17 @@ Correct use of header files can make a huge difference to the readability, size 
 
 The following rules will guide you through the various pitfalls of using header files.
 
-## The #include Guard
+## The #pragma once directive
 
 All header files should have `#pragma once` guards to prevent multiple inclusion.
 
-To guarantee uniqueness, they should be based on the full path in a project's source tree. For example, the file `axmol/axmol/2d/Sprite.h` in project foo should have the following guard:
+Use the repository's standard directive consistently:
 
 ```cpp
-// Pragma once
 #pragma once
 ```
+
+Legacy macro include guards may be retained when required for external interoperability, but new Axmol headers should use `#pragma once`.
 
 ## Forward Declarations
 
@@ -247,7 +261,7 @@ With the preferred ordering, if `dir2/foo2.h` omits any necessary includes, the 
 
 Within each section the includes should be ordered alphabetically. Note that older code might not conform to this rule and should be fixed when convenient.
 
-For example, the includes in `cocos2dx/sprite_nodes/CCSprite.cpp` might look like this:
+For example, the includes in an Axmol implementation file such as `axmol/2d/Sprite.cpp` might look like this:
 
 ```cpp
 #include "sprite_nodes/CCSprite.h"  // Preferred location.
@@ -349,7 +363,7 @@ Namespaces wrap the entire source file after includes, gflags definitions/declar
 
 ```cpp
 // In the .h file
-// When using the cocos2d namespace
+// When using the ax namespace
 NS_AX_BEGIN
 
 // All declarations are within the namespace scope.
@@ -367,7 +381,7 @@ NS_AX_END
 
 ```cpp
 // In the .h file
-// When NOT using the cocos2d namespace
+// When NOT using the ax namespace
 namespace mynamespace {
 
 // All declarations are within the namespace scope.
@@ -932,7 +946,7 @@ Prefer to have single, fixed owners for dynamically allocated objects. Prefer to
 
 "Ownership" is a bookkeeping technique for managing dynamically allocated memory (and other resources). The owner of a dynamically allocated object is an object or function that is responsible for ensuring that it is deleted when no longer needed. Ownership can sometimes be shared, in which case the last owner is typically responsible for deleting it. Even when ownership is not shared, it can be transferred from one piece of code to another.
 
-"Smart" pointers are classes that act like pointers, e.g. by overloading the * and -> operators. Some smart pointer types can be used to automate ownership bookkeeping, to ensure these responsibilities are met. `std::unique_ptr` is a smart pointer type introduced in C++11, which expresses exclusive ownership of a dynamically allocated object; the object is deleted when the `std::unique_ptr` goes out of scope. It cannot be copied, but can be moved to represent ownership transfer. shared_ptr is a smart pointer type which expresses shared ownership of a dynamically allocated object. `shared_ptrs` can be copied; ownership of the object is shared among all copies, and the object is deleted when the last `shared_ptr` is destroyed.
+"Smart" pointers are classes that act like pointers, e.g. by overloading the * and -> operators. Some smart pointer types automate ownership bookkeeping. `std::unique_ptr` expresses exclusive ownership of a dynamically allocated object; the object is deleted when the `std::unique_ptr` goes out of scope. It cannot be copied, but it can be moved to represent ownership transfer. `std::shared_ptr` expresses shared ownership; the object is deleted when the last `std::shared_ptr` is destroyed.
 
 **Pros:**
 
@@ -949,7 +963,6 @@ Prefer to have single, fixed owners for dynamically allocated objects. Prefer to
 * The performance costs of value semantics are often overestimated, so the performance benefits of ownership transfer might not justify the readability and complexity costs.
 * APIs that transfer ownership force their clients into a single memory management model.
 * Code using smart pointers is less explicit about where the resource releases take place.
-* `std::unique_ptr` expresses ownership transfer using C++11's move semantics, which are generally forbidden in Google code, and may confuse some programmers.
 * Shared ownership can be a tempting alternative to careful ownership design, obfuscating the design of a system.
 * Shared ownership requires explicit bookkeeping at run-time, which can be costly.
 * In some cases (e.g. cyclic references), objects with shared ownership may never be deleted.
@@ -958,6 +971,8 @@ Prefer to have single, fixed owners for dynamically allocated objects. Prefer to
 **Decision:**
 
 If dynamic allocation is necessary, prefer to keep ownership with the code that allocated it. If other code needs access to the object, consider passing it a copy, or passing a pointer or reference without transferring ownership. Prefer to use `std::unique_ptr` to make ownership transfer explicit. For example:
+
+Scene-graph objects derived from `ax::Ref` are owned by Axmol reference counting and autorelease pools. Create them through the class's `create()`/`init()` pattern, and never wrap them in standard smart pointers or call `delete` on them. For non-scene resources, use `std::unique_ptr` for exclusive ownership and `std::shared_ptr` only when shared ownership is intentional.
 
 ```cpp
 std::unique_ptr<Foo> FooFactory();
@@ -1002,7 +1017,7 @@ Remember that most of the time input parameters are going to be specified as `co
 
 ## Rvalue references
 
-Do not use rvalue references, `std::forward`, `std::move_iterator`, or `std::move_if_noexcept`. Use the single-argument form of `std::move` only with non-copyable arguments.
+Use rvalue references and move utilities when they make ownership transfer explicit or avoid an unnecessary expensive copy. Keep forwarding code localized and readable.
 
 **Definition:** Rvalue references are a type of reference that can only bind to temporary objects. The syntax is similar to traditional reference syntax. For example, void f(string&& s); declares a function whose argument is an rvalue reference to a string.
 
@@ -1015,12 +1030,12 @@ Do not use rvalue references, `std::forward`, `std::move_iterator`, or `std::mov
 
 **Cons:**
 
-* Rvalue references are a relatively new feature (introduced as part of C++11), and not yet widely understood. Rules like reference collapsing, and automatic synthesis of move constructors, are complicated.
+* Rvalue references, forwarding, and move construction can make lifetime and value-category behavior harder to read when used without a clear ownership or performance reason.
 * Rvalue references encourage a programming style that makes heavier use of value semantics. This style is unfamiliar to many developers, and its performance characteristics can be hard to reason about.
 
 **Decision:**
 
-Do not use rvalue references, and do not use the `std::forward` or `std::move_if_noexcept` utility functions (which are essentially just casts to rvalue reference types), or `std::move_iterator`. Use single-argument `std::move` only with objects that are not copyable (e.g. `std::unique_ptr`), or in templated code with objects that might not be copyable.
+Use `std::move` only when moving from the source object is intentional and remains valid afterward. Use `std::forward` and `std::move_iterator` in generic code only when forwarding or move iteration is part of the design. Do not use move operations merely to force an optimization.
 
 ## Function Overloading
 
@@ -1059,7 +1074,7 @@ While the cons above are not that onerous, they still outweigh the (small) benef
 
 One specific exception is when the function is a static function (or in an unnamed namespace) in a .cpp file. In this case, the cons don't apply since the function's use is so localized.
 
-In particular, the `createXXX` and `initXXX` methods in cocos2dx are allowed to use default arguments.
+In particular, the `createXXX` and `initXXX` methods in Axmol are allowed to use default arguments.
 
 Another specific exception is when default arguments are used to simulate variable-length argument lists. Example:
 
@@ -1091,39 +1106,15 @@ Friends extend, but do not break, the encapsulation boundary of a class. In some
 
 ## Exceptions
 
-We do not use C++ exceptions.
-
-**Pros:**
-
-* Exceptions allow higher levels of an application to decide how to handle "can't happen" failures in deeply nested functions, without the obscuring and error-prone bookkeeping of error codes.
-* Exceptions are used by most other modern languages. Using them in C++ would make it more consistent with Python, Java, and the C++ that others are familiar with.
-* Some third-party C++ libraries use exceptions, and turning them off internally makes it harder to integrate with those libraries.
-* Exceptions are the only way for a constructor to fail. We can simulate this with a factory function or an `init()` method, but these require heap allocation or a new "invalid" state, respectively.
-* Exceptions are really handy in testing frameworks.
-
-**Cons:**
-
-* When you add a throw statement to an existing function, you must examine all of its transitive callers. Either they must make at least the basic exception safety guarantee, or they must never catch the exception and be happy with the program terminating as a result. For instance, if f() calls g() calls h(), and h throws an exception that f catches, g has to be careful or it may not clean up properly.
-* More generally, exceptions make the control flow of programs difficult to evaluate by looking at code: functions may return in places you don't expect. This causes maintainability and debugging difficulties. You can minimize this cost via some rules on how and where exceptions can be used, but at the cost of more that a developer needs to know and understand.
-* Exception safety requires both RAII and different coding practices. Lots of supporting machinery is needed to make writing correct exception-safe code easy. Further, to avoid requiring readers to understand the entire call graph, exception-safe code must isolate logic that writes to persistent state into a "commit" phase. This will have both benefits and costs (perhaps where you're forced to obfuscate code to isolate the commit). Allowing exceptions would force us to always pay those costs even when they're not worth it.
-* Turning on exceptions adds data to each binary produced, increasing compile time (probably slightly) and possibly increasing address space pressure.
-* The availability of exceptions may encourage developers to throw them when they are not appropriate or recover from them when it's not safe to do so. For example, invalid user input should not cause exceptions to be thrown. We would need to make the style guide even longer to document these restrictions!
+Axmol code should not throw exceptions across engine or public-API boundaries unless the subsystem explicitly documents that behavior.
 
 **Decision:**
 
-On their face, the benefits of using exceptions outweigh the costs, especially in new projects. However, for existing code, the introduction of exceptions has implications on all dependent code. If exceptions can be propagated beyond a new project, it also becomes problematic to integrate the new project into existing exception-free code. Because most existing C++ code at Google is not prepared to deal with exceptions, it is comparatively difficult to adopt new code that generates exceptions.
-
-Given that Google's existing code is not exception-tolerant, the costs of using exceptions are somewhat greater than the costs in a new project. The conversion process would be slow and error-prone. We don't believe that the available alternatives to exceptions, such as error codes and assertions, introduce a significant burden.
-
-Our advice against using exceptions is not predicated on philosophical or moral grounds, but practical ones. Because we'd like to use our open-source projects at Google and it's difficult to do so if those projects use exceptions, we need to advise against exceptions in Google open-source projects as well. Things would probably be different if we had to do it all over again from scratch.
-
-This prohibition also applies to the exception-related features added in C++11, such as noexcept, `std::exception_ptr`, and `std::nested_exception`. 
-
-There is an exception to this rule (no pun intended) for Windows code.
+Use the existing Axmol error-reporting and initialization patterns instead of introducing throws into engine code. `noexcept` is allowed, and encouraged where truthful, when an operation cannot throw; do not add it merely to silence warnings. Third-party libraries may use exceptions internally, but isolate them at their integration boundary and do not let them escape through Axmol public APIs.
 
 ## Run-Time Type Information (RTTI)
 
-cocos2dx requires Run Time Type Information (RTTI) in order to compile and run. That being said, you should be careful and not abuse the RTTI features.
+Axmol requires Run-Time Type Information (RTTI) in order to compile and run. That being said, you should be careful and not abuse RTTI features.
 
 **Definition:** RTTI allows a programmer to query the C++ class of an object at run time. This is done by use of typeid or dynamic_cast.
 
@@ -1254,7 +1245,7 @@ Use prefix form (++i) of the increment and decrement operators with iterators an
 
 ## Use of const
 
-Use `const` whenever it makes sense. With C++11, `constexpr` is a better choice for some uses of `const`. 
+Use `const` whenever it makes sense. In modern C++, `constexpr` is a better choice for some uses of `const`.
 
 **Definition:** Declared variables and parameters can be preceded by the keyword const to indicate the variables are not changed (e.g., `const int foo`). Class functions can have the `const` qualifier to indicate the function does not change the state of the class member variables (e.g., `class Foo { int Bar(char c) const; };`).
 
@@ -1280,7 +1271,7 @@ That said, while we encourage putting `const` first, we do not require it. But b
 
 ## Use of constexpr
 
-In C++11, use `constexpr` to define true constants or to ensure constant initialization.
+Use `constexpr` to define true constants or to ensure constant initialization.
 
 **Definition:** Some variables can be declared `constexpr` to indicate the variables are true constants, i.e. fixed at compilation/link time. Some functions and constructors can be declared constexpr which enables them to be used in defining a constexpr variable.
 
@@ -1294,7 +1285,7 @@ In C++11, use `constexpr` to define true constants or to ensure constant initial
 
 ## Use of constexpr
 
-In C++11, use `constexpr` to define true constants or to ensure constant initialization.
+Use `constexpr` to define true constants or to ensure constant initialization.
 
 **Definition:** Some variables can be declared constexpr to indicate the variables are true constants, i.e. fixed at compilation/link time. Some functions and constructors can be declared constexpr which enables them to be used in defining a constexpr variable.
 
@@ -1413,7 +1404,7 @@ Use 0 for integers, 0.0 for reals, nullptr (or NULL) for pointers, and '\0' for 
 
 Use 0 for integers and 0.0 for reals. This is not controversial.
 
-For pointers (address values), there is a choice between `0`, `NULL`, and `nullptr`. For projects that allow C++11 features, use `nullptr`. For C++03 projects, we prefer `NULL` because it looks like a pointer. In fact, some C++ compilers provide special definitions of `NULL` which enable them to give useful warnings, particularly in situations where `sizeof(NULL)` is not equal to `sizeof(0)`.
+For pointers, always prefer `nullptr` over `0` or `NULL`. Axmol v3 requires a modern C++ standard, so compatibility guidance for C++03 is not applicable.
 
 Use `'\0'` for chars. This is the correct type and also makes code more readable.
 
@@ -1439,7 +1430,7 @@ if (raw_size < sizeof(int)) {
 
 Use `auto` to avoid type names that are just clutter. Continue to use manifest type declarations when it helps readability, and never use `auto` for anything but local variables.
 
-**Definition:** In C++11, a variable whose type is given as `auto` will be given a type that matches that of the expression used to initialize it. You can use `auto` either to initialize a variable by copying, or to bind a reference.
+**Definition:** The `auto` keyword lets the compiler deduce a variable's type from its initializer. You can use `auto` either to initialize a variable by copying, or to bind a reference.
 
 ```cpp
 vector<string> v;
@@ -1484,7 +1475,7 @@ it may not be obvious what i's type is, if x was declared hundreds of lines earl
 
 Programmers have to understand the difference between `auto` and `const auto&` or they'll get copies when they didn't mean to.
 
-The interaction between auto and C++11 brace-initialization can be confusing. The declarations
+The interaction between `auto` and braced initialization can be confusing. The declarations
 
 ```cpp
 auto x(3);  // Note: parentheses.
@@ -1499,7 +1490,7 @@ If an `auto` variable is used as part of an interface, e.g. as a constant in a h
 
 `auto` is permitted, for local variables only. Do not use `auto` for file-scope or namespace-scope variables, or for class members. Never assign a braced initializer list to an auto-typed variable.
 
-The `auto` keyword is also used in an unrelated C++11 feature: it's part of the syntax for a new kind of function declaration with a trailing return type. Function declarations with trailing return types are not permitted.
+The `auto` keyword is also used in function declarations with trailing return types. Do not use trailing return types unless they materially improve readability or are required by a dependent return type.
 
 ## Brace Initialization
 
@@ -1512,7 +1503,7 @@ struct Point { int x; int y; };
 Point p = {1, 2};
 ```
 
-In C++11, this syntax has been expanded for use with all other datatypes. The brace initialization form is called braced-init-list. Here are a few examples of its use.
+Modern C++ expands this syntax to other data types. The brace initialization form is called a braced-init-list. Here are a few examples of its use.
 
 ```cpp
 // Vector takes lists of elements.
@@ -1580,7 +1571,7 @@ auto d = double{1.23};  // Good -- d is a double, not an initializer_list.
 
 ## Lambda expressions
 
-Use lambda expressions, or the related `std::function` or `std::bind` utilities only in special places like cocos2d callbacks.
+Use lambda expressions, or the related `std::function` or `std::bind` utilities only in special places such as Axmol callbacks.
 
 **Definition:** Lambda expressions are a concise way of creating anonymous function objects. They're often useful when passing functions as arguments. For example: `std::sort(v.begin(), v.end(), [](string x, string y) { return x[1] < y[1]; });` Lambdas were introduced in C++11 along with a set of utilities for working with function objects, such as the polymorphic wrapper `std::function`.
 
@@ -1596,7 +1587,7 @@ Use lambda expressions, or the related `std::function` or `std::bind` utilities 
 
 Decision:
 
-Use lambda expressions, or the related `std::function` or `std::bind` utilities only in special places like cocos2d callbacks.
+Use lambda expressions, or the related `std::function` or `std::bind` utilities only in special places such as Axmol callbacks.
 
 ## Boost
 
@@ -1606,38 +1597,25 @@ Do not use boost.
 
 **Pros:** Boost code is generally very high-quality, is widely portable, and fills many important gaps in the C++ standard library, such as type traits, better binders, and better smart pointers. It also provides an implementation of the TR1 extension to the standard library.
 
-**Cons:** Some Boost libraries encourage coding practices which can hamper readability, such as metaprogramming and other advanced template techniques, and an excessively "functional" style of programming. It also adds more dependencies in cocos2d-x.
+**Cons:** Some Boost libraries encourage coding practices which can hamper readability, such as metaprogramming and other advanced template techniques, and an excessively "functional" style of programming. It also adds more dependencies in Axmol.
 
 **Decision:**
 In order to maintain a high level of readability for all contributors who might read and maintain code, and also in order to keep the dependencies as minimal as possible, we do not use Boost.
 
-## C++11
+## C++23
 
-Use libraries and language extensions from C++11 (formerly known as C++0x) when appropriate. Consider portability to other environments before using C++11 features in your project.
-
-**Definition:** C++11 is the latest ISO C++ standard. It contains significant changes both to the language and libraries.
-
-**Pros:** C++11 has become the official standard, and eventually will be supported by most C++ compilers. It standardizes some common C++ extensions that we use already, allows shorthands for some operations, and has some performance and safety improvements.
-
-**Cons:**
-
-The C++11 standard is substantially more complex than its predecessor (1,300 pages versus 800 pages), and is unfamiliar to many developers. The long-term effects of some features on code readability and maintenance are unknown. We cannot predict when its various features will be implemented uniformly by tools that may be of interest, particularly in the case of projects that are forced to use older versions of tools.
-
-As with Boost, some C++11 extensions encourage coding practices that hamper readability—for example by removing checked redundancy (such as type names) that may be helpful to readers, or by encouraging template metaprogramming. Other extensions duplicate functionality available through existing mechanisms, which may lead to confusion and conversion costs.
+Axmol v3 `dev` requires C++23. Use standard-library and language features when they improve clarity, safety, or performance, while keeping code portable across supported compilers and targets.
 
 **Decision:**
 
-C++11 features may be used unless specified otherwise. In addition to what's described in the rest of the style guide, the following C++11 features may not be used:
+- Prefer clear, idiomatic C++23 over compatibility patterns for older standards.
+- Use modern standard facilities such as `nullptr`, `enum class`, `override`, `final`, `constexpr`, structured bindings, ranges, concepts, `std::span`, and `std::string_view` where they make the code clearer or safer.
+- Keep public APIs stable and avoid introducing templates or abstractions only for novelty.
+- Keep compile-time, binary-size, and platform-support costs in mind for engine and platform code.
+- Do not rely on compiler extensions; the CMake configuration requires the standard and disables extensions.
+- Validate new language or library features against the compilers and platforms touched by the change, and document any exception to the v3 baseline.
 
-* Functions with trailing return types, e.g. writing `auto foo() -> int;` instead of `int foo();`, because of a desire to preserve stylistic consistency with the many existing function declarations.
-* Compile-time rational numbers (`<ratio>`), because of concerns that it's tied to a more template-heavy interface style.
-* The `<cfenv>` and `<fenv.h>` headers, because many compilers do not support those features reliably.
-
-Additionaly, any C++11 features that is used, must work on the following compilers:
-
-* Xcode 5.0.2 or newer
-* gcc 4.8 or newer
-* VS 2012 or newer
+Axmol maintains compatibility code in older branches, but v3 changes should follow the current `dev` baseline unless a patch explicitly targets `release/2.x`.
 
 ## General Naming Rules
 
@@ -1934,7 +1912,7 @@ Start each file with license boilerplate, followed by a description of its conte
 
 Every file should contain license boilerplate. Choose the appropriate boilerplate for the license used by the project (for example, Apache 2.0, BSD, MIT, etc).
 
-The license must be compatible for the different App Stores, so GPL and LGPL code cannot be used in cocos2d-x.
+Preserve the applicable MIT and third-party license notices. Do not remove historical attribution or SPDX identifiers; review the root `LICENSE`, `3rdparty/README.md`, and relevant extension license documentation before adding or changing dependencies.
 
 If you make significant changes to a file with an author line, consider deleting the author line.
 
@@ -2172,23 +2150,11 @@ To help you format code correctly, we've created a settings file for emacs.
 
 ## Line Length
 
-Each line of text in your code should be at most 80 characters long.
-
-We recognize that this rule is controversial, but so much existing code already adheres to it, and we feel that consistency is important.
-
-**Pros:** Those who favor this rule argue that it is rude to force them to resize their windows and there is no need for anything longer. Some folks are used to having several code windows side-by-side, and thus don't have room to widen their windows in any case. People set up their work environment assuming a particular maximum window width, and 80 columns has been the traditional standard. Why change it?
-
-**Cons:** Proponents of change argue that a wider line can make code more readable. The 80-column limit is an hidebound throwback to 1960s mainframes; modern equipment has wide screens that can easily show longer lines.
+The repository `.clang-format` sets `ColumnLimit: 120` for C++ code. Keep lines within 120 columns where practical, while prioritizing readable expressions and consistent local formatting.
 
 **Decision:**
 
-80 characters is the maximum.
-
-Exception: if a comment line contains an example command or a literal URL longer than 80 characters, that line may be longer than 80 characters for ease of cut and paste.
-
-Exception: an #include statement with a long path may exceed 80 columns. Try to avoid situations where this becomes necessary.
-
-Exception: you needn't be concerned about header guards that exceed the maximum length.
+Use the repository formatter for changed C++ code. Comments, include paths, generated code, long diagnostics, and URLs may exceed 120 columns when wrapping would reduce clarity. Do not perform a whole-file formatting pass as part of an unrelated change.
 
 ## Non-ASCII Characters
 
@@ -2196,11 +2162,11 @@ Non-ASCII characters should be rare, and must use UTF-8 formatting.
 
 You shouldn't hard-code user-facing text in source, even English, so use of non-ASCII characters should be rare. However, in certain cases it is appropriate to include such words in your code. For example, if your code parses data files from foreign sources, it may be appropriate to hard-code the non-ASCII string(s) used in those data files as delimiters. More commonly, unittest code (which does not need to be localized) might contain non-ASCII strings. In such cases, you should use UTF-8, since that is an encoding understood by most tools able to handle more than just ASCII.
 
-Hex encoding is also OK, and encouraged where it enhances readability — for example, `"\xEF\xBB\xBF"`, or, even more simply, `u8"\uFEFF"`, is the Unicode zero-width no-break space character, which would be invisible if included in the source as straight UTF-8.
+Hex encoding is also acceptable where it improves readability, for example when representing a byte-order mark or another invisible control character.
 
-Use the `u8` prefix to guarantee that a string literal containing `\uXXXX` escape sequences is encoded as UTF-8. Do not use it for strings containing non-ASCII characters encoded as UTF-8, because that will produce incorrect output if the compiler does not interpret the source file as UTF-8.
+Use the appropriate standard character or string type for the API being called. Keep source files UTF-8 without a BOM, and do not confuse source-file encoding with the runtime encoding of external data.
 
-You shouldn't use the C++11 `char16_t` and `char32_t` character types, since they're for non-UTF-8 text. For similar reasons you also shouldn't use `wchar_t` (unless you're writing code that interacts with the Windows API, which uses `wchar_t` extensively).
+`char16_t`, `char32_t`, and `wchar_t` are not interchangeable with UTF-8. Use them only when required by the target API or data format; otherwise prefer the Axmol string/data conventions and explicit encoding conversions.
 
 
 ## Spaces vs. Tabs
@@ -2790,7 +2756,7 @@ y = static_cast<char*>(x);  // brackets (< and >), before
                             // <, or between >( in a cast.
 vector<char *> x;           // Spaces between type and pointer are
                             // okay, but be consistent.
-set<list<string>> x;        // Permitted in C++11 code.
+set<list<string>> x;        // Permitted in C++23 code.
 set<list<string> > x;       // C++03 required a space in > >.
 set< list<string> > x;      // You may optionally use
                             // symmetric spacing in < <.
@@ -2828,8 +2794,10 @@ It is worth reiterating a few of the guidelines that you might forget if you are
 * Do not use Hungarian notation (for example, naming an integer iNum). Use the Google naming conventions, including the .cpp extension for source files.
 * Windows defines many of its own synonyms for primitive types, such as DWORD, HANDLE, etc. It is perfectly acceptable, and encouraged, that you use these types when calling Windows API functions. Even so, keep as close as you can to the underlying C++ types. For example, use const TCHAR * instead of LPCTSTR.
 * When compiling with Microsoft Visual C++, set the compiler to warning level 3 or higher, and treat all warnings as errors.
-* Do not use #pragma once; instead use the standard Google include guards. The path in the include guards should be relative to the top of your project tree.
-* In fact, do not use any nonstandard extensions, like #pragma and __declspec, unless you absolutely must. Using `__declspec(dllimport)` and `__declspec(dllexport)` is allowed; however, you must use them through macros such as `DLLIMPORT` and `DLLEXPORT` or `AX_DLL`, so that someone can easily disable the extensions if they share the code.
+* Use `#pragma once` for new headers, including on Windows. Keep platform-specific declarations and exports behind existing Axmol macros such as `AX_DLL`.
+* Do not add Windows-only behavior without the appropriate platform/configuration guards; keep shared code portable across Axmol's supported targets.
+* Use Windows API types only at the platform boundary where they are required. Prefer standard C++ types in shared interfaces.
+* Treat compiler warnings as errors where the active build configuration supports it, and report any platform-specific warning that cannot be resolved safely.
 
 However, there are just a few rules that we occasionally need to break on Windows:
 
@@ -2847,4 +2815,3 @@ If you are editing code, take a few minutes to look at the code around you and d
 The point of having style guidelines is to have a common vocabulary of coding so people can concentrate on what you are saying, rather than on how you are saying it. We present global style rules here so people know the vocabulary. But local style is also important. If code you add to a file looks drastically different from the existing code around it, the discontinuity throws readers out of their rhythm when they go to read it. Try to avoid this.
 
 OK, enough writing about writing code; the code itself is much more interesting. Have fun!
-

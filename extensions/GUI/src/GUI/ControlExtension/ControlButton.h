@@ -6,7 +6,7 @@
  * http://yannickloriot.com
  *
  * Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- * Copyright (c) 2019-present Simdsoft Limited and other Axmol contributors (see AUTHORS.md).
+ * Copyright (c) 2019-present Simdsoft Limited.
  *
  * SPDX-License-Identifier: MIT
  *

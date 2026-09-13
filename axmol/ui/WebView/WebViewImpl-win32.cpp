@@ -2,7 +2,7 @@
  MIT License
 
  Portions copyright (c) 2017 Serge Zaitsev.
- Copyright (c) 2019-present Simdsoft Limited and other Axmol contributors (see AUTHORS.md).
+ Copyright (c) 2019-present Simdsoft Limited.
 
  https://axmol.dev/
 

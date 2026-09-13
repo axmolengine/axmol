@@ -15,7 +15,7 @@
 //  https://github.com/microsoft/Windows-classic-samples/tree/main/Samples/Win7Samples/multimedia/mediafoundation/protectedplayback
 //  b. https://docs.microsoft.com/en-us/windows/win32/medfound/seeking--fast-forward--and-reverse-play
 //
-// Copyright (c) 2019-present Simdsoft Limited and other Axmol contributors (see AUTHORS.md).
+// Copyright (c) 2019-present Simdsoft Limited.
 // https://axmol.dev/
 //////////////////////////////////////////////////////////////////////////
 

@@ -19,7 +19,7 @@ This project is a fork of <A HREF="https://github.com/cocos2d/cocos2d-x">"cocos2
 @section sec2 License
 Copyright (c) 2010-2012 cocos2d-x.org \n
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd. \n
-Copyright (c) 2019-present Simdsoft Limited and other Axmol contributors (see AUTHORS.md). \n
+Copyright (c) 2019-present Simdsoft Limited. \n
 \n
 SPDX-License-Identifier: MIT
 \n

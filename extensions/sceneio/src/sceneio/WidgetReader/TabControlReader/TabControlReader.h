@@ -1,6 +1,6 @@
 /****************************************************************************
  Copyright (c) 2016 cocos2d-x.org
- Copyright (c) 2019-present Simdsoft Limited and other Axmol contributors (see AUTHORS.md).
+ Copyright (c) 2019-present Simdsoft Limited.
 
  https://axmol.dev/
 

@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2014 cocos2d-x.org
  Author: Jeff Wang <wohaaitinciu@gmail.com>
- Copyright (c) 2019-present Simdsoft Limited and other Axmol contributors (see AUTHORS.md).
+ Copyright (c) 2019-present Simdsoft Limited.
 
  https://axmol.dev/
 
