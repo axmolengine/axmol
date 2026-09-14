@@ -527,6 +527,12 @@ void InputSystem::dispatchPointerEvent(InputPhase phase, Vec2 point, const Point
 {
     _lastPointerPosition = point;
 
+    if (!_multiTouchEnabled && phase == InputPhase::PointerDown && state.type == PointerType::Touch &&
+        !_pointerEvents.empty())
+    {
+        return;
+    }
+
     PointerEvent* event = nullptr;
 
     if (phase == InputPhase::PointerDown)
