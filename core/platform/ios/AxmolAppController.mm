@@ -79,6 +79,7 @@ configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession
     {
         _viewController = [self createRootViewController];
         AxmolLauncher::launchApp(_viewController, nil);
+        self.window = (__bridge UIWindow*)Director::getInstance()->getRenderView()->getEAWindow();
     }
     return YES;
 }
@@ -162,6 +163,7 @@ configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession
 #if !__has_feature(objc_arc)
 - (void)dealloc
 {
+    [_window release];
     [_viewController release];
     [super dealloc];
 }
