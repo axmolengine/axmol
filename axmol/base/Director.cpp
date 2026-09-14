@@ -460,20 +460,6 @@ void Director::setClearColor(const Color& clearColor)
     _clearColor = clearColor;
 }
 
-static void getViewProjMatrix(Mat4* transformOut)
-{
-    if (nullptr == transformOut)
-        return;
-
-    Director* director = Director::getInstance();
-    AXASSERT(nullptr != director, "Director is null when setting matrix stack");
-
-    auto scene  = director->getRunningScene();
-    auto camera = scene ? scene->getDefaultCamera() : nullptr;
-
-    *transformOut = camera ? camera->getViewProjectionMatrix() : Mat4::identity;
-}
-
 Vec2 Director::canvasToPixels(const Vec2& size) const
 {
     return size * _contentScaleFactor;
