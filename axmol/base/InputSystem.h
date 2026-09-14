@@ -64,7 +64,7 @@ public:
 
     /*
      * @brief Returns whether multi-touch support is enabled.
-    */
+     */
     bool isMultiTouchEnabled() const { return _multiTouchEnabled; }
 
     /**
