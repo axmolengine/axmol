@@ -1905,9 +1905,11 @@ elseif ($Global:is_wasm) {
 elseif ($Global:is_darwin_family) {
     $Global:xcode_ver = setup_xcode
     if (([VersionEx]$xcode_ver -ge [VersionEx]'27.0') -and ([VersionEx]$Global:target_minsdk -lt [VersionEx]'12.0')) {
-        $old_min_sdk = $Global:target_minsdk
-        $Global:target_minsdk = '12.0'
-        $1k.println("Xcode $xcode_ver is >= 27.0, forcing target_minsdk from $old_min_sdk to $Global:target_minsdk")
+        if ($Global:is_mac) {
+            $old_min_sdk = $Global:target_minsdk
+            $Global:target_minsdk = '12.0'
+            $1k.println("Xcode $xcode_ver is >= 27.0, forcing target_minsdk from $old_min_sdk to $Global:target_minsdk")
+        }
     }
 }
 
