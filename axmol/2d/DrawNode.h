@@ -788,6 +788,13 @@ public:
     }
     const Vec2& getLocalScale() const { return _localScale; }
 
+    void setLocalSkew(const Vec2& s)
+    {
+        _localSkew      = s;
+        _trianglesDirty = _linesDirty = true;
+    }
+    const Vec2& getLocalSkew() const { return _localSkew; }
+
     void setLocalPivot(const Vec2& c)
     {
         _localPivot     = c;
@@ -822,6 +829,7 @@ public:
     {
         _thicknessScale        = 1.0f;
         _localScale            = Vec2(1.0f, 1.0f);
+        _localSkew             = Vec2(0.0f, 0.0f);
         _localPivot            = Vec2::zero;
         _localRotation         = 0.0f;
         _localRotationRad      = 0.0f;
@@ -837,6 +845,7 @@ protected:
 
     // optional local transform applied to primitives when enabled
     Vec2 _localScale{1.0f, 1.0f};
+    Vec2 _localSkew{0.0f, 0.0f};
     Vec2 _localPivot{0.0f, 0.0f};
     float _localRotation{0.0f};     // local rotation in degrees
     float _localRotationRad{0.0f};  // local rotation in radians (cached for efficiency)
@@ -852,3 +861,35 @@ private:
 
 /** @} */
 }  // namespace ax
+
+//
+//ax::Vec2 skewPoint(const ax::Vec2& p, float skewX_deg, float skewY_deg)
+//{
+//    float sx = std::tan(skewX_deg * (3.14159265358979323846f / 180.0f));
+//    float sy = std::tan(skewY_deg * (3.14159265358979323846f / 180.0f));
+//
+//    float x2 = p.x + sy * p.y;
+//    float y2 = p.y + sx * p.x;
+//    return {x2, y2};
+//}
+//
+//void drawSkewedRect(ax::DrawNode* dn,
+//                    const ax::Vec2& origin,
+//                    const ax::Vec2& size,
+//                    float skewX_deg,
+//                    float skewY_deg,
+//                    const ax::Color& color)
+//{
+//    ax::Vec2 pts[4] = {{origin.x, origin.y},
+//                       {origin.x + size.x, origin.y},
+//                       {origin.x + size.x, origin.y + size.y},
+//                       {origin.x, origin.y + size.y}};
+//
+//    for (int i = 0; i < 4; ++i)
+//        pts[i] = skewPoint(pts[i], skewX_deg, skewY_deg);
+//
+//    dn->drawPolygon(pts, 4, color, 0.0f, color);
+//}
+//
+//auto dn = ax::DrawNode::create();
+//drawSkewedRect(dn, {0, 0}, {100, 50}, 20.0f, 10.0f, ax::Color4F::GREEN);
