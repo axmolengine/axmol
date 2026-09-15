@@ -1680,8 +1680,8 @@ void DrawNode::applyLocalTransform(const Vec2* from, Vec2* to, unsigned int coun
     {
         for (unsigned int i = 0; i < count; i++)
         {
-            to[i].x = std::tan(from[i].x * (3.14159265358979323846f / 180.0f));
-            to[i].y = std::tan(from[i].y * (3.14159265358979323846f / 180.0f));
+            to[i].x = std::tan(from[i].x * (M_PI / 180.0f));
+            to[i].y = std::tan(from[i].y * (M_PI / 180.0f));
             //    from[i].x* _localScale.x + _localPosition.x;
      //       to[i].y = from[i].y * _localScale.y + _localPosition.y;
         }
