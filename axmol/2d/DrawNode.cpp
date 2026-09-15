@@ -978,38 +978,45 @@ void DrawNode::_drawCornerRect(const Vec2& origin,
                                float crRB,
                                CornerMode mode)
 {
-    //  Draw the four corners
-    if (mode == CornerMode::Round)
+    switch (mode)
     {
-        _drawPie({origin.x + crLB, origin.y + crLB}, crLB, 0.0f, 270.0f, 180.0f, 1.0f, 1.0f, color, color,
-                 DrawMode::Line, thickness);
-        _drawPie({origin.x + crLT, destination.y - crLT}, crLT, 0.0f, 90.0f, 180.0f, 1.0f, 1.0f, color, color,
-                 DrawMode::Line, thickness);
-        _drawPie({destination.x - crRT, destination.y - crRT}, crRT, 0.0f, 0.0f, 90.0f, 1.0f, 1.0f, color, color,
-                 DrawMode::Line, thickness);
-        _drawPie({destination.x - crRB, origin.y + crRB}, crRB, 0.0f, 270.0f, 360.0f, 1.0f, 1.0f, color, color,
-                 DrawMode::Line, thickness);
+    case ax::DrawNode::CornerMode::Round:
+    {
+        _drawPie({ origin.x + crLB, origin.y + crLB }, crLB, 0.0f, 270.0f, 180.0f, 1.0f, 1.0f, Color(), color,
+            DrawMode::Line, thickness);
+        _drawPie({ origin.x + crLT, destination.y - crLT }, crLT, 0.0f, 90.0f, 180.0f, 1.0f, 1.0f, Color(), color,
+            DrawMode::Line, thickness);
+        _drawPie({ destination.x - crRT, destination.y - crRT }, crRT, 0.0f, 0.0f, 90.0f, 1.0f, 1.0f, Color(), color,
+            DrawMode::Line, thickness);
+        _drawPie({ destination.x - crRB, origin.y + crRB }, crRB, 0.0f, 270.0f, 360.0f, 1.0f, 1.0f, Color(), color,
+            DrawMode::Line, thickness);
         // Draw the four edges
         _drawSegment(Vec2(origin.x + crLB, origin.y), Vec2(destination.x - crRB, origin.y), color,
-                     thickness);  // Bottom edge
+            thickness);  // Bottom edge
         _drawSegment(Vec2(origin.x + crLT, destination.y), Vec2(destination.x - crRT, destination.y), color,
-                     thickness);  // Top edge
+            thickness);  // Top edge
         _drawSegment(Vec2(origin.x, origin.y + crLB), Vec2(origin.x, destination.y - crLT), color,
-                     thickness);  // Left edge
+            thickness);  // Left edge
         _drawSegment(Vec2(destination.x, origin.y + crRB), Vec2(destination.x, destination.y - crRT), color,
-                     thickness);  // Right edge
+            thickness);  // Right edge
+        break;
     }
-    else
+
+    case ax::DrawNode::CornerMode::Bevel:
     {
-        Vec2 _vertices8[] = {origin + Vec2(0, crLB),
-                             Vec2(origin.x, destination.y - crLT),
-                             Vec2(origin.x + crLT, destination.y),
-                             destination - Vec2(crRT, 0),
-                             Vec2(destination.x, destination.y - crRT),
-                             Vec2(destination.x, origin.y + crRB),
-                             Vec2(destination.x - crRB, origin.y),
-                             origin + Vec2(crLB, 0)};
+        Vec2 _vertices8[] = { origin + Vec2(0, crLB),
+            Vec2(origin.x, destination.y - crLT),
+            Vec2(origin.x + crLT, destination.y),
+            destination - Vec2(crRT, 0),
+            Vec2(destination.x, destination.y - crRT),
+            Vec2(destination.x, origin.y + crRB),
+            Vec2(destination.x - crRB, origin.y),
+            origin + Vec2(crLB, 0) };
         _drawPoly(_vertices8, 8, true, color, thickness, true);
+        break;
+    }
+    default:
+        break;
     }
 }
 
@@ -1024,27 +1031,49 @@ void DrawNode::_drawSolidCornerRect(const Vec2& origin,
                                     float crRB,
                                     CornerMode mode)
 {
-    Vec2 _vertices8[] = {origin + Vec2(0, crLB),
-                         Vec2(origin.x, destination.y - crLT),
-                         Vec2(origin.x + crLT, destination.y),
-                         destination - Vec2(crRT, 0),
-                         Vec2(destination.x, destination.y - crRT),
-                         Vec2(destination.x, origin.y + crRB),
-                         Vec2(destination.x - crRB, origin.y),
-                         origin + Vec2(crLB, 0)};
-    _drawPolygon(_vertices8, 8, fillColor, fillColor, false, thickness, false);
-    if (mode == CornerMode::Round)
+    Vec2 _vertices8[] = { origin + Vec2(0, crLB),
+        Vec2(origin.x, destination.y - crLT),
+        Vec2(origin.x + crLT, destination.y),
+        destination - Vec2(crRT, 0),
+        Vec2(destination.x, destination.y - crRT),
+        Vec2(destination.x, origin.y + crRB),
+        Vec2(destination.x - crRB, origin.y),
+        origin + Vec2(crLB, 0) };
+
+    switch (mode)
     {
-        _drawCornerRect(origin, destination, borderColor, thickness, crLB, crLT, crRT, crRB, CornerMode::Round);
-        //  Draw the four corners
-        _drawPie({origin.x + crLB, origin.y + crLB}, crLB, 0.0f, 270.0f, 180.0f, 1.0f, 1.0f, fillColor, borderColor,
-                 DrawMode::FillWithLine, thickness);
-        _drawPie({origin.x + crLT, destination.y - crLT}, crLT, 0.0f, 90.0f, 180.0f, 1.0f, 1.0f, fillColor, borderColor,
-                 DrawMode::FillWithLine, thickness);
-        _drawPie({destination.x - crRT, destination.y - crRT}, crRT, 0.0f, 0.0f, 90.0f, 1.0f, 1.0f, fillColor,
-                 borderColor, DrawMode::FillWithLine, thickness);
-        _drawPie({destination.x - crRB, origin.y + crRB}, crRB, 0.0f, 270.0f, 360.0f, 1.0f, 1.0f, fillColor,
-                 borderColor, DrawMode::FillWithLine, thickness);
+    case ax::DrawNode::CornerMode::Round:
+    {
+        // Fill
+        _drawPolygon(_vertices8, 8, fillColor, Color(), false, 0.0f, true);
+        // Draw the edges
+        _drawPie({ origin.x + crLB, origin.y + crLB }, crLB, 0.0f, 270.0f, 180.0f, 1.0f, 1.0f, fillColor, borderColor,
+            DrawMode::FillWithLine, thickness);
+        _drawPie({ origin.x + crLT, destination.y - crLT }, crLT, 0.0f, 90.0f, 180.0f, 1.0f, 1.0f, fillColor, borderColor,
+            DrawMode::FillWithLine, thickness);
+        _drawPie({ destination.x - crRT, destination.y - crRT }, crRT, 0.0f, 0.0f, 90.0f, 1.0f, 1.0f, fillColor, borderColor,
+            DrawMode::FillWithLine, thickness);
+        _drawPie({ destination.x - crRB, origin.y + crRB }, crRB, 0.0f, 270.0f, 360.0f, 1.0f, 1.0f, fillColor, borderColor,
+            DrawMode::FillWithLine, thickness);
+        // Lines
+        _drawSegment(Vec2(origin.x + crLB, origin.y), Vec2(destination.x - crRB, origin.y), borderColor,
+            thickness);  // Bottom line
+        _drawSegment(Vec2(origin.x + crLT, destination.y), Vec2(destination.x - crRT, destination.y), borderColor,
+            thickness);  // Top line
+        _drawSegment(Vec2(origin.x, origin.y + crLB), Vec2(origin.x, destination.y - crLT), borderColor,
+            thickness);  // Left line
+        _drawSegment(Vec2(destination.x, origin.y + crRB), Vec2(destination.x, destination.y - crRT), borderColor,
+            thickness);  // Right line
+
+        break;
+    }
+    case ax::DrawNode::CornerMode::Bevel:
+    {
+        _drawPolygon(_vertices8, 8, fillColor, borderColor, true, thickness, true);
+        break;
+    }
+    default:
+        break;
     }
 }
 

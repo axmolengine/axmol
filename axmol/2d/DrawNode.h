@@ -321,7 +321,7 @@ public:
      *
      * @param origin The rectangle vertex point.
      * @param destination The rectangle vertex point.
-     * @param color The rectangle color.
+     * @param color The rectangle color. Alpha != 0.0 || alpha != 1.0 is not supported
      * @param thickness The rectangle thickness.
      * @param crLB The radius of the left-bottom corner.
      * @param crLT The radius of the left-top corner.
@@ -343,8 +343,8 @@ public:
      *
      * @param origin The rectangle vertex point.
      * @param destination The rectangle vertex point.
-     * @param fillColor The fill color of the rectangle.
-     * @param borderColor The border color of the rectangle.
+     * @param fillColor The fill color of the rectangle.  Alpha != 0.0 || alpha != 1.0 is not supported
+     * @param borderColor The border color of the rectangle.  Alpha != 0.0 || alpha != 1.0 is not supported
      * @param thickness The rectangle thickness.
      * @param crLB The radius of the left-bottom corner.
      * @param crLT The radius of the left-top corner.
