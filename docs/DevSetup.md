@@ -5,7 +5,6 @@
 ### 1. **Install PowerShell 7**
 
 - **Windows**
-  - Windows 10+ includes **PowerShell 5.x** by default, which works.  
     👉 [PowerShell 7](https://github.com/powershell/powershell/releases) is recommended.
   - **Execution Policy (required on Windows)**  
     - For cloned Axmol repository:  

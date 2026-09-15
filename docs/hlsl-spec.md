@@ -207,6 +207,48 @@ examples include:
   `ConsumeStructuredBuffer<T>`;
 - rasterizer ordered resources such as `RasterizerOrderedTexture2D<T>`.
 
+### Storage Buffers
+
+The portable storage-buffer forms are `StructuredBuffer<T>` for read-only
+access and `RWStructuredBuffer<T>` for read-write access:
+
+```hlsl
+StructuredBuffer<Particle> particles;
+RWStructuredBuffer<Trail> trails;
+```
+
+Sampled textures and storage buffers share one logical resource-slot sequence
+in declaration order. Reflection provides the descriptor set, logical and
+backend binding, element stride, and read-only/read-write access. Storage
+buffers may be consumed by vertex or compute stages. Do not write explicit
+registers to make bindings line up across stages.
+
+Storage images are reserved in the archive reflection ABI but are not exposed
+by the first RHI compute API. A Program containing an active storage image is
+unsupported.
+
+## Compute Shaders
+
+Compute entry points use the `_cs.hlsl` suffix and declare a fixed local size:
+
+```hlsl
+[numthreads(256, 1, 1)]
+void main(uint3 id : SV_DispatchThreadID)
+{
+    // Read or update reflected storage resources.
+}
+```
+
+`axslcc` records the local size in reflection. The first RHI compute pipeline
+supports uniform buffers, sampled 2D/3D textures, custom samplers, and storage
+buffers. It does not expose storage images, indirect dispatch, or asynchronous
+compute queues.
+
+OpenGL compute shaders must be compiled for `gl-430`; OpenGL ES compute shaders
+must be compiled for `gles-310`. Ordinary graphics shaders remain `gl-330` or
+`gles-300`. Runtime code must check `COMPUTE_SHADER`, `STORAGE_BUFFER`, and any
+required texture features and limits before creating a compute workload.
+
 ## Sampler Model
 
 Axmol supports two sampler categories:
@@ -282,6 +324,12 @@ Rules:
   ```cpp
   SamplerRegistry::getInstance()->registerSampler("mySampler", desc);
   ```
+- A `ProgramState` may override a custom sampler after Program creation:
+  ```cpp
+  auto location = program->getSamplerLocation("mySampler");
+  programState->setSampler(location, desc);
+  ```
+  Preset samplers are immutable and cannot be overridden this way.
 - SamplerRegistry registration order does not affect shader logical bindings.
 
 Custom sampler ABI:
@@ -432,6 +480,21 @@ Rules:
 - `AXSLCC_DEFINES` applies to all variants;
 - `AXSLCC_VARIANT_DEFINES` applies only to generated variant outputs.
 
+Per-shader target profiles can be selected with `AXSLCC_TARGETS`. This is used
+for compute shaders without raising the profile of ordinary shaders:
+
+```cmake
+set_source_files_properties(
+    particles_cs.hlsl
+    PROPERTIES AXSLCC_TARGETS "gl-430;gles-310;d3d11;d3d12;vk;mtl"
+)
+```
+
+When an archive contains multiple entries for one source language, the runtime
+selects the highest profile not newer than the active device profile. Thus a GL
+4.3 context can load both GLSL 430 compute archives and GLSL 330 graphics
+archives, while a GL 3.3 context cannot load the compute archive.
+
 ## Runtime Reflection
 
 Runtime reflection contains the resources the backend needs to bind:
@@ -440,7 +503,8 @@ Runtime reflection contains the resources the backend needs to bind:
 - textures;
 - samplers;
 - uniform buffers;
-- storage resources where applicable.
+- storage-buffer logical/backend bindings, stride, access, and stage usage;
+- compute local workgroup size.
 
 It does not contain texture/sampler sampling pairs. Texture/sampler pair
 analysis is a compiler-internal step used for GL/GLES lowering and Vulkan

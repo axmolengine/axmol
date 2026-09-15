@@ -1,10 +1,10 @@
 <p align="center"><a href="https://axmol.dev" target="_blank" rel="noopener noreferrer"><img width="160" src="https://axmol.dev/assets/img/logo.png" alt="axmol logo"></a></p>
 
-# Axmol Engine
+# Axmol
 
 ## A Multi-platform Engine for Desktop, XBOX (UWP), WebAssembly and Mobile games.
 
-[Axmol Engine](https://axmol.dev) is an open-source, C++ multi-platform engine designed for mobile devices, desktop, and Xbox, well-suited for 2D game development. It was launched in November 2019 as a fork of Cocos2d-x v4.0.
+[Axmol](https://axmol.dev) is an open-source, C++ multi-platform engine designed for mobile devices, desktop, and Xbox, well-suited for 2D game development. It was launched in November 2019 as a fork of Cocos2d-x v4.0.
 
 Please [visit our Wiki](https://github.com/axmolengine/axmol/wiki) to know more about Axmol.
 
@@ -51,7 +51,7 @@ Please [visit our Wiki](https://github.com/axmolengine/axmol/wiki) to know more 
 
 👉 [Setup & Building Guide](docs/DevSetup.md)
 
-If you have a Cocos2d-x project, migrating to Axmol Engine is easy. We have prepared a [Migration Guide](https://github.com/axmolengine/axmol/wiki/Cocos2d%E2%80%90x-migration-guide).
+If you have a Cocos2d-x project, migrating to Axmol is easy. We have prepared a [Migration Guide](https://github.com/axmolengine/axmol/wiki/Cocos2d%E2%80%90x-migration-guide).
 
 ## Learning and docs
 
@@ -62,7 +62,7 @@ If you have a Cocos2d-x project, migrating to Axmol Engine is easy. We have prep
 
 ## General information
 
-Axmol Engine has iterated and improved over the Cocos2d-x v4.0 base. Now is faster and more capable, while staying lightweight. [Check a comparative here](https://github.com/axmolengine/axmol/wiki/Axmol-vs-Cocos2d%E2%80%90x).
+Axmol has iterated and improved over the Cocos2d-x v4.0 base. Now is faster and more capable, while staying lightweight. [Check a comparative here](https://github.com/axmolengine/axmol/wiki/Axmol-vs-Cocos2d%E2%80%90x).
 
 **Supported platforms**:
 * Mobile: iOS, Android
@@ -164,7 +164,7 @@ How to contribute:
 * Please do not forget to add the topic `axmol` and `axmolengine` to any related repository you create!
 * Adding a star on GitHub will help Axmol grow as well. Thank you!
 
-If you find **Axmol Engine** helpful, please consider [supporting its continued development](https://axmol.dev/sponsor). Thank you very much!
+If you find **Axmol** helpful, please consider [supporting its continued development](https://axmol.dev/sponsor). Thank you very much!
 
 ## Sponsors
 

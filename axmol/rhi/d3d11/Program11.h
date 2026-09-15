@@ -1,25 +1,9 @@
 /****************************************************************************
- Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+ Copyright (c) 2019-present Simdsoft Limited.
 
  https://axmol.dev/
 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
+ SPDX-License-Identifier: MIT
  ****************************************************************************/
 #pragma once
 
@@ -47,6 +31,12 @@ public:
      * @param fragmentShader Specifes the fragment shader source.
      */
     ProgramImpl(Data& vsData, Data& fsData);
+
+    /**
+     * @param csData Specifies the compute shader source.
+     */
+    explicit ProgramImpl(Data& csData);
+
     ~ProgramImpl() override;
 
     std::span<uint8_t> getVSBlob() const;
@@ -57,6 +47,12 @@ public:
             static_cast<ID3D11VertexShader*>(static_cast<ShaderModuleImpl*>(_vsModule)->internalHandle()), nullptr, 0);
         context->PSSetShader(
             static_cast<ID3D11PixelShader*>(static_cast<ShaderModuleImpl*>(_fsModule)->internalHandle()), nullptr, 0);
+    }
+
+    inline void applyCompute(ID3D11DeviceContext* context)
+    {
+        context->CSSetShader(
+            static_cast<ID3D11ComputeShader*>(static_cast<ShaderModuleImpl*>(_csModule)->internalHandle()), nullptr, 0);
     }
 
     void bindUniformBuffers(ID3D11DeviceContext*, const uint8_t* buffer, size_t bufferSize);

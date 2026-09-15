@@ -272,7 +272,7 @@ class AxmolUtils {
     }
 
     private static Properties loadProfiles(project, isAxmolAppProj) {
-        // build.profiles in axmol engine
+        // build.profiles in axmol
         def profiles = new Properties()
         try {
             profiles.load(new File(Paths.get("${getEngineRoot()}/1k/build.profiles").toUri()).newDataInputStream())
@@ -502,7 +502,7 @@ class AxmolUtils {
         buildProfiles['cmakeVer'] = verifiedVer
         buildProfiles['cmakeBinDir'] = verifiedBinDir
 
-        // Create symlink at sdk cmake when using fallback cmake in axmol engine
+        // Create symlink at sdk cmake when using fallback cmake in axmol
         // Only present for compatibility purpose, may remove in future axmol releases
         if (index == (cmakeBinDirs.size() - 1)) {
             def symlinkDir = joinPath(sdkRoot, 'cmake', buildProfiles['cmakeVer'])
@@ -662,7 +662,7 @@ class AxmolUtils {
     }
 
     /**
-     * Setup copy-assets tasks for axmol engine.
+     * Setup copy-assets tasks for axmol.
      * Stage 1: Register tasks via androidComponents (AGP 8/9 compatible).
      * Stage 2: Configure dependencies within project.afterEvaluate.
      */

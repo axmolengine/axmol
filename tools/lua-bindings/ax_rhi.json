@@ -91,7 +91,7 @@
         "createBuffer",
         "createTexture",
         "createDepthStencilState",
-        "createRenderPipeline"
+        "createGraphicsPipeline"
       ]
     },
     {

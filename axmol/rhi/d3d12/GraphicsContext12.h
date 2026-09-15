@@ -1,35 +1,21 @@
 /****************************************************************************
- Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+ Copyright (c) 2019-present Simdsoft Limited.
 
  https://axmol.dev/
 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
+ SPDX-License-Identifier: MIT
  ****************************************************************************/
 #pragma once
 #include "axmol/rhi/GraphicsContext.h"
-#include "axmol/rhi/d3d12/RenderPipeline12.h"
+#include "axmol/rhi/d3d12/GraphicsPipeline12.h"
+#include "axmol/rhi/d3d12/ComputePipeline12.h"
 #include "axmol/rhi/d3d12/DepthStencilState12.h"
 #include "axmol/rhi/d3d12/VertexLayout12.h"
 #include "axmol/rhi/d3d12/Program12.h"
 #include "axmol/rhi/d3d12/Buffer12.h"
 #include "axmol/rhi/d3d12/Texture12.h"
 #include "axmol/tlx/flat_set.hpp"
+#include "axmol/base/RefPtr.h"
 
 #include <d3d12.h>
 #include <dxgi1_6.h>
@@ -93,7 +79,7 @@ public:
     bool updateSurface(SurfaceHandle surface, uint32_t width, uint32_t height) override;
 
     void setDepthStencilState(DepthStencilState* depthStencilState) override;
-    void setRenderPipeline(RenderPipeline* renderPipeline) override;
+    void setGraphicsPipeline(GraphicsPipeline* graphicsPipeline) override;
 
     bool beginFrame() override;
     void beginRenderPass(RenderTarget* renderTarget, const RenderPassDesc& renderPassDesc) override;
@@ -128,6 +114,8 @@ public:
 
     bool copyTexture(RenderTarget* src, Texture* dst) override;
     bool copyTexture(Texture* src, Texture* dst) override;
+
+    bool dispatch(const ComputeDispatchDesc& desc) override;
 
     void setStencilReferenceValue(uint32_t value) override;
 
@@ -229,12 +217,16 @@ private:
 #pragma endregion
 
     DepthStencilStateImpl* _depthStencilState{nullptr};
-    RenderPipelineImpl* _renderPipeline{nullptr};
+    GraphicsPipelineImpl* _graphicsPipeline{nullptr};
     BufferImpl* _vertexBuffer{nullptr};
     BufferImpl* _indexBuffer{nullptr};
     BufferImpl* _instanceBuffer{nullptr};
 
     std::vector<std::function<void(uint64_t)>> _frameCompletionOps;
+
+    // Compute pipelines retained until their frame fence completes (the
+    // command list does not retain the PSO; the caller may release it early).
+    std::array<std::vector<RefPtr<ComputePipelineImpl>>, MAX_FRAMES_IN_FLIGHT> _inFlightComputePipelines;
 
     D3D12_VIEWPORT _cachedViewport{.MinDepth = 0.0f, .MaxDepth = 1.0f};
     D3D12_RECT _cachedScissor{};

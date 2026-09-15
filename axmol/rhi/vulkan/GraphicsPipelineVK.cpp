@@ -1,27 +1,11 @@
 /****************************************************************************
- Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+ Copyright (c) 2019-present Simdsoft Limited.
 
  https://axmol.dev/
 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
+ SPDX-License-Identifier: MIT
  ****************************************************************************/
-#include "axmol/rhi/vulkan/RenderPipelineVK.h"
+#include "axmol/rhi/vulkan/GraphicsPipelineVK.h"
 #include "axmol/rhi/vulkan/RenderTargetVK.h"
 #include "axmol/rhi/vulkan/DepthStencilStateVK.h"
 #include "axmol/rhi/vulkan/VertexLayoutVK.h"
@@ -190,6 +174,8 @@ void DescriptorPool::init(DescriptorAllocator* allocator, std::span<const VkDesc
             _freeSamplerDescriptorCount = _maxSamplerDescriptorCount = poolSize.descriptorCount;
         else if (poolSize.type == VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER)
             _freeCombinedDescriptorCount = _maxCombinedDescriptorCount = poolSize.descriptorCount;
+        else if (poolSize.type == VK_DESCRIPTOR_TYPE_STORAGE_BUFFER)
+            _freeStorageDescriptorCount = _maxStorageDescriptorCount = poolSize.descriptorCount;
     }
 }
 
@@ -205,6 +191,7 @@ void DescriptorPool::dispose()
     _freeImageDescriptorCount = _maxImageDescriptorCount = 0;
     _freeSamplerDescriptorCount = _maxSamplerDescriptorCount = 0;
     _freeCombinedDescriptorCount = _maxCombinedDescriptorCount = 0;
+    _freeStorageDescriptorCount = _maxStorageDescriptorCount = 0;
 }
 
 void DescriptorPool::allocateDescriptorSets(const PipelineLayoutState* layoutState, DescriptorState* descriptorState)
@@ -224,6 +211,7 @@ void DescriptorPool::allocateDescriptorSets(const PipelineLayoutState* layoutSta
     descriptorState->imageDescriptorCount    = static_cast<uint16_t>(layoutState->imageDescriptorCount);
     descriptorState->samplerDescriptorCount  = static_cast<uint16_t>(layoutState->samplerDescriptorCount);
     descriptorState->combinedDescriptorCount = static_cast<uint16_t>(layoutState->combinedDescriptorCount);
+    descriptorState->storageDescriptorCount  = static_cast<uint16_t>(layoutState->storageDescriptorCount);
 
     _freeSetCount -= layoutState->descriptorSetLayoutCount;
     _freeUniformDescriptorCount -= layoutState->uniformDescriptorCount;
@@ -232,6 +220,8 @@ void DescriptorPool::allocateDescriptorSets(const PipelineLayoutState* layoutSta
         _freeSamplerDescriptorCount -= layoutState->samplerDescriptorCount;
     if (layoutState->combinedDescriptorCount > 0)
         _freeCombinedDescriptorCount -= layoutState->combinedDescriptorCount;
+    if (layoutState->storageDescriptorCount > 0)
+        _freeStorageDescriptorCount -= layoutState->storageDescriptorCount;
 }
 
 void DescriptorPool::freeDescriptorSets(uint32_t descriptorSetCount, DescriptorState* descriptorState)
@@ -244,11 +234,13 @@ void DescriptorPool::freeDescriptorSets(uint32_t descriptorSetCount, DescriptorS
     _freeImageDescriptorCount += descriptorState->imageDescriptorCount;
     _freeSamplerDescriptorCount += descriptorState->samplerDescriptorCount;
     _freeCombinedDescriptorCount += descriptorState->combinedDescriptorCount;
+    _freeStorageDescriptorCount += descriptorState->storageDescriptorCount;
 
     descriptorState->uniformDescriptorCount  = 0;
     descriptorState->imageDescriptorCount    = 0;
     descriptorState->samplerDescriptorCount  = 0;
     descriptorState->combinedDescriptorCount = 0;
+    descriptorState->storageDescriptorCount  = 0;
     descriptorState->descriptorSetCount      = 0;
     descriptorState->progId                  = 0;
     descriptorState->pool                    = nullptr;
@@ -316,9 +308,9 @@ DescriptorPool* DescriptorAllocator::spawnPool()
 }
 
 /*
- * CLASS RenderPipelineImpl
+ * CLASS GraphicsPipelineImpl
  */
-RenderPipelineImpl::RenderPipelineImpl(GraphicsDeviceImpl* driver) : _driver(driver), _device(driver->getDevice())
+GraphicsPipelineImpl::GraphicsPipelineImpl(GraphicsDeviceImpl* driver) : _driver(driver), _device(driver->getDevice())
 {
     initializePipelineDefaults(driver);
 
@@ -334,11 +326,12 @@ RenderPipelineImpl::RenderPipelineImpl(GraphicsDeviceImpl* driver) : _driver(dri
         {VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, DESCRIPTOR_POOL_MAX_SETS * DESCRIPTOR_POOL_SAMPLER_MULTIPLIER},
         {VK_DESCRIPTOR_TYPE_SAMPLER, DESCRIPTOR_POOL_MAX_SETS * DESCRIPTOR_POOL_SAMPLER_MULTIPLIER},
         {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, DESCRIPTOR_POOL_MAX_SETS * DESCRIPTOR_POOL_SAMPLER_MULTIPLIER},
+        {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, DESCRIPTOR_POOL_MAX_SETS * DESCRIPTOR_POOL_SAMPLER_MULTIPLIER},
     };
     _descriptorAllocator2.init(_device, poolSizes2);
 }
 
-RenderPipelineImpl::~RenderPipelineImpl()
+GraphicsPipelineImpl::~GraphicsPipelineImpl()
 {
     vkDeviceWaitIdle(_device);
 
@@ -374,7 +367,7 @@ RenderPipelineImpl::~RenderPipelineImpl()
     _pipelineCache.clear();
 }
 
-void RenderPipelineImpl::initializePipelineDefaults(GraphicsDeviceImpl* driver)
+void GraphicsPipelineImpl::initializePipelineDefaults(GraphicsDeviceImpl* driver)
 {
     // Input Assembly
     _iaState          = {};
@@ -423,12 +416,12 @@ void RenderPipelineImpl::initializePipelineDefaults(GraphicsDeviceImpl* driver)
     _dynState.pDynamicStates    = &s_dynamics[0];
 }
 
-void RenderPipelineImpl::update(const RenderTarget* rt, const PipelineDesc& desc, const ExtendedDynamicState& state)
+void GraphicsPipelineImpl::update(const RenderTarget* rt, const PipelineDesc& desc, const ExtendedDynamicState& state)
 {
     // Validate inputs
     if (!rt || !desc.programState || !desc.vertexLayout)
     {
-        AXASSERT(false, "RenderPipelineImpl::update: invalid inputs");
+        AXASSERT(false, "GraphicsPipelineImpl::update: invalid inputs");
         return;
     }
 
@@ -445,7 +438,7 @@ void RenderPipelineImpl::update(const RenderTarget* rt, const PipelineDesc& desc
     updateGraphicsPipeline(program, desc, state, renderPass);
 }
 
-void RenderPipelineImpl::updateBlendState(const BlendDesc& blendDesc, uint32_t colorAttachmentCount)
+void GraphicsPipelineImpl::updateBlendState(const BlendDesc& blendDesc, uint32_t colorAttachmentCount)
 {
     _activeBlendAttachmentStates.clear();
     for (uint32_t i = 0; i < colorAttachmentCount; ++i)
@@ -461,7 +454,7 @@ void RenderPipelineImpl::updateBlendState(const BlendDesc& blendDesc, uint32_t c
     std::fill(std::begin(_activeBlendState.blendConstants), std::end(_activeBlendState.blendConstants), 0.0f);
 }
 
-void RenderPipelineImpl::updatePipelineLayoutState(ProgramImpl* program)
+void GraphicsPipelineImpl::updatePipelineLayoutState(ProgramImpl* program)
 {
     auto it = _pipelineLayoutCache.find(_activeProgId);
     if (it != _pipelineLayoutCache.end())
@@ -487,6 +480,18 @@ void RenderPipelineImpl::updatePipelineLayoutState(ProgramImpl* program)
         b.pImmutableSamplers            = nullptr;
 
         ++state.uniformDescriptorCount;
+    }
+
+    // Storage buffers (read by the GPU render VS/PS) share set 1 with textures.
+    for (auto& sb : program->getActiveStorageBufferInfos())
+    {
+        VkDescriptorSetLayoutBinding& b = resourceBindings.emplace_back();
+        b.binding                       = sb.binding;
+        b.descriptorType                = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+        b.descriptorCount               = 1;
+        b.stageFlags                    = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
+        b.pImmutableSamplers            = nullptr;
+        ++state.storageDescriptorCount;
     }
 
     const bool separateSamplers = !program->getActiveSamplerInfos().empty();
@@ -592,10 +597,10 @@ void RenderPipelineImpl::updatePipelineLayoutState(ProgramImpl* program)
     _activeLayoutState = &state;
 }
 
-void RenderPipelineImpl::updateGraphicsPipeline(ProgramImpl* program,
-                                                const PipelineDesc& desc,
-                                                const ExtendedDynamicState& state,
-                                                VkRenderPass renderPass)
+void GraphicsPipelineImpl::updateGraphicsPipeline(ProgramImpl* program,
+                                                  const PipelineDesc& desc,
+                                                  const ExtendedDynamicState& state,
+                                                  VkRenderPass renderPass)
 {
     static_assert(sizeof(state) == 4, "ExtendedDynamicState size must be 4 bytes");
 
@@ -668,7 +673,7 @@ void RenderPipelineImpl::updateGraphicsPipeline(ProgramImpl* program,
     _activePipeline = pipeline;
 }
 
-DescriptorState* RenderPipelineImpl::acquireDescriptorState()
+DescriptorState* GraphicsPipelineImpl::acquireDescriptorState()
 {
     AXASSERT(_activeLayoutState, "PipelineLayoutState must be valid");
     DescriptorState* descriptorState{nullptr};
@@ -699,7 +704,7 @@ DescriptorState* RenderPipelineImpl::acquireDescriptorState()
     return descriptorState;
 }
 
-void RenderPipelineImpl::recycleDescriptorStates(std::span<DescriptorState*> descriptorStates, bool needResort)
+void GraphicsPipelineImpl::recycleDescriptorStates(std::span<DescriptorState*> descriptorStates, bool needResort)
 {
     int allocatorMods{0};
     for (auto descriptorState : descriptorStates)
@@ -739,7 +744,7 @@ void RenderPipelineImpl::recycleDescriptorStates(std::span<DescriptorState*> des
     }
 }
 
-void RenderPipelineImpl::removeCachedObjects(VkRenderPass key)
+void GraphicsPipelineImpl::removeCachedObjects(VkRenderPass key)
 {
     auto range = _renderPassToPipelineMap.equal_range(key);
 
@@ -759,7 +764,7 @@ void RenderPipelineImpl::removeCachedObjects(VkRenderPass key)
     }
 }
 
-void RenderPipelineImpl::removeCachedObjects(Program* key)
+void GraphicsPipelineImpl::removeCachedObjects(Program* key)
 {
     auto progId = key->getProgramId();
 
@@ -805,9 +810,9 @@ void RenderPipelineImpl::removeCachedObjects(Program* key)
     _programToPipelineMap.erase(range.first, range.second);
 }
 
-void RenderPipelineImpl::freeDescriptorStates(DescriptorAllocator& allocator,
-                                              DescriptorList& descriptorStates,
-                                              bool needResortPools)
+void GraphicsPipelineImpl::freeDescriptorStates(DescriptorAllocator& allocator,
+                                                DescriptorList& descriptorStates,
+                                                bool needResortPools)
 {
     for (auto descriptorState : descriptorStates)
     {

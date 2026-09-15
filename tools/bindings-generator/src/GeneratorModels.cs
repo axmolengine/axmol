@@ -1,3 +1,10 @@
+/****************************************************************************
+ Copyright (c) 2019-present Simdsoft Limited.
+
+ https://axmol.dev/
+
+ SPDX-License-Identifier: MIT
+ ****************************************************************************/
 using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;

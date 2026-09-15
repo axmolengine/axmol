@@ -285,6 +285,17 @@
           "isVariadic": false
         },
         {
+          "nativeName": "getCaps",
+          "luaName": "getCaps",
+          "declaringType": "ax::rhi::GraphicsDevice",
+          "returnType": "const ax::rhi::DriverCaps \u0026",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
           "nativeName": "getMaxAttributes",
           "luaName": "getMaxAttributes",
           "declaringType": "ax::rhi::GraphicsDevice",
@@ -298,6 +309,17 @@
         {
           "nativeName": "getMaxSamplesAllowed",
           "luaName": "getMaxSamplesAllowed",
+          "declaringType": "ax::rhi::GraphicsDevice",
+          "returnType": "int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getMaxTexture3DSize",
+          "luaName": "getMaxTexture3DSize",
           "declaringType": "ax::rhi::GraphicsDevice",
           "returnType": "int",
           "parameterTypes": [],
@@ -424,6 +446,39 @@
       ],
       "methods": [
         {
+          "nativeName": "getActiveStorageBufferInfos",
+          "luaName": "getActiveStorageBufferInfos",
+          "declaringType": "ax::rhi::Program",
+          "returnType": "const std::vector\u003Cax::rhi::StorageBufferInfo\u003E \u0026",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getCSModule",
+          "luaName": "getCSModule",
+          "declaringType": "ax::rhi::Program",
+          "returnType": "ax::rhi::ShaderModule *",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getComputeLocalSize",
+          "luaName": "getComputeLocalSize",
+          "declaringType": "ax::rhi::Program",
+          "returnType": "const std::array\u003Cint, 3\u003E \u0026",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
           "nativeName": "getFSModule",
           "luaName": "getFSModule",
           "declaringType": "ax::rhi::Program",
@@ -452,6 +507,21 @@
           "returnType": "uint32_t",
           "parameterTypes": [],
           "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getSamplerLocation",
+          "luaName": "getSamplerLocation",
+          "declaringType": "ax::rhi::Program",
+          "returnType": "ax::rhi::SamplerLocation",
+          "parameterTypes": [
+            "std::string_view"
+          ],
+          "defaultValues": [
+            null
+          ],
           "isStatic": false,
           "isConst": true,
           "isVariadic": false
@@ -576,6 +646,21 @@
           "isVariadic": false
         },
         {
+          "nativeName": "getSamplerOverride",
+          "luaName": "getSamplerOverride",
+          "declaringType": "ax::rhi::ProgramState",
+          "returnType": "ax::rhi::SamplerId",
+          "parameterTypes": [
+            "int"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
           "nativeName": "isBatchable",
           "luaName": "isBatchable",
           "declaringType": "ax::rhi::ProgramState",
@@ -598,6 +683,59 @@
           "defaultValues": [
             null,
             null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setSampler",
+          "luaName": "setSampler",
+          "declaringType": "ax::rhi::ProgramState",
+          "returnType": "void",
+          "parameterTypes": [
+            "const rhi::SamplerLocation \u0026",
+            "const ax::rhi::SamplerDesc \u0026"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setSampler",
+          "luaName": "setSampler",
+          "declaringType": "ax::rhi::ProgramState",
+          "returnType": "void",
+          "parameterTypes": [
+            "std::string_view",
+            "const ax::rhi::SamplerDesc \u0026"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setStorageBuffer",
+          "luaName": "setStorageBuffer",
+          "declaringType": "ax::rhi::ProgramState",
+          "returnType": "void",
+          "parameterTypes": [
+            "int",
+            "rhi::Buffer *",
+            "ax::rhi::BufferAccess"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            "ax::rhi::BufferAccess::READ_ONLY"
           ],
           "isStatic": false,
           "isConst": false,
@@ -660,6 +798,21 @@
       "constructors": [],
       "bases": [],
       "methods": [
+        {
+          "nativeName": "acquireComputeShaderModule",
+          "luaName": "acquireComputeShaderModule",
+          "declaringType": "ax::rhi::ShaderCache",
+          "returnType": "rhi::ShaderModule *",
+          "parameterTypes": [
+            "ax::Data \u0026"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
         {
           "nativeName": "acquireFragmentShaderModule",
           "luaName": "acquireFragmentShaderModule",
@@ -751,6 +904,17 @@
         {
           "nativeName": "getArraySize",
           "luaName": "getArraySize",
+          "declaringType": "ax::rhi::Texture",
+          "returnType": "int",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "getDepth",
+          "luaName": "getDepth",
           "declaringType": "ax::rhi::Texture",
           "returnType": "int",
           "parameterTypes": [],
@@ -1084,9 +1248,15 @@
           "isUnsigned": false
         },
         {
-          "name": "COUNT",
+          "name": "STORAGE_BUFFER",
           "signedValue": 4,
           "unsignedValue": 4,
+          "isUnsigned": false
+        },
+        {
+          "name": "COUNT",
+          "signedValue": 5,
+          "unsignedValue": 5,
           "isUnsigned": false
         },
         {
@@ -1105,6 +1275,12 @@
           "name": "UNIFORM",
           "signedValue": 2,
           "unsignedValue": 2,
+          "isUnsigned": false
+        },
+        {
+          "name": "STORAGE",
+          "signedValue": 4,
+          "unsignedValue": 4,
           "isUnsigned": false
         }
       ]
@@ -1728,6 +1904,12 @@
           "name": "TEXTURE_CUBE",
           "signedValue": 1,
           "unsignedValue": 1,
+          "isUnsigned": false
+        },
+        {
+          "name": "TEXTURE_3D",
+          "signedValue": 2,
+          "unsignedValue": 2,
           "isUnsigned": false
         }
       ]

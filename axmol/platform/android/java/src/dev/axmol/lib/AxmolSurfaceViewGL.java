@@ -1,25 +1,9 @@
 /****************************************************************************
- Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+ Copyright (c) 2019-present Simdsoft Limited.
 
  https://axmol.dev/
 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
+ SPDX-License-Identifier: MIT
  ****************************************************************************/
 package dev.axmol.lib;
 
@@ -29,6 +13,7 @@ import android.view.inputmethod.EditorInfo;
 
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -53,6 +38,7 @@ public class AxmolSurfaceViewGL extends dev.axmol.lib.GLSurfaceView {
         setEGLConfigChooser(chooser);
 
         setEGLContextClientVersion(3);
+        setEGLContextFactory(new AxmolEGLContextFactory());
         setFocusableInTouchMode(true);
         setPreserveEGLContextOnPause(true);
 
@@ -75,6 +61,36 @@ public class AxmolSurfaceViewGL extends dev.axmol.lib.GLSurfaceView {
 
         // Use continuous rendering mode
         setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+    }
+
+    private static class AxmolEGLContextFactory implements GLSurfaceView.EGLContextFactory {
+        private static final int EGL_CONTEXT_MAJOR_VERSION_KHR = 0x3098;
+        private static final int EGL_CONTEXT_MINOR_VERSION_KHR = 0x30FB;
+
+        @Override
+        public EGLContext createContext(EGL10 egl, EGLDisplay display, EGLConfig config) {
+            int[] attributes31 = {
+                EGL_CONTEXT_MAJOR_VERSION_KHR, 3,
+                EGL_CONTEXT_MINOR_VERSION_KHR, 1,
+                EGL10.EGL_NONE
+            };
+            EGLContext context = egl.eglCreateContext(display, config, EGL10.EGL_NO_CONTEXT, attributes31);
+            if (context != null && context != EGL10.EGL_NO_CONTEXT) {
+                return context;
+            }
+
+            // Clear the failed 3.1 request before applying the GLES 3.0 fallback.
+            egl.eglGetError();
+            int[] attributes30 = {EGL_CONTEXT_MAJOR_VERSION_KHR, 3, EGL10.EGL_NONE};
+            return egl.eglCreateContext(display, config, EGL10.EGL_NO_CONTEXT, attributes30);
+        }
+
+        @Override
+        public void destroyContext(EGL10 egl, EGLDisplay display, EGLContext context) {
+            if (!egl.eglDestroyContext(display, context)) {
+                Log.e(TAG, "Failed to destroy EGL context: 0x" + Integer.toHexString(egl.eglGetError()));
+            }
+        }
     }
 
     /**
@@ -115,7 +131,7 @@ public class AxmolSurfaceViewGL extends dev.axmol.lib.GLSurfaceView {
         public EGLConfig chooseConfig(EGL10 egl, EGLDisplay display) {
             int[][] EGLAttributes = {
                 {
-                    // GL ES 2 with user set
+                    // GL ES 3 with user set
                     EGL10.EGL_RED_SIZE, mConfigAttributes[0],
                     EGL10.EGL_GREEN_SIZE, mConfigAttributes[1],
                     EGL10.EGL_BLUE_SIZE, mConfigAttributes[2],
@@ -124,11 +140,11 @@ public class AxmolSurfaceViewGL extends dev.axmol.lib.GLSurfaceView {
                     EGL10.EGL_STENCIL_SIZE, mConfigAttributes[5],
                     EGL10.EGL_SAMPLE_BUFFERS, (mConfigAttributes[6] > 0) ? 1 : 0,
                     EGL10.EGL_SAMPLES, mConfigAttributes[6],
-                    EGL10.EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+                    EGL10.EGL_RENDERABLE_TYPE, EGL_OPENGL_ES3_BIT,
                     EGL10.EGL_NONE
                 },
                 {
-                    // GL ES 2 with user set 16 bit depth buffer
+                    // GL ES 3 with user set 16 bit depth buffer
                     EGL10.EGL_RED_SIZE, mConfigAttributes[0],
                     EGL10.EGL_GREEN_SIZE, mConfigAttributes[1],
                     EGL10.EGL_BLUE_SIZE, mConfigAttributes[2],
@@ -137,11 +153,11 @@ public class AxmolSurfaceViewGL extends dev.axmol.lib.GLSurfaceView {
                     EGL10.EGL_STENCIL_SIZE, mConfigAttributes[5],
                     EGL10.EGL_SAMPLE_BUFFERS, (mConfigAttributes[6] > 0) ? 1 : 0,
                     EGL10.EGL_SAMPLES, mConfigAttributes[6],
-                    EGL10.EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+                    EGL10.EGL_RENDERABLE_TYPE, EGL_OPENGL_ES3_BIT,
                     EGL10.EGL_NONE
                 },
                 {
-                    // GL ES 2 with user set 16 bit depth buffer without multisampling
+                    // GL ES 3 with user set 16 bit depth buffer without multisampling
                     EGL10.EGL_RED_SIZE, mConfigAttributes[0],
                     EGL10.EGL_GREEN_SIZE, mConfigAttributes[1],
                     EGL10.EGL_BLUE_SIZE, mConfigAttributes[2],
@@ -150,12 +166,12 @@ public class AxmolSurfaceViewGL extends dev.axmol.lib.GLSurfaceView {
                     EGL10.EGL_STENCIL_SIZE, mConfigAttributes[5],
                     EGL10.EGL_SAMPLE_BUFFERS, 0,
                     EGL10.EGL_SAMPLES, 0,
-                    EGL10.EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+                    EGL10.EGL_RENDERABLE_TYPE, EGL_OPENGL_ES3_BIT,
                     EGL10.EGL_NONE
                 },
                 {
-                    // GL ES 2 by default
-                    EGL10.EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+                    // GL ES 3 by default
+                    EGL10.EGL_RENDERABLE_TYPE, EGL_OPENGL_ES3_BIT,
                     EGL10.EGL_NONE
                 }
             };
@@ -163,6 +179,21 @@ public class AxmolSurfaceViewGL extends dev.axmol.lib.GLSurfaceView {
             EGLConfig result = null;
             for (int[] eglAtribute : EGLAttributes) {
                 result = this.doChooseConfig(egl, display, eglAtribute);
+                if (result != null)
+                    return result;
+            }
+
+            // Some EGL implementations expose GLES 3 contexts on configs that
+            // only advertise the legacy ES2 bit. Keep that compatibility path.
+            for (int[] eglAttribute : EGLAttributes) {
+                int[] fallbackAttributes = eglAttribute.clone();
+                for (int i = 0; i + 1 < fallbackAttributes.length; i += 2) {
+                    if (fallbackAttributes[i] == EGL10.EGL_RENDERABLE_TYPE) {
+                        fallbackAttributes[i + 1] = EGL_OPENGL_ES2_BIT;
+                        break;
+                    }
+                }
+                result = this.doChooseConfig(egl, display, fallbackAttributes);
                 if (result != null)
                     return result;
             }

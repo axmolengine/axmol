@@ -1,6 +1,6 @@
 # The axmol CMake options
 
-## The options for axmol engine (please sort them alphabetically. Thanks.)
+## The options for axmol (please sort them alphabetically. Thanks.)
 - AX_BUILD_TESTS: whether build test porojects: cpp-tests, lua-tests, fairygui-tests, default: `TRUE`
 - AX_ENABLE_XXX for core feature: 
   - AX_ENABLE_3D: whether to enable 3D support, default: `TRUE`

@@ -1,26 +1,10 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+ Copyright (c) 2019-present Simdsoft Limited.
 
  https://axmol.dev/
 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
+ SPDX-License-Identifier: MIT
  ****************************************************************************/
 
 #pragma once
@@ -77,10 +61,27 @@ enum class BufferType : uint32_t
     ELEMENT_ARRAY_BUFFER,
     UNIFORM_BUFFER,
     PIXEL_PACK_BUFFER,
+    STORAGE_BUFFER,
     COUNT,
     VERTEX  = ARRAY_BUFFER,
     INDEX   = ELEMENT_ARRAY_BUFFER,
-    UNIFORM = UNIFORM_BUFFER
+    UNIFORM = UNIFORM_BUFFER,
+    STORAGE = STORAGE_BUFFER
+};
+
+enum class BufferAccess : uint8_t
+{
+    READ_ONLY,
+    READ_WRITE
+};
+
+struct BufferDesc
+{
+    size_t size         = 0;
+    uint32_t stride     = 0;  ///< Logical storage element stride; native backends may use raw views.
+    BufferType type     = BufferType::VERTEX;
+    BufferUsage usage   = BufferUsage::DYNAMIC;
+    BufferAccess access = BufferAccess::READ_ONLY;
 };
 
 enum class ShaderStage : int16_t
@@ -338,7 +339,8 @@ enum class Winding : uint8_t
 enum class TextureType : uint8_t
 {
     TEXTURE_2D,
-    TEXTURE_CUBE
+    TEXTURE_CUBE,
+    TEXTURE_3D
 };
 
 enum class SamplerAddressMode : uint32_t
@@ -479,6 +481,7 @@ struct TextureDesc
 {
     uint16_t width     = 1;
     uint16_t height    = 1;
+    uint16_t depth     = 1;
     uint16_t arraySize = 1;
     // =1: no mipmaps, =0: generate mipmaps by GPU, >1: mipmaps enabled manually
     uint16_t mipLevels        = 1;

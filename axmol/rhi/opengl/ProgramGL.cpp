@@ -1,26 +1,10 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+ Copyright (c) 2019-present Simdsoft Limited.
 
  https://axmol.dev/
 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
+ SPDX-License-Identifier: MIT
  ****************************************************************************/
 
 #include "axmol/rhi/opengl/ProgramGL.h"
@@ -39,6 +23,16 @@
 namespace ax::rhi::gl
 {
 ProgramImpl::ProgramImpl(Data& vsData, Data& fsData) : Program(vsData, fsData)
+{
+    compileProgram();
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
+    _backToForegroundListener =
+        CustomEventListener::create(EVENT_RENDERER_RECREATED, [this](CustomEvent*) { this->reloadProgram(); });
+    Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
+#endif
+}
+
+ProgramImpl::ProgramImpl(Data& csData) : Program(csData)
 {
     compileProgram();
 #if AX_ENABLE_CONTEXT_LOSS_RECOVERY
@@ -73,23 +67,37 @@ bool ProgramImpl::isValid() const
 
 void ProgramImpl::compileProgram()
 {
-    if (_vsModule == nullptr || _fsModule == nullptr)
-        return;
+    GLuint computeShader = 0;
+    GLuint vertShader    = 0;
+    GLuint fragShader    = 0;
+    if (_csModule)
+    {
+        computeShader = static_cast<ShaderModuleImpl*>(_csModule)->getShader();
+        if (computeShader == 0)
+            return;
+    }
+    else
+    {
+        if (_vsModule == nullptr || _fsModule == nullptr)
+            return;
 
-    /// --- link program
-    auto vertShader = static_cast<ShaderModuleImpl*>(_vsModule)->getShader();
-    auto fragShader = static_cast<ShaderModuleImpl*>(_fsModule)->getShader();
-
-    assert(vertShader != 0 && fragShader != 0);
-    if (vertShader == 0 || fragShader == 0)
-        return;
+        vertShader = static_cast<ShaderModuleImpl*>(_vsModule)->getShader();
+        fragShader = static_cast<ShaderModuleImpl*>(_fsModule)->getShader();
+        if (vertShader == 0 || fragShader == 0)
+            return;
+    }
 
     _program = glCreateProgram();
     if (!_program)
         return;
 
-    glAttachShader(_program, vertShader);
-    glAttachShader(_program, fragShader);
+    if (computeShader)
+        glAttachShader(_program, computeShader);
+    else
+    {
+        glAttachShader(_program, vertShader);
+        glAttachShader(_program, fragShader);
+    }
 
     glLinkProgram(_program);
 
@@ -100,14 +108,17 @@ void ProgramImpl::compileProgram()
         GLint errorInfoLen = 0;
         glGetProgramiv(_program, GL_INFO_LOG_LENGTH, &errorInfoLen);
 
-        std::string_view vsSource = _vsModule->getCode();
-        std::string_view fsSource = _fsModule->getCode();
+        std::string_view vsSource = _vsModule ? _vsModule->getCode() : std::string_view{};
+        std::string_view fsSource = _fsModule ? _fsModule->getCode() : std::string_view{};
+        std::string_view csSource = _csModule ? _csModule->getCode() : std::string_view{};
         if (errorInfoLen > 1)
         {
             auto errorInfo = tlx::make_unique_for_overwrite<char[]>(static_cast<size_t>(errorInfoLen));
             glGetProgramInfoLog(_program, errorInfoLen, NULL, errorInfo.get());
-            AXLOGE("axmol:ERROR: {}: failed to link program: {} \n--- vsSource ---\n{}\n --- fsSource ---\n{}",
-                   __FUNCTION__, errorInfo.get(), vsSource, fsSource);
+            AXLOGE(
+                "axmol:ERROR: {}: failed to link program: {} \n--- vsSource ---\n{}\n --- fsSource ---\n{}\n --- "
+                "csSource ---\n{}",
+                __FUNCTION__, errorInfo.get(), vsSource, fsSource, csSource);
         }
         else
             AXLOGE("axmol:ERROR: {}: failed to link program", __FUNCTION__);
@@ -205,30 +216,34 @@ void ProgramImpl::compileProgram()
                                   &blockIndex);
             if (blockIndex != -1)
             {  // member of uniform block
-                auto blockInfo = blockInfoMap[blockIndex];
+                const auto blockInfoIt = blockInfoMap.find(blockIndex);
+                if (blockInfoIt == blockInfoMap.end() || blockInfoIt->second == nullptr)
+                    continue;
+
+                auto* blockInfo = blockInfoIt->second;
                 GLint uniformOffset{-1};
                 glGetActiveUniformsiv(_program, 1, reinterpret_cast<const GLuint*>(&i), GL_UNIFORM_OFFSET,
                                       &uniformOffset);
                 auto elementSize = UtilsGL::getGLDataTypeSize(uniformType);
-                try
-                {
-                    const auto uniformId = makeUniformNameKey(uniformFullName);
-                    auto& uniformInfo    = getUniformInfo(uniformId);
 
-                    if (uniformInfo.cpuOffset != blockInfo->cpuOffset)
-                        uniformInfo.cpuOffset = blockInfo->cpuOffset;
+                const auto uniformId = makeUniformNameKey(uniformFullName);
+                const auto uniformIt = _activeUniformInfos.find(uniformId);
+                if (uniformIt == _activeUniformInfos.end())
+                    continue;
 
-                    if (uniformInfo.offset != uniformOffset)
-                        uniformInfo.offset = uniformOffset;
+                // A desktop GL driver may expose a linked UBO member with a
+                // name that is absent from the archive reflection. There is
+                // no CPU-side UniformInfo to adjust in that case.
+                auto& uniformInfo = uniformIt->second;
+                if (uniformInfo.cpuOffset != blockInfo->cpuOffset)
+                    uniformInfo.cpuOffset = blockInfo->cpuOffset;
 
-                    const auto sizeBytes = elementSize * uniformInfo.count;
-                    if (uniformInfo.sizeBytes != sizeBytes)
-                        uniformInfo.sizeBytes = sizeBytes;
-                }
-                catch (const std::exception& /*ex*/)
-                {
-                    AXLOGE("exception occurred when adjust uniform info");
-                }
+                if (uniformInfo.offset != uniformOffset)
+                    uniformInfo.offset = uniformOffset;
+
+                const auto sizeBytes = elementSize * uniformInfo.count;
+                if (uniformInfo.sizeBytes != sizeBytes)
+                    uniformInfo.sizeBytes = sizeBytes;
             }
         }
     }

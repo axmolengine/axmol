@@ -24,27 +24,45 @@
 
 #pragma once
 
-#include "axmol/rhi/RHITypes.h"
-#include "axmol/base/Object.h"
-#include "axmol/rhi/PipelineDesc.h"
-#include "axmol/rhi/RenderPassDesc.h"
+#include "axmol/rhi/GraphicsPipeline.h"
 
-namespace ax::rhi
+#include "axmol/platform/GL.h"
+
+#include <vector>
+
+namespace ax::rhi::gl
 {
+
+class ProgramImpl;
 /**
- * @addtogroup _rhi
+ * @addtogroup _opengl
  * @{
  */
-class RenderTarget;
 
 /**
- * Render pipeline
+ * Set program and blend state.
  */
-class RenderPipeline : public ax::Object
+class GraphicsPipelineImpl : public GraphicsPipeline
 {
-protected:
-    virtual ~RenderPipeline() = default;
+public:
+    /**
+     * @param descriptor Specifies render pipeline descriptor.
+     */
+    GraphicsPipelineImpl() = default;
+    ~GraphicsPipelineImpl();
+
+    void update(const RenderTarget*, const PipelineDesc& pipelineDesc);
+    /**
+     * Get program instance.
+     * @return Program instance.
+     */
+    inline ProgramImpl* getProgram() const { return _programImpl; }
+
+private:
+    void updateBlendState(const BlendDesc& descriptor);
+
+    ProgramImpl* _programImpl = nullptr;
 };
-// end of _rhi group
+// end of _opengl group
 /// @}
-}  // namespace ax::rhi
+}  // namespace ax::rhi::gl

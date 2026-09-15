@@ -1,10 +1,10 @@
 <p align="center"><a href="https://axmol.dev" target="_blank" rel="noopener noreferrer"><img width="160" src="https://axmol.dev/assets/img/logo.png" alt="axmol logo"></a></p>
 
-# Axmol Engine
+# Axmol
 
 ## A Multi-platform Engine for Desktop, XBOX (UWP), WebAssembly and Mobile games.
 
-[Axmol Engine](https://axmol.dev) 是一个开源的专为移动、桌面和 XBox 设备设计的 C++ 多平台引擎。该项目于 2019 年 11 月作为 `Cocos2d-X-4.0` 的一个分支启动。
+[Axmol](https://axmol.dev) 是一个开源的专为移动、桌面和 XBox 设备设计的 C++ 多平台引擎。该项目于 2019 年 11 月作为 `Cocos2d-X-4.0` 的一个分支启动。
 
 请 [访问我们的 Wiki](https://github.com/axmolengine/axmol/wiki) 了解关于 Axmol 的更多信息。
 
@@ -164,7 +164,7 @@ Axmol 引擎在 Cocos2d-x v4.0 的基础上进行迭代和改进。现在速度�
 * 请不要忘记将主题 axmol 和 axmolengine 添加到您创建的任何相关存储库中
 * 在 GitHub 上添加星也将有助于 Axmol 的成长。谢谢你!
 
-如果您觉得 [Axmol Engine](https://axmol.dev) 对您有所帮助，欢迎支持其持续开发：[https://axmol.dev/sponsor](https://axmol.dev/sponsor)，非常感谢！
+如果您觉得 [Axmol](https://axmol.dev) 对您有所帮助，欢迎支持其持续开发：[https://axmol.dev/sponsor](https://axmol.dev/sponsor)，非常感谢！
 
 ## 支持者
 

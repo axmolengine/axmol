@@ -1,25 +1,9 @@
 /****************************************************************************
- Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+ Copyright (c) 2019-present Simdsoft Limited.
 
  https://axmol.dev/
 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
+ SPDX-License-Identifier: MIT
  ****************************************************************************/
 #include "axmol/rhi/d3d11/Program11.h"
 #include "axmol/rhi/d3d11/Buffer11.h"
@@ -29,6 +13,15 @@
 namespace ax::rhi::d3d11
 {
 ProgramImpl::ProgramImpl(Data& vsData, Data& fsData) : Program(vsData, fsData)
+{
+    auto driver = axdrv;
+    for (auto& uboInfo : _activeUniformBlockInfos)
+    {
+        _uniformBuffers.push_back(driver->createBuffer(uboInfo.sizeBytes, BufferType::UNIFORM, BufferUsage::DYNAMIC));
+    }
+}
+
+ProgramImpl::ProgramImpl(Data& csData) : Program(csData)
 {
     auto driver = axdrv;
     for (auto& uboInfo : _activeUniformBlockInfos)
@@ -67,6 +60,9 @@ void ProgramImpl::bindUniformBuffers(ID3D11DeviceContext* context, const uint8_t
             break;
         case ShaderStage::FRAGMENT:
             context->PSSetConstantBuffers(info.binding, 1, &nativeUbo);
+            break;
+        case ShaderStage::COMPUTE:
+            context->CSSetConstantBuffers(info.binding, 1, &nativeUbo);
             break;
         default:
             break;

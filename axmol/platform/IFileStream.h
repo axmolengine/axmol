@@ -1,4 +1,4 @@
-// Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md)
+// Copyright (c) 2019-present Simdsoft Limited.
 #pragma once
 
 #include <errno.h>

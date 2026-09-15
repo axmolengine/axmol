@@ -1,29 +1,13 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+ Copyright (c) 2019-present Simdsoft Limited.
 
  https://axmol.dev/
 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
+ SPDX-License-Identifier: MIT
  ****************************************************************************/
 
-#include "axmol/rhi/metal/RenderPipelineMTL.h"
+#include "axmol/rhi/metal/GraphicsPipelineMTL.h"
 #include "axmol/rhi/metal/GraphicsDeviceMTL.h"
 #include "axmol/rhi/metal/RenderTargetMTL.h"
 #include "axmol/rhi/metal/ShaderModuleMTL.h"
@@ -153,9 +137,9 @@ static MTLBlendOperation toMTLBlendOp(BlendOp operation)
 }
 }  // namespace
 
-RenderPipelineImpl::RenderPipelineImpl(id<MTLDevice> mtlDevice) : _mtlDevice(mtlDevice) {}
+GraphicsPipelineImpl::GraphicsPipelineImpl(id<MTLDevice> mtlDevice) : _mtlDevice(mtlDevice) {}
 
-void RenderPipelineImpl::update(const RenderTarget* renderTarget, const PipelineDesc& pipelineDesc)
+void GraphicsPipelineImpl::update(const RenderTarget* renderTarget, const PipelineDesc& pipelineDesc)
 {
     struct
     {
@@ -229,13 +213,13 @@ void RenderPipelineImpl::update(const RenderTarget* renderTarget, const Pipeline
     _mtlStateCache.emplace(hash, _mtlRenderPipelineState);
 }
 
-RenderPipelineImpl::~RenderPipelineImpl()
+GraphicsPipelineImpl::~GraphicsPipelineImpl()
 {
     for (auto& item : _mtlStateCache)
         [item.second release];
 }
 
-void RenderPipelineImpl::setVertexLayout(MTLRenderPipelineDescriptor* mtlDesc, const PipelineDesc& desc)
+void GraphicsPipelineImpl::setVertexLayout(MTLRenderPipelineDescriptor* mtlDesc, const PipelineDesc& desc)
 {
     auto vertexLayout = desc.vertexLayout;
     assert(vertexLayout);
@@ -295,8 +279,8 @@ void RenderPipelineImpl::setVertexLayout(MTLRenderPipelineDescriptor* mtlDesc, c
     }
 }
 
-void RenderPipelineImpl::setBlendState(MTLRenderPipelineColorAttachmentDescriptor* colorAttachmentDesc,
-                                       const BlendDesc& blendDesc)
+void GraphicsPipelineImpl::setBlendState(MTLRenderPipelineColorAttachmentDescriptor* colorAttachmentDesc,
+                                         const BlendDesc& blendDesc)
 {
     colorAttachmentDesc.blendingEnabled = blendDesc.blendEnabled;
     colorAttachmentDesc.writeMask       = toMTLColorWriteMask(blendDesc.writeMask);
@@ -310,7 +294,7 @@ void RenderPipelineImpl::setBlendState(MTLRenderPipelineColorAttachmentDescripto
     colorAttachmentDesc.destinationAlphaBlendFactor = toMTLBlendFactor(blendDesc.destinationAlphaBlendFactor);
 }
 
-void RenderPipelineImpl::setShaderModules(Program* program)
+void GraphicsPipelineImpl::setShaderModules(Program* program)
 {
     auto vsModule                         = static_cast<ShaderModuleImpl*>(program->getVSModule());
     _mtlRenderPipelineDesc.vertexFunction = vsModule->getMTLFunction();
@@ -319,7 +303,7 @@ void RenderPipelineImpl::setShaderModules(Program* program)
     _mtlRenderPipelineDesc.fragmentFunction = fsModule->getMTLFunction();
 }
 
-void RenderPipelineImpl::setBlendStateAndFormat(const BlendDesc& blendDesc, const RenderTargetImpl* rt)
+void GraphicsPipelineImpl::setBlendStateAndFormat(const BlendDesc& blendDesc, const RenderTargetImpl* rt)
 {
     auto& nativeColorFormats = rt->getNativeColorFormats();
     auto formatCount         = nativeColorFormats.size();

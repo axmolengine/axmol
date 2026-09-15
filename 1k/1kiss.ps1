@@ -1,26 +1,9 @@
-# Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md)
+# Copyright (c) 2019-present Simdsoft Limited.
 #
 #   https://axmol.dev/
 #
-# The MIT License (MIT)
 #
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+# SPDX-License-Identifier: MIT
 #
 #
 # The 1k/1kiss.ps1, the core script of project 1kiss(1k)
@@ -1519,6 +1502,10 @@ function setup_emsdk() {
     else {
         $1k.println("Using emcc: $emcc_prog, version: $emcc_ver")
     }
+
+    # Emscripten 6.0.1 accepts the standard -m64 spelling for wasm64.
+    # Keep the legacy spelling for older emsdk releases supported by Axmol.
+    $Global:EMSCRIPTEN_VERSION = $emcc_ver
 }
 
 function setup_msvc() {
@@ -2000,8 +1987,14 @@ if (!$setupOnly) {
         if (!$is_win_family) {
             $cm_cflags = '-fPIC'
             if ($TARGET_OS -eq 'wasm64') {
-                $cm_cflags += ' -sMEMORY64'
-                $CONFIG_ALL_OPTIONS += '-DEMSCRIPTEN_SYSTEM_PROCESSOR=x86_64', '-DCMAKE_CXX_FLAGS=-sMEMORY64'
+                if (version_ge $Global:EMSCRIPTEN_VERSION '6.0.1') {
+                    $wasm64_flag = '-m64'
+                }
+                else {
+                    $wasm64_flag = '-sMEMORY64'
+                }
+                $cm_cflags += " $wasm64_flag"
+                $CONFIG_ALL_OPTIONS += '-DEMSCRIPTEN_SYSTEM_PROCESSOR=x86_64', "-DCMAKE_CXX_FLAGS=$wasm64_flag"
             }
 
             $CONFIG_ALL_OPTIONS += "-DCMAKE_C_FLAGS=$cm_cflags"

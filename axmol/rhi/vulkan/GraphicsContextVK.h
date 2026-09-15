@@ -1,39 +1,34 @@
 /****************************************************************************
- Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+ Copyright (c) 2019-present Simdsoft Limited.
 
  https://axmol.dev/
 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
+ SPDX-License-Identifier: MIT
  ****************************************************************************/
 #pragma once
 #include "axmol/rhi/GraphicsContext.h"
-#include "axmol/rhi/vulkan/RenderPipelineVK.h"
+#include "axmol/rhi/vulkan/GraphicsPipelineVK.h"
+#include "axmol/rhi/vulkan/ComputePipelineVK.h"
+#include "axmol/base/RefPtr.h"
 #include <glad/vulkan.h>
 
 namespace ax::rhi::vk
 {
 class BufferImpl;
 class DepthStencilStateImpl;
-class RenderPipelineImpl;
+class GraphicsPipelineImpl;
 class RenderTargetImpl;
 class GraphicsDeviceImpl;
 class SemaphorePool;
+
+// Holds a strong reference to the compute pipeline so it stays alive until the
+// frame fence completes (Vulkan requires recorded objects to outlive command
+// buffer execution).
+struct InFlightComputeDescriptorState
+{
+    RefPtr<ComputePipelineImpl> pipeline;
+    DescriptorState* descriptorState = nullptr;
+};
 
 enum class DynamicStateBits : uint32_t
 {
@@ -97,7 +92,7 @@ public:
     bool updateSurface(SurfaceHandle surface, uint32_t width, uint32_t height) override;
 
     void setDepthStencilState(DepthStencilState* depthStencilState) override;
-    void setRenderPipeline(RenderPipeline* renderPipeline) override;
+    void setGraphicsPipeline(GraphicsPipeline* graphicsPipeline) override;
 
     bool beginFrame() override;
     void beginRenderPass(RenderTarget* renderTarget, const RenderPassDesc& descriptor) override;
@@ -130,6 +125,8 @@ public:
 
     bool copyTexture(RenderTarget* src, Texture* dst) override;
     bool copyTexture(Texture* src, Texture* dst) override;
+
+    bool dispatch(const ComputeDispatchDesc& desc) override;
 
     void setStencilReferenceValue(uint32_t value) override;
 
@@ -191,6 +188,7 @@ private:
     uint64_t _frameFenceValue{0};
 
     std::array<tlx::pod_vector<DescriptorState*>, MAX_FRAMES_IN_FLIGHT> _inFlightDescriptorStates;
+    std::array<std::vector<InFlightComputeDescriptorState>, MAX_FRAMES_IN_FLIGHT> _inFlightComputeDescriptorStates;
 
     tlx::pod_vector<VkSemaphore> _presentCompleteSemaphores;
     tlx::pod_vector<VkSemaphore> _renderFinishedSemaphores;
@@ -201,7 +199,7 @@ private:
     VkCommandBuffer _currentCmdBuffer{VK_NULL_HANDLE};  // weak pointer
 
     DepthStencilStateImpl* _depthStencilState{nullptr};
-    RenderPipelineImpl* _renderPipeline{nullptr};
+    GraphicsPipelineImpl* _graphicsPipeline{nullptr};
     BufferImpl* _vertexBuffer{nullptr};
     BufferImpl* _indexBuffer{nullptr};
     BufferImpl* _instanceBuffer{nullptr};

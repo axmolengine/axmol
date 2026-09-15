@@ -1,29 +1,13 @@
 /****************************************************************************
- Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+ Copyright (c) 2019-present Simdsoft Limited.
 
  https://axmol.dev/
 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
+ SPDX-License-Identifier: MIT
  ****************************************************************************/
 #pragma once
 
-#include "axmol/rhi/RenderPipeline.h"
+#include "axmol/rhi/GraphicsPipeline.h"
 #include "axmol/tlx/hlookup.hpp"
 #include <glad/vulkan.h>
 #include <unordered_map>
@@ -59,16 +43,19 @@ using VkDescriptorSetLayoutArray = std::array<VkDescriptorSetLayout, MAX_DESCRIP
 
 class DescriptorPool;
 class DescriptorAllocator;
+class ComputePipelineImpl;
 struct DescriptorState
 {
     DescriptorPool* pool{nullptr};
     VkDescriptorSetArray sets{};  // Allocated VkDescriptorSets
     uint8_t descriptorSetCount{0};
-    uint64_t progId{0};  // progId associated with this descriptor set
+    uint64_t progId{0};                             // progId associated with this descriptor set
+    ComputePipelineImpl* computePipeline{nullptr};  // owning compute pipeline (compute path)
     uint16_t uniformDescriptorCount{0};
     uint16_t imageDescriptorCount{0};
     uint16_t samplerDescriptorCount{0};
     uint16_t combinedDescriptorCount{0};
+    uint16_t storageDescriptorCount{0};
 };
 
 using DescriptorList = tlx::pod_vector<DescriptorState*>;
@@ -83,6 +70,7 @@ struct PipelineLayoutState
     uint32_t samplerDescriptorCount{0};
     uint32_t combinedDescriptorCount{0};
     uint32_t uniformDescriptorCount{0};
+    uint32_t storageDescriptorCount{0};
 
     DescriptorList descriptorFreeList;  // recycled descriptor sets
 };
@@ -100,7 +88,8 @@ public:
                _freeUniformDescriptorCount >= layoutState->uniformDescriptorCount &&
                _freeImageDescriptorCount >= layoutState->imageDescriptorCount &&
                _freeSamplerDescriptorCount >= layoutState->samplerDescriptorCount &&
-               _freeCombinedDescriptorCount >= layoutState->combinedDescriptorCount;
+               _freeCombinedDescriptorCount >= layoutState->combinedDescriptorCount &&
+               _freeStorageDescriptorCount >= layoutState->storageDescriptorCount;
     }
     int available() const { return _freeSetCount > 0; }
     void allocateDescriptorSets(const PipelineLayoutState* layoutState, DescriptorState* descriptorState);
@@ -124,6 +113,8 @@ protected:
     int _freeImageDescriptorCount{0};
     int _maxCombinedDescriptorCount{0};
     int _freeCombinedDescriptorCount{0};
+    int _maxStorageDescriptorCount{0};
+    int _freeStorageDescriptorCount{0};
 };
 
 class DescriptorAllocator
@@ -149,7 +140,7 @@ protected:
 };
 
 /**
- * @brief Vulkan-based RenderPipeline implementation
+ * @brief Vulkan-based graphics pipeline implementation
  *
  * This class manages pipeline creation and caching for Vulkan.
  * It converts Axmol's PipelineDesc into Vulkan pipeline states,
@@ -157,11 +148,11 @@ protected:
  * to avoid redundant Vulkan object creation.
  */
 
-class RenderPipelineImpl : public RenderPipeline
+class GraphicsPipelineImpl : public GraphicsPipeline
 {
 public:
-    explicit RenderPipelineImpl(GraphicsDeviceImpl* driver);
-    ~RenderPipelineImpl();
+    explicit GraphicsPipelineImpl(GraphicsDeviceImpl* driver);
+    ~GraphicsPipelineImpl();
 
     void prepareUpdate(DepthStencilStateImpl* ds) { _dsState = ds; }
 

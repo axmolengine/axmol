@@ -1,4 +1,4 @@
-# Contributing to Axmol Engine
+# Contributing to Axmol
 
 ## General considerations
 
@@ -31,67 +31,85 @@ Steps to report a bug:
 
 If you want to contribute code, please follow these steps:
 
-(If you are new to git and/or GitHub, you should read [Pro Git](http://progit.org/book/) , especially the section on [Contributing to a project:Small/Large Public Project](http://progit.org/book/ch5-2.html#public_small_project) )
+If you are new to Git or GitHub, read [Pro Git](https://git-scm.com/book/en/v2/Git-on-the-Server-Contributing-to-a-Project), especially the section on contributing to a public project.
 
 
-### Following steps must be done once in order to setup repository
+### One-time repository setup
 
--   Fork axmol on github page to your own github account
--   Clone your own fork:
+- Fork Axmol on GitHub to your own account.
+- Clone your fork:
 ```
-$ git clone https://github.com/<your git accout>/axmol.git
+git clone https://github.com/<your-github-account>/axmol.git
 ```
--   Add remote official from axmolengine/axmol:
+- Add the canonical Axmol repository as `upstream`:
 ```
-$ cd axmol
-$ git remote add official https://github.com/axmolengine/axmol.git
+cd axmol
+git remote add upstream https://github.com/axmolengine/axmol.git
 ```
 
-### Following steps must be done for every pull request
+### For each pull request
 
--   Sync with official:
+- Update your local view of the upstream repository:
 ```
-$ git fetch official
+git fetch upstream
 ```
--   Create a new branch on top of the latest dev from official:
+- Create a focused branch from the current v3 development branch:
 ```
-$ git checkout -b <new_branch_name> official/dev
+git switch -c <branch-name> --track upstream/dev
 ```
--   Do local changes on your new branch. Do as much commits as you need and add short descriptive message to each commit:
+- Make focused changes, run the relevant checks, and use short descriptive commit messages.
 ```
-$ git commit
+git commit
 ```
--   When all changes are finished push your new branch to your forked repository:
+- Push the branch to your fork:
 ```
-$ git push origin <new_branch_name>
+git push -u origin <branch-name>
 ```
--   Send a “pull request” to user “axmol”
--   It must be _complete_. See the definition below
--   It must follow the _Releases_ rules. See the definition below
+- Open a pull request against `axmolengine/axmol`, normally targeting `dev`.
+- Target `release/2.x` only for an applicable critical or security fix; new v3 features belong on `dev`.
+- Complete the pull-request description and checklist before requesting review.
 
 ## Only _complete_ patches will be merged
 
 The patch must be _complete_. And by that, we mean:
 
 -   For C++ code follow the [axmol C++ Coding Style](docs/CODING_STYLE.md)
--   For Python code follow the [PEP8 guidelines](https://www.python.org/dev/peps/pep-0008)
--   Describe what the patch does
--   Include test cases if applicable
--   Include unit tests if applicable
--   Must be tested in all supported platforms [*]
--   Must NOT degrade the performance
--   Must NOT break existing tests cases
--   Must NOT break the Continuous Integration build
--   Must NOT break backward compatibility
--   Must compile WITHOUT warnings
--   New APIs MUST be **easy to use**, **familiar** to cocos2d-x users
--   Code MUST be **easy to extend** and **maintain**
--   Must have documentation: C++ APIs must use Doxygen strings, tools must have a README.md file that describe how to use the tool
--   Must be efficient (fast / low memory needs)
--   It must not duplicate existing code, unless the new code deprecates the old one
--   Patches that refactor key components will only be merged in the next major versions.
+-   Describe what the patch does and why.
+-   Include regression or unit tests when applicable.
+-   Run the relevant C++23 build, test, and formatting checks; use the Axmol CLI or the documented CMake workflow.
+-   Test every platform available to you and report the actual platform/compiler matrix in the pull request. If a platform cannot be tested, say so explicitly [*].
+-   Must not degrade performance, break existing tests, break CI, or introduce avoidable backward incompatibility.
+-   Must compile without warnings in the configurations tested.
+-   New APIs must be easy to use, familiar to Axmol users, documented with Doxygen, and easy to extend and maintain.
+-   Tools must include a README.md describing how to use them.
+-   Keep implementations efficient and avoid duplicating existing code unless the new code deliberately deprecates or replaces it.
+-   Large refactors of key components should be coordinated with maintainers and are generally reserved for the next major version.
 
 [*]: If you don't have access to test your code in all the supported platforms, let us know.
+
+## Copyright and Intellectual Property
+
+By submitting contributions you agree to the Axmol Contributor Agreement.
+
+Source‑file headers state the copyright holder of assigned economic rights (Simdsoft Limited).
+Original author attribution is preserved in Git commit history, CLA signing records, AUTHORS.md and the root `LICENSE` file.
+
+- Newly created project-owned source files should use the current MIT/SPDX header style. They do not need historical attribution that does not apply to the new file:
+
+  ```cpp
+  /****************************************************************************
+   Copyright (c) 2019-present Simdsoft Limited.
+
+   https://axmol.dev/
+
+   SPDX-License-Identifier: MIT
+   ****************************************************************************/
+  #pragma once
+  ```
+- When modifying an existing file, preserve its applicable historical copyright and author notices, and add the current project notice when appropriate.
+- New pull requests must complete CLA signing before being merged. The CLA assigns economic copyright rights for incoming contributions to Simdsoft Limited.
+- Some historical code segments are from former external contributors who are inactive and cannot sign the CLA. Those contributions are licensed under the original MIT license; Simdsoft does not hold assigned copyright ownership over those code segments.
+- The root `LICENSE` lists `Simdsoft Limited and other Axmol contributors` as the overall project copyright holders.
 
 ## About branch management
 

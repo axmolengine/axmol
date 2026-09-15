@@ -1,27 +1,11 @@
 /****************************************************************************
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+ Copyright (c) 2019-present Simdsoft Limited.
 
  https://axmol.dev/
 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
+ SPDX-License-Identifier: MIT
  ****************************************************************************/
 
 #include "axmol/platform/PlatformConfig.h"
@@ -60,6 +44,7 @@ AudioEngineTests::AudioEngineTests()
 #if AX_USE_ALSOFT
     ADD_TEST_CASE(AudioReverbTest);
 #endif
+    ADD_TEST_CASE(AudioIssue3317Test);
     // FIXME: Please keep AudioSwitchStateTest to the last position since this test case doesn't work well on each
     // platforms.
     ADD_TEST_CASE(AudioSwitchStateTest);
@@ -1134,6 +1119,61 @@ std::string AudioIssue16938Test::title() const
 std::string AudioIssue16938Test::subtitle() const
 {
     return "Should heard the entire audio frames";
+}
+
+/////////////////////////////////////////////////////////////////////////
+void AudioIssue3317Test::onEnter()
+{
+    AudioEngineTestDemo::onEnter();
+
+    // Start silently, restore the position after the audio is ready, and restore
+    // the volume on the following frame. This reproduces the reported mismatch
+    // between the app's position and the system player's displayed position.
+    _audioID = AudioEngine::play2d("audio/LuckyDay.opus", true, 0.0f);
+    if (_audioID == AudioEngine::INVALID_AUDIO_ID)
+    {
+        AXLOGE("Failed to play audio/LuckyDay.opus");
+        return;
+    }
+
+    _state = 0;
+    Director::getInstance()->getScheduler()->schedule([this](float) {
+        if (_audioID == AudioEngine::INVALID_AUDIO_ID)
+            return;
+
+        if (_state == 0)
+        {
+            // getDuration() is TIME_UNKNOWN until the audio has been prepared.
+            const float duration = AudioEngine::getDuration(_audioID);
+            if (duration > 0.0f)
+            {
+                if (!AudioEngine::setCurrentTime(_audioID, 50.0f))
+                {
+                    AXLOGE("Failed to set current time for audioId {}, maybe the audio is not ready yet", _audioID);
+                }
+                _state = 1;
+            }
+        }
+        else if (_state == 1)
+        {
+            AudioEngine::setVolume(_audioID, 1.0f);
+            _state = 2;
+        }
+        else
+        {
+            AXLOGD("Current time of audioId {}: {}", _audioID, AudioEngine::getCurrentTime(_audioID));
+        }
+    }, this, 0.0f, false, "restore_current_time");
+}
+
+std::string AudioIssue3317Test::title() const
+{
+    return "Issue 3317 Test";
+}
+
+std::string AudioIssue3317Test::subtitle() const
+{
+    return "Starts muted, seeks to 50 seconds, then logs current time";
 }
 
 /////////////////////////////////////////////////////////////////////////

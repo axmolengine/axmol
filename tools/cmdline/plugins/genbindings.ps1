@@ -1,5 +1,9 @@
-#requires -Version 7.4
-
+# Copyright (c) 2019-present Simdsoft Limited.
+#
+#   https://axmol.dev/
+#
+# SPDX-License-Identifier: MIT
+# requires -Version 7.4
 param(
     [switch]$Verify,
     [string]$ClangSharpRoot = $env:AXMOL_CLANGSHARP_ROOT,

@@ -64,6 +64,7 @@ int GLAD_EGL_EXT_device_openwf = 0;
 int GLAD_EGL_EXT_device_persistent_id = 0;
 int GLAD_EGL_EXT_device_query = 0;
 int GLAD_EGL_EXT_device_query_name = 0;
+int GLAD_EGL_EXT_device_type = 0;
 int GLAD_EGL_EXT_display_alloc = 0;
 int GLAD_EGL_EXT_explicit_device = 0;
 int GLAD_EGL_EXT_gl_colorspace_bt2020_hlg = 0;
@@ -774,6 +775,7 @@ static int glad_egl_find_extensions_egl(EGLDisplay display) {
     GLAD_EGL_EXT_device_persistent_id = glad_egl_has_extension(extensions, "EGL_EXT_device_persistent_id");
     GLAD_EGL_EXT_device_query = glad_egl_has_extension(extensions, "EGL_EXT_device_query");
     GLAD_EGL_EXT_device_query_name = glad_egl_has_extension(extensions, "EGL_EXT_device_query_name");
+    GLAD_EGL_EXT_device_type = glad_egl_has_extension(extensions, "EGL_EXT_device_type");
     GLAD_EGL_EXT_display_alloc = glad_egl_has_extension(extensions, "EGL_EXT_display_alloc");
     GLAD_EGL_EXT_explicit_device = glad_egl_has_extension(extensions, "EGL_EXT_explicit_device");
     GLAD_EGL_EXT_gl_colorspace_bt2020_hlg = glad_egl_has_extension(extensions, "EGL_EXT_gl_colorspace_bt2020_hlg");

@@ -1,27 +1,11 @@
 /****************************************************************************
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+ Copyright (c) 2019-present Simdsoft Limited.
 
  https://axmol.dev/
 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
+ SPDX-License-Identifier: MIT
  ****************************************************************************/
 
 #include "axmol/platform/PlatformConfig.h"
@@ -41,10 +25,10 @@ class AudioEngineTestDemo : public TestCase
 public:
     AudioEngineTestDemo();
 
-    virtual std::string title() const override;
-    virtual void onExit() override;
+    std::string title() const override;
+    void onExit() override;
 
-    virtual void onBackCallback(ax::Object* sender) override;
+    void onBackCallback(ax::Object* sender) override;
 
 protected:
     std::shared_ptr<bool> _isDestroyed;
@@ -57,11 +41,11 @@ public:
 
     virtual ~AudioControlTest();
 
-    virtual bool init() override;
+    bool init() override;
 
-    virtual void update(float dt) override;
+    void update(float dt) override;
 
-    virtual std::string title() const override;
+    std::string title() const override;
 
 private:
     int _audioID;
@@ -85,11 +69,11 @@ public:
 
     virtual ~AudioOpusTest();
 
-    virtual bool init() override;
+    bool init() override;
 
     void onEnter() override;
 
-    virtual std::string title() const override;
+    std::string title() const override;
 
 private:
     ax::Label* _stateLabel = nullptr;
@@ -103,11 +87,11 @@ public:
 
     virtual ~AudioWavTest();
 
-    virtual bool init() override;
+    bool init() override;
 
     void onEnter() override;
 
-    virtual std::string title() const override;
+    std::string title() const override;
 
 private:
     int _audioID = -1;
@@ -125,9 +109,9 @@ public:
 
     virtual ~PlaySimultaneouslyTest();
 
-    virtual bool init() override;
+    bool init() override;
 
-    virtual std::string title() const override;
+    std::string title() const override;
 
 private:
     static const int TEST_COUNT = 10;
@@ -144,12 +128,12 @@ public:
 
     virtual ~AudioProfileTest();
 
-    virtual bool init() override;
+    bool init() override;
 
-    virtual std::string title() const override;
-    virtual std::string subtitle() const override;
+    std::string title() const override;
+    std::string subtitle() const override;
 
-    virtual void update(float dt) override;
+    void update(float dt) override;
 
 private:
     static const int FILE_COUNT = 2;
@@ -170,10 +154,10 @@ public:
 
     virtual ~InvalidAudioFileTest();
 
-    virtual bool init() override;
+    bool init() override;
 
-    virtual std::string title() const override;
-    virtual std::string subtitle() const override;
+    std::string title() const override;
+    std::string subtitle() const override;
 
 private:
 };
@@ -185,9 +169,9 @@ public:
 
     virtual ~LargeAudioFileTest();
 
-    virtual bool init() override;
+    bool init() override;
 
-    virtual std::string title() const override;
+    std::string title() const override;
 
 private:
 };
@@ -197,9 +181,9 @@ class AudioLoadTest : public AudioEngineTestDemo
 public:
     CREATE_FUNC(AudioLoadTest);
 
-    virtual bool init() override;
+    bool init() override;
 
-    virtual std::string title() const override;
+    std::string title() const override;
 };
 
 class AudioIssue18597Test : public AudioEngineTestDemo
@@ -209,10 +193,10 @@ public:
 
     float _time;
 
-    virtual bool init() override;
+    bool init() override;
 
-    virtual std::string title() const override;
-    virtual std::string subtitle() const override;
+    std::string title() const override;
+    std::string subtitle() const override;
 };
 
 class AudioIssue11143Test : public AudioEngineTestDemo
@@ -220,10 +204,10 @@ class AudioIssue11143Test : public AudioEngineTestDemo
 public:
     CREATE_FUNC(AudioIssue11143Test);
 
-    virtual bool init() override;
+    bool init() override;
 
-    virtual std::string title() const override;
-    virtual std::string subtitle() const override;
+    std::string title() const override;
+    std::string subtitle() const override;
 };
 
 class AudioPerformanceTest : public AudioEngineTestDemo
@@ -231,10 +215,10 @@ class AudioPerformanceTest : public AudioEngineTestDemo
 public:
     CREATE_FUNC(AudioPerformanceTest);
 
-    virtual bool init() override;
+    bool init() override;
 
-    virtual std::string title() const override;
-    virtual std::string subtitle() const override;
+    std::string title() const override;
+    std::string subtitle() const override;
 };
 
 class AudioSwitchStateTest : public AudioEngineTestDemo
@@ -243,8 +227,8 @@ public:
     CREATE_FUNC(AudioSwitchStateTest);
 
     void onEnter() override;
-    virtual std::string title() const override;
-    virtual std::string subtitle() const override;
+    std::string title() const override;
+    std::string subtitle() const override;
 };
 
 class AudioSmallFileTest : public AudioEngineTestDemo
@@ -254,8 +238,8 @@ public:
 
     void onEnter() override;
 
-    virtual std::string title() const override;
-    virtual std::string subtitle() const override;
+    std::string title() const override;
+    std::string subtitle() const override;
 };
 
 class AudioSmallFile2Test : public AudioEngineTestDemo
@@ -263,10 +247,10 @@ class AudioSmallFile2Test : public AudioEngineTestDemo
 public:
     CREATE_FUNC(AudioSmallFile2Test);
 
-    virtual void onEnter() override;
+    void onEnter() override;
 
-    virtual std::string title() const override;
-    virtual std::string subtitle() const override;
+    std::string title() const override;
+    std::string subtitle() const override;
 };
 
 class AudioSmallFile3Test : public AudioEngineTestDemo
@@ -274,10 +258,10 @@ class AudioSmallFile3Test : public AudioEngineTestDemo
 public:
     CREATE_FUNC(AudioSmallFile3Test);
 
-    virtual void onEnter() override;
+    void onEnter() override;
 
-    virtual std::string title() const override;
-    virtual std::string subtitle() const override;
+    std::string title() const override;
+    std::string subtitle() const override;
 };
 
 class AudioPauseResumeAfterPlay : public AudioEngineTestDemo
@@ -285,10 +269,10 @@ class AudioPauseResumeAfterPlay : public AudioEngineTestDemo
 public:
     CREATE_FUNC(AudioPauseResumeAfterPlay);
 
-    virtual void onEnter() override;
+    void onEnter() override;
 
-    virtual std::string title() const override;
-    virtual std::string subtitle() const override;
+    std::string title() const override;
+    std::string subtitle() const override;
 };
 
 class AudioIssue16938Test : public AudioEngineTestDemo
@@ -296,10 +280,25 @@ class AudioIssue16938Test : public AudioEngineTestDemo
 public:
     CREATE_FUNC(AudioIssue16938Test);
 
-    virtual void onEnter() override;
+    void onEnter() override;
 
-    virtual std::string title() const override;
-    virtual std::string subtitle() const override;
+    std::string title() const override;
+    std::string subtitle() const override;
+};
+
+class AudioIssue3317Test : public AudioEngineTestDemo
+{
+public:
+    CREATE_FUNC(AudioIssue3317Test);
+
+    void onEnter() override;
+
+    std::string title() const override;
+    std::string subtitle() const override;
+
+private:
+    int _audioID = ax::AudioEngine::INVALID_AUDIO_ID;
+    int _state   = 0;
 };
 
 class AudioPreloadSameFileMultipleTimes : public AudioEngineTestDemo
@@ -307,10 +306,10 @@ class AudioPreloadSameFileMultipleTimes : public AudioEngineTestDemo
 public:
     CREATE_FUNC(AudioPreloadSameFileMultipleTimes);
 
-    virtual void onEnter() override;
+    void onEnter() override;
 
-    virtual std::string title() const override;
-    virtual std::string subtitle() const override;
+    std::string title() const override;
+    std::string subtitle() const override;
 };
 
 class AudioPlayFileInWritablePath : public AudioEngineTestDemo
@@ -318,11 +317,11 @@ class AudioPlayFileInWritablePath : public AudioEngineTestDemo
 public:
     CREATE_FUNC(AudioPlayFileInWritablePath);
 
-    virtual void onEnter() override;
-    virtual void onExit() override;
+    void onEnter() override;
+    void onExit() override;
 
-    virtual std::string title() const override;
-    virtual std::string subtitle() const override;
+    std::string title() const override;
+    std::string subtitle() const override;
 
 private:
     std::vector<std::string> _oldSearchPaths;
@@ -333,11 +332,11 @@ class AudioPlayInFinishedCB : public AudioEngineTestDemo
 public:
     CREATE_FUNC(AudioPlayInFinishedCB);
 
-    virtual void onEnter() override;
-    virtual void onExit() override;
+    void onEnter() override;
+    void onExit() override;
 
-    virtual std::string title() const override;
-    virtual std::string subtitle() const override;
+    std::string title() const override;
+    std::string subtitle() const override;
 
 private:
     void doPlay(std::string_view filename);
@@ -350,11 +349,11 @@ class AudioUncacheInFinishedCB : public AudioEngineTestDemo
 public:
     CREATE_FUNC(AudioUncacheInFinishedCB);
 
-    virtual void onEnter() override;
-    virtual void onExit() override;
+    void onEnter() override;
+    void onExit() override;
 
-    virtual std::string title() const override;
-    virtual std::string subtitle() const override;
+    std::string title() const override;
+    std::string subtitle() const override;
 
 private:
 };

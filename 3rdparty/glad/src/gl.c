@@ -440,6 +440,7 @@ int GLAD_GL_MESAX_texture_stack = 0;
 int GLAD_GL_MESA_framebuffer_flip_x = 0;
 int GLAD_GL_MESA_framebuffer_flip_y = 0;
 int GLAD_GL_MESA_framebuffer_swap_xy = 0;
+int GLAD_GL_MESA_map_buffer_client_pointer = 0;
 int GLAD_GL_MESA_pack_invert = 0;
 int GLAD_GL_MESA_program_binary_formats = 0;
 int GLAD_GL_MESA_resize_buffers = 0;
@@ -668,6 +669,7 @@ PFNGLACTIVESTENCILFACEEXTPROC glad_glActiveStencilFaceEXT = NULL;
 PFNGLACTIVETEXTUREPROC glad_glActiveTexture = NULL;
 PFNGLACTIVETEXTUREARBPROC glad_glActiveTextureARB = NULL;
 PFNGLACTIVEVARYINGNVPROC glad_glActiveVaryingNV = NULL;
+PFNGLADDCLIENTPOINTERRANGEMESAPROC glad_glAddClientPointerRangeMESA = NULL;
 PFNGLALPHAFRAGMENTOP1ATIPROC glad_glAlphaFragmentOp1ATI = NULL;
 PFNGLALPHAFRAGMENTOP2ATIPROC glad_glAlphaFragmentOp2ATI = NULL;
 PFNGLALPHAFRAGMENTOP3ATIPROC glad_glAlphaFragmentOp3ATI = NULL;
@@ -2329,6 +2331,7 @@ PFNGLREADNPIXELSARBPROC glad_glReadnPixelsARB = NULL;
 PFNGLRECTXOESPROC glad_glRectxOES = NULL;
 PFNGLRECTXVOESPROC glad_glRectxvOES = NULL;
 PFNGLREFERENCEPLANESGIXPROC glad_glReferencePlaneSGIX = NULL;
+PFNGLRELEASECLIENTPOINTERRANGEMESAPROC glad_glReleaseClientPointerRangeMESA = NULL;
 PFNGLRELEASEKEYEDMUTEXWIN32EXTPROC glad_glReleaseKeyedMutexWin32EXT = NULL;
 PFNGLRELEASESHADERCOMPILERPROC glad_glReleaseShaderCompiler = NULL;
 PFNGLRENDERGPUMASKNVPROC glad_glRenderGpuMaskNV = NULL;
@@ -5787,6 +5790,11 @@ static void glad_gl_load_GL_MESA_framebuffer_flip_y( GLADuserptrloadfunc load, v
     glad_glFramebufferParameteriMESA = (PFNGLFRAMEBUFFERPARAMETERIMESAPROC) load(userptr, "glFramebufferParameteriMESA");
     glad_glGetFramebufferParameterivMESA = (PFNGLGETFRAMEBUFFERPARAMETERIVMESAPROC) load(userptr, "glGetFramebufferParameterivMESA");
 }
+static void glad_gl_load_GL_MESA_map_buffer_client_pointer( GLADuserptrloadfunc load, void* userptr) {
+    if(!GLAD_GL_MESA_map_buffer_client_pointer) return;
+    glad_glAddClientPointerRangeMESA = (PFNGLADDCLIENTPOINTERRANGEMESAPROC) load(userptr, "glAddClientPointerRangeMESA");
+    glad_glReleaseClientPointerRangeMESA = (PFNGLRELEASECLIENTPOINTERRANGEMESAPROC) load(userptr, "glReleaseClientPointerRangeMESA");
+}
 static void glad_gl_load_GL_MESA_resize_buffers( GLADuserptrloadfunc load, void* userptr) {
     if(!GLAD_GL_MESA_resize_buffers) return;
     glad_glResizeBuffersMESA = (PFNGLRESIZEBUFFERSMESAPROC) load(userptr, "glResizeBuffersMESA");
@@ -8213,6 +8221,7 @@ static int glad_gl_find_extensions_gl(void) {
     GLAD_GL_MESA_framebuffer_flip_x = glad_gl_has_extension(exts, exts_i, "GL_MESA_framebuffer_flip_x");
     GLAD_GL_MESA_framebuffer_flip_y = glad_gl_has_extension(exts, exts_i, "GL_MESA_framebuffer_flip_y");
     GLAD_GL_MESA_framebuffer_swap_xy = glad_gl_has_extension(exts, exts_i, "GL_MESA_framebuffer_swap_xy");
+    GLAD_GL_MESA_map_buffer_client_pointer = glad_gl_has_extension(exts, exts_i, "GL_MESA_map_buffer_client_pointer");
     GLAD_GL_MESA_pack_invert = glad_gl_has_extension(exts, exts_i, "GL_MESA_pack_invert");
     GLAD_GL_MESA_program_binary_formats = glad_gl_has_extension(exts, exts_i, "GL_MESA_program_binary_formats");
     GLAD_GL_MESA_resize_buffers = glad_gl_has_extension(exts, exts_i, "GL_MESA_resize_buffers");
@@ -8707,6 +8716,7 @@ int gladLoadGLUserPtr( GLADuserptrloadfunc load, void *userptr) {
     glad_gl_load_GL_KHR_parallel_shader_compile(load, userptr);
     glad_gl_load_GL_KHR_robustness(load, userptr);
     glad_gl_load_GL_MESA_framebuffer_flip_y(load, userptr);
+    glad_gl_load_GL_MESA_map_buffer_client_pointer(load, userptr);
     glad_gl_load_GL_MESA_resize_buffers(load, userptr);
     glad_gl_load_GL_MESA_window_pos(load, userptr);
     glad_gl_load_GL_NVX_conditional_render(load, userptr);
@@ -8930,7 +8940,9 @@ static void* glad_gl_dlopen_handle(void) {
         "libGL-1.so",
   #endif
         "libGL.so.1",
-        "libGL.so"
+        "libGL.so",
+        "libEGL.so.1",
+        "libEGL.so"
     };
 #endif
 
@@ -8953,6 +8965,9 @@ static struct _glad_gl_userptr glad_gl_build_userptr(void *handle) {
 #else
     userptr.gl_get_proc_address_ptr =
         (GLADglprocaddrfunc) glad_dlsym_handle(handle, "glXGetProcAddressARB");
+    if (!userptr.gl_get_proc_address_ptr)
+        userptr.gl_get_proc_address_ptr =
+            (GLADglprocaddrfunc) glad_dlsym_handle(handle, "eglGetProcAddress");
 #endif
 
     return userptr;

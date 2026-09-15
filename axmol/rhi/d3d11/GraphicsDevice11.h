@@ -1,25 +1,9 @@
 /****************************************************************************
- Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+ Copyright (c) 2019-present Simdsoft Limited.
 
  https://axmol.dev/
 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
+ SPDX-License-Identifier: MIT
  ****************************************************************************/
 #pragma once
 
@@ -70,6 +54,8 @@ public:
      */
     Buffer* createBuffer(size_t size, BufferType type, BufferUsage usage, const void* initial) override;
 
+    Buffer* createBuffer(const BufferDesc& desc, const void* initial) override;
+
     /**
      * Create a Texture object.
      * @param descriptor Specifies texture description.
@@ -86,11 +72,12 @@ public:
     DepthStencilState* createDepthStencilState() override;
 
     /**
-     * Create a RenderPipeline object.
+     * Create a GraphicsPipeline object.
      * @param descriptor Specifies render pipeline description.
-     * @return A RenderPipeline object.
+     * @return A GraphicsPipeline object.
      */
-    RenderPipeline* createRenderPipeline() override;
+    GraphicsPipeline* createGraphicsPipeline() override;
+    ComputePipeline* createComputePipeline(Program* program) override;
 
     /**
      * Create an auto released Program.
@@ -99,6 +86,8 @@ public:
      * @return A Program instance.
      */
     Program* createProgram(Data vsData, Data fsData) override;
+
+    Program* createComputeProgram(Data csData) override;
 
     VertexLayout* createVertexLayout(VertexLayoutDesc&& desc) override;
 

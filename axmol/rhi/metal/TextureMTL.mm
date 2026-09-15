@@ -1,26 +1,10 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+ Copyright (c) 2019-present Simdsoft Limited.
 
  https://axmol.dev/
 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
+ SPDX-License-Identifier: MIT
  ****************************************************************************/
 
 #include "axmol/rhi/metal/TextureMTL.h"
@@ -157,6 +141,43 @@ void TextureImpl::updateCompressedData(const void* data,
     updateCompressedSubData(0, 0, width, height, dataSize, level, data, layerIndex);
 }
 
+void TextureImpl::updateData3D(const void* data, int width, int height, int depth, int level)
+{
+    updateSubData3D(0, 0, 0, width, height, depth, level, data);
+}
+
+void TextureImpl::updateSubData3D(int xoffset,
+                                  int yoffset,
+                                  int zoffset,
+                                  int width,
+                                  int height,
+                                  int depth,
+                                  int level,
+                                  const void* data)
+{
+    ensureNativeTexture();
+
+    if (!data) [[unlikely]]
+        return;
+
+    MTLRegion region = {
+        {(NSUInteger)xoffset, (NSUInteger)yoffset, (NSUInteger)zoffset},  // MTLOrigin
+        {(NSUInteger)width, (NSUInteger)height, (NSUInteger)depth}        // MTLSize
+    };
+
+    auto bytesPerRow   = RHIUtils::computeRowPitch(_desc.pixelFormat, static_cast<uint32_t>(width));
+    auto bytesPerImage = bytesPerRow * static_cast<uint32_t>(height);
+    [_mtlTexture replaceRegion:region
+                   mipmapLevel:level
+                         slice:0
+                     withBytes:data
+                   bytesPerRow:bytesPerRow
+                 bytesPerImage:bytesPerImage];
+
+    if (shouldGenMipmaps(level))
+        generateMipmaps();
+}
+
 void TextureImpl::updateCompressedSubData(int xoffset,
                                           int yoffset,
                                           int width,
@@ -226,6 +247,19 @@ void TextureImpl::ensureNativeTexture()
         textureDesc = [MTLTextureDescriptor textureCubeDescriptorWithPixelFormat:pixelFormat
                                                                             size:_desc.width
                                                                        mipmapped:needMipmaps];
+        break;
+    case TextureType::TEXTURE_3D:
+        // MTLTextureDescriptor has no texture3DDescriptorWithPixelFormat
+        // convenience method; create a 2D descriptor and promote it to a 3D
+        // texture via the mutable textureType/depth properties.
+        textureDesc             = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:pixelFormat
+                                                                         width:_desc.width
+                                                                        height:_desc.height
+                                                                     mipmapped:needMipmaps];
+        textureDesc.textureType = MTLTextureType3D;
+        textureDesc.depth       = _desc.depth;
+        if (_desc.mipLevels > 1)
+            textureDesc.mipmapLevelCount = _desc.mipLevels;
         break;
     default:
         return;

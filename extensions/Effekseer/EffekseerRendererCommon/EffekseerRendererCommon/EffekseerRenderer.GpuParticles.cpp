@@ -210,6 +210,7 @@ GpuParticleSystem::Block GpuParticleSystem::BlockAllocator::Allocate(uint32_t si
 			{
 				result = Block{block.Offset, size};
 				block.Offset += size;
+				block.Size -= size;
 				break;
 			}
 		}
@@ -237,19 +238,22 @@ void GpuParticleSystem::BlockAllocator::Deallocate(Block releasingBlock)
 				block.Size += BufferBlocks[i + 1].Size;
 				BufferBlocks.erase(BufferBlocks.begin() + i + 1);
 			}
-			break;
+			return;
 		}
 		else if (newBlock.Offset + newBlock.Size == block.Offset)
 		{
-			block.Offset -= newBlock.Size;
-			break;
+			block.Offset = newBlock.Offset;
+			block.Size += newBlock.Size;
+			return;
 		}
 		else if (newBlock.Offset < block.Offset)
 		{
 			BufferBlocks.insert(BufferBlocks.begin() + i, newBlock);
-			break;
+			return;
 		}
 	}
+
+	BufferBlocks.push_back(newBlock);
 }
 
 GpuParticleSystem::GpuParticleSystem(Renderer* renderer)

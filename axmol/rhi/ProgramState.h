@@ -1,32 +1,17 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+ Copyright (c) 2019-present Simdsoft Limited.
 
  https://axmol.dev/
 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
+ SPDX-License-Identifier: MIT
  ****************************************************************************/
 
 #pragma once
 
 #include <vector>
 #include <string>
+#include <string_view>
 #include <unordered_map>
 #include <stdint.h>
 #include <functional>
@@ -62,6 +47,20 @@ struct TextureBinding
     }
 };
 
+struct StorageBufferBinding
+{
+    int slot{-1};
+    rhi::Buffer* buffer{nullptr};
+    BufferAccess access{BufferAccess::READ_ONLY};
+
+    void reset()
+    {
+        slot   = -1;
+        buffer = nullptr;
+        access = BufferAccess::READ_ONLY;
+    }
+};
+
 /**
  * Store texture binding information.
  * OpenGL can use 1 location (logic var location) to store multi texture units, in shader is 'uniform sampler2D texs[4]'
@@ -89,6 +88,26 @@ struct AX_DLL TextureBindingSet
     int runtimeLocation = -1;
     tlx::pod_vector<int> slots;
     mutable tlx::pod_vector<rhi::Texture*> texs;
+};
+
+struct AX_DLL StorageBufferBindingSet
+{
+    StorageBufferBindingSet() = default;
+    StorageBufferBindingSet(const StorageBufferBindingSet&);
+    StorageBufferBindingSet(StorageBufferBindingSet&& rhs) noexcept;
+    ~StorageBufferBindingSet();
+
+    StorageBufferBindingSet& operator=(const StorageBufferBindingSet& other) noexcept;
+    StorageBufferBindingSet& operator=(StorageBufferBindingSet&& other) noexcept;
+
+    void assign(const StorageBufferBindingSet& other);
+    void swap(StorageBufferBindingSet& other);
+    void setBuffer(int slot, rhi::Buffer* buffer, BufferAccess access);
+    void releaseBuffer();
+
+    int runtimeLocation = -1;
+    rhi::Buffer* buffer = nullptr;
+    BufferAccess access = BufferAccess::READ_ONLY;
 };
 
 /**
@@ -130,6 +149,9 @@ public:
      * @param size Specifies the uniform data size.
      */
     void setUniform(const rhi::UniformLocation& uniformLocation, const void* data, size_t size);
+    void setUniformBlock(int binding, const void* data, size_t size);
+    /** Writes an active uniform block selected by shader stage and source block name. */
+    bool setUniformBlock(ShaderStage stage, std::string_view blockName, const void* data, size_t size);
 
     /**
      * Get uniform location in given uniform name.
@@ -200,6 +222,10 @@ public:
                          std::span<int> slot,
                          std::span<rhi::Texture*> texture);
 
+    void setStorageBuffer(int binding, rhi::Buffer* buffer, BufferAccess access = BufferAccess::READ_ONLY);
+    void setSampler(const rhi::SamplerLocation& samplerLocation, const SamplerDesc& desc);
+    void setSampler(std::string_view name, const SamplerDesc& desc);
+
     /**
      * Get vertex texture informations
      * @return Vertex texture informations. Key is the texture location, Value store the texture informations
@@ -208,6 +234,15 @@ public:
     {
         return _textureBindingSets;
     }
+
+    inline const std::unordered_map<int, StorageBufferBindingSet>& getStorageBufferBindingSets() const
+    {
+        return _storageBufferBindingSets;
+    }
+
+    inline const std::unordered_map<int, SamplerId>& getSamplerOverrides() const { return _samplerOverrides; }
+
+    SamplerId getSamplerOverride(int binding) const;
 
     const tlx::byte_buffer& getUniformBuffer() const { return _uniformBuffer; }
 
@@ -315,6 +350,8 @@ protected:
     tlx::byte_buffer _uniformBuffer;
 
     std::unordered_map<int, TextureBindingSet> _textureBindingSets;
+    std::unordered_map<int, StorageBufferBindingSet> _storageBufferBindingSets;
+    std::unordered_map<int, SamplerId> _samplerOverrides;
 
     std::unordered_map<std::string, std::string> _autoBindings;
 

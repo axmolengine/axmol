@@ -2,27 +2,11 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+Copyright (c) 2019-present Simdsoft Limited.
 
 https://axmol.dev/
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
+SPDX-License-Identifier: MIT
 
 The RenderView for win32,linux,macos,wasm
 
@@ -1025,11 +1009,24 @@ bool RenderView::initWithRect(std::string_view viewName, const ax::Rect& rect, f
 #if AX_GLES_PROFILE
         glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
         glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
+#    if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+        // Prefer GLES 3.1 for compute and fall back to the engine minimum.
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+#    else
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, AX_GLES_PROFILE / AX_GLES_PROFILE_DEN);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, (AX_GLES_PROFILE % AX_GLES_PROFILE_DEN) / 10);
+#    endif
 #else
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);  // We want OpenGL 3.3
+#    if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
+        // Prefer a compute-capable context. Window creation retries with the
+        // engine minimum (GL 3.3) below when GL 4.3 is unavailable.
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+#    else
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+#    endif
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // We don't want the old OpenGL
 #endif
     }
@@ -1066,9 +1063,33 @@ bool RenderView::initWithRect(std::string_view viewName, const ax::Rect& rect, f
     glfwWindowHint(GLFW_SCALE_TO_MONITOR, _renderScaleMode == RenderScaleMode::Physical ? GLFW_TRUE : GLFW_FALSE);
 #endif
 
-    _mainWindow =
-        glfwCreateWindow(static_cast<int>(std::lround(requestWinSize.width)),
-                         static_cast<int>(std::lround(requestWinSize.height)), _viewName.c_str(), _monitor, nullptr);
+    const auto createMainWindow = [&]() {
+        return glfwCreateWindow(static_cast<int>(std::lround(requestWinSize.width)),
+                                static_cast<int>(std::lround(requestWinSize.height)), _viewName.c_str(), _monitor,
+                                nullptr);
+    };
+
+    _mainWindow = createMainWindow();
+#if AX_ENABLE_GL && !AX_GLES_PROFILE && \
+    (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
+    if (!_mainWindow && fallbackGL)
+    {
+        AXLOGD("OpenGL 4.3 context is unavailable; falling back to OpenGL 3.3");
+        _glfwError.clear();
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        _mainWindow = createMainWindow();
+    }
+#elif AX_ENABLE_GL && AX_GLES_PROFILE && AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+    if (!_mainWindow && fallbackGL)
+    {
+        AXLOGD("OpenGL ES 3.1 context is unavailable; falling back to OpenGL ES 3.0");
+        _glfwError.clear();
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+        _mainWindow = createMainWindow();
+    }
+#endif
     if (_mainWindow == nullptr)
     {
         std::string message = "Can't create window";

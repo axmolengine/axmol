@@ -1,25 +1,9 @@
 /****************************************************************************
- Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+ Copyright (c) 2019-present Simdsoft Limited.
 
  https://axmol.dev/
 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
+ SPDX-License-Identifier: MIT
  ****************************************************************************/
 #include "axmol/rhi/d3d11/Texture11.h"
 #include "axmol/rhi/d3d11/GraphicsDevice11.h"
@@ -208,6 +192,44 @@ void TextureImpl::updateSubData(int xoffset,
         generateMipmaps(context);
 }
 
+void TextureImpl::updateData3D(const void* data, int width, int height, int depth, int level)
+{
+    updateSubData3D(0, 0, 0, width, height, depth, level, data);
+}
+
+void TextureImpl::updateSubData3D(int xoffset,
+                                  int yoffset,
+                                  int zoffset,
+                                  int width,
+                                  int height,
+                                  int depth,
+                                  int level,
+                                  const void* data)
+{
+    assert(_desc.textureType == TextureType::TEXTURE_3D);
+    ensureNativeTexture();
+    if (!data) [[unlikely]]
+        return;
+
+    D3D11_BOX box{};
+    box.left   = static_cast<UINT>(xoffset);
+    box.top    = static_cast<UINT>(yoffset);
+    box.front  = static_cast<UINT>(zoffset);
+    box.right  = static_cast<UINT>(xoffset + width);
+    box.bottom = static_cast<UINT>(yoffset + height);
+    box.back   = static_cast<UINT>(zoffset + depth);
+
+    auto rowPitch   = RHIUtils::computeRowPitch(_desc.pixelFormat, static_cast<uint32_t>(width));
+    UINT slicePitch = rowPitch * static_cast<UINT>(height);
+
+    auto context     = static_cast<GraphicsDeviceImpl*>(axdrv)->getContext();
+    UINT subresource = D3D11CalcSubresource(level, 0, _desc.mipLevels);
+    context->UpdateSubresource(_nativeTexture, subresource, &box, data, rowPitch, slicePitch);
+
+    if (shouldGenMipmaps(level))
+        generateMipmaps(context);
+}
+
 void TextureImpl::updateCompressedSubData(int xoffset,
                                           int yoffset,
                                           int width,
@@ -270,6 +292,52 @@ void TextureImpl::ensureNativeTexture()
 {
     if (_nativeTexture)
         return;
+
+    auto fmtInfo = dxutils::toDxgiFormatInfo(_desc.pixelFormat);
+    assert(fmtInfo);
+    if (fmtInfo->format == DXGI_FORMAT_UNKNOWN)
+    {
+        AXLOGE("axmol: D3D not support pixel format: {}", (int)_desc.pixelFormat);
+        return;
+    }
+
+    if (_desc.textureType == TextureType::TEXTURE_3D)
+    {
+        D3D11_TEXTURE3D_DESC texDesc{};
+        texDesc.Width     = _desc.width;
+        texDesc.Height    = _desc.height;
+        texDesc.Depth     = _desc.depth;
+        texDesc.MipLevels = _desc.mipLevels;
+        texDesc.Format    = fmtInfo->format;
+        texDesc.Usage     = D3D11_USAGE_DEFAULT;
+        texDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+        if (_desc.mipLevels == 0)
+        {
+            texDesc.MiscFlags |= D3D11_RESOURCE_MISC_GENERATE_MIPS;
+            texDesc.BindFlags |= D3D11_BIND_RENDER_TARGET;
+        }
+
+        ComPtr<ID3D11Texture3D> texture;
+        HRESULT hr = _device->CreateTexture3D(&texDesc, nullptr, texture.GetAddressOf());
+        if (FAILED(hr) || !texture)
+            return;
+
+        D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+        srvDesc.Format                    = fmtInfo->fmtSrv;
+        srvDesc.ViewDimension             = D3D11_SRV_DIMENSION_TEXTURE3D;
+        srvDesc.Texture3D.MipLevels       = -1;
+        srvDesc.Texture3D.MostDetailedMip = 0;
+
+        ComPtr<ID3D11ShaderResourceView> srv;
+        hr = _device->CreateShaderResourceView(texture.Get(), &srvDesc, srv.GetAddressOf());
+        if (FAILED(hr) || !srv)
+            return;
+
+        _nativeTexture.resource = texture.Detach();
+        _nativeTexture.srv      = srv.Detach();
+        return;
+    }
+
     D3D11_TEXTURE2D_DESC texDesc{};
     translateTexDesc(_desc, texDesc);
 
@@ -279,14 +347,6 @@ void TextureImpl::ensureNativeTexture()
     {  // means we must invoke generateMipmaps by GPU
         texDesc.MiscFlags |= D3D11_RESOURCE_MISC_GENERATE_MIPS;
         texDesc.BindFlags |= D3D11_BIND_RENDER_TARGET;
-    }
-
-    auto fmtInfo = dxutils::toDxgiFormatInfo(_desc.pixelFormat);
-    assert(fmtInfo);
-    if (fmtInfo->format == DXGI_FORMAT_UNKNOWN)
-    {
-        AXLOGE("axmol: D3D not support pixel format: {}", (int)_desc.pixelFormat);
-        return;
     }
 
     texDesc.Format = fmtInfo->format;
