@@ -89,7 +89,7 @@ bool MultiTouchTest::init()
         multiTouchButton->setTitleFontSize(20.0f);
         multiTouchButton->setPosition(VisibleRect::bottom() + Vec2(150.0f, 50.0f));
         multiTouchButton->setTitleText(InputSystem::getInstance()->isMultiTouchEnabled() ? "Multi-touch: ON"
-                                                                                          : "Multi-touch: OFF");
+                                                                                         : "Multi-touch: OFF");
         multiTouchButton->addTouchEventListener([multiTouchButton](Object*, ui::Widget::TouchEventType type) {
             if (type == ui::Widget::TouchEventType::ENDED)
             {
