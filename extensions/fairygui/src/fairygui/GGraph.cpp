@@ -143,10 +143,11 @@ void GGraph::updateShape()
         {
             if (_lineSize > 0)
                 _shape->drawSolidCornerRect(Vec2(0, 0), Vec2(_size.width, _size.height), _fillColor, _lineColor,
-                                            _lineSize*2, _cornerRadius[0], _cornerRadius[1], _cornerRadius[2], _cornerRadius[3]);
+                                            _lineSize * 2, _cornerRadius[0], _cornerRadius[1], _cornerRadius[2],
+                                            _cornerRadius[3]);
 
             else
-                _shape->drawCornerRect(Vec2(0, 0), Vec2(_size.width, _size.height), _lineColor, _lineSize*2,
+                _shape->drawCornerRect(Vec2(0, 0), Vec2(_size.width, _size.height), _lineColor, _lineSize * 2,
                                        _cornerRadius[0], _cornerRadius[1], _cornerRadius[2], _cornerRadius[3]);
         }
         else if (_lineSize > 0)
@@ -169,8 +170,8 @@ void GGraph::updateShape()
     {
         if (_lineSize > 0)
         {
-            _shape->drawCircle(Vec2(_size.width / 2, _size.height / 2), _size.width / 2 - _lineSize/2, 0, 360, false, 1,
-                               _size.height / _size.width, _lineColor, _lineSize*2);
+            _shape->drawCircle(Vec2(_size.width / 2, _size.height / 2), _size.width / 2 - _lineSize / 2, 0, 360, false,
+                               1, _size.height / _size.width, _lineColor, _lineSize * 2);
         }
         _shape->drawSolidCircle(Vec2(_size.width / 2, _size.height / 2), _size.width / 2, 0, 360, 1,
                                 _size.height / _size.width, _fillColor);
@@ -178,8 +179,7 @@ void GGraph::updateShape()
     }
     case 3:
     {
-        _shape->drawPolygon(_polygonPoints->data(), (int)_polygonPoints->size(), _fillColor, _lineSize*2,
-                            _lineColor);
+        _shape->drawPolygon(_polygonPoints->data(), (int)_polygonPoints->size(), _fillColor, _lineSize * 2, _lineColor);
         break;
     }
 
@@ -210,7 +210,7 @@ void GGraph::updateShape()
             angle += deltaAngle;
         }
 
-        _shape->drawPolygon(_polygonPoints->data(), (int)_polygonPoints->size(), _fillColor, _lineSize * 2.0f,
+        _shape->drawPolygon(_polygonPoints->data(), (int)_polygonPoints->size(), _fillColor, _lineSize * 2,
                             _lineColor);
 
         break;
