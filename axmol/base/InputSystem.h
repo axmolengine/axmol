@@ -55,6 +55,18 @@ public:
      */
     static InputSystem* getInstance();
     static void destroyInstance();
+
+    /*
+     * @brief Enable or disable multi-touch support.
+     * @param enabled True to enable multi-touch, false to disable.
+     */
+    void setMultiTouchEnabled(bool enabled) { _multiTouchEnabled = enabled; }
+
+    /*
+     * @brief Returns whether multi-touch support is enabled.
+     */
+    bool isMultiTouchEnabled() const { return _multiTouchEnabled; }
+
     /**
      * @brief Unified bridging utility to extract a node's UI bounding rect in native OS window coordinates.
      */
@@ -254,6 +266,7 @@ protected:
     PointerEvent _scrollEvent{};
 
     bool _interactive{true};
+    bool _multiTouchEnabled{true};
 
     ax::IMEKeyboardNotificationInfo _cachedKeyboardNotifInfo;
 
