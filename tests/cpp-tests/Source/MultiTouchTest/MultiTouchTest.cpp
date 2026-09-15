@@ -23,6 +23,7 @@
  ****************************************************************************/
 
 #include "MultiTouchTest.h"
+#include "axmol/ui/Button.h"
 
 using namespace ax;
 
@@ -83,6 +84,21 @@ bool MultiTouchTest::init()
         auto title = Label::createWithSystemFont("Please touch the screen!", "", 24);
         title->setPosition(VisibleRect::top() + Vec2(0.0f, -40.0f));
         addChild(title);
+
+        auto multiTouchButton = ui::Button::create();
+        multiTouchButton->setTitleFontSize(20.0f);
+        multiTouchButton->setPosition(VisibleRect::bottom() + Vec2(150.0f, 50.0f));
+        multiTouchButton->setTitleText(InputSystem::getInstance()->isMultiTouchEnabled() ? "Multi-touch: ON"
+                                                                                          : "Multi-touch: OFF");
+        multiTouchButton->addTouchEventListener([multiTouchButton](Object*, ui::Widget::TouchEventType type) {
+            if (type == ui::Widget::TouchEventType::ENDED)
+            {
+                const bool enabled = !InputSystem::getInstance()->isMultiTouchEnabled();
+                InputSystem::getInstance()->setMultiTouchEnabled(enabled);
+                multiTouchButton->setTitleText(enabled ? "Multi-touch: ON" : "Multi-touch: OFF");
+            }
+        });
+        addChild(multiTouchButton);
 
         return true;
     }
