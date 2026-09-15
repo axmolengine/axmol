@@ -351,8 +351,8 @@ public:
 
     DrawNodeCornerRectTest();
 
-    virtual std::string title() const override;
-    virtual std::string subtitle() const override;
+    std::string title() const override;
+    std::string subtitle() const override;
 };
 
 class DrawNodeSolidCornerRectTest : public DrawNodeBaseTest
@@ -362,8 +362,8 @@ public:
 
     DrawNodeSolidCornerRectTest();
 
-    virtual std::string title() const override;
-    virtual std::string subtitle() const override;
+    std::string title() const override;
+    std::string subtitle() const override;
 };
 
 class DrawNodeSolidCircleTest : public DrawNodeBaseTest
