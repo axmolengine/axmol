@@ -361,6 +361,7 @@ $Global:is_win_family = $Global:is_winrt -or $Global:is_win32
 $Global:is_darwin_embed_family = $Global:is_ios -or $Global:is_tvos -or $Global:is_watchos
 $Global:is_darwin_family = $Global:is_mac -or $Global:is_darwin_embed_family
 $Global:is_gh_act = "$env:GITHUB_ACTIONS" -eq 'true'
+$Global:xcode_ver = $null
 
 $Script:cmake_ver = ''
 
@@ -1563,6 +1564,7 @@ function setup_xcode() {
     if (!$xcode_prog) {
         throw "The command 'xcodebuild' not work, if you confirm Xcode was installed on this computer, please execute 'sudo xcode-select -switch /Applications/Xcode.app' and try again"
     }
+    return $xcode_ver
 }
 
 # google gn build system, current windows only for build angleproject/dawn on windows
@@ -1754,10 +1756,12 @@ function preprocess_osx() {
         $arch = 'x86_64'
     }
 
-    $outputOptions += "-DCMAKE_OSX_ARCHITECTURES=$arch"
     if ($Global:target_minsdk) {
         $outputOptions += "-DCMAKE_OSX_DEPLOYMENT_TARGET=$Global:target_minsdk"
     }
+
+    $outputOptions += "-DCMAKE_OSX_ARCHITECTURES=$arch"
+    
     return , $outputOptions
 }
 
@@ -1897,6 +1901,14 @@ elseif ($Global:is_android) {
 elseif ($Global:is_wasm) {
     $ninja_prog = setup_ninja
     . setup_emsdk
+}
+elseif ($Global:is_darwin_family) {
+    $Global:xcode_ver = setup_xcode
+    if (([VersionEx]$xcode_ver -ge [VersionEx]'27.0') -and ([VersionEx]$Global:target_minsdk -lt [VersionEx]'12.0')) {
+        $old_min_sdk = $Global:target_minsdk
+        $Global:target_minsdk = '12.0'
+        $1k.println("Xcode $xcode_ver is >= 27.0, forcing target_minsdk from $old_min_sdk to $Global:target_minsdk")
+    }
 }
 
 $is_host_target = $Global:is_win32 -or $Global:is_linux -or $Global:is_mac
@@ -2078,10 +2090,6 @@ if (!$setupOnly) {
 
                 if ($using_ninja -and $Global:is_android) {
                     $CONFIG_ALL_OPTIONS += "-DCMAKE_MAKE_PROGRAM=$ninja_prog"
-                }
-
-                if ($cmake_generator -eq 'Xcode') {
-                    setup_xcode
                 }
             }
 
