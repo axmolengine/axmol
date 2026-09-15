@@ -1619,7 +1619,6 @@ void DrawNode::_drawPie(const Vec2& center,
             _drawPolygon(_vertices.data(), n, fillColor, Color(), true, 0, false);
             _drawPoly(_vertices.data(), n - 2, false, borderColor, thickness, true);
             break;
-            break;
         case DrawMode::Outline:
             _vertices[n++] = center;
             _vertices[n++] = _vertices[0];
