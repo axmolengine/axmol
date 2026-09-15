@@ -33,7 +33,7 @@ Vec2 vertices1[] = {
     {126.500000f, 74.125000f},  {110.500000f, 86.625000f},  {127.750000f, 85.125000f},  {135.250000f, 91.125000f},
     {135.250000f, 97.875000f},  {124.000000f, 93.875000f},  {115.500000f, 100.875000f}, {115.500000f, 111.875000f},
     {135.250000f, 108.625000f}, {151.000000f, 124.125000f}, {90.500000f, 131.875000f},  {113.250000f, 120.875000f},
-    {88.000000f, 116.875000f},  {106.000000f, 103.875000f}, {88.000000f, 97.875000f}};
+    {88.000000f, 116.875000f},  {106.000000f, 103.875000f}, {88.000000f, 97.875000f} };
 
 Vec2 vertices2[] = {
     {290.250000f, 98.1250000f}, {235.000000f, 90.8750000f}, {270.500000f, 109.875000f}, {235.000000f, 119.125000f},
@@ -42,7 +42,7 @@ Vec2 vertices2[] = {
     {300.000000f, 211.125015f}, {333.750000f, 211.125015f}, {368.250000f, 206.625000f}, {377.000000f, 178.125000f},
     {421.750000f, 170.125000f}, {416.250000f, 115.375000f}, {391.250000f, 157.875000f}, {338.500000f, 131.625000f},
     {362.750000f, 131.625000f}, {362.750000f, 106.875000f}, {306.500000f, 119.125000f}, {324.250000f, 85.1250000f},
-    {227.500000f, 61.8750000}};
+    {227.500000f, 61.8750000} };
 
 Vec2 vertices21[] = {
     {290.250000f, 98.1250000f}, {235.000000f, 90.8750000f}, {270.500000f, 109.875000f}, {235.000000f, 119.125000f},
@@ -51,7 +51,7 @@ Vec2 vertices21[] = {
     {300.000000f, 211.125015f}, {333.750000f, 211.125015f}, {368.250000f, 206.625000f}, {377.000000f, 178.125000f},
     {421.750000f, 170.125000f}, {416.250000f, 115.375000f}, {391.250000f, 157.875000f}, {338.500000f, 131.625000f},
     {362.750000f, 131.625000f}, {362.750000f, 106.875000f}, {306.500000f, 119.125000f}, {324.250000f, 85.1250000f},
-    {227.500000f, 61.8750000}};
+    {227.500000f, 61.8750000} };
 
 Vec2 vertices24[] = {
     {45.750000f, 144.375000f},  {75.500000f, 136.875000f},  {75.500000f, 159.125000f},  {100.250000f, 161.375000f},
@@ -1313,7 +1313,7 @@ float verticesFB[] = {
     16.470f, 6.004f,  16.340f, 5.647f,  16.170f, 5.322f,  16.050f, 5.134f,  15.880f, 4.893f,  15.670f,
     4.617f,  15.430f, 4.323f,  15.200f, 4.030f,  14.970f, 3.755f,  14.760f, 3.515f,  14.690f, 3.464f,
     14.540f, 3.373f,  14.330f, 3.236f,  14.050f, 3.047f,  13.730f, 2.800f,  13.360f, 2.489f,  12.950f,
-    2.107f,  12.520f, 1.649f,  0.842f,  1.649f,  27.220f, 1.649f,  27.220f, 1.052f};
+    2.107f,  12.520f, 1.649f,  0.842f,  1.649f,  27.220f, 1.649f,  27.220f, 1.052f };
 
 
 static Vec2 horse[] = {
@@ -1389,6 +1389,9 @@ static Vec2 spider[] = {
 
 DrawNodeTests::DrawNodeTests()
 {
+    ADD_TEST_CASE(DrawNodeCornerRectTest);
+    ADD_TEST_CASE(DrawNodeSolidCornerRectTest);
+
     ADD_TEST_CASE(DrawNodeCircleTest);
     ADD_TEST_CASE(DrawNodeSolidCircleTest);
     ADD_TEST_CASE(DrawNodePolygonTest);
@@ -2061,23 +2064,27 @@ void DrawNodePieTest::update(float dt)
 
     // Filled
     drawNode->drawPie(VisibleRect::center() - Vec2(190.0f, -35.0f), 40, _localeRotation, _angelStart, _angelEnd, 1.0f,
-                      1.0f, Color::red, Color::blue, drawNode->DrawMode::Fill, thickness);
+                      1.0f, Color::red, Color::blue, DrawNode::DrawMode::Fill, thickness);
 
-    // Outlined
+    // Outline
     drawNode->drawPie(VisibleRect::center() - Vec2(95.0f, -35.0f), 40, _localeRotation, _angelStart, _angelEnd, 1.0f,
-                      1.0f, Color(), Color::blue, drawNode->DrawMode::Outline, thickness);
+                      1.0f, Color(), Color::blue, DrawNode::DrawMode::Outline, thickness);
 
     // Line
     drawNode->drawPie(VisibleRect::center() + Vec2(0.0f, 35.0f), 40, _localeRotation, _angelStart, _angelEnd, 1.0f,
-                      1.0f, Color(), Color::blue, drawNode->DrawMode::Line, thickness);
+                      1.0f, Color(), Color::blue, DrawNode::DrawMode::Line, thickness);
 
     //  Semi
     drawNode->drawPie(VisibleRect::center() + Vec2(95.0f, 35.0f), 40, _localeRotation, _angelStart, _angelEnd, 1.0f,
-                      1.0f, Color(), Color::blue, drawNode->DrawMode::Semi, thickness);
+                      1.0f, Color(), Color::blue, DrawNode::DrawMode::Semi, thickness);
 
     // Semi (Filled)
     drawNode->drawPie(VisibleRect::center() + Vec2(190.0f, 35.0f), 40, _localeRotation, _angelStart, _angelEnd, 1.0f,
-                      1.0f, Color::red, Color::blue, drawNode->DrawMode::Semi, thickness);
+                      1.0f, Color::red, Color::blue, DrawNode::DrawMode::Semi, thickness);
+
+    // FillWithLine
+    drawNode->drawPie(VisibleRect::center() + Vec2(-190.0f, -35.0f), 40, _localeRotation, _angelStart, _angelEnd, 1.0f,
+                      1.0f, Color::red, Color::blue, DrawNode::DrawMode::FillWithLine, thickness);
 }
 
 void DrawNodePieTest::onEnter()
@@ -2092,7 +2099,7 @@ string DrawNodePieTest::title() const
 
 string DrawNodePieTest::subtitle() const
 {
-    return "Filled, Outlined, Line, Semi, Semi (Filled)";
+    return "Fill, Outline, Line, Semi, Semi (filled), FillWithLine";
 }
 
 DrawNodeMethodsTest::DrawNodeMethodsTest()
@@ -2433,20 +2440,20 @@ void DrawNodeMethodsTest::drawAll()
         int yy  = 0;
 
         drawNode->drawSegment(Vec2(-150.0f, yy - yy1 - 40), Vec2(200, yy - yy1 - 40), thickness, Color::magenta,
-                              DrawNode::Round, DrawNode::Round);
+                              DrawNode::EndStyle::Round, DrawNode::EndStyle::Round);
 
         drawNode->drawSegment(Vec2(-150.0f, yy - yy1), Vec2(200, yy - yy1), 20 + 5 * thickness, Color::green,
-                              DrawNode::Round, DrawNode::Round);
+                              DrawNode::EndStyle::Round, DrawNode::EndStyle::Round);
         //      labelRound->setPosition(Vec2(250.0f, 85));
 
         yy += 170;
         drawNode->drawSegment(Vec2(-150.0f, yy - yy1), Vec2(200, yy - yy1), 20 + 5 * thickness, Color::blue,
-                              DrawNode::Square, DrawNode::Square);
+                              DrawNode::EndStyle::Square, DrawNode::EndStyle::Square);
         //     labelSquare->setPosition(Vec2(250.0f, 170));
 
         yy += 170;
         drawNode->drawSegment(Vec2(-150.0f, yy - yy1), Vec2(200, yy - yy1), 20 + 5 * thickness, Color::red,
-                              DrawNode::Butt, DrawNode::Butt);
+                              DrawNode::EndStyle::Butt, DrawNode::EndStyle::Butt);
         //    labelButt->setPosition(Vec2(250.0f, 255));
 
         break;
@@ -2701,8 +2708,8 @@ void DrawNodeAxmolTest2::drawAllv2(DrawNode* drawNode, bool _drawOrder)
             Vec2(o + w * 2, o),  // lower spike
             Vec2(o + w * 2 + h, o + w),
             Vec2(o + w * 2, o + w * 2),  // right spike
-                                         //{o +w, o+w*2+h}, {o,o+w*2},        // top spike
-                                         //{o -h, o+w}, {o,o}, // left spike
+            //{o +w, o+w*2+h}, {o,o+w*2},        // top spike
+            //{o -h, o+w}, {o,o}, // left spike
         };
 
         drawNode->drawPolygon(star, sizeof(star) / sizeof(star[0]), Color(1.0f, 0.0f, 0.0f, 0.5f), 1,
@@ -2841,6 +2848,63 @@ string DrawNodeCircleTest::title() const
 string DrawNodeCircleTest::subtitle() const
 {
     return "Axmol,  '3...20', '48'-Corner";
+}
+
+DrawNodeCornerRectTest::DrawNodeCornerRectTest()
+{
+    const Color& color1 = Color(0.5f, 0.5f, 0.5f, 1.0f);  // alpha != 0.0 || alpha != 1.0 is not supported
+    const Color& color2 = Color(0.9f, 0.2f, 0.5f, 1.0f);
+    float thickness     = 4.0f;
+    float crLB          = 50.0f;
+    float crLT          = 5.0f;
+    float crRT          = 25.0f;
+    float crRB          = 15.0f;
+
+    drawNode->drawCornerRect(Vec2(10, 150), Vec2(200, 220), color2, thickness, crLB, crLT, crRT, crRB,
+                             DrawNode::CornerMode::Bevel);
+    drawNode->drawCornerRect(Vec2(250, 170), Vec2(450, 230), Color::gray, thickness, crLB, crLT, crRT, crRB,
+                             DrawNode::CornerMode::Bevel);
+    drawNode->drawCornerRect(Vec2(10, 50), Vec2(200, 130), color1, thickness, 10, 10, 10, 10);
+    drawNode->drawCornerRect(Vec2(250, 70), Vec2(450, 150), color2, thickness, crLB, crLT, crRT, crRB);
+}
+
+string DrawNodeCornerRectTest::title() const
+{
+    return "drawCornerRect Test";
+}
+
+string DrawNodeCornerRectTest::subtitle() const
+{
+    return "DrawNode::CornerMode::Bevel/Round";
+}
+
+DrawNodeSolidCornerRectTest::DrawNodeSolidCornerRectTest()
+{
+    const Color& fillColor   = Color(0.5f, 0.5f, 0.5f, 1.0f);  // alpha != 0.0 || alpha != 1.0 is not supported
+    const Color& borderColor = Color(0.9f, 0.2f, 0.5f, 1.0f);
+    float thickness          = 10.0f;
+    float crLB               = 50.0f;
+    float crLT               = 5.0f;
+    float crRT               = 25.0f;
+    float crRB               = 15.0f;
+
+    drawNode->drawSolidCornerRect(Vec2(10, 150), Vec2(200, 220), fillColor, borderColor, thickness, crLB, crLT, crRT,
+                                  crRB, DrawNode::CornerMode::Bevel);
+    drawNode->drawSolidCornerRect(Vec2(250, 170), Vec2(450, 230), fillColor, borderColor, 0.0f, crLB, crLT, crRT, crRB,
+                                  DrawNode::CornerMode::Bevel);
+    drawNode->drawSolidCornerRect(Vec2(10, 50), Vec2(200, 130), fillColor, borderColor, thickness, 10.0f, 10, 10, 10);
+    drawNode->drawSolidCornerRect(Vec2(250, 70), Vec2(450, 150), fillColor, borderColor, thickness, crLB, crLT, crRT,
+                                  crRB);
+}
+
+string DrawNodeSolidCornerRectTest::title() const
+{
+    return "drawSolidCornerRect Test";
+}
+
+string DrawNodeSolidCornerRectTest::subtitle() const
+{
+    return "DrawNode::CornerMode::Bevel/Round";
 }
 
 DrawNodeSolidCircleTest::DrawNodeSolidCircleTest()
@@ -3079,7 +3143,7 @@ void DrawNodeSpLinesTest::update(float dt)
     for (int i = 0; i < 10; i++)
     {
         array->addControlPoint(Vec2((i % 2) ? 20 : screen.width - 20, 50 + i * 20));
-        drawNode->drawPoint(array->getControlPointAtIndex(i), 10, Color::blue, DrawNode::PointType::Circle);
+        drawNode->drawPoint(array->getControlPointAtIndex(i), 10, Color::blue, DrawNode::PointStyle::Circle);
     }
     drawNode->drawCardinalSpline(array, 0.1, 20, Color::orange);
 
@@ -3112,8 +3176,8 @@ void DrawNodeSpLinesTest::update(float dt)
 
 DrawNodeSpLinesOpenClosedTest::DrawNodeSpLinesOpenClosedTest()
 {
-    auto listener         = PointerEventListener::create();
-    listener->onPointerUp = AX_CALLBACK_1(DrawNodeSpLinesOpenClosedTest::onPointerUp, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = AX_CALLBACK_1(DrawNodeSpLinesOpenClosedTest::onPointerDown, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     drawNodeCP = DrawNode::create();
@@ -3167,10 +3231,11 @@ void DrawNodeSpLinesOpenClosedTest::addNewControlPoint(Vec2 p)
     points.emplace_back(Vec2(p.x, p.y));
 }
 
-void DrawNodeSpLinesOpenClosedTest::onPointerUp(PointerEvent* event)
+bool DrawNodeSpLinesOpenClosedTest::onPointerDown(PointerEvent* event)
 {
     auto location = event->getWorldPoint();
     addNewControlPoint(location);
+    return true;
 }
 
 string DrawNodeSpLinesOpenClosedTest::title() const
