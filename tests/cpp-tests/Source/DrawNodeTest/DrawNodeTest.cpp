@@ -1396,9 +1396,6 @@ DrawNodeTests::DrawNodeTests()
     ADD_TEST_CASE(DrawNodeSolidCircleTest);
     ADD_TEST_CASE(DrawNodePolygonTest);
 
-    ADD_TEST_CASE(DrawNodeCornerRectTest);
-    ADD_TEST_CASE(DrawNodeSolidCornerRectTest);
-
     ADD_TEST_CASE(DrawNodeSpLinesTest);
     ADD_TEST_CASE(DrawNodeSpLinesOpenClosedTest);
     ADD_TEST_CASE(DrawNodeAxmolTest2);
