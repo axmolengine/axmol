@@ -893,3 +893,98 @@ private:
 //
 //auto dn = ax::DrawNode::create();
 //drawSkewedRect(dn, {0, 0}, {100, 50}, 20.0f, 10.0f, ax::Color4F::GREEN);
+
+
+//fairyGUI
+// ax::Mat4 makeFairySkew(float skewX_deg, float skewY_deg)
+//{
+//    float sx = std::tan(skewX_deg * (3.14159265358979323846f / 180.0f));
+//    float sy = std::tan(skewY_deg * (3.14159265358979323846f / 180.0f));
+//
+//    ax::Mat4 M;
+//    M.setIdentity();
+//
+//    // FairyGUI mapping:
+//    // m01 = tan(skewY)
+//    // m10 = tan(skewX)
+//
+//    M.m[1] = sy;  // xy
+//    M.m[4] = sx;  // yx
+//
+//    return M;
+//}
+//auto dn = ax::DrawNode::create();
+//dn->drawSolidRect({0, 0}, {120, 60}, ax::Color4F::BLUE);
+//
+//float skewX = 15.0f;  // FairyGUI-style
+//float skewY = -10.0f;
+//
+//dn->setAdditionalTransform(makeFairySkew(skewX, skewY));
+
+
+//Für deine FairyGUI‑Portierung nach Axmol Wenn du FairyGUI‑Objekte nach Axmol renderst,
+//    musst du :
+//
+//        1. FairyGUI‑Transformationskette übernehmen Position
+//
+//            Scale
+//
+//                Rotation
+//
+//                    Skew
+//
+//                        Pivot
+//
+//                            Size
+//
+//                                Local /
+//        Global transform
+//
+//        2. Reihenfolge wie FairyGUI einhalten
+// FairyGUI macht:
+//Translate
+//Rotate
+//Skew
+//Scale
+
+//Axmol macht :
+// Translate
+// Rotate
+// Scale
+
+//Komplette FairyGUI‑Transform‑Matrix in Axmol
+// Wenn du alles 1 : 1 übernehmen willst:
+    //ax::Mat4
+//makeFairyTransform(float x, float y, float rotation_deg, float skewX_deg, float skewY_deg, float scaleX, float scaleY)
+//{
+//    float r  = rotation_deg * (3.14159265358979323846f / 180.0f);
+//    float sx = std::tan(skewX_deg * (3.14159265358979323846f / 180.0f));
+//    float sy = std::tan(skewY_deg * (3.14159265358979323846f / 180.0f));
+//
+//    ax::Mat4 M;
+//    M.setIdentity();
+//
+//    // Translation
+//    M.translate(x, y, 0);
+//
+//    // Rotation
+//    ax::Mat4 R;
+//    R.setIdentity();
+//    R.rotateZ(r);
+//
+//    // Skew
+//    ax::Mat4 S;
+//    S.setIdentity();
+//    S.m[1] = sy;
+//    S.m[4] = sx;
+//
+//    // Scale
+//    ax::Mat4 Sc;
+//    Sc.setIdentity();
+//    Sc.scale(scaleX, scaleY, 1);
+//
+//    // FairyGUI order: T * R * Skew * Scale
+//    M = M * R * S * Sc;
+//
+//    return M;
+//}

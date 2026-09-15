@@ -1674,6 +1674,31 @@ void DrawNode::applyLocalTransform(const Vec2* from, Vec2* to, unsigned int coun
     if (!_localTransformEnabled)
         return;
 
+   // _localSkew.x = 60.0f;
+
+  //  if (_localSkew.x || _localSkew.y)
+    {
+        for (unsigned int i = 0; i < count; i++)
+        {
+            to[i].x = std::tan(from[i].x * (3.14159265358979323846f / 180.0f));
+            to[i].y = std::tan(from[i].y * (3.14159265358979323846f / 180.0f));
+            //    from[i].x* _localScale.x + _localPosition.x;
+     //       to[i].y = from[i].y * _localScale.y + _localPosition.y;
+        }
+        return;
+
+        // ax::Vec2 skewPoint(const ax::Vec2& p, float skewX_deg, float skewY_deg)
+        //{
+            //float sx = std::tan(skewX_deg * (3.14159265358979323846f / 180.0f));
+            //float sy = std::tan(skewY_deg * (3.14159265358979323846f / 180.0f));
+        
+            //float x2 = p.x + sy * p.y;
+            //float y2 = p.y + sx * p.x;
+        //    return {x2, y2};
+
+
+    }
+
     if (_localRotationRad == 0.0f)
     {
         for (unsigned int i = 0; i < count; i++)
