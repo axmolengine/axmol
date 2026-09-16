@@ -161,8 +161,7 @@ static id s_sharedDirectorCaller;
     {
         ax::Director* director = ax::Director::getInstance();
 #if AX_GLES_PROFILE
-        EAGLContext* context =
-            [(__bridge RenderHostView*)director->getRenderView()->getNativeDisplay().ptr context];
+        EAGLContext* context = [(__bridge RenderHostView*)director->getRenderView()->getNativeDisplay().ptr context];
         if (context != [EAGLContext currentContext])
             glFlush();
 

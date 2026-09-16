@@ -350,11 +350,11 @@ static bool _initWithString(std::string_view text,
         [paragraphStyle setAlignment:textAlign];
 
         // attribute
-        NSDictionary* tokenAttributesDict = [NSDictionary
+        NSDictionary* tokenAttributesDict        = [NSDictionary
             dictionaryWithObjectsAndKeys:foregroundColor, NSForegroundColorAttributeName, font, NSFontAttributeName,
                                          paragraphStyle, NSParagraphStyleAttributeName, nil];
-        NSAttributedString* stringWithAttributes =
-            [[NSAttributedString alloc] initWithString:string attributes:tokenAttributesDict];
+        NSAttributedString* stringWithAttributes = [[NSAttributedString alloc] initWithString:string
+                                                                                   attributes:tokenAttributesDict];
 
         CGSize dimensions = CGSizeMake(info->width, info->height);
 
@@ -384,16 +384,16 @@ static bool _initWithString(std::string_view text,
             NSMakeRect(xPadding, POTHigh - dimensions.height + yPadding, realDimensions.width, realDimensions.height);
 
         NSBitmapImageRep* offscreenRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
-                                                                                  pixelsWide:POTWide
-                                                                                  pixelsHigh:POTHigh
-                                                                               bitsPerSample:8
-                                                                             samplesPerPixel:4
-                                                                                    hasAlpha:YES
-                                                                                    isPlanar:NO
-                                                                              colorSpaceName:NSDeviceRGBColorSpace
-                                                                                bitmapFormat:0
-                                                                                 bytesPerRow:4 * POTWide
-                                                                                bitsPerPixel:32];
+                                                                                 pixelsWide:POTWide
+                                                                                 pixelsHigh:POTHigh
+                                                                              bitsPerSample:8
+                                                                            samplesPerPixel:4
+                                                                                   hasAlpha:YES
+                                                                                   isPlanar:NO
+                                                                             colorSpaceName:NSDeviceRGBColorSpace
+                                                                               bitmapFormat:0
+                                                                                bytesPerRow:4 * POTWide
+                                                                               bitsPerPixel:32];
 
         NSGraphicsContext* g = [NSGraphicsContext graphicsContextWithBitmapImageRep:offscreenRep];
         [NSGraphicsContext saveGraphicsState];
@@ -413,8 +413,8 @@ static bool _initWithString(std::string_view text,
                                              NSFontAttributeName, paragraphStyle, NSParagraphStyleAttributeName,
                                              strokeSize, NSStrokeWidthAttributeName, strokeColor,
                                              NSStrokeColorAttributeName, nil];
-            NSAttributedString* strokeString =
-                [[NSAttributedString alloc] initWithString:string attributes:tokenAttributesDict2];
+            NSAttributedString* strokeString   = [[NSAttributedString alloc] initWithString:string
+                                                                               attributes:tokenAttributesDict2];
             [strokeString drawInRect:textRect];
         }
 

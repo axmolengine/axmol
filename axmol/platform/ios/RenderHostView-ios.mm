@@ -125,12 +125,12 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
 + (id)viewWithFrame:(CGRect)frame pixelFormat:(int)format depthFormat:(int)depth
 {
     return [[self alloc] initWithFrame:frame
-                            pixelFormat:format
-                            depthFormat:depth
-                     preserveBackbuffer:NO
-                             sharegroup:nil
-                          multiSampling:NO
-                        numberOfSamples:0];
+                           pixelFormat:format
+                           depthFormat:depth
+                    preserveBackbuffer:NO
+                            sharegroup:nil
+                         multiSampling:NO
+                       numberOfSamples:0];
 }
 
 + (id)viewWithFrame:(CGRect)frame
@@ -142,12 +142,12 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
        numberOfSamples:(unsigned int)samples
 {
     return [[self alloc] initWithFrame:frame
-                            pixelFormat:format
-                            depthFormat:depth
-                     preserveBackbuffer:retained
-                             sharegroup:sharegroup
-                          multiSampling:multisampling
-                        numberOfSamples:samples];
+                           pixelFormat:format
+                           depthFormat:depth
+                    preserveBackbuffer:retained
+                            sharegroup:sharegroup
+                         multiSampling:multisampling
+                       numberOfSamples:samples];
 }
 
 - (id)initWithFrame:(CGRect)frame

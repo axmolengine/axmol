@@ -32,10 +32,10 @@ struct AvfMediaCallbackState
 {
     std::mutex mutex;
     std::condition_variable callbackFinished;
-    AvfMediaEngine* engine     = nullptr;
-    void* currentPlayerItem   = nullptr;
-    uint64_t generation        = 0;
-    size_t activeCallbacks     = 0;
+    AvfMediaEngine* engine  = nullptr;
+    void* currentPlayerItem = nullptr;
+    uint64_t generation     = 0;
+    size_t activeCallbacks  = 0;
 };
 }  // namespace ax
 
@@ -55,8 +55,8 @@ public:
         {
             _engine = _state->engine;
             ++_state->activeCallbacks;
-            _previousGuard            = g_currentCallbackGuard;
-            g_currentCallbackGuard    = this;
+            _previousGuard         = g_currentCallbackGuard;
+            g_currentCallbackGuard = this;
         }
     }
 
@@ -92,7 +92,7 @@ public:
 
 private:
     std::shared_ptr<AvfMediaCallbackState> _state;
-    AvfMediaEngine* _engine = nullptr;
+    AvfMediaEngine* _engine               = nullptr;
     AvfMediaCallbackGuard* _previousGuard = nullptr;
 };
 }  // namespace
@@ -105,8 +105,7 @@ private:
 - (void)playerItemDidPlayToEndTime:(NSNotification*)notification;
 @end
 
-@implementation AVMediaSessionHandler
-{
+@implementation AVMediaSessionHandler {
     std::shared_ptr<AvfMediaCallbackState> _callbackState;
 }
 
@@ -279,7 +278,7 @@ bool AvfMediaEngine::open(std::string_view sourceUri)
     uint64_t generation;
     {
         std::lock_guard lock(_callbackState->mutex);
-        generation = ++_callbackState->generation;
+        generation             = ++_callbackState->generation;
         _callbackState->engine = this;
     }
 
@@ -346,7 +345,7 @@ bool AvfMediaEngine::open(std::string_view sourceUri)
 
     _state = MEMediaState::Preparing;
 
-    auto callbackState = _callbackState;
+    auto callbackState       = _callbackState;
     AVPlayerItem* playerItem = _playerItem;
 
     // load tracks
@@ -359,8 +358,7 @@ bool AvfMediaEngine::open(std::string_view sourceUri)
 
                         NSError* nsError = nil;
 
-                        if ([[playerItem asset] statusOfValueForKey:@"tracks"
-                                                               error:&nsError] == AVKeyValueStatusLoaded)
+                        if ([[playerItem asset] statusOfValueForKey:@"tracks" error:&nsError] == AVKeyValueStatusLoaded)
                         {
                             // File movies will be ready now
                             if (playerItem.status == AVPlayerItemStatusReadyToPlay)
@@ -422,7 +420,7 @@ void AvfMediaEngine::onStatusNotification(void* context)
 
             CMFormatDescriptionRef DescRef =
                 (__bridge CMFormatDescriptionRef)[assetTrack.formatDescriptions objectAtIndex:0];
-            CMVideoCodecType codecType       = CMFormatDescriptionGetMediaSubType(DescRef);
+            CMVideoCodecType codecType = CMFormatDescriptionGetMediaSubType(DescRef);
 
             int videoOutputPF = kCVPixelFormatType_32BGRA;
             if (kCMVideoCodecType_H264 == codecType || kCMVideoCodecType_HEVC == codecType)
@@ -576,8 +574,8 @@ bool AvfMediaEngine::close()
     AXLOGD("AvfMediaEngine::close(): this:{}", fmt::ptr(this));
     std::unique_lock<std::mutex> callbackLock(_callbackState->mutex);
     ++_callbackState->generation;
-    _callbackState->engine = nullptr;
-    _callbackState->currentPlayerItem = nullptr;
+    _callbackState->engine                = nullptr;
+    _callbackState->currentPlayerItem     = nullptr;
     const auto callbacksOwnedByThisThread = AvfMediaCallbackGuard::currentThreadGuardCount(_callbackState.get());
     _callbackState->callbackFinished.wait(callbackLock, [state = _callbackState.get(), callbacksOwnedByThisThread] {
         return state->activeCallbacks <= callbacksOwnedByThisThread;

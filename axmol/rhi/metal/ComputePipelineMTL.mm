@@ -44,8 +44,6 @@ ComputePipelineImpl::ComputePipelineImpl(id<MTLDevice> mtlDevice, ProgramImpl* p
     }
 }
 
-ComputePipelineImpl::~ComputePipelineImpl()
-{
-}
+ComputePipelineImpl::~ComputePipelineImpl() {}
 
 }  // namespace ax::rhi::mtl

@@ -551,9 +551,9 @@ SamplerHandle GraphicsDeviceImpl::createSampler(const SamplerDesc& desc)
         const SEL selector = @selector(supportsSamplerBorderColor);
         if ([_mtlDevice respondsToSelector:selector])
         {
-            const IMP imp = [(NSObject*)_mtlDevice methodForSelector:selector];
+            const IMP imp                         = [(NSObject*)_mtlDevice methodForSelector:selector];
             const auto supportsSamplerBorderColor = reinterpret_cast<BOOL (*)(id, SEL)>(imp);
-            supportBorderColor = supportsSamplerBorderColor(_mtlDevice, selector);
+            supportBorderColor                    = supportsSamplerBorderColor(_mtlDevice, selector);
         }
     }
 

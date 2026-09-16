@@ -552,7 +552,7 @@ void GraphicsContextImpl::submitCurrentFrameCommands(bool waitForCompletion)
         _currentCmdBuffer = nil;
     }
 
-    _currentCmdBuffer = [_mtlCmdQueue commandBuffer];
+    _currentCmdBuffer      = [_mtlCmdQueue commandBuffer];
     _currentRenderPassDesc = {};
     _currentRT             = nullptr;
     _renderPassInterrupted = false;

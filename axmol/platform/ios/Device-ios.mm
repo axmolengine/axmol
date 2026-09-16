@@ -465,8 +465,8 @@ static bool _initWithString(std::string_view text,
             dictionaryWithObjectsAndKeys:foregroundColor, NSForegroundColorAttributeName, font, NSFontAttributeName,
                                          paragraphStyle, NSParagraphStyleAttributeName, nil];
 
-        NSAttributedString* stringWithAttributes =
-            [[NSAttributedString alloc] initWithString:str attributes:tokenAttributesDict];
+        NSAttributedString* stringWithAttributes = [[NSAttributedString alloc] initWithString:str
+                                                                                   attributes:tokenAttributesDict];
 
         int shrinkFontSize = size;
         CGSize realDimensions;
@@ -546,8 +546,8 @@ static bool _initWithString(std::string_view text,
                                      forKey:NSStrokeWidthAttributeName];
             [tokenAttributesDict2 setObject:strokeColor forKey:NSStrokeColorAttributeName];
 
-            NSAttributedString* strokeString =
-                [[NSAttributedString alloc] initWithString:str attributes:tokenAttributesDict2];
+            NSAttributedString* strokeString = [[NSAttributedString alloc] initWithString:str
+                                                                               attributes:tokenAttributesDict2];
 
             if (overflow == 2)
             {

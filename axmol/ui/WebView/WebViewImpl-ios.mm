@@ -141,7 +141,7 @@ static NSString* const AXWebViewConsoleMessageHandlerName = @"axmolWebViewConsol
 - (void)dealloc
 {
     [self detach];
-    self.jsScheme                            = nil;
+    self.jsScheme = nil;
 }
 
 - (void)setupWebView
@@ -192,8 +192,8 @@ static NSString* const AXWebViewConsoleMessageHandlerName = @"axmolWebViewConsol
         WKWebViewConfiguration* configuration          = [[WKWebViewConfiguration alloc] init];
         WKUserContentController* userContentController = [[WKUserContentController alloc] init];
         WKUserScript* userScript                       = [[WKUserScript alloc] initWithSource:consoleBridgeScript
-                                                           injectionTime:WKUserScriptInjectionTimeAtDocumentStart
-                                                        forMainFrameOnly:NO];
+                                                          injectionTime:WKUserScriptInjectionTimeAtDocumentStart
+                                                       forMainFrameOnly:NO];
 
         [userContentController addUserScript:userScript];
         self.scriptMessageHandler                = [[AXWebViewScriptMessageHandler alloc] init];

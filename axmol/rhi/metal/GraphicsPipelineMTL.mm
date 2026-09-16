@@ -213,9 +213,7 @@ void GraphicsPipelineImpl::update(const RenderTarget* renderTarget, const Pipeli
     _mtlStateCache.emplace(hash, _mtlRenderPipelineState);
 }
 
-GraphicsPipelineImpl::~GraphicsPipelineImpl()
-{
-}
+GraphicsPipelineImpl::~GraphicsPipelineImpl() {}
 
 void GraphicsPipelineImpl::setVertexLayout(MTLRenderPipelineDescriptor* mtlDesc, const PipelineDesc& desc)
 {

@@ -37,11 +37,8 @@ ShaderModuleImpl::ShaderModuleImpl(id<MTLDevice> mtlDevice, ShaderStage stage, D
         NSLog(@"metal shader is ---------------");
         AXLOGE("{}", std::string_view{(const char*)_codeSpan.data(), _codeSpan.size()});
     }
-
 }
 
-ShaderModuleImpl::~ShaderModuleImpl()
-{
-}
+ShaderModuleImpl::~ShaderModuleImpl() {}
 
 }  // namespace ax::rhi::mtl

@@ -182,8 +182,7 @@ void EditBoxImplIOS::nativeCloseKeyboard()
 UIFont* EditBoxImplIOS::createNativeFont(std::string_view fontName, int fontSize)
 {
     AXASSERT(!fontName.empty(), "fontName can't be nullptr");
-    auto hostView =
-        (__bridge RenderHostView*)ax::Director::getInstance()->getRenderView()->getNativeDisplay().ptr;
+    auto hostView      = (__bridge RenderHostView*)ax::Director::getInstance()->getRenderView()->getNativeDisplay().ptr;
     float retinaFactor = hostView.contentScaleFactor;
     NSString* fntName  = [[NSString alloc] initWithBytes:fontName.data()
                                                  length:fontName.length()

@@ -40,8 +40,7 @@ TextureImpl::TextureImpl(id<MTLDevice> mtlDevice, const TextureDesc& desc) : _mt
     updateTextureDesc(desc);
 }
 
-TextureImpl::TextureImpl(id<MTLDevice> mtlDevice, id<MTLTexture> texture)
-    : _mtlDevice(mtlDevice), _mtlTexture(texture)
+TextureImpl::TextureImpl(id<MTLDevice> mtlDevice, id<MTLTexture> texture) : _mtlDevice(mtlDevice), _mtlTexture(texture)
 {
     _desc.width        = static_cast<uint16_t>(texture.width);
     _desc.height       = static_cast<uint16_t>(texture.height);
@@ -74,9 +73,7 @@ TextureImpl::TextureImpl(id<MTLDevice> mtlDevice, id<MTLTexture> texture)
     Texture::updateTextureDesc(_desc);
 }
 
-TextureImpl::~TextureImpl()
-{
-}
+TextureImpl::~TextureImpl() {}
 
 void TextureImpl::updateSamplerDesc(const SamplerDesc& desc)
 {

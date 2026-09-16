@@ -185,7 +185,6 @@ bool __axmolAudioSessionInterrupted = false;
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:UIApplicationWillResignActiveNotification
                                                   object:nil];
-
 }
 @end
 
