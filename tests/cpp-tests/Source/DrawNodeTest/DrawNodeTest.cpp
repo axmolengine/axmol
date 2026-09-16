@@ -2859,6 +2859,9 @@ DrawNodeCornerRectTest::DrawNodeCornerRectTest()
     float crLT          = 5.0f;
     float crRT          = 25.0f;
     float crRB          = 15.0f;
+    drawNode->setLocalTransformEnabled(true);
+    drawNode->setLocalSkew({0,30});
+
 
     drawNode->drawCornerRect(Vec2(10, 150), Vec2(200, 220), color2, thickness, crLB, crLT, crRT, crRB,
                              DrawNode::CornerMode::Bevel);
@@ -2866,6 +2869,7 @@ DrawNodeCornerRectTest::DrawNodeCornerRectTest()
                              DrawNode::CornerMode::Bevel);
     drawNode->drawCornerRect(Vec2(10, 50), Vec2(200, 130), color1, thickness, 10, 10, 10, 10);
     drawNode->drawCornerRect(Vec2(250, 70), Vec2(450, 150), color2, thickness, crLB, crLT, crRT, crRB);
+    drawNode->setLocalTransformEnabled(false);
 }
 
 string DrawNodeCornerRectTest::title() const

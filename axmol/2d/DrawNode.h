@@ -845,7 +845,7 @@ protected:
 
     // optional local transform applied to primitives when enabled
     Vec2 _localScale{1.0f, 1.0f};
-    Vec2 _localSkew{0.0f, 0.0f};
+    Vec2 _localSkew{0.0f, 0.0f};    // local skew in degrees
     Vec2 _localPivot{0.0f, 0.0f};
     float _localRotation{0.0f};     // local rotation in degrees
     float _localRotationRad{0.0f};  // local rotation in radians (cached for efficiency)
