@@ -41,21 +41,21 @@
 
 - (void)createSingleLineTextField
 {
-    AxmolSingleLineTextField* textField = [[[AxmolSingleLineTextField alloc] initWithFrame:self.frameRect] autorelease];
+    AxmolSingleLineTextField* textField = [[AxmolSingleLineTextField alloc] initWithFrame:self.frameRect];
 
     self.textInput = textField;
 }
 
 - (void)createMultiLineTextField
 {
-    AxmolMultilineTextField* textView = [[[AxmolMultilineTextField alloc] initWithFrame:self.frameRect] autorelease];
+    AxmolMultilineTextField* textView = [[AxmolMultilineTextField alloc] initWithFrame:self.frameRect];
     [textView setVerticallyResizable:NO];
     self.textInput = textView;
 }
 
 - (void)createPasswordTextField
 {
-    AxmolPasswordTextField* textField = [[[AxmolPasswordTextField alloc] initWithFrame:self.frameRect] autorelease];
+    AxmolPasswordTextField* textField = [[AxmolPasswordTextField alloc] initWithFrame:self.frameRect];
 
     self.textInput = textField;
 }
@@ -69,8 +69,6 @@
     _textInput                       = textInput;
     if (_textInput != nil)
     {
-        [_textInput retain];  // retain new input view
-
         // migrate properties from old input if available
         _textInput.axui_alignment   = oldInput.axui_alignment;
         _textInput.axui_textColor   = oldInput.axui_textColor ?: [NSColor whiteColor];
@@ -99,7 +97,6 @@
     if (oldInput != nil)
     {
         [oldInput removeFromSuperview];  // detach old view
-        [oldInput release];              // release old view
     }
 }
 
@@ -117,14 +114,12 @@
 - (void)dealloc
 {
     self.textInput = nil;
-
-    [super dealloc];
 }
 
 - (NSWindow*)window
 {
     auto renderView = ax::Director::getInstance()->getRenderView();
-    return (NSWindow*)renderView->getNativeWindow();
+    return (__bridge NSWindow*)renderView->getNativeWindow();
 }
 
 - (void)openKeyboard

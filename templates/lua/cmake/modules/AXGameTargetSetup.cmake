@@ -19,3 +19,10 @@ target_include_directories(${APP_NAME} PRIVATE ${GAME_INC_DIRS})
 if(NOT _AX_USE_PREBUILT)
   target_link_libraries(${APP_NAME} ${_AX_LUA_LIB})
 endif()
+
+if(APPLE)
+  set_property(TARGET ${APP_NAME} PROPERTY XCODE_ATTRIBUTE_CLANG_ENABLE_OBJC_ARC "YES")
+  target_compile_options(${APP_NAME} PRIVATE
+    "$<$<COMPILE_LANGUAGE:OBJC>:-fobjc-arc>"
+    "$<$<COMPILE_LANGUAGE:OBJCXX>:-fobjc-arc>")
+endif()

@@ -40,18 +40,12 @@ ComputePipelineImpl::ComputePipelineImpl(id<MTLDevice> mtlDevice, ProgramImpl* p
     {
         AXLOGE("Compute local workgroup size {} exceeds maxTotalThreadsPerThreadgroup {}", totalThreads,
                _mtlComputePipelineState.maxTotalThreadsPerThreadgroup);
-        [_mtlComputePipelineState release];
         _mtlComputePipelineState = nil;
     }
 }
 
 ComputePipelineImpl::~ComputePipelineImpl()
 {
-    if (_mtlComputePipelineState)
-    {
-        [_mtlComputePipelineState release];
-        _mtlComputePipelineState = nil;
-    }
 }
 
 }  // namespace ax::rhi::mtl

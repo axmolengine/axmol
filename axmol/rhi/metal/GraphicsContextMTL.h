@@ -254,7 +254,7 @@ private:
     dispatch_semaphore_t _frameBoundarySemaphore;
     RenderPassDesc _currentRenderPassDesc;
     bool _renderPassInterrupted         = false;
-    NSAutoreleasePool* _autoReleasePool = nil;
+    void* _autoreleasePool = nullptr;
 
     std::vector<std::pair<Texture*, std::function<void(const PixelBufferDesc&)>>> _captureCallbacks;
 };

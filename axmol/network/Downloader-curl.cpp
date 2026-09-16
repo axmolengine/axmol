@@ -11,7 +11,7 @@
 #if !defined(__EMSCRIPTEN__)
 #    include "axmol/network/Downloader-curl.h"
 
-#    include <cinttypes>
+#    include <inttypes.h>
 #    include <set>
 
 #    include <curl/curl.h>

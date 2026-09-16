@@ -53,7 +53,7 @@ static NSAttributedString* __attributedStringWithFontSize(NSMutableAttributedStr
         [attributedString endEditing];
     }
 
-    return [[attributedString copy] autorelease];
+    return [attributedString copy];
 }
 
 static CGFloat _calculateTextDrawStartHeight(ax::Device::TextAlign align, CGSize realDimensions, CGSize dimensions)
@@ -103,7 +103,7 @@ static CGSize _calculateShrinkedSizeForString(NSAttributedString** str,
                 break;
             }
 
-            NSMutableAttributedString* mutableString = [[*str mutableCopy] autorelease];
+            NSMutableAttributedString* mutableString = [*str mutableCopy];
             *str                                     = __attributedStringWithFontSize(mutableString, fontSize);
 
             CTFramesetterRef framesetter =
@@ -144,7 +144,7 @@ static CGSize _calculateShrinkedSizeForString(NSAttributedString** str,
                 break;
             }
 
-            NSMutableAttributedString* mutableString = [[*str mutableCopy] autorelease];
+            NSMutableAttributedString* mutableString = [*str mutableCopy];
             *str                                     = __attributedStringWithFontSize(mutableString, fontSize);
 
             CGSize fitSize = [*str boundingRectWithSize:CGSizeMake(constrainSize.width, MAX_MEASURE_HEIGHT)
@@ -222,8 +222,6 @@ static CCAccelerometerDispatcher* s_pAccelerometerDispatcher;
 {
     s_pAccelerometerDispatcher = nullptr;
     delete _acceleration;
-    [_motionManager release];
-    [super dealloc];
 }
 
 - (void)setAccelerometerEnabled:(bool)isEnabled
@@ -468,7 +466,7 @@ static bool _initWithString(std::string_view text,
                                          paragraphStyle, NSParagraphStyleAttributeName, nil];
 
         NSAttributedString* stringWithAttributes =
-            [[[NSAttributedString alloc] initWithString:str attributes:tokenAttributesDict] autorelease];
+            [[NSAttributedString alloc] initWithString:str attributes:tokenAttributesDict];
 
         int shrinkFontSize = size;
         CGSize realDimensions;
@@ -549,7 +547,7 @@ static bool _initWithString(std::string_view text,
             [tokenAttributesDict2 setObject:strokeColor forKey:NSStrokeColorAttributeName];
 
             NSAttributedString* strokeString =
-                [[[NSAttributedString alloc] initWithString:str attributes:tokenAttributesDict2] autorelease];
+                [[NSAttributedString alloc] initWithString:str attributes:tokenAttributesDict2];
 
             if (overflow == 2)
             {

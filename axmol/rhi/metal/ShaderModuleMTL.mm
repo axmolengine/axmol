@@ -38,12 +38,10 @@ ShaderModuleImpl::ShaderModuleImpl(id<MTLDevice> mtlDevice, ShaderStage stage, D
         AXLOGE("{}", std::string_view{(const char*)_codeSpan.data(), _codeSpan.size()});
     }
 
-    [library release];
 }
 
 ShaderModuleImpl::~ShaderModuleImpl()
 {
-    [_mtlFunction release];
 }
 
 }  // namespace ax::rhi::mtl

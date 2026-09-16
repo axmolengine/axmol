@@ -18,7 +18,7 @@
 
 @interface AxmolSingleLineTextField : UITextField
 
-@property(nonatomic, retain) UIColor* placeholderTextColor;
-@property(nonatomic, retain) UIFont* placeholderFont;
+@property(nonatomic, strong) UIColor* placeholderTextColor;
+@property(nonatomic, strong) UIFont* placeholderFont;
 
 @end

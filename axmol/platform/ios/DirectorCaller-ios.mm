@@ -73,7 +73,6 @@ static id s_sharedDirectorCaller;
 + (void)destroy
 {
     [s_sharedDirectorCaller stopMainLoop];
-    [s_sharedDirectorCaller release];
     s_sharedDirectorCaller = nil;
 }
 
@@ -101,7 +100,6 @@ static id s_sharedDirectorCaller;
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self stopMainLoop];
-    [super dealloc];
 }
 
 - (void)appDidBecomeActive
@@ -163,7 +161,8 @@ static id s_sharedDirectorCaller;
     {
         ax::Director* director = ax::Director::getInstance();
 #if AX_GLES_PROFILE
-        EAGLContext* context = [(__bridge RenderHostView*)director->getRenderView()->getNativeDisplay() context];
+        EAGLContext* context =
+            [(__bridge RenderHostView*)director->getRenderView()->getNativeDisplay().ptr context];
         if (context != [EAGLContext currentContext])
             glFlush();
 

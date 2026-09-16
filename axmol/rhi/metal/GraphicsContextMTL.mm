@@ -23,6 +23,9 @@
 
 #include <algorithm>
 
+extern "C" void* objc_autoreleasePoolPush(void);
+extern "C" void objc_autoreleasePoolPop(void*);
+
 #if AX_TARGET_PLATFORM == AX_PLATFORM_MAC
 #    import <AppKit/AppKit.h>
 #else
@@ -137,7 +140,7 @@ GraphicsContextImpl::GraphicsContextImpl(GraphicsDeviceImpl* driver, SurfaceHand
     auto screenPF           = UtilsMTL::toMTLPixelFormat(UtilsMTL::getDefaultColorAttachmentPixelFormat());
 #if AX_TARGET_PLATFORM == AX_PLATFORM_MAC
     CGSize fbSize;
-    NSView* contentView = static_cast<NSView*>(surface);
+    NSView* contentView = (__bridge NSView*)surface.ptr;
     @autoreleasepool
     {
         const NSRect contentRect = [contentView frame];
@@ -155,7 +158,7 @@ GraphicsContextImpl::GraphicsContextImpl(GraphicsDeviceImpl* driver, SurfaceHand
     _mtlLayer.displaySyncEnabled = contextAttrs.vsync;
     [contentView setLayer:_mtlLayer];
 #else
-    UIView* view              = static_cast<UIView*>(surface);
+    UIView* view              = (__bridge UIView*)surface.ptr;
     _mtlLayer                 = (CAMetalLayer*)[view layer];
     _mtlLayer.device          = mtlDevice;
     _mtlLayer.pixelFormat     = screenPF;
@@ -182,7 +185,11 @@ GraphicsContextImpl::~GraphicsContextImpl()
     AX_SAFE_RELEASE_NULL(_screenRT);
     AX_SAFE_RELEASE_NULL(_graphicsPipeline);
 
-    [oneOffBuffer release];
+    if (_autoreleasePool)
+    {
+        objc_autoreleasePoolPop(_autoreleasePool);
+        _autoreleasePool = nullptr;
+    }
 
     dispatch_semaphore_signal(_frameBoundarySemaphore);
 }
@@ -219,13 +226,12 @@ void GraphicsContextImpl::releaseDrawable()
 
 bool GraphicsContextImpl::beginFrame()
 {
-    _autoReleasePool = [[NSAutoreleasePool alloc] init];
+    _autoreleasePool = objc_autoreleasePoolPush();
     dispatch_semaphore_wait(_frameBoundarySemaphore, DISPATCH_TIME_FOREVER);
 
     _currentCmdBuffer = [_mtlCmdQueue commandBuffer];
     // [_currentCmdBuffer enqueue];
     // commit will enqueue automatically
-    [_currentCmdBuffer retain];
 
     BufferManager::beginFrame();
     return true;
@@ -247,7 +253,6 @@ void GraphicsContextImpl::beginRenderPass(RenderTarget* renderTarget, const Rend
     if (_mtlRenderEncoder != nil)
     {
         [_mtlRenderEncoder endEncoding];
-        [_mtlRenderEncoder release];
         _mtlRenderEncoder = nil;
     }
 
@@ -264,7 +269,6 @@ void GraphicsContextImpl::beginRenderPass(RenderTarget* renderTarget, const Rend
     _renderTargetWidth  = (unsigned int)mtlDesc.colorAttachments[0].texture.width;
     _renderTargetHeight = (unsigned int)mtlDesc.colorAttachments[0].texture.height;
     _mtlRenderEncoder   = [_currentCmdBuffer renderCommandEncoderWithDescriptor:mtlDesc];
-    [_mtlRenderEncoder retain];
     //    [_mtlRenderEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
 }
 
@@ -336,7 +340,6 @@ void GraphicsContextImpl::setIndexBuffer(Buffer* buffer)
         return;
 
     _mtlIndexBuffer = static_cast<BufferImpl*>(buffer)->getMTLBuffer();
-    [_mtlIndexBuffer retain];
 }
 
 void GraphicsContextImpl::drawArrays(size_t start, size_t count, bool wireframe /* unused */)
@@ -418,7 +421,6 @@ bool GraphicsContextImpl::dispatch(const ComputeDispatchDesc& desc)
             [_mtlRenderEncoder setStencilStoreAction:MTLStoreActionStore];
         }
         [_mtlRenderEncoder endEncoding];
-        [_mtlRenderEncoder release];
         _mtlRenderEncoder      = nil;
         _renderPassInterrupted = true;
     }
@@ -468,7 +470,7 @@ bool GraphicsContextImpl::dispatch(const ComputeDispatchDesc& desc)
         }
 
         auto sampler      = samplerRegistry->getSampler(samplerId);
-        auto samplerState = static_cast<id<MTLSamplerState>>(sampler);
+        auto samplerState = (__bridge id<MTLSamplerState>)sampler.ptr;
         if (samplerState == nil)
             continue;
 
@@ -513,7 +515,6 @@ void GraphicsContextImpl::readPixels(RenderTarget* rt, std::function<void(const 
 void GraphicsContextImpl::endFrame()
 {
     [_mtlRenderEncoder endEncoding];
-    [_mtlRenderEncoder release];
     _mtlRenderEncoder      = nil;
     _renderPassInterrupted = false;
 
@@ -528,7 +529,11 @@ void GraphicsContextImpl::endFrame()
     flush();
 
     releaseDrawable();
-    [_autoReleasePool drain];
+    if (_autoreleasePool)
+    {
+        objc_autoreleasePoolPop(_autoreleasePool);
+        _autoreleasePool = nullptr;
+    }
 }
 
 void GraphicsContextImpl::submitCurrentFrameCommands(bool waitForCompletion)
@@ -544,12 +549,10 @@ void GraphicsContextImpl::submitCurrentFrameCommands(bool waitForCompletion)
 
         flushCaptureCommands();
 
-        [_currentCmdBuffer release];
         _currentCmdBuffer = nil;
     }
 
     _currentCmdBuffer = [_mtlCmdQueue commandBuffer];
-    [_currentCmdBuffer retain];
     _currentRenderPassDesc = {};
     _currentRT             = nullptr;
     _renderPassInterrupted = false;
@@ -560,7 +563,6 @@ void GraphicsContextImpl::endEncoding()
     if (_mtlRenderEncoder)
     {
         [_mtlRenderEncoder endEncoding];
-        [_mtlRenderEncoder release];
     }
     _mtlRenderEncoder = nil;
 }
@@ -574,7 +576,6 @@ void GraphicsContextImpl::flush()
 
         flushCaptureCommands();
 
-        [_currentCmdBuffer release];
         _currentCmdBuffer = nil;
     }
 }
@@ -621,7 +622,6 @@ void GraphicsContextImpl::afterDraw()
 {
     if (_mtlIndexBuffer)
     {
-        [_mtlIndexBuffer release];
         _mtlIndexBuffer = nullptr;
     }
 
@@ -675,7 +675,7 @@ void GraphicsContextImpl::setTexturesAndSamplers() const
         }
 
         const auto sampler      = samplerRegistry->getSampler(samplerId);
-        const auto samplerState = static_cast<id<MTLSamplerState>>(sampler);
+        const auto samplerState = (__bridge id<MTLSamplerState>)sampler.ptr;
 
         if (samplerState == nil)
         {
@@ -817,7 +817,6 @@ void GraphicsContextImpl::readPixels(id<MTLTexture> texture,
           pbd._width  = static_cast<int>(rectWidth);
           pbd._height = static_cast<int>(rectHeight);
       }
-      [readPixelsTexture release];
     }];
     [oneOffBuffer commit];
     [oneOffBuffer waitUntilCompleted];

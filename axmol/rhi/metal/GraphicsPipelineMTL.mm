@@ -208,15 +208,13 @@ void GraphicsPipelineImpl::update(const RenderTarget* renderTarget, const Pipeli
     if (error)
         NSLog(@"Can not create renderpipeline state: %@", error);
 
-    [_mtlRenderPipelineDesc release];
+    _mtlRenderPipelineDesc = nil;
 
     _mtlStateCache.emplace(hash, _mtlRenderPipelineState);
 }
 
 GraphicsPipelineImpl::~GraphicsPipelineImpl()
 {
-    for (auto& item : _mtlStateCache)
-        [item.second release];
 }
 
 void GraphicsPipelineImpl::setVertexLayout(MTLRenderPipelineDescriptor* mtlDesc, const PipelineDesc& desc)

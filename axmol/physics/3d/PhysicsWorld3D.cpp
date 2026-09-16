@@ -33,7 +33,7 @@
 #    include <Jolt/Physics/Collision/ShapeCast.h>
 #    include <Jolt/RegisterTypes.h>
 
-#    include <cstdarg>
+#    include <stdarg.h>
 #    include <iterator>
 #    include <mutex>
 #    include <utility>

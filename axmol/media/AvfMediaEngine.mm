@@ -13,6 +13,8 @@
 #    include <TargetConditionals.h>
 
 #    include <assert.h>
+#    include <condition_variable>
+#    include <mutex>
 #    include "yasio/tlx/string_view.hpp"
 #    include "yasio/endian_portable.hpp"
 
@@ -24,31 +26,104 @@ using namespace ax;
 
 #    define AX_ALIGN_ANY(x, a) ((((x) + (a) - 1) / (a)) * (a))
 
+namespace ax
+{
+struct AvfMediaCallbackState
+{
+    std::mutex mutex;
+    std::condition_variable callbackFinished;
+    AvfMediaEngine* engine     = nullptr;
+    void* currentPlayerItem   = nullptr;
+    uint64_t generation        = 0;
+    size_t activeCallbacks     = 0;
+};
+}  // namespace ax
+
+namespace
+{
+class AvfMediaCallbackGuard;
+thread_local AvfMediaCallbackGuard* g_currentCallbackGuard = nullptr;
+
+class AvfMediaCallbackGuard
+{
+public:
+    explicit AvfMediaCallbackGuard(const std::shared_ptr<AvfMediaCallbackState>& state, uint64_t generation = 0)
+        : _state(state)
+    {
+        std::lock_guard<std::mutex> lock(_state->mutex);
+        if (_state->engine != nullptr && (generation == 0 || _state->generation == generation))
+        {
+            _engine = _state->engine;
+            ++_state->activeCallbacks;
+            _previousGuard            = g_currentCallbackGuard;
+            g_currentCallbackGuard    = this;
+        }
+    }
+
+    ~AvfMediaCallbackGuard()
+    {
+        if (_engine == nullptr)
+            return;
+
+        {
+            std::lock_guard<std::mutex> lock(_state->mutex);
+            --_state->activeCallbacks;
+            _state->callbackFinished.notify_all();
+        }
+        g_currentCallbackGuard = _previousGuard;
+    }
+
+    AvfMediaCallbackGuard(const AvfMediaCallbackGuard&)            = delete;
+    AvfMediaCallbackGuard& operator=(const AvfMediaCallbackGuard&) = delete;
+
+    explicit operator bool() const { return _engine != nullptr; }
+    AvfMediaEngine* get() const { return _engine; }
+
+    static size_t currentThreadGuardCount(const AvfMediaCallbackState* state)
+    {
+        size_t count = 0;
+        for (auto* guard = g_currentCallbackGuard; guard != nullptr; guard = guard->_previousGuard)
+        {
+            if (guard->_state.get() == state)
+                ++count;
+        }
+        return count;
+    }
+
+private:
+    std::shared_ptr<AvfMediaCallbackState> _state;
+    AvfMediaEngine* _engine = nullptr;
+    AvfMediaCallbackGuard* _previousGuard = nullptr;
+};
+}  // namespace
+
 @interface AVMediaSessionHandler : NSObject
-- (AVMediaSessionHandler*)initWithMediaEngine:(AvfMediaEngine*)me;
-- (void)dealloc;
+- (AVMediaSessionHandler*)initWithCallbackState:(std::shared_ptr<AvfMediaCallbackState>)callbackState;
+- (void)detachMediaEngine;
+- (void)registerUINotifications;
+- (void)deregisterUINotifications;
 - (void)playerItemDidPlayToEndTime:(NSNotification*)notification;
-@property AvfMediaEngine* _me;
 @end
 
 @implementation AVMediaSessionHandler
-@synthesize _me;
+{
+    std::shared_ptr<AvfMediaCallbackState> _callbackState;
+}
 
-- (AVMediaSessionHandler*)initWithMediaEngine:(AvfMediaEngine*)me
+- (AVMediaSessionHandler*)initWithCallbackState:(std::shared_ptr<AvfMediaCallbackState>)callbackState
 {
     self = [super init];
     if (self)
-        _me = me;
+        _callbackState = std::move(callbackState);
     return self;
 }
 
-- detachMediaEngine
+- (void)detachMediaEngine
 {
     [self deregisterUINotifications];
-    self._me = nullptr;
 }
 
-- registerUINotifications
+- (void)registerUINotifications
 {
 #    if TARGET_OS_IPHONE
     auto nc = [NSNotificationCenter defaultCenter];
@@ -73,46 +148,56 @@ using namespace ax;
 #    if TARGET_OS_IPHONE
 - (void)handleAudioRouteChange:(NSNotification*)notification
 {
-    if (!_me)
+    AvfMediaCallbackGuard callback(_callbackState);
+    auto me = callback.get();
+    if (!callback)
         return;
-    if (_me->isPlaying())
-        _me->internalPlay(true);
+    if (me->isPlaying())
+        me->internalPlay(true);
 }
 
 - (void)handleActive:(NSNotification*)notification
 {
-    if (!_me)
+    AvfMediaCallbackGuard callback(_callbackState);
+    auto me = callback.get();
+    if (!callback)
         return;
-    if (_me->isPlaying())
-        _me->internalPlay();
+    if (me->isPlaying())
+        me->internalPlay();
 }
 
 - (void)handleDeactive:(NSNotification*)notification
 {
-    if (!_me)
+    AvfMediaCallbackGuard callback(_callbackState);
+    auto me = callback.get();
+    if (!callback)
         return;
-    if (_me->isPlaying())
-        _me->internalPause();
+    if (me->isPlaying())
+        me->internalPause();
 }
 
 - (void)handleEnterForground:(NSNotification*)notification
 {
-    if (!_me)
+    AvfMediaCallbackGuard callback(_callbackState);
+    auto me = callback.get();
+    if (!callback)
         return;
-    if (_me->isPlaying())
-        _me->internalPlay();
+    if (me->isPlaying())
+        me->internalPlay();
 }
 
 - (void)handleEnterBackround:(NSNotification*)notification
 {
-    if (!_me)
+    AvfMediaCallbackGuard callback(_callbackState);
+    auto me = callback.get();
+    if (!callback)
         return;
-    if (_me->isPlaying())
-        _me->internalPause();
+    if (me->isPlaying())
+        me->internalPause();
 }
 #    endif
 
-- deregisterUINotifications
+- (void)deregisterUINotifications
 {
 #    if TARGET_OS_IPHONE
     auto nc = [NSNotificationCenter defaultCenter];
@@ -124,16 +209,19 @@ using namespace ax;
 #    endif
 }
 
-- (void)dealloc
-{
-    [super dealloc];
-}
-
 - (void)playerItemDidPlayToEndTime:(NSNotification*)notification
 {
-    if (!_me)
+    AvfMediaCallbackGuard callback(_callbackState);
+    auto me = callback.get();
+    if (!callback)
         return;
-    _me->onPlayerEnd();
+
+    {
+        std::lock_guard<std::mutex> lock(_callbackState->mutex);
+        if (_callbackState->currentPlayerItem != (__bridge void*)notification.object)
+            return;
+    }
+    me->onPlayerEnd();
 }
 
 - (void)observeValueForKeyPath:(NSString*)keyPath
@@ -141,10 +229,12 @@ using namespace ax;
                         change:(NSDictionary<NSKeyValueChangeKey, id>*)change
                        context:(void*)context
 {
-    if (!_me)
+    AvfMediaCallbackGuard callback(_callbackState);
+    auto me = callback.get();
+    if (!callback)
         return;
-    if ((id)context == object && [keyPath isEqualToString:@"status"])
-        _me->onStatusNotification(context);
+    if ((__bridge id)context == object && [keyPath isEqualToString:@"status"])
+        me->onStatusNotification(context);
 }
 
 @end
@@ -152,13 +242,25 @@ using namespace ax;
 namespace ax
 {
 
+AvfMediaEngine::AvfMediaEngine() : _callbackState(std::make_shared<AvfMediaCallbackState>())
+{
+    _callbackState->engine = this;
+}
+
+AvfMediaEngine::~AvfMediaEngine()
+{
+    close();
+    std::lock_guard lock(_callbackState->mutex);
+    _callbackState->engine = nullptr;
+}
+
 void AvfMediaEngine::onPlayerEnd()
 {
     _playbackEnded = true;
     _state         = MEMediaState::Stopped;
     fireMediaEvent(MEMediaEventType::Stopped);
 
-    if (_repeatEnabled)
+    if (_state != MEMediaState::Closed && _repeatEnabled)
     {
         this->setCurrentTime(0);
         this->play();
@@ -173,6 +275,13 @@ void AvfMediaEngine::setAutoPlay(bool bAutoPlay)
 bool AvfMediaEngine::open(std::string_view sourceUri)
 {
     close();
+
+    uint64_t generation;
+    {
+        std::lock_guard lock(_callbackState->mutex);
+        generation = ++_callbackState->generation;
+        _callbackState->engine = this;
+    }
 
     NSURL* nsMediaUrl = nil;
     std::string_view Path;
@@ -216,14 +325,13 @@ bool AvfMediaEngine::open(std::string_view sourceUri)
     _player.actionAtItemEnd = AVPlayerActionAtItemEndPause;
 
     // create player item
-    _sessionHandler = [[AVMediaSessionHandler alloc] initWithMediaEngine:this];
+    _sessionHandler = [[AVMediaSessionHandler alloc] initWithCallbackState:_callbackState];
     assert(_sessionHandler != nil);
 
     // Use URL asset which gives us resource loading ability if system can't handle the scheme
     AVURLAsset* urlAsset = [[AVURLAsset alloc] initWithURL:nsMediaUrl options:nil];
 
-    _playerItem = [[AVPlayerItem playerItemWithAsset:urlAsset] retain];
-    [urlAsset release];
+    _playerItem = [AVPlayerItem playerItemWithAsset:urlAsset];
 
     if (_playerItem == nil)
     {
@@ -231,21 +339,33 @@ bool AvfMediaEngine::open(std::string_view sourceUri)
         return false;
     }
 
+    {
+        std::lock_guard<std::mutex> lock(_callbackState->mutex);
+        _callbackState->currentPlayerItem = (__bridge void*)_playerItem;
+    }
+
     _state = MEMediaState::Preparing;
+
+    auto callbackState = _callbackState;
+    AVPlayerItem* playerItem = _playerItem;
 
     // load tracks
     [[_playerItem asset]
         loadValuesAsynchronouslyForKeys:@[ @"tracks" ]
                       completionHandler:^{
+                        AvfMediaCallbackGuard callback(callbackState, generation);
+                        if (!callback)
+                            return;
+
                         NSError* nsError = nil;
 
-                        if ([[_playerItem asset] statusOfValueForKey:@"tracks"
+                        if ([[playerItem asset] statusOfValueForKey:@"tracks"
                                                                error:&nsError] == AVKeyValueStatusLoaded)
                         {
                             // File movies will be ready now
-                            if (_playerItem.status == AVPlayerItemStatusReadyToPlay)
+                            if (playerItem.status == AVPlayerItemStatusReadyToPlay)
                             {
-                                onStatusNotification(_playerItem);
+                                callback.get()->onStatusNotification((__bridge void*)playerItem);
                             }
                         }
                         else if (nsError != nullptr)
@@ -261,19 +381,21 @@ bool AvfMediaEngine::open(std::string_view sourceUri)
                                              selector:@selector(playerItemDidPlayToEndTime:)
                                                  name:AVPlayerItemDidPlayToEndTimeNotification
                                                object:_playerItem];
-    [_playerItem addObserver:_sessionHandler forKeyPath:@"status" options:0 context:_playerItem];
+    [_playerItem addObserver:_sessionHandler forKeyPath:@"status" options:0 context:(__bridge void*)_playerItem];
 
     _player.rate = 0.0;
     [_player replaceCurrentItemWithPlayerItem:_playerItem];
 
     // TODO: handle EnterForground, EnterBackground, Active, Deactive, AudioRouteChanged
+#    if TARGET_OS_IPHONE
     [_sessionHandler registerUINotifications];
+#    endif
     return true;
 }
 
 void AvfMediaEngine::onStatusNotification(void* context)
 {
-    if (!_playerItem || context != _playerItem)
+    if (!_playerItem || context != (__bridge void*)_playerItem)
         return;
     if (_playerItem.status == AVPlayerItemStatusFailed)
     {
@@ -295,7 +417,11 @@ void AvfMediaEngine::onStatusNotification(void* context)
             _videoExtent.y   = naturalSize.height;
 
             NSMutableDictionary* outputAttrs = [NSMutableDictionary dictionary];
-            CMFormatDescriptionRef DescRef   = (CMFormatDescriptionRef)[assetTrack.formatDescriptions objectAtIndex:0];
+            if (assetTrack.formatDescriptions.count == 0)
+                continue;
+
+            CMFormatDescriptionRef DescRef =
+                (__bridge CMFormatDescriptionRef)[assetTrack.formatDescriptions objectAtIndex:0];
             CMVideoCodecType codecType       = CMFormatDescriptionGetMediaSubType(DescRef);
 
             int videoOutputPF = kCVPixelFormatType_32BGRA;
@@ -333,10 +459,11 @@ void AvfMediaEngine::onStatusNotification(void* context)
             }
 
             [outputAttrs setObject:[NSNumber numberWithInt:videoOutputPF]
-                            forKey:(NSString*)kCVPixelBufferPixelFormatTypeKey];
+                            forKey:(__bridge NSString*)kCVPixelBufferPixelFormatTypeKey];
             [outputAttrs setObject:[NSNumber numberWithInteger:1]
-                            forKey:(NSString*)kCVPixelBufferBytesPerRowAlignmentKey];
-            [outputAttrs setObject:[NSNumber numberWithBool:YES] forKey:(NSString*)kCVPixelBufferMetalCompatibilityKey];
+                            forKey:(__bridge NSString*)kCVPixelBufferBytesPerRowAlignmentKey];
+            [outputAttrs setObject:[NSNumber numberWithBool:YES]
+                            forKey:(__bridge NSString*)kCVPixelBufferMetalCompatibilityKey];
 
             AVPlayerItemVideoOutput* videoOutput =
                 [[AVPlayerItemVideoOutput alloc] initWithPixelBufferAttributes:outputAttrs];
@@ -358,9 +485,17 @@ void AvfMediaEngine::onStatusNotification(void* context)
         delay one frame to invoke [player play] to fix player.timeControlStatus
         maybe AVPlayerTimeControlStatusPaused at first app startup
         */
-        __unsafe_unretained AVPlayer* player = _player;
+        __weak AVPlayer* weakPlayer = _player;
+        auto callbackState          = _callbackState;
+        uint64_t generation;
+        {
+            std::lock_guard<std::mutex> lock(callbackState->mutex);
+            generation = callbackState->generation;
+        }
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-          if (player != nil)
+          AvfMediaCallbackGuard callback(callbackState, generation);
+          AVPlayer* player = weakPlayer;
+          if (callback && player != nil && player == callback.get()->_player)
               [player play];
         });
 
@@ -433,11 +568,22 @@ bool AvfMediaEngine::transferVideoFrame()
     CVPixelBufferUnlockBaseAddress(videoFrame, kCVPixelBufferLock_ReadOnly);
 
     CVPixelBufferRelease(videoFrame);
+    return true;
 }
 
 bool AvfMediaEngine::close()
 {
     AXLOGD("AvfMediaEngine::close(): this:{}", fmt::ptr(this));
+    std::unique_lock<std::mutex> callbackLock(_callbackState->mutex);
+    ++_callbackState->generation;
+    _callbackState->engine = nullptr;
+    _callbackState->currentPlayerItem = nullptr;
+    const auto callbacksOwnedByThisThread = AvfMediaCallbackGuard::currentThreadGuardCount(_callbackState.get());
+    _callbackState->callbackFinished.wait(callbackLock, [state = _callbackState.get(), callbacksOwnedByThisThread] {
+        return state->activeCallbacks <= callbacksOwnedByThisThread;
+    });
+    callbackLock.unlock();
+
     if (_playerItem)
     {
         [_playerItem removeObserver:_sessionHandler forKeyPath:@"status"];
@@ -446,22 +592,21 @@ bool AvfMediaEngine::close()
                                                         name:AVPlayerItemDidPlayToEndTimeNotification
                                                       object:_playerItem];
 
-        [_playerItem release];
         _playerItem = nil;
     }
+
+    _playerOutput = nil;
 
     if (_player)
     {
         [_player pause];
         [_player replaceCurrentItemWithPlayerItem:nil];
-        [_player release];
         _player = nil;
     }
 
     if (_sessionHandler)
     {
         [_sessionHandler detachMediaEngine];
-        [_sessionHandler release];
         _sessionHandler = nil;
     }
 

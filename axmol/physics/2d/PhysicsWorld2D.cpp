@@ -13,7 +13,7 @@
 #    include <algorithm>
 #    include <array>
 #    include <atomic>
-#    include <climits>
+#    include <limits.h>
 
 #    include "axmol/physics/2d/Rigidbody2D.h"
 #    include "axmol/physics/2d/Collider2D.h"
