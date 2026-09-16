@@ -33,7 +33,7 @@ public:
     TextureImpl(id<MTLDevice> mtlDevice, const TextureDesc& descriptor);
     /**
      * Wraps an existing MTLTexture object.
-     * The texture is retained; this instance will release it on destruction.
+     * ARC keeps the texture alive for this instance's lifetime.
      */
     TextureImpl(id<MTLDevice> mtlDevice, id<MTLTexture> texture);
     ~TextureImpl();

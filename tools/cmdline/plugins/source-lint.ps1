@@ -43,7 +43,9 @@ function Check-CStdHeaders {
         'cstring', 'ctime', 'cuchar', 'cwchar', 'cwctype'
     )
 
-    $pattern = '#include\s+<(' + ($cHeaders -join '|') + ')>'
+    # Allow whitespace between '#' and 'include' (for example '#    include')
+    # as commonly used inside platform/configuration guards.
+    $pattern = '(?m)^\s*#\s*include\s+<(' + ($cHeaders -join '|') + ')>'
 
     $violations = @()
 

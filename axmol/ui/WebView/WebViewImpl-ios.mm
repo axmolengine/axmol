@@ -24,7 +24,7 @@
 static NSString* const AXWebViewConsoleMessageHandlerName = @"axmolWebViewConsole";
 
 @interface AXWebViewScriptMessageHandler : NSObject <WKScriptMessageHandler>
-@property(nonatomic, assign) UIWebViewWrapper* webViewWrapper;
+@property(nonatomic, weak) UIWebViewWrapper* webViewWrapper;
 @end
 
 @interface UIWebViewWrapper : NSObject
@@ -76,12 +76,13 @@ static NSString* const AXWebViewConsoleMessageHandlerName = @"axmolWebViewConsol
 - (void)goForward;
 
 - (void)setScalesPageToFit:(const bool)scalesPageToFit;
+- (void)detach;
 @end
 
 @interface UIWebViewWrapper () <WKUIDelegate, WKNavigationDelegate>
 @property(nonatomic) WKWebView* wkWebView;
 @property(nonatomic) BOOL suppressNextDidFinishLoading;
-@property(nonatomic, retain) AXWebViewScriptMessageHandler* scriptMessageHandler;
+@property(nonatomic, strong) AXWebViewScriptMessageHandler* scriptMessageHandler;
 
 @property(nonatomic, copy) NSString* jsScheme;
 @end
@@ -120,19 +121,27 @@ static NSString* const AXWebViewConsoleMessageHandlerName = @"axmolWebViewConsol
     return self;
 }
 
-- (void)dealloc
+- (void)detach
 {
+    self.shouldStartLoading = nullptr;
+    self.didFinishLoading   = nullptr;
+    self.didFailLoading     = nullptr;
+    self.onJsCallback       = nullptr;
+
     self.wkWebView.UIDelegate         = nil;
     self.wkWebView.navigationDelegate = nil;
     [self.wkWebView.configuration.userContentController
         removeScriptMessageHandlerForName:AXWebViewConsoleMessageHandlerName];
     [self.wkWebView removeFromSuperview];
-    [self.wkWebView release];
     self.wkWebView                           = nil;
     self.scriptMessageHandler.webViewWrapper = nil;
     self.scriptMessageHandler                = nil;
-    self.jsScheme                            = nil;
-    [super dealloc];
+}
+
+- (void)dealloc
+{
+    [self detach];
+    self.jsScheme = nil;
 }
 
 - (void)setupWebView
@@ -180,14 +189,14 @@ static NSString* const AXWebViewConsoleMessageHandlerName = @"axmolWebViewConsol
             @"});"
             @"})();";
 
-        WKWebViewConfiguration* configuration          = [[[WKWebViewConfiguration alloc] init] autorelease];
-        WKUserContentController* userContentController = [[[WKUserContentController alloc] init] autorelease];
-        WKUserScript* userScript                       = [[[WKUserScript alloc] initWithSource:consoleBridgeScript
-                                                           injectionTime:WKUserScriptInjectionTimeAtDocumentStart
-                                                        forMainFrameOnly:NO] autorelease];
+        WKWebViewConfiguration* configuration          = [[WKWebViewConfiguration alloc] init];
+        WKUserContentController* userContentController = [[WKUserContentController alloc] init];
+        WKUserScript* userScript                       = [[WKUserScript alloc] initWithSource:consoleBridgeScript
+                                                          injectionTime:WKUserScriptInjectionTimeAtDocumentStart
+                                                       forMainFrameOnly:NO];
 
         [userContentController addUserScript:userScript];
-        self.scriptMessageHandler                = [[[AXWebViewScriptMessageHandler alloc] init] autorelease];
+        self.scriptMessageHandler                = [[AXWebViewScriptMessageHandler alloc] init];
         self.scriptMessageHandler.webViewWrapper = self;
         [userContentController addScriptMessageHandler:self.scriptMessageHandler
                                                   name:AXWebViewConsoleMessageHandlerName];
@@ -200,7 +209,7 @@ static NSString* const AXWebViewConsoleMessageHandlerName = @"axmolWebViewConsol
     if (!self.wkWebView.superview)
     {
         auto view     = ax::Director::getInstance()->getRenderView();
-        auto hostView = (__bridge RenderHostView*)view->getNativeDisplay();
+        auto hostView = (__bridge RenderHostView*)view->getNativeDisplay().ptr;
         [hostView addSubview:self.wkWebView];
     }
 }
@@ -331,7 +340,7 @@ static NSString* const AXWebViewConsoleMessageHandlerName = @"axmolWebViewConsol
         [self setupWebView];
     }
 
-    NSURL* url = [self.wkWebView.URL retain];
+    NSURL* url = self.wkWebView.URL;
     if (!url)
     {
         [self.wkWebView reload];
@@ -348,7 +357,6 @@ static NSString* const AXWebViewConsoleMessageHandlerName = @"axmolWebViewConsol
                                                               cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
                                                           timeoutInterval:60];
                      [self.wkWebView loadRequest:request];
-                     [url release];
                    });
 }
 
@@ -587,7 +595,7 @@ WebViewImpl::WebViewImpl(WebView* webView) : _uiWebViewWrapper([UIWebViewWrapper
 
 WebViewImpl::~WebViewImpl()
 {
-    [_uiWebViewWrapper release];
+    [_uiWebViewWrapper detach];
     _uiWebViewWrapper = nullptr;
 }
 

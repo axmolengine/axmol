@@ -197,7 +197,7 @@ void RenderView::showWindow(void* viewController)
 
     // After lifecycle completes, controller.view is initialized with RenderHostView
     auto hostView   = controller.view;
-    _hostViewHandle = controller.view;
+    _hostViewHandle = (__bridge void*)controller.view;
 
     const auto size = resolveViewSizeToOrientation([hostView bounds].size);
 

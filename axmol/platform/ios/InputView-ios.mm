@@ -58,9 +58,7 @@ struct InputState
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];  // remove keyboard notification
-    [self.markedText release];
     [self removeFromSuperview];
-    [super dealloc];
 }
 
 - (BOOL)canBecomeFirstResponder
@@ -110,14 +108,13 @@ struct InputState
 
 - (UITextRange*)selectedTextRange
 {
-    return [[[UITextRange alloc] init] autorelease];
+    return [[UITextRange alloc] init];
 }
 
 - (void)deleteBackward
 {
     if (nil != self.markedText)
     {
-        [self.markedText release];
         self.markedText = nil;
     }
     ax::InputSystem::getInstance()->dispatchDeleteBackward(1u);
@@ -127,7 +124,6 @@ struct InputState
 {
     if (nil != self.markedText)
     {
-        [self.markedText release];
         self.markedText = nil;
     }
     const char* pszText = [text cStringUsingEncoding:NSUTF8StringEncoding];
@@ -230,12 +226,7 @@ struct InputState
     {
         return;
     }
-    if (nil != self.markedText)
-    {
-        [self.markedText release];
-    }
     self.markedText = markedText;
-    [self.markedText retain];
 }
 
 - (UITextRange*)markedTextRange
@@ -243,7 +234,7 @@ struct InputState
     AXLOGD("markedTextRange");
     if (nil != self.markedText)
     {
-        return [[[UITextRange alloc] init] autorelease];
+        return [[UITextRange alloc] init];
     }
     return nil;  // Nil if no marked text.
 }
@@ -274,7 +265,6 @@ struct InputState
     }
     const char* pszText = [self.markedText cStringUsingEncoding:NSUTF8StringEncoding];
     ax::InputSystem::getInstance()->dispatchInsertText(std::string_view{pszText, strlen(pszText)});
-    [self.markedText release];
     self.markedText = nil;
 }
 

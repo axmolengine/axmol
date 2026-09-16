@@ -42,7 +42,6 @@ EditBoxImplIOS::EditBoxImplIOS(EditBox* pEditText) : EditBoxImplCommon(pEditText
 
 EditBoxImplIOS::~EditBoxImplIOS()
 {
-    [_systemControl release];
     _systemControl = nil;
 }
 
@@ -156,7 +155,7 @@ void EditBoxImplIOS::setNativeVisible(bool visible)
 void EditBoxImplIOS::updateNativeFrame(const Rect& rect)
 {
     auto renderView = ax::Director::getInstance()->getRenderView();
-    auto hostView   = (__bridge RenderHostView*)renderView->getNativeDisplay();
+    auto hostView   = (__bridge RenderHostView*)renderView->getNativeDisplay().ptr;
 
     float factor = 1.0f;  // hostView.contentScaleFactor;
 
@@ -183,7 +182,7 @@ void EditBoxImplIOS::nativeCloseKeyboard()
 UIFont* EditBoxImplIOS::createNativeFont(std::string_view fontName, int fontSize)
 {
     AXASSERT(!fontName.empty(), "fontName can't be nullptr");
-    auto hostView      = static_cast<RenderHostView*>(ax::Director::getInstance()->getRenderView()->getNativeDisplay());
+    auto hostView      = (__bridge RenderHostView*)ax::Director::getInstance()->getRenderView()->getNativeDisplay().ptr;
     float retinaFactor = hostView.contentScaleFactor;
     NSString* fntName  = [[NSString alloc] initWithBytes:fontName.data()
                                                  length:fontName.length()

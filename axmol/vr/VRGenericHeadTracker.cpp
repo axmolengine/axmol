@@ -145,7 +145,7 @@ static Mat4 getRotateEulerMatrix(float x, float y, float z)
 VRGenericHeadTracker::VRGenericHeadTracker() : _localPosition(Vec3::zero)
 {
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS) && !defined(AX_TARGET_OS_TVOS)
-    _motionMgr = [[CMMotionManager alloc] init];
+    _motionMgr = (__bridge_retained void*)[[CMMotionManager alloc] init];
 #endif
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS) && !defined(AX_TARGET_OS_TVOS) || \
@@ -162,14 +162,16 @@ VRGenericHeadTracker::~VRGenericHeadTracker()
 #endif
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS) && !defined(AX_TARGET_OS_TVOS)
-    [(CMMotionManager*)_motionMgr release];
+    id motionMgr = (__bridge_transfer id)_motionMgr;
+    (void)motionMgr;
+    _motionMgr = nullptr;
 #endif
 }
 
 void VRGenericHeadTracker::startTracking()
 {
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS) && !defined(AX_TARGET_OS_TVOS)
-    CMMotionManager* motionMgr = (CMMotionManager*)_motionMgr;
+    CMMotionManager* motionMgr = (__bridge CMMotionManager*)_motionMgr;
     if (motionMgr.isDeviceMotionAvailable && !motionMgr.isDeviceMotionActive)
     {
         [motionMgr startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXArbitraryZVertical];
@@ -198,7 +200,7 @@ void VRGenericHeadTracker::startTracking()
 void VRGenericHeadTracker::stopTracking()
 {
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS) && !defined(AX_TARGET_OS_TVOS)
-    [(CMMotionManager*)_motionMgr stopDeviceMotionUpdates];
+    [(__bridge CMMotionManager*)_motionMgr stopDeviceMotionUpdates];
 #elif (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
     Device::setAccelerometerEnabled(false);
 #endif
@@ -212,7 +214,7 @@ Vec3 VRGenericHeadTracker::getLocalPosition()
 Mat4 VRGenericHeadTracker::getLocalRotation()
 {
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS) && !defined(AX_TARGET_OS_TVOS)
-    CMMotionManager* motionMgr = (CMMotionManager*)_motionMgr;
+    CMMotionManager* motionMgr = (__bridge CMMotionManager*)_motionMgr;
     CMDeviceMotion* motion     = motionMgr.deviceMotion;
 
     if (motion)

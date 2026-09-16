@@ -27,7 +27,7 @@
 #    include <Jolt/Physics/Collision/Shape/SphereShape.h>
 #    include <Jolt/Physics/Collision/Shape/StaticCompoundShape.h>
 
-#    include <cstring>
+#    include <string.h>
 
 namespace ax
 {

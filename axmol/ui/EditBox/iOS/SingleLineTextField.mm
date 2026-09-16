@@ -23,14 +23,6 @@
 
 #pragma mark - Init & Dealloc
 
-- (void)dealloc
-{
-    [_placeholderFont release];
-    [_placeholderTextColor release];
-
-    [super dealloc];
-}
-
 #pragma mark - Properties
 
 - (UIColor*)placeholderTextColor

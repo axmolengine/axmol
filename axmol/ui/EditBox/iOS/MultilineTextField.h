@@ -18,7 +18,7 @@
 
 @interface AxmolMultilineTextField : UITextView
 
-@property(nonatomic, assign) NSString* placeholder;
-@property(nonatomic, retain) UILabel* placeHolderLabel;
+@property(nonatomic, strong) NSString* placeholder;
+@property(nonatomic, strong) UILabel* placeHolderLabel;
 
 @end

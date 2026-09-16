@@ -33,7 +33,7 @@ EditBoxImplMac::EditBoxImplMac(EditBox* pEditText) : EditBoxImplCommon(pEditText
 
 EditBoxImplMac::~EditBoxImplMac()
 {
-    [_sysEdit release];
+    _sysEdit = nil;
 }
 
 void EditBoxImplMac::createNativeControl()

@@ -16,7 +16,7 @@
  ****************************************************************************/
 #include "axmol/physics/2d/Rigidbody2D.h"
 #if defined(AX_ENABLE_PHYSICS_2D)
-#    include <climits>
+#    include <limits.h>
 #    include <algorithm>
 #    include <cmath>
 

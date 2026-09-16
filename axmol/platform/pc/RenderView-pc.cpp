@@ -879,7 +879,7 @@ void* RenderView::getNativeWindow() const
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
     return glfwGetWin32Window(_mainWindow);
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_MAC
-    return (void*)glfwGetCocoaWindow(_mainWindow);
+    return (__bridge void*)glfwGetCocoaWindow(_mainWindow);
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
 #    if defined(AX_ENABLE_WAYLAND)
     int platform = glfwGetPlatform();
@@ -902,9 +902,8 @@ SurfaceHandle RenderView::getNativeDisplay() const
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
     return glfwGetWin32Window(_mainWindow);
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_MAC
-    return driverType == rhi::GraphicsBackend::Metal ? (void*)glfwGetCocoaView(_mainWindow)
-                                                     : (void*)glfwGetNSGLContext(_mainWindow);
-    return (void*)glfwGetNSGLContext(_mainWindow);
+    return driverType == rhi::GraphicsBackend::Metal ? (__bridge void*)glfwGetCocoaView(_mainWindow)
+                                                     : (__bridge void*)glfwGetNSGLContext(_mainWindow);
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
 #    if defined(AX_ENABLE_WAYLAND)
     int platform = glfwGetPlatform();
