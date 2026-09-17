@@ -228,11 +228,7 @@ static CGSize shrinkTextToFit(NSAttributedString* __strong& string,
             break;
     }
 
-#if AX_TARGET_PLATFORM == AX_PLATFORM_MAC
-    return actualSize;
-#else
     return CGSizeMake(ceil(actualSize.width), ceil(actualSize.height));
-#endif
 }
 
 static bool prepareTextLayout(std::string_view text,
