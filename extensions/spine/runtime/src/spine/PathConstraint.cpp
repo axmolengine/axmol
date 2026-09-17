@@ -163,8 +163,9 @@ void PathConstraint::update(Skeleton &skeleton, Physics physics) {
 		BonePose &bone = _slot->getBone().getAppliedPose();
 		offsetRotation *= bone._a * bone._d - bone._b * bone._c > 0 ? MathUtil::Deg_Rad : -MathUtil::Deg_Rad;
 	}
-	for (size_t i = 0, ip = 3, u = skeleton._update; i < boneCount; i++, ip += 3) {
+	for (size_t i = 0, ip = 3; i < boneCount; i++, ip += 3) {
 		BonePose *bone = bones[i];
+		bone->modifyWorld(skeleton);
 		bone->_worldX += (boneX - bone->_worldX) * mixX;
 		bone->_worldY += (boneY - bone->_worldY) * mixY;
 		float x = positionsBuffer[ip], y = positionsBuffer[ip + 1], dx = x - boneX, dy = y - boneY;
@@ -207,7 +208,6 @@ void PathConstraint::update(Skeleton &skeleton, Physics physics) {
 			bone->_c = sin * a + cos * c;
 			bone->_d = sin * b + cos * d;
 		}
-		bone->modifyWorld((int) u);
 	}
 }
 
