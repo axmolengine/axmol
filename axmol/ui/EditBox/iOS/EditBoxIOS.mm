@@ -53,8 +53,6 @@
 {
     // custom setter cleanup
     self.textInput = nil;
-
-    [super dealloc];
 }
 
 #pragma mark - Properties
@@ -82,9 +80,7 @@
 
     [_textInput resignFirstResponder];
     [_textInput removeFromSuperview];
-    [_textInput release];
-
-    _textInput = [textInput retain];
+    _textInput = textInput;
 
     [self setInputFlag:self.dataInputMode];
     [self setReturnType:self.keyboardReturnType];
@@ -94,7 +90,7 @@
 
 - (void)createSingleLineTextField
 {
-    AxmolSingleLineTextField* textField = [[[AxmolSingleLineTextField alloc] initWithFrame:self.frameRect] autorelease];
+    AxmolSingleLineTextField* textField = [[AxmolSingleLineTextField alloc] initWithFrame:self.frameRect];
     textField.contentVerticalAlignment  = UIControlContentVerticalAlignmentCenter;
     textField.borderStyle               = UITextBorderStyleNone;
 
@@ -105,7 +101,7 @@
 
 - (void)createMultiLineTextField
 {
-    AxmolMultilineTextField* textView = [[[AxmolMultilineTextField alloc] initWithFrame:self.frameRect] autorelease];
+    AxmolMultilineTextField* textView = [[AxmolMultilineTextField alloc] initWithFrame:self.frameRect];
     self.textInput                    = textView;
 }
 
@@ -302,7 +298,7 @@
 - (void)doAnimationWhenKeyboardMoveWithDuration:(float)duration distance:(float)distance
 {
     auto view     = ax::Director::getInstance()->getRenderView();
-    auto hostView = (__bridge RenderHostView*)view->getNativeDisplay();
+    auto hostView = (__bridge RenderHostView*)view->getNativeDisplay().ptr;
 
     [hostView doAnimationWhenKeyboardMoveWithDuration:duration distance:distance];
 }
@@ -319,7 +315,7 @@
 - (void)openKeyboard
 {
     auto view     = ax::Director::getInstance()->getRenderView();
-    auto hostView = (__bridge RenderHostView*)view->getNativeDisplay();
+    auto hostView = (__bridge RenderHostView*)view->getNativeDisplay().ptr;
 
     self.textInput.contentScaleFactor = [hostView contentScaleFactor];
 
@@ -346,7 +342,7 @@
 - (void)animationSelector
 {
     auto view     = ax::Director::getInstance()->getRenderView();
-    auto hostView = (__bridge RenderHostView*)view->getNativeDisplay();
+    auto hostView = (__bridge RenderHostView*)view->getNativeDisplay().ptr;
 
     [hostView doAnimationWhenAnotherEditBeClicked];
 }
@@ -360,7 +356,7 @@
     _returnPressed = NO;
 
     auto view     = ax::Director::getInstance()->getRenderView();
-    auto hostView = (__bridge RenderHostView*)view->getNativeDisplay();
+    auto hostView = (__bridge RenderHostView*)view->getNativeDisplay().ptr;
 
     if ([hostView isKeyboardShown])
     {
@@ -453,7 +449,7 @@
     _returnPressed = NO;
 
     auto view     = ax::Director::getInstance()->getRenderView();
-    auto hostView = (__bridge RenderHostView*)view->getNativeDisplay();
+    auto hostView = (__bridge RenderHostView*)view->getNativeDisplay().ptr;
 
     if ([hostView isKeyboardShown])
     {

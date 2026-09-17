@@ -43,7 +43,7 @@ API_AVAILABLE(ios(13.0))
 
     _viewController = [self createRootViewController];
 
-    renderView->showWindow(_viewController);
+    renderView->showWindow((__bridge void*)_viewController);
 
     // IMPORTANT: Setting the RenderView should be done after creating the RootViewController
     Director::getInstance()->setRenderView(renderView);
@@ -95,13 +95,5 @@ API_AVAILABLE(ios(13.0))
      */
     ax::Application::getInstance()->applicationDidEnterBackground();
 }
-
-#if !__has_feature(objc_arc)
-- (void)dealloc
-{
-    [_viewController release];
-    [super dealloc];
-}
-#endif
 
 @end

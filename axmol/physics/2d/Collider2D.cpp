@@ -11,7 +11,7 @@
 #include "axmol/physics/2d/Collider2D.h"
 #if defined(AX_ENABLE_PHYSICS_2D)
 
-#    include <climits>
+#    include <limits.h>
 #    include <cmath>
 #    include <unordered_map>
 

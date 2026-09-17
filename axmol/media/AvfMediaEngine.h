@@ -9,6 +9,8 @@
 
 #include "axmol/media/MediaEngine.h"
 
+#include <memory>
+
 #if defined(__APPLE__)
 
 #    import <AVFoundation/AVFoundation.h>
@@ -18,9 +20,15 @@
 namespace ax
 {
 
+class AvfMediaEngine;
+struct AvfMediaCallbackState;
+
 class AvfMediaEngine : public MediaEngine
 {
 public:
+    AvfMediaEngine();
+    ~AvfMediaEngine() override;
+
     void fireMediaEvent(MEMediaEventType event)
     {
         if (_onMediaEvent)
@@ -55,6 +63,7 @@ public:
     void internalPause();
 
 private:
+    std::shared_ptr<AvfMediaCallbackState> _callbackState;
     std::function<void(MEMediaEventType)> _onMediaEvent;
     std::function<void(const MEVideoFrame&)> _onVideoFrame;
     MEVideoPixelFormat _videoPF = MEVideoPixelFormat::INVALID;

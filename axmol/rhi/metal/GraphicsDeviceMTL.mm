@@ -450,7 +450,7 @@ Texture* GraphicsDeviceImpl::createTexture(const TextureDesc& descriptor, std::o
 
 Texture* GraphicsDeviceImpl::createTextureFromNativeHandle(const ExternalTextureDesc& descriptor)
 {
-    id<MTLTexture> nativeTexture = (id<MTLTexture>)descriptor.nativeTexture.ptr;
+    id<MTLTexture> nativeTexture = (__bridge id<MTLTexture>)descriptor.nativeTexture.ptr;
     if (!nativeTexture)
         return nullptr;
 
@@ -520,6 +520,9 @@ SamplerHandle GraphicsDeviceImpl::createSampler(const SamplerDesc& desc)
     case SamplerFilter::MIN_ANISOTROPIC:
         samplerDesc.minFilter = MTLSamplerMinMagFilterLinear;
         break;
+    default:
+        samplerDesc.minFilter = MTLSamplerMinMagFilterLinear;
+        break;
     }
 
     samplerDesc.magFilter =
@@ -537,13 +540,21 @@ SamplerHandle GraphicsDeviceImpl::createSampler(const SamplerDesc& desc)
     case SamplerFilter::MIP_LINEAR:
         samplerDesc.mipFilter = MTLSamplerMipFilterLinear;
         break;
+    default:
+        samplerDesc.mipFilter = MTLSamplerMipFilterNotMipmapped;
+        break;
     }
 
     bool supportBorderColor{false};
     if (@available(iOS 14.0, macOS 10.12, *))
     {
-        supportBorderColor = ([_mtlDevice respondsToSelector:@selector(supportsSamplerBorderColor)] &&
-                              (bool)(void*)[_mtlDevice performSelector:@selector(supportsSamplerBorderColor)]);
+        const SEL selector = @selector(supportsSamplerBorderColor);
+        if ([_mtlDevice respondsToSelector:selector])
+        {
+            const IMP imp                         = [(NSObject*)_mtlDevice methodForSelector:selector];
+            const auto supportsSamplerBorderColor = reinterpret_cast<BOOL (*)(id, SEL)>(imp);
+            supportBorderColor                    = supportsSamplerBorderColor(_mtlDevice, selector);
+        }
     }
 
     // --- Address Modes ---
@@ -607,16 +618,15 @@ SamplerHandle GraphicsDeviceImpl::createSampler(const SamplerDesc& desc)
 
     // --- Create Sampler ---
     id<MTLSamplerState> sampler = [_mtlDevice newSamplerStateWithDescriptor:samplerDesc];
-    [samplerDesc release];
-
-    return SamplerHandle{(__bridge void*)sampler};
+    return SamplerHandle{(__bridge_retained void*)sampler};
 }
 
 void GraphicsDeviceImpl::destroySampler(SamplerHandle& sampler)
 {
     if (sampler)
     {
-        [static_cast<id<MTLSamplerState>>(sampler) release];
+        id<MTLSamplerState> retainedSampler = (__bridge_transfer id<MTLSamplerState>)sampler.ptr;
+        AX_UNUSED_PARAM(retainedSampler);
         sampler = nullptr;
     }
 }

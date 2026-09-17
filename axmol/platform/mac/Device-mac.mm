@@ -80,7 +80,7 @@ static NSAttributedString* __attributedStringWithFontSize(NSMutableAttributedStr
         [attributedString endEditing];
     }
 
-    return [[attributedString copy] autorelease];
+    return [attributedString copy];
 }
 
 int Device::getDPI()
@@ -175,7 +175,7 @@ static NSSize _calculateRealSizeForString(NSAttributedString** str, id font, NSS
                 break;
             }
 
-            NSMutableAttributedString* mutableString = [[*str mutableCopy] autorelease];
+            NSMutableAttributedString* mutableString = [*str mutableCopy];
             *str                                     = __attributedStringWithFontSize(mutableString, fontSize);
 
 #ifdef __MAC_10_11
@@ -224,7 +224,7 @@ static NSSize _calculateRealSizeForString(NSAttributedString** str, id font, NSS
                 break;
             }
 
-            NSMutableAttributedString* mutableString = [[*str mutableCopy] autorelease];
+            NSMutableAttributedString* mutableString = [*str mutableCopy];
             *str                                     = __attributedStringWithFontSize(mutableString, fontSize);
 
 #ifdef __MAC_10_11
@@ -350,11 +350,11 @@ static bool _initWithString(std::string_view text,
         [paragraphStyle setAlignment:textAlign];
 
         // attribute
-        NSDictionary* tokenAttributesDict = [NSDictionary
+        NSDictionary* tokenAttributesDict        = [NSDictionary
             dictionaryWithObjectsAndKeys:foregroundColor, NSForegroundColorAttributeName, font, NSFontAttributeName,
                                          paragraphStyle, NSParagraphStyleAttributeName, nil];
-        NSAttributedString* stringWithAttributes =
-            [[[NSAttributedString alloc] initWithString:string attributes:tokenAttributesDict] autorelease];
+        NSAttributedString* stringWithAttributes = [[NSAttributedString alloc] initWithString:string
+                                                                                   attributes:tokenAttributesDict];
 
         CGSize dimensions = CGSizeMake(info->width, info->height);
 
@@ -383,17 +383,17 @@ static bool _initWithString(std::string_view text,
         NSRect textRect =
             NSMakeRect(xPadding, POTHigh - dimensions.height + yPadding, realDimensions.width, realDimensions.height);
 
-        NSBitmapImageRep* offscreenRep = [[[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
-                                                                                  pixelsWide:POTWide
-                                                                                  pixelsHigh:POTHigh
-                                                                               bitsPerSample:8
-                                                                             samplesPerPixel:4
-                                                                                    hasAlpha:YES
-                                                                                    isPlanar:NO
-                                                                              colorSpaceName:NSDeviceRGBColorSpace
-                                                                                bitmapFormat:0
-                                                                                 bytesPerRow:4 * POTWide
-                                                                                bitsPerPixel:32] autorelease];
+        NSBitmapImageRep* offscreenRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
+                                                                                 pixelsWide:POTWide
+                                                                                 pixelsHigh:POTHigh
+                                                                              bitsPerSample:8
+                                                                            samplesPerPixel:4
+                                                                                   hasAlpha:YES
+                                                                                   isPlanar:NO
+                                                                             colorSpaceName:NSDeviceRGBColorSpace
+                                                                               bitmapFormat:0
+                                                                                bytesPerRow:4 * POTWide
+                                                                               bitsPerPixel:32];
 
         NSGraphicsContext* g = [NSGraphicsContext graphicsContextWithBitmapImageRep:offscreenRep];
         [NSGraphicsContext saveGraphicsState];
@@ -413,8 +413,8 @@ static bool _initWithString(std::string_view text,
                                              NSFontAttributeName, paragraphStyle, NSParagraphStyleAttributeName,
                                              strokeSize, NSStrokeWidthAttributeName, strokeColor,
                                              NSStrokeColorAttributeName, nil];
-            NSAttributedString* strokeString =
-                [[[NSAttributedString alloc] initWithString:string attributes:tokenAttributesDict2] autorelease];
+            NSAttributedString* strokeString   = [[NSAttributedString alloc] initWithString:string
+                                                                               attributes:tokenAttributesDict2];
             [strokeString drawInRect:textRect];
         }
 

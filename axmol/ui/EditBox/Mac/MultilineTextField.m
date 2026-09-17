@@ -22,8 +22,6 @@
 - (void)dealloc
 {
     self.placeHolder = nil;
-
-    [super dealloc];
 }
 
 - (void)axui_setPlaceholderFont:(NSFont*)font

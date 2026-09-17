@@ -169,7 +169,7 @@
 
 - (void)axui_setMaxLength:(int)length
 {
-    id formater = [[[AxmolTextFieldFormatter alloc] init] autorelease];
+    id formater = [[AxmolTextFieldFormatter alloc] init];
     [formater setMaximumLength:length];
     [self setFormatter:formater];
 }

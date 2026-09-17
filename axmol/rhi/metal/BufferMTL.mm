@@ -64,16 +64,7 @@ BufferImpl::~BufferImpl()
 {
     if (BufferUsage::DYNAMIC == _usage)
     {
-        for (id<MTLBuffer> buffer in _dynamicDataBuffers)
-            [buffer release];
-
-        [_dynamicDataBuffers release];
-
         BufferManager::removeBuffer(this);
-    }
-    else
-    {
-        [_mtlBuffer release];
     }
 }
 

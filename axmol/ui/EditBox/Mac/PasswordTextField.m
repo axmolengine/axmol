@@ -90,11 +90,6 @@
     return self;
 }
 
-- (void)dealloc
-{
-    [super dealloc];
-}
-
 + (void)load
 {
     //    [self setCellClass:[RSVerticallyCenteredSecureTextFieldCell class]];
@@ -179,7 +174,7 @@
 
 - (void)axui_setMaxLength:(int)length
 {
-    id formater = [[[AxmolTextFieldFormatter alloc] init] autorelease];
+    id formater = [[AxmolTextFieldFormatter alloc] init];
     [formater setMaximumLength:length];
     [self setFormatter:formater];
 }
