@@ -86,7 +86,7 @@
 ## scripting/lua
 
 - Upstream: https://github.com/axmolengine/axmol
-- Version: axmol-1.0
+- Version: axmol-3.0
 - License: MIT
 
 ## spine
