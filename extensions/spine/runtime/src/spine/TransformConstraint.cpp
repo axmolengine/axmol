@@ -72,14 +72,13 @@ void TransformConstraint::update(Skeleton &skeleton, Physics physics) {
 	}
 	FromProperty **fromItems = data._properties.buffer();
 	size_t fn = data._properties.size();
-	int update = skeleton._update;
 	BonePose **bones = _bones.buffer();
 	for (size_t i = 0, n = _bones.size(); i < n; i++) {
 		BonePose *bone = bones[i];
 		if (localTarget) {
 			bone->modifyLocal(skeleton);
 		} else {
-			bone->modifyWorld(update);
+			bone->modifyWorld(skeleton);
 		}
 		for (size_t f = 0; f < fn; f++) {
 			FromProperty *from = fromItems[f];
