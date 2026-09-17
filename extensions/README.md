@@ -86,13 +86,13 @@
 ## scripting/lua
 
 - Upstream: https://github.com/axmolengine/axmol
-- Version: axmol-1.0
+- Version: axmol-3.0
 - License: MIT
 
 ## spine
 
 - Upstream: https://github.com/axmolengine/spine-axmol
-- Version: 4.3-ce7b5d9 (Until Jun.13 2026), with modifications:
+- Version: 4.3-8cc9f91 (Until Sep.17 2026), with modifications:
   - `String.h`: Added an unsafe String(std::string_view) constructor to bypass redundant strlen and memory copy operations.
   - `Interpolation.h`: Removes Interpolation’s inheritance from spine::SpineObject to prevent destructor calls from accessing a released AxmolSpineExtension during shutdown.
 - License: Spine Runtimes License

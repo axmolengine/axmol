@@ -98,7 +98,7 @@ namespace spine {
 		void validateLocalTransform(Skeleton &skeleton);
 
 		void modifyLocal(Skeleton &skeleton);
-		void modifyWorld(int update);
+		void modifyWorld(Skeleton &skeleton);
 
 		/// The world transform <code>[a b][c d]</code> x-axis x component.
 		float getA();
@@ -160,7 +160,7 @@ namespace spine {
 	private:
 		void setLocal(float ra, float rb, float rc, float rd);
 		void setLocal(float ra, float rb, float rc, float rd, float ro);
-		void resetWorld(int update);
+		void resetWorld(Skeleton &skeleton, int update);
 
 	protected:
 		Bone *_bone;

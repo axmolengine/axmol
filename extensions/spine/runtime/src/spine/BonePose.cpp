@@ -279,23 +279,24 @@ void BonePose::validateLocalTransform(Skeleton &skeleton) {
 void BonePose::modifyLocal(Skeleton &skeleton) {
 	if (_local == skeleton._update) updateLocalTransform(skeleton);
 	_world = 0;
-	resetWorld(skeleton._update);
+	resetWorld(skeleton, skeleton._update);
 }
 
-void BonePose::modifyWorld(int update) {
+void BonePose::modifyWorld(Skeleton &skeleton) {
+	int update = skeleton._update;
 	_local = update;
 	_world = update;
-	resetWorld(update);
+	resetWorld(skeleton, update);
 }
 
-void BonePose::resetWorld(int update) {
+void BonePose::resetWorld(Skeleton &skeleton, int update) {
 	Array<Bone *> &children = _bone->getChildren();
 	for (size_t i = 0, n = children.size(); i < n; i++) {
 		BonePose &child = children[i]->getAppliedPose();
 		if (child._world == update) {
+			if (child._local == update) child.updateLocalTransform(skeleton);
 			child._world = 0;
-			child._local = 0;
-			child.resetWorld(update);
+			child.resetWorld(skeleton, update);
 		}
 	}
 }
