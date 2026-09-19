@@ -36,7 +36,7 @@
 
 ## curl
 - [![Upstream](https://img.shields.io/github/v/release/curl/curl?label=Upstream)](https://github.com/curl/curl)
-- Version: 8.21.0
+- Version: 8.22.0
 - License: Curl (MIT/X)
 
 ## doctest
@@ -127,7 +127,7 @@
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: 2.1-acb2234
+  - Version: 2.1-24c20c9
   - License: MIT
 
 - lua-cjson
@@ -196,7 +196,7 @@
 
 ## OpenSSL
 - [![Upstream](https://img.shields.io/github/v/release/openssl/openssl?label=Upstream)](https://github.com/openssl/openssl)
-- Version: 3.0.21
+- Version: 3.0.22
 - License: Apache-2.0
 
 ## lunasvg

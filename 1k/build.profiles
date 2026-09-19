@@ -93,13 +93,13 @@ emsdk=3.1.73~6.0.9+
 # --- endregion
 
 # --- region dependencies @fetch.cmake
-1kdist=v122
-oboe=1.10.0
+1kdist=v123
+oboe=1.11.0
 kcp=2.1.1
 lz4=v1.10.0
 sample-assets=master
 live2d-core=5.5
 lunasvg=v3.5.0
-openxr=release-1.1.62
+openxr=release-1.1.63
 tracy=v0.13.1
 # --- endregion
