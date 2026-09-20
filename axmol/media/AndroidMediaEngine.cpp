@@ -112,6 +112,18 @@ bool AndroidMediaEngine::setRate(double fRate)
 {
     return _mediaPlayer && JniHelper::callBooleanMethod(className, "setRate", _mediaPlayer, fRate);
 }
+bool AndroidMediaEngine::setVolume(double volume)
+{
+    if (!_mediaPlayer || !JniHelper::callBooleanMethod(className, "setVolume", _mediaPlayer, volume))
+        return false;
+
+    _volume = volume;
+    return true;
+}
+double AndroidMediaEngine::getVolume() const
+{
+    return _volume;
+}
 bool AndroidMediaEngine::setCurrentTime(double fSeekTimeInSec)
 {
     return _mediaPlayer && JniHelper::callBooleanMethod(className, "setCurrentTime", _mediaPlayer, fSeekTimeInSec);

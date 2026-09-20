@@ -31,6 +31,8 @@ public:
     bool close() override;
     bool setLoop(bool bLooping) override;
     bool setRate(double fRate) override;
+    bool setVolume(double volume) override;
+    double getVolume() const override;
     bool setCurrentTime(double fSeekTimeInSec) override;
     double getCurrentTime() override { return _currentTime; }
     double getDuration() override { return _duration; }
@@ -69,6 +71,7 @@ private:
 
     double _currentTime{0.0};  // current time in seconds
     double _duration{0.0};     // duration in seconds
+    double _volume{1.0};
 };
 
 struct AndroidMediaEngineFactory : public MediaEngineFactory

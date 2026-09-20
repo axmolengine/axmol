@@ -1,7 +1,4 @@
-#pragma once
 //////////////////////////////////////////////////////////////////////////
-//
-// WmfMediaEngine.h : Playback helper class.
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -18,6 +15,8 @@
 // Copyright (c) 2019-present Simdsoft Limited.
 // https://axmol.dev/
 //////////////////////////////////////////////////////////////////////////
+
+#pragma once
 
 #if defined(_WIN32)
 #    include <winapifamily.h>
@@ -176,6 +175,8 @@ public:
     BOOL CanFastForward() const;
     BOOL CanRewind() const;
     bool setRate(double fRate) override;
+    bool setVolume(double volume) override;
+    double getVolume() const override;
     HRESULT FastForward();
     HRESULT Rewind();
 
@@ -234,6 +235,7 @@ protected:
     TComPtr<IMFRateControl> m_RateControl;
     TComPtr<IMFRateSupport> m_RateSupport;
     TComPtr<IMFPresentationClock> m_pClock;
+    TComPtr<IMFSimpleAudioVolume> m_audioVolume;
 
     TComPtr<IMFMediaType> m_videoInputType;
 
@@ -259,7 +261,7 @@ protected:
     std::atomic<bool> m_bClosePending = false;
     bool m_bPlaybackEnded             = false;
 
-    mutable CritSec m_critsec;  // Protects the seeking and rate-change states.
+    mutable CritSec m_critsec;  // Protects seek/rate command state and audio-volume state/service.
 
     std::atomic<MEMediaState> m_state = MEMediaState::Closed;  // Current state of the media session.
 
@@ -272,8 +274,9 @@ protected:
     BOOL m_bLooping  = FALSE;
     BOOL m_bAutoPlay = TRUE;
 
-    BOOL m_bIsH264 = FALSE;
-    BOOL m_bIsHEVC = FALSE;  // hvc1,hev1
+    BOOL m_bIsH264  = FALSE;
+    BOOL m_bIsHEVC  = FALSE;  // hvc1,hev1
+    double m_volume = 1.0;
     GUID m_VideoOutputFormat{};
     MFVideoRotationFormat m_VideoRotation{MFVideoRotationFormat_0};
 

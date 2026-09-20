@@ -119,6 +119,17 @@
           "isVariadic": false
         },
         {
+          "nativeName": "getVolume",
+          "luaName": "getVolume",
+          "declaringType": "ax::ui::VideoPlayer",
+          "returnType": "double",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
           "nativeName": "isFullscreen",
           "luaName": "isFullscreen",
           "declaringType": "ax::ui::VideoPlayer",
@@ -385,6 +396,21 @@
           "returnType": "void",
           "parameterTypes": [
             "ax::ui::VideoController *"
+          ],
+          "defaultValues": [
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
+          "nativeName": "setVolume",
+          "luaName": "setVolume",
+          "declaringType": "ax::ui::VideoPlayer",
+          "returnType": "bool",
+          "parameterTypes": [
+            "double"
           ],
           "defaultValues": [
             null

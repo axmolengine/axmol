@@ -233,6 +233,17 @@ public:
     virtual void setPlayRate(float fRate);
 
     /**
+     * Sets the audio volume for this video player.
+     *
+     * @param volume A normalized volume clamped to [0.0, 1.0]; zero produces silence.
+     * @return True if the value was accepted by the player.
+     */
+    virtual bool setVolume(double volume);
+
+    /** Gets the current audio volume for this video player. */
+    virtual double getVolume() const;
+
+    /**
      * Starts playback.
      */
     virtual void play();
@@ -385,6 +396,7 @@ protected:
 
     bool _isPlaying        = false;
     bool _isLooping        = false;
+    double _volume         = 1.0;
     bool _fullscreenDirty  = false;
     bool _fullscreen       = false;
     bool _keepAspectRatio  = false;

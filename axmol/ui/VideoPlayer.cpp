@@ -1310,6 +1310,24 @@ void VideoPlayer::setPlayRate(float fRate)
     }
 }
 
+bool VideoPlayer::setVolume(double volume)
+{
+    volume = std::clamp(volume, 0.0, 1.0);
+
+    auto engine = reinterpret_cast<PrivateVideoContext*>(_videoContext)->_engine;
+    if (!engine || !engine->setVolume(volume))
+        return false;
+
+    _volume = volume;
+    return true;
+}
+
+double VideoPlayer::getVolume() const
+{
+    auto engine = reinterpret_cast<PrivateVideoContext*>(_videoContext)->_engine;
+    return engine ? engine->getVolume() : _volume;
+}
+
 void VideoPlayer::play()
 {
     if (!_videoURL.empty())
@@ -1496,6 +1514,7 @@ void VideoPlayer::copySpecialProperties(Widget* widget)
     {
         _isPlaying        = player->_isPlaying;
         _isLooping        = player->_isLooping;
+        _volume           = player->_volume;
         _userInputEnabled = player->_userInputEnabled;
         _styleType        = player->_styleType;
         _fullscreen       = player->_fullscreen;
@@ -1504,6 +1523,7 @@ void VideoPlayer::copySpecialProperties(Widget* widget)
         _keepAspectRatio  = player->_keepAspectRatio;
         _videoSource      = player->_videoSource;
         _eventCallback    = player->_eventCallback;
+        setVolume(_volume);
     }
 }
 
