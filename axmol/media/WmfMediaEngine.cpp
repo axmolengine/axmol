@@ -744,6 +744,17 @@ HRESULT WmfMediaEngine::OnTopologyReady(IMFMediaEvent* pEvent)
     // MFVideoRotationFormat
     m_VideoRotation =
         static_cast<MFVideoRotationFormat>(MFGetAttributeUINT32(m_videoInputType.Get(), MF_MT_VIDEO_ROTATION, FALSE));
+
+    {
+        AutoLock lock(m_critsec);
+        m_audioVolume.Reset();
+        if (m_pSession && SUCCEEDED(MFGetService(m_pSession.Get(), MR_POLICY_VOLUME_SERVICE,
+                                                 IID_PPV_ARGS(m_audioVolume.GetAddressOf()))))
+        {
+            m_audioVolume->SetMasterVolume(static_cast<float>(m_volume));
+        }
+    }
+
     if (m_bAutoPlay)
         StartPlayback(nullptr);
 
@@ -1081,6 +1092,25 @@ bool WmfMediaEngine::setRate(double lfRate)
     }
 
     return SUCCEEDED(hr);
+}
+
+bool WmfMediaEngine::setVolume(double volume)
+{
+    AutoLock lock(m_critsec);
+    if (m_audioVolume && FAILED(m_audioVolume->SetMasterVolume(static_cast<float>(volume))))
+        return false;
+
+    m_volume = volume;
+    return true;
+}
+
+double WmfMediaEngine::getVolume() const
+{
+    AutoLock lock(m_critsec);
+    float volume = 0.0f;
+    if (m_audioVolume && SUCCEEDED(m_audioVolume->GetMasterVolume(&volume)))
+        return volume;
+    return m_volume;
 }
 
 HRESULT WmfMediaEngine::SetPositionInternal(const MFTIME& hnsPosition)
@@ -1474,6 +1504,11 @@ HRESULT WmfMediaEngine::CloseSession()
     m_RateControl.Reset();
     m_RateSupport.Reset();
     m_pClock.Reset();
+
+    {
+        AutoLock lock(m_critsec);
+        m_audioVolume.Reset();
+    }
 
     m_pSource.Reset();
     m_pSession.Reset();
