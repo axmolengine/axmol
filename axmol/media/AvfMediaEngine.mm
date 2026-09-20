@@ -322,6 +322,7 @@ bool AvfMediaEngine::open(std::string_view sourceUri)
     }
 
     _player.actionAtItemEnd = AVPlayerActionAtItemEndPause;
+    _player.volume          = static_cast<float>(_volume);
 
     // create player item
     _sessionHandler = [[AVMediaSessionHandler alloc] initWithCallbackState:_callbackState];
@@ -627,11 +628,19 @@ bool AvfMediaEngine::setRate(double fRate)
     if (_player)
     {
         [_player setRate:fRate];
-        // TODO:
-
-        _player.muted = fRate < 0 ? YES : NO;
     }
     return true;
+}
+bool AvfMediaEngine::setVolume(double volume)
+{
+    if (_player)
+        _player.volume = static_cast<float>(volume);
+    _volume = volume;
+    return true;
+}
+double AvfMediaEngine::getVolume() const
+{
+    return _player ? _player.volume : _volume;
 }
 bool AvfMediaEngine::setCurrentTime(double fSeekTimeInSec)
 {
