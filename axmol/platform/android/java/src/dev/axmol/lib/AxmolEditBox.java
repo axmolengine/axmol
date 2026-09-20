@@ -144,6 +144,8 @@ public class AxmolEditBox extends AppCompatEditText {
 
     public  AxmolEditBox(Context context){
         super(context);
+        this.setTextHorizontalAlignment(kTextHorizontalAlignmentLeft);
+        this.setTextVerticalAlignment(kTextVerticalAlignmentCenter);        
     }
 
     public void setEditBoxViewRect(int left, int top, int maxWidth, int maxHeight) {
@@ -204,18 +206,19 @@ public class AxmolEditBox extends AppCompatEditText {
 
     public void setTextHorizontalAlignment(int alignment) {
         int gravity = this.getGravity();
+        gravity &= ~Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK;
         switch (alignment) {
             case kTextHorizontalAlignmentLeft:
-                gravity = (gravity & ~Gravity.RIGHT) | Gravity.LEFT ;
+                gravity |= Gravity.LEFT;
                 break;
             case kTextHorizontalAlignmentCenter:
-                gravity =(gravity & ~Gravity.RIGHT & ~Gravity.LEFT) | Gravity.CENTER_HORIZONTAL;
+                gravity |= Gravity.CENTER_HORIZONTAL;
                 break;
             case kTextHorizontalAlignmentRight:
-                gravity = (gravity & ~Gravity.LEFT) | Gravity.RIGHT ;
+                gravity |= Gravity.RIGHT;
                 break;
             default:
-                gravity = (gravity & ~Gravity.RIGHT) | Gravity.LEFT ;
+                gravity |= Gravity.LEFT;
                 break;
         }
         this.setGravity(gravity);
@@ -247,8 +250,6 @@ public class AxmolEditBox extends AppCompatEditText {
     }
 
     public  void setInputMode(int inputMode){
-        this.setTextHorizontalAlignment(kTextHorizontalAlignmentLeft);
-        this.setTextVerticalAlignment(kTextVerticalAlignmentCenter);
         switch (inputMode) {
             case kEditBoxInputModeAny:
                 this.setTextVerticalAlignment(kTextVerticalAlignmentTop);
