@@ -282,6 +282,12 @@ bool VlcMediaEngine::open(std::string_view sourceUri)
     libvlc_media_list_add_media(_ml, media);  // always one media
     libvlc_media_release(media);
 
+    if (libvlc_audio_set_volume(_mp, static_cast<int>(std::lround(_volume * 100.0))) != 0)
+    {
+        libvlc_media_list_remove_index(_ml, 0);
+        return false;
+    }
+
     if (_bAutoPlay)
     {
         _state = MEMediaState::Preparing;
@@ -362,6 +368,7 @@ bool VlcMediaEngine::updatePlaybackProperties()
     }
     return true;
 }
+
 bool VlcMediaEngine::close()
 {
     if (libvlc_media_list_count(_ml) > 0)
@@ -376,6 +383,7 @@ bool VlcMediaEngine::close()
     _state = MEMediaState::Closed;
     return true;
 }
+
 bool VlcMediaEngine::setLoop(bool bLooping)
 {
     _looping = bLooping;
@@ -384,10 +392,26 @@ bool VlcMediaEngine::setLoop(bool bLooping)
             _mlp, _looping ? libvlc_playback_mode_repeat : libvlc_playback_mode_default);
     return true;
 }
+
 bool VlcMediaEngine::setRate(double fRate)
 {
     return _mp && libvlc_media_player_set_rate(_mp, static_cast<float>(fRate)) == 0;
 }
+
+bool VlcMediaEngine::setVolume(double volume)
+{
+    if (_mp && libvlc_audio_set_volume(_mp, static_cast<int>(std::lround(volume * 100.0))) != 0)
+        return false;
+
+    _volume = volume;
+    return true;
+}
+
+double VlcMediaEngine::getVolume() const
+{
+    return _volume;
+}
+
 bool VlcMediaEngine::setCurrentTime(double fSeekTimeInSec)
 {
     if (_mp)
@@ -415,12 +439,14 @@ bool VlcMediaEngine::play()
         libvlc_media_list_player_play(_mlp);
     return true;
 }
+
 bool VlcMediaEngine::pause()
 {
     if (_mlp && _state != MEMediaState::Closed)
         libvlc_media_list_player_pause(_mlp);
     return true;
 }
+
 bool VlcMediaEngine::stop()
 {
     if (_mlp && _state != MEMediaState::Closed)
@@ -431,6 +457,7 @@ bool VlcMediaEngine::stop()
 #    endif
     return true;
 }
+
 MEMediaState VlcMediaEngine::getState() const
 {
     return _state;
