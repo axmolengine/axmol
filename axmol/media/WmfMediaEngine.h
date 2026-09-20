@@ -1,7 +1,4 @@
-#pragma once
 //////////////////////////////////////////////////////////////////////////
-//
-// WmfMediaEngine.h : Playback helper class.
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -18,6 +15,8 @@
 // Copyright (c) 2019-present Simdsoft Limited.
 // https://axmol.dev/
 //////////////////////////////////////////////////////////////////////////
+
+#pragma once
 
 #if defined(_WIN32)
 #    include <winapifamily.h>

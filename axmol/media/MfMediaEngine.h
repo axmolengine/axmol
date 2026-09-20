@@ -1,5 +1,4 @@
 //--------------------------------------------------------------------------------------
-// File: MfMediaEngine.h
 //
 // Modified from https://github.com/microsoft/Xbox-ATG-Samples/tree/main/UWPSamples/Graphics/VideoTextureUWP
 //

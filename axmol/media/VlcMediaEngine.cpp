@@ -1,16 +1,12 @@
-/***************************************************
-* VlcMediaEngine.cpp
-
-required codec-runtime: ubuntu-restricted-extras (contains intel-media-va-driver)
-sudo apt install ubuntu-restricted-extras
-
-*/
 /****************************************************************************
  Copyright (c) 2019-present Simdsoft Limited.
 
  https://axmol.dev/
 
  SPDX-License-Identifier: MIT
+
+ Note: required codec-runtime: ubuntu-restricted-extras (contains intel-media-va-driver)
+sudo apt install ubuntu-restricted-extras
  ****************************************************************************/
 
 #if defined(AX_ENABLE_VLC_MEDIA)

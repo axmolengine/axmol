@@ -1,6 +1,13 @@
-// VlcMediaEngine.h
-// Copyright (c) 2019-present Simdsoft Limited.
-// https://axmol.dev/
+/****************************************************************************
+ Copyright (c) 2019-present Simdsoft Limited.
+
+ https://axmol.dev/
+
+ SPDX-License-Identifier: MIT
+
+ Note: required codec-runtime: ubuntu-restricted-extras (contains intel-media-va-driver)
+sudo apt install ubuntu-restricted-extras
+ ****************************************************************************/
 
 #pragma once
 
