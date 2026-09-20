@@ -274,8 +274,8 @@ protected:
     BOOL m_bLooping  = FALSE;
     BOOL m_bAutoPlay = TRUE;
 
-    BOOL m_bIsH264 = FALSE;
-    BOOL m_bIsHEVC = FALSE;  // hvc1,hev1
+    BOOL m_bIsH264  = FALSE;
+    BOOL m_bIsHEVC  = FALSE;  // hvc1,hev1
     double m_volume = 1.0;
     GUID m_VideoOutputFormat{};
     MFVideoRotationFormat m_VideoRotation{MFVideoRotationFormat_0};

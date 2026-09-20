@@ -102,11 +102,9 @@ bool VideoPlayerTest::init()
 
     _volumeLabel = Label::createWithSystemFont("volume: 100.00%", "Arial", 14);
     _volumeLabel->setAnchorPoint(Anchors::center);
-    const auto volumeSliderOffsetY =
-        kVolumeSliderY - (_visibleRect.origin.y + _visibleRect.size.height * 0.08f);
-    _volumeLabel->setPosition(
-        Vec2(_visibleRect.origin.x + _visibleRect.size.width * 0.5f,
-             _visibleRect.origin.y + _visibleRect.size.height * 0.035f + volumeSliderOffsetY));
+    const auto volumeSliderOffsetY = kVolumeSliderY - (_visibleRect.origin.y + _visibleRect.size.height * 0.08f);
+    _volumeLabel->setPosition(Vec2(_visibleRect.origin.x + _visibleRect.size.width * 0.5f,
+                                   _visibleRect.origin.y + _visibleRect.size.height * 0.035f + volumeSliderOffsetY));
     _uiLayer->addChild(_volumeLabel, 1);
 
     createSlider();
