@@ -28,6 +28,7 @@ void register_ax_video(lua_State* L)
     class_0_VideoPlayer.method("getState", static_cast<ax::ui::VideoPlayer::State (ax::ui::VideoPlayer::*)() const>(&ax::ui::VideoPlayer::getState));
     class_0_VideoPlayer.method("getURL", static_cast<std::string_view (ax::ui::VideoPlayer::*)() const>(&ax::ui::VideoPlayer::getURL));
     class_0_VideoPlayer.method("getVideoController", static_cast<ax::ui::VideoController * (ax::ui::VideoPlayer::*)() const>(&ax::ui::VideoPlayer::getVideoController));
+    class_0_VideoPlayer.method("getVolume", static_cast<double (ax::ui::VideoPlayer::*)() const>(&ax::ui::VideoPlayer::getVolume));
     class_0_VideoPlayer.method("isFullscreen", static_cast<bool (ax::ui::VideoPlayer::*)() const>(&ax::ui::VideoPlayer::isFullscreen));
     class_0_VideoPlayer.method("isKeepAspectRatio", static_cast<bool (ax::ui::VideoPlayer::*)() const>(&ax::ui::VideoPlayer::isKeepAspectRatio));
     class_0_VideoPlayer.method("isLooping", static_cast<bool (ax::ui::VideoPlayer::*)() const>(&ax::ui::VideoPlayer::isLooping));
@@ -49,6 +50,7 @@ void register_ax_video(lua_State* L)
     class_0_VideoPlayer.method("setURL", static_cast<void (ax::ui::VideoPlayer::*)(std::string_view)>(&ax::ui::VideoPlayer::setURL));
     class_0_VideoPlayer.method("setUserInputEnabled", static_cast<void (ax::ui::VideoPlayer::*)(bool)>(&ax::ui::VideoPlayer::setUserInputEnabled));
     class_0_VideoPlayer.method("setVideoController", static_cast<void (ax::ui::VideoPlayer::*)(ax::ui::VideoController *)>(&ax::ui::VideoPlayer::setVideoController));
+    class_0_VideoPlayer.method("setVolume", static_cast<bool (ax::ui::VideoPlayer::*)(double)>(&ax::ui::VideoPlayer::setVolume));
     class_0_VideoPlayer.method("stop", static_cast<void (ax::ui::VideoPlayer::*)()>(&ax::ui::VideoPlayer::stop));
     auto enum_0_EventType = class_0_VideoPlayer.get_or_create_table("EventType");
     enum_0_EventType.set("PLAYING", 0ll);
