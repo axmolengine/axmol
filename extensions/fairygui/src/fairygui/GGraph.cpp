@@ -144,8 +144,8 @@ void GGraph::updateShape()
         float lineSize2 = _lineSize * 0.5f;
         float wl        = _size.width - _lineSize;
         float hl        = _size.height - _lineSize;
-        float wl2        = _size.width - lineSize2;
-        float hl2        = _size.height - lineSize2;
+        float wl2       = _size.width - lineSize2;
+        float hl2       = _size.height - lineSize2;
         if (_cornerRadius)
         {
             if (_lineSize > 0)
@@ -187,41 +187,52 @@ void GGraph::updateShape()
         _shape->drawSolidCircle(Vec2(cx, cy), _size.width / 2, 0, 60, 1, scaleY, _fillColor);
         break;
     }
-    case 3:
+    case 3:  // polygon
     {
-        _shape->drawPolygon(_polygonPoints->data(), (int)_polygonPoints->size(), _fillColor, _lineSize * 2, _lineColor);
+        _shape->drawPolygon(_polygonPoints->data(), _polygonPoints->size(), _fillColor, _lineSize * 2, _lineColor,
+                            false);
         break;
     }
 
-    case 4:
+    case 4:  // regular polygon
     {
         float h             = getHeight();
+        float lineSize2     = _lineSize * 0.5f;
         _polygonPointOffset = h;
         if (_polygonPoints == nullptr)
             _polygonPoints = new std::vector<Vec2>();
         else
             _polygonPoints->clear();
 
-        float radius     = MIN(getWidth(), getHeight()) * 0.5f;
+        float radius     = MIN(getWidth(), h) * 0.5f - lineSize2;
         float angle      = MATH_DEG_TO_RAD(_startAngle);
         float deltaAngle = 2 * M_PI / _sides;
         float dist;
         for (int i = 0; i < _sides; i++)
         {
-            if (_distances != nullptr && i < (int)_distances->size())
+            if (_distances != nullptr && i < _distances->size())
+            {
                 dist = (*_distances)[i];
+                if (dist <= 0)
+                    dist = 1;
+            }
             else
-                dist = 1;
+                dist = 1.0f;
 
-            float xv = radius + radius * dist * cos(angle);
-            float yv = h - (radius + radius * dist * sin(angle));
+            float xv = radius + radius * dist * cos(angle) + lineSize2;
+            float yv = h - (radius + radius * dist * sin(angle)) - lineSize2;
             _polygonPoints->push_back(Vec2(xv, yv));
 
             angle += deltaAngle;
         }
 
-        _shape->drawPolygon(_polygonPoints->data(), (int)_polygonPoints->size(), _fillColor, _lineSize * 2, _lineColor);
-
+        _shape->setLocalTransformEnabled(
+            false);  // enable local transform to avoid the polygon being scaled by the parent node's scale
+        _shape->setLocalScale({0.5f, 0.5f});  // scale down the polygon to fit the size of the GGraph
+        _shape->drawPolygon(_polygonPoints->data(), _polygonPoints->size(), _fillColor, _lineSize * 2.0f, _lineColor,
+                            true);
+        _shape->setLocalTransformEnabled(
+            false);  // disable local transform to avoid the polygon being scaled by the parent node's scale
         break;
     }
     }
