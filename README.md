@@ -1,5 +1,3 @@
-<img width="1282" height="752" alt="image" src="https://github.com/user-attachments/assets/777bb26f-2c6f-4b24-9079-a11688a1fa17" />
-
 <p align="center"><a href="https://axmol.dev" target="_blank" rel="noopener noreferrer"><img width="160" src="https://axmol.dev/assets/img/logo.png" alt="axmol logo"></a></p>
 
 # Axmol
