@@ -12,6 +12,8 @@
 using namespace ax;
 using namespace ax::ui;
 
+static constexpr float kVolumeSliderY = 260.600f;
+
 static MenuItemFont* createMenuFontWithColor(std::string_view title,
                                              ax::ccMenuCallback&& cb,
                                              const Color32& color = Color32::red)
@@ -97,6 +99,15 @@ bool VideoPlayerTest::init()
         Vec2(_visibleRect.origin.x + _visibleRect.size.width - 10, _visibleRect.origin.y + 185));
     _uiLayer->addChild(_loopStatusLabel, 1);
     _loopStatusLabel->setTextColor(Color32::yellow);
+
+    _volumeLabel = Label::createWithSystemFont("volume: 100.00%", "Arial", 14);
+    _volumeLabel->setAnchorPoint(Anchors::center);
+    const auto volumeSliderOffsetY = kVolumeSliderY - (_visibleRect.origin.y + _visibleRect.size.height * 0.08f);
+    _volumeLabel->setPosition(Vec2(_visibleRect.origin.x + _visibleRect.size.width * 0.5f,
+                                   _visibleRect.origin.y + _visibleRect.size.height * 0.035f + volumeSliderOffsetY));
+    _uiLayer->addChild(_volumeLabel, 1);
+
+    createSlider();
 
     return true;
 }
@@ -213,6 +224,9 @@ void VideoPlayerTest::createVideo()
     _videoPlayer->setPosition(centerPos);
     _videoPlayer->setAnchorPoint(Anchors::center);
     _videoPlayer->setContentSize(Size(widgetSize.width * 0.4f, widgetSize.height * 0.4f));
+    _videoPlayer->setVolume(1.0);
+    _volumeLabel->setString(fmt::format("volume: {:.2f}%", _videoPlayer->getVolume() * 100.0));
+    static_cast<Slider*>(_uiLayer->getChildByTag(3))->setPercent(100);
     _uiLayer->addChild(_videoPlayer);
 
     _videoPlayer->addEventListener(AX_CALLBACK_2(VideoPlayerTest::videoEventCallback, this));
@@ -223,39 +237,24 @@ void VideoPlayerTest::createSlider()
     auto centerPos =
         Vec2(_visibleRect.origin.x + _visibleRect.size.width / 2, _visibleRect.origin.y + _visibleRect.size.height / 2);
 
-    auto hSlider = ui::Slider::create();
-    hSlider->setTouchEnabled(true);
-    hSlider->loadBarTexture("cocosui/sliderTrack.png");
-    hSlider->loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "");
-    hSlider->loadProgressBarTexture("cocosui/sliderProgress.png");
-    hSlider->setPosition(Vec2(centerPos.x, _visibleRect.origin.y + _visibleRect.size.height * 0.15f));
-    hSlider->setPercent(50);
-    hSlider->addEventListener(AX_CALLBACK_2(VideoPlayerTest::sliderCallback, this));
-    _uiLayer->addChild(hSlider, 0, 1);
-
-    auto vSlider = ui::Slider::create();
-    vSlider->setTouchEnabled(true);
-    vSlider->loadBarTexture("cocosui/sliderTrack.png");
-    vSlider->loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "");
-    vSlider->loadProgressBarTexture("cocosui/sliderProgress.png");
-    vSlider->setPosition(Vec2(_visibleRect.origin.x + _visibleRect.size.width * 0.15f, centerPos.y));
-    vSlider->setRotation(90);
-    vSlider->setPercent(50);
-    vSlider->addEventListener(AX_CALLBACK_2(VideoPlayerTest::sliderCallback, this));
-    _uiLayer->addChild(vSlider, 0, 2);
+    auto volumeSlider = ui::Slider::create();
+    volumeSlider->setTouchEnabled(true);
+    volumeSlider->loadBarTexture("cocosui/sliderTrack.png");
+    volumeSlider->loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "");
+    volumeSlider->loadProgressBarTexture("cocosui/sliderProgress.png");
+    volumeSlider->setPosition(Vec2(centerPos.x, kVolumeSliderY));
+    volumeSlider->setPercent(100);
+    volumeSlider->addEventListener(AX_CALLBACK_2(VideoPlayerTest::sliderCallback, this));
+    _uiLayer->addChild(volumeSlider, 1, 3);
 }
 
 void VideoPlayerTest::sliderCallback(Object* sender, ui::Slider::EventType ev)
 {
     if (ev == Slider::EventType::ON_PERCENTAGE_CHANGED && _videoPlayer)
     {
-        Slider* hSlider = (Slider*)this->getChildByTag(1);
-        Slider* vSlider = (Slider*)this->getChildByTag(2);
-
-        auto newPosX = _visibleRect.origin.x + _visibleRect.size.width / 2 + hSlider->getPercent() - 50;
-        auto newPosY = _visibleRect.origin.y + _visibleRect.size.height / 2 + 50 - vSlider->getPercent();
-
-        _videoPlayer->setPosition(Vec2(newPosX, newPosY));
+        auto slider = static_cast<Slider*>(sender);
+        _videoPlayer->setVolume(static_cast<double>(slider->getPercent()) / 100.0);
+        _volumeLabel->setString(fmt::format("volume: {:.2f}%", _videoPlayer->getVolume() * 100.0));
     }
 }
 

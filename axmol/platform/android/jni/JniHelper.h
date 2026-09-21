@@ -450,6 +450,30 @@ public:
     }
 
     /**
+    @brief Call of Java double method
+    @return value from Java double method if there are proper JniMethodInfo; otherwise 0.
+    */
+    template <typename... Ts>
+    static double callDoubleMethod(const char* className, const char* methodName, void* object, Ts&&... xs)
+    {
+        jdouble ret = 0.0;
+        ax::JniMethodInfo t;
+        const char* signature = jni::TypeSignature<jdouble(std::decay_t<Ts>...)>{}();
+        if (ax::JniHelper::getMethodInfo(t, className, methodName, signature))
+        {
+            LocalRefMapType localRefs;
+            ret = t.env->CallDoubleMethod((jobject)object, t.methodID, convert(localRefs, t, xs)...);
+            t.env->DeleteLocalRef(t.classID);
+            deleteLocalRefs(t.env, localRefs);
+        }
+        else
+        {
+            reportError(className, methodName, signature);
+        }
+        return ret;
+    }
+
+    /**
     @brief Call of Java booleans method
     @return value from Java boolean method if there are proper JniMethodInfo; otherwise 0.
     */

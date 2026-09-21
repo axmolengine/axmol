@@ -175,6 +175,8 @@ public:
     virtual bool close()                                                             = 0;
     virtual bool setLoop(bool bLooping)                                              = 0;
     virtual bool setRate(double fRate)                                               = 0;
+    virtual bool setVolume(double volume)                                            = 0;
+    virtual double getVolume() const                                                 = 0;
     virtual bool setCurrentTime(double fSeekTimeInSec)                               = 0;
     virtual double getCurrentTime()                                                  = 0;
     virtual double getDuration()                                                     = 0;

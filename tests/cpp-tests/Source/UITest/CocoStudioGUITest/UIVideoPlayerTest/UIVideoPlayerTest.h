@@ -45,9 +45,10 @@ private:
     void createVideo();
     void createSlider();
 
-    ax::ui::VideoPlayer* _videoPlayer = nullptr;
-    ax::Label* _videoStateLabel;
-    ax::Label* _loopStatusLabel;
+    ax::ui::VideoPlayer* _videoPlayer{nullptr};
+    ax::Label* _videoStateLabel{nullptr};
+    ax::Label* _loopStatusLabel{nullptr};
+    ax::Label* _volumeLabel{nullptr};
     ax::Rect _visibleRect;
 };
 
@@ -71,10 +72,10 @@ private:
     void createVideo();
 
     ax::Rect _visibleRect;
-    ax::ui::VideoPlayer* _videoPlayer = nullptr;
+    ax::ui::VideoPlayer* _videoPlayer{nullptr};
 
-    ax::MenuItemFont* _switchUserInputEnabled;
-    ax::MenuItemFont* _switchStyle;
+    ax::MenuItemFont* _switchUserInputEnabled{nullptr};
+    ax::MenuItemFont* _switchStyle{nullptr};
 
     bool _userInputEnabled;
     ax::ui::VideoPlayer::StyleType _style;

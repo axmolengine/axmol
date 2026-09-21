@@ -1,6 +1,13 @@
-// VlcMediaEngine.h
-// Copyright (c) 2019-present Simdsoft Limited.
-// https://axmol.dev/
+/****************************************************************************
+ Copyright (c) 2019-present Simdsoft Limited.
+
+ https://axmol.dev/
+
+ SPDX-License-Identifier: MIT
+
+ Note: required codec-runtime: ubuntu-restricted-extras (contains intel-media-va-driver)
+sudo apt install ubuntu-restricted-extras
+ ****************************************************************************/
 
 #pragma once
 
@@ -35,6 +42,8 @@ public:
     bool close() override;
     bool setLoop(bool bLooping) override;
     bool setRate(double fRate) override;
+    bool setVolume(double volume) override;
+    double getVolume() const override;
     bool setCurrentTime(double fSeekTimeInSec) override;
     double getCurrentTime() override;
     double getDuration() override;
@@ -76,6 +85,7 @@ private:
     bool _bAutoPlay     = false;
     bool _looping       = false;
     bool _playbackEnded = false;
+    double _volume      = 1.0;
 
     std::atomic<MEMediaState> _state{MEMediaState::Closed};
 

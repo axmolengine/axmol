@@ -1,5 +1,4 @@
 //--------------------------------------------------------------------------------------
-// File: MfMediaEngine.h
 //
 // Modified from https://github.com/microsoft/Xbox-ATG-Samples/tree/main/UWPSamples/Graphics/VideoTextureUWP
 //
@@ -77,13 +76,15 @@ public:
         _onVideoFrame = std::move(onVideoFrame);
     }
 
-    void setAutoPlay(bool bAutoPlay) { m_autoPlay = bAutoPlay; }
+    void setAutoPlay(bool bAutoPlay) override { m_autoPlay = bAutoPlay; }
 
     bool open(std::string_view sourceUri) override;
     bool close() override;
 
     bool setLoop(bool bLoop) override;
     bool setRate(double fRate) override;
+    bool setVolume(double volume) override;
+    double getVolume() const override;
 
     bool transferVideoFrame() override;
 
@@ -120,6 +121,7 @@ private:
 
     bool m_autoPlay      = false;
     MEMediaState m_state = MEMediaState::Closed;
+    double m_volume      = 1.0;
 
     MEIntPoint m_videoExtent;
 

@@ -88,7 +88,7 @@ public class AxmolMediaPlayer extends DefaultRenderersFactory implements Player.
      */
     public static final String TAG = "AxmolMediaPlayer";
     private Context mContext;
-    private ExoPlayer mPlayer;
+    private volatile ExoPlayer mPlayer;
     private volatile ByteBufferVideoRenderer mVideoRenderer;
     private MediaFormat mOutputFormat;
     private volatile long mNativeObj = 0; // native object address for send event to C++, weak ref
@@ -96,6 +96,7 @@ public class AxmolMediaPlayer extends DefaultRenderersFactory implements Player.
     private boolean mLooping = false;
     private volatile boolean mPlayWhenReady = false;
     private volatile boolean mPlaybackEnded = false;
+    private volatile double mVolume = 1.0;
     private AtomicInteger mState = new AtomicInteger(STATE_CLOSED);
 
     /**
@@ -177,6 +178,7 @@ public class AxmolMediaPlayer extends DefaultRenderersFactory implements Player.
                         .createMediaSource(MediaItem.fromUri(Uri.parse(sourceUri)));
 
                 mPlayer = new ExoPlayer.Builder(mContext, mediaPlayer).build();
+                mPlayer.setVolume((float) mVolume);
                 for (int i = 0; i < mPlayer.getRendererCount(); i++) {
                     Renderer renderer = mPlayer.getRenderer(i);
                     if (renderer instanceof ByteBufferVideoRenderer) {
@@ -243,6 +245,22 @@ public class AxmolMediaPlayer extends DefaultRenderersFactory implements Player.
                 mPlayer.setPlaybackSpeed((float) fRate);
         });
         return true;
+    }
+
+    public boolean setVolume(double volume) {
+        mVolume = volume;
+        if (mPlayer == null)
+            return true;
+
+        AxmolEngine.runOnUiThread(() -> {
+            if (mPlayer != null)
+                mPlayer.setVolume((float) mVolume);
+        });
+        return true;
+    }
+
+    public double getVolume() {
+        return mVolume;
     }
 
     public boolean setCurrentTime(double fSeekTimeInSec) {
