@@ -177,7 +177,8 @@ void GGraph::updateShape()
         const float rx     = cx - lineSize05;
         const float scaleY = (_size.width > 0.0f) ? (_size.height / _size.width) : 1.0f;
 
-        _shape->drawSolidCircle(Vec2(cx, cy), rx, 0, 60, 1, scaleY, _fillColor, lineSize2, _lineColor);
+        _shape->drawSolidCircle(Vec2(cx, cy), rx, 0, AX_DRAWNODE_PRE_CALCULATING_VERTICES, 1, scaleY, _fillColor,
+                                lineSize2, _lineColor);
         break;
     }
     case 3:  // Polygon

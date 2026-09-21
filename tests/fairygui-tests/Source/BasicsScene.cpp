@@ -6,11 +6,11 @@ using namespace ax;
 
 void BasicsScene::continueInit()
 {
-    UIConfig::buttonSound = "ui://Basics/click";
-    UIConfig::verticalScrollBar = "ui://Basics/ScrollBar_VT";
+    UIConfig::buttonSound         = "ui://Basics/click";
+    UIConfig::verticalScrollBar   = "ui://Basics/ScrollBar_VT";
     UIConfig::horizontalScrollBar = "ui://Basics/ScrollBar_HZ";
-    UIConfig::tooltipsWin = "ui://Basics/WindowFrame";
-    UIConfig::popupMenu = "ui://Basics/PopupMenu";
+    UIConfig::tooltipsWin         = "ui://Basics/WindowFrame";
+    UIConfig::popupMenu           = "ui://Basics/PopupMenu";
 
     UIPackage::addPackage("UI/Basics");
     _view = UIPackage::createObject("Basics", "Main")->as<GComponent>();
@@ -21,7 +21,7 @@ void BasicsScene::continueInit()
     _backBtn->addClickListener(AX_CALLBACK_1(BasicsScene::onClickBack, this));
 
     _demoContainer = _view->getChild("container")->as<GComponent>();
-    _cc = _view->getController("c1");
+    _cc            = _view->getController("c1");
 
     int cnt = _view->numChildren();
     for (int i = 0; i < cnt; i++)
@@ -32,13 +32,7 @@ void BasicsScene::continueInit()
     }
 }
 
-BasicsScene::BasicsScene()
-    : _winA(nullptr),
-      _winB(nullptr),
-      _pm(nullptr),
-      _popupCom(nullptr)
-{
-}
+BasicsScene::BasicsScene() : _winA(nullptr), _winB(nullptr), _pm(nullptr), _popupCom(nullptr) {}
 
 BasicsScene::~BasicsScene()
 {
@@ -57,7 +51,7 @@ void BasicsScene::onClickBack(EventContext* context)
 void BasicsScene::runDemo(EventContext* context)
 {
     std::string type = ((GObject*)context->getSender())->name.substr(4);
-    auto it = _demoObjects.find(type);
+    auto it          = _demoObjects.find(type);
     GComponent* obj;
     if (it == _demoObjects.end())
     {
@@ -91,11 +85,11 @@ void BasicsScene::playText()
     GComponent* obj = _demoObjects.at("Text");
     obj->getChild("n12")->addEventListener(UIEventType::ClickLink, [this](EventContext* context) {
         GRichTextField* t = dynamic_cast<GRichTextField*>(context->getSender());
-        t->setText("[img]ui://Basics/pet[/img][color=#FF0000]You click the link[/color]:" + context->getDataValue().asString());
+        t->setText("[img]ui://Basics/pet[/img][color=#FF0000]You click the link[/color]:" +
+                   context->getDataValue().asString());
     });
-    obj->getChild("n25")->addClickListener([this, obj](EventContext* context) {
-        obj->getChild("n24")->setText(obj->getChild("n22")->getText());
-    });
+    obj->getChild("n25")->addClickListener(
+        [this, obj](EventContext* context) { obj->getChild("n24")->setText(obj->getChild("n22")->getText()); });
 }
 
 void BasicsScene::playPopup()
@@ -117,17 +111,12 @@ void BasicsScene::playPopup()
         _popupCom->center();
     }
     GComponent* obj = _demoObjects.at("Popup");
-    obj->getChild("n0")->addClickListener([this](EventContext* context) {
-        _pm->show((GObject*)context->getSender(), PopupDirection::DOWN);
-    });
+    obj->getChild("n0")->addClickListener(
+        [this](EventContext* context) { _pm->show((GObject*)context->getSender(), PopupDirection::DOWN); });
 
-    obj->getChild("n1")->addClickListener([this](EventContext* context) {
-        UIRoot->showPopup(_popupCom);
-    });
+    obj->getChild("n1")->addClickListener([this](EventContext* context) { UIRoot->showPopup(_popupCom); });
 
-    obj->addEventListener(UIEventType::RightClick, [this](EventContext* context) {
-        _pm->show();
-    });
+    obj->addEventListener(UIEventType::RightClick, [this](EventContext* context) { _pm->show(); });
 }
 
 void BasicsScene::onClickMenu(EventContext* context)
@@ -147,27 +136,23 @@ void BasicsScene::playWindow()
         _winB = Window2::create();
         _winB->retain();
 
-        obj->getChild("n0")->addClickListener([this](EventContext*) {
-            _winA->show();
-        });
+        obj->getChild("n0")->addClickListener([this](EventContext*) { _winA->show(); });
 
-        obj->getChild("n1")->addClickListener([this](EventContext*) {
-            _winB->show();
-        });
+        obj->getChild("n1")->addClickListener([this](EventContext*) { _winB->show(); });
     }
 }
 
 Vec2 startPos;
 void BasicsScene::playDepth()
 {
-    GComponent* obj = _demoObjects.at("Depth");
+    GComponent* obj           = _demoObjects.at("Depth");
     GComponent* testContainer = obj->getChild("n22")->as<GComponent>();
-    GObject* fixedObj = testContainer->getChild("n0");
+    GObject* fixedObj         = testContainer->getChild("n0");
     fixedObj->setSortingOrder(100);
     fixedObj->setDraggable(true);
 
     int numChildren = testContainer->numChildren();
-    int i = 0;
+    int i           = 0;
     while (i < numChildren)
     {
         GObject* child = testContainer->getChildAt(i);
@@ -181,7 +166,8 @@ void BasicsScene::playDepth()
     }
     startPos = fixedObj->getPosition();
 
-    obj->getChild("btn0")->addClickListener([obj](EventContext*) {
+    obj->getChild("btn0")->addClickListener(
+        [obj](EventContext*) {
         GGraph* graph = GGraph::create();
         startPos.x += 10;
         startPos.y += 10;
@@ -189,7 +175,7 @@ void BasicsScene::playDepth()
         graph->drawRect(150, 150, 1, Color::black, Color::red);
         obj->getChild("n22")->as<GComponent>()->addChild(graph);
     },
-                                            EventTag(this)); //avoid duplicate register
+        EventTag(this));  // avoid duplicate register
 
     obj->getChild("btn1")->addClickListener([obj](EventContext*) {
         GGraph* graph = GGraph::create();
@@ -199,8 +185,7 @@ void BasicsScene::playDepth()
         graph->drawRect(150, 150, 1, Color::black, Color::green);
         graph->setSortingOrder(200);
         obj->getChild("n22")->as<GComponent>()->addChild(graph);
-    },
-                                            EventTag(this));
+    }, EventTag(this));
 }
 
 void BasicsScene::playDragDrop()
@@ -211,7 +196,7 @@ void BasicsScene::playDragDrop()
     GButton* b = obj->getChild("b")->as<GButton>();
     b->setDraggable(true);
     b->addEventListener(UIEventType::DragStart, [b](EventContext* context) {
-        //Cancel the original dragging, and start a new one with a agent.
+        // Cancel the original dragging, and start a new one with a agent.
         context->preventDefault();
 
         DragDropManager::getInstance()->startDrag(b->getIcon(), Value(b->getIcon()), context->getInput()->getTouchId());
@@ -219,14 +204,14 @@ void BasicsScene::playDragDrop()
 
     GButton* c = obj->getChild("c")->as<GButton>();
     c->setIcon("");
-    c->addEventListener(UIEventType::Drop, [c](EventContext* context) {
-        c->setIcon(context->getDataValue().asString());
-    });
+    c->addEventListener(UIEventType::Drop,
+                        [c](EventContext* context) { c->setIcon(context->getDataValue().asString()); });
 
     GObject* bounds = obj->getChild("n7");
-    Rect rect = bounds->transformRect(Rect(Vec2::zero, bounds->getSize()), _groot);
+    Rect rect       = bounds->transformRect(Rect(Vec2::zero, bounds->getSize()), _groot);
 
-    //---!!Because at this time the container is on the right side of the stage and beginning to move to left(transition), so we need to caculate the final position
+    //---!!Because at this time the container is on the right side of the stage and beginning to move to
+    //left(transition), so we need to caculate the final position
     rect.origin.x -= obj->getParent()->getX();
     //----
 
@@ -238,17 +223,18 @@ void BasicsScene::playDragDrop()
 void BasicsScene::playProgress()
 {
     GComponent* obj = _demoObjects.at("ProgressBar");
-    ax::Director::getInstance()->getScheduler()->schedule(
-        AX_SCHEDULE_SELECTOR(BasicsScene::onPlayProgress), this, 0.02f, false);
+    ax::Director::getInstance()->getScheduler()->schedule(AX_SCHEDULE_SELECTOR(BasicsScene::onPlayProgress), this,
+                                                          0.02f, false);
     obj->addEventListener(UIEventType::Exit, [this](EventContext*) {
-        ax::Director::getInstance()->getScheduler()->unschedule(AX_SCHEDULE_SELECTOR(BasicsScene::onPlayProgress), this);
+        ax::Director::getInstance()->getScheduler()->unschedule(AX_SCHEDULE_SELECTOR(BasicsScene::onPlayProgress),
+                                                                this);
     });
 }
 
 void BasicsScene::onPlayProgress(float dt)
 {
     GComponent* obj = _demoObjects.at("ProgressBar");
-    int cnt = obj->numChildren();
+    int cnt         = obj->numChildren();
     for (int i = 0; i < cnt; i++)
     {
         GProgressBar* child = obj->getChildAt(i)->as<GProgressBar>();

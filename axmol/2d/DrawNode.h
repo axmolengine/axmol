@@ -788,13 +788,6 @@ public:
     }
     const Vec2& getLocalScale() const { return _localScale; }
 
-    void setLocalSkew(const Vec2& s)
-    {
-        _localSkew      = s;
-        _trianglesDirty = _linesDirty = true;
-    }
-    const Vec2& getLocalSkew() const { return _localSkew; }
-
     void setLocalPivot(const Vec2& c)
     {
         _localPivot     = c;
@@ -829,7 +822,6 @@ public:
     {
         _thicknessScale        = 1.0f;
         _localScale            = Vec2(1.0f, 1.0f);
-        _localSkew             = Vec2(0.0f, 0.0f);
         _localPivot            = Vec2::zero;
         _localRotation         = 0.0f;
         _localRotationRad      = 0.0f;
@@ -845,7 +837,6 @@ protected:
 
     // optional local transform applied to primitives when enabled
     Vec2 _localScale{1.0f, 1.0f};
-    Vec2 _localSkew{0.0f, 0.0f};    // local skew in degrees
     Vec2 _localPivot{0.0f, 0.0f};
     float _localRotation{0.0f};     // local rotation in degrees
     float _localRotationRad{0.0f};  // local rotation in radians (cached for efficiency)
@@ -861,130 +852,3 @@ private:
 
 /** @} */
 }  // namespace ax
-
-//
-//ax::Vec2 skewPoint(const ax::Vec2& p, float skewX_deg, float skewY_deg)
-//{
-//    float sx = std::tan(skewX_deg * (3.14159265358979323846f / 180.0f));
-//    float sy = std::tan(skewY_deg * (3.14159265358979323846f / 180.0f));
-//
-//    float x2 = p.x + sy * p.y;
-//    float y2 = p.y + sx * p.x;
-//    return {x2, y2};
-//}
-//
-//void drawSkewedRect(ax::DrawNode* dn,
-//                    const ax::Vec2& origin,
-//                    const ax::Vec2& size,
-//                    float skewX_deg,
-//                    float skewY_deg,
-//                    const ax::Color& color)
-//{
-//    ax::Vec2 pts[4] = {{origin.x, origin.y},
-//                       {origin.x + size.x, origin.y},
-//                       {origin.x + size.x, origin.y + size.y},
-//                       {origin.x, origin.y + size.y}};
-//
-//    for (int i = 0; i < 4; ++i)
-//        pts[i] = skewPoint(pts[i], skewX_deg, skewY_deg);
-//
-//    dn->drawPolygon(pts, 4, color, 0.0f, color);
-//}
-//
-//auto dn = ax::DrawNode::create();
-//drawSkewedRect(dn, {0, 0}, {100, 50}, 20.0f, 10.0f, ax::Color4F::GREEN);
-
-
-//fairyGUI
-// ax::Mat4 makeFairySkew(float skewX_deg, float skewY_deg)
-//{
-//    float sx = std::tan(skewX_deg * (3.14159265358979323846f / 180.0f));
-//    float sy = std::tan(skewY_deg * (3.14159265358979323846f / 180.0f));
-//
-//    ax::Mat4 M;
-//    M.setIdentity();
-//
-//    // FairyGUI mapping:
-//    // m01 = tan(skewY)
-//    // m10 = tan(skewX)
-//
-//    M.m[1] = sy;  // xy
-//    M.m[4] = sx;  // yx
-//
-//    return M;
-//}
-//auto dn = ax::DrawNode::create();
-//dn->drawSolidRect({0, 0}, {120, 60}, ax::Color4F::BLUE);
-//
-//float skewX = 15.0f;  // FairyGUI-style
-//float skewY = -10.0f;
-//
-//dn->setAdditionalTransform(makeFairySkew(skewX, skewY));
-
-
-//Für deine FairyGUI‑Portierung nach Axmol Wenn du FairyGUI‑Objekte nach Axmol renderst,
-//    musst du :
-//
-//        1. FairyGUI‑Transformationskette übernehmen Position
-//
-//            Scale
-//
-//                Rotation
-//
-//                    Skew
-//
-//                        Pivot
-//
-//                            Size
-//
-//                                Local /
-//        Global transform
-//
-//        2. Reihenfolge wie FairyGUI einhalten
-// FairyGUI macht:
-//Translate
-//Rotate
-//Skew
-//Scale
-
-//Axmol macht :
-// Translate
-// Rotate
-// Scale
-
-//Komplette FairyGUI‑Transform‑Matrix in Axmol
-// Wenn du alles 1 : 1 übernehmen willst:
-    //ax::Mat4
-//makeFairyTransform(float x, float y, float rotation_deg, float skewX_deg, float skewY_deg, float scaleX, float scaleY)
-//{
-//    float r  = rotation_deg * (3.14159265358979323846f / 180.0f);
-//    float sx = std::tan(skewX_deg * (3.14159265358979323846f / 180.0f));
-//    float sy = std::tan(skewY_deg * (3.14159265358979323846f / 180.0f));
-//
-//    ax::Mat4 M;
-//    M.setIdentity();
-//
-//    // Translation
-//    M.translate(x, y, 0);
-//
-//    // Rotation
-//    ax::Mat4 R;
-//    R.setIdentity();
-//    R.rotateZ(r);
-//
-//    // Skew
-//    ax::Mat4 S;
-//    S.setIdentity();
-//    S.m[1] = sy;
-//    S.m[4] = sx;
-//
-//    // Scale
-//    ax::Mat4 Sc;
-//    Sc.setIdentity();
-//    Sc.scale(scaleX, scaleY, 1);
-//
-//    // FairyGUI order: T * R * Skew * Scale
-//    M = M * R * S * Sc;
-//
-//    return M;
-//}
