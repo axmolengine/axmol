@@ -18,40 +18,43 @@ static Vec2 sGlobalDragStart;
 static Rect sGlobalRect;
 static bool sUpdateInDragging;
 
-GObject::GObject() : _scale{1, 1},
-                     _sizePercentInGroup(0.0f),
-                     _pivotAsAnchor(false),
-                     _alpha(1.0f),
-                     _rotation(0.0f),
-                     _visible(true),
-                     _internalVisible(true),
-                     _handlingController(false),
-                     _touchable(true),
-                     _grayed(false),
-                     _blendMode(BlendMode::Normal),
-                     _finalGrayed(false),
-                     _draggable(false),
-                     _dragBounds(nullptr),
-                     _dragTesting(false),
-                     _sortingOrder(0),
-                     _focusable(false),
-                     _pixelSnapping(false),
-                     _group(nullptr),
-                     _parent(nullptr),
-                     _displayObject(nullptr),
-                     _sizeImplType(0),
-                     _underConstruct(false),
-                     _gearLocked(false),
-                     _packageItem(nullptr),
-                     _data(nullptr),
-                     _touchDisabled(false),
-                     _alignToBL(false)
+GObject::GObject()
+    : _scale{1, 1}
+    , _sizePercentInGroup(0.0f)
+    , _pivotAsAnchor(false)
+    , _alpha(1.0f)
+    , _rotation(0.0f)
+    , _skewX(0.0f)
+    , _skewY(0.0f)
+    , _visible(true)
+    , _internalVisible(true)
+    , _handlingController(false)
+    , _touchable(true)
+    , _grayed(false)
+    , _blendMode(BlendMode::Normal)
+    , _finalGrayed(false)
+    , _draggable(false)
+    , _dragBounds(nullptr)
+    , _dragTesting(false)
+    , _sortingOrder(0)
+    , _focusable(false)
+    , _pixelSnapping(false)
+    , _group(nullptr)
+    , _parent(nullptr)
+    , _displayObject(nullptr)
+    , _sizeImplType(0)
+    , _underConstruct(false)
+    , _gearLocked(false)
+    , _packageItem(nullptr)
+    , _data(nullptr)
+    , _touchDisabled(false)
+    , _alignToBL(false)
 {
     static uint64_t _gInstanceCounter = 1;
-    _uid = _gInstanceCounter++;
+    _uid                              = _gInstanceCounter++;
     std::stringstream ss;
     ss << _uid;
-    id = ss.str();
+    id         = ss.str();
     _relations = new Relations(this);
 
     for (int i = 0; i < 10; i++)
@@ -101,8 +104,8 @@ void GObject::setPosition(float xv, float yv)
 {
     if (_position.x != xv || _position.y != yv)
     {
-        float dx = xv - _position.x;
-        float dy = yv - _position.y;
+        float dx    = xv - _position.x;
+        float dy    = yv - _position.y;
         _position.x = xv;
         _position.y = yv;
 
@@ -167,7 +170,7 @@ void GObject::setSize(float wv, float hv, bool ignorePivot /*= false*/)
 {
     if (_rawSize.width != wv || _rawSize.height != hv)
     {
-        _rawSize.width = wv;
+        _rawSize.width  = wv;
         _rawSize.height = hv;
         if (wv < minSize.width)
             wv = minSize.width;
@@ -177,10 +180,10 @@ void GObject::setSize(float wv, float hv, bool ignorePivot /*= false*/)
             hv = minSize.height;
         else if (maxSize.height > 0 && hv > maxSize.height)
             hv = maxSize.height;
-        float dWidth = wv - _size.width;
+        float dWidth  = wv - _size.width;
         float dHeight = hv - _size.height;
-        _size.width = wv;
-        _size.height = hv;
+        _size.width   = wv;
+        _size.height  = hv;
 
         handleSizeChanged();
 
@@ -219,13 +222,13 @@ void GObject::setSize(float wv, float hv, bool ignorePivot /*= false*/)
 
 void GObject::setSizeDirectly(float wv, float hv)
 {
-    _rawSize.width = wv;
+    _rawSize.width  = wv;
     _rawSize.height = hv;
     if (wv < 0)
         wv = 0;
     if (hv < 0)
         hv = 0;
-    _size.width = wv;
+    _size.width  = wv;
     _size.height = hv;
 }
 
@@ -276,12 +279,22 @@ void GObject::setScale(float xv, float yv)
 
 void GObject::setSkewX(float value)
 {
-    _displayObject->setRotationSkewX(value);
+    if (_skewX != value)
+    {
+        _skewX = value;
+        _displayObject->setRotationSkewX(_skewX + _rotation);  // Need skew and rotation for correct drawing
+        updateGear(3);
+    }
 }
 
 void GObject::setSkewY(float value)
 {
-    _displayObject->setRotationSkewY(value);
+    if (_skewY != value)
+    {
+        _skewY = value;
+        _displayObject->setRotationSkewY(_skewY + _rotation); // Need skew and rotation for correct drawing
+        updateGear(3);
+    }
 }
 
 void GObject::setRotation(float value)
@@ -289,7 +302,9 @@ void GObject::setRotation(float value)
     if (_rotation != value)
     {
         _rotation = value;
-        _displayObject->setRotation(_rotation);
+    //    _displayObject->setRotation(_rotation);  // Not use setRotationSkewX/Y here because it will reset skewX/Y to 0
+        _displayObject->setRotationSkewY(_skewY + _rotation); // Need skew and rotation for correct drawing
+        _displayObject->setRotationSkewX(_skewX + _rotation); // Need skew and rotation for correct drawing
         updateGear(3);
     }
 }
@@ -353,7 +368,7 @@ void GObject::setSortingOrder(int value)
         value = 0;
     if (_sortingOrder != value)
     {
-        int old = _sortingOrder;
+        int old       = _sortingOrder;
         _sortingOrder = value;
         if (_parent != nullptr)
             _parent->childSortingOrderChanged(this, old, _sortingOrder);
@@ -380,18 +395,14 @@ const std::string& GObject::getText() const
     return STD_STRING_EMPTY;
 }
 
-void GObject::setText(const std::string& text)
-{
-}
+void GObject::setText(const std::string& text) {}
 
 const std::string& GObject::getIcon() const
 {
     return STD_STRING_EMPTY;
 }
 
-void GObject::setIcon(const std::string& text)
-{
-}
+void GObject::setIcon(const std::string& text) {}
 
 void GObject::setTooltips(const std::string& value)
 {
@@ -465,18 +476,18 @@ Vec2 GObject::localToGlobal(const Vec2& pt)
         pt2.y += _size.height * _pivot.y;
     }
     pt2.y = _size.height - pt2.y;
-    pt2 = _displayObject->convertToWorldSpace(pt2);
+    pt2   = _displayObject->convertToWorldSpace(pt2);
     return UIRoot->worldToRoot(pt2);
 }
 
 ax::Rect GObject::localToGlobal(const ax::Rect& rect)
 {
     Rect ret;
-    Vec2 v = localToGlobal(rect.origin);
-    ret.origin.x = v.x;
-    ret.origin.y = v.y;
-    v = localToGlobal(Vec2(rect.getMaxX(), rect.getMaxY()));
-    ret.size.width = v.x - ret.origin.x;
+    Vec2 v          = localToGlobal(rect.origin);
+    ret.origin.x    = v.x;
+    ret.origin.y    = v.y;
+    v               = localToGlobal(Vec2(rect.getMaxX(), rect.getMaxY()));
+    ret.size.width  = v.x - ret.origin.x;
     ret.size.height = v.y - ret.origin.y;
     return ret;
 }
@@ -484,8 +495,8 @@ ax::Rect GObject::localToGlobal(const ax::Rect& rect)
 Vec2 GObject::globalToLocal(const Vec2& pt)
 {
     Vec2 pt2 = UIRoot->rootToWorld(pt);
-    pt2 = _displayObject->convertToNodeSpace(pt2);
-    pt2.y = _size.height - pt2.y;
+    pt2      = _displayObject->convertToNodeSpace(pt2);
+    pt2.y    = _size.height - pt2.y;
     if (_pivotAsAnchor)
     {
         pt2.x -= _size.width * _pivot.x;
@@ -497,11 +508,11 @@ Vec2 GObject::globalToLocal(const Vec2& pt)
 ax::Rect GObject::globalToLocal(const ax::Rect& rect)
 {
     Rect ret;
-    Vec2 v = globalToLocal(rect.origin);
-    ret.origin.x = v.x;
-    ret.origin.y = v.y;
-    v = globalToLocal(Vec2(rect.getMaxX(), rect.getMaxY()));
-    ret.size.width = v.x - ret.origin.x;
+    Vec2 v          = globalToLocal(rect.origin);
+    ret.origin.x    = v.x;
+    ret.origin.y    = v.y;
+    v               = globalToLocal(Vec2(rect.getMaxX(), rect.getMaxY()));
+    ret.size.width  = v.x - ret.origin.x;
     ret.size.height = v.y - ret.origin.y;
     return ret;
 }
@@ -511,12 +522,10 @@ ax::Rect GObject::transformRect(const ax::Rect& rect, GObject* targetSpace)
     if (targetSpace == this)
         return rect;
 
-    if (targetSpace == _parent) // optimization
+    if (targetSpace == _parent)  // optimization
     {
-        return Rect((_position.x + rect.origin.x) * _scale.x,
-                    (_position.y + rect.origin.y) * _scale.y,
-                    rect.size.width * _scale.x,
-                    rect.size.height * _scale.y);
+        return Rect((_position.x + rect.origin.x) * _scale.x, (_position.y + rect.origin.y) * _scale.y,
+                    rect.size.width * _scale.x, rect.size.height * _scale.y);
     }
     else
     {
@@ -562,7 +571,7 @@ GearBase* GObject::getGear(int index)
     GearBase* gear = _gears[index];
     if (gear == nullptr)
     {
-        gear = GearBase::create(this, index);
+        gear          = GearBase::create(this, index);
         _gears[index] = gear;
     }
     return gear;
@@ -703,9 +712,7 @@ void GObject::setProp(ObjectPropID propId, const ax::Value& value)
     }
 }
 
-void GObject::constructFromResource()
-{
-}
+void GObject::constructFromResource() {}
 
 GObject* GObject::hitTest(const Vec2& worldPoint, const Camera* camera)
 {
@@ -714,7 +721,7 @@ GObject* GObject::hitTest(const Vec2& worldPoint, const Camera* camera)
 
     Rect rect;
     rect.size = _size;
-    //if (camera->isWorldPointInRect(worldPoint, _displayObject->getWorldToNodeTransform(), rect))
+    // if (camera->isWorldPointInRect(worldPoint, _displayObject->getWorldToNodeTransform(), rect))
     if (rect.containsPoint(_displayObject->convertToNodeSpace(worldPoint)))
         return this;
     else
@@ -742,7 +749,7 @@ void GObject::handlePositionChanged()
     if (_displayObject)
     {
         Vec2 pt = _position;
-        pt.y = -pt.y;
+        pt.y    = -pt.y;
         if (!_pivotAsAnchor)
         {
             pt.x += _size.width * _pivot.x;
@@ -771,7 +778,8 @@ void GObject::handleSizeChanged()
         if (_sizeImplType == 0 || sourceSize.width == 0 || sourceSize.height == 0)
             _displayObject->setContentSize(_size);
         else
-            _displayObject->setScale(_scale.x * _size.width / sourceSize.width, _scale.y * _size.height / sourceSize.height);
+            _displayObject->setScale(_scale.x * _size.width / sourceSize.width,
+                                     _scale.y * _size.height / sourceSize.height);
     }
 }
 
@@ -780,7 +788,8 @@ void GObject::handleScaleChanged()
     if (_sizeImplType == 0 || sourceSize.width == 0 || sourceSize.height == 0)
         _displayObject->setScale(_scale.x, _scale.y);
     else
-        _displayObject->setScale(_scale.x * _size.width / sourceSize.width, _scale.y * _size.height / sourceSize.height);
+        _displayObject->setScale(_scale.x * _size.width / sourceSize.width,
+                                 _scale.y * _size.height / sourceSize.height);
 }
 
 void GObject::handleAlphaChanged()
@@ -817,23 +826,23 @@ void GObject::setup_beforeAdd(ByteBuffer* buffer, int beginPos)
     buffer->seek(beginPos, 0);
     buffer->skip(5);
 
-    id = buffer->readS();
-    name = buffer->readS();
+    id       = buffer->readS();
+    name     = buffer->readS();
     float f1 = buffer->readInt();
     float f2 = buffer->readInt();
     setPosition(f1, f2);
 
     if (buffer->readBool())
     {
-        initSize.width = buffer->readInt();
+        initSize.width  = buffer->readInt();
         initSize.height = buffer->readInt();
         setSize(initSize.width, initSize.height, true);
     }
 
     if (buffer->readBool())
     {
-        minSize.width = buffer->readInt();
-        maxSize.width = buffer->readInt();
+        minSize.width  = buffer->readInt();
+        maxSize.width  = buffer->readInt();
         minSize.height = buffer->readInt();
         maxSize.height = buffer->readInt();
     }
@@ -875,7 +884,7 @@ void GObject::setup_beforeAdd(ByteBuffer* buffer, int beginPos)
     if (buffer->readBool())
         setGrayed(true);
     setBlendMode((BlendMode)buffer->readByte());
-    buffer->readByte(); //filter
+    buffer->readByte();  // filter
 
     const std::string& str = buffer->readS();
     if (!str.empty())
@@ -936,10 +945,10 @@ void GObject::dragBegin(int touchId)
     }
 
     sGlobalDragStart = UIRoot->getTouchPosition(touchId);
-    sGlobalRect = localToGlobal(Rect(Vec2::zero, _size));
+    sGlobalRect      = localToGlobal(Rect(Vec2::zero, _size));
 
     _draggingObject = this;
-    _dragTesting = true;
+    _dragTesting    = true;
     UIRoot->getInputProcessor()->addTouchMonitor(touchId, this);
 
     addEventListener(UIEventType::TouchMove, AX_CALLBACK_1(GObject::onTouchMove, this), EventTag(this));
@@ -950,7 +959,7 @@ void GObject::dragEnd()
 {
     if (_draggingObject == this)
     {
-        _dragTesting = false;
+        _dragTesting    = false;
         _draggingObject = nullptr;
     }
 }
@@ -958,7 +967,7 @@ void GObject::dragEnd()
 void GObject::onTouchBegin(EventContext* context)
 {
     _dragTouchStartPos = context->getInput()->getPosition();
-    _dragTesting = true;
+    _dragTesting       = true;
     context->captureTouch();
 }
 
@@ -974,7 +983,8 @@ void GObject::onTouchMove(EventContext* context)
 #else
         sensitivity = UIConfig::touchDragSensitivity;
 #endif
-        if (std::abs(_dragTouchStartPos.x - evt->getPosition().x) < sensitivity && std::abs(_dragTouchStartPos.y - evt->getPosition().y) < sensitivity)
+        if (std::abs(_dragTouchStartPos.x - evt->getPosition().x) < sensitivity &&
+            std::abs(_dragTouchStartPos.y - evt->getPosition().y) < sensitivity)
             return;
 
         _dragTesting = false;

@@ -284,6 +284,9 @@ void GBasicTextField::handleInit()
 void GBasicTextField::applyTextFormat()
 {
     _label->applyTextFormat();
+    _label->setRotation(_rotation);
+    _label->setRotationSkewY(_skewY + _rotation);
+    _label->setRotationSkewX(_skewX + _rotation);
     updateGear(4);
     if (!_underConstruct)
         updateSize();

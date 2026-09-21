@@ -9,13 +9,9 @@
 NS_FGUI_BEGIN
 using namespace ax;
 
-GTextInput::GTextInput()
-{
-}
+GTextInput::GTextInput() {}
 
-GTextInput::~GTextInput()
-{
-}
+GTextInput::~GTextInput() {}
 
 void GTextInput::handleInit()
 {
@@ -25,9 +21,7 @@ void GTextInput::handleInit()
 
     _displayObject = _input;
 
-    this->addEventListener(UIEventType::TouchEnd, [this](EventContext*) {
-        _input->openKeyboard();
-    });
+    this->addEventListener(UIEventType::TouchEnd, [this](EventContext*) { _input->openKeyboard(); });
 }
 
 bool GTextInput::isSingleLine() const
@@ -45,7 +39,7 @@ void GTextInput::applyTextFormat()
     _input->applyTextFormat();
 }
 
-void GTextInput::setPrompt(const std::string & value)
+void GTextInput::setPrompt(const std::string& value)
 {
     if (value.empty())
         _input->setPlaceHolder(value.c_str());
@@ -75,9 +69,7 @@ void GTextInput::setMaxLength(int value)
     _input->setMaxLength(value);
 }
 
-void GTextInput::setRestrict(const std::string & value)
-{
-}
+void GTextInput::setRestrict(const std::string& value) {}
 
 void GTextInput::handleSizeChanged()
 {
@@ -115,11 +107,11 @@ void GTextInput::setTextFieldText()
         _input->setText(_text);
 }
 
-void GTextInput::editBoxReturn(ax::ui::EditBox * editBox)
+void GTextInput::editBoxReturn(ax::ui::EditBox* editBox)
 {
-    //found that this will trigger even when focus is lost
-    //if (isSingleLine())
-    // dispatchEvent(UIEventType::Submit);
+    // found that this will trigger even when focus is lost
+    // if (isSingleLine())
+    //  dispatchEvent(UIEventType::Submit);
 }
 
 void GTextInput::editBoxTextChanged(ax::ui::EditBox* editBox, std::string_view /*text*/)

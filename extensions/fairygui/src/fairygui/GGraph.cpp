@@ -128,6 +128,8 @@ void GGraph::drawRegularPolygon(int lineSize,
 
 void GGraph::updateShape()
 {
+    static Vec2 _scale;
+    static bool _transform;
     _shape->clear();
     if (_type == 0)
     {
@@ -139,21 +141,24 @@ void GGraph::updateShape()
     {
     case 1:
     {
+        float lineSize2 = _lineSize * 0.5f;
+        float wl        = _size.width - _lineSize;
+        float hl        = _size.height - _lineSize;
+        float wl2        = _size.width - lineSize2;
+        float hl2        = _size.height - lineSize2;
         if (_cornerRadius)
         {
             if (_lineSize > 0)
-                _shape->drawSolidCornerRect(Vec2(0, 0), Vec2(_size.width, _size.height), _fillColor, _lineColor,
+                _shape->drawSolidCornerRect(Vec2(lineSize2, lineSize2), Vec2(wl2, hl2), _fillColor, _lineColor,
                                             _lineSize * 2, _cornerRadius[0], _cornerRadius[1], _cornerRadius[2],
                                             _cornerRadius[3]);
 
             else
-                _shape->drawCornerRect(Vec2(0, 0), Vec2(_size.width, _size.height), _lineColor, _lineSize * 2,
+                _shape->drawCornerRect(Vec2(lineSize2, lineSize2), Vec2(wl2, hl2), _lineColor, _lineSize * 2,
                                        _cornerRadius[0], _cornerRadius[1], _cornerRadius[2], _cornerRadius[3]);
         }
         else if (_lineSize > 0)
         {
-            float wl = _size.width - _lineSize;
-            float hl = _size.height - _lineSize;
             drawVertRect(_shape, 0, 0, wl, _lineSize, _lineColor);
             drawVertRect(_shape, wl, 0, _lineSize, hl, _lineColor);
             drawVertRect(_shape, _lineSize, hl, wl, _lineSize, _lineColor);
@@ -168,13 +173,18 @@ void GGraph::updateShape()
     }
     case 2:
     {
+        const float cx     = _size.width * 0.5f;
+        const float cy     = _size.height * 0.5f;
+        const float rx     = _size.width * 0.5f;
+        const float scaleY = (_size.width > 0.0f) ? (_size.height / _size.width) : 1.0f;
         if (_lineSize > 0)
         {
-            _shape->drawCircle(Vec2(_size.width / 2, _size.height / 2), _size.width / 2 - _lineSize / 2, 0, 360, false,
-                               1, _size.height / _size.width, _lineColor, _lineSize * 2);
+            _shape->drawCircle(Vec2(cx, cy), _size.width / 2 - _lineSize / 2, 0, 60, false, 1, scaleY, _lineColor,
+                               _lineSize * 2);
         }
-        _shape->drawSolidCircle(Vec2(_size.width / 2, _size.height / 2), _size.width / 2, 0, 360, 1,
-                                _size.height / _size.width, _fillColor);
+        //_shape->drawSolidCircle(Vec2(cx, cy), _size.width / 2, 0, 60, 1,
+        //    scaleY, _fillColor);
+        _shape->drawSolidCircle(Vec2(cx, cy), _size.width / 2, 0, 60, 1, scaleY, _fillColor);
         break;
     }
     case 3:
@@ -210,8 +220,7 @@ void GGraph::updateShape()
             angle += deltaAngle;
         }
 
-        _shape->drawPolygon(_polygonPoints->data(), (int)_polygonPoints->size(), _fillColor, _lineSize * 2,
-                            _lineColor);
+        _shape->drawPolygon(_polygonPoints->data(), (int)_polygonPoints->size(), _fillColor, _lineSize * 2, _lineColor);
 
         break;
     }

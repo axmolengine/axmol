@@ -28,6 +28,9 @@ void GRichTextField::handleInit()
 void GRichTextField::applyTextFormat()
 {
     _richText->applyTextFormat();
+    _richText->setRotation(_rotation);
+    _richText->setRotationSkewY(_skewY + _rotation);
+    _richText->setRotationSkewX(_skewX + _rotation);
     updateGear(4);
     if (!_underConstruct)
         updateSize();

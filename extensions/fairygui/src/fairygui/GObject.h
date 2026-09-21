@@ -63,10 +63,10 @@ public:
     const ax::Vec2& getScale() const { return _scale; }
     void setScale(float xv, float yv);
 
-    float getSkewX() const { return _displayObject->getSkewX(); }
+    float getSkewX() const { return _skewX; }
     void setSkewX(float value);
 
-    float getSkewY() const { return _displayObject->getSkewY(); }
+    float getSkewY() const { return _skewY; }
     void setSkewY(float value);
 
     float getRotation() const { return _rotation; }
@@ -205,6 +205,8 @@ protected:
     bool _pivotAsAnchor;
     float _alpha;
     float _rotation;
+    float _skewX;
+    float _skewY;
     bool _visible;
     bool _touchable;
     bool _grayed;

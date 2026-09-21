@@ -978,17 +978,35 @@ namespace ax
         float crRB,
         CornerMode mode)
     {
+        float t05 = thickness * _thicknessScale * 0.25f * 0.5f;
         switch (mode)
         {
         case ax::DrawNode::CornerMode::Round:
         {
-            _drawPie({ origin.x + crLB, origin.y + crLB }, crLB, 0.0f, 270.0f, 180.0f, 1.0f, 1.0f, Color(), color,
+
+            //   float lineSize2 = _lineSize * 0.5f;
+            //float wl        = _size.width - _lineSize;
+            //float hl        = _size.height - _lineSize;
+            //float wl2       = _size.width - lineSize2;
+            //float hl2       = _size.height - lineSize2;
+            //if (_cornerRadius)
+            //{
+            //    if (_lineSize > 0)
+            //    _shape->drawSolidCornerRect(Vec2(lineSize2, lineSize2), Vec2(wl2, hl2), _fillColor, _lineColor,
+            //                                _lineSize * 2, _cornerRadius[0], _cornerRadius[1], _cornerRadius[2],
+
+
+            // _drawSegment draws a line to the right and left of an imaginary line therefore 0.5f is needed + 0.25f for
+            // a
+            // correct thickness)
+            float width = thickness * _thicknessScale * 0.25f * 0.5f;
+            _drawPie({origin.x + crLB - t05, origin.y + crLB - t05}, crLB, 0.0f, 270.0f, 180.0f, 1.0f, 1.0f, Color(), color,
                 DrawMode::Line, thickness);
-            _drawPie({ origin.x + crLT, destination.y - crLT }, crLT, 0.0f, 90.0f, 180.0f, 1.0f, 1.0f, Color(), color,
+            _drawPie({ origin.x + crLT - t05, destination.y - crLT }, crLT, 0.0f, 90.0f, 180.0f, 1.0f, 1.0f, Color(), color,
                 DrawMode::Line, thickness);
-            _drawPie({ destination.x - crRT, destination.y - crRT }, crRT, 0.0f, 0.0f, 90.0f, 1.0f, 1.0f, Color(), color,
+            _drawPie({ destination.x - crRT - t05, destination.y - crRT - t05}, crRT, 0.0f, 0.0f, 90.0f, 1.0f, 1.0f, Color(), color,
                 DrawMode::Line, thickness);
-            _drawPie({ destination.x - crRB, origin.y + crRB }, crRB, 0.0f, 270.0f, 360.0f, 1.0f, 1.0f, Color(), color,
+            _drawPie({ destination.x - crRB - t05, origin.y + crRB - t05 }, crRB, 0.0f, 270.0f, 360.0f, 1.0f, 1.0f, Color(), color,
                 DrawMode::Line, thickness);
             // Draw the four edges
             _drawSegment(Vec2(origin.x + crLB, origin.y), Vec2(destination.x - crRB, origin.y), color,

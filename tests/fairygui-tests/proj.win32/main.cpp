@@ -11,7 +11,7 @@
 #include "AppDelegate.h"
 
 // Uncomment to enable win32 console
-// #define USE_WIN32_CONSOLE
+ #define USE_WIN32_CONSOLE
 
 using namespace ax;
 static int axmol_main(int argc, TCHAR** argv)

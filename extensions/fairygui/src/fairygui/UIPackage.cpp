@@ -300,8 +300,9 @@ PackageItem* UIPackage::getItemByName(const string& itemName)
 
 GObject* UIPackage::createObject(const string& resName)
 {
+    AXLOGD("FairyGUI: resource searching - {} in  {}", resName, _name);
     PackageItem* pi = getItemByName(resName);
-#    if _AX_DEBUG > 0
+#  if _AX_DEBUG > 0
     auto msg =  fmt::format("FairyGUI: resource not found - {} in  {}",
                                     resName, _name);
     AXASSERT(pi, msg.c_str());
