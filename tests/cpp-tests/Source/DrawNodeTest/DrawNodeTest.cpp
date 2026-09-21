@@ -2860,21 +2860,12 @@ DrawNodeCornerRectTest::DrawNodeCornerRectTest()
     float crRT          = 25.0f;
     float crRB          = 15.0f;
 
-    drawNode->drawCornerRect(Vec2(10, 150), Vec2(200, 220), Color(0.2f, 0.9f, 0.5f, 1.0f), thickness, crLB, crLT, crRT,
-                             crRB, DrawNode::CornerMode::Bevel);
-
     drawNode->drawCornerRect(Vec2(10, 150), Vec2(200, 220), color2, thickness, crLB, crLT, crRT, crRB,
                              DrawNode::CornerMode::Bevel);
     drawNode->drawCornerRect(Vec2(250, 170), Vec2(450, 230), Color::gray, thickness, crLB, crLT, crRT, crRB,
                              DrawNode::CornerMode::Bevel);
     drawNode->drawCornerRect(Vec2(10, 50), Vec2(200, 130), color1, thickness, 10, 10, 10, 10);
     drawNode->drawCornerRect(Vec2(250, 70), Vec2(450, 150), color2, thickness, crLB, crLT, crRT, crRB);
-
-    auto drawNode2 = DrawNode::create();
-    addChild(drawNode2, 10);
-    drawNode2->setRotationSkewY(30);
-    drawNode2->drawCornerRect(Vec2(10, 150), Vec2(200, 220), color1, thickness, crLB, crLT, crRT, crRB,
-                              DrawNode::CornerMode::Bevel);
 }
 
 string DrawNodeCornerRectTest::title() const
