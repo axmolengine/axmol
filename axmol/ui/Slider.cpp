@@ -509,7 +509,7 @@ bool Slider::hitTestSelf(PointerEvent* event, Vec3* outHitPoint)
     if (!event)
         return false;
 
-    const Ray& ray = event->getRay();
+    const Ray& ray       = event->getRay();
     auto hitTestRenderer = [&ray, outHitPoint](Node* renderer) {
         Ray localRay(ray);
         localRay.transform(renderer->getWorldToNodeTransform());
