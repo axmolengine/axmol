@@ -55,6 +55,7 @@ struct FontFaceInfo
 class IFontEngine
 {
 public:
+    virtual ~IFontEngine() {}
     virtual FontFaceInfo* lookupFontFaceForCodepoint(char32_t charCode) = 0;
 };
 
