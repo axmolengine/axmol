@@ -1,5 +1,5 @@
 /****************************************************************************
- Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
+ Copyright (c) 2026-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmol.dev/
 
@@ -21,47 +21,17 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#pragma once
+#include "platform/SystemFonts.h"
 
-#include <string_view>
-#include "base/Config.h"
+#include "platform/SystemFontResult.h"
 
-/* freetype fwd decls */
-
-typedef struct FT_LibraryRec_* FT_Library;
-typedef struct FT_StreamRec_* FT_Stream;
-typedef struct FT_FaceRec_* FT_Face;
-typedef struct FT_StrokerRec_* FT_Stroker;
-typedef struct FT_BBox_ FT_BBox;
-
-namespace ax
+ax::SystemFonts& ax::SystemFonts::getInstance()
 {
-/**
- * @addtogroup _2d
- * @{
- */
+    static SystemFonts result;
+    return result;
+}
 
-struct AX_DEPRECATED(2.11.6, "Will be removed with the corresponding functoins from IFontEngine.") FontFaceInfo
+ax::SystemFontResult ax::SystemFonts::findFont(const SystemFontRequest&)
 {
-    FT_Face face                   = nullptr;
-    long index                     = 0;
-    unsigned int currentGlyphIndex = 0;
-
-    std::string_view family;
-    std::string_view path;
-};
-
-class IFontEngine
-{
-public:
-    virtual ~IFontEngine() {}
-    AX_DEPRECATED(2.11.6, "Use the variant with the family instead.");
-    virtual FontFaceInfo* lookupFontFaceForCodepoint(char32_t charCode) = 0;
-
-    virtual std::string lookupFontFaceForCodepoint(char32_t charCode, std::string_view family, bool bold, bool italic)
-    {
-        return {};
-    }
-};
-
-}  // namespace ax
+    return {};
+}

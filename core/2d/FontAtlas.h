@@ -47,6 +47,7 @@ class Font;
 class EventCustom;
 class EventListenerCustom;
 class FontFreeType;
+class FontFreeTypeBitmap;
 
 struct FontLetterDefinition
 {
@@ -56,6 +57,7 @@ struct FontLetterDefinition
     float height;
     float offsetX;
     float offsetY;
+    float scale;
     int textureID;
     bool validDefinition;
     int xAdvance;
@@ -82,11 +84,13 @@ public:
     void addLetterDefinition(char32_t utf32Char, const FontLetterDefinition& letterDefinition);
     bool getLetterDefinitionForChar(char32_t utf32Char, FontLetterDefinition& letterDefinition);
 
-    bool prepareLetterDefinitions(const std::u32string& utf16String);
+    bool prepareLetterDefinitions(const std::u32string& utf16String, IFontEngine* fallback = nullptr);
+
+    const FontLetterDefinition& getLetterDefinition(char32_t utf32Char) const;
 
     const auto& getLetterDefinitions() const { return _letterDefinitions; }
 
-    const std::unordered_map<unsigned int, Texture2D*>& getTextures() const { return _atlasTextures; }
+    const std::unordered_map<int, Texture2D*>& getTextures() const { return _atlasTextures; }
 
     virtual void addNewPage();
 
@@ -124,6 +128,8 @@ public:
     */
     void setAliasTexParameters();
 
+    backend::PixelFormat getPixelFormat() const;
+
 protected:
     void initWithSettings(void* opaque /*simdjson::ondemand::document*/);
 
@@ -142,13 +148,24 @@ protected:
      */
     void scaleFontLetterDefinition(float scaleFactor);
 
-    void updateTextureContent(backend::PixelFormat format, int startY);
+    bool getOrCreateLetter(char32_t charCode, FontLetterDefinition& letterDefinition);
+    int renderChar(const FontFreeTypeBitmap& bitmap, int bitmapWidth, int bitmapHeight, int startY, const Rect& rect, FontLetterDefinition& letterDefinition);
 
-    std::unordered_map<unsigned int, Texture2D*> _atlasTextures;
+    void updateTextureContent(int startY);
+
+    std::unordered_map<int, Texture2D*> _atlasTextures;
     std::unordered_map<char32_t, FontLetterDefinition> _letterDefinitions;
 
-    StringMap<FontFreeType*> _missingFallbackFonts; // maybe style no needs?
-    std::unordered_map<char32_t, std::pair<FontFreeType*, unsigned int>> _missingGlyphFallbackFonts;
+    /**
+     * Textures we use but that we got from another atlas. Label expects all
+     * the glyphs in the same atlas, as if the atlas was linked to a single
+     * font, but actually we ma reference other atlas for glyphs missing in the
+     * current font.
+     */
+    std::unordered_map<const Texture2D*, int> _sharedTextures;
+
+    /// ID used in _atlasTextures. Shared IDs go decreasing.
+    int _nextSharedTextureID = -1;
 
     Font* _font                 = nullptr;
     FontFreeType* _fontFreeType = nullptr;
@@ -175,8 +192,6 @@ protected:
     EventListenerCustom* _rendererRecreatedListener = nullptr;
     bool _antialiasEnabled                          = true;
     int _currLineHeight                             = 0;
-
-    friend class Label;
 };
 
 }

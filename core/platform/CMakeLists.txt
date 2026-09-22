@@ -29,6 +29,7 @@ if(ANDROID)
     platform/android/Common-android.cpp
     platform/android/RenderViewImpl-android.cpp
     platform/android/FileUtils-android.cpp
+    platform/linux/SystemFonts-android.cpp
   )
 elseif(WINDOWS)
   if(NOT WINRT)
@@ -143,6 +144,7 @@ elseif(LINUX)
     platform/linux/Common-linux.cpp
     platform/linux/Application-linux.cpp
     platform/linux/Device-linux.cpp
+    platform/linux/SystemFonts-linux.cpp
     platform/RenderViewImpl.cpp
   )
 elseif(EMSCRIPTEN)
@@ -173,6 +175,10 @@ endif()
 # Add desktop-specific sources for platforms where GLFW is available
 if((WIN32 AND NOT WINRT) OR LINUX OR MACOSX OR WASM)
   list(APPEND _AX_PLATFORM_SPECIFIC_SRC "platform/desktop/Device-desktop.cpp")
+endif()
+
+if(NOT ANDROID AND NOT LINUX)
+  list(APPEND _AX_PLATFORM_SPECIFIC_SRC "platform/SystemFonts-dummy.cpp")
 endif()
 
 set(_AX_PLATFORM_HEADER
