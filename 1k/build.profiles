@@ -101,5 +101,5 @@ sample-assets=master
 live2d-core=5.5
 lunasvg=v3.5.0
 openxr=release-1.1.63
-tracy=v0.13.1
+tracy=v0.14.1
 # --- endregion
