@@ -22,7 +22,7 @@ float4 main(PS_IN input) : SV_Target0
 
     /* Convert YUV to RGB */
     float4 OutColor;
-    OutColor.xyz = trasnformYUV(YUV, colorTransform);
+    OutColor.xyz = transformYUV(YUV, colorTransform);
     OutColor.w = 1.0;
 
     return input.v_color * OutColor;
