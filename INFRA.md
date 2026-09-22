@@ -3,7 +3,7 @@
 ## PowerShell
 
 - [![github](https://img.shields.io/github/v/release/PowerShell/PowerShell?label=Upstream)](https://github.com/PowerShell/PowerShell)
-- Version: 7.6.5
+- Version: 7.6.6
 - License: MIT
 - Platform: Win32/macOS/Linux
 - Managed by: `1k/pwshi.sh`
@@ -35,7 +35,7 @@
 ## emsdk
 
 - [![github](https://img.shields.io/github/v/tag/emscripten-core/emsdk?label=Upstream)](https://github.com/emscripten-core/emsdk)
-- Version: 6.0.9
+- Version: 6.0.10
 - License: Apache-2.0
 - Platform: Android
 - Manged by: `1k/build.profiles`
