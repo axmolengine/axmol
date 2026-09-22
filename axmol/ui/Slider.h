@@ -233,7 +233,7 @@ public:
 
     // override the widget's hitTestSelf function to perform its own
     bool hitTestSelf(const Vec2& pt, const Camera* camera, Vec3* p) const override;
-    bool onPointerHitTest(PointerEvent* event, Vec3* outHitPoint) override;
+    bool hitTestSelf(PointerEvent* event, Vec3* outHitPoint) override;
     /**
      * Returns the "class name" of widget.
      */

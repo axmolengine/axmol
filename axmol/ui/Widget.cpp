@@ -1028,7 +1028,7 @@ bool Widget::isPointerInside(PointerEvent* event, Vec3* outHitPoint)
     if (!isVisible() || !isEnabled() || !isAncestorsEnabled() || !isAncestorsVisible(this))
         return false;
 
-    if (!Node::onPointerHitTest(event, outHitPoint))
+    if (!hitTestSelf(event, outHitPoint))
         return false;
 
     if (!isClippingParentContainsPoint(event))
@@ -1047,6 +1047,11 @@ bool Widget::hitTestSelf(const Vec2& pt, const Camera* camera, Vec3* p) const
     bool ret  = camera->isWorldPointInRect(pt, getWorldToNodeTransform(), rect, p);
 
     return ret;
+}
+
+bool Widget::hitTestSelf(PointerEvent* event, Vec3* outHitPoint)
+{
+    return Node::onPointerHitTest(event, outHitPoint);
 }
 
 bool Widget::isClippingParentContainsPoint(PointerEvent* event)

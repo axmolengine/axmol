@@ -504,46 +504,33 @@ bool Slider::hitTestSelf(const ax::Vec2& pt, const Camera* camera, Vec3* /*p*/) 
     return camera->isWorldPointInRect(pt, w2l, rect) || camera->isWorldPointInRect(pt, barW2l, sliderBarRect);
 }
 
-bool Slider::onPointerHitTest(PointerEvent* event, Vec3* outHitPoint)
+bool Slider::hitTestSelf(PointerEvent* event, Vec3* outHitPoint)
 {
     if (!event)
         return false;
 
-    const Ray& ray = event->getRay();
-
-    // Test slid ball
-    {
+    const Ray& ray       = event->getRay();
+    auto hitTestRenderer = [&ray, outHitPoint](Node* renderer) {
         Ray localRay(ray);
-        localRay.transform(_slidBallNormalRenderer->getWorldToNodeTransform());
-        if (localRay.direction.z != 0.0f)
-        {
-            float t = -localRay.origin.z / localRay.direction.z;
-            if (t >= 0.0f)
-            {
-                Vec3 hitPt = localRay.origin + t * localRay.direction;
-                if (Rect(Vec2(), _slidBallNormalRenderer->getContentSize()).containsPoint(Vec2(hitPt.x, hitPt.y)))
-                    return Widget::onPointerHitTest(event, outHitPoint);
-            }
-        }
-    }
+        localRay.transform(renderer->getWorldToNodeTransform());
+        if (localRay.direction.z == 0.0f)
+            return false;
 
-    // Test bar
-    {
-        Ray localRay(ray);
-        localRay.transform(_barRenderer->getWorldToNodeTransform());
-        if (localRay.direction.z != 0.0f)
-        {
-            float t = -localRay.origin.z / localRay.direction.z;
-            if (t >= 0.0f)
-            {
-                Vec3 hitPt = localRay.origin + t * localRay.direction;
-                if (Rect(Vec2(), _barRenderer->getContentSize()).containsPoint(Vec2(hitPt.x, hitPt.y)))
-                    return Widget::onPointerHitTest(event, outHitPoint);
-            }
-        }
-    }
+        float t = -localRay.origin.z / localRay.direction.z;
+        if (t < 0.0f)
+            return false;
 
-    return false;
+        Vec3 hitPoint = localRay.origin + t * localRay.direction;
+        if (!Rect(Vec2(), renderer->getContentSize()).containsPoint(Vec2(hitPoint.x, hitPoint.y)))
+            return false;
+
+        if (outHitPoint)
+            renderer->getNodeToWorldTransform().transformPoint(hitPoint, outHitPoint);
+
+        return true;
+    };
+
+    return hitTestRenderer(_slidBallNormalRenderer) || hitTestRenderer(_barRenderer);
 }
 
 bool Slider::onPointerDown(PointerEvent* event)

@@ -24,6 +24,7 @@ namespace ax
 {
 
 class PointerEventListener;
+class PointerEvent;
 class Camera;
 
 namespace ui
@@ -710,6 +711,12 @@ protected:
      * @return true if the point is in widget's content space, false otherwise.
      */
     virtual bool hitTestSelf(const Vec2& pt, const Camera* camera, Vec3* p) const;
+
+    /**
+     * Checks whether the pointer ray hits this widget.
+     * Derived widgets can override this when their interactive area differs from their content size.
+     */
+    virtual bool hitTestSelf(PointerEvent* event, Vec3* outHitPoint);
 
     /**
      * A callback which will be called when pointer down event is issued.

@@ -21,7 +21,7 @@ float3 transformHSV(float3 inColor, float3 hsv)
     return outColor;
 }
 
-float3 trasnformYUV(inout float3 YUV, float4x4 colorTransform)
+float3 transformYUV(inout float3 YUV, float4x4 colorTransform)
 {
     // The legacy buffer stores offsets in c0.w, c1.w and c2.w.
     // With column-major interpretation, these form row 3.
