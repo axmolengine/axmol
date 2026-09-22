@@ -28,15 +28,48 @@
 
 #include "2d/Font.h"
 #include "2d/IFontEngine.h"
+
 #include <string>
+
+/* freetype fwd decls */
+
+typedef struct FT_LibraryRec_* FT_Library;
+typedef struct FT_StreamRec_* FT_Stream;
+typedef struct FT_FaceRec_* FT_Face;
+typedef struct FT_StrokerRec_* FT_Stroker;
+typedef struct FT_BBox_ FT_BBox;
+typedef unsigned int  FT_UInt;
 
 namespace ax
 {
+struct _ttfConfig;
 
 /**
  * @addtogroup _2d
  * @{
  */
+
+/**
+ * Glyph bitmap returned by FontFreeType. The buffer may or may not be
+ * dynamically allocated, which makes memory management a bit complex.
+ */
+struct FontFreeTypeBitmap
+{
+    FontFreeTypeBitmap();
+    FontFreeTypeBitmap(const unsigned char* b, bool d);
+    FontFreeTypeBitmap(const FontFreeTypeBitmap&) = delete;
+    FontFreeTypeBitmap(FontFreeTypeBitmap&&);
+    ~FontFreeTypeBitmap();
+
+    FontFreeTypeBitmap& operator=(const FontFreeTypeBitmap&) = delete;
+    FontFreeTypeBitmap& operator=(FontFreeTypeBitmap&&);
+
+    const unsigned char* bitmap() const;
+
+private:
+    const unsigned char* _bitmap;
+    bool _dynamicallyAllocated;
+};
 
 /** @class FontFreeType
  * @brief FontFreeType is a class of rendering ttf/ttc characters
@@ -118,8 +151,6 @@ public:
                                 bool distanceFieldEnabled = false,
                                 float outline             = 0);
 
-    static FontFreeType* createWithFaceInfo(FontFaceInfo* info, FontFreeType* mainFont);
-
     static void shutdownFreeType();
 
     bool isDistanceFieldEnabled() const { return _distanceFieldEnabled; }
@@ -129,7 +160,7 @@ public:
     void renderCharAt(unsigned char* dest,
                       int posX,
                       int posY,
-                      unsigned char* bitmap,
+                      const FontFreeTypeBitmap& bitmap,
                       int bitmapWidth,
                       int bitmapHeight,
                       int atlasWidth,
@@ -137,18 +168,22 @@ public:
 
     int* getHorizontalKerningForTextUTF32(const std::u32string& text, int& outNumLetters) const override;
 
-    unsigned char* getGlyphBitmap(char32_t charCode,
+    FontFreeTypeBitmap getGlyphBitmap(char32_t charCode,
                                   int& outWidth,
                                   int& outHeight,
                                   Rect& outRect,
                                   int& xAdvance,
-                                  FontFaceInfo** ppFallbackInfo = nullptr);
+                                  IFontEngine* fallback = nullptr,                                                            _ttfConfig* fallbackFont = nullptr);
 
-    unsigned char* getGlyphBitmapByIndex(unsigned int glyphIndex,
+    FontFreeTypeBitmap getGlyphBitmapByIndex(unsigned int glyphIndex,
                                          int& outWidth,
                                          int& outHeight,
                                          Rect& outRect,
                                          int& xAdvance);
+
+    bool hasColors() const;
+    bool isBold() const;
+    bool isItalic() const;
 
     int getFontAscender() const;
     const char* getFontFamily() const;
@@ -163,7 +198,7 @@ public:
 
     static FT_Library getFTLibrary();
 
-    FT_Face getFTFace() const;
+    FT_UInt getCharIndex(char32_t char_code) const;
 
 private:
     static FT_Library _FTlibrary;
@@ -183,7 +218,7 @@ private:
     bool initWithFontFace(FT_Face face, std::string_view fontPath, int faceSize);
 
     int getHorizontalKerningForChars(uint64_t firstChar, uint64_t secondChar) const;
-    unsigned char* getGlyphBitmapWithOutline(unsigned int glyphIndex, FT_BBox& bbox);
+    FontFreeTypeBitmap getGlyphBitmapWithOutline(unsigned int glyphIndex, FT_BBox& bbox);
 
     void setGlyphCollection(GlyphCollection glyphs, std::string_view customGlyphs);
 
@@ -196,7 +231,6 @@ private:
     bool _distanceFieldEnabled;
     float _outlineSize;
     int _ascender;
-    int _descender;
     int _lineHeight;
 
     GlyphCollection _usedGlyphs;

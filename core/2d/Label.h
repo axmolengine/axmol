@@ -93,6 +93,7 @@ class Sprite;
 class SpriteBatchNode;
 class DrawNode;
 class EventListenerCustom;
+class IFontEngine;
 class TextureAtlas;
 
 /**
@@ -112,6 +113,17 @@ class TextureAtlas;
  */
 class AX_DLL Label : public Node, public LabelProtocol, public BlendProtocol
 {
+private:
+    struct BatchUniformLocation
+    {
+        backend::UniformLocation mvpMatrixLocation;
+        backend::UniformLocation textureLocation;
+        backend::UniformLocation textColorLocation;
+        backend::UniformLocation effectColorLocation;
+        backend::UniformLocation effectWidthLocation;
+        backend::UniformLocation passLocation;
+    };
+
 public:
     enum class Overflow
     {
@@ -147,7 +159,7 @@ public:
      *
      * @return An automatically released Label object.
      */
-    static Label* create();
+    static Label* create(IFontEngine* fontFallbackEngine = nullptr);
 
     /**
      * Allocates and initializes a Label, base on platform-dependent API.
@@ -185,9 +197,10 @@ public:
     static Label* createWithTTF(std::string_view text,
                                 std::string_view fontFilePath,
                                 float fontSize,
-                                const Vec2& dimensions    = Vec2::ZERO,
-                                TextHAlignment hAlignment = TextHAlignment::LEFT,
-                                TextVAlignment vAlignment = TextVAlignment::TOP);
+                                const Vec2& dimensions          = Vec2::ZERO,
+                                TextHAlignment hAlignment       = TextHAlignment::LEFT,
+                                TextVAlignment vAlignment       = TextVAlignment::TOP,
+                                IFontEngine* fontFallbackEngine = nullptr);
 
     /**
      * Allocates and initializes a Label, base on FreeType2.
@@ -202,8 +215,9 @@ public:
      */
     static Label* createWithTTF(const TTFConfig& ttfConfig,
                                 std::string_view text,
-                                TextHAlignment hAlignment = TextHAlignment::LEFT,
-                                int maxLineWidth          = 0);
+                                TextHAlignment hAlignment       = TextHAlignment::LEFT,
+                                int maxLineWidth                = 0,
+                                IFontEngine* fontFallbackEngine = nullptr);
 
     /**
      * Allocates and initializes a Label, with a bitmap font file.
@@ -724,14 +738,16 @@ public:
     bool initWithTTF(std::string_view text,
                      std::string_view fontFilePath,
                      float fontSize,
-                     const Vec2& dimensions    = Vec2::ZERO,
-                     TextHAlignment hAlignment = TextHAlignment::LEFT,
-                     TextVAlignment vAlignment = TextVAlignment::TOP);
+                     const Vec2& dimensions          = Vec2::ZERO,
+                     TextHAlignment hAlignment       = TextHAlignment::LEFT,
+                     TextVAlignment vAlignment       = TextVAlignment::TOP,
+                     IFontEngine* fontFallbackEngine = nullptr);
 
     bool initWithTTF(const TTFConfig& ttfConfig,
                      std::string_view text,
-                     TextHAlignment hAlignment = TextHAlignment::LEFT,
-                     int maxLineWidth          = 0);
+                     TextHAlignment hAlignment       = TextHAlignment::LEFT,
+                     int maxLineWidth                = 0,
+                     IFontEngine* fontFallbackEngine = nullptr);
 
 protected:
     struct LetterInfo
@@ -785,6 +801,7 @@ protected:
     void alignText();
     bool tryTextPlacement(float fontSize);
     void updateBatchNode();
+    void updateBatchNodeProgram(int id, Texture2D* texture);
     void computeAlignmentOffset();
     bool computeHorizontalKernings(const std::u32string& stringToRender);
 
@@ -813,7 +830,7 @@ protected:
     void setBMFontSizeInternal(float fontSize);
     bool isLetterHorizontallyClamped(float letterPositionX, float letterWidth, int lineIndex, float offsetX);
     void restoreFontSize();
-    void updateLetterSpriteScale(Sprite* sprite);
+    void updateLetterSpriteScale(Sprite* sprite, float glyphScale);
     int getFirstCharLen(const std::u32string& utf32Text, int startIndex, int textLen) const;
     int getFirstWordLen(const std::u32string& utf32Text, int startIndex, int textLen) const;
 
@@ -827,12 +844,13 @@ protected:
     void setVertexLayout();
     void updateBlendState();
     void updateEffectUniforms(BatchCommand& batch,
+                              const BatchUniformLocation& locations,
                               TextureAtlas* textureAtlas,
                               Renderer* renderer,
                               const Mat4& transform);
     void updateBuffer(TextureAtlas* textureAtlas, CustomCommand& customCommand);
 
-    void updateBatchCommand(BatchCommand& batch);
+    void updateBatchCommands();
 
     bool _contentDirty;
     bool _useDistanceField;
@@ -925,7 +943,9 @@ protected:
 
     TTFConfig _fontConfig;
 
-    Vector<SpriteBatchNode*> _batchNodes;
+    Map<int, SpriteBatchNode*> _batchNodes;
+    std::unordered_map<int, uint32_t> _batchNodeProgramType;
+
     std::vector<LetterInfo> _lettersInfo;
 
     std::vector<float> _linesWidth;
@@ -944,12 +964,9 @@ protected:
     DrawNode* _debugDrawNode;
 #endif
 
-    backend::UniformLocation _mvpMatrixLocation;
-    backend::UniformLocation _textureLocation;
-    backend::UniformLocation _textColorLocation;
-    backend::UniformLocation _effectColorLocation;
-    backend::UniformLocation _effectWidthLocation;
-    backend::UniformLocation _passLocation;
+    std::vector<BatchUniformLocation> _uniformLocation;
+
+    IFontEngine* _fontFallbackEngine;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(Label);

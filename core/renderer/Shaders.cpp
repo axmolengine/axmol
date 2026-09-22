@@ -40,6 +40,7 @@ AX_DLL const std::string_view positionTextureColor_vert            = "positionTe
 AX_DLL const std::string_view positionTextureColor_frag            = "positionTextureColor_fs"sv;
 AX_DLL const std::string_view positionTextureColorAlphaTest_frag   = "positionTextureColorAlphaTest_fs"sv;
 AX_DLL const std::string_view label_normal_frag                    = "label_normal_fs"sv;
+AX_DLL const std::string_view label_color_frag                     = "label_color_fs"sv;
 AX_DLL const std::string_view label_outline_frag                   = "label_outline_fs"sv;
 AX_DLL const std::string_view label_distanceNormal_frag            = "label_distanceNormal_fs"sv;
 AX_DLL const std::string_view label_distanceOutline_frag           = "label_distanceOutline_fs"sv;

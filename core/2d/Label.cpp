@@ -235,9 +235,10 @@ std::array<CustomCommand*, 3> Label::BatchCommand::getCommandArray()
     return std::array<CustomCommand*, 3>{&textCommand, &shadowCommand, &effectCommand};
 }
 
-Label* Label::create()
+Label* Label::create(IFontEngine* fontFallbackEngine)
 {
     auto ret = new Label;
+    ret->_fontFallbackEngine = fontFallbackEngine;
     ret->autorelease();
     return ret;
 }
@@ -266,11 +267,12 @@ Label* Label::createWithTTF(std::string_view text,
                             float fontSize,
                             const Vec2& dimensions /* = Vec2::ZERO */,
                             TextHAlignment hAlignment /* = TextHAlignment::LEFT */,
-                            TextVAlignment vAlignment /* = TextVAlignment::TOP */)
+                            TextVAlignment vAlignment /* = TextVAlignment::TOP */,
+                            IFontEngine* fontFallbackEngine)
 {
     auto ret = new Label(hAlignment, vAlignment);
 
-    if (ret->initWithTTF(text, fontFile, fontSize, dimensions, hAlignment, vAlignment))
+    if (ret->initWithTTF(text, fontFile, fontSize, dimensions, hAlignment, vAlignment, fontFallbackEngine))
     {
         ret->autorelease();
         return ret;
@@ -283,11 +285,12 @@ Label* Label::createWithTTF(std::string_view text,
 Label* Label::createWithTTF(const TTFConfig& ttfConfig,
                             std::string_view text,
                             TextHAlignment hAlignment /* = TextHAlignment::CENTER */,
-                            int maxLineWidth /* = 0 */)
+                            int maxLineWidth /* = 0 */,
+                            IFontEngine* fontFallbackEngine )
 {
     auto ret = new Label(hAlignment);
 
-    if (ret->initWithTTF(ttfConfig, text, hAlignment, maxLineWidth))
+    if (ret->initWithTTF(ttfConfig, text, hAlignment, maxLineWidth, fontFallbackEngine))
     {
         ret->autorelease();
         return ret;
@@ -434,13 +437,15 @@ bool Label::initWithTTF(std::string_view text,
                         float fontSize,
                         const Vec2& dimensions,
                         TextHAlignment /*hAlignment*/,
-                        TextVAlignment /*vAlignment*/)
+                        TextVAlignment /*vAlignment*/,
+                        IFontEngine* fontFallbackEngine)
 {
     if (FileUtils::getInstance()->isFileExist(fontFilePath))
     {
         TTFConfig ttfConfig(fontFilePath, fontSize, GlyphCollection::DYNAMIC);
         if (setTTFConfig(ttfConfig))
         {
+            _fontFallbackEngine = fontFallbackEngine;
             setDimensions(dimensions.width, dimensions.height);
             setString(text);
         }
@@ -452,10 +457,12 @@ bool Label::initWithTTF(std::string_view text,
 bool Label::initWithTTF(const TTFConfig& ttfConfig,
                         std::string_view text,
                         TextHAlignment /*hAlignment*/,
-                        int maxLineWidth)
+                        int maxLineWidth,
+                        IFontEngine* fontFallbackEngine)
 {
     if (FileUtils::getInstance()->isFileExist(ttfConfig.fontFilePath) && setTTFConfig(ttfConfig))
     {
+        _fontFallbackEngine = fontFallbackEngine;
         setMaxLineWidth(maxLineWidth);
         setString(text);
         return true;
@@ -506,6 +513,7 @@ Label::Label(TextHAlignment hAlignment /* = TextHAlignment::LEFT */,
     , _lineDrawNode(nullptr)
     , _strikethroughEnabled(false)
     , _underlineEnabled(false)
+    , _fontFallbackEngine(nullptr)
 {
     setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     reset();
@@ -525,6 +533,7 @@ Label::Label(TextHAlignment hAlignment /* = TextHAlignment::LEFT */,
                 it.second->setTexture(nullptr);
             }
             _batchNodes.clear();
+            _batchNodeProgramType.clear();
             _batchCommands.clear();
 
             if (_fontAtlas)
@@ -585,6 +594,7 @@ void Label::reset()
     AX_SAFE_RELEASE_NULL(_reusedLetter);
     _letters.clear();
     _batchNodes.clear();
+    _batchNodeProgramType.clear();
     _batchCommands.clear();
     _lettersInfo.clear();
     if (_fontAtlas)
@@ -693,11 +703,8 @@ bool Label::setProgramState(backend::ProgramState* programState, bool ownPS /*= 
 {
     if (Node::setProgramState(programState, ownPS))
     {
+        updateBatchCommands();
         updateUniformLocations();
-        for (auto&& batch : _batchCommands)
-        {
-            updateBatchCommand(batch);
-        }
 
         setVertexLayout();
 
@@ -723,61 +730,81 @@ void Label::updateShaderProgram()
     }
     else
     {
-        switch (_currLabelEffect)
-        {
-        case ax::LabelEffect::NORMAL:
-            if (_useDistanceField)
-                programType = backend::ProgramType::LABEL_DISTANCE_NORMAL;
-            else if (_useA8Shader)
-                programType = backend::ProgramType::LABEL_NORMAL;
-            else
-            {
-                auto texture = _getTexture(this);
-                if (texture)
-                {
-                    programType = backend::ProgramStateRegistry::getInstance()->getProgramType(
-                        programType, texture->getSamplerFlags());
-                }
-            }
-            break;
-        case ax::LabelEffect::OUTLINE:
-            programType =
-                _useDistanceField ? backend::ProgramType::LABEL_DISTANCE_OUTLINE : backend::ProgramType::LABLE_OUTLINE;
-            break;
-        case ax::LabelEffect::GLOW:
-            if (_useDistanceField)
-                programType = backend::ProgramType::LABLE_DISTANCE_GLOW;
-            break;
-        default:
-            return;
-        }
-    }
+        for (const auto& [id, texture] : _fontAtlas->getTextures())
+            updateBatchNodeProgram(id, texture);
 
+        programType = _batchNodeProgramType[0];
+    }
     this->setProgramStateByProgramId(programType);
 
+    updateBatchCommands();
     updateUniformLocations();
-
-    for (auto&& batch : _batchCommands)
-        updateBatchCommand(batch);
 
     auto& quadPipeline        = _quadCommand.getPipelineDescriptor();
     quadPipeline.programState = _programState;
 }
 
-void Label::updateBatchCommand(Label::BatchCommand& batch)
+void Label::updateBatchCommands()
 {
-    AXASSERT(_programState, "programState should be set!");
-    batch.setProgramState(_programState);
+    if (_batchCommands.empty())
+        return;
+
+    if (_currentLabelType == LabelType::BMFONT || _currentLabelType == LabelType::CHARMAP)
+      {
+        AXASSERT(_programState, "programState should be set!");
+        for (auto&& batch : _batchCommands)
+            batch.setProgramState(_programState);
+      }
+    else
+    {
+        int commandIndex = 0;
+
+        // There is one BatchCommand per SpriteBatchNode, and one SpriteBatchNode for
+        // each texture from the atlas.
+        for (auto&& [id, _] : _batchNodes)
+        {
+            Label::BatchCommand& batch = _batchCommands[commandIndex];
+            Program* const prog = ProgramManager::getInstance()->loadProgram(_batchNodeProgramType.find(id)->second);
+
+            if (prog)
+            {
+                ProgramState programState(prog);
+                batch.setProgramState(&programState);
+            }
+
+            ++commandIndex;
+        }
+    }
 }
 
 void Label::updateUniformLocations()
 {
-    _mvpMatrixLocation   = _programState->getUniformLocation(backend::Uniform::MVP_MATRIX);
-    _textureLocation     = _programState->getUniformLocation(backend::Uniform::TEXTURE);
-    _textColorLocation   = _programState->getUniformLocation(backend::Uniform::TEXT_COLOR);
-    _effectColorLocation = _programState->getUniformLocation(backend::Uniform::EFFECT_COLOR);
-    _effectWidthLocation = _programState->getUniformLocation(backend::Uniform::EFFECT_WIDTH);
-    _passLocation        = _programState->getUniformLocation(backend::Uniform::LABEL_PASS);
+    const auto fillUniform = [](BatchUniformLocation& uniformLocation, ProgramState* programState) {
+        uniformLocation.mvpMatrixLocation   = programState->getUniformLocation(backend::Uniform::MVP_MATRIX);
+        uniformLocation.textureLocation     = programState->getUniformLocation(backend::Uniform::TEXTURE);
+        uniformLocation.textColorLocation   = programState->getUniformLocation(backend::Uniform::TEXT_COLOR);
+        uniformLocation.effectColorLocation = programState->getUniformLocation(backend::Uniform::EFFECT_COLOR);
+        uniformLocation.effectWidthLocation = programState->getUniformLocation(backend::Uniform::EFFECT_WIDTH);
+        uniformLocation.passLocation        = programState->getUniformLocation(backend::Uniform::LABEL_PASS);
+    };
+
+    if (_currentLabelType == LabelType::BMFONT || _currentLabelType == LabelType::CHARMAP)
+    {
+        _uniformLocation.resize(1);
+        fillUniform(_uniformLocation[0], _programState);
+    }
+    else
+    {
+        const size_t batchCount = _batchCommands.size();
+        _uniformLocation.resize(batchCount);
+
+        for (size_t i = 0; i != batchCount; ++i)
+        {
+            // Batch commands share the same program state, thus we can pick any command.
+            ProgramState* const programState = _batchCommands[i].textCommand.getPipelineDescriptor().programState;
+            fillUniform(_uniformLocation[i], programState);
+        }
+    }
 }
 
 bool Label::setFontAtlas(FontAtlas* atlas, bool distanceFieldEnabled /* = false */, bool useA8Shader /* = false */)
@@ -794,6 +821,7 @@ bool Label::setFontAtlas(FontAtlas* atlas, bool distanceFieldEnabled /* = false 
     if (_fontAtlas)
     {
         _batchNodes.clear();
+        _batchNodeProgramType.clear();
         FontAtlasCache::releaseFontAtlas(_fontAtlas);
     }
     _fontAtlas = atlas;
@@ -1051,7 +1079,7 @@ void Label::updateLabelLetters()
                 auto& letterInfo = _lettersInfo[letterIndex];
                 if (letterInfo.valid)
                 {
-                    auto& letterDef    = _fontAtlas->_letterDefinitions[letterInfo.utf32Char];
+                    auto& letterDef    = _fontAtlas->getLetterDefinition(letterInfo.utf32Char);
                     uvRect.size.height = letterDef.height;
                     uvRect.size.width  = letterDef.width;
                     uvRect.origin.x    = letterDef.U;
@@ -1071,17 +1099,19 @@ void Label::updateLabelLetters()
                         letterSprite->setAtlasIndex(_lettersInfo[letterIndex].atlasIndex);
                     }
 
+                    const float scale = _fontScale * letterDef.scale / 2;
                     auto px =
-                        letterInfo.positionX + _fontScale * uvRect.size.width / 2 + _linesOffsetX[letterInfo.lineIndex];
-                    auto py = letterInfo.positionY - _fontScale * uvRect.size.height / 2 + _letterOffsetY;
+                        letterInfo.positionX + scale * uvRect.size.width + _linesOffsetX[letterInfo.lineIndex];
+                    auto py = letterInfo.positionY - scale * uvRect.size.height + _letterOffsetY;
                     letterSprite->setPosition(px, py);
                     letterSprite->setOpacity(_realOpacity);
+                    this->updateLetterSpriteScale(letterSprite, letterDef.scale);
                 }
                 else
                 {
                     letterSprite->setTextureAtlas(nullptr);
+                    this->updateLetterSpriteScale(letterSprite, 1);
                 }
-                this->updateLetterSpriteScale(letterSprite);
                 ++it;
             }
         }
@@ -1096,7 +1126,7 @@ void Label::alignText()
         return;
     }
 
-    _fontAtlas->prepareLetterDefinitions(_utf32Text);
+    _fontAtlas->prepareLetterDefinitions(_utf32Text, _fontFallbackEngine);
 
     float currentFontSize = getRenderingFontSize();
 
@@ -1133,6 +1163,8 @@ void Label::alignText()
     }
 
     updateBatchNode();
+    updateBatchCommands();
+    updateUniformLocations();
 }
 
 bool Label::tryTextPlacement(float fontSize)
@@ -1153,6 +1185,8 @@ bool Label::tryTextPlacement(float fontSize)
         redoProcess = !multilineTextWrapByChar(atMinimumFontSizeLimit);
     }
 
+    bool multredo = redoProcess;
+
     if ((!redoProcess && _overflow == Overflow::SHRINK && !atMinimumFontSizeLimit)
         && (isVerticalClamp() || isHorizontalClamp()))
     {
@@ -1164,31 +1198,35 @@ bool Label::tryTextPlacement(float fontSize)
 
 void Label::updateBatchNode()
 {
-    const std::unordered_map<unsigned int, Texture2D*>& textures = _fontAtlas->getTextures();
+    const std::unordered_map<int, Texture2D*>& textures = _fontAtlas->getTextures();
     const size_t textureCount = textures.size();
     const size_t nodeCount = _batchNodes.size();
 
     if (textureCount > nodeCount)
     {
-        _batchNodes.reserve(textureCount);
-
-        for (size_t index = nodeCount; index < textureCount; ++index)
-        {
-            SpriteBatchNode* const batchNode = SpriteBatchNode::createWithTexture(textures.at(index));
-            if (batchNode)
+        for (const auto& e : textures)
+            if (_batchNodes.find(e.first) == _batchNodes.end())
             {
-                _isOpacityModifyRGB = batchNode->getTexture()->hasPremultipliedAlpha();
-                _blendFunc          = batchNode->getBlendFunc();
-                batchNode->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
-                batchNode->setPosition(Vec2::ZERO);
-                _batchNodes.pushBack(batchNode);
+                SpriteBatchNode* const batchNode = SpriteBatchNode::createWithTexture(textures.at(e.first));
+                if (batchNode)
+                {
+                    _isOpacityModifyRGB = batchNode->getTexture()->hasPremultipliedAlpha();
+                    _blendFunc          = batchNode->getBlendFunc();
+                    batchNode->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+                    batchNode->setPosition(Vec2::ZERO);
+                    _batchNodes.insert(e.first, batchNode);
+
+                    updateBatchNodeProgram(e.first, e.second);
+                }
             }
-        }
     }
+
     if (_batchNodes.empty())
     {
         return;
     }
+
+    _batchCommands.resize(_batchNodes.size());
 
     // optimize for one-texture-only scenario if multiple textures, then we
     // should count how many chars are per texture
@@ -1204,6 +1242,30 @@ void Label::updateBatchNode()
     updateLabelLetters();
 
     updateColor();
+}
+
+void Label::updateBatchNodeProgram(int id, Texture2D* texture)
+{
+    uint32_t programID;
+
+    if ((_currentLabelType == LabelType::TTF) && (texture->getPixelFormat() == backend::PixelFormat::RGBA8))
+        programID = backend::ProgramType::LABEL_COLOR;
+    else if (_currLabelEffect == LabelEffect::OUTLINE)
+        programID =
+            _useDistanceField ? backend::ProgramType::LABEL_DISTANCE_OUTLINE : backend::ProgramType::LABLE_OUTLINE;
+    else if ((_currLabelEffect == LabelEffect::GLOW) && (_useDistanceField))
+        programID = backend::ProgramType::LABLE_DISTANCE_GLOW;
+    else if (_useDistanceField)
+        programID = backend::ProgramType::LABEL_DISTANCE_NORMAL;
+    else if (_useA8Shader)
+        programID = backend::ProgramType::LABEL_NORMAL;
+    else
+    {
+        programID = backend::ProgramStateRegistry::getInstance()->getProgramType(
+            backend::ProgramType::POSITION_TEXTURE_COLOR, texture->getSamplerFlags());
+    }
+
+    _batchNodeProgramType[id] = programID;
 }
 
 bool Label::computeHorizontalKernings(const std::u32string& stringToRender)
@@ -1244,7 +1306,7 @@ bool Label::updateQuads()
     bool ret = true;
     for (auto&& batchNode : _batchNodes)
     {
-        batchNode->getTextureAtlas()->removeAllQuads();
+        batchNode.second->getTextureAtlas()->removeAllQuads();
     }
 
     for (int ctr = 0; ctr < _lengthOfString; ++ctr)
@@ -1252,7 +1314,7 @@ bool Label::updateQuads()
         auto& letterInfo = _lettersInfo[ctr];
         if (letterInfo.valid)
         {
-            auto& letterDef = _fontAtlas->_letterDefinitions[letterInfo.utf32Char];
+            auto& letterDef = _fontAtlas->getLetterDefinition(letterInfo.utf32Char);
 
             _reusedRect.size.height = letterDef.height;
             _reusedRect.size.width  = letterDef.width;
@@ -1269,7 +1331,7 @@ bool Label::updateQuads()
                     _reusedRect.size.height -= clipTop;
                     py -= clipTop;
                 }
-                if (py - letterDef.height * _fontScale < _tailoredBottomY)
+                if (py - letterDef.height * _fontScale * letterDef.scale < _tailoredBottomY)
                 {
                     _reusedRect.size.height = (py < _tailoredBottomY) ? 0.f : (py - _tailoredBottomY);
                 }
@@ -1281,7 +1343,7 @@ bool Label::updateQuads()
 
             if (_labelWidth > 0.f)
             {
-                if (this->isLetterHorizontallyClamped(px, letterDef.width * _fontScale, lineIndex, offsetX))
+                if (this->isLetterHorizontallyClamped(px, letterDef.width * _fontScale * letterDef.scale, lineIndex, offsetX))
                 {
                     if (_overflow == Overflow::CLAMP)
                     {
@@ -1295,12 +1357,13 @@ bool Label::updateQuads()
                 _reusedLetter->setTextureRect(_reusedRect, letterDef.rotated, _reusedRect.size);
                 float letterPositionX = letterInfo.positionX + _linesOffsetX[lineIndex];
                 _reusedLetter->setPosition(letterPositionX, py);
-                auto index = static_cast<int>(_batchNodes.at(letterDef.textureID)->getTextureAtlas()->getTotalQuads());
+                SpriteBatchNode* const batchNode = _batchNodes.at(letterDef.textureID);
+                auto index = static_cast<int>(batchNode->getTextureAtlas()->getTotalQuads());
                 letterInfo.atlasIndex = index;
 
-                this->updateLetterSpriteScale(_reusedLetter);
+                this->updateLetterSpriteScale(_reusedLetter, letterDef.scale);
 
-                _batchNodes.at(letterDef.textureID)->insertQuadFromSprite(_reusedLetter, index);
+                batchNode->insertQuadFromSprite(_reusedLetter, index);
             }
         }
     }
@@ -1459,7 +1522,6 @@ void Label::enableOutline(const Color4B& outlineColor, float outlineSize /* = -1
 
             if (outlineSize > 0 && _fontConfig.outlineSize != outlineSize)
             {
-
                 _fontConfig.outlineSize = static_cast<int>(outlineSize);
                 setTTFConfig(_fontConfig);
             }
@@ -1768,6 +1830,7 @@ void Label::clearTextures()
         if (_fontAtlas)
         {
             _batchNodes.clear();
+            _batchNodeProgramType.clear();
             _batchCommands.clear();
             AX_SAFE_RELEASE_NULL(_reusedLetter);
             FontAtlasCache::releaseFontAtlas(_fontAtlas);
@@ -1953,6 +2016,7 @@ void Label::updateBuffer(TextureAtlas* textureAtlas, CustomCommand& customComman
 }
 
 void Label::updateEffectUniforms(BatchCommand& batch,
+                                 const BatchUniformLocation& locations,
                                  TextureAtlas* textureAtlas,
                                  Renderer* renderer,
                                  const Mat4& transform)
@@ -1965,13 +2029,21 @@ void Label::updateEffectUniforms(BatchCommand& batch,
     {
         updateBuffer(textureAtlas, batch.shadowCommand);
         auto shadowMatrix = matrixProjection * _shadowTransform;
-        batch.shadowCommand.getPipelineDescriptor().programState->setUniform(_mvpMatrixLocation, shadowMatrix.m,
+        batch.shadowCommand.getPipelineDescriptor().programState->setUniform(locations.mvpMatrixLocation, shadowMatrix.m,
                                                                              sizeof(shadowMatrix.m));
     }
 
     if (_currentLabelType == LabelType::TTF)
     {
-        switch (_currLabelEffect)
+        // TTF labels allow outlines and glow, but they may also contain bitmap
+        // glyphs for which we do not support those effects. Consequently we may
+        // have to disable the effects here. Bitmap glyphs in TTF are stored in
+        // an RGBA8 texture.
+        const LabelEffect effectForTexture =
+            (textureAtlas->getTexture()->getPixelFormat() == backend::PixelFormat::RGBA8) ? LabelEffect::NORMAL
+                                                                                          : _currLabelEffect;
+
+        switch (effectForTexture)
         {
         case LabelEffect::OUTLINE:
         {
@@ -1983,8 +2055,8 @@ void Label::updateEffectUniforms(BatchCommand& batch,
                 pass                 = 2;
                 Vec4 shadowColor         = Vec4(_shadowColor4F.r, _shadowColor4F.g, _shadowColor4F.b, _shadowColor4F.a);
                 auto shadowPS = batch.shadowCommand.getPipelineDescriptor().programState;
-                shadowPS->setUniform(_effectColorLocation, &shadowColor, sizeof(Vec4));
-                shadowPS->setUniform(_passLocation, &pass, sizeof(pass));
+                shadowPS->setUniform(locations.effectColorLocation, &shadowColor, sizeof(Vec4));
+                shadowPS->setUniform(locations.passLocation, &pass, sizeof(pass));
                 batch.shadowCommand.init(_globalZOrder);
                 renderer->addCommand(&batch.shadowCommand);
             }
@@ -1999,9 +2071,9 @@ void Label::updateEffectUniforms(BatchCommand& batch,
                         (_outlineSize > 0 ? _outlineSize : _fontConfig.outlineSize) / FontFreeType::DistanceMapSpread;
                     auto effectPS = batch.effectCommand.getPipelineDescriptor().programState;
                     updateBuffer(textureAtlas, batch.effectCommand);
-                    effectPS->setUniform(_effectColorLocation, &effectColor, sizeof(Vec4));
-                    effectPS->setUniform(_effectWidthLocation, &effectWidth, sizeof(float));
-                    effectPS->setUniform(_passLocation, &pass, sizeof(pass));
+                    effectPS->setUniform(locations.effectColorLocation, &effectColor, sizeof(Vec4));
+                    effectPS->setUniform(locations.effectWidthLocation, &effectWidth, sizeof(float));
+                    effectPS->setUniform(locations.passLocation, &pass, sizeof(pass));
                     batch.effectCommand.init(_globalZOrder);
                     renderer->addCommand(&batch.effectCommand);
                 }
@@ -2011,8 +2083,8 @@ void Label::updateEffectUniforms(BatchCommand& batch,
                     pass     = 0;
                     auto textPS = batch.textCommand.getPipelineDescriptor().programState;
 
-                    textPS->setUniform(_effectColorLocation, &effectColor, sizeof(effectColor));
-                    textPS->setUniform(_passLocation, &pass, sizeof(pass));
+                    textPS->setUniform(locations.effectColorLocation, &effectColor, sizeof(effectColor));
+                    textPS->setUniform(locations.passLocation, &pass, sizeof(pass));
                 }
             }
             else
@@ -2022,8 +2094,8 @@ void Label::updateEffectUniforms(BatchCommand& batch,
                     pass = 1;
                     updateBuffer(textureAtlas, batch.effectCommand);
                     auto effectPS = batch.effectCommand.getPipelineDescriptor().programState;
-                    effectPS->setUniform(_effectColorLocation, &effectColor, sizeof(Vec4));
-                    effectPS->setUniform(_passLocation, &pass, sizeof(pass));
+                    effectPS->setUniform(locations.effectColorLocation, &effectColor, sizeof(Vec4));
+                    effectPS->setUniform(locations.passLocation, &pass, sizeof(pass));
                     batch.effectCommand.init(_globalZOrder);
                     renderer->addCommand(&batch.effectCommand);
                 }
@@ -2033,8 +2105,8 @@ void Label::updateEffectUniforms(BatchCommand& batch,
                     pass     = 0;
                     auto* textPS = batch.textCommand.getPipelineDescriptor().programState;
 
-                    textPS->setUniform(_effectColorLocation, &effectColor, sizeof(effectColor));
-                    textPS->setUniform(_passLocation, &pass, sizeof(pass));
+                    textPS->setUniform(locations.effectColorLocation, &effectColor, sizeof(effectColor));
+                    textPS->setUniform(locations.passLocation, &pass, sizeof(pass));
                 }
             }
         }
@@ -2045,7 +2117,7 @@ void Label::updateEffectUniforms(BatchCommand& batch,
             {
                 Vec4 shadowColor         = Vec4(_shadowColor4F.r, _shadowColor4F.g, _shadowColor4F.b, _shadowColor4F.a);
                 auto shadowPS = batch.shadowCommand.getPipelineDescriptor().programState;
-                shadowPS->setUniform(_textColorLocation, &shadowColor, sizeof(Vec4));
+                shadowPS->setUniform(locations.textColorLocation, &shadowColor, sizeof(Vec4));
                 batch.shadowCommand.init(_globalZOrder);
                 renderer->addCommand(&batch.shadowCommand);
             }
@@ -2060,9 +2132,9 @@ void Label::updateEffectUniforms(BatchCommand& batch,
                 pass                     = 2;
                 Vec4 shadowColor         = Vec4(_shadowColor4F.r, _shadowColor4F.g, _shadowColor4F.b, _shadowColor4F.a);
                 auto shadowPS           = batch.shadowCommand.getPipelineDescriptor().programState;
-                shadowPS->setUniform(_textColorLocation, &shadowColor, sizeof(Vec4));
-                shadowPS->setUniform(_effectColorLocation, &shadowColor, sizeof(Vec4));
-                shadowPS->setUniform(_passLocation, &pass, sizeof(pass));
+                shadowPS->setUniform(locations.textColorLocation, &shadowColor, sizeof(Vec4));
+                shadowPS->setUniform(locations.effectColorLocation, &shadowColor, sizeof(Vec4));
+                shadowPS->setUniform(locations.passLocation, &pass, sizeof(pass));
                 batch.shadowCommand.init(_globalZOrder);
                 renderer->addCommand(&batch.shadowCommand);
             }
@@ -2074,9 +2146,9 @@ void Label::updateEffectUniforms(BatchCommand& batch,
                 Vec4 effectColor(_effectColorF.r, _effectColorF.g, _effectColorF.b, _effectColorF.a);
                 updateBuffer(textureAtlas, batch.effectCommand);
                 auto effectPS = batch.effectCommand.getPipelineDescriptor().programState;
-                effectPS->setUniform(_effectColorLocation, &effectColor, sizeof(Vec4));
-                effectPS->setUniform(_effectWidthLocation, &effectWidth, sizeof(float));
-                effectPS->setUniform(_passLocation, &pass, sizeof(pass));
+                effectPS->setUniform(locations.effectColorLocation, &effectColor, sizeof(Vec4));
+                effectPS->setUniform(locations.effectWidthLocation, &effectWidth, sizeof(float));
+                effectPS->setUniform(locations.passLocation, &pass, sizeof(pass));
                 batch.effectCommand.init(_globalZOrder);
                 renderer->addCommand(&batch.effectCommand);
             }
@@ -2085,8 +2157,8 @@ void Label::updateEffectUniforms(BatchCommand& batch,
             pass = 0;
             Vec4 effectColor(_effectColorF.r, _effectColorF.g, _effectColorF.b, _effectColorF.a);
             auto textPS = batch.textCommand.getPipelineDescriptor().programState;
-            textPS->setUniform(_effectColorLocation, &effectColor, sizeof(Vec4));
-            textPS->setUniform(_passLocation, &pass, sizeof(pass));
+            textPS->setUniform(locations.effectColorLocation, &effectColor, sizeof(Vec4));
+            textPS->setUniform(locations.passLocation, &pass, sizeof(pass));
         }
         break;
         default:
@@ -2155,7 +2227,7 @@ void Label::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 
             auto texture       = textureAtlas->getTexture();
             auto& pipelineQuad = _quadCommand.getPipelineDescriptor();
-            pipelineQuad.programState->setUniform(_mvpMatrixLocation, matrixProjection.m, sizeof(matrixProjection.m));
+            pipelineQuad.programState->setUniform(_uniformLocation[0].mvpMatrixLocation, matrixProjection.m, sizeof(matrixProjection.m));
             pipelineQuad.programState->setTexture(texture->getBackendTexture());
             _quadCommand.init(_globalZOrder, texture, _blendFunc, textureAtlas->getQuads(),
                               textureAtlas->getTotalQuads(), transform, flags);
@@ -2171,33 +2243,49 @@ void Label::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
             }
             int i = 0;
 
-            if (_batchCommands.size() != _batchNodes.size())
-            {
-                _batchCommands.resize(_batchNodes.size());
-                updateShaderProgram();
-            }
-
             updateBlendState();
 
-            for (auto&& batchNode : _batchNodes)
+            AX_ASSERT(_batchNodes.size() == _uniformLocation.size());
+            AX_ASSERT(_batchNodes.size() == _batchCommands.size());
+
+            for (const auto& e : _batchNodes)
             {
+                SpriteBatchNode* const batchNode = e.second;
+
                 auto textureAtlas = batchNode->getTextureAtlas();
                 if (!textureAtlas->getTotalQuads())
+                {
+                    ++i;
                     continue;
+                }
 
-                auto& batch = _batchCommands[i++];
+                auto& batch = _batchCommands[i];
+                const BatchUniformLocation& locations = _uniformLocation[i];
+                ++i;
+
                 for (auto&& command : batch.getCommandArray())
                 {
                     auto* programState = command->getPipelineDescriptor().programState;
-                    Vec4 textColor(_textColorF.r, _textColorF.g, _textColorF.b, _textColorF.a);
-                    programState->setUniform(_textColorLocation, &textColor, sizeof(Vec4));
+
+                    Texture2D* const texture = textureAtlas->getTexture();
+                    Vec4 textColor;
+
+                    if ((_currentLabelType == LabelType::TTF) &&
+                        (texture->getPixelFormat() == backend::PixelFormat::RGBA8))
+                        // No text color for bitmap glyphs as they already have
+                        // their own colors.
+                        textColor = Vec4(1, 1, 1, _textColorF.a);
+                    else
+                        textColor = Vec4(_textColorF.r, _textColorF.g, _textColorF.b, _textColorF.a);
+
+                    programState->setUniform(locations.textColorLocation, &textColor, sizeof(Vec4));
                     programState->setTexture(textureAtlas->getTexture()->getBackendTexture());
                 }
-                batch.textCommand.getPipelineDescriptor().programState->setUniform(_mvpMatrixLocation, matrixMVP.m,
+                batch.textCommand.getPipelineDescriptor().programState->setUniform(locations.mvpMatrixLocation, matrixMVP.m,
                                                                                    sizeof(matrixMVP.m));
-                batch.effectCommand.getPipelineDescriptor().programState->setUniform(_mvpMatrixLocation, matrixMVP.m,
+                batch.effectCommand.getPipelineDescriptor().programState->setUniform(locations.mvpMatrixLocation, matrixMVP.m,
                                                                                       sizeof(matrixMVP.m));
-                updateEffectUniforms(batch, textureAtlas, renderer, transform);
+                updateEffectUniforms(batch, locations, textureAtlas, renderer, transform);
             }
         }
     }
@@ -2359,14 +2447,15 @@ Sprite* Label::getLetter(int letterIndex)
                 break;
             }
 
-            if (_letters.find(letterIndex) != _letters.end())
+            const auto letter_it = _letters.find(letterIndex);
+            if (letter_it != _letters.end())
             {
-                letter = _letters[letterIndex];
+                letter = letter_it->second;
             }
 
             if (letter == nullptr)
             {
-                auto& letterDef = _fontAtlas->_letterDefinitions[letterInfo.utf32Char];
+                auto& letterDef = _fontAtlas->getLetterDefinition(letterInfo.utf32Char);
                 auto textureID  = letterDef.textureID;
                 Rect uvRect;
                 uvRect.size.height = letterDef.height;
@@ -2385,12 +2474,13 @@ Sprite* Label::getLetter(int letterIndex)
                         LabelLetter::createWithTexture(_fontAtlas->getTexture(textureID), uvRect, letterDef.rotated);
                     letter->setTextureAtlas(_batchNodes.at(textureID)->getTextureAtlas());
                     letter->setAtlasIndex(letterInfo.atlasIndex);
+                    const float scale = _fontScale * letterDef.scale / 2;
                     auto px =
-                        letterInfo.positionX + _fontScale * uvRect.size.width / 2 + _linesOffsetX[letterInfo.lineIndex];
-                    auto py = letterInfo.positionY - _fontScale * uvRect.size.height / 2 + _letterOffsetY;
+                        letterInfo.positionX + scale * uvRect.size.width + _linesOffsetX[letterInfo.lineIndex];
+                    auto py = letterInfo.positionY - scale * uvRect.size.height + _letterOffsetY;
                     letter->setPosition(px, py);
                     letter->setOpacity(_realOpacity);
-                    this->updateLetterSpriteScale(letter);
+                    this->updateLetterSpriteScale(letter, letterDef.scale);
                 }
 
                 addChild(letter);
@@ -2610,9 +2700,9 @@ void Label::updateColor()
 
     ax::TextureAtlas* textureAtlas;
     V3F_C4B_T2F_Quad* quads;
-    for (auto&& batchNode : _batchNodes)
+    for (auto&& e : _batchNodes)
     {
-        textureAtlas = batchNode->getTextureAtlas();
+        textureAtlas = e.second->getTextureAtlas();
         quads        = textureAtlas->getQuads();
         auto count   = textureAtlas->getTotalQuads();
 
@@ -2838,12 +2928,12 @@ Label::Overflow Label::getOverflow() const
     return _overflow;
 }
 
-void Label::updateLetterSpriteScale(Sprite* sprite)
+void Label::updateLetterSpriteScale(Sprite* sprite, float glyphScale)
 {
     if (_currentLabelType == LabelType::BMFONT || _currentLabelType == LabelType::TTF)
-        sprite->setScale(_fontScale);
+        sprite->setScale(_fontScale * glyphScale);
     else
-        sprite->setScale(1.0);
+        sprite->setScale(glyphScale);
 }
 
 void Label::computeAlignmentOffset()
@@ -2918,8 +3008,10 @@ int Label::getFirstWordLen(const std::u32string& utf32Text, int startIndex, int 
         {
             auto letterX = (nextLetterX + letterDef.offsetX * _fontScale) / contentScaleFactor;
 
-            if (letterX + letterDef.width * _fontScale > _maxLineWidth)
+            if (letterX + letterDef.width * _fontScale * letterDef.scale > _maxLineWidth)
+              {
                 break;
+              }
         }
 
         nextLetterX += static_cast<int>(letterDef.xAdvance * _fontScale + _additionalKerning);
@@ -3067,7 +3159,7 @@ bool Label::multilineTextWrap(bool breakOnChar, bool ignoreOverflow)
 
             auto letterX = (nextLetterX + letterDef.offsetX * _fontScale) / contentScaleFactor;
             if (_enableWrap && _maxLineWidth > 0.f && nextTokenX > 0.f &&
-                letterX + letterDef.width * _fontScale > _maxLineWidth && !StringUtils::isUnicodeSpace(character) &&
+                letterX + letterDef.width * _fontScale * letterDef.scale > _maxLineWidth && !StringUtils::isUnicodeSpace(character) &&
                 nextChangeSize)
             {
                 _linesWidth.emplace_back(letterRight - whitespaceWidth);
@@ -3090,7 +3182,7 @@ bool Label::multilineTextWrap(bool breakOnChar, bool ignoreOverflow)
             {
                 float newLetterWidth = 0.f;
                 if (_horizontalKernings && letterIndex < textLen - 1)
-                    newLetterWidth = static_cast<float>(_horizontalKernings[letterIndex + 1]) * _fontScale;
+                    newLetterWidth = static_cast<float>(_horizontalKernings[letterIndex + 1]) * _fontScale * letterDef.scale;
                 newLetterWidth += letterDef.xAdvance * _fontScale + _additionalKerning;
 
                 nextLetterX += newLetterWidth;
@@ -3108,7 +3200,7 @@ bool Label::multilineTextWrap(bool breakOnChar, bool ignoreOverflow)
             nextChangeSize = true;
 
             tokenHighestY = std::max(tokenHighestY, letterPosition.y);
-            tokenLowestY  = std::min(tokenLowestY, letterPosition.y - letterDef.height * _fontScale);
+            tokenLowestY  = std::min(tokenLowestY, letterPosition.y - letterDef.height * _fontScale * letterDef.scale);
         }
 
         if (newLine)
@@ -3196,9 +3288,9 @@ bool Label::isHorizontalClamp()
     {
         if (_lettersInfo[ctr].valid)
         {
-            auto& letterDef = _fontAtlas->_letterDefinitions[_lettersInfo[ctr].utf32Char];
+            auto& letterDef = _fontAtlas->getLetterDefinition(_lettersInfo[ctr].utf32Char);
 
-            auto px        = _lettersInfo[ctr].positionX + letterDef.width * _fontScale;
+            auto px        = _lettersInfo[ctr].positionX + letterDef.width * _fontScale * letterDef.scale;
             auto lineIndex = _lettersInfo[ctr].lineIndex;
 
             if (_labelWidth > 0.f)
@@ -3241,7 +3333,7 @@ void Label::recordLetterInfo(const ax::Vec2& point,
     }
     _lettersInfo[letterIndex].lineIndex = lineIndex;
     _lettersInfo[letterIndex].utf32Char = utf32Char;
-    _lettersInfo[letterIndex].valid     = _fontAtlas->_letterDefinitions[utf32Char].validDefinition && utf32Char != ' ';
+    _lettersInfo[letterIndex].valid     = _fontAtlas->getLetterDefinition(utf32Char).validDefinition && utf32Char != ' ';
     _lettersInfo[letterIndex].positionX = point.x;
     _lettersInfo[letterIndex].positionY = point.y;
     _lettersInfo[letterIndex].atlasIndex = -1;

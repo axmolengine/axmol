@@ -174,7 +174,7 @@ static void trimUTF32VectorFromIndex(std::vector<char32_t>& str, int index)
  *
  * Reference: http://en.wikipedia.org/wiki/Whitespace_character#Unicode
  *
- * Return value: weather the character is a whitespace character.
+ * Return value: whether the character is a whitespace character.
  * */
 bool isUnicodeSpace(char32_t ch)
 {
@@ -195,6 +195,11 @@ bool isCJKUnicode(char32_t ch)
            || (ch >= 0xFE30 && ch <= 0xFE4F)     // CJK Compatibility Forms
            || (ch >= 0x31C0 && ch <= 0x4DFF)     // Other extensions
            || (ch >= 0x1f004 && ch <= 0x1f682);  // Emoji
+}
+
+bool isVariantSelector(char32_t ch)
+{
+    return ch >= 0xfe00 && ch <= 0xfe0f;
 }
 
 bool isUnicodeNonBreaking(char32_t ch)
@@ -425,7 +430,7 @@ size_t countUTF8Chars(std::string_view utf8)
             ++count;
         }
     }
-  
+
     return count;
 }
 
@@ -450,7 +455,7 @@ size_t getUTF8ByteOffset(std::string_view utf8, size_t utf8CharOffset)
 }
 
 size_t eraseUTF8CharAt(std::string& str, size_t utf8CharOffset)
-{ 
+{
     if (utf8CharOffset >= str.length())
         return 0;
     const UTF8* source = (const UTF8*)str.data();
