@@ -9440,6 +9440,23 @@
           "isVariadic": false
         },
         {
+          "nativeName": "hitTestSelf",
+          "luaName": "hitTestSelf",
+          "declaringType": "ax::ui::Slider",
+          "returnType": "bool",
+          "parameterTypes": [
+            "ax::PointerEvent *",
+            "ax::Vec3 *"
+          ],
+          "defaultValues": [
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
           "nativeName": "isScale9Enabled",
           "luaName": "isScale9Enabled",
           "declaringType": "ax::ui::Slider",
@@ -9580,23 +9597,6 @@
             "ax::PointerEvent *"
           ],
           "defaultValues": [
-            null
-          ],
-          "isStatic": false,
-          "isConst": false,
-          "isVariadic": false
-        },
-        {
-          "nativeName": "onPointerHitTest",
-          "luaName": "onPointerHitTest",
-          "declaringType": "ax::ui::Slider",
-          "returnType": "bool",
-          "parameterTypes": [
-            "ax::PointerEvent *",
-            "ax::Vec3 *"
-          ],
-          "defaultValues": [
-            null,
             null
           ],
           "isStatic": false,
