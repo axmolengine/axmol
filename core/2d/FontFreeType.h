@@ -163,6 +163,8 @@ public:
 
     static FT_Library getFTLibrary();
 
+    FT_Face getFTFace() const;
+
 private:
     static FT_Library _FTlibrary;
     static bool _FTInitialized;

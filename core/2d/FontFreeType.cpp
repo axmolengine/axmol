@@ -183,6 +183,11 @@ FT_Library FontFreeType::getFTLibrary()
     return _FTlibrary;
 }
 
+FT_Face FontFreeType::getFTFace() const
+{
+    return _fontFace;
+}
+
 // clang-format off
 FontFreeType::FontFreeType(bool distanceFieldEnabled /* = false */, float outline /* = 0 */)
 : _fontFace(nullptr)
