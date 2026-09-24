@@ -1558,6 +1558,7 @@ function setup_xcode() {
     if (!$xcode_prog) {
         throw "The command 'xcodebuild' not work, if you confirm Xcode was installed on this computer, please execute 'sudo xcode-select -switch /Applications/Xcode.app' and try again"
     }
+    return $xcode_ver
 }
 
 # google gn build system, current windows only for build angleproject/dawn on windows
@@ -2036,10 +2037,6 @@ if (!$setupOnly) {
 
                 if ($using_ninja -and $Global:is_android) {
                     $CONFIG_ALL_OPTIONS += "-DCMAKE_MAKE_PROGRAM=$ninja_prog"
-                }
-
-                if ($cmake_generator -eq 'Xcode') {
-                    setup_xcode
                 }
             }
 
