@@ -40,10 +40,6 @@
 
 - (void)dealloc
 {
-    [_placeholderFont release];
-    [_placeholderTextColor release];
-
-    [super dealloc];
 }
 
 #pragma mark - Properties

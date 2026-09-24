@@ -42,7 +42,7 @@ void launchApp(UIViewController* viewController, UIWindow* windowHandle)
     if (windowHandle) 
         renderView->setEAWindow((__bridge void*)windowHandle);
 
-    renderView->showWindow(viewController);
+    renderView->showWindow((__bridge void*)viewController);
     
     // IMPORTANT: Must be done after creating RootViewController
     ax::Director::getInstance()->setRenderView(renderView);

@@ -55,16 +55,13 @@ BufferMTL::~BufferMTL()
 {
     if (BufferUsage::DYNAMIC == _usage)
     {
-        for (id<MTLBuffer> buffer in _dynamicDataBuffers)
-            [buffer release];
-
-        [_dynamicDataBuffers release];
+        _dynamicDataBuffers = nil;
 
         BufferManager::removeBuffer(this);
     }
     else
     {
-        [_mtlBuffer release];
+        _mtlBuffer = nil;
     }
 }
 

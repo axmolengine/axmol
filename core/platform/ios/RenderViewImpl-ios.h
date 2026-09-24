@@ -80,7 +80,7 @@ public:
     void* getEAWindow() const override { return _hostWindowHandle; }
     
     /** @since axmol-2.11.5, sets the objective-c UIWindow instance */
-    void setEAWindow(void* window) override { _hostWindowHandle = window; }
+    void setEAWindow(void* window) override;
     
     /** @since axmol-2.8.0, returns the objective-c RenderHostView instance */
     void* getEARenderView() const override { return _hostViewHandle; }
@@ -106,8 +106,10 @@ protected:
     bool initWithFullScreen(std::string_view viewName);
 
     // the objective-c instance handles
-    void* _hostViewHandle;
-    void* _hostWindowHandle;
+    void* _hostViewHandle = nullptr;
+    void* _hostWindowHandle = nullptr;
+    bool _ownsHostViewHandle = false;
+    bool _ownsHostWindowHandle = false;
 };
 
 #ifndef AX_CORE_PROFILE

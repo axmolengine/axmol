@@ -159,12 +159,4 @@ configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession
      */
 }
 
-#if !__has_feature(objc_arc)
-- (void)dealloc
-{
-    [_viewController release];
-    [super dealloc];
-}
-#endif
-
 @end

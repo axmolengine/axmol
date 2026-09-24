@@ -58,7 +58,6 @@ EditBoxImplIOS::EditBoxImplIOS(EditBox* pEditText) : EditBoxImplCommon(pEditText
 
 EditBoxImplIOS::~EditBoxImplIOS()
 {
-    [_systemControl release];
     _systemControl = nil;
 }
 
@@ -210,7 +209,7 @@ void EditBoxImplIOS::nativeCloseKeyboard()
 UIFont* EditBoxImplIOS::constructFont(const char* fontName, int fontSize)
 {
     AXASSERT(fontName != nullptr, "fontName can't be nullptr");
-    auto eaView = static_cast<RenderHostView*>(ax::Director::getInstance()->getRenderView()->getEARenderView());
+    auto eaView = (__bridge RenderHostView*)ax::Director::getInstance()->getRenderView()->getEARenderView();
     float retinaFactor   = eaView.contentScaleFactor;
     NSString* fntName    = [NSString stringWithUTF8String:fontName];
 

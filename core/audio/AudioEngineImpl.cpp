@@ -235,7 +235,6 @@ static void resumeAudioDevice()
                                                     name:UIApplicationWillResignActiveNotification
                                                   object:nil];
 
-    [super dealloc];
 }
 @end
 
@@ -362,7 +361,7 @@ AudioEngineImpl::~AudioEngineImpl()
     AudioDecoderManager::destroy();
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
-    [s_AudioEngineSessionHandler release];
+    s_AudioEngineSessionHandler = nil;
 #endif
     s_instance = nullptr;
 }

@@ -181,12 +181,11 @@ ShaderModuleMTL::ShaderModuleMTL(id<MTLDevice> mtlDevice, ShaderStage stage, std
 
     setBuiltinLocations();
 
-    [library release];
 }
 
 ShaderModuleMTL::~ShaderModuleMTL()
 {
-    [_mtlFunction release];
+    _mtlFunction = nil;
 }
 
 void ShaderModuleMTL::parseAttibute(SLCReflectContext* context)

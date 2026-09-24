@@ -94,14 +94,4 @@ API_AVAILABLE(ios(13.0))
     ax::Application::getInstance()->applicationDidEnterBackground();
 }
 
-#if !__has_feature(objc_arc)
-- (void)dealloc
-{
-    [_viewController release];
-    [_window release];
-    [super dealloc];
-}
-#endif
-
-
 @end

@@ -26,7 +26,7 @@
 #import "ui/UIEditBox/Mac/UIMultilineTextField.h"
 
 @interface CCUIMultilineTextField()
-@property(nonatomic, copy)NSString* placeHolder;
+@property(nonatomic, copy) NSString* placeHolder;
 @end
 
 @implementation CCUIMultilineTextField
@@ -39,7 +39,6 @@
 {
     self.placeHolder = nil;
 
-    [super dealloc];
 }
 
 -(void)axui_setPlaceholderFont:(NSFont *)font

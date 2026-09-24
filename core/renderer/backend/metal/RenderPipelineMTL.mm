@@ -236,15 +236,15 @@ void RenderPipelineMTL::update(const RenderTarget* renderTarget, const PipelineD
     if (error)
         NSLog(@"Can not create renderpipeline state: %@", error);
 
-    [_mtlRenderPipelineDescriptor release];
+    _mtlRenderPipelineDescriptor = nil;
 
     _mtlStateCache.emplace(hash, _mtlRenderPipelineState);
 }
 
 RenderPipelineMTL::~RenderPipelineMTL()
 {
-    for (auto& item : _mtlStateCache)
-        [item.second release];
+    _mtlRenderPipelineState = nil;
+    _mtlStateCache.clear();
 }
 
 void RenderPipelineMTL::setVertexLayout(MTLRenderPipelineDescriptor* mtlDescriptor,

@@ -448,11 +448,11 @@ HWND RenderViewImpl::getWin32Window()
 #elif (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
 void* RenderViewImpl::getCocoaWindow()
 {
-    return (void*)glfwGetCocoaWindow(_mainWindow);
+    return (__bridge void*)glfwGetCocoaWindow(_mainWindow);
 }
 void* RenderViewImpl::getNSGLContext()
 {
-    return (void*)glfwGetNSGLContext(_mainWindow);
+    return (__bridge void*)glfwGetNSGLContext(_mainWindow);
 }  // stevetranby: added
 #elif (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
 void* RenderViewImpl::getX11Window()
@@ -623,7 +623,7 @@ bool RenderViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rec
         return false;
     }
 
-    NSView* contentView = [(id)getCocoaWindow() contentView];
+    NSView* contentView = [(__bridge id)getCocoaWindow() contentView];
     [contentView setWantsLayer:YES];
     CAMetalLayer* layer = [CAMetalLayer layer];
     [layer setDevice:device];

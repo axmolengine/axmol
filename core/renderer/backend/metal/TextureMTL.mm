@@ -105,7 +105,7 @@ id<MTLTexture> TextureInfoMTL::ensure(int index, int target)
 {
     if (index < AX_META_TEXTURES)
     {
-        id<MTLTexture>& mtlTexture = _mtlTextures[index];
+        __strong id<MTLTexture>& mtlTexture = _mtlTextures[index];
         if (mtlTexture)
             return mtlTexture;
         mtlTexture = createTexture(_mtlDevice, _descriptor, target);
@@ -120,14 +120,10 @@ void TextureInfoMTL::destroy()
 {
     if (_maxIdx == -1)
         return;
-    id<MTLTexture> texture;
-    int i = 0;
-    while ((texture = _mtlTextures[i++]))
-        [texture release];
+    _mtlTextures.fill(nil);
 
     if (_mtlSamplerState)
     {
-        [_mtlSamplerState release];
         _mtlSamplerState = nil;
     }
     _maxIdx = -1;
@@ -188,7 +184,6 @@ void TextureInfoMTL::recreateSampler(const SamplerDescriptor& descriptor)
 
     if (_mtlSamplerState)
     {
-        [_mtlSamplerState release];
         _mtlSamplerState = nil;
     }
 
@@ -200,7 +195,6 @@ void TextureInfoMTL::recreateSampler(const SamplerDescriptor& descriptor)
 
     _mtlSamplerState = [_mtlDevice newSamplerStateWithDescriptor:mtlDescriptor];
 
-    [mtlDescriptor release];
 }
 
 /// CLASS TextureMTL
@@ -287,7 +281,7 @@ void TextureMTL::generateMipmaps()
     if (!_hasMipmaps)
     {
         _hasMipmaps = true;
-        UtilsMTL::generateMipmaps(reinterpret_cast<id<MTLTexture>>(this->getHandler()));
+        UtilsMTL::generateMipmaps((__bridge id<MTLTexture>)reinterpret_cast<void*>(this->getHandler()));
     }
 }
 
@@ -340,7 +334,7 @@ void TextureCubeMTL::generateMipmaps()
     if (!_hasMipmaps)
     {
         _hasMipmaps = true;
-        UtilsMTL::generateMipmaps(reinterpret_cast<id<MTLTexture>>(this->getHandler()));
+        UtilsMTL::generateMipmaps((__bridge id<MTLTexture>)reinterpret_cast<void*>(this->getHandler()));
     }
 }
 

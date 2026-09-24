@@ -85,7 +85,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 #define IOS_MAX_TOUCHES_COUNT 10
 
 @interface RenderHostView ()
-@property(nonatomic) TextInputView* textInputView;
+@property(nonatomic, strong) TextInputView* textInputView;
 @property(nonatomic, readwrite, assign) BOOL isKeyboardShown;
 @property(nonatomic, copy) NSNotification* keyboardShowNotification;
 @property(nonatomic, assign) CGRect originalRect;
@@ -120,23 +120,23 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
 
 + (id)viewWithFrame:(CGRect)frame
 {
-    return [[[self alloc] initWithFrame:frame] autorelease];
+    return [[self alloc] initWithFrame:frame];
 }
 
 + (id)viewWithFrame:(CGRect)frame pixelFormat:(int)format
 {
-    return [[[self alloc] initWithFrame:frame pixelFormat:format] autorelease];
+    return [[self alloc] initWithFrame:frame pixelFormat:format];
 }
 
 + (id)viewWithFrame:(CGRect)frame pixelFormat:(int)format depthFormat:(int)depth
 {
-    return [[[self alloc] initWithFrame:frame
+    return [[self alloc] initWithFrame:frame
                             pixelFormat:format
                             depthFormat:depth
                      preserveBackbuffer:NO
                              sharegroup:nil
                           multiSampling:NO
-                        numberOfSamples:0] autorelease];
+                        numberOfSamples:0];
 }
 
 + (id)viewWithFrame:(CGRect)frame
@@ -147,13 +147,13 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
          multiSampling:(BOOL)multisampling
        numberOfSamples:(unsigned int)samples
 {
-    return [[[self alloc] initWithFrame:frame
+    return [[self alloc] initWithFrame:frame
                             pixelFormat:format
                             depthFormat:depth
                      preserveBackbuffer:retained
                              sharegroup:sharegroup
                           multiSampling:multisampling
-                        numberOfSamples:samples] autorelease];
+                        numberOfSamples:samples];
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -221,7 +221,6 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
         preserveBackbuffer_ = retained;
         if (![self setupSurfaceWithSharegroup:sharegroup])
         {
-            [self release];
             return nil;
         }
 #endif
@@ -248,7 +247,6 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
 
         if (![self setupSurfaceWithSharegroup:nil])
         {
-            [self release];
             return nil;
         }
 #endif
@@ -286,7 +284,7 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
     auto pixel = pixelformat_ == (int)ax::PixelFormat::RGB565 ? GL_RGB565 : GL_RGBA8_OES;
     renderer_ = [[ES3Renderer alloc] initWithDepthFormat:depth
                                            withPixelFormat:pixel
-                                            withSharegroup:(EAGLSharegroup*)sharegroup
+                                            withSharegroup:(__bridge EAGLSharegroup*)sharegroup
                                          withMultiSampling:multiSampling_
                                        withNumberOfSamples:requestedSamples_];
 
@@ -311,11 +309,6 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];  // remove keyboard notification
-#if !defined(AX_USE_METAL)
-    [renderer_ release];
-#endif
-    [self.textInputView release];
-    [super dealloc];
 }
 
 - (void)layoutSubviews
