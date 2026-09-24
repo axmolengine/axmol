@@ -26,6 +26,7 @@
 #import <WebKit/WKWebView.h>
 #import <WebKit/WKUIDelegate.h>
 #import <WebKit/WKNavigationDelegate.h>
+#import <WebKit/WKNavigationAction.h>
 
 #include "ui/UIWebView/UIWebViewImpl-ios.h"
 #include "ui/UIWebView/UIWebView.h"

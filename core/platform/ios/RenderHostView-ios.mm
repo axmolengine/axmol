@@ -64,6 +64,8 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
 #import <QuartzCore/QuartzCore.h>
 
+#include <stdint.h>
+
 #import "base/Director.h"
 #import "base/Touch.h"
 #import "base/IMEDispatcher.h"
@@ -458,7 +460,7 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
     if (self.isKeyboardShown)
         [self closeKeyboardOpenedByEditBox];
 
-    UITouch* ids[IOS_MAX_TOUCHES_COUNT] = {0};
+    intptr_t ids[IOS_MAX_TOUCHES_COUNT] = {0};
     float xs[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
     float ys[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
 
@@ -471,19 +473,19 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
             break;
         }
 
-        ids[i] = touch;
+        ids[i] = reinterpret_cast<intptr_t>((__bridge void*)touch);
         xs[i]  = [touch locationInView:[touch view]].x * self.contentScaleFactor;
         ys[i]  = [touch locationInView:[touch view]].y * self.contentScaleFactor;
         ++i;
     }
 
     auto renderView = ax::Director::getInstance()->getRenderView();
-    renderView->handleTouchesBegin(i, (intptr_t*)ids, xs, ys);
+    renderView->handleTouchesBegin(i, ids, xs, ys);
 }
 
 - (void)touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    UITouch* ids[IOS_MAX_TOUCHES_COUNT] = {0};
+    intptr_t ids[IOS_MAX_TOUCHES_COUNT] = {0};
     float xs[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
     float ys[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
     float fs[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
@@ -498,7 +500,7 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
             break;
         }
 
-        ids[i] = touch;
+        ids[i] = reinterpret_cast<intptr_t>((__bridge void*)touch);
         xs[i]  = [touch locationInView:[touch view]].x * self.contentScaleFactor;
         ys[i]  = [touch locationInView:[touch view]].y * self.contentScaleFactor;
 #if defined(__IPHONE_9_0) && (__IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_9_0)
@@ -513,12 +515,12 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
     }
 
     auto renderView = ax::Director::getInstance()->getRenderView();
-    renderView->handleTouchesMove(i, (intptr_t*)ids, xs, ys, fs, ms);
+    renderView->handleTouchesMove(i, ids, xs, ys, fs, ms);
 }
 
 - (void)touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    UITouch* ids[IOS_MAX_TOUCHES_COUNT] = {0};
+    intptr_t ids[IOS_MAX_TOUCHES_COUNT] = {0};
     float xs[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
     float ys[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
 
@@ -531,19 +533,19 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
             break;
         }
 
-        ids[i] = touch;
+        ids[i] = reinterpret_cast<intptr_t>((__bridge void*)touch);
         xs[i]  = [touch locationInView:[touch view]].x * self.contentScaleFactor;
         ys[i]  = [touch locationInView:[touch view]].y * self.contentScaleFactor;
         ++i;
     }
 
     auto renderView = ax::Director::getInstance()->getRenderView();
-    renderView->handleTouchesEnd(i, (intptr_t*)ids, xs, ys);
+    renderView->handleTouchesEnd(i, ids, xs, ys);
 }
 
 - (void)touchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    UITouch* ids[IOS_MAX_TOUCHES_COUNT] = {0};
+    intptr_t ids[IOS_MAX_TOUCHES_COUNT] = {0};
     float xs[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
     float ys[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
 
@@ -556,14 +558,14 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
             break;
         }
 
-        ids[i] = touch;
+        ids[i] = reinterpret_cast<intptr_t>((__bridge void*)touch);
         xs[i]  = [touch locationInView:[touch view]].x * self.contentScaleFactor;
         ys[i]  = [touch locationInView:[touch view]].y * self.contentScaleFactor;
         ++i;
     }
 
     auto renderView = ax::Director::getInstance()->getRenderView();
-    renderView->handleTouchesCancel(i, (intptr_t*)ids, xs, ys);
+    renderView->handleTouchesCancel(i, ids, xs, ys);
 }
 
 - (void)showKeyboard
