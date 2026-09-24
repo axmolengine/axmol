@@ -417,23 +417,26 @@ Data Device::getTextureDataForText(std::string_view text,
                                    bool& hasPremultipliedAlpha)
 {
     Data ret;
-    do
+    @autoreleasepool
     {
-        tImageInfo info = {0};
-        info.width      = textDefinition._dimensions.width;
-        info.height     = textDefinition._dimensions.height;
-
-        if (!_initWithString(text, align, textDefinition._fontName.c_str(), textDefinition._fontSize, &info,
-                             &textDefinition._fontFillColor, textDefinition._fontAlpha, textDefinition._enableWrap,
-                             textDefinition._overflow, textDefinition._stroke))
+        do
         {
-            break;
-        }
-        height = static_cast<int>(info.height);
-        width  = static_cast<int>(info.width);
-        ret.fastSet(info.data, width * height * 4);
-        hasPremultipliedAlpha = true;
-    } while (0);
+            tImageInfo info = {0};
+            info.width      = textDefinition._dimensions.width;
+            info.height     = textDefinition._dimensions.height;
+
+            if (!_initWithString(text, align, textDefinition._fontName.c_str(), textDefinition._fontSize, &info,
+                                 &textDefinition._fontFillColor, textDefinition._fontAlpha, textDefinition._enableWrap,
+                                 textDefinition._overflow, textDefinition._stroke))
+            {
+                break;
+            }
+            height = static_cast<int>(info.height);
+            width  = static_cast<int>(info.width);
+            ret.fastSet(info.data, width * height * 4);
+            hasPremultipliedAlpha = true;
+        } while (0);
+    }
 
     return ret;
 }
