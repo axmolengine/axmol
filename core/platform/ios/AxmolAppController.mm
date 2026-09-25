@@ -79,6 +79,7 @@ configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession
     {
         _viewController = [self createRootViewController];
         AxmolLauncher::launchApp(_viewController, nil);
+        self.window = (__bridge UIWindow*)Director::getInstance()->getRenderView()->getEAWindow();
     }
     return YES;
 }
