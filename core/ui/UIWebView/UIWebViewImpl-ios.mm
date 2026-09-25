@@ -26,6 +26,7 @@
 #import <WebKit/WKWebView.h>
 #import <WebKit/WKUIDelegate.h>
 #import <WebKit/WKNavigationDelegate.h>
+#import <WebKit/WKNavigationAction.h>
 
 #include "ui/UIWebView/UIWebViewImpl-ios.h"
 #include "ui/UIWebView/UIWebView.h"
@@ -85,7 +86,7 @@
 @end
 
 @interface UIWebViewWrapper () <WKUIDelegate, WKNavigationDelegate>
-@property(nonatomic) WKWebView* wkWebView;
+@property(nonatomic, strong) WKWebView* wkWebView;
 
 @property(nonatomic, copy) NSString* jsScheme;
 @end
@@ -116,10 +117,8 @@
     self.wkWebView.UIDelegate         = nil;
     self.wkWebView.navigationDelegate = nil;
     [self.wkWebView removeFromSuperview];
-    [self.wkWebView release];
     self.wkWebView = nil;
     self.jsScheme  = nil;
-    [super dealloc];
 }
 
 - (void)setupWebView
@@ -409,8 +408,7 @@ WebViewImpl::WebViewImpl(WebView* webView) : _uiWebViewWrapper([UIWebViewWrapper
 
 WebViewImpl::~WebViewImpl()
 {
-    [_uiWebViewWrapper release];
-    _uiWebViewWrapper = nullptr;
+    _uiWebViewWrapper = nil;
 }
 
 void WebViewImpl::setJavascriptInterfaceScheme(std::string_view scheme)
@@ -503,7 +501,7 @@ void WebViewImpl::draw(ax::Renderer* renderer, ax::Mat4 const& transform, uint32
         auto renderView    = director->getRenderView();
         auto frameSize = renderView->getFrameSize();
 
-        auto scaleFactor = [static_cast<RenderHostView*>(renderView->getEARenderView()) contentScaleFactor];
+        auto scaleFactor = [(__bridge RenderHostView*)renderView->getEARenderView() contentScaleFactor];
 
         auto winSize = director->getWinSize();
 

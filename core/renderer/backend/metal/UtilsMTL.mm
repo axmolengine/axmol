@@ -169,7 +169,7 @@ MTLPixelFormat UtilsMTL::toMTLPixelFormat(PixelFormat textureFormat)
 void UtilsMTL::resizeDefaultAttachmentTexture(std::size_t width, std::size_t height)
 {
     [backend::DriverMTL::getCAMetalLayer() setDrawableSize:CGSizeMake(width, height)];
-    [_defaultDepthStencilAttachmentTexture release];
+    _defaultDepthStencilAttachmentTexture = nil;
     _defaultDepthStencilAttachmentTexture = UtilsMTL::createDepthStencilAttachmentTexture();
 }
 
@@ -183,7 +183,6 @@ id<MTLTexture> UtilsMTL::createDepthStencilAttachmentTexture()
     textureDescriptor.resourceOptions       = MTLResourceStorageModePrivate;
     textureDescriptor.usage                 = MTLTextureUsageRenderTarget;
     auto ret                                = [CAMetalLayer.device newTextureWithDescriptor:textureDescriptor];
-    [textureDescriptor release];
 
     return ret;
 }

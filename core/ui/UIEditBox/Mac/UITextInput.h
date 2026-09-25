@@ -31,17 +31,16 @@
  */
 @protocol AXUITextInput <NSObject>
 
-@property(nonatomic, retain, setter=axui_setText:) NSString* axui_text;
-@property(nonatomic, retain, setter=axui_setTextColor:) NSColor* axui_textColor;
-@property(nonatomic, retain, setter=axui_setFont:) NSFont* axui_font;
+@property(nonatomic, strong, setter=axui_setText:) NSString* axui_text;
+@property(nonatomic, strong, setter=axui_setTextColor:) NSColor* axui_textColor;
+@property(nonatomic, strong, setter=axui_setFont:) NSFont* axui_font;
 @property(nonatomic, assign, setter=axui_setMaxLength:) int axui_maxLength;
-@property(nonatomic, retain, setter=axui_setPlaceholder:) NSString* axui_placeholder;
-@property(nonatomic, retain, setter=axui_setPlaceholderColor:) NSColor* axui_placeholderColor;
-@property(nonatomic, retain, setter=axui_setPlaceholderFont:) NSFont* axui_placeholderFont;
+@property(nonatomic, strong, setter=axui_setPlaceholder:) NSString* axui_placeholder;
+@property(nonatomic, strong, setter=axui_setPlaceholderColor:) NSColor* axui_placeholderColor;
+@property(nonatomic, strong, setter=axui_setPlaceholderFont:) NSFont* axui_placeholderFont;
 @property(nonatomic, assign, setter=axui_setTextHorizontalAlignment:) NSTextAlignment axui_alignment;
 
 /* can only set. and not get, since the getter will only return one delegate implementation */
 - (void)axui_setDelegate:(id<NSTextFieldDelegate, NSTextViewDelegate>)delegate;
 
 @end
-

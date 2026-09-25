@@ -69,7 +69,7 @@ static NSAttributedString* __attributedStringWithFontSize(NSMutableAttributedStr
         [attributedString endEditing];
     }
 
-    return [[attributedString copy] autorelease];
+    return [attributedString copy];
 }
 
 static CGFloat _calculateTextDrawStartHeight(ax::Device::TextAlign align, CGSize realDimensions, CGSize dimensions)
@@ -119,7 +119,7 @@ static CGSize _calculateShrinkedSizeForString(NSAttributedString** str,
                 break;
             }
 
-            NSMutableAttributedString* mutableString = [[*str mutableCopy] autorelease];
+            NSMutableAttributedString* mutableString = [*str mutableCopy];
             *str                                     = __attributedStringWithFontSize(mutableString, fontSize);
 
             CTFramesetterRef framesetter =
@@ -160,7 +160,7 @@ static CGSize _calculateShrinkedSizeForString(NSAttributedString** str,
                 break;
             }
 
-            NSMutableAttributedString* mutableString = [[*str mutableCopy] autorelease];
+            NSMutableAttributedString* mutableString = [*str mutableCopy];
             *str                                     = __attributedStringWithFontSize(mutableString, fontSize);
 
             CGSize fitSize = [*str boundingRectWithSize:CGSizeMake(constrainSize.width, MAX_MEASURE_HEIGHT)
@@ -238,8 +238,6 @@ static CCAccelerometerDispatcher* s_pAccelerometerDispatcher;
 {
     s_pAccelerometerDispatcher = nullptr;
     delete _acceleration;
-    [_motionManager release];
-    [super dealloc];
 }
 
 - (void)setAccelerometerEnabled:(bool)isEnabled
@@ -454,7 +452,6 @@ static bool _initWithString(std::string_view text,
                             bool enableWrap,
                             int overflow)
 {
-
     bool bRet = false;
     do
     {
@@ -488,7 +485,7 @@ static bool _initWithString(std::string_view text,
                                          paragraphStyle, NSParagraphStyleAttributeName, nil];
 
         NSAttributedString* stringWithAttributes =
-            [[[NSAttributedString alloc] initWithString:str attributes:tokenAttributesDict] autorelease];
+            [[NSAttributedString alloc] initWithString:str attributes:tokenAttributesDict];
 
         int shrinkFontSize = size;
         CGSize realDimensions;
@@ -569,7 +566,7 @@ static bool _initWithString(std::string_view text,
             [tokenAttributesDict2 setObject:strokeColor forKey:NSStrokeColorAttributeName];
 
             NSAttributedString* strokeString =
-                [[[NSAttributedString alloc] initWithString:str attributes:tokenAttributesDict2] autorelease];
+            [[NSAttributedString alloc] initWithString:str attributes:tokenAttributesDict2];
 
             if (overflow == 2)
             {
@@ -613,37 +610,40 @@ Data Device::getTextureDataForText(std::string_view text,
 {
     Data ret;
 
-    do
+    @autoreleasepool
     {
-        tImageInfo info          = {0};
-        info.width               = textDefinition._dimensions.width;
-        info.height              = textDefinition._dimensions.height;
-        info.hasShadow           = textDefinition._shadow._shadowEnabled;
-        info.shadowOffset.width  = textDefinition._shadow._shadowOffset.width;
-        info.shadowOffset.height = textDefinition._shadow._shadowOffset.height;
-        info.shadowBlur          = textDefinition._shadow._shadowBlur;
-        info.shadowOpacity       = textDefinition._shadow._shadowOpacity;
-        info.hasStroke           = textDefinition._stroke._strokeEnabled;
-        info.strokeColorR        = textDefinition._stroke._strokeColor.r / 255.0f;
-        info.strokeColorG        = textDefinition._stroke._strokeColor.g / 255.0f;
-        info.strokeColorB        = textDefinition._stroke._strokeColor.b / 255.0f;
-        info.strokeColorA        = textDefinition._stroke._strokeAlpha / 255.0f;
-        info.strokeSize          = textDefinition._stroke._strokeSize;
-        info.tintColorR          = textDefinition._fontFillColor.r / 255.0f;
-        info.tintColorG          = textDefinition._fontFillColor.g / 255.0f;
-        info.tintColorB          = textDefinition._fontFillColor.b / 255.0f;
-        info.tintColorA          = textDefinition._fontAlpha / 255.0f;
-
-        if (!_initWithString(text, align, textDefinition._fontName.c_str(), textDefinition._fontSize, &info,
-                             textDefinition._enableWrap, textDefinition._overflow))
+        do
         {
-            break;
-        }
-        height = info.height;
-        width  = info.width;
-        ret.fastSet(info.data, width * height * 4);
-        hasPremultipliedAlpha = true;
-    } while (0);
+            tImageInfo info          = {0};
+            info.width               = textDefinition._dimensions.width;
+            info.height              = textDefinition._dimensions.height;
+            info.hasShadow           = textDefinition._shadow._shadowEnabled;
+            info.shadowOffset.width  = textDefinition._shadow._shadowOffset.width;
+            info.shadowOffset.height = textDefinition._shadow._shadowOffset.height;
+            info.shadowBlur          = textDefinition._shadow._shadowBlur;
+            info.shadowOpacity       = textDefinition._shadow._shadowOpacity;
+            info.hasStroke           = textDefinition._stroke._strokeEnabled;
+            info.strokeColorR        = textDefinition._stroke._strokeColor.r / 255.0f;
+            info.strokeColorG        = textDefinition._stroke._strokeColor.g / 255.0f;
+            info.strokeColorB        = textDefinition._stroke._strokeColor.b / 255.0f;
+            info.strokeColorA        = textDefinition._stroke._strokeAlpha / 255.0f;
+            info.strokeSize          = textDefinition._stroke._strokeSize;
+            info.tintColorR          = textDefinition._fontFillColor.r / 255.0f;
+            info.tintColorG          = textDefinition._fontFillColor.g / 255.0f;
+            info.tintColorB          = textDefinition._fontFillColor.b / 255.0f;
+            info.tintColorA          = textDefinition._fontAlpha / 255.0f;
+
+            if (!_initWithString(text, align, textDefinition._fontName.c_str(), textDefinition._fontSize, &info,
+                                 textDefinition._enableWrap, textDefinition._overflow))
+            {
+                break;
+            }
+            height = info.height;
+            width  = info.width;
+            ret.fastSet(info.data, width * height * 4);
+            hasPremultipliedAlpha = true;
+        } while (0);
+    }
 
     return ret;
 }

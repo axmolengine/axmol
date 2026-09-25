@@ -77,7 +77,7 @@
 @property(nonatomic, readonly) GLuint msaaColorbuffer;
 
 /** EAGLContext */
-@property(nonatomic, readonly) EAGLContext* context;
+@property(nonatomic, strong, readonly) EAGLContext* context;
 
 - (BOOL)resizeFromLayer:(CAEAGLLayer*)layer;
 @end

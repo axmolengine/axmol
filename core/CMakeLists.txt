@@ -281,6 +281,10 @@ add_library(${_AX_CORE_LIB} ${_AX_SRC})
 
 if(APPLE)
   set_xcode_property(${_AX_CORE_LIB} CLANG_ENABLE_OBJC_WEAK "YES")
+  set_xcode_property(${_AX_CORE_LIB} CLANG_ENABLE_OBJC_ARC "YES")
+  target_compile_options(${_AX_CORE_LIB} PRIVATE
+    "$<$<COMPILE_LANGUAGE:OBJC>:-fobjc-arc>"
+    "$<$<COMPILE_LANGUAGE:OBJCXX>:-fobjc-arc>")
 endif()
 
 if(WASM)

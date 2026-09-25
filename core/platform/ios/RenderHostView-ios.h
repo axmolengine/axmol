@@ -134,7 +134,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
 #if AX_GLES_PROFILE
 /** OpenGL context */
-@property(nonatomic, readonly) EAGLContext* context;
+@property(nonatomic, strong, readonly) EAGLContext* context;
 #endif
 
 @property(nonatomic, readwrite) BOOL multiSampling;

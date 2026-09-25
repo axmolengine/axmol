@@ -40,7 +40,7 @@
     void* _editBox;
 }
 
-@property(nonatomic, retain) NSView<AXUITextInput>* textInput;
+@property(nonatomic, strong) NSView<AXUITextInput>* textInput;
 @property(nonatomic, readonly) NSWindow* window;
 
 @property(nonatomic, readonly, getter=isEditState) BOOL editState;

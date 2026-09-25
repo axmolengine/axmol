@@ -32,12 +32,12 @@ static const int AX_EDIT_BOX_PADDING = 5;
  */
 @protocol AXUITextInput <NSObject>
 
-@property(nonatomic, retain, setter=axui_setText:) NSString* axui_text;
-@property(nonatomic, retain, setter=axui_setPlaceholder:) NSString* axui_placeholder;
-@property(nonatomic, retain, setter=axui_setTextColor:) UIColor* axui_textColor;
-@property(nonatomic, retain, setter=axui_setFont:) UIFont* axui_font;
-@property(nonatomic, retain, setter=axui_setPlaceholderTextColor:) UIColor* axui_placeholderTextColor;
-@property(nonatomic, retain, setter=axui_setPlaceholderFont:) UIFont* axui_placeholderFont;
+@property(nonatomic, strong, setter=axui_setText:) NSString* axui_text;
+@property(nonatomic, strong, setter=axui_setPlaceholder:) NSString* axui_placeholder;
+@property(nonatomic, strong, setter=axui_setTextColor:) UIColor* axui_textColor;
+@property(nonatomic, strong, setter=axui_setFont:) UIFont* axui_font;
+@property(nonatomic, strong, setter=axui_setPlaceholderTextColor:) UIColor* axui_placeholderTextColor;
+@property(nonatomic, strong, setter=axui_setPlaceholderFont:) UIFont* axui_placeholderFont;
 @property(nonatomic, assign, setter=axui_setSecureTextEntry:) BOOL axui_secureTextEntry;
 @property(nonatomic, assign, setter=axui_setTextHorizontalAlignment:) NSTextAlignment axui_alignment;
 

@@ -113,7 +113,6 @@ DepthStencilStateMTL::DepthStencilStateMTL(id<MTLDevice> mtlDevice) : _mtlDevice
     // By default MTLDepthStencilDescriptor disables depth and stencil access
     MTLDepthStencilDescriptor* mtlDescriptor = [MTLDepthStencilDescriptor new];
     _mtlDepthStencilDisabledState = [mtlDevice newDepthStencilStateWithDescriptor:mtlDescriptor];
-    [mtlDescriptor release];
 }
 
 void DepthStencilStateMTL::update(const DepthStencilDescriptor& dsDesc)
@@ -157,7 +156,6 @@ void DepthStencilStateMTL::update(const DepthStencilDescriptor& dsDesc)
     }
 
     _mtlDepthStencilState = [_mtlDevice newDepthStencilStateWithDescriptor:mtlDescriptor];
-    [mtlDescriptor release];
 
     // emplace to state cache
     _mtlStateCache.emplace(key, _mtlDepthStencilState);
@@ -165,10 +163,8 @@ void DepthStencilStateMTL::update(const DepthStencilDescriptor& dsDesc)
 
 DepthStencilStateMTL::~DepthStencilStateMTL()
 {
-    _mtlDepthStencilState = nullptr;
-    [_mtlDepthStencilDisabledState release];
-    for (auto& stateItem : _mtlStateCache)
-        [stateItem.second release];
+    _mtlDepthStencilState = nil;
+    _mtlDepthStencilDisabledState = nil;
     _mtlStateCache.clear();
 }
 

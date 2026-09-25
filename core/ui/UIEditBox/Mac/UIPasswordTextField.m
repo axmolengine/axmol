@@ -118,7 +118,6 @@
 
 -(void)dealloc
 {
-    [super dealloc];
 }
 
 +(void)load
@@ -208,7 +207,7 @@
 
 - (void)axui_setMaxLength:(int)length
 {
-    id formater =  [[[CCUITextFieldFormatter alloc]init] autorelease];
+    id formater =  [[CCUITextFieldFormatter alloc]init];
     [formater setMaximumLength:length];
     [self setFormatter:formater];
 }

@@ -56,21 +56,21 @@
 
 - (void)createSingleLineTextField
 {
-    CCUISingleLineTextField* textField = [[[CCUISingleLineTextField alloc] initWithFrame:self.frameRect] autorelease];
+    CCUISingleLineTextField* textField = [[CCUISingleLineTextField alloc] initWithFrame:self.frameRect];
 
     self.textInput = textField;
 }
 
 - (void)createMultiLineTextField
 {
-    CCUIMultilineTextField* textView = [[[CCUIMultilineTextField alloc] initWithFrame:self.frameRect] autorelease];
+    CCUIMultilineTextField* textView = [[CCUIMultilineTextField alloc] initWithFrame:self.frameRect];
     [textView setVerticallyResizable:NO];
     self.textInput = textView;
 }
 
 - (void)createPasswordTextField
 {
-    CCUIPasswordTextField* textField = [[[CCUIPasswordTextField alloc] initWithFrame:self.frameRect] autorelease];
+    CCUIPasswordTextField* textField = [[CCUIPasswordTextField alloc] initWithFrame:self.frameRect];
 
     self.textInput = textField;
 }
@@ -91,9 +91,7 @@
     textInput.axui_alignment   = _textInput.axui_alignment;
 
     [_textInput removeFromSuperview];
-    [_textInput release];
-
-    _textInput = [textInput retain];
+    _textInput = textInput;
 
     [_textInput performSelector:@selector(setTextColor:) withObject:_textInput.axui_textColor];
     [_textInput performSelector:@selector(setBackgroundColor:) withObject:[NSColor clearColor]];
@@ -126,13 +124,12 @@
 {
     self.textInput = nil;
 
-    [super dealloc];
 }
 
 - (NSWindow*)window
 {
     auto renderView = ax::Director::getInstance()->getRenderView();
-    return (NSWindow*)renderView->getCocoaWindow();
+    return (__bridge NSWindow*)renderView->getCocoaWindow();
 }
 
 - (void)openKeyboard
