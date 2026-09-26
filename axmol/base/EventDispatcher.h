@@ -54,6 +54,7 @@ dispatched.
 class AX_DLL EventDispatcher : public Object
 {
     using PointerCaptureId = uint64_t;
+
 public:
     // Adds event listener.
 

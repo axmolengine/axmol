@@ -1005,7 +1005,7 @@ bool EventDispatcher::dispatchClaimedPointerEvent(PointerEvent* event)
     };
 
     auto mergeClaimTarget = [](tlx::inlined_vector<PointerClaimDispatchEntry, 8>& entries,
-                                  const PointerClaimTarget& target, PointerEvent::CaptureBits captureBits) {
+                               const PointerClaimTarget& target, PointerEvent::CaptureBits captureBits) {
         auto listener = target.listener.get();
         if (!listener || !listener->isAttached())
             return;
@@ -1034,7 +1034,7 @@ bool EventDispatcher::dispatchClaimedPointerEvent(PointerEvent* event)
     };
 
     auto mergeClaimEntry = [&mergeClaimTarget](tlx::inlined_vector<PointerClaimDispatchEntry, 8>& entries,
-                                                     const PointerClaimEntry& entry) {
+                                               const PointerClaimEntry& entry) {
         for (const auto& target : entry.targets)
         {
             mergeClaimTarget(entries, target, entry.captureBits);
@@ -1076,8 +1076,8 @@ bool EventDispatcher::dispatchClaimedPointerEvent(PointerEvent* event)
     };
 
     auto deliverClaimedEntries = [&deliverClaimedEvent, event](
-                                      const tlx::inlined_vector<PointerClaimDispatchEntry, 8>& entries,
-                                      bool breakOnStopped) -> bool {
+                                     const tlx::inlined_vector<PointerClaimDispatchEntry, 8>& entries,
+                                     bool breakOnStopped) -> bool {
         bool delivered = false;
 
         for (const auto& entry : entries)
@@ -1236,9 +1236,9 @@ void EventDispatcher::dispatchUnclaimedPointerEvent(PointerEvent* event, Pointer
 
                 auto& targets = entry.targets;
 
-                auto targetIt = std::find_if(
-                    targets.begin(), targets.end(),
-                    [listener](const PointerClaimTarget& target) { return target.listener == listener; });
+                auto targetIt =
+                    std::find_if(targets.begin(), targets.end(),
+                                 [listener](const PointerClaimTarget& target) { return target.listener == listener; });
 
                 if (targetIt != targets.end())
                 {

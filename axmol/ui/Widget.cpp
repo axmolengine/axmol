@@ -857,9 +857,7 @@ void Widget::onPointerCancel(PointerEvent* event)
     }
 }
 
-void Widget::onPointerScroll(PointerEvent* pointerEvent)
-{
-}
+void Widget::onPointerScroll(PointerEvent* pointerEvent) {}
 
 void Widget::pushDownEvent()
 {
