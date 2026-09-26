@@ -511,7 +511,7 @@ void InputProcessor::onPointerCancel(ax::PointerEvent* event)
     _activeProcessor = nullptr;
 }
 
-bool InputProcessor::onPointerScroll(ax::PointerEvent* event)
+void InputProcessor::onPointerScroll(ax::PointerEvent* event)
 {
     auto camera = event->getCamera();
     Vec2 pt = event->getWorldPoint();
@@ -532,7 +532,7 @@ bool InputProcessor::onPointerScroll(ax::PointerEvent* event)
 
     _activeProcessor = nullptr;
 
-    return true;
+    event->stopPropagation();
 }
 
 void InputProcessor::onKeyDown(ax::KeyboardEvent* event)

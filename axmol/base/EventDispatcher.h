@@ -53,6 +53,7 @@ dispatched.
 */
 class AX_DLL EventDispatcher : public Object
 {
+    using PointerCaptureId = uint64_t;
 public:
     // Adds event listener.
 
@@ -283,8 +284,8 @@ protected:
     /** Dispatches event to listeners with a specified listener type */
     void dispatchEventToListeners(EventListenerVector* listeners, const std::function<bool(EventListener*)>& onEvent);
 
-    void removeCapturedPointerListener(EventListener* listener);
-    void removeCapturedPointerListenersForTarget(Node* target);
+    void removeClaimedPointerListener(EventListener* listener);
+    void removeClaimedPointerListenersForTarget(Node* target);
 
     void releaseListener(EventListener* listener);
 
@@ -311,16 +312,27 @@ protected:
     /** Remove all listeners in _toRemoveListeners list and cleanup */
     void cleanToRemovedListeners();
 
-    using PointerCaptureId = uint64_t;
-    struct PointerCaptureEntry
+    bool dispatchClaimedPointerEvent(PointerEvent* event);
+    void dispatchUnclaimedPointerEvent(PointerEvent* event, PointerCaptureId captureId);
+
+    struct PointerClaimDispatchEntry
     {
         WeakPtr<PointerEventListener> listener{nullptr};
         PointerEvent::CaptureBits captureBits{PointerEvent::CAPTURE_NONE};
-        WeakPtr<Camera> camera{nullptr};
+        WeakPtr<const Camera> camera{nullptr};
     };
 
-    bool dispatchCapturedPointerEvent(PointerEvent* event);
-    void dispatchUncapturedPointerEvent(PointerEvent* event, PointerCaptureId captureId);
+    struct PointerClaimTarget
+    {
+        WeakPtr<PointerEventListener> listener{nullptr};
+        WeakPtr<const Camera> camera{nullptr};
+    };
+
+    struct PointerClaimEntry
+    {
+        tlx::inlined_vector<PointerClaimTarget, 4> targets;
+        PointerEvent::CaptureBits captureBits{PointerEvent::CAPTURE_NONE};
+    };
 
     /** Listeners map */
     tlx::string_map<EventListenerVector*> _listenerMap;
@@ -337,7 +349,7 @@ protected:
     /** key: Global Z Order, value: Sorted Nodes */
     tlx::hash_map<float, std::vector<Node*>> _globalZOrderNodeMap;
 
-    tlx::hash_map<PointerCaptureId, PointerCaptureEntry> _capturedPointerListeners;
+    tlx::hash_map<PointerCaptureId, PointerClaimEntry> _claimedPointerListeners;
 
     /** The listeners to be added after dispatching event */
     std::vector<EventListener*> _toAddedListeners;

@@ -79,7 +79,7 @@ public:
         ScrollView::onPointerUp(event);
     }
 
-    bool onPointerScroll(PointerEvent* event) override
+    void onPointerScroll(PointerEvent* event) override
     {
         float moveY = event->getScrollY() * 20;
 
@@ -87,7 +87,10 @@ public:
         auto maxOffset = this->maxContainerOffset();
 
         if (minOffset.y >= maxOffset.y)
-            return true;
+        {
+            event->stopPropagation();
+            return;
+        }
 
         auto offset = this->getContentOffset();
         offset.y += moveY;
@@ -102,7 +105,7 @@ public:
         }
         this->setContentOffset(offset);
 
-        return true;
+        event->stopPropagation();
     }
 };
 

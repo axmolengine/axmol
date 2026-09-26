@@ -22737,7 +22737,7 @@
         {
           "nativeName": "onPointerScroll",
           "luaName": "onPointerScroll",
-          "fieldType": "std::function\u003Cbool (ax::PointerEvent *)\u003E"
+          "fieldType": "std::function\u003Cvoid (ax::PointerEvent *)\u003E"
         },
         {
           "nativeName": "onPointerUp",

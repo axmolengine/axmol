@@ -974,13 +974,13 @@ void ScrollView::onPointerCancel(PointerEvent* touch)
     }
 }
 
-bool ScrollView::onPointerScroll(PointerEvent* event)
+void ScrollView::onPointerScroll(PointerEvent* event)
 {
     if (!event || !_container || !this->isVisible() || !this->hasVisibleParents())
-        return false;
+        return;
 
     if (_direction == Direction::NONE)
-        return false;
+        return;
 
     constexpr float mouseFactor = 20.0f;
     Vec2 move;
@@ -995,29 +995,38 @@ bool ScrollView::onPointerScroll(PointerEvent* event)
     {
     case Direction::HORIZONTAL:
         if (!canScrollX)
-            return true;
+        {
+            event->stopPropagation();
+            return;
+        }
         move.x = (scrollDelta.x != 0.0f ? scrollDelta.x : scrollDelta.y) * mouseFactor;
         break;
 
     case Direction::VERTICAL:
         if (!canScrollY)
-            return true;
+        {
+            event->stopPropagation();
+            return;
+        }
         move.y = scrollDelta.y * mouseFactor;
         break;
 
     case Direction::BOTH:
         if (!canScrollX && !canScrollY)
-            return true;
+        {
+            event->stopPropagation();
+            return;
+        }
         move.x = canScrollX ? scrollDelta.x * mouseFactor : 0.0f;
         move.y = canScrollY ? scrollDelta.y * mouseFactor : 0.0f;
         break;
 
     default:
-        return false;
+        return;
     }
 
     if (move == Vec2::zero)
-        return false;
+        return;
 
     this->unschedule(AX_SCHEDULE_SELECTOR(ScrollView::deaccelerateScrolling));
     _scrollDistance.setZero();
@@ -1027,7 +1036,7 @@ bool ScrollView::onPointerScroll(PointerEvent* event)
     this->setContentOffset(_container->getPosition() + move);
     _bounceable = bounceable;
 
-    return true;
+    event->stopPropagation();
 }
 
 Rect ScrollView::getViewRect()

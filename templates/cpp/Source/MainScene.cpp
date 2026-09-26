@@ -136,10 +136,10 @@ void MainScene::onPointerMove(PointerEvent* ev)
     //        ev->getLocation().y);
 }
 
-bool MainScene::onPointerScroll(PointerEvent* ev)
+void MainScene::onPointerScroll(PointerEvent* ev)
 {
     // AXLOGD("onPointerScroll detected, X:{}  Y:{}", ev->getScrollX(), ev->getScrollY());
-    return true;
+    ev->stopPropagation();
 }
 
 void MainScene::onKeyPressed(KeyboardEvent* ev)

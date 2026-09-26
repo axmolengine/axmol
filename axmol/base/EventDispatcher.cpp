@@ -478,7 +478,7 @@ void EventDispatcher::resumeEventListenersForTarget(Node* target, bool recursive
 
 void EventDispatcher::removeEventListenersForTarget(Node* target, bool recursive /* = false */)
 {
-    removeCapturedPointerListenersForTarget(target);
+    removeClaimedPointerListenersForTarget(target);
 
     // Ensure the node is removed from these immediately also.
     // Don't want any dangling pointers or the possibility of dealing with deleted objects..
@@ -746,7 +746,7 @@ void EventDispatcher::removeEventListener(EventListener* listener)
             if (l == listener)
             {
                 AX_SAFE_RETAIN(l);
-                removeCapturedPointerListener(l);
+                removeClaimedPointerListener(l);
                 l->setAttached(false);
                 if (l->getAssociatedNode() != nullptr)
                 {
@@ -980,20 +980,76 @@ bool EventDispatcher::hasEventListener(std::string_view listenerID) const
     return getListeners(listenerID) != nullptr;
 }
 
-bool EventDispatcher::dispatchCapturedPointerEvent(PointerEvent* event)
+bool EventDispatcher::dispatchClaimedPointerEvent(PointerEvent* event)
 {
-    //  Helper lambda to deliver an captured PointerEvent to a single listener
-    auto deliverCapturedEvent = [event](const PointerCaptureEntry& entry) {
+    struct PointerClaimDispatchEntry
+    {
+        WeakPtr<PointerEventListener> listener{nullptr};
+        PointerEvent::CaptureBits captureBits{PointerEvent::CAPTURE_NONE};
+        WeakPtr<const Camera> camera{nullptr};
+    };
+
+    auto pruneClaimEntry = [](PointerClaimEntry& entry) -> bool {
+        auto& targets = entry.targets;
+
+        for (auto iter = targets.begin(); iter != targets.end();)
+        {
+            auto listener = iter->listener.get();
+            if (!listener || !listener->isAttached())
+                iter = targets.erase(iter);
+            else
+                ++iter;
+        }
+
+        return !targets.empty();
+    };
+
+    auto mergeClaimTarget = [](tlx::inlined_vector<PointerClaimDispatchEntry, 8>& entries,
+                                  const PointerClaimTarget& target, PointerEvent::CaptureBits captureBits) {
+        auto listener = target.listener.get();
+        if (!listener || !listener->isAttached())
+            return;
+
+        auto found = std::find_if(entries.begin(), entries.end(), [listener](const PointerClaimDispatchEntry& item) {
+            return item.listener.get() == listener;
+        });
+
+        if (found != entries.end())
+        {
+            found->captureBits = static_cast<PointerEvent::CaptureBits>(found->captureBits | captureBits);
+
+            // Same listener may be captured by multiple mouse buttons.
+            // Keep the first valid camera context, matching the old single-entry merge behavior.
+            if (!found->camera)
+                found->camera = target.camera;
+        }
+        else
+        {
+            entries.emplace_back(PointerClaimDispatchEntry{
+                WeakPtr<PointerEventListener>{listener},
+                captureBits,
+                target.camera,
+            });
+        }
+    };
+
+    auto mergeClaimEntry = [&mergeClaimTarget](tlx::inlined_vector<PointerClaimDispatchEntry, 8>& entries,
+                                                     const PointerClaimEntry& entry) {
+        for (const auto& target : entry.targets)
+        {
+            mergeClaimTarget(entries, target, entry.captureBits);
+        }
+    };
+
+    auto deliverClaimedEvent = [event](const PointerClaimDispatchEntry& entry) -> bool {
         auto listener = entry.listener.get();
         if (!listener || !listener->isAttached())
             return false;
 
-        auto target = listener->getAssociatedNode();
-        auto camera = entry.camera.get();
-        event->setCurrentTarget(target);
-        event->setCamera(camera);
+        event->setCurrentTarget(listener->getAssociatedNode());
+        event->setCamera(entry.camera.get());
         event->setCaptureBits(entry.captureBits);
-        pointerHitTest(event, camera, listener, target);
+        pointerHitTest(event, event->getCamera(), listener, event->getCurrentTarget());
 
         switch (event->getPhase())
         {
@@ -1019,24 +1075,25 @@ bool EventDispatcher::dispatchCapturedPointerEvent(PointerEvent* event)
         return true;
     };
 
-    auto mergeCapturedEntry = [](tlx::inlined_vector<PointerCaptureEntry, 8>& entries,
-                                 const PointerCaptureEntry& entry) {
-        auto found = std::find_if(entries.begin(), entries.end(),
-                                  [&entry](const auto& item) { return item.listener == entry.listener; });
-        if (found != entries.end())
+    auto deliverClaimedEntries = [&deliverClaimedEvent, event](
+                                      const tlx::inlined_vector<PointerClaimDispatchEntry, 8>& entries,
+                                      bool breakOnStopped) -> bool {
+        bool delivered = false;
+
+        for (const auto& entry : entries)
         {
-            found->captureBits = static_cast<PointerEvent::CaptureBits>(found->captureBits | entry.captureBits);
-            if (!found->camera)
-                found->camera = entry.camera;
+            if (deliverClaimedEvent(entry))
+                delivered = true;
+
+            if (breakOnStopped && event->isStopped())
+                break;
         }
-        else
-        {
-            entries.emplace_back(entry);
-        }
+
+        return delivered;
     };
 
     const auto pointerId = event->getPointerId();
-    tlx::inlined_vector<PointerCaptureEntry, 8> entries;
+    tlx::inlined_vector<PointerClaimDispatchEntry, 8> entries;
 
     switch (event->getPhase())
     {
@@ -1044,17 +1101,22 @@ bool EventDispatcher::dispatchCapturedPointerEvent(PointerEvent* event)
     {
         if (event->getPointerType() == PointerType::Touch)
         {
-            auto iter = _capturedPointerListeners.find(makePointerCaptureId(pointerId, InputButton::None));
-            if (iter == _capturedPointerListeners.end())
+            auto iter = _claimedPointerListeners.find(makePointerCaptureId(pointerId, InputButton::None));
+            if (iter == _claimedPointerListeners.end())
                 return false;
 
-            if (!deliverCapturedEvent(iter->second))
+            if (!pruneClaimEntry(iter->second))
             {
-                _capturedPointerListeners.erase(iter);
+                _claimedPointerListeners.erase(iter);
                 return false;
             }
 
-            return true;
+            mergeClaimEntry(entries, iter->second);
+
+            if (entries.empty())
+                return false;
+
+            return deliverClaimedEntries(entries, true);
         }
 
         auto buttons = event->getPressedButtons();
@@ -1064,18 +1126,17 @@ bool EventDispatcher::dispatchCapturedPointerEvent(PointerEvent* event)
         while (buttons != 0)
         {
             const auto button = static_cast<int32_t>(std::countr_zero(buttons));
-            auto iter         = _capturedPointerListeners.find(makePointerCaptureId(pointerId, button));
+            auto iter         = _claimedPointerListeners.find(makePointerCaptureId(pointerId, button));
 
-            if (iter != _capturedPointerListeners.end())
+            if (iter != _claimedPointerListeners.end())
             {
-                auto& entry = iter->second;
-                if (!entry.listener || !entry.listener->isAttached())
+                if (!pruneClaimEntry(iter->second))
                 {
-                    _capturedPointerListeners.erase(iter);
+                    _claimedPointerListeners.erase(iter);
                 }
                 else
                 {
-                    mergeCapturedEntry(entries, entry);
+                    mergeClaimEntry(entries, iter->second);
                 }
             }
 
@@ -1085,52 +1146,48 @@ bool EventDispatcher::dispatchCapturedPointerEvent(PointerEvent* event)
         if (entries.empty())
             return false;
 
-        for (const auto& entry : entries)
-        {
-            deliverCapturedEvent(entry);
-            if (event->isStopped())
-                break;
-        }
-
-        return true;
+        return deliverClaimedEntries(entries, true);
     }
 
     case InputPhase::PointerUp:
     {
-        auto iter = _capturedPointerListeners.find(makePointerCaptureId(pointerId, event->getButton()));
-        if (iter == _capturedPointerListeners.end())
+        auto iter = _claimedPointerListeners.find(makePointerCaptureId(pointerId, event->getButton()));
+        if (iter == _claimedPointerListeners.end())
             return false;
 
         auto entry = iter->second;
-        _capturedPointerListeners.erase(iter);
+        _claimedPointerListeners.erase(iter);
 
-        return deliverCapturedEvent(entry);
+        mergeClaimEntry(entries, entry);
+
+        if (entries.empty())
+            return false;
+
+        // PointerUp is a terminal event for the capture slot.
+        // Deliver it to all captured targets so every listener can finish its state.
+        return deliverClaimedEntries(entries, false);
     }
 
     case InputPhase::PointerCancel:
     {
-        for (auto iter = _capturedPointerListeners.begin(); iter != _capturedPointerListeners.end();)
+        for (auto iter = _claimedPointerListeners.begin(); iter != _claimedPointerListeners.end();)
         {
             if (isPointerCaptureIdForPointer(iter->first, pointerId))
             {
-                auto& entry = iter->second;
-                if (entry.listener && entry.listener->isAttached())
-                {
-                    mergeCapturedEntry(entries, entry);
-                }
-
-                iter = _capturedPointerListeners.erase(iter);
+                mergeClaimEntry(entries, iter->second);
+                iter = _claimedPointerListeners.erase(iter);
                 continue;
             }
 
             ++iter;
         }
 
-        if (entries.empty())
-            return true;
-
-        for (const auto& entry : entries)
-            deliverCapturedEvent(entry);
+        if (!entries.empty())
+        {
+            // PointerCancel should be delivered to all captured targets.
+            // Do not let stopPropagation prevent another captured listener from cleaning up.
+            deliverClaimedEntries(entries, false);
+        }
 
         return true;
     }
@@ -1140,7 +1197,7 @@ bool EventDispatcher::dispatchCapturedPointerEvent(PointerEvent* event)
     }
 }
 
-void EventDispatcher::dispatchUncapturedPointerEvent(PointerEvent* event, PointerCaptureId captureId)
+void EventDispatcher::dispatchUnclaimedPointerEvent(PointerEvent* event, PointerCaptureId captureId)
 {
     sortEventListeners(PointerEventListener::LISTENER_ID);
 
@@ -1148,30 +1205,52 @@ void EventDispatcher::dispatchUncapturedPointerEvent(PointerEvent* event, Pointe
     if (!listeners)
         return;
 
-    //  Helper lambda to deliver an uncaptured PointerEvent to a single listener
-    auto deliverUncapturedEvent = [this, event, captureId](EventListener* l) -> bool {
+    const auto captureBits = makePointerCaptureBits(event);
+
+    //  Helper lambda to deliver an unclaimed PointerEvent to a single listener
+    auto deliverUnclaimedEvent = [this, event, captureId, captureBits](EventListener* l) -> bool {
         auto listener = static_cast<PointerEventListener*>(l);
         if (!listener || !listener->isAttached())
             return false;
 
         event->setCurrentTarget(listener->getAssociatedNode());
 
-        bool captured = false;
+        bool claimed = false;
         switch (event->getPhase())
         {
         case InputPhase::PointerDown:
             if (listener->onPointerDown)
-                captured = listener->onPointerDown(event);
-
-            if (captured && listener && listener->isAttached())
+                claimed = listener->onPointerDown(event);
+            if (claimed && listener && listener->isAttached())
             {
                 const auto captureBits = makePointerCaptureBits(event);
-                auto iter              = _capturedPointerListeners.find(captureId);
-                if (iter == _capturedPointerListeners.end() || !iter->second.listener ||
-                    !iter->second.listener->isAttached())
-                    _capturedPointerListeners[captureId] =
-                        PointerCaptureEntry{WeakPtr<PointerEventListener>{listener}, captureBits,
-                                            WeakPtr<Camera>{const_cast<Camera*>(event->getCamera())}};
+
+                auto [entryIt, inserted] =
+                    _claimedPointerListeners.try_emplace(captureId, PointerClaimEntry{{}, captureBits});
+
+                auto& entry = entryIt->second;
+
+                // Same captureId should normally have the same captureBits,
+                // but refresh it defensively in case this slot survived from a stale capture.
+                entry.captureBits = captureBits;
+
+                auto& targets = entry.targets;
+
+                auto targetIt = std::find_if(
+                    targets.begin(), targets.end(),
+                    [listener](const PointerClaimTarget& target) { return target.listener == listener; });
+
+                if (targetIt != targets.end())
+                {
+                    targetIt->camera = WeakPtr<const Camera>{event->getCamera()};
+                }
+                else
+                {
+                    targets.emplace_back(PointerClaimTarget{
+                        WeakPtr<PointerEventListener>{listener},
+                        WeakPtr<const Camera>{event->getCamera()},
+                    });
+                }
             }
             break;
 
@@ -1182,14 +1261,14 @@ void EventDispatcher::dispatchUncapturedPointerEvent(PointerEvent* event, Pointe
 
         case InputPhase::PointerScroll:
             if (listener->onPointerScroll)
-                captured = listener->onPointerScroll(event);
+                listener->onPointerScroll(event);
             break;
 
         default:
             break;
         }
 
-        if (event->isStopped() || captured)
+        if (event->isStopped())
             return true;
 
         return false;
@@ -1218,7 +1297,7 @@ void EventDispatcher::dispatchUncapturedPointerEvent(PointerEvent* event, Pointe
             for (; i < listeners->getGt0Index(); ++i)
             {
                 auto l = fixedPriorityListeners->at(i);
-                if (l->isEnabled() && !l->isPaused() && l->isAttached() && deliverUncapturedEvent(l))
+                if (l->isEnabled() && !l->isPaused() && l->isAttached() && deliverUnclaimedEvent(l))
                 {
                     shouldStopPropagation = true;
                     break;
@@ -1266,7 +1345,7 @@ void EventDispatcher::dispatchUncapturedPointerEvent(PointerEvent* event, Pointe
             // Camera context for input callbacks.
             event->setCamera(hitCamera);
 
-            if (deliverUncapturedEvent(l))
+            if (deliverUnclaimedEvent(l))
             {
                 shouldStopPropagation = true;
                 break;
@@ -1289,7 +1368,7 @@ void EventDispatcher::dispatchUncapturedPointerEvent(PointerEvent* event, Pointe
         {
             auto l = fixedPriorityListeners->at(i);
 
-            if (l->isEnabled() && !l->isPaused() && l->isAttached() && deliverUncapturedEvent(l))
+            if (l->isEnabled() && !l->isPaused() && l->isAttached() && deliverUnclaimedEvent(l))
             {
                 // shouldStopPropagation = true;
                 break;
@@ -1303,11 +1382,11 @@ void EventDispatcher::dispatchPointerEvent(PointerEvent* event)
     // Avoid carrying stale camera context into fixed-priority listeners or non-hit paths.
     event->setCamera(nullptr);
 
-    if (dispatchCapturedPointerEvent(event))
+    if (dispatchClaimedPointerEvent(event))
         return;
 
     const auto captureId = makePointerCaptureId(event->getPointerId(), event->getButton());
-    dispatchUncapturedPointerEvent(event, captureId);
+    dispatchUnclaimedPointerEvent(event, captureId);
 }
 
 void EventDispatcher::updateListeners(Event* event)
@@ -1584,7 +1663,7 @@ void EventDispatcher::removeEventListenersForListenerID(std::string_view listene
             for (auto iter = listenerVector->begin(); iter != listenerVector->end();)
             {
                 auto l = *iter;
-                removeCapturedPointerListener(l);
+                removeClaimedPointerListener(l);
                 l->setAttached(false);
                 if (l->getAssociatedNode() != nullptr)
                 {
@@ -1790,32 +1869,50 @@ void EventDispatcher::cleanToRemovedListeners()
     _toRemovedListeners.clear();
 }
 
-void EventDispatcher::removeCapturedPointerListener(EventListener* listener)
+void EventDispatcher::removeClaimedPointerListener(EventListener* listener)
 {
     if (listener == nullptr || listener->getType() != EventListener::Type::POINTER)
         return;
 
-    auto* pointerListener = static_cast<PointerEventListener*>(listener);
-
-    for (auto iter = _capturedPointerListeners.begin(); iter != _capturedPointerListeners.end();)
+    for (auto iter = _claimedPointerListeners.begin(); iter != _claimedPointerListeners.end();)
     {
-        if (iter->second.listener == pointerListener)
-            iter = _capturedPointerListeners.erase(iter);
+        auto& targets = iter->second.targets;
+        for (auto targetIt = targets.begin(); targetIt != targets.end();)
+        {
+            if (targetIt->listener && targetIt->listener == listener)
+            {
+                targetIt = targets.erase(targetIt);
+                break;
+            }
+            else
+                ++targetIt;
+        }
+
+        if (targets.empty())
+            iter = _claimedPointerListeners.erase(iter);
         else
             ++iter;
     }
 }
 
-void EventDispatcher::removeCapturedPointerListenersForTarget(Node* target)
+void EventDispatcher::removeClaimedPointerListenersForTarget(Node* target)
 {
     if (target == nullptr)
         return;
 
-    for (auto iter = _capturedPointerListeners.begin(); iter != _capturedPointerListeners.end();)
+    for (auto iter = _claimedPointerListeners.begin(); iter != _claimedPointerListeners.end();)
     {
-        auto& listener = iter->second.listener;
-        if (listener && listener->getAssociatedNode() == target)
-            iter = _capturedPointerListeners.erase(iter);
+        auto& targets = iter->second.targets;
+        for (auto targetIt = targets.begin(); targetIt != targets.end();)
+        {
+            if (targetIt->listener && targetIt->listener->getAssociatedNode() == target)
+                targetIt = targets.erase(targetIt);
+            else
+                ++targetIt;
+        }
+
+        if (targets.empty())
+            iter = _claimedPointerListeners.erase(iter);
         else
             ++iter;
     }
