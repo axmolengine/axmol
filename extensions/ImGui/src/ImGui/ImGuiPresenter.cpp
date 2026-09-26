@@ -8,6 +8,7 @@ SPDX-License-Identifier: MIT
 
 #include "ImGuiPresenter.h"
 #include <assert.h>
+#include "axmol/base/WeakPtr.h"
 #if AX_IMGUI_USE_GLFW
 #    include "backends/imgui_impl_glfw.h"
 #else
@@ -139,99 +140,69 @@ ImVec2& operator+=(ImVec2& lhs, const ImVec2& rhs)
 class ImGuiEventTracker
 {
 public:
-    virtual ~ImGuiEventTracker() = default;
-};
-
-// Track scene event and check whether routed to the scene graph
-class ImGuiSceneEventTracker : public ImGuiEventTracker
-{
-public:
-    bool initWithScene(Scene* scene)
+    bool init()
     {
-        _trackLayer = utils::newInstance<Node>(&Node::initLayer);
-
-        // note: when at the first click to focus the window, this will not take effect
-        auto listener              = PointerEventListener::create();
-        listener->onPointerHitTest = [](PointerEvent*, Vec3*) {
-            return ImGui::GetIO().WantCaptureMouse;
-        };
-        listener->onPointerDown = [](PointerEvent*) -> bool { return ImGui::GetIO().WantCaptureMouse; };
-        listener->onPointerMove = [](PointerEvent* event) {
-            if (ImGui::GetIO().WantCaptureMouse)
-                event->stopPropagation();
-        };
-        listener->onPointerScroll = [](PointerEvent*) -> bool { return true; };
-        _trackLayer->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, _trackLayer);
-
-        scene->addChild(_trackLayer, INT_MAX);
-        // add an empty sprite to avoid render problem
-        // const auto sp = Sprite::create();
-        // sp->setGlobalZOrder(1);
-        // sp->setOpacity(0);
-        // addChild(sp, 1);
-
-        /*
-         * There a 3 choice for schedule frame for ImGui render loop
-         * a. at visit/draw to call beginFrame/endFrame, but at ImGui loop, we can't game object and add to Scene
-         * directly, will cause damage iterator b. scheduleUpdate at onEnter to call beginFrame, at visit/draw to call
-         * endFrame, it's solve iterator damage problem, but when director is paused the director will stop call
-         * 'update' function of Scheduler And need modify engine code to call _scheduler->update(_deltaTime) even
-         * director is paused, pass 0 for update c. Director::EVENT_BEFORE_DRAW call beginFrame, EVENT_AFTER_VISIT call
-         * endFrame
-         */
-
-        return true;
+        return initListener();
     }
 
-    ~ImGuiSceneEventTracker() override
+    bool initWithScene(Scene* scene)
     {
-        if (_trackLayer)
+        _sceneScoped = true;
+        _scene = scene;
+        return initListener();
+    }
+
+    ~ImGuiEventTracker()
+    {
+        if (_pointerListener)
         {
-            if (_trackLayer->getParent())
-                _trackLayer->removeFromParent();
-            _trackLayer->release();
+            Director::getInstance()->getEventDispatcher()->removeEventListener(_pointerListener);
+            AX_SAFE_RELEASE_NULL(_pointerListener);
         }
     }
 
 private:
-    Node* _trackLayer = nullptr;
-};
+    bool shouldCaptureMouse() const
+    {
+        if (_sceneScoped)
+        {
+            auto scene = _scene.get();
+            if (!scene || scene != Director::getInstance()->getRunningScene())
+                return false;
+        }
+        return ImGui::GetIO().WantCaptureMouse;
+    }
 
-class ImGuiGlobalEventTracker : public ImGuiEventTracker
-{
-    static const int highestPriority = (std::numeric_limits<int>::min)();
-
-public:
-    bool init()
+    bool initListener()
     {
         // note: when at the first click to focus the window, this will not take effect
-
-        auto eventDispatcher = Director::getInstance()->getEventDispatcher();
-
         _pointerListener                   = utils::newInstance<PointerEventListener>();
-        _pointerListener->onPointerHitTest = [](PointerEvent*, Vec3*) {
-            return ImGui::GetIO().WantCaptureMouse;
+        _pointerListener->onPointerHitTest = [this](PointerEvent*, Vec3*) {
+            return shouldCaptureMouse();
         };
-        _pointerListener->onPointerDown = [](PointerEvent*) -> bool { return ImGui::GetIO().WantCaptureMouse; };
-        _pointerListener->onPointerMove = [](PointerEvent* event) {
-            if (ImGui::GetIO().WantCaptureMouse)
+        _pointerListener->onPointerDown = [this](PointerEvent* event) -> bool {
+            if (!shouldCaptureMouse())
+                return false;
+            event->stopPropagation();
+            return true;  // captured listener always requires claimed
+        };
+        _pointerListener->onPointerMove = [this](PointerEvent* event) {
+            if (shouldCaptureMouse())
                 event->stopPropagation();
         };
-        _pointerListener->onPointerScroll = [](PointerEvent*) -> bool { return ImGui::GetIO().WantCaptureMouse; };
-        eventDispatcher->addEventListenerWithFixedPriority(_pointerListener, highestPriority);
+        _pointerListener->onPointerScroll = [this](PointerEvent* event) {
+            if (shouldCaptureMouse())
+                event->stopPropagation();
+        };
 
+        // ImGui overlays are drawn above the scene graph.
+        Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(
+            _pointerListener, (std::numeric_limits<int>::min)());
         return true;
     }
 
-    ~ImGuiGlobalEventTracker() override
-    {
-        auto eventDispatcher = Director::getInstance()->getEventDispatcher();
-        // eventDispatcher->removeEventListener(_mouseListener);
-        eventDispatcher->removeEventListener(_pointerListener);
-
-        AX_SAFE_RELEASE_NULL(_pointerListener);
-    }
-
+    WeakPtr<Scene> _scene;
+    bool _sceneScoped = false;
     PointerEventListener* _pointerListener = nullptr;
 };
 #endif
@@ -526,9 +497,8 @@ void ImGuiPresenter::update()
 bool ImGuiPresenter::addRenderLoop(std::string_view id, std::function<void()> func, Scene* target)
 {
 #if AX_IMGUI_USE_GLFW
-    auto tracker = target ? static_cast<ImGuiEventTracker*>(utils::newInstance<ImGuiSceneEventTracker>(
-                                &ImGuiSceneEventTracker::initWithScene, target))
-                          : static_cast<ImGuiEventTracker*>(utils::newInstance<ImGuiGlobalEventTracker>());
+    auto tracker = target ? utils::newInstance<ImGuiEventTracker>(&ImGuiEventTracker::initWithScene, target)
+                          : utils::newInstance<ImGuiEventTracker>();
 #endif
 
     auto fourccId = fourccValue(id);

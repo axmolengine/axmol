@@ -88,12 +88,12 @@ bool MouseEventTest::onMouseMove(PointerEvent* e)
     return true;
 }
 
-bool MouseEventTest::onMouseScroll(PointerEvent* e)
+void MouseEventTest::onMouseScroll(PointerEvent* e)
 {
     std::string str = fmt::format("Mouse Scroll detected, X:{} Y:{}", e->getScrollX(), e->getScrollY());
     _labelAction->setString(str.c_str());
 
-    return true;
+    e->stopPropagation();
 }
 
 std::string MouseEventTest::title() const

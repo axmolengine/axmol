@@ -219,10 +219,10 @@ void Box2DTestBed::onPointerMove(PointerEvent* ev)
     }
 }
 
-bool Box2DTestBed::onPointerScroll(PointerEvent* ev)
+void Box2DTestBed::onPointerScroll(PointerEvent* ev)
 {
     _debugDrawNode->setPTMRatio(_debugDrawNode->getPTMRatio() - ev->getScrollY());
-    return true;
+    ev->stopPropagation();
 }
 
 void Box2DTestBed::onEnter()

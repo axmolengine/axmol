@@ -204,7 +204,7 @@ void register_ax_ui_members_2(lua_State* L)
     class_9_ScrollView.method("onPointerCancel", static_cast<void (ax::ui::ScrollView::*)(ax::PointerEvent *)>(&ax::ui::ScrollView::onPointerCancel));
     class_9_ScrollView.method("onPointerDown", static_cast<bool (ax::ui::ScrollView::*)(ax::PointerEvent *)>(&ax::ui::ScrollView::onPointerDown));
     class_9_ScrollView.method("onPointerMove", static_cast<void (ax::ui::ScrollView::*)(ax::PointerEvent *)>(&ax::ui::ScrollView::onPointerMove));
-    class_9_ScrollView.method("onPointerScroll", static_cast<bool (ax::ui::ScrollView::*)(ax::PointerEvent *)>(&ax::ui::ScrollView::onPointerScroll));
+    class_9_ScrollView.method("onPointerScroll", static_cast<void (ax::ui::ScrollView::*)(ax::PointerEvent *)>(&ax::ui::ScrollView::onPointerScroll));
     class_9_ScrollView.method("onPointerUp", static_cast<void (ax::ui::ScrollView::*)(ax::PointerEvent *)>(&ax::ui::ScrollView::onPointerUp));
     class_9_ScrollView.method("scrollToBottom", static_cast<void (ax::ui::ScrollView::*)(float, bool)>(&ax::ui::ScrollView::scrollToBottom));
     class_9_ScrollView.method("scrollToBottomLeft", static_cast<void (ax::ui::ScrollView::*)(float, bool)>(&ax::ui::ScrollView::scrollToBottomLeft));
