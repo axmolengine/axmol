@@ -674,6 +674,7 @@ bool Camera3DTestDemo::onPointerCommon(PointerEvent* event, bool* touchProperty)
     if (rect.containsPoint(locationInNode))
     {
         *touchProperty = true;
+        event->stopPropagation();
         return true;
     }
     return false;

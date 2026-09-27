@@ -351,6 +351,7 @@ bool InputProcessor::onPointerDown(ax::PointerEvent* event)
 
     _activeProcessor = nullptr;
 
+    event->stopPropagation();
     return true;
 }
 

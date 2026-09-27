@@ -865,6 +865,7 @@ MeshRendererHitTest::MeshRendererHitTest()
         {
             AXLOGD("mesh3d began... x = {}, y = {}", event->getWorldPoint().x, event->getWorldPoint().y);
             target->setOpacity(100);
+            event->stopPropagation();
             return true;
         }
         return false;

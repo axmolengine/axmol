@@ -210,7 +210,12 @@ void ScrollView::setTouchEnabled(bool enabled)
     if (enabled)
     {
         _touchListener                  = PointerEventListener::create();
-        _touchListener->onPointerDown   = AX_CALLBACK_1(ScrollView::onPointerDown, this);
+        _touchListener->onPointerDown   = [this](PointerEvent* event) {
+            const bool claimed = this->onPointerDown(event);
+            if (claimed)
+                event->stopPropagation();
+            return claimed;
+        };
         _touchListener->onPointerMove   = AX_CALLBACK_1(ScrollView::onPointerMove, this);
         _touchListener->onPointerUp     = AX_CALLBACK_1(ScrollView::onPointerUp, this);
         _touchListener->onPointerCancel = AX_CALLBACK_1(ScrollView::onPointerCancel, this);

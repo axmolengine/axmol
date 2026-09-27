@@ -214,6 +214,7 @@ bool UIScale9SpriteTouchTest::init()
             {
                 AXLOGD("sprite began... x = {}, y = {}", locationInNode.x, locationInNode.y);
                 target->setOpacity(180);
+                event->stopPropagation();
                 return true;
             }
             return false;

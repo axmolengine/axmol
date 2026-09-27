@@ -188,6 +188,7 @@ void TouchableSpriteTest::onEnter()
         {
             AXLOGD("sprite began... x = {}, y = {}", locationInNode.x, locationInNode.y);
             target->setOpacity(180);
+            event->stopPropagation();
             return true;
         }
         return false;
@@ -291,6 +292,7 @@ protected:
             {
                 AXLOGD("TouchableSprite: onPointerDown ...");
                 this->setColor(Color32::red);
+                event->stopPropagation();
                 return true;
             }
             return false;
@@ -1027,6 +1029,7 @@ GlobalZTouchTest::GlobalZTouchTest() : _sprite(nullptr), _accum(0)
         {
             AXLOGD("sprite began... x = {}, y = {}", locationInNode.x, locationInNode.y);
             target->setOpacity(180);
+            event->stopPropagation();
             return true;
         }
         return false;
@@ -1120,6 +1123,7 @@ StopPropagationTest::StopPropagationTest()
         if (this->isPointInNode(event->getWorldPoint(), target))
         {
             target->setOpacity(180);
+            event->stopPropagation();
             return true;
         }
 
