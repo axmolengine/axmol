@@ -47,8 +47,8 @@ private:
     std::function<void(const MEVideoFrame&)> _onVideoFrame;
     std::vector<uint8_t> _frameBuffer;
     bool _autoPlay = false;
-    bool _loop = false;
-    double _rate = 1.0;
+    bool _loop     = false;
+    double _rate   = 1.0;
     double _volume = 1.0;
 };
 
