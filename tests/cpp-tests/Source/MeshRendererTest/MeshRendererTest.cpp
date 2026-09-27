@@ -148,8 +148,9 @@ std::string MeshRendererEmptyTest::subtitle() const
 
 MeshRendererBasicTest::MeshRendererBasicTest()
 {
-    auto listener         = PointerEventListener::create();
-    listener->onPointerUp = AX_CALLBACK_1(MeshRendererBasicTest::onPointerUp, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = [](PointerEvent*) { return true; };
+    listener->onPointerUp   = AX_CALLBACK_1(MeshRendererBasicTest::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto s = Director::getInstance()->getCanvasSize();
@@ -900,8 +901,9 @@ MeshRendererEffectTest::MeshRendererEffectTest()
     auto s = Director::getInstance()->getCanvasSize();
     addNewMeshWithCoords(Vec2(s.width / 2, s.height / 2));
 
-    auto listener         = PointerEventListener::create();
-    listener->onPointerUp = AX_CALLBACK_1(MeshRendererEffectTest::onPointerUp, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = [](PointerEvent*) { return true; };
+    listener->onPointerUp   = AX_CALLBACK_1(MeshRendererEffectTest::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
     _backToForegroundListener = CustomEventListener::create(EVENT_COME_TO_FOREGROUND, [this](CustomEvent*) {
@@ -1039,8 +1041,9 @@ void AsyncLoadMeshRendererTest::asyncLoad_Callback(MeshRenderer* mesh, void* par
 
 MeshRendererWithSkinTest::MeshRendererWithSkinTest()
 {
-    auto listener         = PointerEventListener::create();
-    listener->onPointerUp = AX_CALLBACK_1(MeshRendererWithSkinTest::onPointerUp, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = [](PointerEvent*) { return true; };
+    listener->onPointerUp   = AX_CALLBACK_1(MeshRendererWithSkinTest::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     // switch animation quality. In fact, you can set the mesh3d out of frustum to Animate3DQuality::QUALITY_NONE, it
@@ -1142,8 +1145,9 @@ void MeshRendererWithSkinTest::onPointerUp(PointerEvent* event)
 
 MeshRendererWithSkinOutlineTest::MeshRendererWithSkinOutlineTest()
 {
-    auto listener         = PointerEventListener::create();
-    listener->onPointerUp = AX_CALLBACK_1(MeshRendererWithSkinOutlineTest::onPointerUp, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = [](PointerEvent*) { return true; };
+    listener->onPointerUp   = AX_CALLBACK_1(MeshRendererWithSkinOutlineTest::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto s = Director::getInstance()->getCanvasSize();
@@ -1225,8 +1229,9 @@ Animate3DTest::Animate3DTest()
 {
     addMeshRenderer();
 
-    auto listener         = PointerEventListener::create();
-    listener->onPointerUp = AX_CALLBACK_1(Animate3DTest::onPointerUp, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = [](PointerEvent*) { return true; };
+    listener->onPointerUp   = AX_CALLBACK_1(Animate3DTest::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     scheduleUpdate();
@@ -1359,8 +1364,9 @@ AttachmentTest::AttachmentTest() : _hasWeapon(false), _mesh(nullptr)
     auto s = Director::getInstance()->getCanvasSize();
     addNewMeshWithCoords(Vec2(s.width / 2, s.height / 2));
 
-    auto listener         = PointerEventListener::create();
-    listener->onPointerUp = AX_CALLBACK_1(AttachmentTest::onPointerUp, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = [](PointerEvent*) { return true; };
+    listener->onPointerUp   = AX_CALLBACK_1(AttachmentTest::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 std::string AttachmentTest::title() const
@@ -1415,9 +1421,6 @@ MeshRendererReskinTest::MeshRendererReskinTest() : _mesh(nullptr)
     auto s = Director::getInstance()->getCanvasSize();
     addNewMeshWithCoords(Vec2(s.width / 2, s.height / 2));
 
-    auto listener         = PointerEventListener::create();
-    listener->onPointerUp = AX_CALLBACK_1(MeshRendererReskinTest::onPointerUp, this);
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
     TTFConfig ttfConfig("fonts/arial.ttf", 20);
     auto label1 = Label::createWithTTF(ttfConfig, "Hair");
     auto item1  = MenuItemLabel::create(label1, AX_CALLBACK_1(MeshRendererReskinTest::menuCallback_reSkin, this));
@@ -1511,8 +1514,6 @@ void MeshRendererReskinTest::addNewMeshWithCoords(Vec2 p)
 
     applyCurSkin();
 }
-
-void MeshRendererReskinTest::onPointerUp(PointerEvent* event) {}
 
 void MeshRendererReskinTest::applyCurSkin()
 {
@@ -2705,10 +2706,6 @@ MeshRendererPropertyTest::MeshRendererPropertyTest()
     addChild(_mesh);
 
     setCameraMask(2);
-
-    // auto listener = PointerEventListener::create();
-    ////listener->onPointerUp = AX_CALLBACK_1(MeshRendererReskinTest::onPointerUp, this);
-    //_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     TTFConfig ttfConfig("fonts/arial.ttf", 20);
 

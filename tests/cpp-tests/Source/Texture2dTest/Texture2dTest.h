@@ -73,7 +73,6 @@ public:
     virtual std::string subtitle() const override;
 
     void addNewSpriteWithCoords();
-    void onPointerUp(ax::PointerEvent* event);
 
     ax::Node* _background;
 };

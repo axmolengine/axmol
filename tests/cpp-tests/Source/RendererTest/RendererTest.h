@@ -53,7 +53,6 @@ public:
 
     void createSpriteTest();
     void createNewSpriteTest();
-    void onPointerUp(ax::PointerEvent* event);
 
 protected:
     NewSpriteTest();

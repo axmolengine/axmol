@@ -111,12 +111,9 @@ static bool pointerHitTest(PointerEvent* event, const Camera* camera, PointerEve
     {
         hitted = listener->onPointerHitTest(event, &hitPoint);
     }
-    else
+    else if (target)
     {
-        if (target)
-            hitted = target->onPointerHitTest(event, &hitPoint);
-        else
-            AXLOGW("fixed priority pointer listener should have onPointerHitTest callback");
+        hitted = target->onPointerHitTest(event, &hitPoint);
     }
 
     if (hitted)
@@ -1046,10 +1043,10 @@ bool EventDispatcher::dispatchClaimedPointerEvent(PointerEvent* event)
         if (!listener || !listener->isAttached())
             return false;
 
-        event->setCurrentTarget(listener->getAssociatedNode());
-        event->setCamera(entry.camera.get());
+        auto target = listener->getAssociatedNode();
+        event->setCurrentTarget(target);
         event->setCaptureBits(entry.captureBits);
-        pointerHitTest(event, event->getCamera(), listener, event->getCurrentTarget());
+        pointerHitTest(event, entry.camera.get(), listener, target);
 
         switch (event->getPhase())
         {

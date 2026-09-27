@@ -176,10 +176,7 @@ private:
     bool initListener()
     {
         // note: when at the first click to focus the window, this will not take effect
-        _pointerListener                   = utils::newInstance<PointerEventListener>();
-        _pointerListener->onPointerHitTest = [this](PointerEvent*, Vec3*) {
-            return shouldCaptureMouse();
-        };
+        _pointerListener = utils::newInstance<PointerEventListener>();
         _pointerListener->onPointerDown = [this](PointerEvent* event) -> bool {
             if (!shouldCaptureMouse())
                 return false;

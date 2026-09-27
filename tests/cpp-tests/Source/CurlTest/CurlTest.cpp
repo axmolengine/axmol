@@ -45,8 +45,9 @@ CurlTest::CurlTest()
     addChild(label, 0);
     label->setPosition(VisibleRect::center().x, VisibleRect::top().y - 50);
 
-    auto listener         = PointerEventListener::create();
-    listener->onPointerUp = AX_CALLBACK_1(CurlTest::onPointerUp, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = [](PointerEvent*) { return true; };
+    listener->onPointerUp   = AX_CALLBACK_1(CurlTest::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     // create a label to display the tip string

@@ -750,8 +750,9 @@ void SpriteRenderTextureBug::SimpleSprite::draw(const SceneRenderState& state, c
 
 SpriteRenderTextureBug::SpriteRenderTextureBug()
 {
-    auto listener         = PointerEventListener::create();
-    listener->onPointerUp = AX_CALLBACK_1(SpriteRenderTextureBug::onPointerUp, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = [](PointerEvent*) { return true; };
+    listener->onPointerUp   = AX_CALLBACK_1(SpriteRenderTextureBug::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto s = Director::getInstance()->getCanvasSize();
