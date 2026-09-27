@@ -67,6 +67,7 @@ git push -u origin <branch-name>
 ```
 - Open a pull request against `axmolengine/axmol`, normally targeting `dev`.
 - Target `release/2.x` only for an applicable critical or security fix; new v3 features belong on `dev`.
+- Do not run whole-file `clang-format` or make unrelated formatting changes in `release/2.x` pull requests; they create avoidable merge conflicts with `dev`.
 - Complete the pull-request description and checklist before requesting review.
 
 ## Only _complete_ patches will be merged
