@@ -13,6 +13,7 @@
 
 // Now, common implementation based on redesigned MediaEngine is enable for windows and macOS
 #if defined(AX_ENABLE_VIDEO)
+#    include <algorithm>
 #    include <unordered_map>
 #    include <stdlib.h>
 #    include <string>
@@ -1409,6 +1410,8 @@ void VideoPlayer::stop()
 
 void VideoPlayer::seekTo(float sec)
 {
+    sec = (std::max)(0.0f, sec);
+
     if (!_videoURL.empty())
     {
         auto engine = reinterpret_cast<PrivateVideoContext*>(_videoContext)->_engine;

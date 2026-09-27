@@ -187,6 +187,11 @@ elseif(LINUX)
       generated/axlua_video_gen.cpp
     )
   endif()
+elseif(WASM)
+  if(AX_ENABLE_VIDEO)
+    list(APPEND lua_bindings_adapter_headers generated/axlua_video_gen.h)
+    list(APPEND lua_bindings_adapter_files generated/axlua_video_gen.cpp)
+  endif()
 endif()
 
 set(lua_bindings_files

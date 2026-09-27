@@ -26,6 +26,8 @@ local function VideoPlayerTest()
             videoStateLabel:setString("STOPPED")
         elseif eventType == axui.VideoPlayer.EventType.COMPLETED then
             videoStateLabel:setString("COMPLETED")
+        elseif eventType == axui.VideoPlayer.EventType.ERROR then
+            videoStateLabel:setString("ERROR")
         end
     end
     local widgetSize = widget:getContentSize()
@@ -127,7 +129,16 @@ local function VideoPlayerTest()
     ratioSwitch:setPosition(ax.p(visibleRect.x + visibleRect.width - 10,visibleRect.y + 150))
     ratioSwitch:registerScriptTapHandler(menuRatioCallback)
 
-    local menu = ax.Menu:create(fullSwitch, pauseItem, resumeItem, stopItem, hintItem, resourceVideo, onlineVideo, ratioSwitch)
+    local loopSwitch = ax.MenuItemFont:create(videoPlayer:isLooping() and "Loop: ON" or "Loop: OFF")
+    loopSwitch:setAnchorPoint(ax.p(1, 0.5))
+    loopSwitch:setPosition(ax.p(visibleRect.x + visibleRect.width - 10,visibleRect.y + 250))
+    local function menuLoopCallback(tag, sender)
+        videoPlayer:setLooping(not videoPlayer:isLooping())
+        loopSwitch:setString(videoPlayer:isLooping() and "Loop: ON" or "Loop: OFF")
+    end
+    loopSwitch:registerScriptTapHandler(menuLoopCallback)
+
+    local menu = ax.Menu:create(fullSwitch, pauseItem, resumeItem, stopItem, hintItem, resourceVideo, onlineVideo, ratioSwitch, loopSwitch)
     menu:setPosition(ax.p(0.0, 0.0))
     layer:addChild(menu)
 

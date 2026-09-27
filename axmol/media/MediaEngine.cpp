@@ -8,7 +8,9 @@
 
 #include "axmol/media/MediaEngine.h"
 
-#if defined(WINAPI_FAMILY)
+#if defined(__EMSCRIPTEN__)
+#    include "axmol/media/WasmMediaEngine.h"
+#elif defined(WINAPI_FAMILY)
 #    if WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP && !defined(AXME_USE_IMFME)
 #        include "axmol/media/WmfMediaEngine.h"
 #    else
@@ -47,7 +49,9 @@ namespace ax
 
 std::unique_ptr<MediaEngineFactory> MediaEngineFactory::create()
 {
-#if defined(WINAPI_FAMILY)
+#if defined(__EMSCRIPTEN__)
+    return tlx::static_pointer_cast<MediaEngineFactory>(std::make_unique<WasmMediaEngineFactory>());
+#elif defined(WINAPI_FAMILY)
 #    if WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP && !defined(AXME_USE_IMFME)
 #        if defined(AX_ENABLE_MFMEDIA)
     return tlx::static_pointer_cast<MediaEngineFactory>(std::make_unique<WmfMediaEngineFactory>());
