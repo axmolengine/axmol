@@ -10,7 +10,6 @@
 #if defined(__EMSCRIPTEN__)
 
 #    include "axmol/media/MediaEngine.h"
-#    include <vector>
 
 namespace ax
 {
@@ -45,7 +44,7 @@ private:
     int _id = 0;
     std::function<void(MEMediaEventType)> _onMediaEvent;
     std::function<void(const MEVideoFrame&)> _onVideoFrame;
-    std::vector<uint8_t> _frameBuffer;
+    tlx::byte_buffer _frameBuffer;
     bool _autoPlay = false;
     bool _loop     = false;
     double _rate   = 1.0;
