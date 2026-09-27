@@ -80,6 +80,7 @@ public:
         const auto localRect = Rect(Vec2::zero, _parent->getContentSize());
         if (localRect.containsPoint(_parent->convertPointerToNodeSpace(pointerEvent)))
         {
+            pointerEvent->stopPropagation();
             return true;
         }
 
