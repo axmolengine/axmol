@@ -22,7 +22,7 @@ public:
     bool onPointerDown(ax::PointerEvent* ev);
     void onPointerMove(ax::PointerEvent* ev);
     void onPointerUp(ax::PointerEvent* ev);
-    bool onPointerScroll(ax::PointerEvent* ev);
+    void onPointerScroll(ax::PointerEvent* ev);
     void onKeyPressed(ax::KeyboardEvent* ev);
     void onKeyReleased(ax::KeyboardEvent* ev);
     void menuCloseCallback(ax::Object* sender);

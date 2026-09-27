@@ -43,7 +43,7 @@ private:
     void onPointerUp(ax::PointerEvent* event);
     void onPointerCancel(ax::PointerEvent* event);
 
-    bool onPointerScroll(ax::PointerEvent* event);
+    void onPointerScroll(ax::PointerEvent* event);
 
     void onKeyDown(ax::KeyboardEvent*);
     void onKeyUp(ax::KeyboardEvent*);

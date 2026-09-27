@@ -48,13 +48,15 @@ public:
     //
 
 public:
-    // Hit-test callback invoked only for scene-graph listeners
+    // Used for scene-graph hit testing and refreshing claimed event hits.
+    // Fixed-priority listeners may leave this unset.
     std::function<bool(PointerEvent*, Vec3*)> onPointerHitTest;
     std::function<bool(PointerEvent*)> onPointerDown;
     std::function<void(PointerEvent*)> onPointerMove;
     std::function<void(PointerEvent*)> onPointerUp;
     std::function<void(PointerEvent*)> onPointerCancel;
-    std::function<bool(PointerEvent*)> onPointerScroll;
+    // Call stopPropagation() when this listener consumes a scroll event.
+    std::function<void(PointerEvent*)> onPointerScroll;
 
     PointerEventListener();
     bool init();

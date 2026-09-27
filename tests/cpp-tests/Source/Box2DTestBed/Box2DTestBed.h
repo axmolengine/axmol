@@ -59,7 +59,7 @@ public:
     bool onPointerDown(ax::PointerEvent* event);
     bool onPointerUp(ax::PointerEvent* event);
     void onPointerMove(ax::PointerEvent* event);
-    bool onPointerScroll(ax::PointerEvent* event);
+    void onPointerScroll(ax::PointerEvent* event);
 
     void RestartSample();
 

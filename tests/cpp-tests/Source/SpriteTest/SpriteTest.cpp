@@ -138,8 +138,9 @@ SpriteTests::SpriteTests()
 
 Sprite1::Sprite1()
 {
-    auto listener         = PointerEventListener::create();
-    listener->onPointerUp = AX_CALLBACK_1(Sprite1::onPointerUp, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = [](PointerEvent*) { return true; };
+    listener->onPointerUp   = AX_CALLBACK_1(Sprite1::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto s = Director::getInstance()->getCanvasSize();
@@ -203,8 +204,9 @@ std::string Sprite1::subtitle() const
 
 SpriteBatchNode1::SpriteBatchNode1()
 {
-    auto listener         = PointerEventListener::create();
-    listener->onPointerUp = AX_CALLBACK_1(SpriteBatchNode1::onPointerUp, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = [](PointerEvent*) { return true; };
+    listener->onPointerUp   = AX_CALLBACK_1(SpriteBatchNode1::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto BatchNode = SpriteBatchNode::create("Images/grossini_dance_atlas.png", 50);
@@ -1658,8 +1660,9 @@ std::string SpriteBatchNodeAliased::subtitle() const
 
 SpriteNewTexture::SpriteNewTexture()
 {
-    auto listener         = PointerEventListener::create();
-    listener->onPointerUp = AX_CALLBACK_1(SpriteNewTexture::onPointerUp, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = [](PointerEvent*) { return true; };
+    listener->onPointerUp   = AX_CALLBACK_1(SpriteNewTexture::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto node = Node::create();
@@ -1766,8 +1769,9 @@ std::string SpriteNewTexture::subtitle() const
 
 SpriteBatchNodeNewTexture::SpriteBatchNodeNewTexture()
 {
-    auto listener         = PointerEventListener::create();
-    listener->onPointerUp = AX_CALLBACK_1(SpriteBatchNodeNewTexture::onPointerUp, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = [](PointerEvent*) { return true; };
+    listener->onPointerUp   = AX_CALLBACK_1(SpriteBatchNodeNewTexture::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto batch = SpriteBatchNode::create("Images/grossini_dance_atlas.png", 50);

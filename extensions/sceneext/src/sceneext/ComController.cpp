@@ -130,7 +130,12 @@ void ComController::setPointerEnabled(bool enabled)
             // Register Touch Event
             auto listener = PointerEventListener::create();
 
-            listener->onPointerDown   = AX_CALLBACK_1(ComController::onPointerDown, this);
+            listener->onPointerDown = [this](PointerEvent* event) {
+                const bool claimed = this->onPointerDown(event);
+                if (claimed)
+                    event->stopPropagation();
+                return claimed;
+            };
             listener->onPointerMove   = AX_CALLBACK_1(ComController::onPointerMove, this);
             listener->onPointerUp     = AX_CALLBACK_1(ComController::onPointerUp, this);
             listener->onPointerCancel = AX_CALLBACK_1(ComController::onPointerCancel, this);

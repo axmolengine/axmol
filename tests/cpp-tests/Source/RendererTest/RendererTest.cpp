@@ -91,9 +91,6 @@ std::string MultiSceneTest::subtitle() const
 
 NewSpriteTest::NewSpriteTest()
 {
-    auto touchListener         = PointerEventListener::create();
-    touchListener->onPointerUp = AX_CALLBACK_1(NewSpriteTest::onPointerUp, this);
-
     createSpriteTest();
     createNewSpriteTest();
 }
@@ -161,8 +158,6 @@ void NewSpriteTest::createNewSpriteTest()
     parent->addChild(child7);
     addChild(parent);
 }
-
-void NewSpriteTest::onPointerUp(PointerEvent* event) {}
 
 std::string NewSpriteTest::title() const
 {

@@ -32,7 +32,7 @@ public:
     void onPointerMove(ax::PointerEvent* ev);
     void onPointerUp(ax::PointerEvent* ev);
 
-    bool onPointerScroll(ax::PointerEvent* ev);
+    void onPointerScroll(ax::PointerEvent* ev);
 
     // Keyboard
     void onKeyPressed(ax::KeyboardEvent* ev);

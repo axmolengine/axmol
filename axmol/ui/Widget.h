@@ -746,8 +746,9 @@ protected:
     /**
      * A callback which will be called when a pointer scroll event is issued.
      *@param event The mouse event info.
+     * Call stopPropagation() to prevent the scroll event from reaching later listeners.
      */
-    virtual bool onPointerScroll(PointerEvent* pointerEvent);
+    virtual void onPointerScroll(PointerEvent* pointerEvent);
 
     bool isPointerInside(PointerEvent* event, Vec3* outHitPoint);
 

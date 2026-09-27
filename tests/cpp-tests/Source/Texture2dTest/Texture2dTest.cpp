@@ -169,8 +169,9 @@ std::string TextureASTC::title() const
 
 TextureETC1Alpha::TextureETC1Alpha()
 {
-    auto listener         = PointerEventListener::create();
-    listener->onPointerUp = AX_CALLBACK_1(TextureETC1Alpha::onPointerUp, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = [](PointerEvent*) { return true; };
+    listener->onPointerUp   = AX_CALLBACK_1(TextureETC1Alpha::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 
@@ -247,12 +248,7 @@ std::string TextureETC1Alpha::subtitle() const
 //
 //------------------------------------------------------------------
 
-TextureETC2::TextureETC2()
-{
-    auto listener         = PointerEventListener::create();
-    listener->onPointerUp = AX_CALLBACK_1(TextureETC2::onPointerUp, this);
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
-}
+TextureETC2::TextureETC2() = default;
 
 bool TextureETC2::init()
 {
@@ -284,16 +280,6 @@ void TextureETC2::addNewSpriteWithCoords()
     _background->addChild(spriteA4);
 }
 
-void TextureETC2::onPointerUp(PointerEvent* event)
-{
-    // for (auto&& touch : touches)
-    //{
-    //     auto location = touch->getWorldPoint();
-
-    //    addNewSpriteWithCoords();
-    //}
-}
-
 std::string TextureETC2::title() const
 {
     return "Testing Texture ETC2 support";
@@ -312,8 +298,9 @@ std::string TextureETC2::subtitle() const
 
 TextureBMP::TextureBMP()
 {
-    auto listener         = PointerEventListener::create();
-    listener->onPointerUp = AX_CALLBACK_1(TextureBMP::onPointerUp, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = [](PointerEvent*) { return true; };
+    listener->onPointerUp   = AX_CALLBACK_1(TextureBMP::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto s = Director::getInstance()->getCanvasSize();

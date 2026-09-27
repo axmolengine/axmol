@@ -159,9 +159,9 @@ bool MainScene::onPointerDown(PointerEvent* ev)
 }
 void MainScene::onPointerMove(PointerEvent* ev) {}
 void MainScene::onPointerUp(PointerEvent* ev) {}
-bool MainScene::onPointerScroll(PointerEvent* ev)
+void MainScene::onPointerScroll(PointerEvent* ev)
 {
-    return true;
+    ev->stopPropagation();
 }
 void MainScene::onKeyPressed(KeyboardEvent* ev) {}
 void MainScene::onKeyReleased(KeyboardEvent* ev) {}

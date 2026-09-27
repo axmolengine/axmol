@@ -45,7 +45,7 @@ public:
     bool onMouseDown(ax::PointerEvent* event);
     void onMouseUp(ax::PointerEvent* event);
     bool onMouseMove(ax::PointerEvent* event);
-    bool onMouseScroll(ax::PointerEvent* event);
+    void onMouseScroll(ax::PointerEvent* event);
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;

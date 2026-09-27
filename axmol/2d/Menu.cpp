@@ -282,6 +282,7 @@ bool Menu::onPointerDown(PointerEvent* event)
 
     _selectedItem->selected();
 
+    event->stopPropagation();
     return true;
 }
 

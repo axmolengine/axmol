@@ -1090,16 +1090,15 @@ void ScrollView::onPointerCancel(PointerEvent* event)
     _isInterceptTouch = false;
 }
 
-bool ScrollView::onPointerScroll(PointerEvent* event)
+void ScrollView::onPointerScroll(PointerEvent* event)
 {
     if (!event || !isVisible() || !isEnabled() || !isAncestorsEnabled() || !isAncestorsVisible(this))
-        return false;
+        return;
 
     if (_direction == Direction::NONE)
-        return false;
+        return;
 
-    // Widget::onPointerScroll() returns false by default.  ScrollView handles
-    // wheel/trackpad scrolling itself once EventDispatcher has hit-tested it.
+    // ScrollView handles wheel/trackpad scrolling itself once EventDispatcher has hit-tested it.
     constexpr float mouseFactor = 20.f;
     Vec2 move;
 
@@ -1113,7 +1112,7 @@ bool ScrollView::onPointerScroll(PointerEvent* event)
     }
 
     if (move == Vec2::zero)
-        return false;
+        return;
 
     bool origBounce = _bounceEnabled;
     _bounceEnabled  = false;
@@ -1121,7 +1120,7 @@ bool ScrollView::onPointerScroll(PointerEvent* event)
     _bounceEnabled = origBounce;
     processScrollingEndedEvent();
 
-    return true;
+    event->stopPropagation();
 }
 
 void ScrollView::update(float dt)

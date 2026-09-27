@@ -149,7 +149,7 @@ void register_ax_extension(lua_State* L)
     class_7_ScrollView.method("onPointerCancel", static_cast<void (ax::ext::ScrollView::*)(ax::PointerEvent *)>(&ax::ext::ScrollView::onPointerCancel));
     class_7_ScrollView.method("onPointerDown", static_cast<bool (ax::ext::ScrollView::*)(ax::PointerEvent *)>(&ax::ext::ScrollView::onPointerDown));
     class_7_ScrollView.method("onPointerMove", static_cast<void (ax::ext::ScrollView::*)(ax::PointerEvent *)>(&ax::ext::ScrollView::onPointerMove));
-    class_7_ScrollView.method("onPointerScroll", static_cast<bool (ax::ext::ScrollView::*)(ax::PointerEvent *)>(&ax::ext::ScrollView::onPointerScroll));
+    class_7_ScrollView.method("onPointerScroll", static_cast<void (ax::ext::ScrollView::*)(ax::PointerEvent *)>(&ax::ext::ScrollView::onPointerScroll));
     class_7_ScrollView.method("onPointerUp", static_cast<void (ax::ext::ScrollView::*)(ax::PointerEvent *)>(&ax::ext::ScrollView::onPointerUp));
     class_7_ScrollView.method("pause", axlua::overload(axlua::overload_candidate<>(static_cast<void (ax::Node::*)()>(&ax::Node::pause)), axlua::overload_candidate<ax::Object *>(static_cast<void (ax::ext::ScrollView::*)(ax::Object *)>(&ax::ext::ScrollView::pause))));
     class_7_ScrollView.method("removeAllChildrenWithCleanup", static_cast<void (ax::ext::ScrollView::*)(bool)>(&ax::ext::ScrollView::removeAllChildrenWithCleanup));

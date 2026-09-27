@@ -431,9 +431,13 @@ void TestController::destroyInstance()
     disableCrashCatch();
 }
 
-bool TestController::blockTouchBegan(PointerEvent* /*event*/)
+bool TestController::blockTouchBegan(PointerEvent* event)
 {
-    return !_stopAutoTest;
+    if (_stopAutoTest)
+        return false;
+
+    event->stopPropagation();
+    return true;
 }
 
 //==================================================================================================

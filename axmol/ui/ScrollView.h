@@ -335,7 +335,7 @@ public:
     void onPointerMove(PointerEvent* event) override;
     void onPointerUp(PointerEvent* event) override;
     void onPointerCancel(PointerEvent* event) override;
-    bool onPointerScroll(PointerEvent* event) override;
+    void onPointerScroll(PointerEvent* event) override;
     void update(float dt) override;
 
     /**

@@ -956,6 +956,7 @@ void DefaultVideoController::createControls()
 
         if (rect.containsPoint(locationInNode))
         {
+            event->stopPropagation();
             auto percent  = locationInNode.x / rect.size.x;
             auto duration = _videoPlayer->getDuration();
             auto newTime  = percent * duration;

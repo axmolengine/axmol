@@ -358,7 +358,6 @@ public:
     MeshRendererReskinTest();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void onPointerUp(ax::PointerEvent* event);
     void addNewMeshWithCoords(ax::Vec2 p);
 
     void menuCallback_reSkin(ax::Object* sender);

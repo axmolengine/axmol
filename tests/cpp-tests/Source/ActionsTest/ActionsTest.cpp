@@ -1354,8 +1354,9 @@ void ActionStacked::onEnter()
 
     this->centerSprites(0);
 
-    auto listener         = PointerEventListener::create();
-    listener->onPointerUp = AX_CALLBACK_1(ActionStacked::onPointerUp, this);
+    auto listener           = PointerEventListener::create();
+    listener->onPointerDown = [](PointerEvent*) { return true; };
+    listener->onPointerUp   = AX_CALLBACK_1(ActionStacked::onPointerUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto s = Director::getInstance()->getCanvasSize();

@@ -233,7 +233,7 @@ public:
     virtual void onPointerMove(PointerEvent*);
     virtual void onPointerUp(PointerEvent*);
     virtual void onPointerCancel(PointerEvent*);
-    virtual bool onPointerScroll(PointerEvent*);
+    virtual void onPointerScroll(PointerEvent*);
 
     // Overrides
     void setContentSize(const Size& size) override;

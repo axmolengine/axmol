@@ -387,7 +387,7 @@ bool ImGui_ImplAxmolSW_Init(RenderViewCore* window, bool install_callbacks)
         bd->CapturedPointerId = -1;
     };
 
-    listener->onPointerScroll = [bd](PointerEvent* event) -> bool {
+    listener->onPointerScroll = [bd](PointerEvent* event) {
         ImGuiIO& io                = ImGui::GetIO();
         ImGui_ImplAxmolSW_Data* bd = ImGui_ImplAxmolSW_GetBackendData();
         
@@ -405,9 +405,7 @@ bool ImGui_ImplAxmolSW_Init(RenderViewCore* window, bool install_callbacks)
         io.AddMouseWheelEvent(scrollDelta.x, -scrollDelta.y);
 
         if (ImGui_ImplAxmol_HitTest(pointerPos))
-            return true;
-        
-        return false;
+            event->stopPropagation();
     };
 
     constexpr int highestPriority = (std::numeric_limits<int>::min)();

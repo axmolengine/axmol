@@ -54,7 +54,10 @@ bool UITabControlTest::init()
         _uiLayer->addChild(touchSinkLayer);
 
         auto listener           = PointerEventListener::create();
-        listener->onPointerDown = [](PointerEvent* e) { return true; };
+        listener->onPointerDown = [](PointerEvent* event) {
+            event->stopPropagation();
+            return true;
+        };
         _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, touchSinkLayer);
 
         auto tab = TabControl::create();

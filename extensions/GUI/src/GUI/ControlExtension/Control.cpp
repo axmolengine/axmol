@@ -72,9 +72,14 @@ bool Control::init()
         setSelected(false);
         setHighlighted(false);
 
-        auto dispatcher                = Director::getInstance()->getEventDispatcher();
-        auto touchListener             = PointerEventListener::create();
-        touchListener->onPointerDown   = AX_CALLBACK_1(Control::onPointerDown, this);
+        auto dispatcher              = Director::getInstance()->getEventDispatcher();
+        auto touchListener           = PointerEventListener::create();
+        touchListener->onPointerDown = [this](PointerEvent* event) {
+            const bool claimed = this->onPointerDown(event);
+            if (claimed)
+                event->stopPropagation();
+            return claimed;
+        };
         touchListener->onPointerMove   = AX_CALLBACK_1(Control::onPointerMove, this);
         touchListener->onPointerUp     = AX_CALLBACK_1(Control::onPointerUp, this);
         touchListener->onPointerCancel = AX_CALLBACK_1(Control::onPointerCancel, this);

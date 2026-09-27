@@ -1650,7 +1650,7 @@
           "nativeName": "onPointerScroll",
           "luaName": "onPointerScroll",
           "declaringType": "ax::ext::ScrollView",
-          "returnType": "bool",
+          "returnType": "void",
           "parameterTypes": [
             "ax::PointerEvent *"
           ],

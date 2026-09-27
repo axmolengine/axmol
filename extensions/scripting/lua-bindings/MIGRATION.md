@@ -75,6 +75,17 @@ listener.onPointerUp = function(event)
 end
 ```
 
+`PointerEventListener.onPointerScroll` callbacks return no value. Call
+`event:stopPropagation()` when the listener handles the scroll and later
+listeners should not receive it:
+
+```lua
+listener.onPointerScroll = function(event)
+    -- Handle the scroll event.
+    event:stopPropagation()
+end
+```
+
 Use the current position accessors `getPoint`, `getPrevPoint`, `getWorldPoint`,
 and `getPrevWorldPoint`. The old `getDelta`, `getStartLocation`, and
 `getPreviousScreenLocation` methods no longer exist; calculate a screen-space
