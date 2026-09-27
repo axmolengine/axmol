@@ -727,6 +727,9 @@ bool Widget::onPointerDown(PointerEvent* event)
     }
 
     pushDownEvent();
+
+    event->stopPropagation();
+
     return true;
 }
 
