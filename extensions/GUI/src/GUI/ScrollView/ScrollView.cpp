@@ -209,8 +209,8 @@ void ScrollView::setTouchEnabled(bool enabled)
 
     if (enabled)
     {
-        _touchListener                  = PointerEventListener::create();
-        _touchListener->onPointerDown   = [this](PointerEvent* event) {
+        _touchListener                = PointerEventListener::create();
+        _touchListener->onPointerDown = [this](PointerEvent* event) {
             const bool claimed = this->onPointerDown(event);
             if (claimed)
                 event->stopPropagation();

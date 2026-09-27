@@ -130,7 +130,7 @@ void ComController::setPointerEnabled(bool enabled)
             // Register Touch Event
             auto listener = PointerEventListener::create();
 
-            listener->onPointerDown   = [this](PointerEvent* event) {
+            listener->onPointerDown = [this](PointerEvent* event) {
                 const bool claimed = this->onPointerDown(event);
                 if (claimed)
                     event->stopPropagation();

@@ -72,9 +72,9 @@ bool Control::init()
         setSelected(false);
         setHighlighted(false);
 
-        auto dispatcher                = Director::getInstance()->getEventDispatcher();
-        auto touchListener             = PointerEventListener::create();
-        touchListener->onPointerDown   = [this](PointerEvent* event) {
+        auto dispatcher              = Director::getInstance()->getEventDispatcher();
+        auto touchListener           = PointerEventListener::create();
+        touchListener->onPointerDown = [this](PointerEvent* event) {
             const bool claimed = this->onPointerDown(event);
             if (claimed)
                 event->stopPropagation();
