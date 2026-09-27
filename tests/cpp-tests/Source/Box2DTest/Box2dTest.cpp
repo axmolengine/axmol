@@ -57,9 +57,9 @@ bool Box2DTest::init()
     }
     auto dispatcher = Director::getInstance()->getEventDispatcher();
 
-    auto eventListener         = PointerEventListener::create();
+    auto eventListener           = PointerEventListener::create();
     eventListener->onPointerDown = [](PointerEvent* /*event*/) { return true; };
-    eventListener->onPointerUp = AX_CALLBACK_1(Box2DTest::onPointerUp, this);
+    eventListener->onPointerUp   = AX_CALLBACK_1(Box2DTest::onPointerUp, this);
     dispatcher->addEventListenerWithSceneGraphPriority(eventListener, this);
 
     // init physics
