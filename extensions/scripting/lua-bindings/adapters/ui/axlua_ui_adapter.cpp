@@ -26,6 +26,8 @@
 #    if defined(AX_ENABLE_VLC_MEDIA)
 #        include "lua-bindings/generated/axlua_video_gen.h"
 #    endif
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_WASM && defined(AX_ENABLE_VIDEO)
+#    include "lua-bindings/generated/axlua_video_gen.h"
 #endif
 
 #include "lua-bindings/runtime/axlua_adapter.h"
@@ -558,6 +560,8 @@ int register_ui_module(lua_State* L)
 #    if defined(AX_ENABLE_VLC_MEDIA)
         register_all_ax_video(L);
 #    endif
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_WASM && defined(AX_ENABLE_VIDEO)
+        register_all_ax_video(L);
 #endif
         extendFocusEventListenerEvent(L);
     }

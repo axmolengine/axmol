@@ -161,7 +161,7 @@ cmake_dependent_option(AX_ENABLE_VLC_MEDIA "Enabling vlc media" OFF "(WIN32 AND 
 cmake_dependent_option(AX_ENABLE_WAYLAND "Enabling linux wayland" OFF "LINUX" OFF)
 
 option(AX_ENABLE_PHYSICS_2D "Build Physics2D support" ON)
-cmake_dependent_option(AX_ENABLE_VIDEO "Build video support" ON "AX_ENABLE_MFMEDIA OR AX_ENABLE_VLC_MEDIA OR APPLE OR ANDROID" OFF)
+cmake_dependent_option(AX_ENABLE_VIDEO "Build video support" ON "AX_ENABLE_MFMEDIA OR AX_ENABLE_VLC_MEDIA OR APPLE OR ANDROID OR WASM" OFF)
 option(AX_ENABLE_AUDIO "Build audio support" ON)
 option(AX_ENABLE_OPUS "Build with opus support" ON)
 
