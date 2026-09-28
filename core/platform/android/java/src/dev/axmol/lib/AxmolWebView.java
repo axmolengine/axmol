@@ -29,19 +29,19 @@ import android.content.Context;
 import android.util.Log;
 import android.view.Gravity;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
-
-import dev.axmol.lib.AxmolEngine;
 
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.concurrent.CountDownLatch;
 
 class ShouldStartLoadingWorker implements Runnable {
-    private CountDownLatch mLatch;
-    private boolean[] mResult;
+    private final CountDownLatch mLatch;
+    private final boolean[] mResult;
     private final int mViewTag;
     private final String mUrlString;
 
@@ -62,7 +62,7 @@ class ShouldStartLoadingWorker implements Runnable {
 public class AxmolWebView extends WebView {
     private static final String TAG = WebViewHelper.class.getSimpleName();
 
-    private int mViewTag;
+    private final int mViewTag;
     private String mJSScheme;
 
     public AxmolWebView(Context context) {
@@ -85,7 +85,7 @@ public class AxmolWebView extends WebView {
 
         // `searchBoxJavaBridge_` has big security risk. http://jvn.jp/en/jp/JVN53768697
         try {
-            Method method = this.getClass().getMethod("removeJavascriptInterface", new Class[]{String.class});
+            Method method = this.getClass().getMethod("removeJavascriptInterface", String.class);
             method.invoke(this, "searchBoxJavaBridge_");
         } catch (Exception e) {
             Log.d(TAG, "This API level do not support `removeJavascriptInterface`");
@@ -105,18 +105,13 @@ public class AxmolWebView extends WebView {
 
     class AxmolWebViewClient extends WebViewClient {
         @Override
-        public boolean shouldOverrideUrlLoading(WebView view, final String urlString) {
-            AxmolActivity activity = (AxmolActivity)getContext();
+        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+            String urlString = request.getUrl().toString();
 
             try {
                 URI uri = URI.create(urlString);
                 if (uri != null && uri.getScheme().equals(mJSScheme)) {
-                    AxmolEngine.runOnGLThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            WebViewHelper._onJsCallback(mViewTag, urlString);
-                        }
-                    });
+                    AxmolEngine.runOnGLThread(() -> WebViewHelper._onJsCallback(mViewTag, urlString));
                     return true;
                 }
             } catch (Exception e) {
@@ -137,29 +132,20 @@ public class AxmolWebView extends WebView {
             }
 
             return result[0];
+
         }
 
         @Override
         public void onPageFinished(WebView view, final String url) {
             super.onPageFinished(view, url);
-            AxmolEngine.runOnGLThread(new Runnable() {
-                @Override
-                public void run() {
-                    WebViewHelper._didFinishLoading(mViewTag, url);
-                }
-            });
+            AxmolEngine.runOnGLThread(() -> WebViewHelper._didFinishLoading(mViewTag, url));
         }
 
         @Override
-        public void onReceivedError(WebView view, int errorCode, String description, final String failingUrl) {
-            super.onReceivedError(view, errorCode, description, failingUrl);
-            AxmolActivity activity = (AxmolActivity)getContext();
-            AxmolEngine.runOnGLThread(new Runnable() {
-                @Override
-                public void run() {
-                    WebViewHelper._didFailLoading(mViewTag, failingUrl);
-                }
-            });
+        public void onReceivedError(WebView view, WebResourceRequest request,
+                                    WebResourceError error) {
+            super.onReceivedError(view, request, error);
+            AxmolEngine.runOnGLThread(() -> WebViewHelper._didFailLoading(mViewTag, request.getUrl().toString()));
         }
     }
 
@@ -170,7 +156,7 @@ public class AxmolWebView extends WebView {
         layoutParams.topMargin = top;
         layoutParams.width = maxWidth;
         layoutParams.height = maxHeight;
-        layoutParams.gravity = Gravity.TOP | Gravity.LEFT;
+        layoutParams.gravity = Gravity.TOP | Gravity.START;
         this.setLayoutParams(layoutParams);
     }
 }
