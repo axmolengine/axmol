@@ -187,8 +187,8 @@ UIFont* EditBoxImplIOS::createNativeFont(std::string_view fontName, int fontSize
     NSString* fntName  = [[NSString alloc] initWithBytes:fontName.data()
                                                  length:fontName.length()
                                                encoding:NSUTF8StringEncoding];
-    auto renderView   = ax::Director::getInstance()->getRenderView();
-    float scaleFactor = renderView->getScaleX();
+    auto renderView    = ax::Director::getInstance()->getRenderView();
+    float scaleFactor  = renderView->getScaleX();
 
     if (fontSize == -1)
     {
