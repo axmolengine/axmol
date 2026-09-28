@@ -59,7 +59,7 @@ dependencies {
 
     implementation "androidx.annotation:annotation:$annotation_ver"
     implementation "androidx.preference:preference:$preference_ver"
-    implementation "androidx.appcompat:appcompat:$appcompat_ver"
+    api "androidx.appcompat:appcompat:$appcompat_ver"
 
     api ("com.google.guava:guava:$guava_ver-android") {
         // Exclude dependencies that are only used by Guava at compile time
