@@ -206,6 +206,13 @@ set(_AX_LUA_LIB axlua CACHE INTERNAL "The axmol lua bindings lib name")
 
 add_library(${_AX_LUA_LIB} STATIC ${lua_bindings_files})
 
+if(APPLE)
+  set_xcode_property(${_AX_LUA_LIB} CLANG_ENABLE_OBJC_ARC "YES")
+  target_compile_options(${_AX_LUA_LIB} PRIVATE
+    "$<$<COMPILE_LANGUAGE:OBJC>:-fobjc-arc>"
+    "$<$<COMPILE_LANGUAGE:OBJCXX>:-fobjc-arc>")
+endif()
+
 if(MSVC)
   target_compile_options(${_AX_LUA_LIB} PRIVATE /bigobj)
 endif()

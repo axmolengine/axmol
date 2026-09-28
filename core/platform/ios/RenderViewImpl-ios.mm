@@ -148,12 +148,38 @@ RenderViewImpl::RenderViewImpl() {}
 
 RenderViewImpl::~RenderViewImpl()
 {
+    if (_ownsHostViewHandle && _hostViewHandle)
+    {
+        id ownedView = (__bridge_transfer id)_hostViewHandle;
+        AX_UNUSED_PARAM(ownedView);
+        _hostViewHandle = nullptr;
+        _ownsHostViewHandle = false;
+    }
+    if (_ownsHostWindowHandle && _hostWindowHandle)
+    {
+        id ownedWindow = (__bridge_transfer id)_hostWindowHandle;
+        AX_UNUSED_PARAM(ownedWindow);
+        _hostWindowHandle = nullptr;
+        _ownsHostWindowHandle = false;
+    }
+}
+
+void RenderViewImpl::setEAWindow(void* window)
+{
+    if (_ownsHostWindowHandle && _hostWindowHandle)
+    {
+        id ownedWindow = (__bridge_transfer id)_hostWindowHandle;
+        AX_UNUSED_PARAM(ownedWindow);
+    }
+    _hostWindowHandle = window;
+    _ownsHostWindowHandle = false;
 }
 
 #ifndef AX_CORE_PROFILE
 bool RenderViewImpl::initWithEARenderView(void* viewHandle)
 {
     _hostViewHandle          = viewHandle;
+    _ownsHostViewHandle = false;
     RenderHostView* eaView  = (__bridge RenderHostView*)_hostViewHandle;
 
     _screenSize.width = _designResolutionSize.width = [eaView getWidth];
@@ -173,7 +199,8 @@ bool RenderViewImpl::initWithRect(std::string_view /*viewName*/, const Rect& rec
         // Window is assigned via SceneDelegate
     } else {
         // create platform window
-        _hostWindowHandle = [[UIWindow alloc] initWithFrame:r];
+        _hostWindowHandle = (__bridge_retained void*)[[UIWindow alloc] initWithFrame:r];
+        _ownsHostWindowHandle = true;
     }
 
     // create platform render view
@@ -198,7 +225,8 @@ bool RenderViewImpl::initWithRect(std::string_view /*viewName*/, const Rect& rec
     _screenSize.height = _designResolutionSize.height = logicalSize.height * backingScaleFactor;
     //    _scaleX = _scaleY = [eaView contentScaleFactor];
 
-    _hostViewHandle = hostView;
+    _hostViewHandle = (__bridge_retained void*)hostView;
+    _ownsHostViewHandle = true;
 
     return true;
 }

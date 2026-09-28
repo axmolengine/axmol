@@ -34,6 +34,9 @@
 #include "DepthStencilStateMTL.h"
 #include "RenderTargetMTL.h"
 
+extern "C" void* objc_autoreleasePoolPush(void);
+extern "C" void objc_autoreleasePoolPop(void*);
+
 NS_AX_BACKEND_BEGIN
 
 namespace
@@ -137,7 +140,7 @@ static MTLRenderPassDescriptor* toMTLRenderPassDescriptor(const RenderTarget* rt
 
 static id<MTLTexture> getMTLTexture(TextureBackend* texture, int index)
 {
-    return reinterpret_cast<id<MTLTexture>>(texture->getHandler(index));
+    return (__bridge id<MTLTexture>)reinterpret_cast<void*>(texture->getHandler(index));
 }
 
 static id<MTLSamplerState> getMTLSamplerState(TextureBackend* texture)
@@ -188,13 +191,12 @@ void CommandBufferMTL::setRenderPipeline(RenderPipeline* renderPipeline)
 
 bool CommandBufferMTL::beginFrame()
 {
-    _autoReleasePool = [[NSAutoreleasePool alloc] init];
+    _autoReleasePool = objc_autoreleasePoolPush();
     dispatch_semaphore_wait(_frameBoundarySemaphore, DISPATCH_TIME_FOREVER);
 
     _mtlCommandBuffer = [_mtlCommandQueue commandBuffer];
     // [_mtlCommandBuffer enqueue];
     // commit will enqueue automatically
-    [_mtlCommandBuffer retain];
 
     BufferManager::beginFrame();
     return true;
@@ -215,7 +217,6 @@ void CommandBufferMTL::updateRenderCommandEncoder(const RenderTarget* renderTarg
     if (_mtlRenderEncoder != nil)
     {
         [_mtlRenderEncoder endEncoding];
-        [_mtlRenderEncoder release];
         _mtlRenderEncoder = nil;
     }
 
@@ -223,7 +224,6 @@ void CommandBufferMTL::updateRenderCommandEncoder(const RenderTarget* renderTarg
     _renderTargetWidth  = (unsigned int)mtlDescriptor.colorAttachments[0].texture.width;
     _renderTargetHeight = (unsigned int)mtlDescriptor.colorAttachments[0].texture.height;
     _mtlRenderEncoder   = [_mtlCommandBuffer renderCommandEncoderWithDescriptor:mtlDescriptor];
-    [_mtlRenderEncoder retain];
 }
 
 void CommandBufferMTL::beginRenderPass(const RenderTarget* renderTarget, const RenderPassDescriptor& renderPassDesc)
@@ -291,7 +291,6 @@ void CommandBufferMTL::setIndexBuffer(Buffer* buffer)
         return;
 
     _mtlIndexBuffer = static_cast<BufferMTL*>(buffer)->getMTLBuffer();
-    [_mtlIndexBuffer retain];
 }
 
 void CommandBufferMTL::drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count, bool wireframe /* unused */)
@@ -349,7 +348,6 @@ void CommandBufferMTL::readPixels(RenderTarget* rt, std::function<void(const Pix
 void CommandBufferMTL::endFrame()
 {
     [_mtlRenderEncoder endEncoding];
-    [_mtlRenderEncoder release];
     _mtlRenderEncoder = nil;
 
     auto currentDrawable = DriverMTL::getCurrentDrawable();
@@ -364,14 +362,14 @@ void CommandBufferMTL::endFrame()
     flush();
 
     DriverMTL::resetCurrentDrawable();
-    [_autoReleasePool drain];
+    objc_autoreleasePoolPop(_autoReleasePool);
+    _autoReleasePool = nullptr;
 }
 
 void CommandBufferMTL::endEncoding()
 {
     if (_mtlRenderEncoder) {
         [_mtlRenderEncoder endEncoding];
-        [_mtlRenderEncoder release];
     }
     _mtlRenderEncoder = nil;
 }
@@ -385,7 +383,6 @@ void CommandBufferMTL::flush()
 
         flushCaptureCommands();
 
-        [_mtlCommandBuffer release];
         _mtlCommandBuffer = nil;
     }
 }
@@ -432,8 +429,7 @@ void CommandBufferMTL::afterDraw()
 {
     if (_mtlIndexBuffer)
     {
-        [_mtlIndexBuffer release];
-        _mtlIndexBuffer = nullptr;
+        _mtlIndexBuffer = nil;
     }
 
     AX_SAFE_RELEASE_NULL(_programState);
@@ -557,7 +553,7 @@ void CommandBufferMTL::readPixels(TextureBackend* texture,
                                   std::size_t rectHeight,
                                   PixelBufferDescriptor& pbd)
 {
-    CommandBufferMTL::readPixels(reinterpret_cast<id<MTLTexture>>(texture->getHandler()), origX, origY, rectWidth,
+    CommandBufferMTL::readPixels((__bridge id<MTLTexture>)reinterpret_cast<void*>(texture->getHandler()), origX, origY, rectWidth,
                                  rectHeight, pbd);
 }
 
@@ -611,7 +607,6 @@ void CommandBufferMTL::readPixels(id<MTLTexture> texture,
           pbd._width  = static_cast<int>(rectWidth);
           pbd._height = static_cast<int>(rectHeight);
       }
-      [readPixelsTexture release];
     }];
     [commandBuffer commit];
     [commandBuffer waitUntilCompleted];

@@ -33,7 +33,7 @@
 #import "base/Director.h"
 #import "platform/ios/RenderHostView-ios.h"
 
-static id s_sharedDirectorCaller;
+static __strong id s_sharedDirectorCaller;
 
 @interface NSObject (CADisplayLink)
 + (id)displayLinkWithTarget:(id)arg1 selector:(SEL)arg2;
@@ -59,7 +59,6 @@ static id s_sharedDirectorCaller;
 + (void)destroy
 {
     [s_sharedDirectorCaller stopMainLoop];
-    [s_sharedDirectorCaller release];
     s_sharedDirectorCaller = nil;
 }
 
@@ -86,8 +85,6 @@ static id s_sharedDirectorCaller;
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [displayLink release];
-    [super dealloc];
 }
 
 - (void)appDidBecomeActive

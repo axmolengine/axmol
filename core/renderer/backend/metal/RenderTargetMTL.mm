@@ -130,7 +130,7 @@ RenderTargetMTL::Attachment RenderTargetMTL::getColorAttachment(int index) const
     if (isDefaultRenderTarget() && index == 0)
         return {DriverMTL::getCurrentDrawable().texture, 0};
     auto& rb = this->_color[index];
-    return RenderTargetMTL::Attachment{static_cast<bool>(rb) ? (id<MTLTexture>)(rb.texture->getHandler()) : nil,
+    return RenderTargetMTL::Attachment{static_cast<bool>(rb) ? (__bridge id<MTLTexture>)reinterpret_cast<void*>(rb.texture->getHandler()) : nil,
                                        rb.level};
 }
 
@@ -139,7 +139,7 @@ RenderTargetMTL::Attachment RenderTargetMTL::getDepthAttachment() const
     if (isDefaultRenderTarget())
         return {UtilsMTL::getDefaultDepthStencilTexture(), 0};
     auto& rb = this->_depth;
-    return RenderTargetMTL::Attachment{!!rb ? (id<MTLTexture>)(rb.texture->getHandler()) : nil, rb.level};
+    return RenderTargetMTL::Attachment{!!rb ? (__bridge id<MTLTexture>)reinterpret_cast<void*>(rb.texture->getHandler()) : nil, rb.level};
 }
 
 RenderTargetMTL::Attachment RenderTargetMTL::getStencilAttachment() const
@@ -147,7 +147,7 @@ RenderTargetMTL::Attachment RenderTargetMTL::getStencilAttachment() const
     if (isDefaultRenderTarget())
         return RenderTargetMTL::Attachment{UtilsMTL::getDefaultDepthStencilTexture(), 0};
     auto& rb = this->_stencil;
-    return RenderTargetMTL::Attachment{!!rb ? (id<MTLTexture>)(rb.texture->getHandler()) : nil, rb.level};
+    return RenderTargetMTL::Attachment{!!rb ? (__bridge id<MTLTexture>)reinterpret_cast<void*>(rb.texture->getHandler()) : nil, rb.level};
 }
 
 PixelFormat RenderTargetMTL::getColorAttachmentPixelFormat(int index) const

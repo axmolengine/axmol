@@ -1,3 +1,26 @@
+# axmol-2.11.5 (Sep 25, 2026)
+
+## Bug fixes
+
+- Expose the iOS app delegate's `UIWindow` property for SDK compatibility by @halx99
+- Fix audio seek offsets for multichannel OGG and MP3 files by @halx99 in [#3318](https://github.com/axmolengine/axmol/pull/3318)
+- Fix text alignment in Android `EditBox` while editing by @rh101 in [#3335](https://github.com/axmolengine/axmol/pull/3335)
+- Fix linking errors in `AXLinkHelpers.cmake` for release/2.11.4 by @WUCJ638 in [#3253](https://github.com/axmolengine/axmol/pull/3253)
+- Fix aliases not being cleared after each frame by @rh101 in [#3236](https://github.com/axmolengine/axmol/pull/3236)
+
+## Improvements
+
+- Enable ARC for Apple platforms by @halx99 in [#3343](https://github.com/axmolengine/axmol/pull/3343)
+- Add Xcode 27 support by @rh101 in [#3339](https://github.com/axmolengine/axmol/pull/3339)
+- Update Gradle for Axmol v2 by @theSlyest in [#3306](https://github.com/axmolengine/axmol/pull/3306)
+- Use `UIScene` on iOS 13 and later by @rh101 in [#3284](https://github.com/axmolengine/axmol/pull/3284); use the default `UISceneConfiguration` name by @rh101 in [#3297](https://github.com/axmolengine/axmol/pull/3297)
+- Set all Slider renderers to the correct global Z value by @rh101 in [#3294](https://github.com/axmolengine/axmol/pull/3294)
+- Expose `EditBox` editing state to Lua by @rh101 in [#3277](https://github.com/axmolengine/axmol/pull/3277) and [#3279](https://github.com/axmolengine/axmol/pull/3279)
+- Add a getter for keyboard modifier keys by @rh101 in [#3315](https://github.com/axmolengine/axmol/pull/3315) and [#3316](https://github.com/axmolengine/axmol/pull/3316)
+- Support keyboard modifier keys in Lua by @rh101 in [#3269](https://github.com/axmolengine/axmol/pull/3269) and [#3272](https://github.com/axmolengine/axmol/pull/3272)
+- Add `Director::setMaxDeltaTime` to cap the maximum frame delta time by @halx99 in [#3258](https://github.com/axmolengine/axmol/pull/3258)
+
+
 # axmol-2.11.4 (Jul 6, 2026)
 
 ## Bug fixes

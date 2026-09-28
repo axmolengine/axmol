@@ -47,6 +47,13 @@ if(NOT DEFINED DEPLOYMENT_TARGET)
   endif()
 endif()
 
+if(PLAT STREQUAL "iOS" AND XCODE_VERSION VERSION_GREATER_EQUAL "27.0")
+  if(DEPLOYMENT_TARGET LESS "15.0")
+    set(DEPLOYMENT_TARGET "15.0" CACHE STRING "" FORCE)
+    message(STATUS "Adjust iOS deployment target to 15.0 since Xcode 27.0+ requires a minimum deployment target of 15.0")
+  endif()
+endif()
+
 # SIMULATOR, regards x86_64 as simulator if SIMULATOR not defined
 if((NOT DEFINED SIMULATOR) AND("${ARCHS}" STREQUAL "x86_64"))
   set(SIMULATOR TRUE CACHE BOOL "" FORCE)

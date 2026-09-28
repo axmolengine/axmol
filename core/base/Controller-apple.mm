@@ -69,7 +69,6 @@ static GCControllerConnectionEventHandler* __instance = nil;
 {
     if (__instance)
     {
-        [__instance release];
         __instance = nil;
     }
 }
@@ -94,11 +93,10 @@ static GCControllerConnectionEventHandler* __instance = nil;
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 
-    // Have to reset 'copy' property to nil value to avoid memory leak.
+    // Break block ownership before the singleton goes away.
     self._connectionBlock    = nil;
     self._disconnectionBlock = nil;
 
-    [super dealloc];
 }
 
 - (void)onControllerConnected:(NSNotification*)connectedNotification

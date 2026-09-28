@@ -64,6 +64,8 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
 #import <QuartzCore/QuartzCore.h>
 
+#include <stdint.h>
+
 #import "base/Director.h"
 #import "base/Touch.h"
 #import "base/IMEDispatcher.h"
@@ -85,7 +87,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 #define IOS_MAX_TOUCHES_COUNT 10
 
 @interface RenderHostView ()
-@property(nonatomic) TextInputView* textInputView;
+@property(nonatomic, strong) TextInputView* textInputView;
 @property(nonatomic, readwrite, assign) BOOL isKeyboardShown;
 @property(nonatomic, copy) NSNotification* keyboardShowNotification;
 @property(nonatomic, assign) CGRect originalRect;
@@ -120,23 +122,23 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
 
 + (id)viewWithFrame:(CGRect)frame
 {
-    return [[[self alloc] initWithFrame:frame] autorelease];
+    return [[self alloc] initWithFrame:frame];
 }
 
 + (id)viewWithFrame:(CGRect)frame pixelFormat:(int)format
 {
-    return [[[self alloc] initWithFrame:frame pixelFormat:format] autorelease];
+    return [[self alloc] initWithFrame:frame pixelFormat:format];
 }
 
 + (id)viewWithFrame:(CGRect)frame pixelFormat:(int)format depthFormat:(int)depth
 {
-    return [[[self alloc] initWithFrame:frame
+    return [[self alloc] initWithFrame:frame
                             pixelFormat:format
                             depthFormat:depth
                      preserveBackbuffer:NO
                              sharegroup:nil
                           multiSampling:NO
-                        numberOfSamples:0] autorelease];
+                        numberOfSamples:0];
 }
 
 + (id)viewWithFrame:(CGRect)frame
@@ -147,13 +149,13 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
          multiSampling:(BOOL)multisampling
        numberOfSamples:(unsigned int)samples
 {
-    return [[[self alloc] initWithFrame:frame
+    return [[self alloc] initWithFrame:frame
                             pixelFormat:format
                             depthFormat:depth
                      preserveBackbuffer:retained
                              sharegroup:sharegroup
                           multiSampling:multisampling
-                        numberOfSamples:samples] autorelease];
+                        numberOfSamples:samples];
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -221,7 +223,6 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
         preserveBackbuffer_ = retained;
         if (![self setupSurfaceWithSharegroup:sharegroup])
         {
-            [self release];
             return nil;
         }
 #endif
@@ -248,7 +249,6 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
 
         if (![self setupSurfaceWithSharegroup:nil])
         {
-            [self release];
             return nil;
         }
 #endif
@@ -286,7 +286,7 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
     auto pixel = pixelformat_ == (int)ax::PixelFormat::RGB565 ? GL_RGB565 : GL_RGBA8_OES;
     renderer_ = [[ES3Renderer alloc] initWithDepthFormat:depth
                                            withPixelFormat:pixel
-                                            withSharegroup:(EAGLSharegroup*)sharegroup
+                                            withSharegroup:(__bridge EAGLSharegroup*)sharegroup
                                          withMultiSampling:multiSampling_
                                        withNumberOfSamples:requestedSamples_];
 
@@ -311,11 +311,6 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];  // remove keyboard notification
-#if !defined(AX_USE_METAL)
-    [renderer_ release];
-#endif
-    [self.textInputView release];
-    [super dealloc];
 }
 
 - (void)layoutSubviews
@@ -465,7 +460,7 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
     if (self.isKeyboardShown)
         [self closeKeyboardOpenedByEditBox];
 
-    UITouch* ids[IOS_MAX_TOUCHES_COUNT] = {0};
+    intptr_t ids[IOS_MAX_TOUCHES_COUNT] = {0};
     float xs[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
     float ys[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
 
@@ -478,19 +473,19 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
             break;
         }
 
-        ids[i] = touch;
+        ids[i] = reinterpret_cast<intptr_t>((__bridge void*)touch);
         xs[i]  = [touch locationInView:[touch view]].x * self.contentScaleFactor;
         ys[i]  = [touch locationInView:[touch view]].y * self.contentScaleFactor;
         ++i;
     }
 
     auto renderView = ax::Director::getInstance()->getRenderView();
-    renderView->handleTouchesBegin(i, (intptr_t*)ids, xs, ys);
+    renderView->handleTouchesBegin(i, ids, xs, ys);
 }
 
 - (void)touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    UITouch* ids[IOS_MAX_TOUCHES_COUNT] = {0};
+    intptr_t ids[IOS_MAX_TOUCHES_COUNT] = {0};
     float xs[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
     float ys[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
     float fs[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
@@ -505,7 +500,7 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
             break;
         }
 
-        ids[i] = touch;
+        ids[i] = reinterpret_cast<intptr_t>((__bridge void*)touch);
         xs[i]  = [touch locationInView:[touch view]].x * self.contentScaleFactor;
         ys[i]  = [touch locationInView:[touch view]].y * self.contentScaleFactor;
 #if defined(__IPHONE_9_0) && (__IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_9_0)
@@ -520,12 +515,12 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
     }
 
     auto renderView = ax::Director::getInstance()->getRenderView();
-    renderView->handleTouchesMove(i, (intptr_t*)ids, xs, ys, fs, ms);
+    renderView->handleTouchesMove(i, ids, xs, ys, fs, ms);
 }
 
 - (void)touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    UITouch* ids[IOS_MAX_TOUCHES_COUNT] = {0};
+    intptr_t ids[IOS_MAX_TOUCHES_COUNT] = {0};
     float xs[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
     float ys[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
 
@@ -538,19 +533,19 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
             break;
         }
 
-        ids[i] = touch;
+        ids[i] = reinterpret_cast<intptr_t>((__bridge void*)touch);
         xs[i]  = [touch locationInView:[touch view]].x * self.contentScaleFactor;
         ys[i]  = [touch locationInView:[touch view]].y * self.contentScaleFactor;
         ++i;
     }
 
     auto renderView = ax::Director::getInstance()->getRenderView();
-    renderView->handleTouchesEnd(i, (intptr_t*)ids, xs, ys);
+    renderView->handleTouchesEnd(i, ids, xs, ys);
 }
 
 - (void)touchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    UITouch* ids[IOS_MAX_TOUCHES_COUNT] = {0};
+    intptr_t ids[IOS_MAX_TOUCHES_COUNT] = {0};
     float xs[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
     float ys[IOS_MAX_TOUCHES_COUNT]     = {0.0f};
 
@@ -563,14 +558,14 @@ static ax::Rect convertKeyboardRectToViewport(CGRect rect, CGSize viewSize)
             break;
         }
 
-        ids[i] = touch;
+        ids[i] = reinterpret_cast<intptr_t>((__bridge void*)touch);
         xs[i]  = [touch locationInView:[touch view]].x * self.contentScaleFactor;
         ys[i]  = [touch locationInView:[touch view]].y * self.contentScaleFactor;
         ++i;
     }
 
     auto renderView = ax::Director::getInstance()->getRenderView();
-    renderView->handleTouchesCancel(i, (intptr_t*)ids, xs, ys);
+    renderView->handleTouchesCancel(i, ids, xs, ys);
 }
 
 - (void)showKeyboard

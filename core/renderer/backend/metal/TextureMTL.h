@@ -174,12 +174,12 @@ public:
     int getCount() const override { return _textureInfo._maxIdx + 1; }
 
     /**
-     * Get MTLTexture object. reinterpret_cast<id<MTLTexture>>(handler);
+     * Get the non-owning MTLTexture handle for this backend texture.
      * @return A MTLTexture object.
      */
     uintptr_t getHandler(int index = 0) const override
     {
-        return reinterpret_cast<uintptr_t>((void*)_textureInfo._mtlTextures[index]);
+        return reinterpret_cast<uintptr_t>((__bridge void*)_textureInfo._mtlTextures[index]);
     }
 
     /**
@@ -233,7 +233,7 @@ public:
 
     uintptr_t getHandler(int index = 0) const override
     {
-        return reinterpret_cast<uintptr_t>((void*)_textureInfo._mtlTextures[index]);
+        return reinterpret_cast<uintptr_t>((__bridge void*)_textureInfo._mtlTextures[index]);
     }
 
     /**

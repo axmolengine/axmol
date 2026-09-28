@@ -1558,6 +1558,7 @@ function setup_xcode() {
     if (!$xcode_prog) {
         throw "The command 'xcodebuild' not work, if you confirm Xcode was installed on this computer, please execute 'sudo xcode-select -switch /Applications/Xcode.app' and try again"
     }
+    return $xcode_ver
 }
 
 # google gn build system, current windows only for build angleproject/dawn on windows
@@ -1858,6 +1859,16 @@ elseif ($Global:is_wasm) {
     $ninja_prog = setup_ninja
     . setup_emsdk
 }
+elseif ($Global:is_darwin_family) {
+    $Global:xcode_ver = setup_xcode
+    if (([VersionEx]$xcode_ver -ge [VersionEx]'27.0') -and ([VersionEx]$Global:target_minsdk -lt [VersionEx]'12.0')) {
+        if ($Global:is_mac) {
+            $old_min_sdk = $Global:target_minsdk
+            $Global:target_minsdk = '12.0'
+            $1k.println("Xcode $xcode_ver is >= 27.0, forcing target_minsdk from $old_min_sdk to $Global:target_minsdk")
+        }
+    }
+}
 
 $is_host_target = $Global:is_win32 -or $Global:is_linux -or $Global:is_mac
 $is_host_cpu = $HOST_CPU -eq $TARGET_CPU
@@ -2026,10 +2037,6 @@ if (!$setupOnly) {
 
                 if ($using_ninja -and $Global:is_android) {
                     $CONFIG_ALL_OPTIONS += "-DCMAKE_MAKE_PROGRAM=$ninja_prog"
-                }
-
-                if ($cmake_generator -eq 'Xcode') {
-                    setup_xcode
                 }
             }
 

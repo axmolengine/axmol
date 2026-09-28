@@ -28,6 +28,8 @@
 @interface AxmolAppController : NSObject <UIApplicationDelegate> {
 }
 
+@property(nullable, nonatomic, strong) UIWindow* window;
+
 @property(nonatomic, readonly) UIViewController* viewController;
 
 @end

@@ -56,9 +56,6 @@ CGFloat const UI_PLACEHOLDER_TEXT_CHANGED_ANIMATION_DURATION = 0.25;
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 
-    [_placeHolderLabel release];
-
-    [super dealloc];
 }
 
 #pragma mark - Properties

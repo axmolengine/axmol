@@ -53,7 +53,7 @@ static NSAttributedString* __attributedStringWithFontSize(NSMutableAttributedStr
         [attributedString endEditing];
     }
 
-    return [[attributedString copy] autorelease];
+    return [attributedString copy];
 }
 
 int Device::getDPI()
@@ -148,7 +148,7 @@ static NSSize _calculateRealSizeForString(NSAttributedString** str, id font, NSS
                 break;
             }
 
-            NSMutableAttributedString* mutableString = [[*str mutableCopy] autorelease];
+            NSMutableAttributedString* mutableString = [*str mutableCopy];
             *str                                     = __attributedStringWithFontSize(mutableString, fontSize);
 
 #ifdef __MAC_10_11
@@ -197,7 +197,7 @@ static NSSize _calculateRealSizeForString(NSAttributedString** str, id font, NSS
                 break;
             }
 
-            NSMutableAttributedString* mutableString = [[*str mutableCopy] autorelease];
+            NSMutableAttributedString* mutableString = [*str mutableCopy];
             *str                                     = __attributedStringWithFontSize(mutableString, fontSize);
 
 #ifdef __MAC_10_11
@@ -326,7 +326,7 @@ static bool _initWithString(std::string_view text,
             dictionaryWithObjectsAndKeys:foregroundColor, NSForegroundColorAttributeName, font, NSFontAttributeName,
                                          paragraphStyle, NSParagraphStyleAttributeName, nil];
         NSAttributedString* stringWithAttributes =
-            [[[NSAttributedString alloc] initWithString:string attributes:tokenAttributesDict] autorelease];
+            [[NSAttributedString alloc] initWithString:string attributes:tokenAttributesDict];
 
         CGSize dimensions = CGSizeMake(info->width, info->height);
 
@@ -355,7 +355,7 @@ static bool _initWithString(std::string_view text,
         NSRect textRect =
             NSMakeRect(xPadding, POTHigh - dimensions.height + yPadding, realDimensions.width, realDimensions.height);
 
-        NSBitmapImageRep* offscreenRep = [[[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
+        NSBitmapImageRep* offscreenRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
                                                                                   pixelsWide:POTWide
                                                                                   pixelsHigh:POTHigh
                                                                                bitsPerSample:8
@@ -365,7 +365,7 @@ static bool _initWithString(std::string_view text,
                                                                               colorSpaceName:NSDeviceRGBColorSpace
                                                                                 bitmapFormat:0
                                                                                  bytesPerRow:4 * POTWide
-                                                                                bitsPerPixel:32] autorelease];
+                                                                                bitsPerPixel:32];
 
         NSGraphicsContext* g = [NSGraphicsContext graphicsContextWithBitmapImageRep:offscreenRep];
         [NSGraphicsContext saveGraphicsState];
@@ -383,7 +383,7 @@ static bool _initWithString(std::string_view text,
                                              paragraphStyle, NSParagraphStyleAttributeName, strokeSize,
                                              NSStrokeWidthAttributeName, strokeColor, NSStrokeColorAttributeName, nil];
             NSAttributedString* strokeString =
-                [[[NSAttributedString alloc] initWithString:string attributes:tokenAttributesDict2] autorelease];
+                [[NSAttributedString alloc] initWithString:string attributes:tokenAttributesDict2];
             [strokeString drawInRect:textRect];
         }
 
@@ -417,23 +417,26 @@ Data Device::getTextureDataForText(std::string_view text,
                                    bool& hasPremultipliedAlpha)
 {
     Data ret;
-    do
+    @autoreleasepool
     {
-        tImageInfo info = {0};
-        info.width      = textDefinition._dimensions.width;
-        info.height     = textDefinition._dimensions.height;
-
-        if (!_initWithString(text, align, textDefinition._fontName.c_str(), textDefinition._fontSize, &info,
-                             &textDefinition._fontFillColor, textDefinition._fontAlpha, textDefinition._enableWrap,
-                             textDefinition._overflow, textDefinition._stroke))
+        do
         {
-            break;
-        }
-        height = static_cast<int>(info.height);
-        width  = static_cast<int>(info.width);
-        ret.fastSet(info.data, width * height * 4);
-        hasPremultipliedAlpha = true;
-    } while (0);
+            tImageInfo info = {0};
+            info.width      = textDefinition._dimensions.width;
+            info.height     = textDefinition._dimensions.height;
+
+            if (!_initWithString(text, align, textDefinition._fontName.c_str(), textDefinition._fontSize, &info,
+                                 &textDefinition._fontFillColor, textDefinition._fontAlpha, textDefinition._enableWrap,
+                                 textDefinition._overflow, textDefinition._stroke))
+            {
+                break;
+            }
+            height = static_cast<int>(info.height);
+            width  = static_cast<int>(info.width);
+            ret.fastSet(info.data, width * height * 4);
+            hasPremultipliedAlpha = true;
+        } while (0);
+    }
 
     return ret;
 }

@@ -41,14 +41,14 @@ AlertResult showAlert(std::string_view msg, std::string_view title, AlertStyle)
     NSString* tmpTitle = svtons(title);
     NSString* tmpMsg   = svtons(msg);
 
-    NSAlert* alert = [[[NSAlert alloc] init] autorelease];
+    NSAlert* alert = [[NSAlert alloc] init];
     [alert addButtonWithTitle:@"OK"];
     [alert setMessageText:tmpMsg];
     [alert setInformativeText:tmpTitle];
     [alert setAlertStyle:NSAlertStyleWarning];
 
     auto renderView = Director::getInstance()->getRenderView();
-    id window       = (id)renderView->getCocoaWindow();
+    id window       = (__bridge id)renderView->getCocoaWindow();
     [alert beginSheetModalForWindow:window completionHandler:nil];
 
     return AlertResult::None;

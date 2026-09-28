@@ -46,7 +46,7 @@ namespace FontUtils
 {
 NSMutableParagraphStyle* _calculateParagraphStyle(bool enableWrap, int overflow)
 {
-    NSMutableParagraphStyle* paragraphStyle = [[[NSMutableParagraphStyle alloc] init] autorelease];
+    NSMutableParagraphStyle* paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.lineBreakMode            = NSLineBreakByWordWrapping;
     return paragraphStyle;
 }

@@ -120,8 +120,6 @@ bool ax::Image::saveToFile(std::string_view filename, bool isToRGB)
         outStream->write(data.bytes, data.length);
     }
 
-    [image release];
-
     if (needToCopyPixels)
     {
         delete[] pixels;
