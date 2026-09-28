@@ -10,7 +10,7 @@ axslcc=3.99.2
 
 # The cmake, @gradle @axmol-cmdline
 # as latest as possible
-cmake=4.2.0~4.4.2+
+cmake=4.2.0~4.4.3+
 
 # The ninja
 ninja=1.10.0~1.13.2+
@@ -37,7 +37,7 @@ llvm=21.1.8
 jdk=17.0.10~17.0.20.1+
 
 # The android cmdline-tools aka sdkmanager, as stable as possible
-cmdlinetools=20.0
+cmdlinetools=22.0
 
 # The android ndk version
 # as stable as possible @setup.ps1 @gradle @axmol-cmdline
