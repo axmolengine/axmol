@@ -19,7 +19,7 @@
 ## Microsoft.Web.WebView2
 
 - [![nuget](https://img.shields.io/nuget/v/Microsoft.Web.WebView2?label=Upstream)](https://www.nuget.org/packages/Microsoft.Web.WebView2)
-- Version: 1.0.4191.47
+- Version: 1.0.4258.31
 - License: https://www.nuget.org/packages/Microsoft.Web.WebView2/1.0.4191.47/License
 - Platform: Win32
 - Managed by: `cmake/Modules/AXConfigDefine.cmake`
@@ -27,7 +27,7 @@
 ## gradle
 
 - [![github](https://img.shields.io/github/v/release/gradle/gradle?label=Upstream)](https://github.com/gradle/gradle)
-- Version: 9.7.1
+- Version: 9.8.0
 - License: Apache-2.0
 - Platform: Android
 - Manged by: `1k/build.profiles`
