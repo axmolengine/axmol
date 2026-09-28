@@ -79,12 +79,18 @@ endif()
 if(AX_RENDER_API STREQUAL "auto")
   if(APPLE)
     set(AX_RENDER_API "mtl" CACHE STRING "" FORCE)
-  else()
+  elseif(ANDROID OR LINUX)
+    set(AX_RENDER_API "vk;gl" CACHE STRING "" FORCE)
+  elseif(WINRT)
+    set(AX_RENDER_API "d3d11;d3d12;gl" CACHE STRING "" FORCE)
+  elseif(WIN32)
+    set(AX_RENDER_API "d3d11;d3d12;vk;gl" CACHE STRING "" FORCE)
+  else() # WebAssembly and other platforms default to OpenGL
     set(AX_RENDER_API "gl" CACHE STRING "" FORCE)
   endif()
 endif()
 
-string(REPLACE "," " " AX_RENDER_API_LIST "${AX_RENDER_API}")
+string(REPLACE ";" " " AX_RENDER_API_LIST "${AX_RENDER_API}")
 separate_arguments(AX_RENDER_API_LIST)
 
 # Remove duplicates
