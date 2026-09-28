@@ -147,21 +147,13 @@ void EditBoxImplCommon::setFont(std::string_view fontName, int fontSize)
     _fontSize = fontSize;
     this->setNativeFont(fontName, fontSize * _label->getNodeToWorldAffineTransform().a);
 
-    if (FileUtils::getInstance()->isFileExist(fontName))
+    if (!_fontName.empty())
     {
-        TTFConfig ttfConfig(fontName, fontSize);
-        _label->setTTFConfig(ttfConfig);
+        _label->setSystemFontName(fontName);
     }
-    else
+    if (fontSize > 0)
     {
-        if (!_fontName.empty())
-        {
-            _label->setSystemFontName(fontName);
-        }
-        if (fontSize > 0)
-        {
-            _label->setSystemFontSize(fontSize);
-        }
+        _label->setSystemFontSize(fontSize);
     }
 }
 
@@ -178,21 +170,13 @@ void EditBoxImplCommon::setPlaceholderFont(std::string_view fontName, int fontSi
     _placeholderFontSize = fontSize;
     this->setNativePlaceholderFont(fontName, fontSize * _labelPlaceHolder->getNodeToWorldAffineTransform().a);
 
-    if (FileUtils::getInstance()->isFileExist(fontName))
+    if (!_placeholderFontName.empty())
     {
-        TTFConfig ttfConfig(fontName, fontSize);
-        _labelPlaceHolder->setTTFConfig(ttfConfig);
+        _labelPlaceHolder->setSystemFontName(fontName);
     }
-    else
+    if (fontSize > 0)
     {
-        if (!_placeholderFontName.empty())
-        {
-            _labelPlaceHolder->setSystemFontName(fontName);
-        }
-        if (fontSize > 0)
-        {
-            _labelPlaceHolder->setSystemFontSize(fontSize);
-        }
+        _labelPlaceHolder->setSystemFontSize(fontSize);
     }
 }
 

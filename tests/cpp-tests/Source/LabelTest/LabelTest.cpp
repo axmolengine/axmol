@@ -2218,7 +2218,7 @@ std::string LabelIssue9255Test::subtitle() const
 
 LabelSmallDimensionsTest::LabelSmallDimensionsTest()
 {
-    auto label = Label::createWithSystemFont("Hello World!", "fonts/arial.ttf", 24, Size(30.0f, 100.0f));
+    auto label = Label::createWithSystemFont("Hello World!", "Arial", 24, Size(30.0f, 100.0f));
     label->setPosition(VisibleRect::center());
     addChild(label);
 }
@@ -2237,7 +2237,7 @@ LabelIssue10089Test::LabelIssue10089Test()
 {
     auto center = VisibleRect::center();
 
-    auto labelA = Label::createWithSystemFont("create label with system font", "fonts/arial.ttf", 24);
+    auto labelA = Label::createWithSystemFont("create label with system font", "Arial", 24);
     auto size   = labelA->getContentSize();
     labelA->setDimensions(size.width, size.height);
     labelA->setPosition(center.x, center.y + 50);
@@ -2264,22 +2264,22 @@ LabelSystemFontColor::LabelSystemFontColor()
 {
     auto size = Director::getInstance()->getCanvasSize();
 
-    auto label1 = Label::createWithSystemFont("Color32::Red", "fonts/arial.ttf", 20);
+    auto label1 = Label::createWithSystemFont("Color32::Red", "Arial", 20);
     label1->setPosition(Vec2(size.width / 2, size.height * 0.3f));
     label1->setTextColor(Color32::red);
     addChild(label1);
 
-    auto label2 = Label::createWithSystemFont("Color32::Green", "fonts/arial.ttf", 20);
+    auto label2 = Label::createWithSystemFont("Color32::Green", "Arial", 20);
     label2->setPosition(Vec2(size.width / 2, size.height * 0.4f));
     label2->setTextColor(Color32::green);
     addChild(label2);
 
-    auto label3 = Label::createWithSystemFont("Color32::Blue", "fonts/arial.ttf", 20);
+    auto label3 = Label::createWithSystemFont("Color32::Blue", "Arial", 20);
     label3->setPosition(Vec2(size.width / 2, size.height * 0.5f));
     label3->setTextColor(Color32::blue);
     addChild(label3);
 
-    auto label4 = Label::createWithSystemFont("Color32(0, 0, 255, 100)", "fonts/arial.ttf", 20);
+    auto label4 = Label::createWithSystemFont("Color32(0, 0, 255, 100)", "Arial", 20);
     label4->setPosition(Vec2(size.width / 2, size.height * 0.6f));
     label4->setTextColor(Color32(0, 0, 255, 100));
     addChild(label4);
@@ -4066,11 +4066,11 @@ LabelIssueLineGap::LabelIssueLineGap()
 
     auto size = Director::getInstance()->getCanvasSize();
 
-    auto label1 = Label::createWithTTF("test \ntest", "fonts/FingerpopGap.ttf", 30);
+    auto label1 = Label::createWithTTF("test \ntest", "fonts/arial.ttf", 30);
     label1->setPosition(Vec2(size.width / 3, size.height / 2));
     addChild(label1);
 
-    auto label2 = Label::createWithSystemFont("test \ntest", "fonts/FingerpopGap.ttf", 30);
+    auto label2 = Label::createWithSystemFont("test \ntest", "Arial", 30);
     label2->setPosition(Vec2(size.width / 3 * 1.8, size.height / 2));
     addChild(label2);
 }

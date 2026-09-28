@@ -48,7 +48,6 @@ NSFont* EditBoxImplMac::createNativeFont(std::string_view fontName, int fontSize
     NSString* fntName = [[NSString alloc] initWithBytes:fontName.data()
                                                  length:fontName.length()
                                                encoding:NSUTF8StringEncoding];
-    fntName           = [[fntName lastPathComponent] stringByDeletingPathExtension];
     auto renderView   = ax::Director::getInstance()->getRenderView();
     float scaleFactor = renderView->getScaleX();
 

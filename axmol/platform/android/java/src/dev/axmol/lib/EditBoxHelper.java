@@ -214,19 +214,7 @@ public class EditBoxHelper {
                 if (editBox != null) {
                     Typeface tf;
                     if (!fontName.isEmpty()) {
-                        if (fontName.endsWith(".ttf")) {
-                            try {
-                                tf = TypefaceHelper.get(mActivity.getContext(), fontName);
-                            } catch (final Exception e) {
-                                Log.e("EditBoxHelper", "error to create ttf type face: "
-                                        + fontName);
-                                // The file may not find, use system font.
-                                tf  =  Typeface.create(fontName, Typeface.NORMAL);
-                            }
-                        } else {
-                            tf  =  Typeface.create(fontName, Typeface.NORMAL);
-                        }
-
+                        tf = Typeface.create(fontName, Typeface.NORMAL);
                     }else{
                         tf = Typeface.DEFAULT;
                     }
