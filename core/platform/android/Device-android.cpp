@@ -96,7 +96,7 @@ public:
         // Do a full lookup for the font path using FileUtils in case the given font name is a relative path to a font
         // file asset, or the path has been mapped to a different location in the app package:
         std::string fullPathOrFontName = textDefinition._fontName;
-        if (FileUtils::getInstance()->isFileExist(fullPathOrFontName))
+        if (fullPathOrFontName.ends_with(".ttf") && FileUtils::getInstance()->isFileExist(fullPathOrFontName))
         {
             fullPathOrFontName = FileUtils::getInstance()->fullPathForFilename(textDefinition._fontName);
             // If the path name returned includes the 'assets' dir then that needs to be removed, because the
