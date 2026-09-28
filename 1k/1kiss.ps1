@@ -233,6 +233,7 @@ $cmdlinetools_revs = @{
     '12.0' = '11076708'
     '19.0' = '13114758'
     '20.0' = '14742923'
+    '22.0' = '15859902' # since 22.0 macos-x86_64 and macos-arm64 are separated
 }
 
 $ndk_r23d_rev = '12186248'

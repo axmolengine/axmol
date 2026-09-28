@@ -96,7 +96,8 @@
       "artifacts": {
         "windows": "commandlinetools-win-${ver}_latest.zip",
         "linux": "commandlinetools-linux-${ver}_latest.zip",
-        "macos": "commandlinetools-mac-${ver}_latest.zip"
+        "macos-x64": "commandlinetools-mac_x86_64-${ver}_latest.zip",
+        "macos-arm64": "commandlinetools-mac_arm64-${ver}_latest.zip"
       },
       "sources": { "origin": "https://dl.google.com/android/repository/" }
     },
