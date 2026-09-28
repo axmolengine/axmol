@@ -16,7 +16,7 @@ fi
 
 pwsh_min_ver=$2
 if [ "$pwsh_min_ver" = "" ] ; then
-    pwsh_min_ver='7.3.0'
+    pwsh_min_ver='7.4.0'
 fi
 
 if [[ "$pwsh_ver" < "$pwsh_min_ver" ]] ; then
