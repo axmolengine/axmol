@@ -719,6 +719,11 @@ struct ProgramType
 
         POS_UV_COLOR_2D,
 
+        LABEL_NORMAL_ALIAS,             // label_normal_fs with PointClamp
+        LABLE_OUTLINE_ALIAS,            // label_outline_fs with PointClamp
+        POSITION_TEXTURE_COLOR_ALIAS,  // positionTextureColor_fs with PointClamp
+        DUAL_SAMPLER_ALIAS,             // dualSampler_fs with PointClamp
+
         BUILTIN_COUNT,
 
         VIDEO_TEXTURE_RGB32 = POSITION_TEXTURE_COLOR,

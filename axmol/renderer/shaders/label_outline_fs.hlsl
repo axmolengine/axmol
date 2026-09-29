@@ -1,5 +1,11 @@
 #include "base.hlsli"
 
+#if defined(USE_POINT_SAMPLER) && USE_POINT_SAMPLER
+#define TEXTURE_SAMPLER PointClamp
+#else
+#define TEXTURE_SAMPLER LinearClamp
+#endif
+
 struct PS_IN {
     float4 v_color : COLOR0;
     float2 v_texCoord : TEXCOORD0;
@@ -15,7 +21,7 @@ cbuffer fs_ub {
 
 float4 main(PS_IN input) : SV_Target0
 {
-    float4 texColor = u_tex0.Sample(LinearClamp, input.v_texCoord);
+    float4 texColor = u_tex0.Sample(TEXTURE_SAMPLER, input.v_texCoord);
     // fontAlpha == 1 means the area of solid text (without edge)
     // fontAlpha == 0 means the area outside text, including outline area
     // fontAlpha == (0, 1) means the edge of text

@@ -432,6 +432,13 @@ set_source_files_properties(
   ${_AX_ROOT}/axmol/renderer/shaders/skinPositionNormalTexture_vs.hlsl
   PROPERTIES AXSLCC_VARIANT_DEFINES "USE_NORMAL_MAPPING=1"
 )
+set_source_files_properties(
+  ${_AX_ROOT}/axmol/renderer/shaders/label_normal_fs.hlsl
+  ${_AX_ROOT}/axmol/renderer/shaders/label_outline_fs.hlsl
+  ${_AX_ROOT}/axmol/renderer/shaders/positionTextureColor_fs.hlsl
+  ${_AX_ROOT}/axmol/renderer/shaders/dualSampler_fs.hlsl
+  PROPERTIES AXSLCC_VARIANT_DEFINES "USE_POINT_SAMPLER=1"
+)
 ax_add_shader_target_for(${_AX_CORE_LIB} FILES ${_builtin_shaders} BUILTIN)
 
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MFMEDIA)
