@@ -104,7 +104,8 @@ void ProgramManager::init()
                     VertexLayoutKind::Sprite);
     registerProgram(ProgramType::POSITION_TEXTURE_COLOR_ALIAS, positionTextureColor_vs, positionTextureColor_fs_1,
                     VertexLayoutKind::Sprite);
-    registerProgram(ProgramType::DUAL_SAMPLER_ALIAS, positionTextureColor_vs, dualSampler_fs_1, VertexLayoutKind::Sprite);
+    registerProgram(ProgramType::DUAL_SAMPLER_ALIAS, positionTextureColor_vs, dualSampler_fs_1,
+                    VertexLayoutKind::Sprite);
     registerProgram(ProgramType::LABEL_DISTANCE_OUTLINE, positionTextureColor_vs, label_distanceOutline_fs,
                     VertexLayoutKind::Sprite);
     registerProgram(ProgramType::LABLE_DISTANCE_GLOW, positionTextureColor_vs, label_distanceGlow_fs,

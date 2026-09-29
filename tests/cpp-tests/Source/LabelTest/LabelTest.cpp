@@ -69,11 +69,11 @@ public:
 
     LabelSamplerTest()
     {
-        using PT = rhi::ProgramType;
+        using PT        = rhi::ProgramType;
         const auto size = Director::getInstance()->getCanvasSize();
         TTFConfig config("fonts/arial.ttf", 14);
         config.distanceFieldEnabled = false;
-        auto addTTF = [&](std::string_view text, uint32_t linearType, uint32_t pointType) {
+        auto addTTF                 = [&](std::string_view text, uint32_t linearType, uint32_t pointType) {
             auto label = Label::createWithTTF(config, text);
             addSample(label, linearType, pointType);
             return label;
@@ -108,20 +108,20 @@ public:
         std::array<uint8_t, 32 * 16 * 4> alpha;
         for (size_t i = 0; i < color.size(); i += 4)
         {
-            color[i]     = 255;
-            color[i + 1] = 128;
-            color[i + 2] = 32;
-            color[i + 3] = 255;
+            color[i]               = 255;
+            color[i + 1]           = 128;
+            color[i + 2]           = 32;
+            color[i + 3]           = 255;
             const uint8_t coverage = ((i / 4) % 8 < 4 && (i / (32 * 4)) % 8 < 4) ? 255 : 0;
             alpha[i] = alpha[i + 1] = alpha[i + 2] = coverage;
-            alpha[i + 3] = 255;
+            alpha[i + 3]                           = 255;
         }
         rhi::TextureDesc desc;
         desc.width     = 32;
         desc.height    = 16;
         desc.arraySize = 2;
         std::array<TextureSliceData, 2> slices{{{color.data(), static_cast<uint32_t>(color.size()), 0, 0},
-                                               {alpha.data(), static_cast<uint32_t>(alpha.size()), 1, 0}}};
+                                                {alpha.data(), static_cast<uint32_t>(alpha.size()), 1, 0}}};
         auto texture = new Texture2D();
         if (texture->initWithSpec(desc, slices))
         {
@@ -144,8 +144,8 @@ public:
         sdfGlow->enableGlow(Color32::blue);
 
         config.distanceFieldEnabled = false;
-        _custom = addTTF("Custom ProgramState", PT::CUSTOM_PROGRAM, PT::CUSTOM_PROGRAM);
-        _customState = new rhi::ProgramState(ProgramManager::getInstance()->loadProgram(
+        _custom                     = addTTF("Custom ProgramState", PT::CUSTOM_PROGRAM, PT::CUSTOM_PROGRAM);
+        _customState                = new rhi::ProgramState(ProgramManager::getInstance()->loadProgram(
             positionTextureColor_vs, label_normal_fs, VertexLayoutKind::Sprite));
         _custom->setProgramState(_customState, true);
         setAlias(false);
@@ -171,10 +171,7 @@ public:
     }
 
     std::string title() const override { return "Label Point / Linear sampling"; }
-    std::string subtitle() const override
-    {
-        return "TTF, BMFont and CharMap switch; SDF stays linear";
-    }
+    std::string subtitle() const override { return "TTF, BMFont and CharMap switch; SDF stays linear"; }
     Type getTestType() const override { return Type::UNIT; }
     float getDuration() const override { return 5.0f; }
     std::string getExpectedOutput() const override { return "Passed"; }
@@ -195,8 +192,7 @@ private:
     {
         const auto size  = Director::getInstance()->getCanvasSize();
         const auto index = _samples.size();
-        label->setPosition(size.width * (index % 2 == 0 ? 0.25f : 0.75f),
-                           size.height * (0.74f - 0.095f * (index / 2)));
+        label->setPosition(size.width * (index % 2 == 0 ? 0.25f : 0.75f), size.height * (0.74f - 0.095f * (index / 2)));
         addChild(label);
         _samples.push_back({label, linearType, pointType});
     }
@@ -221,8 +217,8 @@ private:
             return;
         for (const auto& sample : _samples)
         {
-            auto program = sample.label->getProgramState()->getProgram();
-            auto expectedType = _alias ? sample.pointType : sample.linearType;
+            auto program         = sample.label->getProgramState()->getProgram();
+            auto expectedType    = _alias ? sample.pointType : sample.linearType;
             auto expectedSampler = _alias && sample.pointType != sample.linearType ? "PointClamp" : "LinearClamp";
             const auto& samplers = program->getActiveSamplerInfos();
             if (program->getProgramType() != expectedType || samplers.size() != 1 ||
@@ -249,13 +245,13 @@ private:
     }
 
     std::vector<Sample> _samples;
-    Label* _dual = nullptr;
-    Label* _custom = nullptr;
-    MenuItemFont* _toggle = nullptr;
+    Label* _dual                    = nullptr;
+    Label* _custom                  = nullptr;
+    MenuItemFont* _toggle           = nullptr;
     rhi::ProgramState* _customState = nullptr;
     CustomEventListener* _afterDraw = nullptr;
     std::string _failure;
-    bool _alias = false;
+    bool _alias    = false;
     bool _complete = false;
 };
 
