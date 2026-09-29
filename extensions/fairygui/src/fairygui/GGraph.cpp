@@ -128,8 +128,8 @@ void GGraph::updateShape()
         if (_cornerRadius != nullptr)
         {
             _shape->drawSolidCornerRect(Vec2::zero, Vec2(_size.width, _size.height), _fillColor, _lineColor,
-                                         (float)_lineSize, _cornerRadius[3], _cornerRadius[0], _cornerRadius[1],
-                                         _cornerRadius[2]);
+                                         (float)_lineSize, _cornerRadius[2], _cornerRadius[0], _cornerRadius[1],
+                                         _cornerRadius[3]);
         }
         else if (_lineSize > 0)
         {
