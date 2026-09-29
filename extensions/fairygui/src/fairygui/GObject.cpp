@@ -276,12 +276,12 @@ void GObject::setScale(float xv, float yv)
 
 void GObject::setSkewX(float value)
 {
-    _displayObject->setRotationSkewX(value);
+    _displayObject->setSkewX(value);
 }
 
 void GObject::setSkewY(float value)
 {
-    _displayObject->setRotationSkewY(value);
+    _displayObject->setSkewY(value);
 }
 
 void GObject::setRotation(float value)

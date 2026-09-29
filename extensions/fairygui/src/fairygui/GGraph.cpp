@@ -125,7 +125,13 @@ void GGraph::updateShape()
     {
     case 1:
     {
-        if (_lineSize > 0)
+        if (_cornerRadius != nullptr)
+        {
+            _shape->drawSolidCornerRect(Vec2::zero, Vec2(_size.width, _size.height), _fillColor, _lineColor,
+                                         (float)_lineSize, _cornerRadius[2], _cornerRadius[0], _cornerRadius[1],
+                                         _cornerRadius[3]);
+        }
+        else if (_lineSize > 0)
         {
             float wl = _size.width - _lineSize;
             float hl = _size.height - _lineSize;
