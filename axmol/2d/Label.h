@@ -816,6 +816,7 @@ protected:
     void createShadowSpriteForSystemFont(const FontDefinition& fontDef);
 
     virtual void updateShaderProgram();
+    uint32_t getBuiltinProgramType();
     virtual void updateFontScale();
 
     void scaleFontSize(float fontSize);
@@ -848,6 +849,7 @@ protected:
     bool _contentDirty;
     bool _useDistanceField;
     bool _useA8Shader;
+    bool _usesBuiltinLabelProgram;
     bool _shadowDirty;
 
     bool _shadowEnabled;

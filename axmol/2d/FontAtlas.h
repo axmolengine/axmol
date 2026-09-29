@@ -97,16 +97,14 @@ public:
      */
     void clearTexturesAtlas();
 
-    /** sets font texture parameters:
-     - GL_TEXTURE_MIN_FILTER = GL_LINEAR
-     - GL_TEXTURE_MAG_FILTER = GL_LINEAR
+    /** Enables linear sampling on the next draw of non-distance-field Labels using this atlas and built-in shaders.
+     * Distance-field Labels always use linear sampling.
      */
     void setAntiAliasTexParameters();
 
-    /** sets font texture parameters:
-    - GL_TEXTURE_MIN_FILTER = GL_NEAREST
-    - GL_TEXTURE_MAG_FILTER = GL_NEAREST
-    */
+    /** Enables point sampling on the next draw of non-distance-field Labels using this atlas and built-in shaders.
+     * Distance-field Labels always use linear sampling.
+     */
     void setAliasTexParameters();
 
 protected:
