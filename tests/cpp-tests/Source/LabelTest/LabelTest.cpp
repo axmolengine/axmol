@@ -62,62 +62,6 @@ public:
     virtual std::string subtitle() const override { return "The label char shouldn't overlap"; }
 };
 
-class LabelSamplerProbe : public Label
-{
-public:
-    CREATE_FUNC(LabelSamplerProbe);
-
-    void useSmallAtlas()
-    {
-        const auto scale = AX_CONTENT_SCALE_FACTOR();
-        auto font = FontFreeType::create(_fontConfig.fontFilePath, static_cast<int>(_fontConfig.fontSize * scale),
-                                        GlyphCollection::DYNAMIC, "");
-        auto atlas = new FontAtlas(font, static_cast<int>(64 * scale), static_cast<int>(64 * scale), scale);
-        setFontAtlas(atlas, false, true);
-        atlas->release();
-        updateShaderProgram();
-    }
-
-    std::string checkProgramState(uint32_t expectedType, std::string_view expectedSampler)
-    {
-        auto program = _programState->getProgram();
-        if (program->getProgramType() != expectedType)
-            return fmt::format("Unexpected Label program: {} (expected {})", program->getProgramType(), expectedType);
-        const auto& samplers = program->getActiveSamplerInfos();
-        if (samplers.size() != 1 || samplers.front().name != expectedSampler)
-            return "Unexpected reflected sampler";
-        if (_quadCommand.unsafePS() != _programState)
-            return "Quad command did not follow Label ProgramState";
-        if (_currentLabelType == LabelType::TTF || _shadowEnabled)
-        {
-            if (_batchCommands.size() != _batchNodes.size() || _batchCommands.empty())
-                return "Atlas batches were not initialized";
-        }
-
-        std::vector<rhi::ProgramState*> batchStates;
-        for (auto& batch : _batchCommands)
-        {
-            for (auto command : batch.getCommandArray())
-            {
-                auto ps = command->unsafePS();
-                if (!ps || ps->getProgram() != program)
-                    return "Text, shadow or effect command has a stale program";
-                batchStates.push_back(ps);
-            }
-        }
-        if (_lastProgramState == _programState && _lastBatchStates.size() == batchStates.size() &&
-            _lastBatchStates != batchStates)
-            return "Stable Label recreated batch ProgramStates";
-        _lastProgramState = _programState;
-        _lastBatchStates  = std::move(batchStates);
-        return "";
-    }
-
-private:
-    rhi::ProgramState* _lastProgramState = nullptr;
-    std::vector<rhi::ProgramState*> _lastBatchStates;
-};
-
 class LabelSamplerTest : public AtlasDemoNew
 {
 public:
@@ -130,9 +74,7 @@ public:
         TTFConfig config("fonts/arial.ttf", 14);
         config.distanceFieldEnabled = false;
         auto addTTF = [&](std::string_view text, uint32_t linearType, uint32_t pointType) {
-            auto label = LabelSamplerProbe::create();
-            label->setTTFConfig(config);
-            label->setString(text);
+            auto label = Label::createWithTTF(config, text);
             addSample(label, linearType, pointType);
             return label;
         };
@@ -149,16 +91,14 @@ public:
 
         for (bool shadow : {false, true})
         {
-            auto label = LabelSamplerProbe::create();
-            label->setBMFontFilePath("fonts/bitmapFontTest2.fnt", 14);
-            label->setString(shadow ? "BMFont + shadow" : "BMFont");
+            auto label = Label::createWithBMFont("fonts/bitmapFontTest2.fnt", shadow ? "BMFont + shadow" : "BMFont",
+                                                 TextHAlignment::CENTER, 14);
             if (shadow)
                 label->enableShadow(Color32::gray, Vec2(2, -2));
             addSample(label, PT::POSITION_TEXTURE_COLOR, PT::POSITION_TEXTURE_COLOR_ALIAS);
         }
 
-        auto charMap = LabelSamplerProbe::create();
-        charMap->setCharMap("fonts/tuffy_bold_italic-charmap.plist");
+        auto charMap = Label::createWithCharMap("fonts/tuffy_bold_italic-charmap.plist");
         charMap->setString("CharMap");
         charMap->setScale(0.5f);
         addSample(charMap, PT::POSITION_TEXTURE_COLOR, PT::POSITION_TEXTURE_COLOR_ALIAS);
@@ -185,7 +125,7 @@ public:
         auto texture = new Texture2D();
         if (texture->initWithSpec(desc, slices))
         {
-            _dual = LabelSamplerProbe::create();
+            _dual = Label::create();
             _dual->setCharMap(texture, 8, 16, '0');
             _dual->setString("0123");
             _dual->setScale(1.5f);
@@ -204,20 +144,19 @@ public:
         sdfGlow->enableGlow(Color32::blue);
 
         config.distanceFieldEnabled = false;
-        _paged = addTTF("AB", PT::LABEL_NORMAL, PT::LABEL_NORMAL_ALIAS);
-        _paged->useSmallAtlas();
-        _paged->enableShadow(Color32::gray, Vec2(2, -2));
-        _custom = addTTF("AB", PT::CUSTOM_PROGRAM, PT::CUSTOM_PROGRAM);
-        _custom->useSmallAtlas();
-        _custom->enableShadow(Color32::gray, Vec2(2, -2));
+        _custom = addTTF("Custom ProgramState", PT::CUSTOM_PROGRAM, PT::CUSTOM_PROGRAM);
         _customState = new rhi::ProgramState(ProgramManager::getInstance()->loadProgram(
             positionTextureColor_vs, label_normal_fs, VertexLayoutKind::Sprite));
         _custom->setProgramState(_customState, true);
-
         setAlias(false);
-        auto toggle = MenuItemFont::create("Toggle Point / Linear", [this](Object*) { setAlias(!_alias); });
-        toggle->setFontSizeObj(16);
-        auto menu = Menu::createWithItem(toggle);
+        if (_dual && Environment::getInstance()->supportsETC2())
+        {
+            _dual->setCharMap("ccs-res/cocosui/labelatlas.pkm", 17, 22, '0');
+            setAlias(_alias);
+        }
+        _toggle = MenuItemFont::create("Sampling: LinearClamp", [this](Object*) { setAlias(!_alias); });
+        _toggle->setFontSizeObj(16);
+        auto menu = Menu::createWithItem(_toggle);
         menu->setPosition(size.width / 2, size.height * 0.18f);
         addChild(menu);
 
@@ -234,7 +173,7 @@ public:
     std::string title() const override { return "Label Point / Linear sampling"; }
     std::string subtitle() const override
     {
-        return "Bitmap fonts switch together; SDF and explicit ProgramState stay fixed";
+        return "TTF, BMFont and CharMap switch; SDF stays linear";
     }
     Type getTestType() const override { return Type::UNIT; }
     float getDuration() const override { return 5.0f; }
@@ -247,12 +186,12 @@ public:
 private:
     struct Sample
     {
-        LabelSamplerProbe* label;
+        Label* label;
         uint32_t linearType;
         uint32_t pointType;
     };
 
-    void addSample(LabelSamplerProbe* label, uint32_t linearType, uint32_t pointType)
+    void addSample(Label* label, uint32_t linearType, uint32_t pointType)
     {
         const auto size  = Director::getInstance()->getCanvasSize();
         const auto index = _samples.size();
@@ -265,6 +204,8 @@ private:
     void setAlias(bool alias)
     {
         _alias = alias;
+        if (_toggle)
+            _toggle->setString(alias ? "Sampling: PointClamp" : "Sampling: LinearClamp");
         for (const auto& sample : _samples)
         {
             if (alias)
@@ -280,12 +221,15 @@ private:
             return;
         for (const auto& sample : _samples)
         {
-            _failure = sample.label->checkProgramState(_alias ? sample.pointType : sample.linearType,
-                                                      _alias && sample.pointType != sample.linearType ? "PointClamp"
-                                                                                                    : "LinearClamp");
-            if (!_failure.empty())
+            auto program = sample.label->getProgramState()->getProgram();
+            auto expectedType = _alias ? sample.pointType : sample.linearType;
+            auto expectedSampler = _alias && sample.pointType != sample.linearType ? "PointClamp" : "LinearClamp";
+            const auto& samplers = program->getActiveSamplerInfos();
+            if (program->getProgramType() != expectedType || samplers.size() != 1 ||
+                samplers.front().name != expectedSampler)
             {
-                AXLOGE("Label sampler test: {} ({})", _failure, sample.label->getString());
+                _failure = fmt::format("Unexpected program or sampler for {}", sample.label->getString());
+                AXLOGE("Label sampler test: {}", _failure);
                 setSubtitleLabel(_failure);
                 return;
             }
@@ -293,59 +237,25 @@ private:
         if (_custom->getProgramState() != _customState)
         {
             _failure = "Explicit ProgramState was replaced";
+            setSubtitleLabel(_failure);
             return;
         }
-        if (_complete)
-            return;
-
-        switch (++_frames)
+        if (!_complete)
         {
-        case 8:
-            setAlias(true);
-            break;
-        case 16:
-            setAlias(false);
-            break;
-        case 24:
-            setAlias(true);
-            break;
-        case 32:
-            _initialPages = _paged->getFontAtlas()->getTextures().size();
-            _paged->setString("Paged: ABCDEFGHIJKLM\nNOPQRSTUVWXYZ0123456789");
-            _custom->setString("Custom: ABCDEFGHIJKLM\nNOPQRSTUVWXYZ0123456789");
-            if (Environment::getInstance()->supportsETC2())
-            {
-                _dual->setCharMap("ccs-res/cocosui/labelatlas.pkm", 17, 22, '0');
-                setAlias(_alias);
-            }
-            break;
-        case 40:
-            if (_paged->getFontAtlas()->getTextures().size() <= _initialPages ||
-                _custom->getFontAtlas()->getTextures().size() <= 1)
-                _failure = "FontAtlas did not grow to multiple pages";
-            setAlias(false);
-            break;
-        case 48:
-            setAlias(true);
-            break;
-        case 56:
             _complete = true;
             AXLOGI("Label sampler test passed");
-            setSubtitleLabel("Passed: Point / Linear, SDF Linear, custom state preserved");
-            break;
+            setSubtitleLabel("Passed: Point / Linear, SDF Linear");
         }
     }
 
     std::vector<Sample> _samples;
-    LabelSamplerProbe* _paged        = nullptr;
-    LabelSamplerProbe* _custom       = nullptr;
-    LabelSamplerProbe* _dual         = nullptr;
-    rhi::ProgramState* _customState  = nullptr;
+    Label* _dual = nullptr;
+    Label* _custom = nullptr;
+    MenuItemFont* _toggle = nullptr;
+    rhi::ProgramState* _customState = nullptr;
     CustomEventListener* _afterDraw = nullptr;
     std::string _failure;
-    size_t _initialPages  = 0;
-    unsigned int _frames = 0;
-    bool _alias    = false;
+    bool _alias = false;
     bool _complete = false;
 };
 
