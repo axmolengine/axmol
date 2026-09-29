@@ -1,5 +1,5 @@
 
-local MainScene = class("MainScene", cc.load("mvc").ViewBase)
+local MainScene = class("MainScene", ax.load("mvc").ViewBase)
 
 function MainScene:onCreate()
     -- add background image
@@ -8,7 +8,7 @@ function MainScene:onCreate()
         :addTo(self)
 
     -- add HelloWorld label
-    cc.Label:createWithSystemFont("Hello World", "Arial", 40)
+    ax.Label:createWithSystemFont("Hello World", "Arial", 40)
         :move(display.cx, display.cy + 200)
         :addTo(self)
 

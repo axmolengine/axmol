@@ -731,6 +731,11 @@ private:
         axlua::adapter::push_literal(state, ".classname");
         lua_pushlstring(state, name.data(), name.size());
         lua_rawset(state, classTable);
+        // class() uses this marker to create native userdata. Store it on
+        // the public class table, bypassing sol2's __newindex storage.
+        axlua::adapter::push_literal(state, ".isclass");
+        lua_pushboolean(state, 1);
+        lua_rawset(state, classTable);
         axlua::adapter::push_literal(state, "__index");
         lua_pushcfunction(state, &class_index);
         lua_rawset(state, classTable);
@@ -1174,6 +1179,12 @@ sol::optional<T*> sol_lua_check_get(sol::types<T*>,
                                     Handler&& handler,
                                     sol::stack::record& tracking)
 {
+    if (lua_isnoneornil(state, index))
+    {
+        tracking.use(1);
+        return static_cast<T*>(nullptr);
+    }
+
     if (axlua::is_invalid_userdata(state, index))
     {
         handler(state, index, sol::type::userdata, sol::type::userdata, "native object has expired");
@@ -1183,7 +1194,10 @@ sol::optional<T*> sol_lua_check_get(sol::types<T*>,
     // Persistent objects use per-userdata WeakPtr metadata; borrowed Events
     // use the invalid marker set when their callback scope ends. Both are
     // checked above without consulting a potentially reused native address.
-    return sol::stack::unqualified_getter<sol::detail::as_pointer_tag<T>>::get(state, index, tracking);
+    // Delegate to the checked getter so sol_lua_check validates the native
+    // type before extracting a pointer. A table receiver must raise a Lua
+    // error rather than dereferencing lua_touserdata's null result.
+    return sol::stack::unqualified_check_getter<T*>::get(state, index, std::forward<Handler>(handler), tracking);
 }
 }  // namespace ax
 
