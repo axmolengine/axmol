@@ -29,7 +29,22 @@ bool checkLua(lua_State* state, const char* script)
 bool checkMethodDispatch(lua_State* state)
 {
     return checkLua(state, R"lua(
+        -- class("ViewBase", ax.Node) must recognize the native base and
+        -- create userdata, not a Lua table used as a C++ method receiver.
+        assert(rawget(ax.Node, ".isclass") == true)
+
+        -- The checked member path must reject invalid receivers before
+        -- attempting pointer extraction, including unrelated userdata.
+        local setOnEnterCallback = ax.Node.setOnEnterCallback
+        for _, receiver in ipairs({{}, ax.Node, false, ax.Director:getInstance()}) do
+            local ok = pcall(setOnEnterCallback, receiver, function() end)
+            assert(not ok)
+        end
+        assert(not pcall(setOnEnterCallback, nil, function() end))
+
         local node = ax.Node:create()
+        node:setOnEnterCallback(function() end)
+        node:setOnEnterCallback(nil)
         local child = ax.Node.create()
         local setPosition = node.setPosition
         assert(select('#', setPosition(node, 12, 34)) == 0)

@@ -221,6 +221,11 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     "${AX_ROOT_DIR}/extensions/spine/runtime/include" "${AX_ROOT_DIR}/extensions/spine/src"
   )
 
+  if(AX_PROFILER_BACKEND STREQUAL "TRACY")
+    list(APPEND LIBS "TracyClient")
+    target_include_directories(${APP_NAME} PRIVATE "${Tracy_SOURCE_DIR}/public")
+  endif()
+
   if(WINDOWS)
     target_link_libraries(${APP_NAME}
       ${LIBS}

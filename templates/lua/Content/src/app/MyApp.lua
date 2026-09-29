@@ -1,5 +1,5 @@
 
-local MyApp = class("MyApp", cc.load("mvc").AppBase)
+local MyApp = class("MyApp", ax.load("mvc").AppBase)
 
 function MyApp:onCreate()
     math.randomseed(os.time())

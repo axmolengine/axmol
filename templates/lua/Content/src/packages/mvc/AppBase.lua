@@ -24,7 +24,7 @@ function AppBase:ctor(configs)
     end
 
     if AX_SHOW_FPS then
-        cc.Director:getInstance():setDisplayStats(true)
+        ax.Director:getInstance():setStatsDisplay(true)
     end
 
     -- event
