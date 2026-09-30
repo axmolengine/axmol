@@ -38,7 +38,6 @@ dependencies {
 
     def media3_ver = buildProfiles['media3']
     def annotation_ver = buildProfiles['annotation']
-    def preference_ver = buildProfiles['preference']
     def appcompat_ver = buildProfiles['appcompat']
     def guava_ver = buildProfiles['guava']
 
@@ -58,7 +57,6 @@ dependencies {
     //api "androidx.media3:media3-exoplayer-ima:$media3_version"
 
     implementation "androidx.annotation:annotation:$annotation_ver"
-    implementation "androidx.preference:preference:$preference_ver"
     api "androidx.appcompat:appcompat:$appcompat_ver"
 
     api ("com.google.guava:guava:$guava_ver-android") {

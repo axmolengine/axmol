@@ -76,7 +76,6 @@ androidstudio=2026.1.1+
 appcompat=1.7.1
 media3=1.8.1
 annotation=1.10.0
-preference=1.2.1
 guava=33.7.1
 
 # --- endregion

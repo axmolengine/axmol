@@ -156,7 +156,7 @@ public class AxmolWebView extends WebView {
         layoutParams.topMargin = top;
         layoutParams.width = maxWidth;
         layoutParams.height = maxHeight;
-        layoutParams.gravity = Gravity.TOP | Gravity.START;
+        layoutParams.gravity = Gravity.TOP | Gravity.LEFT;
         this.setLayoutParams(layoutParams);
     }
 }

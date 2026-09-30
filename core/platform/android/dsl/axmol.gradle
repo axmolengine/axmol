@@ -161,7 +161,6 @@ class AxmolUtils {
         buildProfiles['appcompat'] = profiles['appcompat']
         buildProfiles['media3'] = profiles['media3']
         buildProfiles['annotation'] = profiles['annotation']
-        buildProfiles['preference'] = profiles['preference']
         buildProfiles['guava'] = profiles['guava']
 
         return buildProfiles

@@ -189,16 +189,6 @@ public abstract class AxmolActivity extends AppCompatActivity implements AxmolEn
 
         // Audio configuration
         this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
-
-        ActivityResultLauncher<Intent> customActivityResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-                    Intent data = result.getData();
-                    // Gérer le retour de l'activité ici
-                }
-            }
-        );
     }
 
     //native method,call RenderViewImpl::getGLContextAttrs() to get the OpenGL ES context attributions
