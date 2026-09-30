@@ -100,6 +100,11 @@ void EditBoxImplWin::cleanupEditCtrl()
 {
     if (_hwndEdit)
     {
+        if (s_previousFocusWnd == _hwndEdit)
+        {
+            s_previousFocusWnd = s_hwndCocos;
+        }
+
         SetWindowLongPtrW(_hwndEdit, GWLP_WNDPROC, (LONG_PTR)_prevWndProc);
         ::DestroyWindow(_hwndEdit);
         _hasFocus            = false;
@@ -129,7 +134,7 @@ void EditBoxImplWin::createEditCtrl(bool singleLine)
         _prevWndProc = (WNDPROC)SetWindowLongPtrW(_hwndEdit, GWLP_WNDPROC, (LONG_PTR)WindowProc);
 
         ::SendMessageW(_hwndEdit, EM_LIMITTEXT, this->_maxLength, 0);
-        s_previousFocusWnd = s_hwndCocos;
+
         this->setNativeFont(this->getNativeDefaultFontName(), this->_fontSize);
         this->setNativeText(this->_text.c_str());
     }
