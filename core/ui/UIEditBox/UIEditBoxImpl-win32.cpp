@@ -389,12 +389,14 @@ void EditBoxImplWin::_WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
         }
         break;
     case WM_KILLFOCUS:
+        _hasFocus = false;
         // when app enter background, this message also be called.
         if (this->_editingMode && !::IsWindowVisible(hwnd))
         {
             this->editBoxEditingDidEnd(this->getText(), _endAction);
         }
         break;
+    default:
         break;
     }
 }
