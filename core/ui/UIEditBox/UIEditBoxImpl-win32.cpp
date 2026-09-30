@@ -116,7 +116,7 @@ void EditBoxImplWin::createEditCtrl(bool singleLine)
     {
         _hwndEdit = ::CreateWindowExW(WS_EX_CLIENTEDGE, L"EDIT",  // predefined class
                                       NULL,                       // no window title
-                                      WS_CHILD | ES_LEFT | WS_BORDER | WS_EX_TRANSPARENT | WS_TABSTOP | ES_AUTOHSCROLL |
+                                      WS_CHILD | ES_LEFT | WS_BORDER | WS_TABSTOP | ES_AUTOHSCROLL |
                                           (singleLine ? 0 : ES_AUTOVSCROLL | ES_MULTILINE),
                                       0, 0, 0,
                                       0,                        // set size in WM_SIZE message
@@ -262,7 +262,7 @@ void EditBoxImplWin::setNativeVisible(bool visible)
 {
     if (visible)
     {
-        ::ShowWindow(_hwndEdit, SW_SHOW);
+        ::ShowWindow(_hwndEdit, SW_SHOWNOACTIVATE);
     }
     else
     {
@@ -273,7 +273,7 @@ void EditBoxImplWin::setNativeVisible(bool visible)
 void EditBoxImplWin::updateNativeFrame(const Rect& rect)
 {
     ::SetWindowPos(_hwndEdit, HWND_NOTOPMOST, rect.origin.x, rect.origin.y, rect.size.width, rect.size.height,
-                   SWP_NOZORDER);
+                   SWP_NOZORDER | SWP_NOACTIVATE);
 }
 
 const char* EditBoxImplWin::getNativeDefaultFontName()
@@ -283,12 +283,22 @@ const char* EditBoxImplWin::getNativeDefaultFontName()
 
 void EditBoxImplWin::nativeOpenKeyboard()
 {
-    ::PostMessageW(_hwndEdit, WM_SETFOCUS, (WPARAM)s_previousFocusWnd, 0);
-    //        s_previousFocusWnd = hwndEdit;
+    auto* renderView     = Director::getInstance()->getRenderView();
+    auto* renderViewImpl = static_cast<RenderViewImpl*>(renderView);
+    GLFWwindow* window   = renderViewImpl->getWindow();
+
+    const int previousAutoIconify = glfwGetWindowAttrib(window, GLFW_AUTO_ICONIFY);
+
+    glfwSetWindowAttrib(window, GLFW_AUTO_ICONIFY, GLFW_FALSE);
+
     this->editBoxEditingDidBegin();
 
     auto rect = ui::Helper::convertBoundingBoxToScreen(_editBox);
     this->updateNativeFrame(rect);
+
+    ::SetFocus(_hwndEdit);
+
+    glfwSetWindowAttrib(window, GLFW_AUTO_ICONIFY, previousAutoIconify);
 }
 
 void EditBoxImplWin::nativeCloseKeyboard()
@@ -352,7 +362,6 @@ void EditBoxImplWin::_WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
     case WM_SETFOCUS:
         if (hwnd != s_previousFocusWnd)
         {
-            ::PostMessageW(hwnd, WM_ACTIVATE, (WPARAM)s_previousFocusWnd, 0);
             ::PostMessageW(hwnd, WM_SETCURSOR, (WPARAM)s_previousFocusWnd, 0);
 
             if (_initialFocus && _editBoxInputMode != ax::ui::EditBox::InputMode::ANY)
