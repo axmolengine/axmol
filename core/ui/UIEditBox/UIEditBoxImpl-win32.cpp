@@ -301,7 +301,7 @@ void EditBoxImplWin::setNativeMaxLength(int maxLength)
     ::SendMessageW(_hwndEdit, EM_LIMITTEXT, maxLength, 0);
 }
 
-void EditBoxImplWin::_WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT EditBoxImplWin::_WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
     {
@@ -347,6 +347,17 @@ void EditBoxImplWin::_WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
                     s_previousFocusWnd = s_hwndCocos;
                 }
             }
+            else if (s_previousFocusWnd != s_hwndCocos)
+            {
+                const auto currentLength = ::GetWindowTextLengthW(s_previousFocusWnd);
+                const auto maxLength     = ::SendMessageW(s_previousFocusWnd, EM_GETLIMITTEXT, 0, 0);
+
+                // A Return key needs 2 character spaces (\r\n)
+                if (currentLength + 2 > maxLength)
+                {
+                    return 0;   // Ignore this input
+                }                
+            }
         }
         break;
     case WM_SETFOCUS:
@@ -390,6 +401,8 @@ void EditBoxImplWin::_WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
     default:
         break;
     }
+
+    return ::CallWindowProcW(_prevWndProc, hwnd, uMsg, wParam, lParam);
 }
 
 std::string EditBoxImplWin::getText() const
@@ -457,7 +470,7 @@ LRESULT EditBoxImplWin::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
     EditBoxImplWin* pThis = (EditBoxImplWin*)GetWindowLongPtrW(hwnd, GWLP_USERDATA);
     if (pThis)
     {
-        pThis->_WindowProc(hwnd, uMsg, wParam, lParam);
+        return pThis->_WindowProc(hwnd, uMsg, wParam, lParam);
     }
 
     return ::CallWindowProcW(pThis->_prevWndProc, hwnd, uMsg, wParam, lParam);
