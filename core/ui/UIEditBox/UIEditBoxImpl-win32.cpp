@@ -371,6 +371,8 @@ void EditBoxImplWin::_WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
         }
         break;
     case WM_SETFOCUS:
+        _hasFocus = true;
+
         if (hwnd != s_previousFocusWnd)
         {
             ::PostMessageW(hwnd, WM_SETCURSOR, (WPARAM)s_previousFocusWnd, 0);
@@ -395,7 +397,6 @@ void EditBoxImplWin::_WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
             }
 
             s_previousFocusWnd         = _hwndEdit;
-            _hasFocus                  = true;
             this->_changedTextManually = false;
         }
         break;
