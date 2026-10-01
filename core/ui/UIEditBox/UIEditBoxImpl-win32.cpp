@@ -247,8 +247,14 @@ void EditBoxImplWin::setNativeText(const char* pText)
     std::u16string utf16Result;
     std::string text(pText);
     ax::StringUtils::UTF8ToUTF16(text, utf16Result);
-    this->_changedTextManually = true;
+
+    const bool previousChangedTextManually = _changedTextManually;
+    _changedTextManually                   = true;
+
     ::SetWindowTextW(_hwndEdit, (LPCWSTR)utf16Result.c_str());
+
+    _changedTextManually = previousChangedTextManually;
+
     int textLen = text.size();
     ::SendMessageW(_hwndEdit, EM_SETSEL, textLen, textLen);
 
@@ -434,7 +440,6 @@ LRESULT EditBoxImplWin::hookGLFWWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
             if (pThis && !pThis->_changedTextManually)
             {
                 pThis->editBoxEditingChanged(pThis->getText());
-                pThis->_changedTextManually = false;
             }
         }
         break;
