@@ -657,6 +657,7 @@ bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::st
     {
         const auto& sourceNodes = document["nodes"];
         std::vector<uint8_t> visitState(sourceNodes.Size(), 0);
+        std::vector<uint8_t> parentCount(sourceNodes.Size(), 0);
         auto validateNode = [&](auto&& self, size_t nodeIndex) -> bool {
             if (visitState[nodeIndex] == 1)
                 return false;
@@ -673,6 +674,7 @@ bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::st
                 for (const auto& child : sourceNode["children"].GetArray())
                 {
                     if (!child.IsUint() || child.GetUint() >= sourceNodes.Size() ||
+                        ++parentCount[child.GetUint()] > 1 ||
                         !self(self, static_cast<size_t>(child.GetUint())))
                         return false;
                 }
