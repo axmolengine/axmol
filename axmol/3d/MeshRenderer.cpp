@@ -10,6 +10,7 @@
 
 #include "axmol/3d/MeshRenderer.h"
 #include "axmol/3d/ObjLoader.h"
+#include "axmol/3d/GltfLoader.h"
 #include "axmol/3d/MeshSkin.h"
 #include "axmol/3d/Bundle3D.h"
 #include "axmol/3d/MeshMaterial.h"
@@ -29,6 +30,9 @@
 #include "axmol/renderer/Material.h"
 #include "axmol/renderer/Technique.h"
 #include "axmol/renderer/Pass.h"
+
+#include <algorithm>
+#include <cctype>
 
 namespace ax
 {
@@ -225,9 +229,16 @@ bool MeshRenderer::loadFromFile(std::string_view path,
     std::string fullPath = FileUtils::getInstance()->fullPathForFilename(path);
 
     std::string ext = FileUtils::getPathExtension(path);
+    std::transform(ext.begin(), ext.end(), ext.begin(), [](unsigned char character) {
+        return static_cast<char>(std::tolower(character));
+    });
     if (ext == ".obj")
     {
         return Bundle3D::loadObj(*meshdatas, *materialdatas, *nodedatas, fullPath);
+    }
+    else if (ext == ".gltf" || ext == ".glb")
+    {
+        return GltfLoader::load(*meshdatas, *materialdatas, *nodedatas, fullPath);
     }
     else if (ext == ".c3b" || ext == ".c3t")
     {
@@ -372,7 +383,8 @@ MeshRenderer* MeshRenderer::createMeshRendererNode(NodeData* nodedata,
     if (modeldata->materialId.empty() && !materialdatas.materials.empty())
     {
         const NTextureData* textureData = materialdatas.materials[0].getTextureData(NTextureData::Usage::Diffuse);
-        setMeshTexture(mesh, textureData->filename);
+        if (textureData)
+            setMeshTexture(mesh, *textureData);
     }
     else
     {
@@ -382,7 +394,7 @@ MeshRenderer* MeshRenderer::createMeshRendererNode(NodeData* nodedata,
             const NTextureData* textureData = materialData->getTextureData(NTextureData::Usage::Diffuse);
             if (textureData)
             {
-                setMeshTexture(mesh, textureData->filename);
+                setMeshTexture(mesh, *textureData);
                 auto tex = mesh->getTexture();
                 if (tex)
                 {
@@ -397,7 +409,7 @@ MeshRenderer* MeshRenderer::createMeshRendererNode(NodeData* nodedata,
             textureData = materialData->getTextureData(NTextureData::Usage::Normal);
             if (textureData)
             {
-                auto tex = setMeshTexture(mesh, textureData->filename, NTextureData::Usage::Normal);
+                auto tex = setMeshTexture(mesh, *textureData);
                 if (tex)
                 {
                     Texture2D::TexParams texParams{};
@@ -545,7 +557,8 @@ void MeshRenderer::createNode(NodeData* nodedata, Node* root, const MaterialData
                     {
                         const NTextureData* textureData =
                             materialdatas.materials[0].getTextureData(NTextureData::Usage::Diffuse);
-                        setMeshTexture(mesh, textureData->filename);
+                        if (textureData)
+                            setMeshTexture(mesh, *textureData);
                     }
                     else
                     {
@@ -556,7 +569,7 @@ void MeshRenderer::createNode(NodeData* nodedata, Node* root, const MaterialData
                                 materialData->getTextureData(NTextureData::Usage::Diffuse);
                             if (textureData)
                             {
-                                setMeshTexture(mesh, textureData->filename);
+                                setMeshTexture(mesh, *textureData);
                                 auto tex = mesh->getTexture();
                                 if (tex)
                                 {
@@ -571,7 +584,7 @@ void MeshRenderer::createNode(NodeData* nodedata, Node* root, const MaterialData
                             textureData = materialData->getTextureData(NTextureData::Usage::Normal);
                             if (textureData)
                             {
-                                auto tex = setMeshTexture(mesh, textureData->filename, NTextureData::Usage::Normal);
+                                auto tex = setMeshTexture(mesh, *textureData);
                                 if (tex)
                                 {
                                     Texture2D::TexParams texParams{};
@@ -664,6 +677,18 @@ Texture2D* MeshRenderer::setMeshTexture(Mesh* mesh, std::string_view texPath, NT
 {
     auto tex = _director->getTextureCache()->addImage(texPath);
     mesh->setTexture(texPath, usage);
+    if (tex)
+        ++_meshTextureHint;
+    return tex;
+}
+
+Texture2D* MeshRenderer::setMeshTexture(Mesh* mesh, const NTextureData& textureData)
+{
+    auto* textureCache = _director->getTextureCache();
+    auto* tex = textureData.imageData.isNull()
+                    ? textureCache->addImage(textureData.filename)
+                    : textureCache->addImage(textureData.imageData, textureData.filename);
+    mesh->setTexture(tex, textureData.type);
     if (tex)
         ++_meshTextureHint;
     return tex;

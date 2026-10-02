@@ -12,6 +12,7 @@
 
 #include "axmol/base/Object.h"
 #include "axmol/base/Types.h"
+#include "axmol/base/Data.h"
 #include "axmol/math/Math.h"
 #include "axmol/math/AABB.h"
 
@@ -276,6 +277,7 @@ struct NTextureData
     };
     std::string id;
     std::string filename;
+    Data imageData;
     Usage type;
     rhi::SamplerAddressMode wrapS;
     rhi::SamplerAddressMode wrapT;
