@@ -54,7 +54,7 @@ private:
     void cleanupEditCtrl();
     void cleanupFont();
     std::string getNativeText() const;
-    void _WindowProc(HWND, UINT, WPARAM, LPARAM);
+    LRESULT _WindowProc(HWND, UINT, WPARAM, LPARAM);
 
     WNDPROC _prevWndProc;
 
@@ -67,10 +67,10 @@ private:
     HWND _hwndEdit{nullptr};
     HFONT _hEditFont{nullptr};
     EditBoxDelegate::EditBoxEndAction _endAction;
-    static WNDPROC s_prevCocosWndProc;
+    static WNDPROC s_prevAxmolWndProc;
 
     static HINSTANCE s_hInstance;
-    static HWND s_hwndCocos;
+    static HWND s_hwndAxmol;
     static HWND s_previousFocusWnd;
     static bool s_isInitialized;
     static HMENU s_editboxChildID;
