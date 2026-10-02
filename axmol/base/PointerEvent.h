@@ -206,8 +206,6 @@ public:
      *         - InputPhase::PointerMove   when the pointer moves
      *         - InputPhase::PointerCancel when the pointer interaction is canceled
      *         - InputPhase::PointerScroll when the pointer performs a scroll
-     *         - InputPhase::PointerEnter  when the pointer enters a region
-     *         - InputPhase::PointerLeave  when the pointer leaves a region
      *
      * @note This reflects only the state of this PointerEvent
      *       instance and does not query the global pointer state.
