@@ -32,7 +32,7 @@
 #include "axmol/renderer/Pass.h"
 
 #include <algorithm>
-#include <cctype>
+#include <ctype.h>
 
 namespace ax
 {

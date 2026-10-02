@@ -51,6 +51,7 @@ MeshRendererTests::MeshRendererTests()
     ADD_TEST_CASE(UseCaseMeshRenderer);
     ADD_TEST_CASE(MeshRendererForceDepthTest);
     ADD_TEST_CASE(MeshRendererCubeMapTest);
+    ADD_TEST_CASE(MeshRendererGltfTest);
     ADD_TEST_CASE(NodeAnimationTest);
     ADD_TEST_CASE(Issue9767);
     ADD_TEST_CASE(MeshRendererClippingTest);
@@ -138,6 +139,29 @@ std::string MeshRendererEmptyTest::title() const
 std::string MeshRendererEmptyTest::subtitle() const
 {
     return "MeshRenderer can act as containers for 2D objects";
+}
+
+//------------------------------------------------------------------
+//
+// MeshRendererGltfTest
+//
+//------------------------------------------------------------------
+MeshRendererGltfTest::MeshRendererGltfTest()
+{
+    auto mesh = MeshRenderer::create("MeshRendererTest/triangle.gltf");
+    mesh->setScale(160.f);
+    mesh->setPositionNormalized(Vec2(.5f, .5f));
+    addChild(mesh);
+}
+
+std::string MeshRendererGltfTest::title() const
+{
+    return "glTF 2.0 MeshRenderer";
+}
+
+std::string MeshRendererGltfTest::subtitle() const
+{
+    return "Loads a self-contained data-URI glTF triangle";
 }
 
 //------------------------------------------------------------------

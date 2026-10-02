@@ -4,8 +4,8 @@
 #include "rapidjson/document.h"
 
 #include <algorithm>
-#include <cstdint>
-#include <cstring>
+#include <stdint.h>
+#include <string.h>
 #include <string>
 #include <vector>
 

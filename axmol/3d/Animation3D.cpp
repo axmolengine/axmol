@@ -16,7 +16,7 @@
 #include "axmol/tlx/utility.hpp"
 
 #include <algorithm>
-#include <cctype>
+#include <ctype.h>
 
 namespace ax
 {
