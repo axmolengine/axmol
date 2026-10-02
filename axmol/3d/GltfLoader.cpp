@@ -3,6 +3,7 @@
 #include "axmol/platform/FileUtils.h"
 #include "rapidjson/document.h"
 
+#include <array>
 #include <algorithm>
 #include <stdint.h>
 #include <string.h>
@@ -146,7 +147,9 @@ bool getAccessor(const rapidjson::Value& root, const std::vector<BufferView>& bu
         index >= static_cast<int>(root["accessors"].Size()))
         return false;
     const auto& accessor = root["accessors"][index];
-    if (!accessor.IsObject() || !accessor.HasMember("bufferView") || !accessor["bufferView"].IsInt()) return false;
+    if (!accessor.IsObject() || accessor.HasMember("sparse") || !accessor.HasMember("bufferView") ||
+        !accessor["bufferView"].IsInt())
+        return false;
     const int viewIndex = accessor["bufferView"].GetInt();
     if (!root.HasMember("bufferViews") || !root["bufferViews"].IsArray() || viewIndex < 0 ||
         viewIndex >= static_cast<int>(root["bufferViews"].Size()))
@@ -169,15 +172,18 @@ bool getAccessor(const rapidjson::Value& root, const std::vector<BufferView>& bu
                                       ? accessor["byteOffset"].GetUint64()
                                       : 0;
     result.count = accessor["count"].GetUint64();
+    if (result.count == 0) return false;
     result.componentType = accessor["componentType"].GetInt();
     result.components = componentCount(accessor["type"].GetString());
     result.normalized = accessor.HasMember("normalized") && accessor["normalized"].IsBool() &&
                         accessor["normalized"].GetBool();
     const size_t elementSize = componentSize(result.componentType) * result.components;
+    if (view.HasMember("byteStride") && !view["byteStride"].IsUint64()) return false;
     result.stride = view.HasMember("byteStride") ? view["byteStride"].GetUint64() : elementSize;
-    if (result.components <= 0 || elementSize == 0 || result.stride < elementSize || accessorOffset > viewSize)
+    if (result.components <= 0 || elementSize == 0 || result.stride < elementSize || accessorOffset > viewSize ||
+        elementSize > viewSize - accessorOffset)
         return false;
-    if (result.count > 0 && (result.count - 1) > (viewSize - accessorOffset - elementSize) / result.stride)
+    if ((result.count - 1) > (viewSize - accessorOffset - elementSize) / result.stride)
         return false;
     result.data = buffers[bufferIndex].data + viewOffset + accessorOffset;
     return true;
@@ -351,6 +357,7 @@ bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::st
                 if (!joint.IsUint()) return false;
                 skin.joints.emplace_back(static_cast<int>(joint.GetUint()));
             }
+            if (skin.joints.empty() || skin.joints.size() > 60) return false;
             if (sourceSkin.HasMember("inverseBindMatrices"))
             {
                 if (!sourceSkin["inverseBindMatrices"].IsInt()) return false;
@@ -436,12 +443,14 @@ bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::st
 
     if (!document.HasMember("meshes") || !document["meshes"].IsArray()) return false;
     size_t meshIndex = 0;
+    std::vector<uint32_t> meshMaxJointIndex;
     std::vector<std::vector<std::string>> primitiveIds;
     std::vector<std::vector<std::string>> primitiveMaterials;
     for (const auto& sourceMesh : document["meshes"].GetArray())
     {
         primitiveIds.emplace_back();
         primitiveMaterials.emplace_back();
+        meshMaxJointIndex.emplace_back(0);
         if (!sourceMesh.IsObject()) return false;
         if (!sourceMesh.HasMember("primitives") || !sourceMesh["primitives"].IsArray()) continue;
         for (const auto& primitive : sourceMesh["primitives"].GetArray())
@@ -497,21 +506,49 @@ bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::st
             {
                 addAttrib(MeshVertexAttribute::BLENDINDICES, rhi::VertexElementType::FLOAT4);
                 addAttrib(MeshVertexAttribute::BLENDWEIGHT, rhi::VertexElementType::FLOAT4);
+                if (!hasTexcoord) return false;
             }
             for (size_t vertex = 0; vertex < position.count; ++vertex)
             {
                 const auto* p = position.data + vertex * position.stride;
                 for (int component = 0; component < 3; ++component) mesh->vertex.emplace_back(readComponent(p + component * componentSize(position.componentType), position.componentType, position.normalized));
                 if (hasNormal) for (int component = 0; component < 3; ++component) mesh->vertex.emplace_back(readComponent(normal.data + vertex * normal.stride + component * componentSize(normal.componentType), normal.componentType, normal.normalized));
-                if (hasTexcoord) for (int component = 0; component < 2; ++component) mesh->vertex.emplace_back(readComponent(texcoord.data + vertex * texcoord.stride + component * componentSize(texcoord.componentType), texcoord.componentType, texcoord.normalized));
+                if (hasTexcoord)
+                {
+                    mesh->vertex.emplace_back(readComponent(texcoord.data + vertex * texcoord.stride,
+                                                            texcoord.componentType, texcoord.normalized));
+                    mesh->vertex.emplace_back(
+                        1.0f - readComponent(texcoord.data + vertex * texcoord.stride + componentSize(texcoord.componentType),
+                                              texcoord.componentType, texcoord.normalized));
+                }
                 if (hasSkinAttributes)
                 {
+                    std::array<float, 4> jointValues{};
+                    std::array<float, 4> weightValues{};
                     for (int component = 0; component < 4; ++component)
-                        mesh->vertex.emplace_back(readComponent(joints.data + vertex * joints.stride + component * componentSize(joints.componentType),
-                                                                joints.componentType, false));
+                    {
+                        jointValues[component] = readComponent(
+                            joints.data + vertex * joints.stride + component * componentSize(joints.componentType),
+                            joints.componentType, false);
+                        weightValues[component] = readComponent(
+                            weights.data + vertex * weights.stride + component * componentSize(weights.componentType),
+                            weights.componentType, weights.normalized);
+                    }
+                    for (int first = 0; first < 4; ++first)
+                        for (int second = first + 1; second < 4; ++second)
+                            if (weightValues[first] <= 0.0f && weightValues[second] > 0.0f)
+                            {
+                                std::swap(weightValues[first], weightValues[second]);
+                                std::swap(jointValues[first], jointValues[second]);
+                            }
                     for (int component = 0; component < 4; ++component)
-                        mesh->vertex.emplace_back(readComponent(weights.data + vertex * weights.stride + component * componentSize(weights.componentType),
-                                                                weights.componentType, weights.normalized));
+                    {
+                        mesh->vertex.emplace_back(jointValues[component]);
+                        meshMaxJointIndex.back() = std::max(meshMaxJointIndex.back(),
+                                                            static_cast<uint32_t>(jointValues[component]));
+                    }
+                    for (int component = 0; component < 4; ++component)
+                        mesh->vertex.emplace_back(weightValues[component]);
                 }
             }
             mesh->vertexSizeInFloat = 3 + (hasNormal ? 3 : 0) + (hasTexcoord ? 2 : 0) + (hasSkinAttributes ? 8 : 0);
@@ -523,6 +560,11 @@ bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::st
                 for (size_t index = 0; index < indices.count; ++index)
                 {
                     const auto value = readIndex(indices.data + index * indices.stride, indices.componentType);
+                    if (value >= position.count)
+                    {
+                        delete mesh;
+                        return false;
+                    }
                     if (indexArray.format() == rhi::IndexFormat::U_INT) indexArray.emplace_back<uint32_t>(value);
                     else indexArray.emplace_back<uint16_t>(static_cast<uint16_t>(value));
                 }
@@ -543,7 +585,7 @@ bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::st
             primitiveIds.back().emplace_back(std::to_string(meshIndex));
             primitiveMaterials.back().emplace_back(primitive.HasMember("material") && primitive["material"].IsInt()
                                                        ? std::to_string(primitive["material"].GetInt())
-                                                       : std::string{});
+                                                       : "__gltf_default__");
             ++meshIndex;
         }
     }
@@ -551,14 +593,34 @@ bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::st
     if (document.HasMember("nodes") && document["nodes"].IsArray())
     {
         const auto& sourceNodes = document["nodes"];
+        std::vector<uint8_t> visitState(sourceNodes.Size(), 0);
+        auto validateNode = [&](auto&& self, size_t nodeIndex) -> bool {
+            if (visitState[nodeIndex] == 1) return false;
+            if (visitState[nodeIndex] == 2) return true;
+            visitState[nodeIndex] = 1;
+            const auto& sourceNode = sourceNodes[nodeIndex];
+            if (!sourceNode.IsObject()) return false;
+            if (sourceNode.HasMember("children"))
+            {
+                if (!sourceNode["children"].IsArray()) return false;
+                for (const auto& child : sourceNode["children"].GetArray())
+                {
+                    if (!child.IsUint() || child.GetUint() >= sourceNodes.Size() ||
+                        !self(self, static_cast<size_t>(child.GetUint())))
+                        return false;
+                }
+            }
+            visitState[nodeIndex] = 2;
+            return true;
+        };
+        for (size_t index = 0; index < sourceNodes.Size(); ++index)
+            if (!validateNode(validateNode, index)) return false;
         for (const auto& skin : skins)
             for (const auto joint : skin.joints)
                 if (joint < 0 || joint >= static_cast<int>(sourceNodes.Size()) || !sourceNodes[joint].IsObject())
                     return false;
         auto nodeName = [&](int nodeIndex) {
-            const auto& node = sourceNodes[static_cast<rapidjson::SizeType>(nodeIndex)];
-            return node.HasMember("name") && node["name"].IsString() ? std::string(node["name"].GetString())
-                                                                       : std::to_string(nodeIndex);
+            return std::string("gltf_node_") + std::to_string(nodeIndex);
         };
         for (const auto& skin : skins)
         {
@@ -623,6 +685,8 @@ bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::st
                         sourceNode["skin"].GetUint() < skins.size())
                     {
                         const auto& skin = skins[sourceNode["skin"].GetUint()];
+                        if (meshId >= meshMaxJointIndex.size() || meshMaxJointIndex[meshId] >= skin.joints.size())
+                            return false;
                         for (const auto joint : skin.joints)
                             model->bones.emplace_back(nodeName(joint));
                         model->invBindPose = skin.inverseBindPoses;
@@ -633,30 +697,37 @@ bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::st
             }
             if (sourceNode.HasMember("children") && sourceNode["children"].IsArray())
                 for (const auto& child : sourceNode["children"].GetArray())
-                    if (child.IsUint()) self(self, static_cast<int>(child.GetUint()), worldTransform);
+                    self(self, static_cast<int>(child.GetUint()), worldTransform);
         };
 
         Mat4 identity;
         bool addedSceneNodes = false;
+        bool hasSelectedScene = false;
         if (document.HasMember("scenes") && document["scenes"].IsArray() && !document["scenes"].Empty())
         {
             size_t sceneIndex = document.HasMember("scene") && document["scene"].IsUint()
                                     ? document["scene"].GetUint()
                                     : 0;
-            if (sceneIndex < document["scenes"].Size() && document["scenes"][sceneIndex].HasMember("nodes") &&
-                document["scenes"][sceneIndex]["nodes"].IsArray())
+            if (sceneIndex >= document["scenes"].Size() || !document["scenes"][sceneIndex].IsObject()) return false;
+            const auto& scene = document["scenes"][sceneIndex];
+            if (scene.HasMember("nodes") && !scene["nodes"].IsArray()) return false;
+            if (scene.HasMember("nodes"))
             {
-                for (const auto& root : document["scenes"][sceneIndex]["nodes"].GetArray())
-                    if (root.IsUint()) self(addNode, static_cast<int>(root.GetUint()), identity);
-                addedSceneNodes = true;
+                for (const auto& root : scene["nodes"].GetArray())
+                {
+                    if (!root.IsUint() || root.GetUint() >= sourceNodes.Size()) return false;
+                    addNode(addNode, static_cast<int>(root.GetUint()), identity);
+                }
             }
+            addedSceneNodes = true;
+            hasSelectedScene = true;
         }
-        if (!addedSceneNodes)
+        if (!addedSceneNodes && !hasSelectedScene)
             for (rapidjson::SizeType index = 0; index < sourceNodes.Size(); ++index)
                 if (!hasParent[index]) addNode(addNode, static_cast<int>(index), identity);
     }
 
-    if (nodes.nodes.empty())
+    if (nodes.nodes.empty() && !document.HasMember("scenes"))
     {
         for (size_t index = 0; index < meshIndex; ++index)
         {
@@ -706,10 +777,7 @@ bool loadAnimationData(Animation3DData& animation, std::string_view path, std::s
         nodeNames.reserve(document["nodes"].Size());
         for (rapidjson::SizeType index = 0; index < document["nodes"].Size(); ++index)
         {
-            const auto& node = document["nodes"][index];
-            nodeNames.emplace_back(node.IsObject() && node.HasMember("name") && node["name"].IsString()
-                                       ? node["name"].GetString()
-                                       : std::to_string(index));
+            nodeNames.emplace_back(std::string("gltf_node_") + std::to_string(index));
         }
     }
 
@@ -773,6 +841,61 @@ bool loadAnimationData(Animation3DData& animation, std::string_view path, std::s
                 animation._rotationKeys[nodeName].emplace_back(time, rotation);
             }
         }
+    }
+    if (document.HasMember("nodes") && document["nodes"].IsArray())
+    {
+        auto readRestTranslation = [](const rapidjson::Value& node) {
+            Vec3 value;
+            if (node.HasMember("translation") && node["translation"].IsArray() && node["translation"].Size() == 3)
+                value.set(node["translation"][0].GetFloat(), node["translation"][1].GetFloat(),
+                          node["translation"][2].GetFloat());
+            return value;
+        };
+        auto readRestScale = [](const rapidjson::Value& node) {
+            Vec3 value(1.0f, 1.0f, 1.0f);
+            if (node.HasMember("scale") && node["scale"].IsArray() && node["scale"].Size() == 3)
+                value.set(node["scale"][0].GetFloat(), node["scale"][1].GetFloat(), node["scale"][2].GetFloat());
+            return value;
+        };
+        auto readRestRotation = [](const rapidjson::Value& node) {
+            Quat value;
+            if (node.HasMember("rotation") && node["rotation"].IsArray() && node["rotation"].Size() == 4)
+            {
+                value.set(node["rotation"][0].GetFloat(), node["rotation"][1].GetFloat(),
+                          node["rotation"][2].GetFloat(), node["rotation"][3].GetFloat());
+                value.normalize();
+            }
+            return value;
+        };
+        for (rapidjson::SizeType index = 0; index < document["nodes"].Size(); ++index)
+        {
+            const auto& node = document["nodes"][index];
+            const auto& name = nodeNames[index];
+            const bool animated = animation._translationKeys.find(name) != animation._translationKeys.end() ||
+                                   animation._rotationKeys.find(name) != animation._rotationKeys.end() ||
+                                   animation._scaleKeys.find(name) != animation._scaleKeys.end();
+            if (!animated) continue;
+            if (animation._translationKeys.find(name) == animation._translationKeys.end())
+                animation._translationKeys[name] = {{0.0f, readRestTranslation(node)},
+                                                     {animation._totalTime, readRestTranslation(node)}};
+            if (animation._rotationKeys.find(name) == animation._rotationKeys.end())
+                animation._rotationKeys[name] = {{0.0f, readRestRotation(node)},
+                                                  {animation._totalTime, readRestRotation(node)}};
+            if (animation._scaleKeys.find(name) == animation._scaleKeys.end())
+                animation._scaleKeys[name] = {{0.0f, readRestScale(node)},
+                                               {animation._totalTime, readRestScale(node)}};
+        }
+    }
+    if (animation._totalTime > 0.0f)
+    {
+        auto normalizeVec3Keys = [&](auto& keyMap) {
+            for (auto& entry : keyMap)
+                for (auto& key : entry.second) key._time /= animation._totalTime;
+        };
+        normalizeVec3Keys(animation._translationKeys);
+        normalizeVec3Keys(animation._scaleKeys);
+        for (auto& entry : animation._rotationKeys)
+            for (auto& key : entry.second) key._time /= animation._totalTime;
     }
     return animation._totalTime > 0.0f || !animation._translationKeys.empty() || !animation._rotationKeys.empty() ||
            !animation._scaleKeys.empty();
