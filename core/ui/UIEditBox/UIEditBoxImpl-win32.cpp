@@ -100,6 +100,11 @@ void EditBoxImplWin::cleanupEditCtrl()
 {
     if (_hwndEdit)
     {
+        if (s_previousFocusWnd == _hwndEdit)
+        {
+            s_previousFocusWnd = s_hwndCocos;
+        }
+
         SetWindowLongPtrW(_hwndEdit, GWLP_WNDPROC, (LONG_PTR)_prevWndProc);
         ::DestroyWindow(_hwndEdit);
         _hasFocus            = false;
@@ -116,7 +121,7 @@ void EditBoxImplWin::createEditCtrl(bool singleLine)
     {
         _hwndEdit = ::CreateWindowExW(WS_EX_CLIENTEDGE, L"EDIT",  // predefined class
                                       NULL,                       // no window title
-                                      WS_CHILD | ES_LEFT | WS_BORDER | WS_EX_TRANSPARENT | WS_TABSTOP | ES_AUTOHSCROLL |
+                                      WS_CHILD | ES_LEFT | WS_BORDER | WS_TABSTOP | ES_AUTOHSCROLL |
                                           (singleLine ? 0 : ES_AUTOVSCROLL | ES_MULTILINE),
                                       0, 0, 0,
                                       0,                        // set size in WM_SIZE message
@@ -129,7 +134,7 @@ void EditBoxImplWin::createEditCtrl(bool singleLine)
         _prevWndProc = (WNDPROC)SetWindowLongPtrW(_hwndEdit, GWLP_WNDPROC, (LONG_PTR)WindowProc);
 
         ::SendMessageW(_hwndEdit, EM_LIMITTEXT, this->_maxLength, 0);
-        s_previousFocusWnd = s_hwndCocos;
+
         this->setNativeFont(this->getNativeDefaultFontName(), this->_fontSize);
         this->setNativeText(this->_text.c_str());
     }
@@ -242,8 +247,14 @@ void EditBoxImplWin::setNativeText(const char* pText)
     std::u16string utf16Result;
     std::string text(pText);
     ax::StringUtils::UTF8ToUTF16(text, utf16Result);
-    this->_changedTextManually = true;
+
+    const bool previousChangedTextManually = _changedTextManually;
+    _changedTextManually                   = true;
+
     ::SetWindowTextW(_hwndEdit, (LPCWSTR)utf16Result.c_str());
+
+    _changedTextManually = previousChangedTextManually;
+
     int textLen = text.size();
     ::SendMessageW(_hwndEdit, EM_SETSEL, textLen, textLen);
 
@@ -262,7 +273,7 @@ void EditBoxImplWin::setNativeVisible(bool visible)
 {
     if (visible)
     {
-        ::ShowWindow(_hwndEdit, SW_SHOW);
+        ::ShowWindow(_hwndEdit, SW_SHOWNOACTIVATE);
     }
     else
     {
@@ -273,7 +284,7 @@ void EditBoxImplWin::setNativeVisible(bool visible)
 void EditBoxImplWin::updateNativeFrame(const Rect& rect)
 {
     ::SetWindowPos(_hwndEdit, HWND_NOTOPMOST, rect.origin.x, rect.origin.y, rect.size.width, rect.size.height,
-                   SWP_NOZORDER);
+                   SWP_NOZORDER | SWP_NOACTIVATE);
 }
 
 const char* EditBoxImplWin::getNativeDefaultFontName()
@@ -283,12 +294,22 @@ const char* EditBoxImplWin::getNativeDefaultFontName()
 
 void EditBoxImplWin::nativeOpenKeyboard()
 {
-    ::PostMessageW(_hwndEdit, WM_SETFOCUS, (WPARAM)s_previousFocusWnd, 0);
-    //        s_previousFocusWnd = hwndEdit;
+    auto* renderView     = Director::getInstance()->getRenderView();
+    auto* renderViewImpl = static_cast<RenderViewImpl*>(renderView);
+    GLFWwindow* window   = renderViewImpl->getWindow();
+
+    const int previousAutoIconify = glfwGetWindowAttrib(window, GLFW_AUTO_ICONIFY);
+
+    glfwSetWindowAttrib(window, GLFW_AUTO_ICONIFY, GLFW_FALSE);
+
     this->editBoxEditingDidBegin();
 
     auto rect = ui::Helper::convertBoundingBoxToScreen(_editBox);
     this->updateNativeFrame(rect);
+
+    ::SetFocus(_hwndEdit);
+
+    glfwSetWindowAttrib(window, GLFW_AUTO_ICONIFY, previousAutoIconify);
 }
 
 void EditBoxImplWin::nativeCloseKeyboard()
@@ -361,9 +382,10 @@ LRESULT EditBoxImplWin::_WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
         }
         break;
     case WM_SETFOCUS:
+        _hasFocus = true;
+
         if (hwnd != s_previousFocusWnd)
         {
-            ::PostMessageW(hwnd, WM_ACTIVATE, (WPARAM)s_previousFocusWnd, 0);
             ::PostMessageW(hwnd, WM_SETCURSOR, (WPARAM)s_previousFocusWnd, 0);
 
             if (_initialFocus && _editBoxInputMode != ax::ui::EditBox::InputMode::ANY)
@@ -386,7 +408,6 @@ LRESULT EditBoxImplWin::_WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             }
 
             s_previousFocusWnd         = _hwndEdit;
-            _hasFocus                  = true;
             this->_changedTextManually = false;
         }
         break;
@@ -433,7 +454,6 @@ LRESULT EditBoxImplWin::hookGLFWWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
             if (pThis && !pThis->_changedTextManually)
             {
                 pThis->editBoxEditingChanged(pThis->getText());
-                pThis->_changedTextManually = false;
             }
         }
         break;
