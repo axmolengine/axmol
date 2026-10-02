@@ -5,6 +5,7 @@
 
 #include <array>
 #include <algorithm>
+#include <cmath>
 #include <stdint.h>
 #include <string.h>
 #include <string>
@@ -451,9 +452,42 @@ bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::st
                     {
                         const auto& image = document["images"][imageIndex];
                         NTextureData texture;
-                        texture.type     = NTextureData::Usage::Diffuse;
-                        texture.wrapS    = rhi::SamplerAddressMode::REPEAT;
-                        texture.wrapT    = rhi::SamplerAddressMode::REPEAT;
+                        texture.type  = NTextureData::Usage::Diffuse;
+                        texture.wrapS = rhi::SamplerAddressMode::REPEAT;
+                        texture.wrapT = rhi::SamplerAddressMode::REPEAT;
+                        if (textureSource.HasMember("sampler"))
+                        {
+                            if (!textureSource["sampler"].IsUint() || !document.HasMember("samplers") ||
+                                !document["samplers"].IsArray() ||
+                                textureSource["sampler"].GetUint() >= document["samplers"].Size())
+                                return false;
+                            const auto& sampler = document["samplers"][textureSource["sampler"].GetUint()];
+                            if (!sampler.IsObject())
+                                return false;
+                            auto readWrapMode = [&](const char* property, rhi::SamplerAddressMode& mode) {
+                                if (!sampler.HasMember(property))
+                                    return true;
+                                if (!sampler[property].IsInt())
+                                    return false;
+                                switch (sampler[property].GetInt())
+                                {
+                                case 33071:
+                                    mode = rhi::SamplerAddressMode::CLAMP;
+                                    break;
+                                case 33648:
+                                    mode = rhi::SamplerAddressMode::MIRROR;
+                                    break;
+                                case 10497:
+                                    mode = rhi::SamplerAddressMode::REPEAT;
+                                    break;
+                                default:
+                                    return false;
+                                }
+                                return true;
+                            };
+                            if (!readWrapMode("wrapS", texture.wrapS) || !readWrapMode("wrapT", texture.wrapT))
+                                return false;
+                        }
                         texture.filename = std::string(path) + "#image" + std::to_string(imageIndex);
                         if (image.IsObject() && image.HasMember("uri") && image["uri"].IsString())
                         {
@@ -533,6 +567,11 @@ bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::st
                 primitive["attributes"].HasMember("WEIGHTS_0") && primitive["attributes"]["WEIGHTS_0"].IsInt() &&
                 getAccessor(document, buffers, primitive["attributes"]["WEIGHTS_0"].GetInt(), weights) &&
                 weights.components == 4 && weights.count == position.count;
+            if ((primitive["attributes"].HasMember("NORMAL") && !hasNormal) ||
+                (primitive["attributes"].HasMember("TEXCOORD_0") && !hasTexcoord) ||
+                (primitive["attributes"].HasMember("JOINTS_0") && !hasJoints) ||
+                (primitive["attributes"].HasMember("WEIGHTS_0") && !hasWeights) || hasJoints != hasWeights)
+                return false;
             const bool hasSkinAttributes = hasJoints && hasWeights;
             bool hasIndices              = false;
             if (primitive.HasMember("indices"))
@@ -658,6 +697,7 @@ bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::st
         const auto& sourceNodes = document["nodes"];
         std::vector<uint8_t> visitState(sourceNodes.Size(), 0);
         std::vector<uint8_t> parentCount(sourceNodes.Size(), 0);
+        std::vector<size_t> graphParent(sourceNodes.Size(), sourceNodes.Size());
         auto validateNode = [&](auto&& self, size_t nodeIndex) -> bool {
             if (visitState[nodeIndex] == 1)
                 return false;
@@ -674,9 +714,10 @@ bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::st
                 for (const auto& child : sourceNode["children"].GetArray())
                 {
                     if (!child.IsUint() || child.GetUint() >= sourceNodes.Size() ||
-                        ++parentCount[child.GetUint()] > 1 ||
+                        ++parentCount[child.GetUint()] > 1 || graphParent[child.GetUint()] != sourceNodes.Size() ||
                         !self(self, static_cast<size_t>(child.GetUint())))
                         return false;
+                    graphParent[child.GetUint()] = nodeIndex;
                 }
             }
             visitState[nodeIndex] = 2;
@@ -685,43 +726,39 @@ bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::st
         for (size_t index = 0; index < sourceNodes.Size(); ++index)
             if (!validateNode(validateNode, index))
                 return false;
-        for (const auto& skin : skins)
-            for (const auto joint : skin.joints)
-                if (joint < 0 || joint >= static_cast<int>(sourceNodes.Size()) || !sourceNodes[joint].IsObject())
-                    return false;
-        auto nodeName = [&](int nodeIndex) { return std::string("gltf_node_") + std::to_string(nodeIndex); };
+        std::vector<bool> requiredBone(sourceNodes.Size());
         for (const auto& skin : skins)
         {
-            std::vector<bool> isJoint(sourceNodes.Size());
-            std::vector<bool> hasJointParent(sourceNodes.Size());
-            for (const auto joint : skin.joints)
-                if (joint >= 0 && joint < static_cast<int>(sourceNodes.Size()))
-                    isJoint[joint] = true;
             for (const auto joint : skin.joints)
             {
-                if (!isJoint[joint])
-                    continue;
-                const auto& sourceNode = sourceNodes[joint];
-                if (!sourceNode.IsObject() || !sourceNode.HasMember("children") || !sourceNode["children"].IsArray())
-                    continue;
-                for (const auto& child : sourceNode["children"].GetArray())
-                    if (child.IsUint() && child.GetUint() < isJoint.size() && isJoint[child.GetUint()])
-                        hasJointParent[child.GetUint()] = true;
+                if (joint < 0 || joint >= static_cast<int>(sourceNodes.Size()) || !sourceNodes[joint].IsObject())
+                    return false;
+                for (int ancestor = joint; ancestor >= 0 && ancestor < static_cast<int>(sourceNodes.Size());)
+                {
+                    if (requiredBone[ancestor])
+                        break;
+                    requiredBone[ancestor] = true;
+                    ancestor =
+                        graphParent[ancestor] == sourceNodes.Size() ? -1 : static_cast<int>(graphParent[ancestor]);
+                }
             }
-            auto makeBone = [&](auto&& self, int nodeIndex) -> NodeData* {
-                const auto& sourceNode = sourceNodes[nodeIndex];
-                auto* bone             = new NodeData();
-                bone->id               = nodeName(nodeIndex);
-                bone->transform        = readNodeTransform(sourceNode);
-                if (sourceNode.HasMember("children") && sourceNode["children"].IsArray())
-                    for (const auto& child : sourceNode["children"].GetArray())
-                        if (child.IsUint() && child.GetUint() < isJoint.size() && isJoint[child.GetUint()])
-                            bone->children.emplace_back(self(self, static_cast<int>(child.GetUint())));
-                return bone;
-            };
-            for (const auto joint : skin.joints)
-                if (joint >= 0 && joint < static_cast<int>(sourceNodes.Size()) && !hasJointParent[joint])
-                    nodes.skeleton.emplace_back(makeBone(makeBone, joint));
+        }
+        auto nodeName = [&](int nodeIndex) { return std::string("gltf_node_") + std::to_string(nodeIndex); };
+        auto makeBone = [&](auto&& self, int nodeIndex) -> NodeData* {
+            const auto& sourceNode = sourceNodes[nodeIndex];
+            auto* bone             = new NodeData();
+            bone->id               = nodeName(nodeIndex);
+            bone->transform        = readNodeTransform(sourceNode);
+            if (sourceNode.HasMember("children") && sourceNode["children"].IsArray())
+                for (const auto& child : sourceNode["children"].GetArray())
+                    if (requiredBone[child.GetUint()])
+                        bone->children.emplace_back(self(self, static_cast<int>(child.GetUint())));
+            return bone;
+        };
+        for (size_t index = 0; index < sourceNodes.Size(); ++index)
+        {
+            if (requiredBone[index] && graphParent[index] == sourceNodes.Size())
+                nodes.skeleton.emplace_back(makeBone(makeBone, static_cast<int>(index)));
         }
         std::vector<bool> hasParent(sourceNodes.Size());
         for (const auto& sourceNode : sourceNodes.GetArray())
@@ -735,24 +772,21 @@ bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::st
                     hasParent[child.GetUint()] = true;
         }
 
-        auto addNode = [&](auto&& self, int nodeIndex, const Mat4& parentTransform) -> void {
+        auto addNode = [&](auto&& self, int nodeIndex, NodeData*& result) -> bool {
             if (nodeIndex < 0 || nodeIndex >= static_cast<int>(sourceNodes.Size()))
-                return;
+                return false;
             const auto& sourceNode = sourceNodes[nodeIndex];
             if (!sourceNode.IsObject())
-                return;
-            const Mat4 worldTransform = parentTransform * readNodeTransform(sourceNode);
+                return false;
+            auto* node      = new NodeData();
+            node->id        = nodeName(nodeIndex);
+            node->transform = readNodeTransform(sourceNode);
             if (sourceNode.HasMember("mesh") && sourceNode["mesh"].IsUint() &&
                 sourceNode["mesh"].GetUint() < primitiveIds.size())
             {
                 const auto meshId = sourceNode["mesh"].GetUint();
                 for (size_t primitive = 0; primitive < primitiveIds[meshId].size(); ++primitive)
                 {
-                    auto* node        = new NodeData();
-                    node->id          = sourceNode.HasMember("name") && sourceNode["name"].IsString()
-                                            ? sourceNode["name"].GetString()
-                                            : std::to_string(nodeIndex);
-                    node->transform   = worldTransform;
                     auto* model       = new ModelData();
                     model->subMeshId  = primitiveIds[meshId][primitive];
                     model->materialId = primitiveMaterials[meshId][primitive];
@@ -761,21 +795,34 @@ bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::st
                     {
                         const auto& skin = skins[sourceNode["skin"].GetUint()];
                         if (meshId >= meshMaxJointIndex.size() || meshMaxJointIndex[meshId] >= skin.joints.size())
+                        {
+                            delete model;
+                            delete node;
                             return false;
+                        }
                         for (const auto joint : skin.joints)
                             model->bones.emplace_back(nodeName(joint));
                         model->invBindPose = skin.inverseBindPoses;
+                        node->transform.setIdentity();
                     }
                     node->modelNodeDatas.emplace_back(model);
-                    nodes.nodes.emplace_back(node);
                 }
             }
             if (sourceNode.HasMember("children") && sourceNode["children"].IsArray())
                 for (const auto& child : sourceNode["children"].GetArray())
-                    self(self, static_cast<int>(child.GetUint()), worldTransform);
+                {
+                    NodeData* childNode = nullptr;
+                    if (!self(self, static_cast<int>(child.GetUint()), childNode))
+                    {
+                        delete node;
+                        return false;
+                    }
+                    node->children.emplace_back(childNode);
+                }
+            result = node;
+            return true;
         };
 
-        Mat4 identity;
         bool addedSceneNodes  = false;
         bool hasSelectedScene = false;
         if (document.HasMember("scenes") && document["scenes"].IsArray() && !document["scenes"].Empty())
@@ -793,7 +840,10 @@ bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::st
                 {
                     if (!root.IsUint() || root.GetUint() >= sourceNodes.Size())
                         return false;
-                    addNode(addNode, static_cast<int>(root.GetUint()), identity);
+                    NodeData* rootNode = nullptr;
+                    if (!addNode(addNode, static_cast<int>(root.GetUint()), rootNode))
+                        return false;
+                    nodes.nodes.emplace_back(rootNode);
                 }
             }
             addedSceneNodes  = true;
@@ -802,7 +852,12 @@ bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::st
         if (!addedSceneNodes && !hasSelectedScene)
             for (rapidjson::SizeType index = 0; index < sourceNodes.Size(); ++index)
                 if (!hasParent[index])
-                    addNode(addNode, static_cast<int>(index), identity);
+                {
+                    NodeData* rootNode = nullptr;
+                    if (!addNode(addNode, static_cast<int>(index), rootNode))
+                        return false;
+                    nodes.nodes.emplace_back(rootNode);
+                }
     }
 
     if (nodes.nodes.empty() && !document.HasMember("scenes"))
@@ -901,11 +956,18 @@ bool loadAnimationData(Animation3DData& animation, std::string_view path, std::s
             return false;
 
         const std::string nodeName = nodeNames[target["node"].GetUint()];
+        float previousTime         = -1.0f;
         for (size_t key = 0; key < input.count; ++key)
         {
-            const float time     = readComponent(input.data + key * input.stride, input.componentType, false);
+            const float time = readComponent(input.data + key * input.stride, input.componentType, false);
+            if (!std::isfinite(time) || time < 0.0f || time <= previousTime)
+                return false;
+            previousTime         = time;
             animation._totalTime = std::max(animation._totalTime, time);
             const auto* values   = output.data + key * output.stride;
+            for (int component = 0; component < output.components; ++component)
+                if (!std::isfinite(readComponent(values + component * sizeof(float), 5126, false)))
+                    return false;
             if (pathName == "translation" && output.components == 3)
             {
                 animation._translationKeys[nodeName].emplace_back(
@@ -961,6 +1023,20 @@ bool loadAnimationData(Animation3DData& animation, std::string_view path, std::s
                                   animation._scaleKeys.find(name) != animation._scaleKeys.end();
             if (!animated)
                 continue;
+            if (!node.IsObject())
+                return false;
+            for (const auto property : {"translation", "rotation", "scale"})
+            {
+                if (!node.HasMember(property))
+                    continue;
+                const auto& values      = node[property];
+                const auto expectedSize = std::strcmp(property, "rotation") == 0 ? 4u : 3u;
+                if (!values.IsArray() || values.Size() != expectedSize)
+                    return false;
+                for (const auto& value : values.GetArray())
+                    if (!value.IsNumber() || !std::isfinite(value.GetFloat()))
+                        return false;
+            }
             if (animation._translationKeys.find(name) == animation._translationKeys.end())
                 animation._translationKeys[name] = {{0.0f, readRestTranslation(node)},
                                                     {animation._totalTime, readRestTranslation(node)}};
