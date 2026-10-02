@@ -69,7 +69,7 @@ private:
     void createEditCtrl(bool singleLine);
     void cleanupEditCtrl();
     std::string getText() const;
-    void _WindowProc(HWND, UINT, WPARAM, LPARAM);
+    LRESULT _WindowProc(HWND, UINT, WPARAM, LPARAM);
 
     WNDPROC _prevWndProc;
 
