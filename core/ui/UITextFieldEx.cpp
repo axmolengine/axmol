@@ -24,6 +24,8 @@ THE SOFTWARE.
 
 #include "UITextFieldEx.h"
 #include "base/Director.h"
+#include "base/IMEDispatcher.h"
+#include <algorithm>
 
 namespace ax
 {
@@ -128,24 +130,63 @@ static Sprite* engine_inj_create_lump(const Color4B& color, int height, int widt
 namespace ui
 {
 
-/// calculate the UTF-8 string's char count.
-static int _truncateUTF8String(const char* text, int limit, int& nb)
+// Input adapters supply valid UTF-8. Returned offsets are character boundaries.
+static size_t inputNextByte(std::string_view text, size_t position)
 {
-    int n   = 0;
-    char ch = 0;
-    nb      = 0;
-    while ((ch = *text) != 0x0)
+    if (position >= text.size())
     {
-        AX_BREAK_IF(!ch || n > limit);
-
-        if (0x80 != (0xC0 & ch))
-        {
-            ++n;
-        }
-        ++nb;
-        ++text;
+        return text.size();
     }
-    return n;
+
+    ++position;
+    while (position < text.size() &&
+           (static_cast<unsigned char>(text[position]) & 0xC0) == 0x80)
+    {
+        ++position;
+    }
+    return position;
+}
+
+static size_t inputPrefixBytes(std::string_view text, size_t codePoints)
+{
+    size_t position = 0;
+    while (position < text.size() && codePoints > 0)
+    {
+        position = inputNextByte(text, position);
+        --codePoints;
+    }
+    return position;
+}
+
+static size_t inputByteFromUtf16(std::string_view text, size_t offset)
+{
+    size_t position = 0;
+    size_t units = 0;
+    while (position < text.size())
+    {
+        const size_t next = inputNextByte(text, position);
+        const size_t width = next - position == 4 ? 2 : 1;
+        if (units + width > offset)
+        {
+            break;
+        }
+        units += width;
+        position = next;
+    }
+    return position;
+}
+
+static size_t inputUtf16FromByte(std::string_view text, size_t offset)
+{
+    size_t position = 0;
+    size_t units = 0;
+    while (position < std::min(offset, text.size()))
+    {
+        const size_t next = inputNextByte(text, position);
+        units += next - position == 4 ? 2 : 1;
+        position = next;
+    }
+    return units;
 }
 
 static void internalSetLableFont(Label* l, std::string_view fontName, float fontSize)
@@ -169,48 +210,6 @@ static float internalCalcStringWidth(std::string_view s, std::string_view fontNa
 {
     auto label = _createLabel(std::string{s}, fontName, fontSize);
     return label->getContentSize().width;
-}
-
-static std::string internalUTF8MoveLeft(std::string_view utf8Text, int length /* default utf8Text.length() */)
-{
-    if (!utf8Text.empty() && length > 0)
-    {
-
-        // get the delete byte number
-        int deleteLen = 1;  // default, erase 1 byte
-
-        while (length >= deleteLen && 0x80 == (0xC0 & utf8Text.at(length - deleteLen)))
-        {
-            ++deleteLen;
-        }
-
-        return std::string{utf8Text.data(), static_cast<size_t>(length - deleteLen)};
-    }
-    else
-    {
-        return std::string{utf8Text};
-    }
-}
-
-static std::string internalUTF8MoveRight(std::string_view utf8Text, int length /* default utf8Text.length() */)
-{
-    if (!utf8Text.empty() && length >= 0)
-    {
-
-        // get the delete byte number
-        size_t addLen = 1;  // default, erase 1 byte
-
-        while ((length + addLen) < utf8Text.size() && 0x80 == (0xC0 & utf8Text.at(length + addLen)))
-        {
-            ++addLen;
-        }
-
-        return std::string{utf8Text.data(), static_cast<size_t>(length + addLen)};
-    }
-    else
-    {
-        return std::string{utf8Text};
-    }
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -428,9 +427,11 @@ void TextFieldEx::enableIME(Node* control)
             switch (code)
             {
             case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+            case EventKeyboard::KeyCode::KEY_DPAD_LEFT:
                 this->__moveCursor(-1);
                 break;
             case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
+            case EventKeyboard::KeyCode::KEY_DPAD_RIGHT:
                 this->__moveCursor(1);
                 break;
             case EventKeyboard::KeyCode::KEY_DELETE:
@@ -531,206 +532,142 @@ bool TextFieldEx::canDetachWithIME()
     return true;  //(_delegate) ? (! _delegate->onTextFieldDetachWithIME(this)) : true;
 }
 
+bool TextFieldEx::supportsTextInputRanges() const
+{
+    return true;
+}
+
+int TextFieldEx::getTextSelection() const
+{
+    return static_cast<int>(inputUtf16FromByte(_inputText, static_cast<size_t>(_insertPos)));
+}
+
+void TextFieldEx::__setCursorBytePosition(size_t position)
+{
+    position = std::min(position, _inputText.size());
+    while (position > 0 && position < _inputText.size() &&
+           (static_cast<unsigned char>(_inputText[position]) & 0xC0) == 0x80)
+    {
+        --position;
+    }
+
+    _insertPos = static_cast<int>(position);
+    _insertPosUtf8 = static_cast<int>(
+        StringUtils::countUTF8Chars(std::string_view(_inputText.data(), position)));
+
+    const std::string_view display = _inputText.empty() ? std::string_view{} :
+        (_secureTextEntry ? _renderLabel->getString() : std::string_view(_inputText));
+    _cursorPos = static_cast<int>(_secureTextEntry ?
+        inputPrefixBytes(display, static_cast<size_t>(_insertPosUtf8)) : position);
+
+    if (_cursor)
+    {
+        const float width = _cursorPos == 0 ? 0.0f :
+            internalCalcStringWidth(display.substr(0, static_cast<size_t>(_cursorPos)), _fontName, _fontSize);
+        _cursor->setPosition(Point(width, this->getContentSize().height / 2));
+    }
+}
+
+void TextFieldEx::setTextSelection(int start, int end)
+{
+    if (start < 0 || end < 0)
+    {
+        return;
+    }
+    // This widget draws one caret; the input adapter retains the selection range.
+    __setCursorBytePosition(inputByteFromUtf16(_inputText, static_cast<size_t>(end)));
+}
+
+void TextFieldEx::replaceTextRange(int start, int end, std::string_view replacement)
+{
+    if (!_editable || !this->_enabled || start < 0 || end < start)
+    {
+        return;
+    }
+
+    const size_t utf16Length = inputUtf16FromByte(_inputText, _inputText.size());
+    if (static_cast<size_t>(end) > utf16Length)
+    {
+        return;
+    }
+
+    const size_t first = inputByteFromUtf16(_inputText, static_cast<size_t>(start));
+    const size_t last = inputByteFromUtf16(_inputText, static_cast<size_t>(end));
+    const size_t removed = StringUtils::countUTF8Chars(
+        std::string_view(_inputText.data() + first, last - first));
+    const size_t retained = _charCount - removed;
+
+    const auto newline = replacement.find('\n');
+    const bool finish = newline != std::string_view::npos;
+    if (finish)
+    {
+        replacement = replacement.substr(0, newline);
+    }
+
+    const size_t allowed = _charLimit == 0 ? replacement.size() :
+        (_charLimit > retained ? _charLimit - retained : 0);
+    const size_t bytes = inputPrefixBytes(replacement, allowed);
+    std::string updated = _inputText;
+    updated.replace(first, last - first, bytes == 0 ? "" : replacement.data(), bytes);
+    const bool changed = updated != _inputText;
+    setString(updated);
+    __setCursorBytePosition(first + bytes);
+
+    if (changed && onTextModify)
+    {
+        onTextModify();
+    }
+    if (finish)
+    {
+        closeIME();
+    }
+}
+
 void TextFieldEx::insertText(const char* text, size_t len)
 {
-    if (!_editable || !this->_enabled)
+    if (!text || len == 0)
     {
         return;
     }
-
-    if (_charLimit > 0 && _charCount >= _charLimit)
-    {  // regard zero as unlimited
-        axbeep(0);
-        return;
-    }
-
-    int nb;
-    auto n = _truncateUTF8String(text, static_cast<int>(_charLimit - _charCount), nb);
-
-    std::string insert(text, nb);
-
-    // insert \n means input end
-    auto pos = insert.find('\n');
-    if (insert.npos != pos)
-    {
-        len = pos;
-        insert.erase(pos);
-    }
-
-    if (len > 0)
-    {
-        // if (_delegate && _delegate->onTextFieldInsertText(this, insert.c_str(), len))
-        //{
-        //     // delegate doesn't want to insert text
-        //     return;
-        // }
-
-        _charCount += n;  // _calcCharCount(insert.c_str());
-        std::string sText(_inputText);
-        sText.insert(_insertPos, insert);  // original is: sText.append(insert);
-
-        // bool needUpdatePos
-        this->setString(sText);
-        while (n-- > 0)
-            __moveCursor(1);
-
-        // this->contentDirty = true;
-        // __updateCursorPosition();
-
-        if (this->onTextModify)
-            this->onTextModify();
-    }
-
-    if (insert.npos == pos)
-    {
-        return;
-    }
-
-    // '\n' inserted, let delegate process first
-    /*if (_delegate && _delegate->onTextFieldInsertText(this, "\n", 1))
-    {
-    return;
-    }*/
-
-    // if delegate hasn't processed, detach from IME by default
-    this->closeIME();
+    const int position = getTextSelection();
+    replaceTextRange(position, position, std::string_view(text, len));
 }
 
 void TextFieldEx::deleteBackward(size_t numChars)
 {
-    if (!_editable || !this->_enabled || 0 == _charCount)
+    if (!_editable || !this->_enabled || numChars == 0)
     {
-        axbeep(0);
         return;
     }
 
-    size_t len = _inputText.length();
-    if (0 == len || _insertPos == 0)
+    size_t first = std::min(static_cast<size_t>(std::max(_insertPos, 0)), _inputText.size());
+    const size_t last = first;
+    while (first > 0 && numChars > 0)
     {
-        axbeep(0);
-        // there is no string
-        // __updateCursorPosition();
-        return;
-    }
-
-    // Length of characters to delete is based on input editor, but the actual
-    // length of the displayed text may be less
-    numChars = std::min(numChars, len);
-
-    size_t totalDeleteLen = 0;
-    for (auto i = 0; i < numChars; ++i)
-    {
-        // get the delete byte number
-        size_t deleteLen = 1;  // default, erase 1 byte
-
-        // Calculate the actual number of bytes to delete for a specific character
-        while (0x80 == (0xC0 & _inputText.at(_insertPos - totalDeleteLen - deleteLen)))
+        --first;
+        while (first > 0 &&
+               (static_cast<unsigned char>(_inputText[first]) & 0xC0) == 0x80)
         {
-            ++deleteLen;
+            --first;
         }
-        totalDeleteLen += deleteLen;
+        --numChars;
     }
 
-    // if (_delegate && _delegate->onTextFieldDeleteBackward(this, _inputText.c_str() + len - deleteLen,
-    // static_cast<int>(deleteLen)))
-    //{
-    //     // delegate doesn't want to delete backwards
-    //     return;
-    // }
-
-    // if all text deleted, show placeholder string
-    if (len <= totalDeleteLen)
-    {
-        __moveCursor(-1);
-
-        _inputText.clear();
-        _charCount = 0;
-        _renderLabel->setTextColor(_colorSpaceHolder);
-        _renderLabel->setString(_placeHolder);
-
-        // __updateCursorPosition();
-
-        // this->contentDirty = true;
-
-        if (this->onTextModify)
-            this->onTextModify();
-        return;
-    }
-
-    // set new input text
-    std::string text = _inputText;  // (inputText.c_str(), len - deleteLen);
-    text.erase(_insertPos - totalDeleteLen, totalDeleteLen);
-
-    __moveCursor(-1);
-
-    this->setString(text);
-
-    //__updateCursorPosition();
-    // __moveCursor(-1);
-
-    if (this->onTextModify)
-        this->onTextModify();
+    replaceTextRange(static_cast<int>(inputUtf16FromByte(_inputText, first)),
+                     static_cast<int>(inputUtf16FromByte(_inputText, last)), {});
 }
 
 void TextFieldEx::handleDeleteKeyEvent()
 {
-    if (!_editable || !this->_enabled || 0 == _charCount)
-    {
-        axbeep(0);
-        return;
-    }
+    const size_t first = std::min(static_cast<size_t>(std::max(_insertPos, 0)), _inputText.size());
+    const size_t last = inputNextByte(_inputText, first);
+    replaceTextRange(static_cast<int>(inputUtf16FromByte(_inputText, first)),
+                     static_cast<int>(inputUtf16FromByte(_inputText, last)), {});
+}
 
-    size_t len = _inputText.length();
-    if (0 == len || _insertPosUtf8 == _charCount)
-    {
-        axbeep(0);
-        // there is no string
-        // __updateCursorPosition();
-        return;
-    }
-
-    // get the delete byte number
-    size_t deleteLen = 1;  // default, erase 1 byte
-
-    while ((_inputText.length() > _insertPos + deleteLen) && 0x80 == (0xC0 & _inputText.at(_insertPos + deleteLen)))
-    {
-        ++deleteLen;
-    }
-
-    // if (_delegate && _delegate->onTextFieldDeleteBackward(this, _inputText.c_str() + len - deleteLen,
-    // static_cast<int>(deleteLen)))
-    //{
-    //     // delegate doesn't wan't to delete backwards
-    //     return;
-    // }
-
-    // if all text deleted, show placeholder string
-    if (len <= deleteLen)
-    {
-        _inputText.clear();
-        _charCount = 0;
-        _renderLabel->setTextColor(_colorSpaceHolder);
-        _renderLabel->setString(_placeHolder);
-
-        __updateCursorPosition();
-
-        // this->contentDirty = true;
-
-        if (this->onTextModify)
-            this->onTextModify();
-        return;
-    }
-
-    // set new input text
-    std::string text = _inputText;  // (inputText.c_str(), len - deleteLen);
-    text.erase(_insertPos, deleteLen);
-
-    // __moveCursor(-1);
-
-    this->setString(text);
-
-    if (this->onTextModify)
-        this->onTextModify();
+size_t TextFieldEx::getContentTextMaxLength()
+{
+    return _charLimit;
 }
 
 std::string_view TextFieldEx::getContentText()
@@ -934,52 +871,16 @@ void TextFieldEx::__updateCursorPosition(void)
     }
 }
 
+void TextFieldEx::__notifySelectionChanged()
+{
+    IMEDispatcher::sharedDispatcher()->notifyTextSelectionChanged(this);
+}
+
 void TextFieldEx::__moveCursor(int direction)
 {
-    auto newOffset = _insertPosUtf8 + direction;
-
-    if (newOffset > 0 && newOffset <= _charCount)
-    {
-
-        std::string_view displayText;
-        if (!_secureTextEntry)
-            displayText = this->getString();
-        else if (!_inputText.empty())
-            displayText = _renderLabel->getString();
-
-        if (direction < 0)
-        {
-            _insertPos = static_cast<int>(internalUTF8MoveLeft(_inputText, _insertPos).size());
-
-            auto s = internalUTF8MoveLeft(displayText, _cursorPos);
-
-            auto width = internalCalcStringWidth(s, _fontName, _fontSize);
-            _cursor->setPosition(Point(width, this->getContentSize().height / 2));
-            _cursorPos = static_cast<int>(s.length());
-        }
-        else
-        {
-            _insertPos = static_cast<int>(internalUTF8MoveRight(_inputText, _insertPos).size());
-
-            auto s     = internalUTF8MoveRight(displayText, _cursorPos);
-            auto width = internalCalcStringWidth(s, _fontName, _fontSize);
-            _cursor->setPosition(Point(width, this->getContentSize().height / 2));
-            _cursorPos = static_cast<int>(s.length());
-        }
-
-        _insertPosUtf8 = newOffset;
-    }
-    else if (newOffset == 0)
-    {
-        _cursor->setPosition(Point(0, this->getContentSize().height / 2));
-        _insertPosUtf8 = newOffset;
-        _insertPos     = 0;
-        _cursorPos     = 0;
-    }
-    else
-    {
-        // MessageBeep(0);
-    }
+    const int next = std::max(0, std::min(_insertPosUtf8 + direction, static_cast<int>(_charCount)));
+    __setCursorBytePosition(inputPrefixBytes(_inputText, static_cast<size_t>(next)));
+    __notifySelectionChanged();
 }
 
 void TextFieldEx::__moveCursorTo(float x)
@@ -1029,10 +930,11 @@ void TextFieldEx::__moveCursorTo(float x)
         length -= backwardLen;
     }
 
-    _insertPos     = !_secureTextEntry ? insertWhere : insertWhereUtf8;
+    _insertPos     = static_cast<int>(inputPrefixBytes(_inputText, static_cast<size_t>(insertWhereUtf8)));
     _cursorPos     = insertWhere;
     _insertPosUtf8 = insertWhereUtf8;
     _cursor->setPosition(Point(normalizedX, this->getContentSize().height / 2));
+    __notifySelectionChanged();
 }
 };  // namespace ui
 

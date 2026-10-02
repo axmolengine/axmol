@@ -31,8 +31,11 @@
 #include "platform/Application.h"
 #include "platform/FileUtils.h"
 #include <jni.h>
+#include <algorithm>
+#include <limits>
 
 #include "base/UTF8.h"
+#include "platform/android/jni/JniHelper.h"
 
 using namespace ax;
 
@@ -73,6 +76,61 @@ JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeInsertText(JNIEnv*
 JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeDeleteBackward(JNIEnv*, jclass, jint numChars)
 {
     ax::IMEDispatcher::sharedDispatcher()->dispatchDeleteBackward(numChars);
+}
+
+JNIEXPORT jint JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeGetContentTextMaxLength(JNIEnv*, jclass)
+{
+    const size_t limit = ax::IMEDispatcher::sharedDispatcher()->getContentTextMaxLength();
+
+    const size_t maxJavaLimit = static_cast<size_t>(std::numeric_limits<jint>::max());
+
+    return static_cast<jint>(std::min(limit, maxJavaLimit));
+}
+
+JNIEXPORT jlong JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeGetTextInputSession(JNIEnv*, jclass)
+{
+    auto dispatcher = IMEDispatcher::sharedDispatcher();
+    dispatcher->setTextSelectionChangedCallback([](uint64_t session, int selection)
+    {
+        JniHelper::callStaticVoidMethod(
+            "dev/axmol/lib/AxmolGLSurfaceView", "syncNativeSelection",
+            static_cast<jlong>(session), selection);
+    });
+    return static_cast<jlong>(dispatcher->getTextInputSession());
+}
+
+JNIEXPORT jboolean JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeSupportsTextInputRanges(JNIEnv*, jclass)
+{
+    return IMEDispatcher::sharedDispatcher()->supportsTextInputRanges() ? JNI_TRUE : JNI_FALSE;
+}
+
+JNIEXPORT jint JNICALL
+Java_dev_axmol_lib_AxmolRenderer_nativeGetTextSelection(JNIEnv*, jclass)
+{
+    return IMEDispatcher::sharedDispatcher()->getTextSelection();
+}
+
+JNIEXPORT jstring JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeReplaceTextRange(
+    JNIEnv* env, jclass, jlong session, jint start, jint end, jstring text)
+{
+    auto dispatcher = IMEDispatcher::sharedDispatcher();
+    if (!text || static_cast<uint64_t>(session) != dispatcher->getTextInputSession())
+    {
+        return nullptr;
+    }
+    const auto replacement = StringUtils::getStringUTFCharsJNI(env, text);
+    dispatcher->dispatchReplaceTextRange(static_cast<uint64_t>(session), start, end, replacement);
+    if (static_cast<uint64_t>(session) != dispatcher->getTextInputSession())
+    {
+        return nullptr;
+    }
+    return StringUtils::newStringUTFJNI(env, dispatcher->getContentText());
+}
+
+JNIEXPORT void JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeSetTextSelection(
+    JNIEnv*, jclass, jlong session, jint start, jint end)
+{
+    IMEDispatcher::sharedDispatcher()->dispatchTextSelection(static_cast<uint64_t>(session), start, end);
 }
 
 JNIEXPORT jstring JNICALL Java_dev_axmol_lib_AxmolRenderer_nativeGetContentText(JNIEnv* env, jclass)

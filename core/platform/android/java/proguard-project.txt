@@ -18,3 +18,7 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+# Called by C++ through JniHelper.
+-keepclassmembers class dev.axmol.lib.AxmolGLSurfaceView {
+    public static void syncNativeSelection(long, int);
+}

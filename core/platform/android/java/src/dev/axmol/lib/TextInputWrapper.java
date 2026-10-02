@@ -46,15 +46,18 @@ public class TextInputWrapper implements TextWatcher, OnEditorActionListener {
     // ===========================================================
 
     private final AxmolGLSurfaceView mGLSurfaceView;
-    private String mText;
+    private String mText = "";
     private String mOriginText;
+    private boolean mRangeInput;
+    private boolean mActive;
+    private boolean mSelectionPosted;
 
     // ===========================================================
     // Constructors
     // ===========================================================
 
-    public TextInputWrapper(final AxmolGLSurfaceView pAxmolGLSurfaceView) {
-        this.mGLSurfaceView = pAxmolGLSurfaceView;
+    public TextInputWrapper(final AxmolGLSurfaceView surfaceView) {
+        mGLSurfaceView = surfaceView;
     }
 
     // ===========================================================
@@ -62,13 +65,47 @@ public class TextInputWrapper implements TextWatcher, OnEditorActionListener {
     // ===========================================================
 
     private boolean isFullScreenEdit() {
-        final TextView textField = this.mGLSurfaceView.getEditText();
-        final InputMethodManager imm = (InputMethodManager) textField.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        return imm.isFullscreenMode();
+        final TextView field = mGLSurfaceView.getEditText();
+        final InputMethodManager imm = (InputMethodManager)
+            field.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        return imm != null && imm.isFullscreenMode();
     }
 
-    public void setOriginText(final String pOriginText) {
-        this.mOriginText = pOriginText;
+    public void setOriginText(final String text) {
+        mOriginText = text;
+        mText = text;
+    }
+
+    public void beginInput(final String text, final boolean rangeInput) {
+        setOriginText(text);
+        mRangeInput = rangeInput;
+        mActive = true;
+    }
+
+    public void endInput() {
+        mActive = false;
+    }
+
+    public boolean isRangeInputActive() {
+        return mActive && mRangeInput;
+    }
+
+    public void scheduleSelectionUpdate() {
+        if (!isRangeInputActive() || mSelectionPosted) {
+            return;
+        }
+        mSelectionPosted = true;
+        mGLSurfaceView.getEditText().post(new Runnable() {
+            @Override
+            public void run() {
+                mSelectionPosted = false;
+                if (isRangeInputActive()) {
+                    final AxmolEditBox field = mGLSurfaceView.getEditText();
+                    mGLSurfaceView.updateTextSelection(
+                        field.getSelectionStart(), field.getSelectionEnd());
+                }
+            }
+        });
     }
 
     // ===========================================================
@@ -76,75 +113,75 @@ public class TextInputWrapper implements TextWatcher, OnEditorActionListener {
     // ===========================================================
 
     @Override
-    public void afterTextChanged(final Editable s) {
-        if (this.isFullScreenEdit()) {
+    public void beforeTextChanged(final CharSequence text, final int start, final int count, final int after) {
+        mText = text.toString();
+    }
+
+    @Override
+    public void onTextChanged(final CharSequence text, final int start, final int before, final int count) {
+        if (!mActive) {
             return;
         }
-        int old_i = 0;
-        int new_i = 0;
-        while (old_i < this.mText.length() && new_i < s.length()) {
-            if (this.mText.charAt(old_i) != s.charAt(new_i)) {
-                break;
-            }
-            old_i += 1;
-            new_i += 1;
+
+        if (mRangeInput) {
+            mGLSurfaceView.replaceTextRange(
+                start, start + before,
+                text.subSequence(start, start + count).toString(), text.toString());
+            return;
         }
 
-        if (old_i < this.mText.length()) {
-            this.mGLSurfaceView.deleteBackward(this.mText.length() - old_i);
+        // Compatibility path for delegates without the new range interface.
+        if (isFullScreenEdit()) {
+            return;
         }
 
-        int nModified = s.length() - new_i;
-        if (nModified > 0) {
-            final String insertText = s.subSequence(new_i, s.length()).toString();
-            this.mGLSurfaceView.insertText(insertText);
+        if (before > 0) {
+            mGLSurfaceView.deleteBackward(mText.codePointCount(start, start + before));
         }
 
-        this.mText = s.toString();
+        if (count > 0) {
+            mGLSurfaceView.insertText(text.subSequence(start, start + count).toString());
+        }
     }
 
     @Override
-    public void beforeTextChanged(final CharSequence pCharSequence, final int start, final int count, final int after) {
-        this.mText = pCharSequence.toString();
-    }
-
-    @Override
-    public void onTextChanged(final CharSequence pCharSequence, final int start, final int before, final int count) {
-
+    public void afterTextChanged(final Editable text) {
+        mText = text.toString();
+        scheduleSelectionUpdate();
     }
 
     @Override
     public boolean onEditorAction(final TextView pTextView, final int pActionID, final KeyEvent pKeyEvent) {
-        if (this.mGLSurfaceView.getEditText() == pTextView && this.isFullScreenEdit()) {
-            // user press the action button, delete all old text and insert new text
-            if (null != mOriginText) {
-                if (!this.mOriginText.isEmpty()) {
-                    this.mGLSurfaceView.deleteBackward(this.mOriginText.length());
-                }
+        if (mGLSurfaceView.getEditText() != pTextView) {
+            return false;
+        }
+        if (isRangeInputActive()) {
+            if (pActionID == EditorInfo.IME_ACTION_DONE ||
+                (pActionID == EditorInfo.IME_NULL && pKeyEvent != null &&
+                 pKeyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER &&
+                 pKeyEvent.getAction() == KeyEvent.ACTION_DOWN)) {
+                mGLSurfaceView.finishTextInput();
+                return true;
+            }
+            return false;
+        }
+
+        if (isFullScreenEdit()) {
+            if (mOriginText != null && !mOriginText.isEmpty()) {
+                mGLSurfaceView.deleteBackward(
+                    mOriginText.codePointCount(0, mOriginText.length()));
             }
 
             String text = pTextView.getText().toString();
-
-            if (text != null) {
-                /* If user input nothing, translate "\n" to engine. */
-                if ( text.compareTo("") == 0) {
-                    text = "\n";
-                }
-
-                if ( '\n' != text.charAt(text.length() - 1)) {
-                    text += '\n';
-                }
+            if (!text.endsWith("\n")) {
+                text += "\n";
             }
-
-            final String insertText = text;
-            this.mGLSurfaceView.insertText(insertText);
-
+            mGLSurfaceView.insertText(text);
         }
 
         if (pActionID == EditorInfo.IME_ACTION_DONE) {
-            this.mGLSurfaceView.requestFocus();
+            mGLSurfaceView.requestFocus();
         }
         return false;
     }
-
 }

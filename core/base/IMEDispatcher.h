@@ -27,6 +27,8 @@ THE SOFTWARE.
 #pragma once
 
 #include "base/IMEDelegate.h"
+#include <cstdint>
+#include <functional>
 
 /**
  * @addtogroup base
@@ -75,6 +77,22 @@ public:
      * @lua NA
      */
     std::string_view getContentText();
+
+    /** Maximum input length of the active delegate; zero means unlimited. */
+    size_t getContentTextMaxLength();
+
+    // A platform adapter can observe caret movements without widget dependencies.
+    using TextSelectionChangedCallback = std::function<void(uint64_t, int)>;
+    void setTextSelectionChangedCallback(TextSelectionChangedCallback callback);
+    void notifyTextSelectionChanged(const IMEDelegate* delegate);
+
+    bool isDelegateAttached(const IMEDelegate* delegate) const;
+    uint64_t getTextInputSession() const;
+    bool supportsTextInputRanges() const;
+    int getTextSelection() const;
+    void dispatchReplaceTextRange(uint64_t session, int start, int end, std::string_view text);
+    void dispatchTextSelection(uint64_t session, int start, int end);
+
 
     //////////////////////////////////////////////////////////////////////////
     // dispatch keyboard notification

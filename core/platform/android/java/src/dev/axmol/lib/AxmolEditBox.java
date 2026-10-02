@@ -30,6 +30,10 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.Spanned;
+import android.text.SpannableString;
+import android.text.TextUtils;
+import java.util.ArrayList;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.Gravity;
@@ -126,7 +130,83 @@ public class AxmolEditBox extends EditText {
 
     private int mInputFlagConstraints;
     private int mInputModeConstraints;
-    private  int mMaxLength;
+    private InputFilter mTextFieldLengthFilter;
+
+    // This limit applies to the shared input view used by TextFieldEx.
+    // Zero means unlimited. Preserve unrelated input filters.
+    public void setTextFieldMaxLength(final int maxLength) {
+        final ArrayList<InputFilter> filters = new ArrayList<InputFilter>();
+
+        for (final InputFilter filter : getFilters()) {
+            if (filter != mTextFieldLengthFilter &&
+                !(filter instanceof InputFilter.LengthFilter)) {
+                filters.add(filter);
+            }
+        }
+
+        mTextFieldLengthFilter = null;
+
+        if (maxLength > 0) {
+            mTextFieldLengthFilter = new CodePointLengthFilter(maxLength);
+            filters.add(mTextFieldLengthFilter);
+        }
+
+        setFilters(filters.toArray(new InputFilter[0]));
+    }
+
+    private static final class CodePointLengthFilter implements InputFilter {
+        private final int mMaxLength;
+
+        CodePointLengthFilter(final int maxLength) {
+            mMaxLength = maxLength;
+        }
+
+        @Override
+        public CharSequence filter(
+            final CharSequence source, final int start, final int end,
+            final Spanned dest, final int dstart, final int dend) {
+            // A deletion must be permitted even if the buffer exceeds the limit.
+            if (start == end) {
+                return null;
+            }
+
+            final int existingCount = Character.codePointCount(dest, 0, dest.length());
+            final int replacedCount = Character.codePointCount(dest, dstart, dend);
+            final int available = mMaxLength - (existingCount - replacedCount);
+
+            if (available <= 0) {
+                return "";
+            }
+
+            if (Character.codePointCount(source, start, end) <= available) {
+                return null;
+            }
+
+            int acceptedEnd = start;
+
+            for (int count = 0; count < available; ++count) {
+                final char current = source.charAt(acceptedEnd);
+                ++acceptedEnd;
+
+                if (Character.isHighSurrogate(current) && acceptedEnd < end &&
+                    Character.isLowSurrogate(source.charAt(acceptedEnd))) {
+                    ++acceptedEnd;
+                }
+            }
+
+            final CharSequence accepted = source.subSequence(start, acceptedEnd);
+
+            if (source instanceof Spanned) {
+                final SpannableString result = new SpannableString(accepted);
+                TextUtils.copySpansFrom((Spanned)source, start, acceptedEnd, null, result, 0);
+                return result;
+            }
+
+            return accepted;
+        }
+    }
+
+    private int mMaxLength;
 
     public Boolean getChangedTextProgrammatically() {
         return changedTextProgrammatically;
@@ -284,17 +364,28 @@ public class AxmolEditBox extends EditText {
         this.setInputType(this.mInputModeConstraints | this.mInputFlagConstraints);
     }
 
+    private Runnable mTextFieldSelectionListener;
+
+    public void setTextFieldSelectionListener(final Runnable listener) {
+        mTextFieldSelectionListener = listener;
+    }
+
     @Override
-    public boolean onKeyDown(final int pKeyCode, final KeyEvent pKeyEvent) {
-        switch (pKeyCode) {
-            case KeyEvent.KEYCODE_BACK:
-                AxmolActivity activity = (AxmolActivity)this.getContext();
-                //To prevent program from going to background
-                activity.getGLSurfaceView().requestFocus();
-                return true;
-            default:
-                return super.onKeyDown(pKeyCode, pKeyEvent);
+    protected void onSelectionChanged(final int start, final int end) {
+        super.onSelectionChanged(start, end);
+        // This override can be called during the superclass constructor.
+        if (mTextFieldSelectionListener != null) {
+            mTextFieldSelectionListener.run();
         }
+    }
+
+    @Override
+    public boolean onKeyDown(final int keyCode, final KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            ((AxmolActivity)this.getContext()).getGLSurfaceView().requestFocus();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
