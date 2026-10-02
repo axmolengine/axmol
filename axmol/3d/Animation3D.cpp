@@ -47,9 +47,8 @@ bool Animation3D::initWithFile(std::string_view filename, std::string_view anima
     std::string fullPath = FileUtils::getInstance()->fullPathForFilename(filename);
 
     auto extension = FileUtils::getPathExtension(fullPath);
-    std::transform(extension.begin(), extension.end(), extension.begin(), [](unsigned char character) {
-        return static_cast<char>(std::tolower(character));
-    });
+    std::transform(extension.begin(), extension.end(), extension.begin(),
+                   [](unsigned char character) { return static_cast<char>(std::tolower(character)); });
     if (extension == ".gltf" || extension == ".glb")
     {
         Animation3DData animationdata;

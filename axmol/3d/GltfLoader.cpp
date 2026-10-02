@@ -17,17 +17,17 @@ namespace
 struct BufferView
 {
     const uint8_t* data = nullptr;
-    size_t size = 0;
+    size_t size         = 0;
 };
 
 struct Accessor
 {
     const uint8_t* data = nullptr;
-    size_t stride = 0;
-    size_t count = 0;
-    int componentType = 0;
-    int components = 0;
-    bool normalized = false;
+    size_t stride       = 0;
+    size_t count        = 0;
+    int componentType   = 0;
+    int components      = 0;
+    bool normalized     = false;
 };
 
 struct SkinInfo
@@ -44,11 +44,16 @@ uint32_t readUint32(const uint8_t* data)
 
 int componentCount(std::string_view type)
 {
-    if (type == "SCALAR") return 1;
-    if (type == "VEC2") return 2;
-    if (type == "VEC3") return 3;
-    if (type == "VEC4") return 4;
-    if (type == "MAT4") return 16;
+    if (type == "SCALAR")
+        return 1;
+    if (type == "VEC2")
+        return 2;
+    if (type == "VEC3")
+        return 3;
+    if (type == "VEC4")
+        return 4;
+    if (type == "MAT4")
+        return 16;
     return 0;
 }
 
@@ -57,31 +62,37 @@ size_t componentSize(int type)
     switch (type)
     {
     case 5120:
-    case 5121: return 1;
+    case 5121:
+        return 1;
     case 5122:
-    case 5123: return 2;
+    case 5123:
+        return 2;
     case 5125:
-    case 5126: return 4;
-    default: return 0;
+    case 5126:
+        return 4;
+    default:
+        return 0;
     }
 }
 
 float readComponent(const uint8_t* value, int type, bool normalized)
 {
-    int8_t signedByte = 0;
-    int16_t signedShort = 0;
+    int8_t signedByte      = 0;
+    int16_t signedShort    = 0;
     uint16_t unsignedShort = 0;
-    uint32_t unsignedInt = 0;
-    float floatValue = 0.0f;
+    uint32_t unsignedInt   = 0;
+    float floatValue       = 0.0f;
     switch (type)
     {
     case 5120:
         std::memcpy(&signedByte, value, sizeof(signedByte));
         return normalized ? std::max(-1.0f, static_cast<float>(signedByte) / 127.0f) : static_cast<float>(signedByte);
-    case 5121: return normalized ? static_cast<float>(*value) / 255.0f : static_cast<float>(*value);
+    case 5121:
+        return normalized ? static_cast<float>(*value) / 255.0f : static_cast<float>(*value);
     case 5122:
         std::memcpy(&signedShort, value, sizeof(signedShort));
-        return normalized ? std::max(-1.0f, static_cast<float>(signedShort) / 32767.0f) : static_cast<float>(signedShort);
+        return normalized ? std::max(-1.0f, static_cast<float>(signedShort) / 32767.0f)
+                          : static_cast<float>(signedShort);
     case 5123:
         std::memcpy(&unsignedShort, value, sizeof(unsignedShort));
         return normalized ? static_cast<float>(unsignedShort) / 65535.0f : static_cast<float>(unsignedShort);
@@ -91,7 +102,8 @@ float readComponent(const uint8_t* value, int type, bool normalized)
     case 5126:
         std::memcpy(&floatValue, value, sizeof(floatValue));
         return floatValue;
-    default: return 0.0f;
+    default:
+        return 0.0f;
     }
 }
 
@@ -113,13 +125,15 @@ uint32_t readIndex(const uint8_t* value, int type)
 bool decodeBase64(std::string_view source, std::vector<uint8_t>& output)
 {
     static constexpr char alphabet[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-    int value = 0;
-    int bits = -8;
+    int value                        = 0;
+    int bits                         = -8;
     for (const char character : source)
     {
-        if (character == '=') break;
+        if (character == '=')
+            break;
         const char* found = std::strchr(alphabet, character);
-        if (!found) continue;
+        if (!found)
+            continue;
         value = (value << 6) + static_cast<int>(found - alphabet);
         bits += 6;
         if (bits >= 0)
@@ -133,11 +147,14 @@ bool decodeBase64(std::string_view source, std::vector<uint8_t>& output)
 
 bool decodeDataUri(std::string_view uri, std::vector<uint8_t>& output)
 {
-    if (!uri.starts_with("data:")) return false;
+    if (!uri.starts_with("data:"))
+        return false;
     const auto comma = uri.find(',');
-    if (comma == std::string_view::npos) return false;
+    if (comma == std::string_view::npos)
+        return false;
     const auto metadata = uri.substr(5, comma - 5);
-    if (metadata.find(";base64") == std::string_view::npos) return false;
+    if (metadata.find(";base64") == std::string_view::npos)
+        return false;
     return decodeBase64(uri.substr(comma + 1), output);
 }
 
@@ -155,11 +172,12 @@ bool getAccessor(const rapidjson::Value& root, const std::vector<BufferView>& bu
         viewIndex >= static_cast<int>(root["bufferViews"].Size()))
         return false;
     const auto& view = root["bufferViews"][viewIndex];
-    if (!view.IsObject() || !view.HasMember("buffer") || !view["buffer"].IsInt()) return false;
-    const size_t viewOffset = view.HasMember("byteOffset") && view["byteOffset"].IsUint64()
-                                  ? view["byteOffset"].GetUint64()
-                                  : 0;
-    if (!view.HasMember("byteLength") || !view["byteLength"].IsUint64()) return false;
+    if (!view.IsObject() || !view.HasMember("buffer") || !view["buffer"].IsInt())
+        return false;
+    const size_t viewOffset =
+        view.HasMember("byteOffset") && view["byteOffset"].IsUint64() ? view["byteOffset"].GetUint64() : 0;
+    if (!view.HasMember("byteLength") || !view["byteLength"].IsUint64())
+        return false;
     const size_t viewSize = view["byteLength"].GetUint64();
     const int bufferIndex = view["buffer"].GetInt();
     if (bufferIndex < 0 || bufferIndex >= static_cast<int>(buffers.size()) || viewOffset > buffers[bufferIndex].size ||
@@ -168,17 +186,18 @@ bool getAccessor(const rapidjson::Value& root, const std::vector<BufferView>& bu
     if (!accessor.HasMember("count") || !accessor["count"].IsUint64() || !accessor.HasMember("componentType") ||
         !accessor["componentType"].IsInt() || !accessor.HasMember("type") || !accessor["type"].IsString())
         return false;
-    const size_t accessorOffset = accessor.HasMember("byteOffset") && accessor["byteOffset"].IsUint64()
-                                      ? accessor["byteOffset"].GetUint64()
-                                      : 0;
+    const size_t accessorOffset =
+        accessor.HasMember("byteOffset") && accessor["byteOffset"].IsUint64() ? accessor["byteOffset"].GetUint64() : 0;
     result.count = accessor["count"].GetUint64();
-    if (result.count == 0) return false;
+    if (result.count == 0)
+        return false;
     result.componentType = accessor["componentType"].GetInt();
-    result.components = componentCount(accessor["type"].GetString());
-    result.normalized = accessor.HasMember("normalized") && accessor["normalized"].IsBool() &&
-                        accessor["normalized"].GetBool();
+    result.components    = componentCount(accessor["type"].GetString());
+    result.normalized =
+        accessor.HasMember("normalized") && accessor["normalized"].IsBool() && accessor["normalized"].GetBool();
     const size_t elementSize = componentSize(result.componentType) * result.components;
-    if (view.HasMember("byteStride") && !view["byteStride"].IsUint64()) return false;
+    if (view.HasMember("byteStride") && !view["byteStride"].IsUint64())
+        return false;
     result.stride = view.HasMember("byteStride") ? view["byteStride"].GetUint64() : elementSize;
     if (result.components <= 0 || elementSize == 0 || result.stride < elementSize || accessorOffset > viewSize ||
         elementSize > viewSize - accessorOffset)
@@ -189,20 +208,22 @@ bool getAccessor(const rapidjson::Value& root, const std::vector<BufferView>& bu
     return true;
 }
 
-bool getBufferView(const rapidjson::Value& root, const std::vector<BufferView>& buffers, int index,
-                   const uint8_t*& data, size_t& size)
+bool getBufferView(const rapidjson::Value& root,
+                   const std::vector<BufferView>& buffers,
+                   int index,
+                   const uint8_t*& data,
+                   size_t& size)
 {
     if (!root.HasMember("bufferViews") || !root["bufferViews"].IsArray() || index < 0 ||
         index >= static_cast<int>(root["bufferViews"].Size()))
         return false;
     const auto& view = root["bufferViews"][index];
-    if (!view.IsObject() || !view.HasMember("buffer") || !view["buffer"].IsInt() ||
-        !view.HasMember("byteLength") || !view["byteLength"].IsUint64())
+    if (!view.IsObject() || !view.HasMember("buffer") || !view["buffer"].IsInt() || !view.HasMember("byteLength") ||
+        !view["byteLength"].IsUint64())
         return false;
     const int bufferIndex = view["buffer"].GetInt();
-    const size_t viewOffset = view.HasMember("byteOffset") && view["byteOffset"].IsUint64()
-                                  ? view["byteOffset"].GetUint64()
-                                  : 0;
+    const size_t viewOffset =
+        view.HasMember("byteOffset") && view["byteOffset"].IsUint64() ? view["byteOffset"].GetUint64() : 0;
     size = view["byteLength"].GetUint64();
     if (bufferIndex < 0 || bufferIndex >= static_cast<int>(buffers.size()) || viewOffset > buffers[bufferIndex].size ||
         size > buffers[bufferIndex].size - viewOffset)
@@ -213,22 +234,29 @@ bool getBufferView(const rapidjson::Value& root, const std::vector<BufferView>& 
 
 bool readMatrixAccessor(const Accessor& accessor, size_t index, Mat4& matrix)
 {
-    if (accessor.componentType != 5126 || accessor.components != 16 || index >= accessor.count) return false;
+    if (accessor.componentType != 5126 || accessor.components != 16 || index >= accessor.count)
+        return false;
     const auto* values = accessor.data + index * accessor.stride;
     for (int component = 0; component < 16; ++component)
         matrix.m[component] = readComponent(values + component * sizeof(float), 5126, false);
     return true;
 }
 
-bool readBuffers(const rapidjson::Document& document, std::string_view path, const uint8_t* glbBin, size_t glbBinSize,
-                 std::vector<std::vector<uint8_t>>& owned, std::vector<BufferView>& buffers)
+bool readBuffers(const rapidjson::Document& document,
+                 std::string_view path,
+                 const uint8_t* glbBin,
+                 size_t glbBinSize,
+                 std::vector<std::vector<uint8_t>>& owned,
+                 std::vector<BufferView>& buffers)
 {
-    if (!document.HasMember("buffers") || !document["buffers"].IsArray()) return false;
+    if (!document.HasMember("buffers") || !document["buffers"].IsArray())
+        return false;
     const auto directory = FileUtils::getPathDirName(path);
-    size_t bufferIndex = 0;
+    size_t bufferIndex   = 0;
     for (const auto& buffer : document["buffers"].GetArray())
     {
-        if (!buffer.IsObject() || !buffer.HasMember("byteLength") || !buffer["byteLength"].IsUint64()) return false;
+        if (!buffer.IsObject() || !buffer.HasMember("byteLength") || !buffer["byteLength"].IsUint64())
+            return false;
         const size_t declaredSize = buffer["byteLength"].GetUint64();
         std::vector<uint8_t> data;
         if (buffer.HasMember("uri") && buffer["uri"].IsString())
@@ -236,22 +264,27 @@ bool readBuffers(const rapidjson::Document& document, std::string_view path, con
             const std::string_view uri = buffer["uri"].GetString();
             if (uri.starts_with("data:"))
             {
-                if (!decodeDataUri(uri, data)) return false;
+                if (!decodeDataUri(uri, data))
+                    return false;
             }
             else
             {
                 const auto fileData = FileUtils::getInstance()->getDataFromFile(directory + "/" + std::string(uri));
-                if (!fileData.getBytes() || fileData.getSize() == 0) return false;
+                if (!fileData.getBytes() || fileData.getSize() == 0)
+                    return false;
                 data.assign(fileData.getBytes(), fileData.getBytes() + fileData.getSize());
             }
         }
         else if (glbBin && bufferIndex == 0)
         {
-            if (declaredSize > glbBinSize) return false;
+            if (declaredSize > glbBinSize)
+                return false;
             data.assign(glbBin, glbBin + declaredSize);
         }
-        else return false;
-        if (data.size() < declaredSize) return false;
+        else
+            return false;
+        if (data.size() < declaredSize)
+            return false;
         data.resize(declaredSize);
         owned.emplace_back(std::move(data));
         buffers.push_back({owned.back().data(), owned.back().size()});
@@ -263,29 +296,36 @@ bool readBuffers(const rapidjson::Document& document, std::string_view path, con
 bool readDocument(std::string_view path, rapidjson::Document& document, std::vector<uint8_t>& bin)
 {
     const auto data = FileUtils::getInstance()->getDataFromFile(path);
-    if (!data.getBytes() || data.getSize() == 0) return false;
+    if (!data.getBytes() || data.getSize() == 0)
+        return false;
     if (data.getSize() >= 12 && std::memcmp(data.getBytes(), "glTF", 4) == 0)
     {
-        const auto* bytes = data.getBytes();
+        const auto* bytes      = data.getBytes();
         const uint32_t version = readUint32(bytes + 4);
-        const uint32_t length = readUint32(bytes + 8);
-        if (version != 2 || length > data.getSize() || length < 12) return false;
+        const uint32_t length  = readUint32(bytes + 8);
+        if (version != 2 || length > data.getSize() || length < 12)
+            return false;
         size_t offset = 12;
         std::string json;
         while (offset + 8 <= data.getSize() && offset < length)
         {
             const uint32_t chunkLength = readUint32(bytes + offset);
-            const uint32_t chunkType = readUint32(bytes + offset + 4);
+            const uint32_t chunkType   = readUint32(bytes + offset + 4);
             offset += 8;
-            if (offset + chunkLength > length) return false;
-            if (chunkType == 0x4e4f534a) json.assign(reinterpret_cast<const char*>(bytes + offset), chunkLength);
-            if (chunkType == 0x004e4942) bin.assign(bytes + offset, bytes + offset + chunkLength);
+            if (offset + chunkLength > length)
+                return false;
+            if (chunkType == 0x4e4f534a)
+                json.assign(reinterpret_cast<const char*>(bytes + offset), chunkLength);
+            if (chunkType == 0x004e4942)
+                bin.assign(bytes + offset, bytes + offset + chunkLength);
             offset += chunkLength;
         }
-        if (json.empty()) return false;
+        if (json.empty())
+            return false;
         document.Parse(json.data(), json.size());
     }
-    else document.Parse(reinterpret_cast<const char*>(data.getBytes()), data.getSize());
+    else
+        document.Parse(reinterpret_cast<const char*>(data.getBytes()), data.getSize());
     return !document.HasParseError() && document.IsObject();
 }
 
@@ -311,8 +351,7 @@ Mat4 readNodeTransform(const rapidjson::Value& node)
     Vec3 scale(1.0f, 1.0f, 1.0f);
     Quat rotation;
     if (node.HasMember("translation") && node["translation"].IsArray() && node["translation"].Size() == 3 &&
-        node["translation"][0].IsNumber() && node["translation"][1].IsNumber() &&
-        node["translation"][2].IsNumber())
+        node["translation"][0].IsNumber() && node["translation"][1].IsNumber() && node["translation"][2].IsNumber())
         translation.set(node["translation"][0].GetFloat(), node["translation"][1].GetFloat(),
                         node["translation"][2].GetFloat());
     if (node.HasMember("scale") && node["scale"].IsArray() && node["scale"].Size() == 3 &&
@@ -332,16 +371,18 @@ Mat4 readNodeTransform(const rapidjson::Value& node)
     Mat4::createScale(scale, &scaleMatrix);
     return translationMatrix * rotationMatrix * scaleMatrix;
 }
-}
+}  // namespace
 
 bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::string_view path)
 {
     rapidjson::Document document;
     std::vector<uint8_t> glbBin;
-    if (!readDocument(path, document, glbBin)) return false;
+    if (!readDocument(path, document, glbBin))
+        return false;
     std::vector<std::vector<uint8_t>> owned;
     std::vector<BufferView> buffers;
-    if (!readBuffers(document, path, glbBin.empty() ? nullptr : glbBin.data(), glbBin.size(), owned, buffers)) return false;
+    if (!readBuffers(document, path, glbBin.empty() ? nullptr : glbBin.data(), glbBin.size(), owned, buffers))
+        return false;
 
     std::vector<SkinInfo> skins;
     if (document.HasMember("skins") && document["skins"].IsArray())
@@ -354,20 +395,24 @@ bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::st
             SkinInfo skin;
             for (const auto& joint : sourceSkin["joints"].GetArray())
             {
-                if (!joint.IsUint()) return false;
+                if (!joint.IsUint())
+                    return false;
                 skin.joints.emplace_back(static_cast<int>(joint.GetUint()));
             }
-            if (skin.joints.empty() || skin.joints.size() > 60) return false;
+            if (skin.joints.empty() || skin.joints.size() > 60)
+                return false;
             if (sourceSkin.HasMember("inverseBindMatrices"))
             {
-                if (!sourceSkin["inverseBindMatrices"].IsInt()) return false;
+                if (!sourceSkin["inverseBindMatrices"].IsInt())
+                    return false;
                 Accessor inverseBindMatrices;
                 if (!getAccessor(document, buffers, sourceSkin["inverseBindMatrices"].GetInt(), inverseBindMatrices) ||
                     inverseBindMatrices.count != skin.joints.size())
                     return false;
                 skin.inverseBindPoses.resize(skin.joints.size());
                 for (size_t index = 0; index < skin.joints.size(); ++index)
-                    if (!readMatrixAccessor(inverseBindMatrices, index, skin.inverseBindPoses[index])) return false;
+                    if (!readMatrixAccessor(inverseBindMatrices, index, skin.inverseBindPoses[index]))
+                        return false;
             }
             else
             {
@@ -397,18 +442,18 @@ bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::st
                     textureIndex < static_cast<int>(document["textures"].Size()))
                 {
                     const auto& textureSource = document["textures"][textureIndex];
-                    const int imageIndex = textureSource.IsObject() && textureSource.HasMember("source") &&
-                                                   textureSource["source"].IsInt()
-                                               ? textureSource["source"].GetInt()
-                                               : -1;
+                    const int imageIndex =
+                        textureSource.IsObject() && textureSource.HasMember("source") && textureSource["source"].IsInt()
+                            ? textureSource["source"].GetInt()
+                            : -1;
                     if (document.HasMember("images") && document["images"].IsArray() && imageIndex >= 0 &&
                         imageIndex < static_cast<int>(document["images"].Size()))
                     {
                         const auto& image = document["images"][imageIndex];
                         NTextureData texture;
-                        texture.type = NTextureData::Usage::Diffuse;
-                        texture.wrapS = rhi::SamplerAddressMode::REPEAT;
-                        texture.wrapT = rhi::SamplerAddressMode::REPEAT;
+                        texture.type     = NTextureData::Usage::Diffuse;
+                        texture.wrapS    = rhi::SamplerAddressMode::REPEAT;
+                        texture.wrapT    = rhi::SamplerAddressMode::REPEAT;
                         texture.filename = std::string(path) + "#image" + std::to_string(imageIndex);
                         if (image.IsObject() && image.HasMember("uri") && image["uri"].IsString())
                         {
@@ -428,7 +473,7 @@ bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::st
                         else if (image.IsObject() && image.HasMember("bufferView") && image["bufferView"].IsInt())
                         {
                             const uint8_t* imageBytes = nullptr;
-                            size_t imageSize = 0;
+                            size_t imageSize          = 0;
                             if (!getBufferView(document, buffers, image["bufferView"].GetInt(), imageBytes, imageSize))
                                 return false;
                             texture.imageData.copy(imageBytes, imageSize);
@@ -441,7 +486,8 @@ bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::st
         }
     }
 
-    if (!document.HasMember("meshes") || !document["meshes"].IsArray()) return false;
+    if (!document.HasMember("meshes") || !document["meshes"].IsArray())
+        return false;
     size_t meshIndex = 0;
     std::vector<uint32_t> meshMaxJointIndex;
     std::vector<std::vector<std::string>> primitiveIds;
@@ -451,75 +497,90 @@ bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::st
         primitiveIds.emplace_back();
         primitiveMaterials.emplace_back();
         meshMaxJointIndex.emplace_back(0);
-        if (!sourceMesh.IsObject()) return false;
-        if (!sourceMesh.HasMember("primitives") || !sourceMesh["primitives"].IsArray()) continue;
+        if (!sourceMesh.IsObject())
+            return false;
+        if (!sourceMesh.HasMember("primitives") || !sourceMesh["primitives"].IsArray())
+            continue;
         for (const auto& primitive : sourceMesh["primitives"].GetArray())
         {
-            if (!primitive.IsObject()) return false;
+            if (!primitive.IsObject())
+                return false;
             if (primitive.HasMember("mode") && (!primitive["mode"].IsInt() || primitive["mode"].GetInt() != 4))
                 continue;
             if (!primitive.HasMember("attributes") || !primitive["attributes"].IsObject() ||
                 !primitive["attributes"].HasMember("POSITION") || !primitive["attributes"]["POSITION"].IsInt())
                 continue;
             Accessor position;
-            if (!getAccessor(document, buffers, primitive["attributes"]["POSITION"].GetInt(), position)) return false;
-            if (position.components != 3) return false;
+            if (!getAccessor(document, buffers, primitive["attributes"]["POSITION"].GetInt(), position))
+                return false;
+            if (position.components != 3)
+                return false;
             Accessor normal, texcoord, joints, weights, indices;
             const bool hasNormal = primitive["attributes"].HasMember("NORMAL") &&
                                    primitive["attributes"]["NORMAL"].IsInt() &&
                                    getAccessor(document, buffers, primitive["attributes"]["NORMAL"].GetInt(), normal) &&
                                    normal.components == 3 && normal.count == position.count;
-            const bool hasTexcoord = primitive["attributes"].HasMember("TEXCOORD_0") &&
-                                     primitive["attributes"]["TEXCOORD_0"].IsInt() &&
-                                     getAccessor(document, buffers, primitive["attributes"]["TEXCOORD_0"].GetInt(), texcoord) &&
-                                     texcoord.components == 2 && texcoord.count == position.count;
-            const bool hasJoints = primitive["attributes"].HasMember("JOINTS_0") &&
-                                   primitive["attributes"]["JOINTS_0"].IsInt() &&
-                                   getAccessor(document, buffers, primitive["attributes"]["JOINTS_0"].GetInt(), joints) &&
-                                   joints.components == 4 && joints.count == position.count &&
-                                   (joints.componentType == 5121 || joints.componentType == 5123);
-            const bool hasWeights = primitive["attributes"].HasMember("WEIGHTS_0") &&
-                                    primitive["attributes"]["WEIGHTS_0"].IsInt() &&
-                                    getAccessor(document, buffers, primitive["attributes"]["WEIGHTS_0"].GetInt(), weights) &&
-                                    weights.components == 4 && weights.count == position.count;
+            const bool hasTexcoord =
+                primitive["attributes"].HasMember("TEXCOORD_0") && primitive["attributes"]["TEXCOORD_0"].IsInt() &&
+                getAccessor(document, buffers, primitive["attributes"]["TEXCOORD_0"].GetInt(), texcoord) &&
+                texcoord.components == 2 && texcoord.count == position.count;
+            const bool hasJoints =
+                primitive["attributes"].HasMember("JOINTS_0") && primitive["attributes"]["JOINTS_0"].IsInt() &&
+                getAccessor(document, buffers, primitive["attributes"]["JOINTS_0"].GetInt(), joints) &&
+                joints.components == 4 && joints.count == position.count &&
+                (joints.componentType == 5121 || joints.componentType == 5123);
+            const bool hasWeights =
+                primitive["attributes"].HasMember("WEIGHTS_0") && primitive["attributes"]["WEIGHTS_0"].IsInt() &&
+                getAccessor(document, buffers, primitive["attributes"]["WEIGHTS_0"].GetInt(), weights) &&
+                weights.components == 4 && weights.count == position.count;
             const bool hasSkinAttributes = hasJoints && hasWeights;
-            bool hasIndices = false;
+            bool hasIndices              = false;
             if (primitive.HasMember("indices"))
             {
-                if (!primitive["indices"].IsInt() || !getAccessor(document, buffers, primitive["indices"].GetInt(), indices) ||
+                if (!primitive["indices"].IsInt() ||
+                    !getAccessor(document, buffers, primitive["indices"].GetInt(), indices) ||
                     indices.components != 1 ||
                     (indices.componentType != 5121 && indices.componentType != 5123 && indices.componentType != 5125))
                     return false;
                 hasIndices = true;
             }
-            auto* mesh = new MeshData();
+            auto* mesh     = new MeshData();
             auto addAttrib = [&](MeshVertexAttribute attribute, rhi::VertexElementType type) {
                 MeshVertexAttrib value;
                 value.vertexAttrib = attribute;
-                value.type = type;
+                value.type         = type;
                 mesh->attribs.emplace_back(value);
             };
             addAttrib(MeshVertexAttribute::POSITION, rhi::VertexElementType::FLOAT3);
-            if (hasNormal) addAttrib(MeshVertexAttribute::NORMAL, rhi::VertexElementType::FLOAT3);
-            if (hasTexcoord) addAttrib(MeshVertexAttribute::TEXCOORD0, rhi::VertexElementType::FLOAT2);
+            if (hasNormal)
+                addAttrib(MeshVertexAttribute::NORMAL, rhi::VertexElementType::FLOAT3);
+            if (hasTexcoord)
+                addAttrib(MeshVertexAttribute::TEXCOORD0, rhi::VertexElementType::FLOAT2);
             if (hasSkinAttributes)
             {
                 addAttrib(MeshVertexAttribute::BLENDINDICES, rhi::VertexElementType::FLOAT4);
                 addAttrib(MeshVertexAttribute::BLENDWEIGHT, rhi::VertexElementType::FLOAT4);
-                if (!hasTexcoord) return false;
+                if (!hasTexcoord)
+                    return false;
             }
             for (size_t vertex = 0; vertex < position.count; ++vertex)
             {
                 const auto* p = position.data + vertex * position.stride;
-                for (int component = 0; component < 3; ++component) mesh->vertex.emplace_back(readComponent(p + component * componentSize(position.componentType), position.componentType, position.normalized));
-                if (hasNormal) for (int component = 0; component < 3; ++component) mesh->vertex.emplace_back(readComponent(normal.data + vertex * normal.stride + component * componentSize(normal.componentType), normal.componentType, normal.normalized));
+                for (int component = 0; component < 3; ++component)
+                    mesh->vertex.emplace_back(readComponent(p + component * componentSize(position.componentType),
+                                                            position.componentType, position.normalized));
+                if (hasNormal)
+                    for (int component = 0; component < 3; ++component)
+                        mesh->vertex.emplace_back(readComponent(
+                            normal.data + vertex * normal.stride + component * componentSize(normal.componentType),
+                            normal.componentType, normal.normalized));
                 if (hasTexcoord)
                 {
                     mesh->vertex.emplace_back(readComponent(texcoord.data + vertex * texcoord.stride,
                                                             texcoord.componentType, texcoord.normalized));
-                    mesh->vertex.emplace_back(
-                        1.0f - readComponent(texcoord.data + vertex * texcoord.stride + componentSize(texcoord.componentType),
-                                              texcoord.componentType, texcoord.normalized));
+                    mesh->vertex.emplace_back(1.0f - readComponent(texcoord.data + vertex * texcoord.stride +
+                                                                       componentSize(texcoord.componentType),
+                                                                   texcoord.componentType, texcoord.normalized));
                 }
                 if (hasSkinAttributes)
                 {
@@ -544,16 +605,16 @@ bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::st
                     for (int component = 0; component < 4; ++component)
                     {
                         mesh->vertex.emplace_back(jointValues[component]);
-                        meshMaxJointIndex.back() = std::max(meshMaxJointIndex.back(),
-                                                            static_cast<uint32_t>(jointValues[component]));
+                        meshMaxJointIndex.back() =
+                            std::max(meshMaxJointIndex.back(), static_cast<uint32_t>(jointValues[component]));
                     }
                     for (int component = 0; component < 4; ++component)
                         mesh->vertex.emplace_back(weightValues[component]);
                 }
             }
             mesh->vertexSizeInFloat = 3 + (hasNormal ? 3 : 0) + (hasTexcoord ? 2 : 0) + (hasSkinAttributes ? 8 : 0);
-            const bool use32BitIndices = (hasIndices && indices.componentType == 5125) ||
-                                         (!hasIndices && position.count > UINT16_MAX);
+            const bool use32BitIndices =
+                (hasIndices && indices.componentType == 5125) || (!hasIndices && position.count > UINT16_MAX);
             IndexArray indexArray(use32BitIndices ? rhi::IndexFormat::U_INT : rhi::IndexFormat::U_SHORT);
             if (hasIndices)
             {
@@ -565,8 +626,10 @@ bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::st
                         delete mesh;
                         return false;
                     }
-                    if (indexArray.format() == rhi::IndexFormat::U_INT) indexArray.emplace_back<uint32_t>(value);
-                    else indexArray.emplace_back<uint16_t>(static_cast<uint16_t>(value));
+                    if (indexArray.format() == rhi::IndexFormat::U_INT)
+                        indexArray.emplace_back<uint32_t>(value);
+                    else
+                        indexArray.emplace_back<uint16_t>(static_cast<uint16_t>(value));
                 }
             }
             else
@@ -595,14 +658,18 @@ bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::st
         const auto& sourceNodes = document["nodes"];
         std::vector<uint8_t> visitState(sourceNodes.Size(), 0);
         auto validateNode = [&](auto&& self, size_t nodeIndex) -> bool {
-            if (visitState[nodeIndex] == 1) return false;
-            if (visitState[nodeIndex] == 2) return true;
-            visitState[nodeIndex] = 1;
+            if (visitState[nodeIndex] == 1)
+                return false;
+            if (visitState[nodeIndex] == 2)
+                return true;
+            visitState[nodeIndex]  = 1;
             const auto& sourceNode = sourceNodes[nodeIndex];
-            if (!sourceNode.IsObject()) return false;
+            if (!sourceNode.IsObject())
+                return false;
             if (sourceNode.HasMember("children"))
             {
-                if (!sourceNode["children"].IsArray()) return false;
+                if (!sourceNode["children"].IsArray())
+                    return false;
                 for (const auto& child : sourceNode["children"].GetArray())
                 {
                     if (!child.IsUint() || child.GetUint() >= sourceNodes.Size() ||
@@ -614,23 +681,24 @@ bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::st
             return true;
         };
         for (size_t index = 0; index < sourceNodes.Size(); ++index)
-            if (!validateNode(validateNode, index)) return false;
+            if (!validateNode(validateNode, index))
+                return false;
         for (const auto& skin : skins)
             for (const auto joint : skin.joints)
                 if (joint < 0 || joint >= static_cast<int>(sourceNodes.Size()) || !sourceNodes[joint].IsObject())
                     return false;
-        auto nodeName = [&](int nodeIndex) {
-            return std::string("gltf_node_") + std::to_string(nodeIndex);
-        };
+        auto nodeName = [&](int nodeIndex) { return std::string("gltf_node_") + std::to_string(nodeIndex); };
         for (const auto& skin : skins)
         {
             std::vector<bool> isJoint(sourceNodes.Size());
             std::vector<bool> hasJointParent(sourceNodes.Size());
             for (const auto joint : skin.joints)
-                if (joint >= 0 && joint < static_cast<int>(sourceNodes.Size())) isJoint[joint] = true;
+                if (joint >= 0 && joint < static_cast<int>(sourceNodes.Size()))
+                    isJoint[joint] = true;
             for (const auto joint : skin.joints)
             {
-                if (!isJoint[joint]) continue;
+                if (!isJoint[joint])
+                    continue;
                 const auto& sourceNode = sourceNodes[joint];
                 if (!sourceNode.IsObject() || !sourceNode.HasMember("children") || !sourceNode["children"].IsArray())
                     continue;
@@ -640,9 +708,9 @@ bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::st
             }
             auto makeBone = [&](auto&& self, int nodeIndex) -> NodeData* {
                 const auto& sourceNode = sourceNodes[nodeIndex];
-                auto* bone = new NodeData();
-                bone->id = nodeName(nodeIndex);
-                bone->transform = readNodeTransform(sourceNode);
+                auto* bone             = new NodeData();
+                bone->id               = nodeName(nodeIndex);
+                bone->transform        = readNodeTransform(sourceNode);
                 if (sourceNode.HasMember("children") && sourceNode["children"].IsArray())
                     for (const auto& child : sourceNode["children"].GetArray())
                         if (child.IsUint() && child.GetUint() < isJoint.size() && isJoint[child.GetUint()])
@@ -656,16 +724,21 @@ bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::st
         std::vector<bool> hasParent(sourceNodes.Size());
         for (const auto& sourceNode : sourceNodes.GetArray())
         {
-            if (!sourceNode.IsObject()) return false;
-            if (!sourceNode.HasMember("children") || !sourceNode["children"].IsArray()) continue;
+            if (!sourceNode.IsObject())
+                return false;
+            if (!sourceNode.HasMember("children") || !sourceNode["children"].IsArray())
+                continue;
             for (const auto& child : sourceNode["children"].GetArray())
-                if (child.IsUint() && child.GetUint() < hasParent.size()) hasParent[child.GetUint()] = true;
+                if (child.IsUint() && child.GetUint() < hasParent.size())
+                    hasParent[child.GetUint()] = true;
         }
 
         auto addNode = [&](auto&& self, int nodeIndex, const Mat4& parentTransform) -> void {
-            if (nodeIndex < 0 || nodeIndex >= static_cast<int>(sourceNodes.Size())) return;
+            if (nodeIndex < 0 || nodeIndex >= static_cast<int>(sourceNodes.Size()))
+                return;
             const auto& sourceNode = sourceNodes[nodeIndex];
-            if (!sourceNode.IsObject()) return;
+            if (!sourceNode.IsObject())
+                return;
             const Mat4 worldTransform = parentTransform * readNodeTransform(sourceNode);
             if (sourceNode.HasMember("mesh") && sourceNode["mesh"].IsUint() &&
                 sourceNode["mesh"].GetUint() < primitiveIds.size())
@@ -673,13 +746,13 @@ bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::st
                 const auto meshId = sourceNode["mesh"].GetUint();
                 for (size_t primitive = 0; primitive < primitiveIds[meshId].size(); ++primitive)
                 {
-                    auto* node = new NodeData();
-                    node->id = sourceNode.HasMember("name") && sourceNode["name"].IsString()
-                                   ? sourceNode["name"].GetString()
-                                   : std::to_string(nodeIndex);
-                    node->transform = worldTransform;
-                    auto* model = new ModelData();
-                    model->subMeshId = primitiveIds[meshId][primitive];
+                    auto* node        = new NodeData();
+                    node->id          = sourceNode.HasMember("name") && sourceNode["name"].IsString()
+                                            ? sourceNode["name"].GetString()
+                                            : std::to_string(nodeIndex);
+                    node->transform   = worldTransform;
+                    auto* model       = new ModelData();
+                    model->subMeshId  = primitiveIds[meshId][primitive];
                     model->materialId = primitiveMaterials[meshId][primitive];
                     if (sourceNode.HasMember("skin") && sourceNode["skin"].IsUint() &&
                         sourceNode["skin"].GetUint() < skins.size())
@@ -701,39 +774,42 @@ bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::st
         };
 
         Mat4 identity;
-        bool addedSceneNodes = false;
+        bool addedSceneNodes  = false;
         bool hasSelectedScene = false;
         if (document.HasMember("scenes") && document["scenes"].IsArray() && !document["scenes"].Empty())
         {
-            size_t sceneIndex = document.HasMember("scene") && document["scene"].IsUint()
-                                    ? document["scene"].GetUint()
-                                    : 0;
-            if (sceneIndex >= document["scenes"].Size() || !document["scenes"][sceneIndex].IsObject()) return false;
+            size_t sceneIndex =
+                document.HasMember("scene") && document["scene"].IsUint() ? document["scene"].GetUint() : 0;
+            if (sceneIndex >= document["scenes"].Size() || !document["scenes"][sceneIndex].IsObject())
+                return false;
             const auto& scene = document["scenes"][sceneIndex];
-            if (scene.HasMember("nodes") && !scene["nodes"].IsArray()) return false;
+            if (scene.HasMember("nodes") && !scene["nodes"].IsArray())
+                return false;
             if (scene.HasMember("nodes"))
             {
                 for (const auto& root : scene["nodes"].GetArray())
                 {
-                    if (!root.IsUint() || root.GetUint() >= sourceNodes.Size()) return false;
+                    if (!root.IsUint() || root.GetUint() >= sourceNodes.Size())
+                        return false;
                     addNode(addNode, static_cast<int>(root.GetUint()), identity);
                 }
             }
-            addedSceneNodes = true;
+            addedSceneNodes  = true;
             hasSelectedScene = true;
         }
         if (!addedSceneNodes && !hasSelectedScene)
             for (rapidjson::SizeType index = 0; index < sourceNodes.Size(); ++index)
-                if (!hasParent[index]) addNode(addNode, static_cast<int>(index), identity);
+                if (!hasParent[index])
+                    addNode(addNode, static_cast<int>(index), identity);
     }
 
     if (nodes.nodes.empty() && !document.HasMember("scenes"))
     {
         for (size_t index = 0; index < meshIndex; ++index)
         {
-            auto* node = new NodeData();
-            node->id = std::to_string(index);
-            auto* model = new ModelData();
+            auto* node       = new NodeData();
+            node->id         = std::to_string(index);
+            auto* model      = new ModelData();
             model->subMeshId = std::to_string(index);
             node->modelNodeDatas.emplace_back(model);
             nodes.nodes.emplace_back(node);
@@ -747,13 +823,15 @@ bool loadAnimationData(Animation3DData& animation, std::string_view path, std::s
     animation.resetData();
     rapidjson::Document document;
     std::vector<uint8_t> glbBin;
-    if (!readDocument(path, document, glbBin)) return false;
+    if (!readDocument(path, document, glbBin))
+        return false;
 
     std::vector<std::vector<uint8_t>> owned;
     std::vector<BufferView> buffers;
     if (!readBuffers(document, path, glbBin.empty() ? nullptr : glbBin.data(), glbBin.size(), owned, buffers))
         return false;
-    if (!document.HasMember("animations") || !document["animations"].IsArray()) return false;
+    if (!document.HasMember("animations") || !document["animations"].IsArray())
+        return false;
 
     const rapidjson::Value* sourceAnimation = nullptr;
     for (rapidjson::SizeType index = 0; index < document["animations"].Size(); ++index)
@@ -764,7 +842,8 @@ bool loadAnimationData(Animation3DData& animation, std::string_view path, std::s
         else if (candidate.IsObject() && candidate.HasMember("name") && candidate["name"].IsString() &&
                  candidate["name"].GetString() == animationName)
             sourceAnimation = &candidate;
-        if (sourceAnimation) break;
+        if (sourceAnimation)
+            break;
     }
     if (!sourceAnimation || !sourceAnimation->IsObject() || !sourceAnimation->HasMember("samplers") ||
         !sourceAnimation->HasMember("channels") || !(*sourceAnimation)["samplers"].IsArray() ||
@@ -791,22 +870,26 @@ bool loadAnimationData(Animation3DData& animation, std::string_view path, std::s
             !target["path"].IsString() || target["node"].GetUint() >= nodeNames.size())
             return false;
         const auto samplerIndex = channel["sampler"].GetUint();
-        const auto& samplers = (*sourceAnimation)["samplers"];
-        if (samplerIndex >= samplers.Size() || !samplers[samplerIndex].IsObject()) return false;
+        const auto& samplers    = (*sourceAnimation)["samplers"];
+        if (samplerIndex >= samplers.Size() || !samplers[samplerIndex].IsObject())
+            return false;
         const auto& sampler = samplers[samplerIndex];
         if (!sampler.HasMember("input") || !sampler.HasMember("output") || !sampler["input"].IsInt() ||
             !sampler["output"].IsInt())
             return false;
-        if (sampler.HasMember("interpolation") && !sampler["interpolation"].IsString()) return false;
-        const std::string_view interpolation = sampler.HasMember("interpolation")
-                                                   ? sampler["interpolation"].GetString()
-                                                   : "LINEAR";
-        if (interpolation == "CUBICSPLINE" || interpolation == "STEP") return false;
-        if (interpolation != "LINEAR") return false;
+        if (sampler.HasMember("interpolation") && !sampler["interpolation"].IsString())
+            return false;
+        const std::string_view interpolation =
+            sampler.HasMember("interpolation") ? sampler["interpolation"].GetString() : "LINEAR";
+        if (interpolation == "CUBICSPLINE" || interpolation == "STEP")
+            return false;
+        if (interpolation != "LINEAR")
+            return false;
         Accessor input;
         Accessor output;
         const std::string_view pathName = target["path"].GetString();
-        if (pathName != "translation" && pathName != "rotation" && pathName != "scale") return false;
+        if (pathName != "translation" && pathName != "rotation" && pathName != "scale")
+            return false;
         if (!getAccessor(document, buffers, sampler["input"].GetInt(), input) ||
             !getAccessor(document, buffers, sampler["output"].GetInt(), output) || input.componentType != 5126 ||
             output.componentType != 5126 || input.components != 1 ||
@@ -818,9 +901,9 @@ bool loadAnimationData(Animation3DData& animation, std::string_view path, std::s
         const std::string nodeName = nodeNames[target["node"].GetUint()];
         for (size_t key = 0; key < input.count; ++key)
         {
-            const float time = readComponent(input.data + key * input.stride, input.componentType, false);
+            const float time     = readComponent(input.data + key * input.stride, input.componentType, false);
             animation._totalTime = std::max(animation._totalTime, time);
-            const auto* values = output.data + key * output.stride;
+            const auto* values   = output.data + key * output.stride;
             if (pathName == "translation" && output.components == 3)
             {
                 animation._translationKeys[nodeName].emplace_back(
@@ -869,35 +952,37 @@ bool loadAnimationData(Animation3DData& animation, std::string_view path, std::s
         };
         for (rapidjson::SizeType index = 0; index < document["nodes"].Size(); ++index)
         {
-            const auto& node = document["nodes"][index];
-            const auto& name = nodeNames[index];
+            const auto& node    = document["nodes"][index];
+            const auto& name    = nodeNames[index];
             const bool animated = animation._translationKeys.find(name) != animation._translationKeys.end() ||
-                                   animation._rotationKeys.find(name) != animation._rotationKeys.end() ||
-                                   animation._scaleKeys.find(name) != animation._scaleKeys.end();
-            if (!animated) continue;
+                                  animation._rotationKeys.find(name) != animation._rotationKeys.end() ||
+                                  animation._scaleKeys.find(name) != animation._scaleKeys.end();
+            if (!animated)
+                continue;
             if (animation._translationKeys.find(name) == animation._translationKeys.end())
                 animation._translationKeys[name] = {{0.0f, readRestTranslation(node)},
-                                                     {animation._totalTime, readRestTranslation(node)}};
+                                                    {animation._totalTime, readRestTranslation(node)}};
             if (animation._rotationKeys.find(name) == animation._rotationKeys.end())
                 animation._rotationKeys[name] = {{0.0f, readRestRotation(node)},
-                                                  {animation._totalTime, readRestRotation(node)}};
+                                                 {animation._totalTime, readRestRotation(node)}};
             if (animation._scaleKeys.find(name) == animation._scaleKeys.end())
-                animation._scaleKeys[name] = {{0.0f, readRestScale(node)},
-                                               {animation._totalTime, readRestScale(node)}};
+                animation._scaleKeys[name] = {{0.0f, readRestScale(node)}, {animation._totalTime, readRestScale(node)}};
         }
     }
     if (animation._totalTime > 0.0f)
     {
         auto normalizeVec3Keys = [&](auto& keyMap) {
             for (auto& entry : keyMap)
-                for (auto& key : entry.second) key._time /= animation._totalTime;
+                for (auto& key : entry.second)
+                    key._time /= animation._totalTime;
         };
         normalizeVec3Keys(animation._translationKeys);
         normalizeVec3Keys(animation._scaleKeys);
         for (auto& entry : animation._rotationKeys)
-            for (auto& key : entry.second) key._time /= animation._totalTime;
+            for (auto& key : entry.second)
+                key._time /= animation._totalTime;
     }
     return animation._totalTime > 0.0f || !animation._translationKeys.empty() || !animation._rotationKeys.empty() ||
            !animation._scaleKeys.empty();
 }
-}
+}  // namespace ax::GltfLoader

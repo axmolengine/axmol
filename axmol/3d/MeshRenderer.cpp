@@ -229,9 +229,8 @@ bool MeshRenderer::loadFromFile(std::string_view path,
     std::string fullPath = FileUtils::getInstance()->fullPathForFilename(path);
 
     std::string ext = FileUtils::getPathExtension(path);
-    std::transform(ext.begin(), ext.end(), ext.begin(), [](unsigned char character) {
-        return static_cast<char>(std::tolower(character));
-    });
+    std::transform(ext.begin(), ext.end(), ext.begin(),
+                   [](unsigned char character) { return static_cast<char>(std::tolower(character)); });
     if (ext == ".obj")
     {
         return Bundle3D::loadObj(*meshdatas, *materialdatas, *nodedatas, fullPath);
@@ -685,9 +684,8 @@ Texture2D* MeshRenderer::setMeshTexture(Mesh* mesh, std::string_view texPath, NT
 Texture2D* MeshRenderer::setMeshTexture(Mesh* mesh, const NTextureData& textureData)
 {
     auto* textureCache = _director->getTextureCache();
-    auto* tex = textureData.imageData.isNull()
-                    ? textureCache->addImage(textureData.filename)
-                    : textureCache->addImage(textureData.imageData, textureData.filename);
+    auto* tex          = textureData.imageData.isNull() ? textureCache->addImage(textureData.filename)
+                                                        : textureCache->addImage(textureData.imageData, textureData.filename);
     mesh->setTexture(tex, textureData.type);
     if (tex)
         ++_meshTextureHint;
