@@ -1,5 +1,11 @@
 #include "base.hlsli"
 
+#if defined(USE_POINT_SAMPLER) && USE_POINT_SAMPLER
+#define TEXTURE_SAMPLER PointClamp
+#else
+#define TEXTURE_SAMPLER LinearClamp
+#endif
+
 struct PS_IN {
     float4 v_color : COLOR0;
     float2 v_texCoord : TEXCOORD0;
@@ -14,6 +20,6 @@ cbuffer fs_ub {
 float4 main(PS_IN input) : SV_Target0
 {
     return input.v_color * float4(u_textColor.rgb, // RGB from uniform
-        u_textColor.a * u_tex0.Sample(LinearClamp, input.v_texCoord).x // x from texture & uniform
+        u_textColor.a * u_tex0.Sample(TEXTURE_SAMPLER, input.v_texCoord).x // x from texture & uniform
     );
 }

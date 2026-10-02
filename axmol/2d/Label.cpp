@@ -647,6 +647,8 @@ void Label::reset()
     _uniformEffectType  = -1;
     _uniformTextColor   = -1;
 
+    _usesBuiltinLabelProgram = false;
+
     _useDistanceField   = false;
     _useA8Shader        = false;
     _clipEnabled        = false;
@@ -677,7 +679,7 @@ static Texture2D* _getTexture(Label* label)
     Texture2D* texture = nullptr;
     if (fontAtlas != nullptr)
     {
-        auto textures = fontAtlas->getTextures();
+        const auto& textures = fontAtlas->getTextures();
         if (!textures.empty())
         {
             texture = textures.begin()->second;
@@ -693,6 +695,8 @@ void Label::setVertexLayout()
 
 bool Label::setProgramState(rhi::ProgramState* programState, bool ownPS /*= false*/)
 {
+    // Explicit ProgramState assignments opt out of automatic sampler selection.
+    _usesBuiltinLabelProgram = false;
     if (Node::setProgramState(programState, ownPS))
     {
         updateUniformLocations();
@@ -710,7 +714,7 @@ bool Label::setProgramState(rhi::ProgramState* programState, bool ownPS /*= fals
     return false;
 }
 
-void Label::updateShaderProgram()
+uint32_t Label::getBuiltinProgramType()
 {
     uint32_t programType = rhi::ProgramType::POSITION_TEXTURE_COLOR;
     if (_currentLabelType == LabelType::BMFONT || _currentLabelType == LabelType::CHARMAP)
@@ -749,18 +753,40 @@ void Label::updateShaderProgram()
                 programType = rhi::ProgramType::LABLE_DISTANCE_GLOW;
             break;
         default:
-            return;
+            return rhi::ProgramType::BUILTIN_COUNT;
         }
     }
 
-    this->setProgramStateByProgramId(programType);
+    if (!_useDistanceField && _fontAtlas && !_fontAtlas->_antialiasEnabled)
+    {
+        switch (programType)
+        {
+        case rhi::ProgramType::LABEL_NORMAL:
+            return rhi::ProgramType::LABEL_NORMAL_ALIAS;
+        case rhi::ProgramType::LABLE_OUTLINE:
+            return rhi::ProgramType::LABLE_OUTLINE_ALIAS;
+        case rhi::ProgramType::POSITION_TEXTURE_COLOR:
+            return rhi::ProgramType::POSITION_TEXTURE_COLOR_ALIAS;
+        case rhi::ProgramType::DUAL_SAMPLER:
+            return rhi::ProgramType::DUAL_SAMPLER_ALIAS;
+        default:
+            break;
+        }
+    }
+    return programType;
+}
 
-    updateUniformLocations();
+void Label::updateShaderProgram()
+{
+    const auto programType = getBuiltinProgramType();
+    if (programType == rhi::ProgramType::BUILTIN_COUNT)
+        return;
 
-    for (auto&& batch : _batchCommands)
-        updateBatchCommand(batch);
+    if (_usesBuiltinLabelProgram && _programState && _programState->getProgram()->getProgramType() == programType)
+        return;
 
-    _quadCommand.setWeakPSVL(_programState, _vertexLayout);
+    if (this->setProgramStateByProgramId(programType))
+        _usesBuiltinLabelProgram = true;
 }
 
 void Label::updateBatchCommand(Label::BatchCommand& batch)
@@ -2118,6 +2144,9 @@ void Label::draw(const SceneRenderState& state, const Mat4& transform, uint32_t 
     if (_insideBounds)
 #endif
     {
+        if (_usesBuiltinLabelProgram)
+            updateShaderProgram();
+
         ax::Mat4 matrixProjection = state.getViewProjectionMatrix();
         if (!_shadowEnabled && (_currentLabelType == LabelType::BMFONT || _currentLabelType == LabelType::CHARMAP))
         {
@@ -2151,8 +2180,10 @@ void Label::draw(const SceneRenderState& state, const Mat4& transform, uint32_t 
 
             if (_batchCommands.size() != _batchNodes.size())
             {
+                const auto oldSize = _batchCommands.size();
                 _batchCommands.resize(_batchNodes.size());
-                updateShaderProgram();
+                for (size_t batchIndex = oldSize; batchIndex < _batchCommands.size(); ++batchIndex)
+                    updateBatchCommand(_batchCommands[batchIndex]);
             }
 
             updateBlendState();
