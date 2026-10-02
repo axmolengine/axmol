@@ -10,9 +10,13 @@
 
 #include "axmol/3d/Animation3D.h"
 #include "axmol/3d/Bundle3D.h"
+#include "axmol/3d/GltfLoader.h"
 #include "axmol/platform/FileUtils.h"
 #include "axmol/tlx/vector.hpp"
 #include "axmol/tlx/utility.hpp"
+
+#include <algorithm>
+#include <cctype>
 
 namespace ax
 {
@@ -41,6 +45,20 @@ Animation3D* Animation3D::create(std::string_view fileName, std::string_view ani
 bool Animation3D::initWithFile(std::string_view filename, std::string_view animationName)
 {
     std::string fullPath = FileUtils::getInstance()->fullPathForFilename(filename);
+
+    auto extension = FileUtils::getPathExtension(fullPath);
+    std::transform(extension.begin(), extension.end(), extension.begin(), [](unsigned char character) {
+        return static_cast<char>(std::tolower(character));
+    });
+    if (extension == ".gltf" || extension == ".glb")
+    {
+        Animation3DData animationdata;
+        if (!GltfLoader::loadAnimationData(animationdata, fullPath, animationName) || !init(animationdata))
+            return false;
+        fullPath.append("#").append(animationName);
+        Animation3DCache::getInstance()->addAnimation(fullPath, this);
+        return true;
+    }
 
     // load animation here
     auto bundle = Bundle3D::createBundle();
