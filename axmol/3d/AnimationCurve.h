@@ -46,6 +46,7 @@ enum class EvaluateType
 {
     INT_LINEAR,
     INT_NEAR,
+    INT_STEP,
     INT_QUAT_SLERP,
     INT_USER_FUNCTION,
 };

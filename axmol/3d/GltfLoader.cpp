@@ -954,7 +954,7 @@ bool loadAnimationData(Animation3DData& animation, std::string_view path, std::s
             return false;
         const std::string_view interpolation =
             sampler.HasMember("interpolation") ? sampler["interpolation"].GetString() : "LINEAR";
-        if (interpolation == "CUBICSPLINE" || interpolation == "STEP")
+        if (interpolation == "CUBICSPLINE")
             return false;
         if (interpolation != "LINEAR")
             return false;
@@ -986,18 +986,24 @@ bool loadAnimationData(Animation3DData& animation, std::string_view path, std::s
                     return false;
             if (pathName == "translation" && output.components == 3)
             {
+                if (interpolation == "STEP")
+                    animation._translationStep[nodeName] = true;
                 animation._translationKeys[nodeName].emplace_back(
                     time, Vec3(readComponent(values, 5126, false), readComponent(values + 4, 5126, false),
                                readComponent(values + 8, 5126, false)));
             }
             else if (pathName == "scale" && output.components == 3)
             {
+                if (interpolation == "STEP")
+                    animation._scaleStep[nodeName] = true;
                 animation._scaleKeys[nodeName].emplace_back(
                     time, Vec3(readComponent(values, 5126, false), readComponent(values + 4, 5126, false),
                                readComponent(values + 8, 5126, false)));
             }
             else if (pathName == "rotation" && output.components == 4)
             {
+                if (interpolation == "STEP")
+                    animation._rotationStep[nodeName] = true;
                 Quat rotation(readComponent(values, 5126, false), readComponent(values + 4, 5126, false),
                               readComponent(values + 8, 5126, false), readComponent(values + 12, 5126, false));
                 rotation.normalize();

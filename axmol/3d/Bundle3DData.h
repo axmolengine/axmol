@@ -343,6 +343,9 @@ public:
     tlx::string_map<std::vector<Vec3Key>> _translationKeys;
     tlx::string_map<std::vector<QuatKey>> _rotationKeys;
     tlx::string_map<std::vector<Vec3Key>> _scaleKeys;
+    tlx::string_map<bool> _translationStep;
+    tlx::string_map<bool> _rotationStep;
+    tlx::string_map<bool> _scaleStep;
 
     float _totalTime;
 
@@ -353,6 +356,9 @@ public:
         : _translationKeys(other._translationKeys)
         , _rotationKeys(other._rotationKeys)
         , _scaleKeys(other._scaleKeys)
+        , _translationStep(other._translationStep)
+        , _rotationStep(other._rotationStep)
+        , _scaleStep(other._scaleStep)
         , _totalTime(other._totalTime)
     {}
 
@@ -362,6 +368,9 @@ public:
         _translationKeys.clear();
         _rotationKeys.clear();
         _scaleKeys.clear();
+        _translationStep.clear();
+        _rotationStep.clear();
+        _scaleStep.clear();
     }
 };
 

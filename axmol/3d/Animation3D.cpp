@@ -95,7 +95,14 @@ Animation3D::~Animation3D()
     }
 }
 
-Animation3D::Curve::Curve() : translateCurve(nullptr), rotCurve(nullptr), scaleCurve(nullptr) {}
+Animation3D::Curve::Curve()
+    : translateCurve(nullptr)
+    , translateStep(false)
+    , rotCurve(nullptr)
+    , rotateStep(false)
+    , scaleCurve(nullptr)
+    , scaleStep(false)
+{}
 Animation3D::Curve::~Curve()
 {
     AX_SAFE_RELEASE_NULL(translateCurve);
@@ -130,6 +137,7 @@ bool Animation3D::init(const Animation3DData& data)
                                       [](const auto& keyIter) { return keyIter._key; });
 
             curve->translateCurve = Curve::AnimationCurveVec3::create(&keys[0], &values[0].x, (int)keys.size());
+            curve->translateStep  = data._translationStep.find(iter.first) != data._translationStep.end();
             if (curve->translateCurve)
                 curve->translateCurve->retain();
         }
@@ -155,7 +163,8 @@ bool Animation3D::init(const Animation3DData& data)
             tlx::resize_and_transform(iter.second.begin(), iter.second.end(), values,
                                       [](const auto& keyIter) { return keyIter._key; });
 
-            curve->rotCurve = Curve::AnimationCurveQuat::create(&keys[0], &values[0].x, (int)keys.size());
+            curve->rotCurve   = Curve::AnimationCurveQuat::create(&keys[0], &values[0].x, (int)keys.size());
+            curve->rotateStep = data._rotationStep.find(iter.first) != data._rotationStep.end();
             if (curve->rotCurve)
                 curve->rotCurve->retain();
         }
@@ -182,6 +191,7 @@ bool Animation3D::init(const Animation3DData& data)
                                       [](const auto& keyIter) { return keyIter._key; });
 
             curve->scaleCurve = Curve::AnimationCurveVec3::create(&keys[0], &values[0].x, (int)keys.size());
+            curve->scaleStep  = data._scaleStep.find(iter.first) != data._scaleStep.end();
             if (curve->scaleCurve)
                 curve->scaleCurve->retain();
         }
