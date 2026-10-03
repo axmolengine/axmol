@@ -1008,27 +1008,19 @@ bool loadAnimationData(Animation3DData& animation, std::string_view path, std::s
     if (document.HasMember("nodes") && document["nodes"].IsArray())
     {
         auto readRestTranslation = [](const rapidjson::Value& node) {
-            Vec3 value;
-            if (node.HasMember("translation") && node["translation"].IsArray() && node["translation"].Size() == 3)
-                value.set(node["translation"][0].GetFloat(), node["translation"][1].GetFloat(),
-                          node["translation"][2].GetFloat());
-            return value;
+            Vec3 translation;
+            readNodeTransform(node).decompose(nullptr, nullptr, &translation);
+            return translation;
         };
         auto readRestScale = [](const rapidjson::Value& node) {
-            Vec3 value(1.0f, 1.0f, 1.0f);
-            if (node.HasMember("scale") && node["scale"].IsArray() && node["scale"].Size() == 3)
-                value.set(node["scale"][0].GetFloat(), node["scale"][1].GetFloat(), node["scale"][2].GetFloat());
-            return value;
+            Vec3 scale(1.0f, 1.0f, 1.0f);
+            readNodeTransform(node).decompose(&scale, nullptr, nullptr);
+            return scale;
         };
         auto readRestRotation = [](const rapidjson::Value& node) {
-            Quat value;
-            if (node.HasMember("rotation") && node["rotation"].IsArray() && node["rotation"].Size() == 4)
-            {
-                value.set(node["rotation"][0].GetFloat(), node["rotation"][1].GetFloat(),
-                          node["rotation"][2].GetFloat(), node["rotation"][3].GetFloat());
-                value.normalize();
-            }
-            return value;
+            Quat rotation;
+            readNodeTransform(node).decompose(nullptr, &rotation, nullptr);
+            return rotation;
         };
         for (rapidjson::SizeType index = 0; index < document["nodes"].Size(); ++index)
         {
