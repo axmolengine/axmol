@@ -18,49 +18,54 @@ void AnimationCurve<componentSize>::evaluate(float time, float* dst, EvaluateTyp
     unsigned int index = determineIndex(time);
 
     float scale = (_keytime[index + 1] - _keytime[index]);
-    float t = (time - _keytime[index]) / scale;
+    float t     = (time - _keytime[index]) / scale;
 
     float* fromValue = &_value[index * componentSize];
-    float* toValue = fromValue + componentSize;
+    float* toValue   = fromValue + componentSize;
 
-    switch (type) {
-        case EvaluateType::INT_LINEAR:
+    switch (type)
+    {
+    case EvaluateType::INT_LINEAR:
+    {
+        for (auto i = 0; i < componentSize; i++)
         {
-            for (auto i = 0; i < componentSize; i++) {
-                dst[i] = fromValue[i] + (toValue[i] - fromValue[i]) * t;
-            }
+            dst[i] = fromValue[i] + (toValue[i] - fromValue[i]) * t;
         }
+    }
+    break;
+    case EvaluateType::INT_NEAR:
+    {
+        float* src = std::abs(t) > 0.5f ? toValue : fromValue;
+        memcpy(dst, src, _componentSizeByte);
+    }
+    break;
+    case EvaluateType::INT_STEP:
+        memcpy(dst, time >= _keytime[index + 1] ? toValue : fromValue, _componentSizeByte);
         break;
-        case EvaluateType::INT_NEAR:
-        {
-            float* src = std::abs(t) > 0.5f ? toValue : fromValue;
-            memcpy(dst, src, _componentSizeByte);
-        }
-        break;
-        case EvaluateType::INT_QUAT_SLERP:
-        {
-            // Evaluate.
-            Quat quat;
-            if (t >= 0)
-                Quat::slerp(Quat(fromValue), Quat(toValue), t, &quat);
-            else
-                Quat::slerp(Quat(toValue), Quat(fromValue), t, &quat);
+    case EvaluateType::INT_QUAT_SLERP:
+    {
+        // Evaluate.
+        Quat quat;
+        if (t >= 0)
+            Quat::slerp(Quat(fromValue), Quat(toValue), t, &quat);
+        else
+            Quat::slerp(Quat(toValue), Quat(fromValue), t, &quat);
 
-            dst[0] = quat.x;
-            dst[1] = quat.y;
-            dst[2] = quat.z;
-            dst[3] = quat.w;
-        }
-        break;
-        case EvaluateType::INT_USER_FUNCTION:
-        {
-            if (_evaluateFun)
-                _evaluateFun(time, dst);
-        }
-        break;
+        dst[0] = quat.x;
+        dst[1] = quat.y;
+        dst[2] = quat.z;
+        dst[3] = quat.w;
+    }
+    break;
+    case EvaluateType::INT_USER_FUNCTION:
+    {
+        if (_evaluateFun)
+            _evaluateFun(time, dst);
+    }
+    break;
 
-        default:
-            break;
+    default:
+        break;
     }
 }
 
@@ -70,21 +75,21 @@ void AnimationCurve<componentSize>::setEvaluateFun(std::function<void(float time
     _evaluateFun = fun;
 }
 
-//create animation curve
+// create animation curve
 template <int componentSize>
 AnimationCurve<componentSize>* AnimationCurve<componentSize>::create(float* keytime, float* value, int count)
 {
-    int floatSize = sizeof(float);
+    int floatSize         = sizeof(float);
     AnimationCurve* curve = new AnimationCurve();
-    curve->_keytime = new float[count];
+    curve->_keytime       = new float[count];
     memcpy(curve->_keytime, keytime, count * floatSize);
 
     int compoentSizeByte = componentSize * floatSize;
-    int totalByte = count * compoentSizeByte;
-    curve->_value = new float[totalByte / floatSize];
+    int totalByte        = count * compoentSizeByte;
+    curve->_value        = new float[totalByte / floatSize];
     memcpy(curve->_value, value, totalByte);
 
-    curve->_count = count;
+    curve->_count             = count;
     curve->_componentSizeByte = compoentSizeByte;
 
     curve->autorelease();
@@ -103,17 +108,10 @@ float AnimationCurve<componentSize>::getEndTime() const
     return _keytime[_count - 1];
 }
 
-
 template <int componentSize>
 AnimationCurve<componentSize>::AnimationCurve()
-: _value(nullptr)
-, _keytime(nullptr)
-, _count(0)
-, _componentSizeByte(0)
-, _evaluateFun(nullptr)
-{
-
-}
+    : _value(nullptr), _keytime(nullptr), _count(0), _componentSizeByte(0), _evaluateFun(nullptr)
+{}
 template <int componentSize>
 AnimationCurve<componentSize>::~AnimationCurve()
 {
@@ -144,4 +142,4 @@ int AnimationCurve<componentSize>::determineIndex(float time) const
     return -1;
 }
 
-}
+}  // namespace ax
