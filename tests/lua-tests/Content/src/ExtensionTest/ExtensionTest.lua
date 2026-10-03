@@ -89,12 +89,7 @@ local function runEditBoxTest()
     -- top
     EditName = axui.EditBox:create(editBoxSize, axui.Scale9Sprite:create("extensions/green_edit.png"))
     EditName:setPosition(ax.p(visibleOrigin.x+visibleSize.width/2, visibleOrigin.y+visibleSize.height*3/4))
-    local targetPlatform = ax.Application:getInstance():getTargetPlatform()
-    if kTargetIphone == targetPlatform or kTargetIpad == targetPlatform then
-	   EditName:setFontName("Paint Boy")
-	else
-		EditName:setFontName("fonts/Paint Boy.ttf")
-	end
+    EditName:setFontName("Paint Boy")
     EditName:setFontSize(25)
     EditName:setFontColor(ax.color32(255,0,0))
     EditName:setPlaceHolder("Name:")
@@ -108,11 +103,7 @@ local function runEditBoxTest()
     --middle
     EditPassword = axui.EditBox:create(editBoxSize, axui.Scale9Sprite:create("extensions/orange_edit.png"))
     EditPassword:setPosition(ax.p(visibleOrigin.x+visibleSize.width/2, visibleOrigin.y+visibleSize.height/2))
-	if kTargetIphone == targetPlatform or kTargetIpad == targetPlatform then
-		EditPassword:setFont("American Typewriter", 30)
-	else
-		EditPassword:setFont("fonts/American Typewriter.ttf", 30)
-	end
+	EditPassword:setFont("American Typewriter", 30)
 
 
     EditPassword:setFontColor(ax.color32(0,255,0))

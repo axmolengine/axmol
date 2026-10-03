@@ -22,7 +22,6 @@
 #    include "axmol/math/Vec2.h"
 #    include "axmol/ui/UIHelper.h"
 #    include "axmol/base/Director.h"
-#    include "axmol/platform/FileUtils.h"
 #    include "yasio/tlx/string_view.hpp"
 
 namespace ax
@@ -63,24 +62,9 @@ void EditBoxImplAndroid::createNativeControl()
 
 void EditBoxImplAndroid::setNativeFont(std::string_view fontName, int fontSize)
 {
-    auto director         = ax::Director::getInstance();
-    auto renderView       = director->getRenderView();
-    auto isFontFileExists = ax::FileUtils::getInstance()->isFileExist(fontName);
-
-    std::string realFontPath;
-    if (isFontFileExists)
-    {
-        auto realFontPath = ax::FileUtils::getInstance()->fullPathForFilename(fontName);
-        if (tlx::starts_with(std::string_view{realFontPath}, "assets/"sv))
-        {
-            realFontPath = realFontPath.substr(sizeof("assets/") - 1);  // Chop out the 'assets/' portion of the path.
-        }
-    }
-    else
-    {
-        realFontPath = fontName;
-    }
-    JniHelper::callStaticVoidMethod(editBoxClassName, "setFont", _editBoxIndex, realFontPath,
+    auto director   = ax::Director::getInstance();
+    auto renderView = director->getRenderView();
+    JniHelper::callStaticVoidMethod(editBoxClassName, "setFont", _editBoxIndex, fontName,
                                     (float)fontSize * renderView->getScaleX());
 }
 
