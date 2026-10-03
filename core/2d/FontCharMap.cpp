@@ -119,6 +119,7 @@ FontAtlas* FontCharMap::newFontAtlas()
     tempDefinition.textureID       = 0;
     tempDefinition.offsetX         = 0.0f;
     tempDefinition.offsetY         = 0.0f;
+    tempDefinition.scale           = 1.0f;
     tempDefinition.validDefinition = true;
     tempDefinition.width           = _itemWidth / contentScaleFactor;
     tempDefinition.height          = _itemHeight / contentScaleFactor;

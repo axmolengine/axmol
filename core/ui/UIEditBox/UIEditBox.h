@@ -208,13 +208,15 @@ public:
     static EditBox* create(const Size& size,
                            Scale9Sprite* normalSprite,
                            Scale9Sprite* pressedSprite  = nullptr,
-                           Scale9Sprite* disabledSprite = nullptr);
+                           Scale9Sprite* disabledSprite = nullptr,
+                           IFontEngine* fontFallbackEngine = nullptr);
 
     /**
      * create a edit box with size.
      * @return An autorelease pointer of EditBox, you don't need to release it only if you retain it again.
      */
-    static EditBox* create(const Size& size, std::string_view normalImage, TextureResType texType);
+    static EditBox* create(const Size& size, std::string_view normalImage, TextureResType texType,
+                           IFontEngine* fontFallbackEngine = nullptr);
 
     /**
      * create a edit box with size.
@@ -224,7 +226,8 @@ public:
                            std::string_view normalImage,
                            std::string_view pressedImage  = "",
                            std::string_view disabledImage = "",
-                           TextureResType texType         = TextureResType::LOCAL);
+                           TextureResType texType         = TextureResType::LOCAL,
+                           IFontEngine* fontFallbackEngine = nullptr);
 
     /**
      * Constructor.
@@ -645,6 +648,8 @@ public:
      */
     bool isEditing() const;
 
+    IFontEngine* getFontFallbackEngine() const;
+
 protected:
     virtual void releaseUpEvent() override;
 
@@ -703,6 +708,7 @@ protected:
 #if AX_ENABLE_SCRIPT_BINDING
     int _scriptEditBoxHandler = 0;
 #endif
+    IFontEngine* _fontFallbackEngine;
 };
 }  // namespace ui
 

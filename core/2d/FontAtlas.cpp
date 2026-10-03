@@ -32,6 +32,8 @@
 #endif
 #include <algorithm>
 #include "2d/FontFreeType.h"
+#include "2d/FontAtlasCache.h"
+#include "2d/Label.h"
 #include "base/UTF8.h"
 #include "base/Director.h"
 #include "base/EventListenerCustom.h"
@@ -141,7 +143,16 @@ FontAtlas::FontAtlas(Font* theFont, int atlasWidth, int atlasHeight, float scale
         _letterEdgeExtend = 2;
 
         auto outlineSize = _fontFreeType->getOutlineSize();
-        if (outlineSize > 0)
+        if (_fontFreeType->hasColors())
+          {
+            _strideShift         = 2;
+            _pixelFormat         = backend::PixelFormat::RGBA8;
+            _currentPageDataSize = _width * _height << _strideShift;
+
+            // We don't consider outlineSize in the line's height because no
+            // outline is drawn for color fonts.
+          }
+        else if (outlineSize > 0)
         {
             _strideShift         = 1;
             _pixelFormat         = backend::PixelFormat::RG8;
@@ -296,6 +307,7 @@ void FontAtlas::scaleFontLetterDefinition(float scaleFactor)
         letterDefinition.height *= scaleFactor;
         letterDefinition.offsetX *= scaleFactor;
         letterDefinition.offsetY *= scaleFactor;
+        letterDefinition.scale *= scaleFactor;
         letterDefinition.xAdvance = (int)(letterDefinition.xAdvance * scaleFactor);
     }
 }
@@ -315,6 +327,11 @@ bool FontAtlas::getLetterDefinitionForChar(char32_t utf32Char, FontLetterDefinit
     }
 }
 
+const FontLetterDefinition& FontAtlas::getLetterDefinition(char32_t utf32Char) const
+{
+  return _letterDefinitions.find(utf32Char)->second;
+}
+
 void FontAtlas::findNewCharacters(const std::u32string& u32Text, std::unordered_set<char32_t>& charset)
 {
     if (_letterDefinitions.empty())
@@ -329,7 +346,7 @@ void FontAtlas::findNewCharacters(const std::u32string& u32Text, std::unordered_
     }
 }
 
-bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
+bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text, IFontEngine* fallback)
 {
     if (_fontFreeType == nullptr)
     {
@@ -354,99 +371,77 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
     Rect tempRect;
     FontLetterDefinition tempDef;
 
-    auto pixelFormat = _pixelFormat;
-
     int startY = (int)_currentPageOrigY;
 
-    for (auto&& charCode : charCodeSet)
+    for (char32_t charCode : charCodeSet)
     {
-        auto missingIt             = _missingGlyphFallbackFonts.find(charCode);
-        uint8_t* bitmap            = nullptr;
-        FontFreeType* charRenderer = _fontFreeType;
-        if (missingIt == _missingGlyphFallbackFonts.end())
+        if (StringUtils::isVariantSelector(charCode))
         {
-            FontFaceInfo* fallbackFaceInfo = nullptr;
-            bitmap = charRenderer->getGlyphBitmap(charCode, bitmapWidth, bitmapHeight, tempRect, tempDef.xAdvance,
-                                                  &fallbackFaceInfo);
-            if (!bitmap && fallbackFaceInfo)
+            // Variant selectors are not supported yet. As a workaround we
+            // accept the letter definiton but give it no dimension.
+            tempDef                      = {};
+            tempDef.validDefinition      = true;
+            _letterDefinitions[charCode] = tempDef;
+            continue;
+        }
+
+        TTFConfig fallbackFont;
+        const FontFreeTypeBitmap bitmap = _fontFreeType->getGlyphBitmap(charCode, bitmapWidth, bitmapHeight, tempRect,
+                                                                        tempDef.xAdvance, fallback, &fallbackFont);
+
+        bool valid            = true;
+
+        if (bitmap.bitmap && bitmapWidth > 0 && bitmapHeight > 0)
+          {
+            startY = renderChar(bitmap, bitmapWidth, bitmapHeight, startY, tempRect, tempDef);
+          }
+        else
+        {
+            if (!fallbackFont.fontFilePath.empty())
             {
-                auto fallbackIt = _missingFallbackFonts.find(fallbackFaceInfo->family);
-                if (fallbackIt != _missingFallbackFonts.end())
+                // The font does not contain the glyph but has provided another font
+                // which would have it.
+                FontAtlas* const atlas = FontAtlasCache::getFontAtlasTTF(&fallbackFont);
+
+                if (atlas->getOrCreateLetter(charCode, tempDef))
                 {
-                    charRenderer = fallbackIt->second;
+                    const FontFreeType* const altFont = atlas->_fontFreeType;
+                    tempDef.scale = (float)_fontFreeType->getFontMaxHeight() / altFont->getFontMaxHeight();
+                    tempDef.xAdvance *= tempDef.scale;
+
+                    Texture2D* const texture = atlas->getTexture(tempDef.textureID);
+
+                    // We must keep the texture in our list as it becomes part
+                    // of this atlas' interface.
+                    const auto [it, inserted] = _sharedTextures.emplace(texture, _nextSharedTextureID);
+
+                    if (inserted)
+                    {
+                        texture->retain();
+                        _atlasTextures[_nextSharedTextureID] = texture;
+                        tempDef.textureID = _nextSharedTextureID;
+                        --_nextSharedTextureID;
+                    }
+                    else
+                      tempDef.textureID = it->second;
                 }
                 else
-                {
-                    charRenderer = FontFreeType::createWithFaceInfo(fallbackFaceInfo, _fontFreeType);
-                    if (charRenderer)
-                        _missingFallbackFonts.insert(fallbackFaceInfo->family, charRenderer);
-                }
-
-                if (charRenderer)
-                {
-                    unsigned int glyphIndex = fallbackFaceInfo->currentGlyphIndex;
-                    bitmap =
-                        charRenderer->getGlyphBitmapByIndex(glyphIndex, bitmapWidth, bitmapHeight, tempRect, tempDef.xAdvance);
-                    _missingGlyphFallbackFonts.emplace(charCode, std::make_pair(charRenderer, glyphIndex));
-                }
+                    valid = false;
             }
+            else
+                valid = false;
         }
-        else
-        {  // found fallback font for missing charas, getGlyphBitmap without fallback
-            charRenderer = missingIt->second.first;
-            unsigned int glyphIndex = missingIt->second.second;
-            bitmap = charRenderer->getGlyphBitmapByIndex(glyphIndex, bitmapWidth, bitmapHeight, tempRect, tempDef.xAdvance);
-        }
-        if (bitmap && bitmapWidth > 0 && bitmapHeight > 0)
+
+        if (!valid)
         {
-            tempDef.validDefinition = true;
-            tempDef.width           = tempRect.size.width + _letterPadding + _letterEdgeExtend;
-            tempDef.height          = tempRect.size.height + _letterPadding + _letterEdgeExtend;
-            tempDef.offsetX         = tempRect.origin.x - adjustForDistanceMap - adjustForExtend;
-            tempDef.offsetY         = _fontAscender + tempRect.origin.y - adjustForDistanceMap - adjustForExtend;
-
-            if (_currentPageOrigX + tempDef.width > _width)
-            {
-                _currentPageOrigY += _currLineHeight;
-                _currLineHeight   = 0;
-                _currentPageOrigX = 0;
-                if (_currentPageOrigY + _lineHeight + _letterPadding + _letterEdgeExtend >= _height)
-                {
-                    updateTextureContent(pixelFormat, startY);
-
-                    startY = 0;
-
-                    addNewPage();
-                }
-            }
-            glyphHeight = static_cast<int>(bitmapHeight) + _letterPadding + _letterEdgeExtend;
-            _currLineHeight = std::max(glyphHeight, _currLineHeight);
-            charRenderer->renderCharAt(_currentPageData, (int)_currentPageOrigX + adjustForExtend,
-                                       (int)_currentPageOrigY + adjustForExtend, bitmap, bitmapWidth, bitmapHeight,
-                                        _width, _height);
-
-            tempDef.U         = _currentPageOrigX;
-            tempDef.V         = _currentPageOrigY;
-            tempDef.textureID = _currentPage;
-            _currentPageOrigX += tempDef.width + 1;
-            // take from pixels to points
-            tempDef.width   = tempDef.width / _scaleFactor;
-            tempDef.height  = tempDef.height / _scaleFactor;
-            tempDef.U       = tempDef.U / _scaleFactor;
-            tempDef.V       = tempDef.V / _scaleFactor;
-            tempDef.rotated = false;
-        }
-        else
-        {
-            delete[] bitmap;
-
-            tempDef.validDefinition = !!tempDef.xAdvance;
+            tempDef.validDefinition = tempDef.xAdvance >= 0;
             tempDef.width           = 0;
             tempDef.height          = 0;
             tempDef.U               = 0;
             tempDef.V               = 0;
             tempDef.offsetX         = 0;
             tempDef.offsetY         = 0;
+            tempDef.scale           = 1;
             tempDef.textureID       = 0;
             tempDef.rotated         = false;
             _currentPageOrigX += 1;
@@ -455,12 +450,89 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
         _letterDefinitions[charCode] = tempDef;
     }
 
-    updateTextureContent(pixelFormat, startY);
+    updateTextureContent(startY);
 
     return true;
 }
 
-void FontAtlas::updateTextureContent(backend::PixelFormat format, int startY)
+bool FontAtlas::getOrCreateLetter(char32_t charCode, FontLetterDefinition& letterDefinition)
+{
+    const auto it = _letterDefinitions.find(charCode);
+
+    if (it != _letterDefinitions.end())
+    {
+        letterDefinition = it->second;
+        return true;
+    }
+
+    int bitmapWidth  = 0;
+    int bitmapHeight = 0;
+    Rect tempRect;
+
+    const FontFreeTypeBitmap bitmap = _fontFreeType->getGlyphBitmap(charCode, bitmapWidth, bitmapHeight, tempRect,
+                                                          letterDefinition.xAdvance, nullptr);
+
+    if (!bitmap.bitmap || !bitmapWidth || !bitmapHeight)
+        return false;
+
+    if (!_currentPageData)
+        reinit();
+
+    const int startY = renderChar(bitmap, bitmapWidth, bitmapHeight, _currentPageOrigY, tempRect, letterDefinition);
+    updateTextureContent(startY);
+
+    _letterDefinitions[charCode] = letterDefinition;
+
+    return true;
+}
+
+int FontAtlas::renderChar(const FontFreeTypeBitmap& bitmap, int bitmapWidth, int bitmapHeight, int startY, const Rect& rect, FontLetterDefinition& letterDefinition)
+{
+    const int adjustForDistanceMap = _letterPadding / 2;
+    const int adjustForExtend      = _letterEdgeExtend / 2;
+
+    letterDefinition.validDefinition = true;
+    letterDefinition.width           = rect.size.width + _letterPadding + _letterEdgeExtend;
+    letterDefinition.height          = rect.size.height + _letterPadding + _letterEdgeExtend;
+    letterDefinition.offsetX         = rect.origin.x - adjustForDistanceMap - adjustForExtend;
+    letterDefinition.offsetY         = _fontAscender + rect.origin.y - adjustForDistanceMap - adjustForExtend;
+    letterDefinition.scale = 1;
+
+    if (_currentPageOrigX + letterDefinition.width > _width)
+    {
+        _currentPageOrigY += _currLineHeight;
+        _currLineHeight   = 0;
+        _currentPageOrigX = 0;
+        if (_currentPageOrigY + _lineHeight + _letterPadding + _letterEdgeExtend >= _height)
+        {
+            updateTextureContent(startY);
+
+            startY = 0;
+
+            addNewPage();
+        }
+    }
+    int glyphHeight = bitmapHeight + _letterPadding + _letterEdgeExtend;
+    _currLineHeight = std::max(glyphHeight, _currLineHeight);
+    _fontFreeType->renderCharAt(_currentPageData, (int)_currentPageOrigX + adjustForExtend,
+                                (int)_currentPageOrigY + adjustForExtend, bitmap, bitmapWidth, bitmapHeight, _width,
+                                _height);
+
+    letterDefinition.U         = _currentPageOrigX;
+    letterDefinition.V         = _currentPageOrigY;
+    letterDefinition.textureID = _currentPage;
+    _currentPageOrigX += letterDefinition.width + 1;
+    // take from pixels to points
+    letterDefinition.width   = letterDefinition.width / _scaleFactor;
+    letterDefinition.height  = letterDefinition.height / _scaleFactor;
+    letterDefinition.U       = letterDefinition.U / _scaleFactor;
+    letterDefinition.V       = letterDefinition.V / _scaleFactor;
+    letterDefinition.rotated = false;
+
+    return startY;
+}
+
+void FontAtlas::updateTextureContent(int startY)
 {
     auto data = _currentPageData + (_width * (int)startY << _strideShift);
     _atlasTextures[_currentPage]->updateWithSubData(data, 0, startY, _width,
@@ -535,6 +607,11 @@ void FontAtlas::setAliasTexParameters()
             tex.second->setAliasTexParameters();
         }
     }
+}
+
+backend::PixelFormat FontAtlas::getPixelFormat() const
+{
+    return _pixelFormat;
 }
 
 void FontAtlas::setAntiAliasTexParameters()
