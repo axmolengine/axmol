@@ -9,6 +9,7 @@
 #include <stdint.h>
 #include <string.h>
 #include <string>
+#include <unordered_set>
 #include <vector>
 
 namespace ax::GltfLoader
@@ -372,6 +373,28 @@ Mat4 readNodeTransform(const rapidjson::Value& node)
     Mat4::createScale(scale, &scaleMatrix);
     return translationMatrix * rotationMatrix * scaleMatrix;
 }
+
+std::vector<std::string> makeNodeNames(const rapidjson::Value& sourceNodes)
+{
+    std::vector<std::string> names;
+    std::unordered_set<std::string> usedNames;
+    names.reserve(sourceNodes.Size());
+    for (rapidjson::SizeType index = 0; index < sourceNodes.Size(); ++index)
+    {
+        const auto& sourceNode = sourceNodes[index];
+        std::string name       = sourceNode.IsObject() && sourceNode.HasMember("name") && sourceNode["name"].IsString()
+                                     ? sourceNode["name"].GetString()
+                                     : "";
+        if (name.empty())
+            name = "gltf_node_" + std::to_string(index);
+        const std::string baseName = name;
+        size_t suffix              = 1;
+        while (!usedNames.emplace(name).second)
+            name = baseName + "#" + std::to_string(suffix++);
+        names.emplace_back(std::move(name));
+    }
+    return names;
+}
 }  // namespace
 
 bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::string_view path)
@@ -599,8 +622,6 @@ bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::st
             {
                 addAttrib(MeshVertexAttribute::BLENDINDICES, rhi::VertexElementType::FLOAT4);
                 addAttrib(MeshVertexAttribute::BLENDWEIGHT, rhi::VertexElementType::FLOAT4);
-                if (!hasTexcoord)
-                    return false;
             }
             for (size_t vertex = 0; vertex < position.count; ++vertex)
             {
@@ -743,8 +764,9 @@ bool load(MeshDatas& meshes, MaterialDatas& materials, NodeDatas& nodes, std::st
                 }
             }
         }
-        auto nodeName = [&](int nodeIndex) { return std::string("gltf_node_") + std::to_string(nodeIndex); };
-        auto makeBone = [&](auto&& self, int nodeIndex) -> NodeData* {
+        const auto nodeNames = makeNodeNames(sourceNodes);
+        auto nodeName        = [&](int nodeIndex) { return nodeNames[static_cast<size_t>(nodeIndex)]; };
+        auto makeBone        = [&](auto&& self, int nodeIndex) -> NodeData* {
             const auto& sourceNode = sourceNodes[nodeIndex];
             auto* bone             = new NodeData();
             bone->id               = nodeName(nodeIndex);
@@ -909,13 +931,7 @@ bool loadAnimationData(Animation3DData& animation, std::string_view path, std::s
 
     std::vector<std::string> nodeNames;
     if (document.HasMember("nodes") && document["nodes"].IsArray())
-    {
-        nodeNames.reserve(document["nodes"].Size());
-        for (rapidjson::SizeType index = 0; index < document["nodes"].Size(); ++index)
-        {
-            nodeNames.emplace_back(std::string("gltf_node_") + std::to_string(index));
-        }
-    }
+        nodeNames = makeNodeNames(document["nodes"]);
 
     for (const auto& channel : (*sourceAnimation)["channels"].GetArray())
     {
