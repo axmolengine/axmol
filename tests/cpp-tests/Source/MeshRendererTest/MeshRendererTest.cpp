@@ -149,6 +149,8 @@ std::string MeshRendererEmptyTest::subtitle() const
 MeshRendererGltfTest::MeshRendererGltfTest()
 {
     auto mesh = MeshRenderer::create("MeshRendererTest/triangle.gltf");
+    if (!mesh)
+        return;
     mesh->setScale(160.f);
     mesh->setPositionNormalized(Vec2(.5f, .5f));
     addChild(mesh);
