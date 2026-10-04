@@ -2,7 +2,7 @@
 Copyright (c) 2015-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
- 
+
 https://axmol.dev/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,19 +25,19 @@ THE SOFTWARE.
 ****************************************************************************/
 package dev.axmol.app;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.view.WindowManager;
+
 import dev.axmol.lib.AxmolActivity;
 import dev.axmol.lib.SharedLoader;
-import android.os.Build;
-import android.view.WindowManager;
-import android.view.WindowManager.LayoutParams;
 
 public class AppActivity extends AxmolActivity {
     static {
         // DNT remove, some android simulator require explicit load shared libraries, otherwise will crash
         SharedLoader.load();
     }
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.setEnableVirtualButton(false);
@@ -58,7 +58,7 @@ public class AppActivity extends AxmolActivity {
             getWindow().setAttributes(lp);
         }
         // DO OTHER INITIALIZATION BELOW
-        
+
     }
 
 }

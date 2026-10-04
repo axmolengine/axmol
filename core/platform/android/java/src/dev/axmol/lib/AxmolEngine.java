@@ -27,31 +27,29 @@ THE SOFTWARE.
 package dev.axmol.lib;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
+import android.graphics.Insets;
 import android.graphics.Rect;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.media.AudioManager;
-import android.app.Activity;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
-import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.res.AssetFileDescriptor;
-import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
+import android.os.VibrationEffect;
 import android.os.Vibrator;
-import android.preference.PreferenceManager.OnActivityResultListener;
+import android.os.VibratorManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -64,18 +62,21 @@ import android.view.ViewConfiguration;
 import android.view.Window;
 import android.view.WindowInsets;
 import android.view.WindowManager;
+import android.view.WindowMetrics;
+
+import androidx.annotation.NonNull;
 
 import com.android.vending.expansion.zipfile.APKExpansionSupport;
 import com.android.vending.expansion.zipfile.ZipResourceFile;
-
 import com.jakewharton.processphoenix.ProcessPhoenix;
 
-import java.io.IOException;
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -105,7 +106,12 @@ public class AxmolEngine {
     private static String sPackageName;
     private static Activity sActivity = null;
     private static AxmolEngineListener sAxmolEngineListener;
-    private static Set<OnActivityResultListener> onActivityResultListeners = new LinkedHashSet<OnActivityResultListener>();
+
+    public interface OnActivityResultListener {
+        boolean onActivityResult(int requestCode, int resultCode, Intent data);
+    }
+
+    private static final Set<OnActivityResultListener> onActivityResultListeners = new LinkedHashSet<OnActivityResultListener>();
     private static Vibrator sVibrateService = null;
 
     // The absolute path to the OBB if it exists, else the absolute path to the APK.
@@ -136,6 +142,8 @@ public class AxmolEngine {
     }
 
     private static boolean sInited = false;
+
+    @SuppressWarnings("deprecation")
     public static void init(final Activity activity) {
         sActivity = activity;
         AxmolEngine.sAxmolEngineListener = (AxmolEngineListener)activity;
@@ -156,8 +164,12 @@ public class AxmolEngine {
 
             BitmapHelper.setContext(activity);
 
-            AxmolEngine.sVibrateService = (Vibrator)activity.getSystemService(Context.VIBRATOR_SERVICE);
-
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                VibratorManager vibratorManager = (VibratorManager) activity.getSystemService(Context.VIBRATOR_MANAGER_SERVICE);
+                AxmolEngine.sVibrateService = vibratorManager.getDefaultVibrator();
+            } else {
+                AxmolEngine.sVibrateService = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
+            }
             sInited = true;
         }
     }
@@ -166,20 +178,12 @@ public class AxmolEngine {
     // else it returns the absolute path to the APK.
     public static String getAssetsPath()
     {
-        if (AxmolEngine.sAssetsPath.equals("")) {
+        if (AxmolEngine.sAssetsPath.isEmpty()) {
 
             String pathToOBB = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/obb/" + AxmolEngine.sPackageName;
 
 	    	// Listing all files inside the folder (pathToOBB) where OBB files are expected to be found.
-            String[] fileNames = new File(pathToOBB).list(new FilenameFilter() { // Using filter to pick up only main OBB file name.
-                public boolean accept(File dir, String name) {
-                    return name.startsWith("main.") && name.endsWith(".obb");  // It's possible to filter only by extension here to get path to patch OBB file also.
-                }
-            });
-
-            String fullPathToOBB = "";
-            if (fileNames != null && fileNames.length > 0)  // If there is at least 1 element inside the array with OBB file names, then we may think fileNames[0] will have desired main OBB file name.
-                fullPathToOBB = pathToOBB + "/" + fileNames[0];  // Composing full file name for main OBB file.
+            String fullPathToOBB = getPathToOBB(pathToOBB);
 
             File obbFile = new File(fullPathToOBB);
             if (obbFile.exists())
@@ -191,19 +195,38 @@ public class AxmolEngine {
         return AxmolEngine.sAssetsPath;
     }
 
+    @NonNull
+    private static String getPathToOBB(String pathToOBB) {
+        String[] fileNames = new File(pathToOBB).list(new FilenameFilter() { // Using filter to pick up only main OBB file name.
+            public boolean accept(File dir, String name) {
+                return name.startsWith("main.") && name.endsWith(".obb");  // It's possible to filter only by extension here to get path to patch OBB file also.
+            }
+        });
+
+        String fullPathToOBB = "";
+        if (fileNames != null && fileNames.length > 0)  // If there is at least 1 element inside the array with OBB file names, then we may think fileNames[0] will have desired main OBB file name.
+            fullPathToOBB = pathToOBB + "/" + fileNames[0];  // Composing full file name for main OBB file.
+        return fullPathToOBB;
+    }
+
+    @SuppressWarnings("deprecation")
     public static ZipResourceFile getObbFile() {
         if (null == sOBBFile) {
             int versionCode = 1;
             try {
-                versionCode = AxmolActivity.getContext().getPackageManager().getPackageInfo(AxmolEngine.getPackageName(), 0).versionCode;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    versionCode = (int)AxmolActivity.getContext().getPackageManager().getPackageInfo(AxmolEngine.getPackageName(), 0).getLongVersionCode();
+                } else {
+                    versionCode = AxmolActivity.getContext().getPackageManager().getPackageInfo(AxmolEngine.getPackageName(), 0).versionCode;
+                }
             } catch (NameNotFoundException e) {
-                e.printStackTrace();
+                Log.e(AxmolEngine.TAG, e.toString());
             }
 
             try {
                 sOBBFile = APKExpansionSupport.getAPKExpansionZipFile(AxmolActivity.getContext(), versionCode, 0);
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e(AxmolEngine.TAG, e.toString());
             }
         }
 
@@ -216,6 +239,10 @@ public class AxmolEngine {
 
     public static void addOnActivityResultListener(OnActivityResultListener listener) {
         onActivityResultListeners.add(listener);
+    }
+
+    public static void removeOnActivityResultListener(OnActivityResultListener listener) {
+        onActivityResultListeners.remove(listener);
     }
 
     public static Set<OnActivityResultListener> getOnActivityResultListeners() {
@@ -294,8 +321,14 @@ public class AxmolEngine {
         ((AxmolActivity)sActivity).setKeepScreenOn(value);
     }
 
+    @SuppressWarnings("deprecation")
     public static void vibrate(float duration) {
-        sVibrateService.vibrate((long)(duration * 1000));
+        long milliseconds = (long) (duration * 1000);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            sVibrateService.vibrate(VibrationEffect.createOneShot(milliseconds, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else {
+            sVibrateService.vibrate(milliseconds);
+        }
     }
 
     public static void impactOccurred(int style) {
@@ -312,8 +345,7 @@ public class AxmolEngine {
 
  	public static String getVersion() {
  		try {
- 			String version = AxmolActivity.getContext().getPackageManager().getPackageInfo(AxmolActivity.getContext().getPackageName(), 0).versionName;
- 			return version;
+            return AxmolActivity.getContext().getPackageManager().getPackageInfo(AxmolActivity.getContext().getPackageName(), 0).versionName;
  		} catch(Exception e) {
  			return "";
  		}
@@ -344,9 +376,7 @@ public class AxmolEngine {
                     array[2] = descriptor.getLength();
                 } catch (NoSuchMethodException e) {
                     Log.e(AxmolEngine.TAG, "Accessing file descriptor directly from the OBB is only supported from Android 3.1 (API level 12) and above.");
-                } catch (IllegalAccessException e) {
-                    Log.e(AxmolEngine.TAG, e.toString());
-                } catch (InvocationTargetException e) {
+                } catch (IllegalAccessException | InvocationTargetException e) {
                     Log.e(AxmolEngine.TAG, e.toString());
                 }
             }
@@ -372,10 +402,7 @@ public class AxmolEngine {
     }
 
     public static void onExit() {
-        // Remove it from recent apps.
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            sActivity.finishAndRemoveTask();
-        }
+        sActivity.finishAndRemoveTask();
     }
 
     private static void showDialog(final String pTitle, final String pMessage) {
@@ -384,18 +411,14 @@ public class AxmolEngine {
 
 
     public static void setEditTextDialogResult(final String pResult) {
-        try {
-            final byte[] bytesUTF8 = pResult.getBytes("UTF8");
+        final byte[] bytesUTF8 = pResult.getBytes(StandardCharsets.UTF_8);
 
-            AxmolEngine.runOnGLThread(new Runnable() {
-                @Override
-                public void run() {
-                    AxmolEngine.nativeSetEditTextDialogResult(bytesUTF8);
-                }
-            });
-        } catch (UnsupportedEncodingException pUnsupportedEncodingException) {
-            /* Nothing. */
-        }
+        AxmolEngine.runOnGLThread(new Runnable() {
+            @Override
+            public void run() {
+                AxmolEngine.nativeSetEditTextDialogResult(bytesUTF8);
+            }
+        });
     }
 
     private static int displayMetricsToDPI(DisplayMetrics metrics)
@@ -403,10 +426,15 @@ public class AxmolEngine {
         return metrics.densityDpi;
     }
 
+    @SuppressWarnings("deprecation")
     public static int getDPI()
     {
         if (sActivity != null)
         {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                return sActivity.getResources().getConfiguration().densityDpi;
+            }
+
             DisplayMetrics metrics = new DisplayMetrics();
             WindowManager wm = sActivity.getWindowManager();
             if (wm != null)
@@ -419,7 +447,7 @@ public class AxmolEngine {
                         getRealMetrics.invoke(d, metrics);
                         return displayMetricsToDPI(metrics);
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        Log.e(AxmolEngine.TAG, e.toString());
                     }
                     d.getMetrics(metrics);
                     return displayMetricsToDPI(metrics);
@@ -439,9 +467,9 @@ public class AxmolEngine {
             return settings.getBoolean(key, defaultValue);
         }
         catch (Exception ex) {
-            ex.printStackTrace();
+            Log.e(AxmolEngine.TAG, ex.toString());
 
-            Map allValues = settings.getAll();
+            Map<String, ?> allValues = settings.getAll();
             Object value = allValues.get(key);
             if ( value instanceof String)
             {
@@ -449,12 +477,12 @@ public class AxmolEngine {
             }
             else if (value instanceof Integer)
             {
-                int intValue = ((Integer) value).intValue();
+                int intValue = ((Integer) value);
                 return (intValue !=  0) ;
             }
             else if (value instanceof Float)
             {
-                float floatValue = ((Float) value).floatValue();
+                float floatValue = ((Float) value);
                 return (floatValue != 0.0f);
             }
         }
@@ -468,9 +496,9 @@ public class AxmolEngine {
             return settings.getInt(key, defaultValue);
         }
         catch (Exception ex) {
-            ex.printStackTrace();
+            Log.e(AxmolEngine.TAG, ex.toString());
 
-            Map allValues = settings.getAll();
+            Map<String, ?> allValues = settings.getAll();
             Object value = allValues.get(key);
             if ( value instanceof String) {
                 return  Integer.parseInt(value.toString());
@@ -481,7 +509,7 @@ public class AxmolEngine {
             }
             else if (value instanceof Boolean)
             {
-                boolean booleanValue = ((Boolean) value).booleanValue();
+                boolean booleanValue = ((Boolean) value);
                 if (booleanValue)
                     return 1;
             }
@@ -496,9 +524,9 @@ public class AxmolEngine {
             return settings.getFloat(key, defaultValue);
         }
         catch (Exception ex) {
-            ex.printStackTrace();
+            Log.e(AxmolEngine.TAG, ex.toString());
 
-            Map allValues = settings.getAll();
+            Map<String, ?> allValues = settings.getAll();
             Object value = allValues.get(key);
             if ( value instanceof String) {
                 return  Float.parseFloat(value.toString());
@@ -509,7 +537,7 @@ public class AxmolEngine {
             }
             else if (value instanceof Boolean)
             {
-                boolean booleanValue = ((Boolean) value).booleanValue();
+                boolean booleanValue = ((Boolean) value);
                 if (booleanValue)
                     return 1.0f;
             }
@@ -529,9 +557,9 @@ public class AxmolEngine {
             return settings.getString(key, defaultValue);
         }
         catch (Exception ex) {
-            ex.printStackTrace();
+            Log.e(AxmolEngine.TAG, ex.toString());
 
-            return settings.getAll().get(key).toString();
+            return Objects.requireNonNull(settings.getAll().get(key)).toString();
         }
     }
 
@@ -584,7 +612,7 @@ public class AxmolEngine {
             String str = new String(text,fromCharset);
             return str.getBytes(newCharset);
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            Log.e(AxmolEngine.TAG, e.toString());
         }
 
         return null;
@@ -644,7 +672,7 @@ public class AxmolEngine {
             if (displayCutout != null) {
                 List<Rect> rects = displayCutout.getBoundingRects();
                 // Judge whether it is cutouts (aka notch) screen phone by judge cutout rects is null or zero size
-                if (rects != null && rects.size() != 0) {
+                if (rects != null && !rects.isEmpty()) {
                     safeInsets[0] = displayCutout.getSafeInsetBottom();
                     safeInsets[1] = displayCutout.getSafeInsetLeft();
                     safeInsets[2] = displayCutout.getSafeInsetRight();
@@ -697,17 +725,26 @@ public class AxmolEngine {
     }
 
     /**
-     * Queries about whether any physical keys exist on the
-     * any keyboard attached to the device and returns <code>true</code>
-     * if the device does not have physical keys
+     * Queries about whether any virtual keys are displayed on the device
+     * and returns <code>true</code> if the device displays virtual keys.
      *
      * @return Returns <code>true</code> if the device have no physical keys,
-     * otherwise <code>false</code> will returned.
+     * otherwise <code>false</code> will be returned.
      */
+    @SuppressWarnings("deprecation")
     public static boolean hasSoftKeys() {
-        boolean hasSoftwareKeys = true;
+        boolean hasSoftwareKeys;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            WindowManager windowManager = sActivity.getSystemService(WindowManager.class);
+            WindowMetrics windowMetrics = windowManager.getCurrentWindowMetrics();
+
+            Insets insets = windowMetrics.getWindowInsets()
+                .getInsetsIgnoringVisibility(WindowInsets.Type.navigationBars());
+
+            hasSoftwareKeys = insets.top > 0 || insets.bottom > 0 || insets.left > 0 || insets.right > 0;
+
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             Display display = sActivity.getWindowManager().getDefaultDisplay();
 
             DisplayMetrics realDisplayMetrics = new DisplayMetrics();
@@ -766,7 +803,7 @@ public class AxmolEngine {
 
             AssetManager assetManager = getAssetManager();
             String[] list = assetManager.list(path);
-            for (int i = 0; i < list.length; i++) {
+            for (int i = 0; i < Objects.requireNonNull(list).length; i++) {
                 try {
                     list[i] = basePath + list[i];
                     java.io.InputStream stream = assetManager.open(list[i]);
@@ -777,7 +814,7 @@ public class AxmolEngine {
             }
             return list;
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(AxmolEngine.TAG, e.toString());
         }
         return null;
     }
@@ -906,7 +943,7 @@ public class AxmolEngine {
                     break;
             }
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            Log.e(AxmolEngine.TAG, e.toString());
             sSupportedOrientationMask = ORIENTATION_MASK_ALL;
         }
 
@@ -917,9 +954,11 @@ public class AxmolEngine {
      * Returns the current orientation of the device.
      * @return One of the ORIENTATION_* constants.
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"unused", "deprecation"})
     public static int getCurrentOrientation() {
-        int rotation = sActivity.getWindowManager().getDefaultDisplay().getRotation();
+        int rotation = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
+            ? Objects.requireNonNull(sActivity.getDisplay()).getRotation()
+            : sActivity.getWindowManager().getDefaultDisplay().getRotation();
         switch (rotation) {
             case Surface.ROTATION_0:
                 return ORIENTATION_PORTRAIT;

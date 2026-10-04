@@ -26,7 +26,9 @@
 
 package dev.axmol.lua_tests;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.view.WindowManager;
 import dev.axmol.lib.AxmolActivity;
 import dev.axmol.lib.SharedLoader;
 import dev.axmol.lib.AxmolGLSurfaceView;

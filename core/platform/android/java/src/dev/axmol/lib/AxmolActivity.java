@@ -31,14 +31,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.graphics.PixelFormat;
 import android.media.AudioManager;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.PowerManager;
-import android.preference.PreferenceManager.OnActivityResultListener;
 import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
@@ -46,14 +44,17 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
-import dev.axmol.lib.AxmolEngine.AxmolEngineListener;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
 
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLDisplay;
-import javax.microedition.khronos.egl.EGLContext;
 
-public abstract class AxmolActivity extends Activity implements AxmolEngineListener {
+import dev.axmol.lib.AxmolEngine.AxmolEngineListener;
+
+public abstract class AxmolActivity extends AppCompatActivity implements AxmolEngineListener {
     // ===========================================================
     // Constants
     // ===========================================================
@@ -136,9 +137,11 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
             ApplicationInfo ai = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
             Bundle bundle = ai.metaData;
             String libName = bundle.getString("android.app.lib_name");
+            assert libName != null;
             System.loadLibrary(libName);
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            Log.e(TAG, "Error loading native library", e);
         }
     }
 
@@ -173,11 +176,11 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
         this.mGLContextAttrs = getGLContextAttrs();
         this.init();
 
-        if(mWebViewHelper == null){
+        if(mWebViewHelper == null) {
             mWebViewHelper = new WebViewHelper(mFrameLayout);
         }
 
-        if(mEditBoxHelper == null){
+        if(mEditBoxHelper == null) {
             mEditBoxHelper = new EditBoxHelper(mFrameLayout);
         }
 
@@ -273,7 +276,7 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        for (OnActivityResultListener listener : AxmolEngine.getOnActivityResultListeners()) {
+        for (AxmolEngine.OnActivityResultListener listener : AxmolEngine.getOnActivityResultListeners()) {
             listener.onActivityResult(requestCode, resultCode, data);
         }
 
@@ -389,8 +392,7 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
 
     private static boolean isDeviceLocked() {
         KeyguardManager keyguardManager = (KeyguardManager)getContext().getSystemService(Context.KEYGUARD_SERVICE);
-        boolean locked = keyguardManager.inKeyguardRestrictedInputMode();
-        return locked;
+        return keyguardManager.isKeyguardLocked();
     }
 
     private static boolean isDeviceAsleep() {
@@ -401,7 +403,7 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
             return !powerManager.isInteractive();
         } else {
-            return !powerManager.isScreenOn();
+            return !powerManager.isInteractive();
         }
     }
 
@@ -411,9 +413,9 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
 
     private class AxmolEGLConfigChooser implements GLSurfaceView.EGLConfigChooser
     {
-        private int[] mConfigAttributes;
-        private  final int EGL_OPENGL_ES2_BIT = 0x04;
-        private  final int EGL_OPENGL_ES3_BIT = 0x40;
+        private final int[] mConfigAttributes;
+        private final int EGL_OPENGL_ES2_BIT = 0x04;
+        private final int EGL_OPENGL_ES3_BIT = 0x40;
         public AxmolEGLConfigChooser(int redSize, int greenSize, int blueSize, int alphaSize, int depthSize, int stencilSize, int multisamplingCount)
         {
             mConfigAttributes = new int[] {redSize, greenSize, blueSize, alphaSize, depthSize, stencilSize, multisamplingCount};
