@@ -252,8 +252,9 @@ $channels = @{}
 
 # refer to: https://developer.android.com/studio#command-line-tools-only
 $cmdlinetools_revs = @{
-    '12.0' = '11076708'
-    '19.0' = '13114758'
+    '21.0' = '15641748'
+    '22.0' = '15859902'
+    '23.0' = '16111833'
 }
 
 $ndk_r23d_rev = '12186248'

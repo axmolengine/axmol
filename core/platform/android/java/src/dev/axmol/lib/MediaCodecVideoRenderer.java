@@ -30,7 +30,6 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Point;
 import android.hardware.display.DisplayManager;
@@ -39,16 +38,18 @@ import android.media.MediaCodecInfo.CodecCapabilities;
 import android.media.MediaCodecInfo.CodecProfileLevel;
 import android.media.MediaCrypto;
 import android.media.MediaFormat;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
 import android.util.Pair;
 import android.view.Display;
 import android.view.Surface;
+
 import androidx.annotation.CallSuper;
 import androidx.annotation.DoNotInline;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.media3.common.C;
@@ -57,7 +58,7 @@ import androidx.media3.common.Format;
 import androidx.media3.common.MimeTypes;
 import androidx.media3.common.VideoSize;
 import androidx.media3.common.util.Clock;
-import androidx.media3.common.util.HandlerWrapper;
+import androidx.media3.common.util.CodecSpecificDataUtil;
 import androidx.media3.common.util.Log;
 import androidx.media3.common.util.MediaFormatUtil;
 import androidx.media3.common.util.Size;
@@ -80,6 +81,10 @@ import androidx.media3.exoplayer.mediacodec.MediaCodecRenderer;
 import androidx.media3.exoplayer.mediacodec.MediaCodecSelector;
 import androidx.media3.exoplayer.mediacodec.MediaCodecUtil;
 import androidx.media3.exoplayer.mediacodec.MediaCodecUtil.DecoderQueryException;
+import androidx.media3.exoplayer.video.MediaCodecVideoDecoderException;
+import androidx.media3.exoplayer.video.VideoFrameMetadataListener;
+import androidx.media3.exoplayer.video.VideoFrameReleaseHelper;
+import androidx.media3.exoplayer.video.VideoRendererEventListener;
 import androidx.media3.exoplayer.video.VideoRendererEventListener.EventDispatcher;
 
 import com.google.common.collect.ImmutableList;
@@ -88,10 +93,6 @@ import java.nio.ByteBuffer;
 import java.util.List;
 
 // Additional imports
-import androidx.media3.exoplayer.video.MediaCodecVideoDecoderException;
-import androidx.media3.exoplayer.video.VideoRendererEventListener;
-import androidx.media3.exoplayer.video.VideoFrameReleaseHelper;
-import androidx.media3.exoplayer.video.VideoFrameMetadataListener;
 
 class ClockUtils {
   public static long nanoTime() {
@@ -125,6 +126,7 @@ class ClockUtils {
  *       VideoFrameMetadataListener}, or null.
  * </ul>
  */
+@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 @UnstableApi
 public class MediaCodecVideoRenderer extends MediaCodecRenderer {
   // region ByteBufferMode
@@ -149,7 +151,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
   /** The first frame was rendered. */
   @UnstableApi public static final int FIRST_FRAME_RENDERED = 3;
 
-  public static final int DESIRED_PIXEL_FORMAT = CodecCapabilities.COLOR_FormatYUV420SemiPlanar; // desired pixel format: NV12
+  public static final int DESIRED_PIXEL_FORMAT = CodecCapabilities.COLOR_FormatYUV420Flexible; // desired pixel format: NV12
   // #endregion ByteBufferMode
 
   private static final String TAG = "MediaCodecVideoRenderer";
@@ -259,7 +261,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
       int maxDroppedFramesToNotify) {
     this(
         context,
-        MediaCodecAdapter.Factory.DEFAULT,
+        MediaCodecAdapter.Factory.getDefault(context),
         mediaCodecSelector,
         allowedJoiningTimeMs,
         /* enableDecoderFallback= */ false,
@@ -293,7 +295,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
       int maxDroppedFramesToNotify) {
     this(
         context,
-        MediaCodecAdapter.Factory.DEFAULT,
+        MediaCodecAdapter.Factory.getDefault(context),
         mediaCodecSelector,
         allowedJoiningTimeMs,
         enableDecoderFallback,
@@ -390,13 +392,14 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
     firstFrameState = FIRST_FRAME_NOT_RENDERED_ONLY_ALLOWED_IF_STARTED;
   }
 
+  @NonNull
   @Override
   public String getName() {
     return TAG;
   }
 
   @Override
-  protected @Capabilities int supportsFormat(MediaCodecSelector mediaCodecSelector, Format format)
+  protected @Capabilities int supportsFormat(@NonNull MediaCodecSelector mediaCodecSelector, Format format)
       throws DecoderQueryException {
     String mimeType = format.sampleMimeType;
     if (!MimeTypes.isVideo(mimeType)) {
@@ -460,7 +463,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
     @DecoderSupport
     int decoderSupport = isPreferredDecoder ? DECODER_SUPPORT_PRIMARY : DECODER_SUPPORT_FALLBACK;
 
-    if (Util.SDK_INT >= 26
+    if (Build.VERSION.SDK_INT >= 26
         && MimeTypes.VIDEO_DOLBY_VISION.equals(format.sampleMimeType)
         && !Api26.doesDisplaySupportDolbyVision(context)) {
       decoderSupport = DECODER_SUPPORT_FALLBACK_MIMETYPE;
@@ -494,9 +497,10 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
         decoderSupport);
   }
 
+  @NonNull
   @Override
   protected List<MediaCodecInfo> getDecoderInfos(
-      MediaCodecSelector mediaCodecSelector, Format format, boolean requiresSecureDecoder)
+      @NonNull MediaCodecSelector mediaCodecSelector, @NonNull Format format, boolean requiresSecureDecoder)
       throws DecoderQueryException {
     return MediaCodecUtil.getDecoderInfosSortedByFormatSupport(
         getDecoderInfos(context, mediaCodecSelector, format, requiresSecureDecoder, tunneling),
@@ -542,7 +546,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
     List<MediaCodecInfo> alternativeDecoderInfos =
       mediaCodecSelector.getDecoderInfos(
         alternativeMimeType, requiresSecureDecoder, requiresTunnelingDecoder);
-    if (Util.SDK_INT >= 26
+    if (Build.VERSION.SDK_INT >= 26
       && MimeTypes.VIDEO_DOLBY_VISION.equals(format.sampleMimeType)
       && !alternativeDecoderInfos.isEmpty()
       && !Api26.doesDisplaySupportDolbyVision(context)) {
@@ -564,7 +568,14 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
       Display display =
           (displayManager != null) ? displayManager.getDisplay(DEFAULT_DISPLAY) : null;
       if (display != null && display.isHdr()) {
-        int[] supportedHdrTypes = display.getHdrCapabilities().getSupportedHdrTypes();
+        int[] supportedHdrTypes;
+        if (Build.VERSION.SDK_INT >= 34) {
+            supportedHdrTypes = display.getMode().getSupportedHdrTypes();
+        }
+        else {
+            supportedHdrTypes = display.getHdrCapabilities().getSupportedHdrTypes();
+        }
+
         for (int hdrType : supportedHdrTypes) {
           if (hdrType == Display.HdrCapabilities.HDR_TYPE_DOLBY_VISION) {
             supportsDolbyVision = true;
@@ -678,13 +689,12 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
     }
   }
 
-  @TargetApi(17) // Needed for placeholderSurface usage, as it is always null on API level 16.
   @Override
   protected void onReset() {
     try {
       super.onReset();
     } finally {
-      ;
+
     }
   }
 
@@ -733,22 +743,18 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
     this.output = (VideoFrameProcessor)output;
   }
 
-  @Override
-  protected boolean shouldInitCodec(MediaCodecInfo codecInfo) {
-    return true;
-  }
-
-  @Override
+    @Override
   protected boolean getCodecNeedsEosPropagation() {
     // Since API 23, onFrameRenderedListener allows for detection of the renderer EOS.
-    return tunneling && Util.SDK_INT < 23;
+    return tunneling && Build.VERSION.SDK_INT < 23;
   }
 
-  @TargetApi(17) // Needed for placeHolderSurface usage, as it is always null on API level 16.
+  @NonNull
+  @RequiresApi(21) // Needed for placeHolderSurface usage, as it is always null on API level 16.
   @Override
   protected MediaCodecAdapter.Configuration getMediaCodecConfiguration(
       MediaCodecInfo codecInfo,
-      Format format,
+      @NonNull Format format,
       @Nullable MediaCrypto crypto,
       float codecOperatingRate) {
     String codecMimeType = codecInfo.codecMimeType;
@@ -777,9 +783,10 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
     mediaFormat.setInteger(MediaFormat.KEY_ALLOW_FRAME_DROP, 0);
   }
 
+  @NonNull
   @Override
   protected DecoderReuseEvaluation canReuseCodec(
-      MediaCodecInfo codecInfo, Format oldFormat, Format newFormat) {
+      MediaCodecInfo codecInfo, @NonNull Format oldFormat, @NonNull Format newFormat) {
     DecoderReuseEvaluation evaluation = codecInfo.canReuseCodec(oldFormat, newFormat);
 
     @DecoderDiscardReasons int discardReasons = evaluation.discardReasons;
@@ -838,7 +845,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
       // profile.
       sampleMimeType = MimeTypes.VIDEO_H265;
       @Nullable
-      Pair<Integer, Integer> codecProfileAndLevel = MediaCodecUtil.getCodecProfileAndLevel(format);
+      Pair<Integer, Integer> codecProfileAndLevel = CodecSpecificDataUtil.getCodecProfileAndLevel(format);
       if (codecProfileAndLevel != null) {
         int profile = codecProfileAndLevel.first;
         if (profile == CodecProfileLevel.DolbyVisionProfileDvavSe
@@ -865,10 +872,10 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
             HEVC_MAX_INPUT_SIZE_THRESHOLD,
             getMaxSampleSize(/* pixelCount= */ width * height, /* minCompressionRatio= */ 2));
       case MimeTypes.VIDEO_H264:
-        if ("BRAVIA 4K 2015".equals(Util.MODEL) // Sony Bravia 4K
-            || ("Amazon".equals(Util.MANUFACTURER)
-                && ("KFSOWI".equals(Util.MODEL) // Kindle Soho
-                    || ("AFTS".equals(Util.MODEL) && codecInfo.secure)))) { // Fire TV Gen 2
+        if ("BRAVIA 4K 2015".equals(Build.MODEL) // Sony Bravia 4K
+            || ("Amazon".equals(Build.MANUFACTURER)
+                && ("KFSOWI".equals(Build.MODEL) // Kindle Soho
+                    || ("AFTS".equals(Build.MODEL) && codecInfo.secure)))) { // Fire TV Gen 2
           // Use the default value for cases where platform limitations may prevent buffers of the
           // calculated maximum input size from being allocated.
           return Format.NO_VALUE;
@@ -886,7 +893,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
 
   @Override
   protected float getCodecOperatingRateV23(
-      float targetPlaybackSpeed, Format format, Format[] streamFormats) {
+      float targetPlaybackSpeed, @NonNull Format format, Format[] streamFormats) {
     // Use the highest known stream frame-rate up front, to avoid having to reconfigure the codec
     // should an adaptive switch to that stream occur.
     float maxFrameRate = -1;
@@ -905,32 +912,32 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
 
   @Override
   protected void onCodecInitialized(
-      String name,
-      MediaCodecAdapter.Configuration configuration,
+      @NonNull String name,
+      @NonNull MediaCodecAdapter.Configuration configuration,
       long initializedTimestampMs,
       long initializationDurationMs) {
     eventDispatcher.decoderInitialized(name, initializedTimestampMs, initializationDurationMs);
     codecHandlesHdr10PlusOutOfBandMetadata =
         checkNotNull(getCodecInfo()).isHdr10PlusOutOfBandMetadataSupported();
-    if (Util.SDK_INT >= 23 && tunneling) {
+    if (Build.VERSION.SDK_INT >= 23 && tunneling) {
       tunnelingOnFrameRenderedListener = new OnFrameRenderedListenerV23(checkNotNull(getCodec()));
     }
   }
 
   @Override
-  protected void onCodecReleased(String name) {
+  protected void onCodecReleased(@NonNull String name) {
     eventDispatcher.decoderReleased(name);
   }
 
   @Override
-  protected void onCodecError(Exception codecError) {
+  protected void onCodecError(@NonNull Exception codecError) {
     Log.e(TAG, "Video codec error", codecError);
     eventDispatcher.videoCodecError(codecError);
   }
 
   @Override
   @Nullable
-  protected DecoderReuseEvaluation onInputFormatChanged(FormatHolder formatHolder)
+  protected DecoderReuseEvaluation onInputFormatChanged(@NonNull FormatHolder formatHolder)
       throws ExoPlaybackException {
     @Nullable DecoderReuseEvaluation evaluation = super.onInputFormatChanged(formatHolder);
     eventDispatcher.inputFormatChanged(checkNotNull(formatHolder.format), evaluation);
@@ -947,13 +954,13 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
    */
   @CallSuper
   @Override
-  protected void onQueueInputBuffer(DecoderInputBuffer buffer) throws ExoPlaybackException {
+  protected void onQueueInputBuffer(@NonNull DecoderInputBuffer buffer) throws ExoPlaybackException {
     // In tunneling mode the device may do frame rate conversion, so in general we can't keep track
     // of the number of buffers in the codec.
     if (!tunneling) {
       buffersInCodecCount++;
     }
-    if (Util.SDK_INT < 23 && tunneling) {
+    if (Build.VERSION.SDK_INT < 23 && tunneling) {
       // In tunneled mode before API 23 we don't have a way to know when the buffer is output, so
       // treat it as if it were output immediately.
       onProcessedTunneledBuffer(buffer.timeUs);
@@ -961,7 +968,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
   }
 
   @Override
-  protected void onOutputFormatChanged(Format format, @Nullable MediaFormat mediaFormat) {
+  protected void onOutputFormatChanged(@NonNull Format format, @Nullable MediaFormat mediaFormat) {
     @Nullable MediaCodecAdapter codec = getCodec();
     if (codec != null) {
       // Must be applied each time the output format changes.
@@ -969,7 +976,6 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
     }
     int width;
     int height;
-    int unappliedRotationDegrees = 0;
     float pixelWidthHeightRatio;
 
     if (tunneling) {
@@ -994,7 +1000,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
     pixelWidthHeightRatio = format.pixelWidthHeightRatio;
     if (codecAppliesRotation()) {
       // On API level 21 and above the decoder applies the rotation when rendering to the surface.
-      // Hence currentUnappliedRotation should always be 0. For 90 and 270 degree rotations, we need
+      // Hence, currentUnappliedRotation should always be 0. For 90 and 270 degree rotations, we need
       // to flip the width, height and pixel aspect ratio to reflect the rotation that was applied.
       if (format.rotationDegrees == 90 || format.rotationDegrees == 270) {
         int rotatedHeight = width;
@@ -1002,18 +1008,16 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
         height = rotatedHeight;
         pixelWidthHeightRatio = 1 / pixelWidthHeightRatio;
       }
-    } else {
-      // Neither the codec nor the video sink applies the rotation.
-      unappliedRotationDegrees = format.rotationDegrees;
     }
     decodedVideoSize =
-        new VideoSize(width, height, unappliedRotationDegrees, pixelWidthHeightRatio);
+//        new VideoSize(width, height, unappliedRotationDegrees, pixelWidthHeightRatio);
+        new VideoSize(width, height, pixelWidthHeightRatio);
     frameReleaseHelper.onFormatChanged(format.frameRate);
   }
 
   @Override
-  @TargetApi(29) // codecHandlesHdr10PlusOutOfBandMetadata is false if Util.SDK_INT < 29
-  protected void handleInputBufferSupplementalData(DecoderInputBuffer buffer)
+  @RequiresApi(29) // codecHandlesHdr10PlusOutOfBandMetadata is false if Build.VERSION.SDK_INT < 29
+  protected void handleInputBufferSupplementalData(@NonNull DecoderInputBuffer buffer)
       throws ExoPlaybackException {
     if (!codecHandlesHdr10PlusOutOfBandMetadata) {
       return;
@@ -1054,7 +1058,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
       long bufferPresentationTimeUs,
       boolean isDecodeOnlyBuffer,
       boolean isLastBuffer,
-      Format format)
+      @NonNull Format format)
       throws ExoPlaybackException {
     checkNotNull(codec); // Can not render video without codec
 
@@ -1117,7 +1121,6 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
       return true;
     }
 
-    if (Util.SDK_INT >= 21) {
       // Let the underlying framework time the release.
       if (earlyUs < MAX_EARLY_US_THRESHOLD) {
         if (adjustedReleaseTimeNs == lastFrameReleaseTimeNs) {
@@ -1134,28 +1137,8 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
         lastFrameReleaseTimeNs = adjustedReleaseTimeNs;
         return true;
       }
-    } else {
-      // We need to time the release ourselves.
-      if (earlyUs < 30000) {
-        if (earlyUs > 11000) {
-          // We're a little too early to render the frame. Sleep until the frame can be rendered.
-          // Note: The 11ms threshold was chosen fairly arbitrarily.
-          try {
-            // Subtracting 10000 rather than 11000 ensures the sleep time will be at least 1ms.
-            Thread.sleep((earlyUs - 10000) / 1000);
-          } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            return false;
-          }
-        }
-        notifyFrameMetadataListener(presentationTimeUs, adjustedReleaseTimeNs, format);
-        renderOutputBuffer(codec, bufferIndex, presentationTimeUs);
-        updateVideoFrameProcessingOffsetCounters(earlyUs);
-        return true;
-      }
-    }
 
-    // We're either not playing, or it's not time to render the frame yet.
+      // We're either not playing, or it's not time to render the frame yet.
     return false;
   }
 
@@ -1231,7 +1214,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
     onProcessedOutputBuffer(presentationTimeUs);
   }
 
-  /** Called when a output EOS was received in tunneling mode. */
+  /** Called when an output EOS was received in tunneling mode. */
   private void onProcessedTunneledEndOfStream() {
     setPendingOutputEndOfStream();
   }
@@ -1342,7 +1325,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
       return false;
     }
     // We dropped some buffers to catch up, so update the decoder counters and flush the codec,
-    // which releases all pending buffers buffers including the current output buffer.
+    // which releases all pending buffers including the current output buffer.
     if (treatDroppedBuffersAsSkipped) {
       decoderCounters.skippedInputBufferCount += droppedSourceBufferCount;
       decoderCounters.skippedOutputBufferCount += buffersInCodecCount;
@@ -1397,7 +1380,8 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
    * @param presentationTimeUs The presentation time of the output buffer, in microseconds.
    */
   protected void renderOutputBuffer(MediaCodecAdapter codec, int index, long presentationTimeUs) {
-    this.output.processVideoFrame(codec, index, presentationTimeUs);
+      assert this.output != null;
+      this.output.processVideoFrame(codec, index, presentationTimeUs);
     TraceUtil.beginSection("releaseOutputBuffer");
     codec.releaseOutputBuffer(index, false);
     TraceUtil.endSection();
@@ -1422,7 +1406,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
     // non-tunneled playback, onQueueInputBuffer for tunneled playback prior to API level 23, and
     // OnFrameRenderedListenerV23.onFrameRenderedListener for tunneled playback on API level 23 and
     // above.
-    if (Util.SDK_INT >= 23 && tunneling) {
+    if (Build.VERSION.SDK_INT >= 23 && tunneling) {
       @Nullable MediaCodecAdapter codec = getCodec();
       // If codec is null then the listener will be instantiated in configureCodec.
       if (codec != null) {
@@ -1514,14 +1498,14 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
    * @param codecMaxValues Codec max values that should be used when configuring the decoder.
    * @param codecOperatingRate The codec operating rate, or {@link #CODEC_OPERATING_RATE_UNSET} if
    *     no codec operating rate should be set.
-   * @param deviceNeedsNoPostProcessWorkaround Whether the device is known to do post processing by
+   * @param deviceNeedsNoPostProcessWorkaround Whether the device is known to do post-processing by
    *     default that isn't compatible with ExoPlayer.
    * @param tunnelingAudioSessionId The audio session id to use for tunneling, or {@link
    *     C#AUDIO_SESSION_ID_UNSET} if tunneling should not be enabled.
    * @return The framework {@link MediaFormat} that should be used to configure the decoder.
    */
   @SuppressLint("InlinedApi")
-  @TargetApi(21) // tunnelingAudioSessionId is unset if Util.SDK_INT < 21
+  @RequiresApi(21) // tunnelingAudioSessionId is unset if Build.VERSION.SDK_INT < 21
   protected MediaFormat getMediaFormat(
       Format format,
       String codecMimeType,
@@ -1542,7 +1526,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
     if (MimeTypes.VIDEO_DOLBY_VISION.equals(format.sampleMimeType)) {
       // Some phones require the profile to be set on the codec.
       // See https://github.com/google/ExoPlayer/pull/5438.
-      Pair<Integer, Integer> codecProfileAndLevel = MediaCodecUtil.getCodecProfileAndLevel(format);
+      Pair<Integer, Integer> codecProfileAndLevel = CodecSpecificDataUtil.getCodecProfileAndLevel(format);
       if (codecProfileAndLevel != null) {
         MediaFormatUtil.maybeSetInteger(
             mediaFormat, MediaFormat.KEY_PROFILE, codecProfileAndLevel.first);
@@ -1554,7 +1538,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
     MediaFormatUtil.maybeSetInteger(
         mediaFormat, MediaFormat.KEY_MAX_INPUT_SIZE, codecMaxValues.inputSize);
     // Set codec configuration values.
-    if (Util.SDK_INT >= 23) {
+    if (Build.VERSION.SDK_INT >= 23) {
       mediaFormat.setInteger(MediaFormat.KEY_PRIORITY, 0 /* realtime priority */);
       if (codecOperatingRate != CODEC_OPERATING_RATE_UNSET) {
         mediaFormat.setFloat(MediaFormat.KEY_OPERATING_RATE, codecOperatingRate);
@@ -1633,9 +1617,10 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
     return new CodecMaxValues(maxWidth, maxHeight, maxInputSize);
   }
 
+  @NonNull
   @Override
   protected MediaCodecDecoderException createDecoderException(
-      Throwable cause, @Nullable MediaCodecInfo codecInfo) {
+      @NonNull Throwable cause, @Nullable MediaCodecInfo codecInfo) {
     return new MediaCodecVideoDecoderException(cause, codecInfo, null);
   }
 
@@ -1661,7 +1646,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
       if (longEdgePx <= formatLongEdgePx || shortEdgePx <= formatShortEdgePx) {
         // Don't return a size not larger than the format for which the codec is being configured.
         return null;
-      } else if (Util.SDK_INT >= 21) {
+      } else {
         Point alignedSize =
             codecInfo.alignVideoSizeV21(
                 isVerticalVideo ? shortEdgePx : longEdgePx,
@@ -1670,20 +1655,6 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
         if (alignedSize != null
             && codecInfo.isVideoSizeAndRateSupportedV21(alignedSize.x, alignedSize.y, frameRate)) {
           return alignedSize;
-        }
-      } else {
-        try {
-          // Conservatively assume the codec requires 16px width and height alignment.
-          longEdgePx = Util.ceilDivide(longEdgePx, 16) * 16;
-          shortEdgePx = Util.ceilDivide(shortEdgePx, 16) * 16;
-          if (longEdgePx * shortEdgePx <= MediaCodecUtil.maxH264DecodableFrameSize()) {
-            return new Point(
-                isVerticalVideo ? shortEdgePx : longEdgePx,
-                isVerticalVideo ? longEdgePx : shortEdgePx);
-          }
-        } catch (DecoderQueryException e) {
-          // We tried our best. Give up!
-          return null;
         }
       }
     }
@@ -1714,15 +1685,15 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
   }
 
   private static boolean codecAppliesRotation() {
-    // axmol: ByteBuffer Mode always doesn't applies rotation by video decoder
-    return false; /*Util.SDK_INT >= 21*/
+    // axmol: ByteBuffer Mode always doesn't apply rotation by video decoder
+    return false; /*Build.VERSION.SDK_INT >= 21*/
   }
 
   /**
-   * Returns whether the device is known to do post processing by default that isn't compatible with
+   * Returns whether the device is known to do post-processing by default that isn't compatible with
    * ExoPlayer.
    *
-   * @return Whether the device is known to do post processing by default that isn't compatible with
+   * @return Whether the device is known to do post-processing by default that isn't compatible with
    *     ExoPlayer.
    */
   private static boolean deviceNeedsNoPostProcessWorkaround() {
@@ -1730,10 +1701,10 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
     // content to the refresh rate of the display. For example playback of 23.976fps content is
     // adjusted to play at 1.001x speed when the output display is 60Hz. Unfortunately the
     // implementation causes ExoPlayer's reported playback position to drift out of sync. Captions
-    // also lose sync [Internal: b/26453592]. Even after M, the devices may apply post processing
+    // also lose sync [Internal: b/26453592]. Even after M, the devices may apply post-processing
     // operations that can modify frame output timestamps, which is incompatible with ExoPlayer's
     // logic for skipping decode-only frames.
-    return "NVIDIA".equals(Util.MANUFACTURER);
+    return "NVIDIA".equals(Build.MANUFACTURER);
   }
 
 
@@ -1762,14 +1733,14 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
   }
 
   private static boolean evaluateDeviceNeedsSetOutputSurfaceWorkaround() {
-    if (Util.SDK_INT <= 28) {
+    if (Build.VERSION.SDK_INT <= 28) {
       // Workaround for MiTV and MiBox devices which have been observed broken up to API 28.
       // https://github.com/google/ExoPlayer/issues/5169,
       // https://github.com/google/ExoPlayer/issues/6899.
       // https://github.com/google/ExoPlayer/issues/8014.
       // https://github.com/google/ExoPlayer/issues/8329.
       // https://github.com/google/ExoPlayer/issues/9710.
-      switch (Util.DEVICE) {
+      switch (Build.DEVICE) {
         case "aquaman":
         case "dangal":
         case "dangalUHD":
@@ -1783,12 +1754,12 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
           break; // Do nothing.
       }
     }
-    if (Util.SDK_INT <= 27 && "HWEML".equals(Util.DEVICE)) {
+    if (Build.VERSION.SDK_INT <= 27 && "HWEML".equals(Build.DEVICE)) {
       // Workaround for Huawei P20:
       // https://github.com/google/ExoPlayer/issues/4468#issuecomment-459291645.
       return true;
     }
-    switch (Util.MODEL) {
+    switch (Build.MODEL) {
         // Workaround for some Fire OS devices.
       case "AFTA":
       case "AFTN":
@@ -1803,7 +1774,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
       default:
         break; // Do nothing.
     }
-    if (Util.SDK_INT <= 26) {
+    if (Build.VERSION.SDK_INT <= 26) {
       // In general, devices running API level 27 or later should be unaffected unless observed
       // otherwise. Enable the workaround on a per-device basis. Works around:
       // https://github.com/google/ExoPlayer/issues/3236,
@@ -1823,7 +1794,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
       // https://github.com/google/ExoPlayer/issues/6503.
       // https://github.com/google/ExoPlayer/issues/8014,
       // https://github.com/google/ExoPlayer/pull/8030.
-      switch (Util.DEVICE) {
+      switch (Build.DEVICE) {
         case "1601":
         case "1713":
         case "1714":
@@ -1968,7 +1939,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
         default:
           break; // Do nothing.
       }
-      switch (Util.MODEL) {
+      switch (Build.MODEL) {
         case "JSN-L21":
           return true;
         default:
@@ -1992,7 +1963,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
     }
 
     @Override
-    public void onFrameRendered(MediaCodecAdapter codec, long presentationTimeUs, long nanoTime) {
+    public void onFrameRendered(@NonNull MediaCodecAdapter codec, long presentationTimeUs, long nanoTime) {
       // Workaround bug in MediaCodec that causes deadlock if you call directly back into the
       // MediaCodec from this listener method.
       // Deadlock occurs because MediaCodec calls this listener method holding a lock,
@@ -2000,7 +1971,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
       // This was fixed in https://android-review.googlesource.com/1156807.
       //
       // The workaround queues the event for subsequent processing, where the lock will not be held.
-      if (Util.SDK_INT < 30) {
+      if (Build.VERSION.SDK_INT < 30) {
         Message message =
             Message.obtain(
                 handler,

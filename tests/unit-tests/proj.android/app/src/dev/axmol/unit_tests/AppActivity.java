@@ -24,7 +24,9 @@ THE SOFTWARE.
 ****************************************************************************/
 package dev.axmol.unit_tests;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.view.WindowManager;
 
 import dev.axmol.lib.AxmolActivity;
 import dev.axmol.lib.SharedLoader;
@@ -34,7 +36,7 @@ public class AppActivity extends AxmolActivity {
         // DNT remove, some android simulator require explicit load shared libraries, otherwise will crash
         SharedLoader.load();
     }
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.setEnableVirtualButton(false);
@@ -48,5 +50,6 @@ public class AppActivity extends AxmolActivity {
             return;
         }
         // DO OTHER INITIALIZATION BELOW
+
     }
 }

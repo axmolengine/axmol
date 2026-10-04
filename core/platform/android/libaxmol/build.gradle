@@ -43,7 +43,7 @@ dependencies {
 
     // refer to: https://developer.android.com/jetpack/androidx/releases/media3?hl=zh-cn#declaring_dependencies
     // ExoPlayer integration note:
-    // Axmol rewrites ExoPlayer's MediaCodecVideoRenderer based on media3-1.2.1 to enable video pixel capture,
+    // Axmol rewrites ExoPlayer's MediaCodecVideoRenderer based on media3-1.11.0 to enable video pixel capture,
     // allowing video frames to be rendered directly into the Axmol scene graph.
     api "androidx.media3:media3-exoplayer:$media3_ver"
 
@@ -57,6 +57,7 @@ dependencies {
     //api "androidx.media3:media3-exoplayer-ima:$media3_version"
 
     implementation "androidx.annotation:annotation:$annotation_ver"
+    api "androidx.appcompat:appcompat:$appcompat_ver"
 
     api ("com.google.guava:guava:$guava_ver-android") {
         // Exclude dependencies that are only used by Guava at compile time
