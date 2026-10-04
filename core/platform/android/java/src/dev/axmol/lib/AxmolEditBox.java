@@ -27,6 +27,7 @@ package dev.axmol.lib;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.Spanned;
@@ -36,6 +37,7 @@ import java.util.ArrayList;
 import android.text.method.PasswordTransformationMethod;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.inputmethod.BaseInputConnection;
 import android.view.inputmethod.EditorInfo;
 import android.widget.FrameLayout;
 
@@ -371,10 +373,23 @@ public class AxmolEditBox extends AppCompatEditText {
     @Override
     protected void onSelectionChanged(final int start, final int end) {
         super.onSelectionChanged(start, end);
-        // This override can be called during the superclass constructor.
-        if (mTextFieldSelectionListener != null) {
-            mTextFieldSelectionListener.run();
+
+        // The listener is installed for the TextFieldEx input adapter.
+        // This override can also run during the superclass constructor.
+        if (mTextFieldSelectionListener == null) {
+            return;
         }
+
+        final Editable text = getText();
+        final boolean composing = text != null &&
+            BaseInputConnection.getComposingSpanStart(text) >= 0;
+
+        if (start >= 0 && end >= 0 && start != end && !composing) {
+            setSelection(end);
+            return;
+        }
+
+        mTextFieldSelectionListener.run();
     }
 
     @Override
@@ -419,5 +434,17 @@ public class AxmolEditBox extends AppCompatEditText {
         }
 
         this.setInputType(this.mInputFlagConstraints | this.mInputModeConstraints);
+    }
+
+    @Override
+    public boolean onTextContextMenuItem(final int id) {
+        if (mTextFieldSelectionListener != null &&
+            (id == android.R.id.selectAll ||
+                id == android.R.id.copy ||
+                id == android.R.id.cut)) {
+            return true;
+        }
+
+        return super.onTextContextMenuItem(id);
     }
 }
