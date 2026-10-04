@@ -308,17 +308,8 @@ bool GraphicsDeviceImpl::initializeFactory()
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
     extensions.push_back("VK_KHR_android_surface");
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
-    const char* waylandDisplay = getenv("WAYLAND_DISPLAY");
-    const char* x11Display     = getenv("DISPLAY");
-    if (waylandDisplay)
-        extensions.push_back("VK_KHR_wayland_surface");
-    else if (x11Display)
-        extensions.push_back("VK_KHR_xcb_surface");
-    else
-    {
-        AXLOGE("Unsupported window platform: neither WAYLAND_DISPLAY nor DISPLAY found");
-        return false;
-    }
+    extensions.push_back("VK_KHR_wayland_surface"); // for wayland
+    extensions.push_back("VK_KHR_xcb_surface"); // for x11
 #endif
 
     const auto shouldCreateDebugLayer =
