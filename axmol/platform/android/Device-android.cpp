@@ -14,8 +14,6 @@ SPDX-License-Identifier: MIT
 #include <jni.h>
 #include "axmol/base/Types.h"
 #include "axmol/platform/android/jni/JniHelper.h"
-#include "axmol/platform/FileUtils.h"
-#include "yasio/tlx/string_view.hpp"
 
 static const char* deviceHelperClassName = "dev.axmol.lib.AxmolEngine";
 
@@ -94,22 +92,6 @@ public:
             return false;
         }
 
-        // Do a full lookup for the font path using FileUtils in case the given font name is a relative path to a font
-        // file asset, or the path has been mapped to a different location in the app package:
-        std::string fullPathOrFontName = textDefinition._fontName;
-        if (FileUtils::getInstance()->isFileExist(fullPathOrFontName))
-        {
-            fullPathOrFontName = FileUtils::getInstance()->fullPathForFilename(textDefinition._fontName);
-            // If the path name returned includes the 'assets' dir then that needs to be removed, because the
-            // android.content.Context requires this portion of the path to be omitted for assets inside the app
-            // package.
-            if (tlx::starts_with(std::string_view{fullPathOrFontName}, "assets/"sv))
-            {
-                fullPathOrFontName =
-                    fullPathOrFontName.substr(sizeof("assets/") - 1);  // Chop out the 'assets/' portion of the path.
-            }
-        }
-
         /**create bitmap
          * this method call Cococs2dx.createBitmap()(java code) to create the bitmap, the java code
          * will call Java_dev_axmol_lib_BitmapHelper_nativeInitBitmapDC() to init the width, height
@@ -119,7 +101,7 @@ public:
         int count           = static_cast<int>(text.length());
         jbyteArray strArray = methodInfo.env->NewByteArray(count);
         methodInfo.env->SetByteArrayRegion(strArray, 0, count, reinterpret_cast<const jbyte*>(text.data()));
-        jstring jstrFont = methodInfo.env->NewStringUTF(fullPathOrFontName.c_str());
+        jstring jstrFont = methodInfo.env->NewStringUTF(textDefinition._fontName.c_str());
 
         if (!methodInfo.env->CallStaticBooleanMethod(
                 methodInfo.classID, methodInfo.methodID, strArray, jstrFont, textDefinition._fontSize,

@@ -91,7 +91,6 @@ static CGFloat maxMeasureDimension()
 static PlatformFont* createFont(const char* fontName, CGFloat fontSize)
 {
     NSString* name = [NSString stringWithUTF8String:fontName];
-    name           = [[name lastPathComponent] stringByDeletingPathExtension];
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_MAC
     PlatformFont* font = [NSFont fontWithName:name size:fontSize];

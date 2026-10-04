@@ -9,7 +9,6 @@ https://axmol.dev/
 SPDX-License-Identifier: MIT
 ****************************************************************************/
 #include "axmol/platform/Device.h"
-#include "axmol/platform/FileUtils.h"
 
 #include <X11/Xlib.h>
 #include <stdio.h>
@@ -393,20 +392,6 @@ public:
         if (it != fontCache.end())
         {
             return it->second;
-        }
-
-        // check if the parameter is a font file shipped with the application
-        std::string lowerCasePath = fontPath;
-        std::transform(lowerCasePath.begin(), lowerCasePath.end(), lowerCasePath.begin(), ::tolower);
-        if (lowerCasePath.find(".ttf") != std::string::npos)
-        {
-            fontPath        = ax::FileUtils::getInstance()->fullPathForFilename(fontPath);
-            auto fileStream = ax::FileUtils::getInstance()->openFileStream(fontPath, IFileStream::Mode::READ);
-            if (fileStream)
-            {
-                fontCache.insert(std::pair<std::string, std::string>(family_name, fontPath));
-                return fontPath;
-            }
         }
 
         // use fontconfig to match the parameter against the fonts installed on the system

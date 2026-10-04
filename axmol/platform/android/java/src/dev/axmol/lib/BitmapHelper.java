@@ -25,7 +25,6 @@ THE SOFTWARE.
  ****************************************************************************/
 package dev.axmol.lib;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -37,7 +36,6 @@ import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
-import android.util.Log;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -54,20 +52,6 @@ public final class BitmapHelper {
     private static final int VERTICAL_ALIGN_TOP = 1;
     private static final int VERTICAL_ALIGN_BOTTOM = 2;
     private static final int VERTICAL_ALIGN_CENTER = 3;
-
-    // ===========================================================
-    // Fields
-    // ===========================================================
-
-    private static Context sContext;
-
-    // ===========================================================
-    // Getter & Setter
-    // ===========================================================
-
-    public static void setContext(final Context context) {
-        BitmapHelper.sContext = context;
-    }
 
     // ===========================================================
     // Methods for/from SuperClass/Interfaces
@@ -265,22 +249,7 @@ public final class BitmapHelper {
         paint.setTextSize(fontSize);
         paint.setAntiAlias(true);
 
-        // Set type face for paint, now it support .ttf file.
-        if (fontName.endsWith(".ttf")) {
-            try {
-                final Typeface typeFace = TypefaceHelper.get(
-                        BitmapHelper.sContext, fontName);
-                paint.setTypeface(typeFace);
-            } catch (final Exception e) {
-                Log.e("BitmapHelper", "error to create ttf type face: "
-                        + fontName);
-
-                // The file may not find, use system font.
-                paint.setTypeface(Typeface.create(fontName, Typeface.NORMAL));
-            }
-        } else {
-            paint.setTypeface(Typeface.create(fontName, Typeface.NORMAL));
-        }
+        paint.setTypeface(Typeface.create(fontName, Typeface.NORMAL));
 
         return paint;
     }

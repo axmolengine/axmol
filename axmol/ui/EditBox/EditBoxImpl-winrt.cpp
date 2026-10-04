@@ -17,7 +17,6 @@
 #    include "axmol/ui/UIHelper.h"
 #    include "axmol/platform/winrt/WinRTUtils.h"
 #    include "axmol/platform/winrt/RenderView-winrt.h"
-#    include "axmol/2d/FontFreeType.h"
 
 #    include <winrt/Windows.UI.Xaml.Input.h>
 #    include <winrt/Windows.UI.ViewManagement.h>
@@ -472,13 +471,7 @@ void UIEditBoxImplWinrt::setNativeFont(std::string_view fontName, int fontSize)
     transform.getScale(&scale);
     _system_control->setFontSize(_fontSize * ax::Director::getInstance()->getRenderView()->getScaleY() /** scale.y*/);
 
-    // fontFamily
-    auto font = ax::FontFreeType::create(fontName, fontSize, ax::GlyphCollection::DYNAMIC, ""sv);
-    if (font != nullptr)
-    {
-        std::string family = fmt::format("ms-appx:///Content/{}#{}", fontName, font->getFontFamily());
-        _system_control->setFontFamily(PlatformStringFromString(family));
-    }
+    _system_control->setFontFamily(PlatformStringFromString(fontName));
 }
 
 void UIEditBoxImplWinrt::setNativeFontColor(const Color32& color)
