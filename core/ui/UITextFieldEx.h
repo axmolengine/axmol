@@ -139,6 +139,14 @@ protected:
 
     void deleteBackward(size_t numChars) override;
     std::string_view getContentText() override;
+    size_t getContentTextMaxLength() override;
+    bool supportsTextInputRanges() const override;
+    void replaceTextRange(int start, int end, std::string_view text) override;
+    void setTextSelection(int start, int end) override;
+    int getTextSelection() const override;
+    void __setCursorBytePosition(size_t position);
+    void __notifySelectionChanged();
+
 
     void handleDeleteKeyEvent();
 

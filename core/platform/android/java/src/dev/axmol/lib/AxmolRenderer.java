@@ -180,7 +180,38 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
 
     private static native void nativeInsertText(final String text);
     private static native void nativeDeleteBackward(final int numChars);
+    private static native long nativeGetTextInputSession();
+    private static native boolean nativeSupportsTextInputRanges();
+    private static native int nativeGetTextSelection();
+    private static native String nativeReplaceTextRange(long session, int start, int end, String replacement);
+    private static native void nativeSetTextSelection(long session, int start, int end);
+
+    public long getTextInputSession() {
+        return nativeGetTextInputSession();
+    }
+
+    public boolean supportsTextInputRanges() {
+        return nativeSupportsTextInputRanges();
+    }
+
+    public int getTextSelection() {
+        return nativeGetTextSelection();
+    }
+
+    public String handleReplaceTextRange(long session, int start, int end, String replacement) {
+        return nativeReplaceTextRange(session, start, end, replacement);
+    }
+
+    public void handleTextSelection(long session, int start, int end) {
+        nativeSetTextSelection(session, start, end);
+    }
+
     private static native String nativeGetContentText();
+    private static native int nativeGetContentTextMaxLength();
+
+    public int getContentTextMaxLength() {
+        return AxmolRenderer.nativeGetContentTextMaxLength();
+    }
 
     public void handleInsertText(final String text) {
         AxmolRenderer.nativeInsertText(text);

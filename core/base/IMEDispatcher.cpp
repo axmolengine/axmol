@@ -27,6 +27,7 @@ THE SOFTWARE.
 #include "base/IMEDispatcher.h"
 
 #include <list>
+#include <utility>
 
 namespace ax
 {
@@ -67,9 +68,8 @@ typedef std::list<IMEDelegate*>::iterator DelegateIter;
 class IMEDispatcher::Impl
 {
 public:
-    Impl() {}
-
-    ~Impl() {}
+    Impl() = default;
+    ~Impl() = default;
 
     void init() { _delegateWithIme = 0; }
 
@@ -88,6 +88,8 @@ public:
 
     DelegateList _delegateList;
     IMEDelegate* _delegateWithIme;
+    uint64_t _textInputSession = 0;
+    TextSelectionChangedCallback _textSelectionChangedCallback;
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -163,6 +165,11 @@ bool IMEDispatcher::attachDelegateWithIME(IMEDelegate* delegate)
         delegate->didAttachWithIME();
         ret = true;
     } while (0);
+
+    if (ret)
+    {
+        ++_impl->_textInputSession;
+    }
     return ret;
 }
 
@@ -182,6 +189,11 @@ bool IMEDispatcher::detachDelegateWithIME(IMEDelegate* delegate)
         delegate->didDetachWithIME();
         ret = true;
     } while (0);
+
+    if (ret)
+    {
+        ++_impl->_textInputSession;
+    }
     return ret;
 }
 
@@ -200,6 +212,7 @@ void IMEDispatcher::removeDelegate(IMEDelegate* delegate)
             if (*iter == _impl->_delegateWithIme)
             {
                 _impl->_delegateWithIme = 0;
+                ++_impl->_textInputSession;
             }
         _impl->_delegateList.erase(iter);
     } while (0);
@@ -226,12 +239,12 @@ void IMEDispatcher::dispatchDeleteBackward(int numChars)
 {
     do
     {
-        AX_BREAK_IF(!_impl);
+        AX_BREAK_IF(!_impl || numChars <= 0);
 
         // there is no delegate attached to IME
         AX_BREAK_IF(!_impl->_delegateWithIme);
 
-        _impl->_delegateWithIme->deleteBackward(numChars);
+        _impl->_delegateWithIme->deleteBackward(static_cast<size_t>(numChars));
     } while (0);
 }
 
@@ -246,6 +259,75 @@ void IMEDispatcher::dispatchControlKey(EventKeyboard::KeyCode keyCode)
 
         _impl->_delegateWithIme->controlKey(keyCode);
     } while (0);
+}
+
+void IMEDispatcher::setTextSelectionChangedCallback(TextSelectionChangedCallback callback)
+{
+    if (_impl)
+    {
+        _impl->_textSelectionChangedCallback = std::move(callback);
+    }
+}
+
+void IMEDispatcher::notifyTextSelectionChanged(const IMEDelegate* delegate)
+{
+    if (isDelegateAttached(delegate) && _impl->_textSelectionChangedCallback)
+    {
+        // Copy it in case a callback changes the registration while running.
+        auto callback = _impl->_textSelectionChangedCallback;
+        callback(_impl->_textInputSession, _impl->_delegateWithIme->getTextSelection());
+    }
+}
+
+bool IMEDispatcher::isDelegateAttached(const IMEDelegate* delegate) const
+{
+    return _impl && _impl->_delegateWithIme == delegate;
+}
+
+uint64_t IMEDispatcher::getTextInputSession() const
+{
+    return _impl ? _impl->_textInputSession : 0;
+}
+
+bool IMEDispatcher::supportsTextInputRanges() const
+{
+    return _impl && _impl->_delegateWithIme &&
+           _impl->_delegateWithIme->supportsTextInputRanges();
+}
+
+int IMEDispatcher::getTextSelection() const
+{
+    return _impl && _impl->_delegateWithIme ?
+        _impl->_delegateWithIme->getTextSelection() : -1;
+}
+
+void IMEDispatcher::dispatchReplaceTextRange(
+    uint64_t session, int start, int end, std::string_view text)
+{
+    if (_impl && _impl->_delegateWithIme && session == _impl->_textInputSession &&
+        start >= 0 && end >= start)
+    {
+        _impl->_delegateWithIme->replaceTextRange(start, end, text);
+    }
+}
+
+void IMEDispatcher::dispatchTextSelection(uint64_t session, int start, int end)
+{
+    if (_impl && _impl->_delegateWithIme && session == _impl->_textInputSession &&
+        start >= 0 && end >= 0)
+    {
+        _impl->_delegateWithIme->setTextSelection(start, end);
+    }
+}
+
+size_t IMEDispatcher::getContentTextMaxLength()
+{
+    if (_impl && _impl->_delegateWithIme)
+    {
+        return _impl->_delegateWithIme->getContentTextMaxLength();
+    }
+
+    return 0;
 }
 
 std::string_view IMEDispatcher::getContentText()

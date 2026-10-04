@@ -79,6 +79,25 @@ public:
 protected:
     friend class IMEDispatcher;
 
+    // Offsets are UTF-16 units, matching Android's editor protocol.
+    virtual bool supportsTextInputRanges() const
+    {
+        return false;
+    }
+
+    virtual void replaceTextRange(int /*start*/, int /*end*/, std::string_view /*text*/)
+    {
+    }
+
+    virtual void setTextSelection(int /*start*/, int /*end*/)
+    {
+    }
+    virtual int getTextSelection() const
+    {
+        return -1;
+    }
+
+
     /**
     @brief    Decide if the delegate instance is ready to receive an IME message.
 
@@ -127,6 +146,12 @@ protected:
     * @lua NA
     */
     virtual std::string_view getContentText() { return STD_STRING_EMPTY; }
+
+    /** Maximum input length in Unicode code points; zero means unlimited. */
+    virtual size_t getContentTextMaxLength()
+    {
+        return 0;
+    }
 
     //////////////////////////////////////////////////////////////////////////
     // keyboard show/hide notification

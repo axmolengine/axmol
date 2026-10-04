@@ -61,6 +61,9 @@ public class AxmolGLSurfaceView extends GLSurfaceView {
 
     private AxmolRenderer mRenderer;
     private AxmolEditBox mEditText;
+    private long mTextInputSession;
+    private int mTextInputRevision;
+    private boolean mTextInputActive;
 
     private boolean mSoftKeyboardShown = false;
     private boolean mMultipleTouchEnabled = true;
@@ -114,11 +117,23 @@ public class AxmolGLSurfaceView extends GLSurfaceView {
                         if (null != AxmolGLSurfaceView.this.mEditText) {
                             AxmolGLSurfaceView.this.mEditText.setVisibility(View.VISIBLE);
                             if (AxmolGLSurfaceView.this.mEditText.requestFocus()) {
+                                AxmolGLSurfaceView.sTextInputWraper.endInput();
+                                AxmolGLSurfaceView.this.mTextInputActive = false;
                                 AxmolGLSurfaceView.this.mEditText.removeTextChangedListener(AxmolGLSurfaceView.sTextInputWraper);
                                 AxmolGLSurfaceView.this.mEditText.setText("");
+                                AxmolGLSurfaceView.this.mEditText.setTextFieldMaxLength(msg.arg1);
                                 final String text = (String) msg.obj;
                                 AxmolGLSurfaceView.this.mEditText.append(text);
-                                AxmolGLSurfaceView.sTextInputWraper.setOriginText(text);
+                                AxmolGLSurfaceView.this.mTextInputSession = msg.getData().getLong("session");
+                                ++AxmolGLSurfaceView.this.mTextInputRevision;
+                                final int selection = msg.getData().getInt("selection", -1);
+                                AxmolGLSurfaceView.this.mEditText.setSelection(
+                                    selection < 0 ? AxmolGLSurfaceView.this.mEditText.length() :
+                                    Math.min(selection, AxmolGLSurfaceView.this.mEditText.length()));
+                                AxmolGLSurfaceView.sTextInputWraper.beginInput(
+                                    AxmolGLSurfaceView.this.mEditText.getText().toString(),
+                                    msg.getData().getBoolean("ranges"));
+                                AxmolGLSurfaceView.this.mTextInputActive = true;
                                 AxmolGLSurfaceView.this.mEditText.addTextChangedListener(AxmolGLSurfaceView.sTextInputWraper);
                                 final InputMethodManager imm = (InputMethodManager) AxmolGLSurfaceView.mGLSurfaceView.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                                 imm.showSoftInput(AxmolGLSurfaceView.this.mEditText, 0);
@@ -128,6 +143,9 @@ public class AxmolGLSurfaceView extends GLSurfaceView {
                         break;
 
                     case HANDLER_CLOSE_IME_KEYBOARD:
+                        AxmolGLSurfaceView.sTextInputWraper.endInput();
+                        AxmolGLSurfaceView.this.mTextInputActive = false;
+                        ++AxmolGLSurfaceView.this.mTextInputRevision;
                         if (null != AxmolGLSurfaceView.this.mEditText) {
                             AxmolGLSurfaceView.this.mEditText.removeTextChangedListener(AxmolGLSurfaceView.sTextInputWraper);
                             final InputMethodManager imm = (InputMethodManager) AxmolGLSurfaceView.mGLSurfaceView.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -177,8 +195,20 @@ public class AxmolGLSurfaceView extends GLSurfaceView {
     }
 
     public void setEditText(final AxmolEditBox pEditText) {
+        if (this.mEditText != null)
+        {
+            this.mEditText.setTextFieldSelectionListener(null);
+        }
         this.mEditText = pEditText;
         if (null != this.mEditText && null != AxmolGLSurfaceView.sTextInputWraper) {
+            this.mEditText.setTextFieldSelectionListener(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    AxmolGLSurfaceView.sTextInputWraper.scheduleSelectionUpdate();
+                }
+            });
             this.mEditText.setOnEditorActionListener(AxmolGLSurfaceView.sTextInputWraper);
             this.requestFocus();
         }
@@ -440,6 +470,10 @@ public class AxmolGLSurfaceView extends GLSurfaceView {
         final Message msg = new Message();
         msg.what = AxmolGLSurfaceView.HANDLER_OPEN_IME_KEYBOARD;
         msg.obj = AxmolGLSurfaceView.mGLSurfaceView.getContentText();
+        msg.arg1 = AxmolGLSurfaceView.mGLSurfaceView.mRenderer.getContentTextMaxLength();
+        msg.getData().putLong("session", mGLSurfaceView.mRenderer.getTextInputSession());
+        msg.getData().putBoolean("ranges", mGLSurfaceView.mRenderer.supportsTextInputRanges());
+        msg.getData().putInt("selection", mGLSurfaceView.mRenderer.getTextSelection());
         AxmolGLSurfaceView.sHandler.sendMessage(msg);
     }
 
@@ -447,6 +481,90 @@ public class AxmolGLSurfaceView extends GLSurfaceView {
         final Message msg = new Message();
         msg.what = AxmolGLSurfaceView.HANDLER_CLOSE_IME_KEYBOARD;
         AxmolGLSurfaceView.sHandler.sendMessage(msg);
+    }
+
+    public void replaceTextRange(
+        final int start, final int end, final String replacement, final String expectedText) {
+        if (!mTextInputActive) {
+            return;
+        }
+
+        final long session = mTextInputSession;
+        final int revision = ++mTextInputRevision;
+        queueEvent(new Runnable() {
+            @Override
+            public void run() {
+                if (mRenderer.getTextInputSession() != session) {
+                    return;
+                }
+
+                final String actualText = mRenderer.handleReplaceTextRange(session, start, end, replacement);
+                final int selection = mRenderer.getTextSelection();
+                if (actualText != null && !actualText.equals(expectedText)) {
+                    // Reconcile a rejection or truncation without editing a newer UI buffer.
+                    post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (mTextInputActive && mTextInputSession == session &&
+                                mTextInputRevision == revision) {
+                                sTextInputWraper.endInput();
+                                mEditText.removeTextChangedListener(sTextInputWraper);
+                                mEditText.setText(actualText);
+                                mEditText.setSelection(Math.max(0, Math.min(selection, mEditText.length())));
+                                sTextInputWraper.beginInput(actualText, true);
+                                mEditText.addTextChangedListener(sTextInputWraper);
+                                sTextInputWraper.scheduleSelectionUpdate();
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    public void updateTextSelection(final int start, final int end) {
+        if (!mTextInputActive || start < 0 || end < 0) {
+            return;
+        }
+
+        final long session = mTextInputSession;
+        queueEvent(new Runnable() {
+            @Override
+            public void run() {
+                mRenderer.handleTextSelection(session, start, end);
+            }
+        });
+    }
+
+    public void finishTextInput() {
+        final long session = mTextInputSession;
+        queueEvent(new Runnable() {
+            @Override
+            public void run() {
+                if (mRenderer.getTextInputSession() == session) {
+                    mRenderer.handleInsertText("\n");
+                }
+            }
+        });
+    }
+
+    // Called on the engine thread when its touch/key logic moves the caret.
+    public static void syncNativeSelection(final long session, final int selection) {
+        final AxmolGLSurfaceView surface = mGLSurfaceView;
+
+        if (surface == null) {
+            return;
+        }
+
+        surface.post(new Runnable() {
+            @Override
+            public void run() {
+                if (surface.mTextInputActive && surface.mTextInputSession == session &&
+                    sTextInputWraper.isRangeInputActive()) {
+                    surface.mEditText.setSelection(Math.max(0, Math.min(selection, surface.mEditText.length())));
+                }
+            }
+        });
     }
 
     public void insertText(final String pText) {
