@@ -308,8 +308,8 @@ bool GraphicsDeviceImpl::initializeFactory()
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
     extensions.push_back("VK_KHR_android_surface");
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
-    extensions.push_back("VK_KHR_wayland_surface"); // for wayland
-    extensions.push_back("VK_KHR_xcb_surface"); // for x11
+    extensions.push_back("VK_KHR_wayland_surface");  // for wayland
+    extensions.push_back("VK_KHR_xcb_surface");      // for x11
 #endif
 
     const auto shouldCreateDebugLayer =
