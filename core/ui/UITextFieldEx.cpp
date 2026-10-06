@@ -644,10 +644,7 @@ void TextFieldEx::deleteBackward(size_t numChars)
     // if all text deleted, show placeholder string
     if (len <= totalDeleteLen)
     {
-        for (size_t i = 0; i < deletedChars; ++i)
-        {
-            __moveCursor(-1);
-        }
+        __moveCursor(-_insertPosUtf8);
 
         _inputText.clear();
         _charCount = 0;
@@ -664,15 +661,30 @@ void TextFieldEx::deleteBackward(size_t numChars)
     }
 
     // set new input text
-    std::string text = _inputText;  // (inputText.c_str(), len - deleteLen);
+    std::string text = _inputText;
     text.erase(_insertPos - totalDeleteLen, totalDeleteLen);
 
-    for (size_t i = 0; i < deletedChars; ++i)
+    // Find the final display offset without copying or measuring each prefix.
+    std::string_view displayText = _secureTextEntry ? _renderLabel->getString() : std::string_view(_inputText);
+    size_t cursorPos = static_cast<size_t>(_cursorPos);
+    for (size_t i = 0; i < deletedChars && cursorPos > 0; ++i)
     {
-        __moveCursor(-1);
+        --cursorPos;
+        while (cursorPos > 0 && 0x80 == (0xC0 & displayText.at(cursorPos)))
+        {
+            --cursorPos;
+        }
     }
 
+    _insertPos -= static_cast<int>(totalDeleteLen);
+    _insertPosUtf8 -= static_cast<int>(deletedChars);
+    _cursorPos = static_cast<int>(cursorPos);
+
     this->setString(text);
+
+    displayText = _secureTextEntry ? _renderLabel->getString() : std::string_view(_inputText);
+    auto width = internalCalcStringWidth(displayText.substr(0, cursorPos), _fontName, _fontSize);
+    _cursor->setPosition(Point(width, this->getContentSize().height / 2));
 
     //__updateCursorPosition();
     // __moveCursor(-1);
