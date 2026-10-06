@@ -62,7 +62,7 @@ bool AudioEngine::lazyInit()
         _audioEngineImpl = new AudioEngineImpl();
         if (!_audioEngineImpl->init(_settings))
         {
-            AX_SAFE_RELEASE(_audioEngineImpl);
+            AX_SAFE_RELEASE_NULL(_audioEngineImpl);
             return false;
         }
     }
