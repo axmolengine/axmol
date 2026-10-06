@@ -598,7 +598,7 @@ void TextFieldEx::insertText(const char* text, size_t len)
 
 void TextFieldEx::deleteBackward(size_t numChars)
 {
-    if (!_editable || !this->_enabled || 0 == _charCount)
+    if (!_editable || !this->_enabled || 0 == _charCount || numChars == 0)
     {
         axbeep(0);
         return;
@@ -618,17 +618,20 @@ void TextFieldEx::deleteBackward(size_t numChars)
     numChars = std::min(numChars, len);
 
     size_t totalDeleteLen = 0;
-    for (auto i = 0; i < numChars; ++i)
+    size_t deletedChars   = 0;
+    for (size_t i = 0; i < numChars && totalDeleteLen < static_cast<size_t>(_insertPos); ++i)
     {
         // get the delete byte number
         size_t deleteLen = 1;  // default, erase 1 byte
 
         // Calculate the actual number of bytes to delete for a specific character
-        while (0x80 == (0xC0 & _inputText.at(_insertPos - totalDeleteLen - deleteLen)))
+        while (deleteLen < static_cast<size_t>(_insertPos) - totalDeleteLen &&
+               0x80 == (0xC0 & _inputText.at(_insertPos - totalDeleteLen - deleteLen)))
         {
             ++deleteLen;
         }
         totalDeleteLen += deleteLen;
+        ++deletedChars;
     }
 
     // if (_delegate && _delegate->onTextFieldDeleteBackward(this, _inputText.c_str() + len - deleteLen,
@@ -641,7 +644,10 @@ void TextFieldEx::deleteBackward(size_t numChars)
     // if all text deleted, show placeholder string
     if (len <= totalDeleteLen)
     {
-        __moveCursor(-1);
+        for (size_t i = 0; i < deletedChars; ++i)
+        {
+            __moveCursor(-1);
+        }
 
         _inputText.clear();
         _charCount = 0;
@@ -661,7 +667,10 @@ void TextFieldEx::deleteBackward(size_t numChars)
     std::string text = _inputText;  // (inputText.c_str(), len - deleteLen);
     text.erase(_insertPos - totalDeleteLen, totalDeleteLen);
 
-    __moveCursor(-1);
+    for (size_t i = 0; i < deletedChars; ++i)
+    {
+        __moveCursor(-1);
+    }
 
     this->setString(text);
 
