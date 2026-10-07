@@ -3,7 +3,8 @@
 # PowerShell Param statement : every line must end in #\ except the last line must with <#\
 # And, you can't use backticks in this section        #\
 # refer https://gist.github.com/ryanmaclean/a1f3135f49c1ab3fa7ec958ac3f8babe #\
-param( [switch]$updateAdt                    #\
+param( [switch]$updateAdt,                    #\
+    [switch]$hub #\
 )                                                <#\
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `
 #vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
@@ -142,10 +143,13 @@ if ($IsWin) {
 # powershell 7 require mark as global explicit if want access in function via $Global:xxx
 $Global:AX_CLI_ROOT = Join-Path $AX_ROOT 'tools/cmdline'
 
+# -hub keeps AX_ROOT and PATH available to this process without persisting environment changes.
 if ($IsWin) {
     if ("$env:AX_ROOT" -ne "$AX_ROOT") {
         $env:AX_ROOT = $AX_ROOT
-        [Environment]::SetEnvironmentVariable('AX_ROOT', $AX_ROOT, 'User')
+        if (!$hub) {
+            [Environment]::SetEnvironmentVariable('AX_ROOT', $AX_ROOT, 'User')
+        }
     }
 
     #  checking evaluated env:PATH with system + user
@@ -184,13 +188,14 @@ if ($IsWin) {
     }
 
     if (!$isMeInPath -or $oldCmdRoot) {
-        # Add cmdline bin to User PATH
-        $strPathList = [Environment]::GetEnvironmentVariable('PATH', 'User')
-        $strPathList = RefreshPath $strPathList
-        [Environment]::SetEnvironmentVariable('PATH', $strPathList, 'User')
-
-        # Re-eval env:PATH to system + users
-        $env:PATH = RefreshPath $env:PATH # sync to PowerShell Terminal
+        if (!$hub) {
+            # Add cmdline bin to User PATH
+            $strPathList = [Environment]::GetEnvironmentVariable('PATH', 'User')
+            $strPathList = RefreshPath $strPathList
+            [Environment]::SetEnvironmentVariable('PATH', $strPathList, 'User')
+        }
+        # sync only the current terminal when -hub is used
+        $env:PATH = RefreshPath $env:PATH
     }
 
     $execPolicy = powershell -Command 'Get-ExecutionPolicy'
@@ -218,39 +223,49 @@ else {
     }
 
     $profileMods = 0
-    $matchRet = [Regex]::Match($profileContent, "env\:AX_ROOT\s+\=\s+.*")
-    if (!$matchRet.Success) {
-        $profileContent += "# Add environment variable AX_ROOT for axmol`n"
-        $profileContent += '$env:AX_ROOT = "{0}"{1}' -f $AX_ROOT, "`n"
-        ++$profileMods
-    }
-    elseif ($env:AX_ROOT -ne $AX_ROOT) {
-        # contains AX_ROOT statement, but not equal us
-        Write-Host "Updating env AX_ROOT from ${env:AX_ROOT} to $AX_ROOT"
-        $profileContent = [Regex]::Replace($profileContent, "env\:AX_ROOT\s+\=\s+.*", "env:AX_ROOT = '$AX_ROOT'")
-        ++$profileMods
-    }
-    if ($profileMods) { $env:AX_ROOT = $AX_ROOT }
-
-    if (!($axmolCmdInfo = (Get-Command axmol -ErrorAction SilentlyContinue)) -or $axmolCmdInfo.Source -ne "$AX_CLI_ROOT/axmol") {
-        $stmt_export = '$env:PATH = "${env:AX_ROOT}/tools/cmdline:${env:PATH}"'
-        if (!$profileContent.Contains($stmt_export)) {
-            $profileContent += "# Add axmol cmdline tool to PATH`n"
-            $profileContent += '$env:PATH = "${env:AX_ROOT}/tools/cmdline:${env:PATH}"'
-            $profileContent += "`n"
+    if (!$hub) {
+        $matchRet = [Regex]::Match($profileContent, "env\:AX_ROOT\s+\=\s+.*")
+        if (!$matchRet.Success) {
+            $profileContent += "# Add environment variable AX_ROOT for axmol`n"
+            $profileContent += '$env:AX_ROOT = "{0}"{1}' -f $AX_ROOT, "`n"
             ++$profileMods
         }
-        $env:PATH = "${env:AX_ROOT}/tools/cmdline:${env:PATH}"
+        elseif ($env:AX_ROOT -ne $AX_ROOT) {
+            # contains AX_ROOT statement, but not equal us
+            Write-Host "Updating env AX_ROOT from ${env:AX_ROOT} to $AX_ROOT"
+            $profileContent = [Regex]::Replace($profileContent, "env\:AX_ROOT\s+\=\s+.*", "env:AX_ROOT = '$AX_ROOT'")
+            ++$profileMods
+        }
     }
 
-    $profileDir = Split-Path $PROFILE -Parent
-    if (!(Test-Path $profileDir -PathType Container)) {
-        mkdirs $profileDir
+    if (!($axmolCmdInfo = (Get-Command axmol -ErrorAction SilentlyContinue)) -or $axmolCmdInfo.Source -ne "$AX_CLI_ROOT/axmol") {
+        if ($hub) {
+            $env:PATH = "$($AX_CLI_ROOT):$env:PATH"
+        }
+        else {
+            $stmt_export = '$env:PATH = "${env:AX_ROOT}/tools/cmdline:${env:PATH}"'
+            $env:PATH = "${env:AX_ROOT}/tools/cmdline:${env:PATH}"
+            if (!$profileContent.Contains($stmt_export)) {
+                $profileContent += "# Add axmol cmdline tool to PATH`n"
+                $profileContent += "$stmt_export`n"
+                $profileContent += "`n"
+                ++$profileMods
+            }
+        }
     }
 
-    if ($profileMods) {
-        Set-Content $PROFILE -Value $profileContent
+    if (!$hub) {
+        $profileDir = Split-Path $PROFILE -Parent
+        if (!(Test-Path $profileDir -PathType Container)) {
+            mkdirs $profileDir
+        }
+
+        if ($profileMods) {
+            Set-Content $PROFILE -Value $profileContent
+        }
     }
+
+    $env:AX_ROOT = $AX_ROOT
 
     # update ~/.bashrc, ~/.zshrc
     function updateUnixProfile($profileFile) {
@@ -259,24 +274,29 @@ else {
         }
         $profileMods = 0
         $profileContent = "$(Get-Content $profileFile -raw)"
-        $matchRet = [Regex]::Match($profileContent, "export AX_ROOT\=.*")
-        if (!$matchRet.Success) {
-            $profileContent += "# Add environment variable AX_ROOT for axmol`n"
-            $profileContent += 'export AX_ROOT="{0}"{1}' -f $AX_ROOT, "`n"
-            ++$profileMods
-        }
-        else {
-            $stmtLine = 'export AX_ROOT="{0}"' -f $AX_ROOT
-            if ($matchRet.Value -ne $stmtLine) {
-                $profileContent = [Regex]::Replace($profileContent, "export AX_ROOT\=.*", $stmtLine)
+        if (!$hub) {
+            $matchRet = [Regex]::Match($profileContent, "export AX_ROOT\=.*")
+            if (!$matchRet.Success) {
+                $profileContent += "# Add environment variable AX_ROOT for axmol`n"
+                $profileContent += 'export AX_ROOT="{0}"{1}' -f $AX_ROOT, "`n"
                 ++$profileMods
+            }
+            else {
+                $stmtLine = 'export AX_ROOT="{0}"' -f $AX_ROOT
+                if ($matchRet.Value -ne $stmtLine) {
+                    $profileContent = [Regex]::Replace($profileContent, "export AX_ROOT\=.*", $stmtLine)
+                    ++$profileMods
+                }
             }
         }
 
-        if (!$profileContent.Contains('export PATH=$AX_ROOT/tools/cmdline:')) {
-            $profileContent += "# Add axmol cmdline tool to PATH`n"
-            $profileContent += 'export PATH=$AX_ROOT/tools/cmdline:$PATH' -f "`n"
-            ++$profileMods
+        if (!$hub) {
+            $pathStatement = 'export PATH=$AX_ROOT/tools/cmdline:$PATH'
+            if (!$profileContent.Contains($pathStatement)) {
+                $profileContent += "# Add axmol cmdline tool to PATH`n"
+                $profileContent += "$pathStatement`n"
+                ++$profileMods
+            }
         }
         if ($profileMods) {
             Set-Content $profileFile -Value $profileContent
@@ -285,14 +305,16 @@ else {
 
     if ($IsMacOS) {
         # for terminal
-        if ("$env:SHELL" -like '*/zsh') {
-            updateUnixProfile ~/.zshrc
+        if (!$hub) {
+            if ("$env:SHELL" -like '*/zsh') {
+                updateUnixProfile ~/.zshrc
+            }
+            else {
+                updateUnixProfile ~/.bash_profile
+            }
+            # for GUI apps, android studio can find AX_ROOT
+            launchctl setenv AX_ROOT $env:AX_ROOT
         }
-        else {
-            updateUnixProfile ~/.bash_profile
-        }
-        # for GUI apps, android studio can find AX_ROOT
-        launchctl setenv AX_ROOT $env:AX_ROOT
     }
     elseif ($IsLinux) {
         # determine distro
@@ -306,16 +328,18 @@ else {
             $LinuxDistro = 'Linux'
         }
 
-        # preferred ~/.profile to ensure GUI apps and terminal works
-        updateUnixProfile ~/.profile
+        if (!$hub) {
+            # preferred ~/.profile to ensure GUI apps and terminal works
+            updateUnixProfile ~/.profile
 
-        # ~/.profile not read by bash(1), if ~/.bash_profile or ~/.bash_login
-        if (Test-Path ~/.bash_profile -PathType Leaf) {
-            if ("$env:SHELL" -like '*/zsh') {
-                updateUnixProfile ~/.zshrc
-            }
-            else {
-                updateUnixProfile ~/.bashrc
+            # ~/.profile not read by bash(1), if ~/.bash_profile or ~/.bash_login
+            if (Test-Path ~/.bash_profile -PathType Leaf) {
+                if ("$env:SHELL" -like '*/zsh') {
+                    updateUnixProfile ~/.zshrc
+                }
+                else {
+                    updateUnixProfile ~/.bashrc
+                }
             }
         }
 
