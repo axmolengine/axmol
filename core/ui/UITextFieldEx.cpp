@@ -598,7 +598,7 @@ void TextFieldEx::insertText(const char* text, size_t len)
 
 void TextFieldEx::deleteBackward(size_t numChars)
 {
-    if (!_editable || !this->_enabled || 0 == _charCount)
+    if (!_editable || !this->_enabled || 0 == _charCount || numChars == 0)
     {
         axbeep(0);
         return;
@@ -618,17 +618,20 @@ void TextFieldEx::deleteBackward(size_t numChars)
     numChars = std::min(numChars, len);
 
     size_t totalDeleteLen = 0;
-    for (auto i = 0; i < numChars; ++i)
+    size_t deletedChars   = 0;
+    for (size_t i = 0; i < numChars && totalDeleteLen < static_cast<size_t>(_insertPos); ++i)
     {
         // get the delete byte number
         size_t deleteLen = 1;  // default, erase 1 byte
 
         // Calculate the actual number of bytes to delete for a specific character
-        while (0x80 == (0xC0 & _inputText.at(_insertPos - totalDeleteLen - deleteLen)))
+        while (deleteLen < static_cast<size_t>(_insertPos) - totalDeleteLen &&
+               0x80 == (0xC0 & _inputText.at(_insertPos - totalDeleteLen - deleteLen)))
         {
             ++deleteLen;
         }
         totalDeleteLen += deleteLen;
+        ++deletedChars;
     }
 
     // if (_delegate && _delegate->onTextFieldDeleteBackward(this, _inputText.c_str() + len - deleteLen,
@@ -641,7 +644,7 @@ void TextFieldEx::deleteBackward(size_t numChars)
     // if all text deleted, show placeholder string
     if (len <= totalDeleteLen)
     {
-        __moveCursor(-1);
+        __moveCursor(-_insertPosUtf8);
 
         _inputText.clear();
         _charCount = 0;
@@ -658,12 +661,30 @@ void TextFieldEx::deleteBackward(size_t numChars)
     }
 
     // set new input text
-    std::string text = _inputText;  // (inputText.c_str(), len - deleteLen);
+    std::string text = _inputText;
     text.erase(_insertPos - totalDeleteLen, totalDeleteLen);
 
-    __moveCursor(-1);
+    // Find the final display offset without copying or measuring each prefix.
+    std::string_view displayText = _secureTextEntry ? _renderLabel->getString() : std::string_view(_inputText);
+    size_t cursorPos = static_cast<size_t>(_cursorPos);
+    for (size_t i = 0; i < deletedChars && cursorPos > 0; ++i)
+    {
+        --cursorPos;
+        while (cursorPos > 0 && 0x80 == (0xC0 & displayText.at(cursorPos)))
+        {
+            --cursorPos;
+        }
+    }
+
+    _insertPos -= static_cast<int>(totalDeleteLen);
+    _insertPosUtf8 -= static_cast<int>(deletedChars);
+    _cursorPos = static_cast<int>(cursorPos);
 
     this->setString(text);
+
+    displayText = _secureTextEntry ? _renderLabel->getString() : std::string_view(_inputText);
+    auto width = internalCalcStringWidth(displayText.substr(0, cursorPos), _fontName, _fontSize);
+    _cursor->setPosition(Point(width, this->getContentSize().height / 2));
 
     //__updateCursorPosition();
     // __moveCursor(-1);
