@@ -227,7 +227,6 @@ else {
         $profileContent = ''
     }
 
-    $env:AX_ROOT = $AX_ROOT
     $profileMods = 0
     if (!$hub) {
         $matchRet = [Regex]::Match($profileContent, "env\:AX_ROOT\s+\=\s+.*")
@@ -270,6 +269,8 @@ else {
             Set-Content $PROFILE -Value $profileContent
         }
     }
+
+    $env:AX_ROOT = $AX_ROOT
 
     # update ~/.bashrc, ~/.zshrc
     function updateUnixProfile($profileFile) {
