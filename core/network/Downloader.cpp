@@ -77,10 +77,10 @@ DownloadTask::~DownloadTask()
     AXLOGD("Destruct DownloadTask {}", fmt::ptr(this));
 }
 
-void DownloadTask::cancel()
+void DownloadTask::cancel(bool cleanup)
 {
     if (_context)
-        _context->cancel();
+        _context->cancel(cleanup);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

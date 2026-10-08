@@ -43,7 +43,7 @@ class AX_DLL IDownloadContext
 {
 public:
     virtual ~IDownloadContext(){}
-    virtual void cancel() {}
+    virtual void cancel(bool /*cleanup*/ = false) {}
 };
 
 class IDownloaderImpl

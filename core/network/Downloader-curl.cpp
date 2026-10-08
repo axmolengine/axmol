@@ -212,9 +212,11 @@ public:
         return ret;
     }
 
-    void cancel() override
+    void cancel(bool cleanup = false) override
     {
         std::lock_guard<std::recursive_mutex> lock(_mutex);
+
+        _cleanupOnCancel |= cleanup;
 
         if (!_cancelled)
         {
@@ -329,6 +331,7 @@ private:
     CURL* _curl = nullptr;
     curl_socket_t _sockfd = -1;  // store the sockfd to support cancel download manually
     bool _cancelled       = false;
+    bool _cleanupOnCancel = false;  // remove temp files when the task stopped because of cancel
     std::atomic<bool> _finished{false};  // set once the task is completely done, temp files are closed
 
     // progress
@@ -982,6 +985,13 @@ void DownloaderCURL::_onDownloadFinished(DownloadTask& task)
                 {
                     // If CURLE_RANGE_ERROR, means the server not support resume from download.
                     pFileUtils->removeFile(context->_checksumFileName);
+                    pFileUtils->removeFile(context->_tempFileName);
+                }
+                else if (context->_errCode == DownloadTask::ERROR_TASK_CANCELLED && context->_cleanupOnCancel &&
+                         !context->_tempFileName.empty())
+                {
+                    // cancel(true): file handles are closed above, remove the partial download
+                    pFileUtils->removeFile(context->_tempFileName + ".digest");
                     pFileUtils->removeFile(context->_tempFileName);
                 }
                 break;

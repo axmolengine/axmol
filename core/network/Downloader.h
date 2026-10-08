@@ -88,9 +88,9 @@ public:
 
     // Cancel the download, it's useful for ios platform switch wifi to 4g
     // Once the task has actually stopped, Downloader::onTaskCancelled is invoked (not onTaskError).
-    // The partially downloaded temp files are kept so the download can be resumed later,
-    // call Downloader::cleanup(task) to remove them.
-    void cancel();
+    // @param cleanup false (default): keep the partially downloaded temp files (.tmp and .tmp.digest) so the
+    //                download can be resumed later. true: remove them once the task has stopped.
+    void cancel(bool cleanup = false);
 
     std::string checksum;  // The MD5 checksum for check only when download finished.
     bool background;       // Does the task is background (all callback will invoke on downloader thread)
