@@ -61,6 +61,9 @@ public:
         onTaskFinish;
 
     virtual void startTask(std::shared_ptr<DownloadTask>& task) = 0;
+
+    // Remove the temp files of a finished file task
+    virtual bool cleanupTask(const DownloadTask& /*task*/) { return false; }
 };
 
 }  // namespace network
