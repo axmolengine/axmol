@@ -364,8 +364,118 @@ struct DownloaderMultiTask : public TestCase
     }
 };
 
+struct DownloaderCancelTest : public TestCase
+{
+    CREATE_FUNC(DownloaderCancelTest);
+
+    virtual std::string title() const override { return "Downloader Cancel Test"; }
+    virtual std::string subtitle() const override
+    {
+        return "cancel(): .tmp/.tmp.digest kept; cancel(true): removed";
+    }
+
+    std::unique_ptr<network::Downloader> downloader;
+    std::shared_ptr<network::DownloadTask> task;
+    std::string storagePath;
+    bool cleanupRequested = false;
+    bool cancelRequested  = false;
+    Label* status         = nullptr;
+    ui::Button* startBtn  = nullptr;
+    ui::Button* cancelBtn = nullptr;
+    ui::Button* cleanBtn  = nullptr;
+
+    DownloaderCancelTest() { downloader.reset(new network::Downloader()); }
+
+    ui::Button* createButton(const char* text, const Vec2& pos, const ui::Button::ccWidgetClickCallback& callback)
+    {
+        auto btn = ui::Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
+        btn->setTitleText(text);
+        btn->setPosition(pos);
+        btn->addClickEventListener(callback);
+        this->addChild(btn);
+        return btn;
+    }
+
+    void setRunning(bool running)
+    {
+        startBtn->setEnabled(!running);
+        cancelBtn->setEnabled(running);
+        cleanBtn->setEnabled(running);
+    }
+
+    void requestCancel(bool cleanup)
+    {
+        if (!task)
+            return;
+        cancelRequested  = true;
+        cleanupRequested = cleanup;
+        status->setString(cleanup ? "cancel(true) requested, waiting for onTaskCancelled..."
+                                  : "cancel() requested, waiting for onTaskCancelled...");
+        task->cancel(cleanup);
+    }
+
+    virtual void onEnter() override
+    {
+        TestCase::onEnter();
+
+        auto center = VisibleRect::center();
+        storagePath = FileUtils::getInstance()->getWritablePath() + "CppTests/DownloaderTest/cancel_test.zip";
+
+        status = Label::createWithTTF("Press Start, then one of the cancel buttons", "fonts/arial.ttf", 16);
+        status->setPosition(center.x, center.y + 80);
+        status->setDimensions(VisibleRect::getVisibleRect().size.width - 40, 100);
+        status->setAlignment(TextHAlignment::CENTER, TextVAlignment::CENTER);
+        this->addChild(status);
+
+        startBtn = createButton("Start", Vec2(center.x - 200, center.y - 20), [this](Object*) {
+            cancelRequested = cleanupRequested = false;
+            setRunning(true);
+            status->setString("Downloading...");
+            task = downloader->createDownloadFileTask(sURLList[3], storagePath, "cancel_test");
+            if (!task)
+                setRunning(false);
+        });
+        cancelBtn = createButton("cancel()", Vec2(center.x, center.y - 20), [this](Object*) { requestCancel(false); });
+        cleanBtn =
+            createButton("cancel(true)", Vec2(center.x + 200, center.y - 20), [this](Object*) { requestCancel(true); });
+        setRunning(false);
+
+        downloader->onTaskProgress = [this](const network::DownloadTask& t) {
+            if (!cancelRequested)
+                status->setString(fmt::format("Downloading... {} KB", t.progressInfo.totalBytesReceived / 1024));
+        };
+
+        downloader->onFileTaskSuccess = [this](const network::DownloadTask&) {
+            status->setString("Download finished before it was cancelled, press Start to try again.");
+            setRunning(false);
+        };
+
+        downloader->onTaskError = [this](const network::DownloadTask&, int errorCode, int, std::string_view errorStr) {
+            status->setString(fmt::format("FAIL: onTaskError({}) {} instead of onTaskCancelled", errorCode, errorStr));
+            setRunning(false);
+        };
+
+        // The cancelled callback must fire, and the temp files must exist only when cleanup wasn't requested
+        downloader->onTaskCancelled = [this](const network::DownloadTask& t) {
+            auto fu            = FileUtils::getInstance();
+            bool tmpExists     = fu->isFileExist(t.storagePath + ".tmp");
+            bool digestExists  = fu->isFileExist(t.storagePath + ".tmp.digest");
+            bool expectedExist = !cleanupRequested;
+            bool pass          = cancelRequested && tmpExists == expectedExist && digestExists == expectedExist;
+
+            auto msg = fmt::format("{}: onTaskCancelled fired after cancel({}), .tmp {}, .tmp.digest {} (expected {})",
+                                   pass ? "PASS" : "FAIL", cleanupRequested ? "true" : "", tmpExists ? "exists" : "gone",
+                                   digestExists ? "exists" : "gone", expectedExist ? "exists" : "gone");
+            AXLOGI("{}", msg);
+            status->setString(msg);
+            setRunning(false);
+        };
+    }
+};
+
 DownloaderTests::DownloaderTests()
 {
     ADD_TEST_CASE(DownloaderTest);
     ADD_TEST_CASE(DownloaderMultiTask);
+    ADD_TEST_CASE(DownloaderCancelTest);
 };
