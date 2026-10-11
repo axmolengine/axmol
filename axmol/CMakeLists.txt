@@ -171,7 +171,7 @@ cmake_dependent_option(AX_ENABLE_WAYLAND "Enabling linux wayland" OFF "LINUX" OF
 option(AX_ENABLE_PHYSICS_2D "Build Physics2D support" ${AX_FEAT_HINT})
 cmake_dependent_option(AX_ENABLE_VIDEO "Build video support" ${AX_FEAT_HINT} "AX_ENABLE_MFMEDIA OR AX_ENABLE_VLC_MEDIA OR APPLE OR ANDROID OR WASM" OFF)
 option(AX_ENABLE_AUDIO "Build audio support" ${AX_FEAT_HINT})
-option(AX_ENABLE_OPUS "Build with opus support" ON${AX_FEAT_HINT})
+cmake_dependent_option(AX_ENABLE_OPUS "Build with opus support" ${AX_FEAT_HINT} "AX_ENABLE_AUDIO" OFF)
 
 option(AX_ENABLE_3D "Build 3D support" ${AX_FEAT_HINT})
 cmake_dependent_option(AX_ENABLE_PHYSICS_3D "Build Physics3D support" ${AX_FEAT_HINT} "AX_ENABLE_3D" OFF)
