@@ -1,9 +1,10 @@
-# NOTE: Changing the value of AX_EXT_HINT after cmake build files have been created
+# NOTE: Changing the value of AX_EXT_HINT or AX_FEAT_HINT after cmake build files have been created
 # will not update all other options that are using AX_EXT_HINT.  You must delete the
 # {build_dir}/CMakeCache.txt file and then re-run the `axmol build ...` command in
 # order for the new setting to take effect. Alternatively, you can also delete the
 # entire build folder and then re-run the `axmol build` command.
-# set(AX_EXT_HINT ON CACHE BOOL "The default extensions hint" FORCE)
+# set(AX_EXT_HINT OFF CACHE BOOL "The default extensions hint" FORCE)
+# set(AX_FEAT_HINT OFF CACHE BOOL "The default features hint" FORCE)
 
 # The following are by default set the same as the AX_EXT_HINT flag above - default: ON
 # Uncomment the lines below to set them individually

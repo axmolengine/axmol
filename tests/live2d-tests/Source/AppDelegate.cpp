@@ -11,7 +11,7 @@
 #include "LAppDefine.hpp"
 #include "LAppPal.hpp"
 
-#if USE_AUDIO_ENGINE
+#if AX_ENABLE_AUDIO
 #    include "audio/include/AudioEngine.h"
 #endif
 
@@ -28,7 +28,7 @@ AppDelegate::~AppDelegate()
 {
     Director::getInstance()->getEventDispatcher()->removeEventListener(_recreatedEventlistener);
 
-#if USE_AUDIO_ENGINE
+#if AX_ENABLE_AUDIO
     AudioEngine::end();
 #endif
 }
@@ -129,7 +129,7 @@ void AppDelegate::applicationDidEnterBackground()
 {
     Director::getInstance()->deactivate();
 
-#if USE_AUDIO_ENGINE
+#if AX_ENABLE_AUDIO
     AudioEngine::pauseAll();
 #endif
 }
@@ -139,7 +139,7 @@ void AppDelegate::applicationWillEnterForeground()
 {
     Director::getInstance()->activate();
 
-#if USE_AUDIO_ENGINE
+#if AX_ENABLE_AUDIO
     AudioEngine::resumeAll();
 #endif
     // Director::getInstance()->activate();
