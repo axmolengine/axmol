@@ -97,7 +97,6 @@ if(AX_ENABLE_EXT_IMGUI)
   endif()
 endif()
 
-option(AX_ENABLE_EXT_SCENEEXT "Whether enable extension: sceneext" ON)
 if(AX_ENABLE_EXT_SCENEEXT)
     add_subdirectory(sceneext)
 endif()

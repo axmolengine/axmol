@@ -200,6 +200,7 @@ option(AX_ENABLE_EXT_SCENEIO "Build extension sceneio (aka cocostudio)" ${AX_EXT
 option(AX_ENABLE_EXT_FAIRYGUI "Build extension FairyGUI" ${AX_EXT_HINT})
 option(AX_ENABLE_EXT_IMGUI "Build extension ImGui" ${AX_EXT_HINT})
 option(AX_ENABLE_EXT_EFFEKSEER "Build extension Effekseer" ${AX_EXT_HINT})
+option(AX_ENABLE_EXT_SCENEEXT "Whether enable extension: sceneext" ${AX_EXT_HINT})
 option(AX_ENABLE_EXT_LIVE2D "Build extension Live2D" OFF)
 
 cmake_dependent_option(AX_ENABLE_OPENXR "Build OpenXR support" OFF "AX_ENABLE_VR;NOT IOS;NOT WASM" OFF)
