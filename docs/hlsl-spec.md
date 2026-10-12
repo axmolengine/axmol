@@ -177,27 +177,24 @@ take the following slots in source order.
 `vs_ub` and `fs_ub` are only the conventional names for the single block of each
 stage; the compiler never looks them up.
 
-The annotation is injected into the HLSL source before it reaches DXC, and the
-D3D targets then carry the same registers in their emitted HLSL. A declaration
-`axslcc` cannot parse stops the build instead of guessing, so author cbuffers so
-that:
+`axslcc` assigns these slots by annotating the HLSL source before it reaches
+DXC. Everything about a declaration it cannot annotate - a manual `: register`
+or `: packoffset`, a block name produced by token pasting - stops the build with
+a diagnostic. Only two cases need to be remembered, because both are silent:
 
-- `{` follows the block name after only ASCII whitespace or comments;
-- the declaration is in the shader file itself or in `base.hlsli`, which is the
-  only header inlined before annotation. A cbuffer arriving from any other
-  include is resolved afterwards by the compiler's own include handler and keeps
-  the register that compiler picked;
-- the declaration is written literally, not produced by a macro.
+- **A cbuffer arriving through an include other than `base.hlsli` keeps the
+  register DXC picked.** `base.hlsli` is the only header inlined before slot
+  assignment, and slots are then consumed in source order, so a block coming from
+  another header never enters that sequence: in a fragment shader the included
+  block lands on `b0` - the vertex stage's slot - while the in-file block stays
+  on `b1`. Pair such a block with a real `vs_ub` and the two collide in the
+  D3D12 root signature.
+- **A block that is declared but never referenced still consumes its
+  source-order slot**, then disappears from reflection because DXC drops it. The
+  blocks after it keep their numbers, which leaves a hole in the sequence the
+  D3D12 backend expects (see the runtime note below).
 
-A `cbuffer` that appears only inside a comment is ignored. A declared but
-unreferenced block still consumes a source-order slot before being dropped from
-reflection, shifting the slots of blocks that follow.
-
-Anything else between the block name and its `{` is rejected with
-`cbuffer 'X' is not followed by '{', so axslcc cannot assign it a register`.
-These assignments are backend/reflection details; user shaders should not spell
-them manually, and explicit `register(...)` on a resource is rejected. Verify
-with `axslcc -S` and read the emitted binding instead of assuming it.
+Read the emitted `register(...)` with `axslcc -S` instead of assuming a slot.
 
 Runtime note: the D3D12 backend uses a UBO's binding directly as its root
 parameter index, so the blocks of a program must form a dense, ascending set
@@ -541,24 +538,21 @@ always uses separate sampled-image and sampler descriptors.
 
 ## Checklist
 
-- Include `base.hlsli` when using preset samplers.
-- Do not write manual `: register(...)` or `: packoffset(...)` annotations.
-- Use `vs_ub` for vertex uniforms and `fs_ub` for fragment uniforms; `axslcc`
-  assigns their backend bindings.
-- Declare cbuffers literally, in the shader file or in `base.hlsli`, which is
-  the only header inlined before binding assignment; see Uniform Buffers.
-- Declare textures and storage resources without binding syntax.
-- Avoid unsupported HLSL resource forms such as `ConstantBuffer<T>`,
-  `Texture2DMS`, `AppendStructuredBuffer<T>`, and `ConsumeStructuredBuffer<T>`.
-- For basic needs, use built-in sampler names such as `LinearClamp`.
-- For custom sampler state, declare your own `SamplerState`; register it with
-  `SamplerRegistry` before creating the Program. Custom sampler arrays are not
-  supported.
-- Do not sample one texture with multiple sampler states if GL/GLES is a target.
-- Match varyings by semantic name and index, not variable name.
-- Recompile all shaders after changing the reflection layout or axslcc runtime
-  ABI. Since axslcc 4.0.0 an archive is identified by the `AXSA` container and
-  stamped with the ABI generation in its header, and the engine rejects any
-  archive from another generation at load time instead of misparsing it.
-  Updating axslcc alone does not refresh previously compiled archives, and
-  axmol loads the copy under `<exeDir>/axslc`, not the compiler output folder.
+These are the rules `axslcc` cannot check for you. Everything else on this page
+is enforced by a compile error or by the runtime.
+
+- Declare cbuffers in the shader file or in `base.hlsli`. A block arriving
+  through any other include keeps DXC's register, and nothing warns you.
+- Prefer a built-in preset (`LinearClamp`, `PointClamp`, ...) over a custom
+  `SamplerState` when no override is needed; a custom sampler is bound through a
+  separate program-local descriptor set.
+- Register every custom `SamplerState` name with `SamplerRegistry` **before**
+  creating the `Program`. An unregistered name logs at Program construction and
+  makes `Program::isValid()` return false; nothing fails at compile time.
+- Match varyings by semantic name and index, not by variable name.
+- Recompile all shaders after changing the reflection layout or the axslcc ABI
+  generation. Since axslcc 4.0.0 an archive is identified by the `AXSA`
+  container and stamped with its generation in the header, and the engine
+  rejects a foreign generation at load time instead of misparsing it. Updating
+  axslcc alone does not refresh previously compiled archives, and axmol loads
+  the copy under `<exeDir>/axslc`, not the compiler output folder.
