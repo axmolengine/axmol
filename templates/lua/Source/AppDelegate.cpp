@@ -11,7 +11,7 @@
 #include "lua-bindings/runtime/LuaEngine.h"
 #include "lua-bindings/runtime/lua_module_register.h"
 
-#define USE_VR_RENDERER  0
+#define USE_VR_RENDERER 0
 #define AX_ENABLE_AUDIO 1
 
 #if AX_ENABLE_AUDIO

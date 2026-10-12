@@ -10,7 +10,7 @@
 #include "AppDelegate.h"
 #include "MainScene.h"
 
-#define USE_VR_RENDERER  0
+#define USE_VR_RENDERER 0
 #define AX_ENABLE_AUDIO 1
 
 #if AX_ENABLE_AUDIO
