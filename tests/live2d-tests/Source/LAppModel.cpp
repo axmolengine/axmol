@@ -31,7 +31,7 @@ using namespace Csm::DefaultParameterId;
 using namespace LAppDefine;
 using namespace ax::rhi;
 
-#if USE_AUDIO_ENGINE
+#if AX_ENABLE_AUDIO
 #include "audio/include/AudioEngine.h"
 using namespace ax::experimental;
 #elif USE_SIMPLE_AUDIO_ENGINE
@@ -325,7 +325,7 @@ void LAppModel::PreloadMotionGroup(const csmChar* group)
             csmString path = voice;
             path = _modelHomeDir + path;
 
-#if USE_AUDIO_ENGINE
+#if AX_ENABLE_AUDIO
             AudioEngine::preload(path.GetRawString());
 #elif USE_SIMPLE_AUDIO_ENGINE
             SimpleAudioEngine::getInstance()->preloadEffect(path.GetRawString());
@@ -345,7 +345,7 @@ void LAppModel::ReleaseMotionGroup(const csmChar* group) const
             csmString path = voice;
             path = _modelHomeDir + path;
 
-#if USE_AUDIO_ENGINE
+#if AX_ENABLE_AUDIO
             AudioEngine::uncache(path.GetRawString());
 #elif USE_SIMPLE_AUDIO_ENGINE
             SimpleAudioEngine::getInstance()->unloadEffect(path.GetRawString());
@@ -526,7 +526,7 @@ CubismMotionQueueEntryHandle LAppModel::StartMotion(const csmChar* group, csmInt
     {
         csmString path = voice;
         path = _modelHomeDir + path;
-#if USE_AUDIO_ENGINE
+#if AX_ENABLE_AUDIO
         AudioEngine::play2d(path.GetRawString());
 #elif USE_SIMPLE_AUDIO_ENGINE
         SimpleAudioEngine::getInstance()->playEffect(path.GetRawString());

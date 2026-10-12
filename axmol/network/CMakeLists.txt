@@ -1,6 +1,7 @@
 
-option(AX_ENABLE_HTTP "Build HTTP client based on yasio" ON)
-option(AX_ENABLE_WEBSOCKET "Build Websocket client based on yasio" ON)
+
+option(AX_ENABLE_HTTP "Build HTTP client based on yasio" ${AX_FEAT_HINT})
+option(AX_ENABLE_WEBSOCKET "Build Websocket client based on yasio" ${AX_FEAT_HINT})
 
 if(EMSCRIPTEN)
   set(_AX_NETWORK_HEADER

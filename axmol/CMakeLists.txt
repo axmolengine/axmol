@@ -153,27 +153,29 @@ if(AX_GLES_PROFILE)
 endif()
 message(STATUS "${_RENDER_NOTICE}")
 
+option(AX_FEAT_HINT "The default features hint" ON)
+
 if(LINUX)
   include(CheckIncludeFile)
   check_include_file(vlc/vlc.h _AX_HAVE_VLC)
   cmake_dependent_option(AX_ENABLE_VLC_MEDIA "Enabling vlc media" ON "_AX_HAVE_VLC" OFF)
 endif()
 
-cmake_dependent_option(AX_ENABLE_MSEDGE_WEBVIEW2 "Use Microsoft Edge webview2" ON "WIN32 AND NOT WINRT" OFF)
+cmake_dependent_option(AX_ENABLE_MSEDGE_WEBVIEW2 "Use Microsoft Edge webview2" ${AX_FEAT_HINT} "(WIN32 AND NOT WINRT)" OFF)
 
-cmake_dependent_option(AX_ENABLE_MFMEDIA "Enabling microsoft media foundation" ON "WIN32" OFF)
+cmake_dependent_option(AX_ENABLE_MFMEDIA "Enabling microsoft media foundation" ${AX_FEAT_HINT} "WIN32" OFF)
 cmake_dependent_option(AX_ENABLE_VLC_MEDIA "Enabling vlc media" OFF "(WIN32 AND NOT WINRT) OR LINUX" OFF)
 
 cmake_dependent_option(AX_ENABLE_WAYLAND "Enabling linux wayland" OFF "LINUX" OFF)
 
-option(AX_ENABLE_PHYSICS_2D "Build Physics2D support" ON)
-cmake_dependent_option(AX_ENABLE_VIDEO "Build video support" ON "AX_ENABLE_MFMEDIA OR AX_ENABLE_VLC_MEDIA OR APPLE OR ANDROID OR WASM" OFF)
-option(AX_ENABLE_AUDIO "Build audio support" ON)
-option(AX_ENABLE_OPUS "Build with opus support" ON)
+option(AX_ENABLE_PHYSICS_2D "Build Physics2D support" ${AX_FEAT_HINT})
+cmake_dependent_option(AX_ENABLE_VIDEO "Build video support" ${AX_FEAT_HINT} "AX_ENABLE_MFMEDIA OR AX_ENABLE_VLC_MEDIA OR APPLE OR ANDROID OR WASM" OFF)
+option(AX_ENABLE_AUDIO "Build audio support" ${AX_FEAT_HINT})
+cmake_dependent_option(AX_ENABLE_OPUS "Build with opus support" ${AX_FEAT_HINT} "AX_ENABLE_AUDIO" OFF)
 
-option(AX_ENABLE_3D "Build 3D support" ON)
-cmake_dependent_option(AX_ENABLE_PHYSICS_3D "Build Physics3D support" ON "AX_ENABLE_3D" OFF)
-cmake_dependent_option(AX_ENABLE_NAVMESH "Build NavMesh support" ON "AX_ENABLE_3D" OFF)
+option(AX_ENABLE_3D "Build 3D support" ${AX_FEAT_HINT})
+cmake_dependent_option(AX_ENABLE_PHYSICS_3D "Build Physics3D support" ${AX_FEAT_HINT} "AX_ENABLE_3D" OFF)
+cmake_dependent_option(AX_ENABLE_NAVMESH "Build NavMesh support" ${AX_FEAT_HINT} "AX_ENABLE_3D" OFF)
 
 option(AX_ENABLE_VR "Build VR support" OFF)
 
@@ -198,6 +200,7 @@ option(AX_ENABLE_EXT_SCENEIO "Build extension sceneio (aka cocostudio)" ${AX_EXT
 option(AX_ENABLE_EXT_FAIRYGUI "Build extension FairyGUI" ${AX_EXT_HINT})
 option(AX_ENABLE_EXT_IMGUI "Build extension ImGui" ${AX_EXT_HINT})
 option(AX_ENABLE_EXT_EFFEKSEER "Build extension Effekseer" ${AX_EXT_HINT})
+option(AX_ENABLE_EXT_SCENEEXT "Whether enable extension: sceneext" ${AX_EXT_HINT})
 option(AX_ENABLE_EXT_LIVE2D "Build extension Live2D" OFF)
 
 cmake_dependent_option(AX_ENABLE_OPENXR "Build OpenXR support" OFF "AX_ENABLE_VR;NOT IOS;NOT WASM" OFF)
