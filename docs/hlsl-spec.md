@@ -165,16 +165,41 @@ cbuffer fs_ub
 };
 ```
 
-`axslcc` preserves Axmol's deterministic uniform-buffer convention:
+`axslcc` preserves Axmol's deterministic uniform-buffer convention. Slots come
+from a **stage base**, not from the block name; extra blocks in the same stage
+take the following slots in source order.
 
-| Buffer | Internal assignment |
-| --- | --- |
-| `vs_ub` and the first vertex-stage cbuffer | `b0, space0` |
-| `fs_ub` and the first fragment-stage cbuffer | `b1, space0` |
+| Stage | First cbuffer | Following cbuffers |
+| --- | --- | --- |
+| vertex, compute | `b0, space0` | `b1`, `b2`, ... |
+| fragment | `b1, space0` | `b2`, `b3`, ... |
 
-Additional cbuffers in the same stage are assigned following slots in source
-order. These assignments are backend/reflection details; user shaders should
-not spell them manually.
+`vs_ub` and `fs_ub` are only the conventional names for the single block of each
+stage; the compiler never looks them up.
+
+The annotation is written into the generated HLSL text, so a block gets its slot
+only when `axslcc` recognizes the declaration there. Author cbuffers so that:
+
+- `{` follows the block name directly, with no comment and no non-ASCII space
+  between them;
+- the declaration is in the shader file itself or in `base.hlsli`, which is the
+  only header inlined before annotation. A cbuffer arriving from any other
+  include is resolved afterwards by the compiler's own include handler and keeps
+  the register that compiler picked;
+- the declaration is written literally, not produced by a macro.
+
+Both silent cases shift the slots of the blocks that follow: a `cbuffer` that
+appears only inside a comment still consumes a slot, while a block that is
+declared but never referenced is dropped from reflection entirely. These
+assignments are backend/reflection details; user shaders should not spell them
+manually, and explicit `register(...)` on a resource is rejected. Verify with
+`axslcc -S` and read the emitted binding instead of assuming it.
+
+Runtime note: the D3D12 backend uses a UBO's binding directly as its root
+parameter index, so the blocks of a program must form a dense, ascending set
+starting at `b0`. A vertex stage without a cbuffer paired with a fragment `b1`,
+or two stages that both end up on `b0`, is therefore not supported today; engine
+shaders that need several blocks reserve the unused slots explicitly.
 
 Existing engine shaders may use packing helpers from `base.hlsli`, such as
 `vfloat_def` and `vvec3_def`. New shaders should prefer ordinary HLSL types
@@ -516,6 +541,8 @@ combined-mode preparation.
 - Do not write manual `: register(...)` annotations.
 - Use `vs_ub` for vertex uniforms and `fs_ub` for fragment uniforms; `axslcc`
   assigns their backend bindings.
+- Write `cbuffer Name {` with the brace directly after the name, and declare it
+  in the shader file or in `base.hlsli`; see Uniform Buffers.
 - Declare textures and storage resources without binding syntax.
 - Avoid unsupported HLSL resource forms such as `ConstantBuffer<T>`,
   `Texture2DMS`, `AppendStructuredBuffer<T>`, and `ConsumeStructuredBuffer<T>`.
@@ -526,4 +553,5 @@ combined-mode preparation.
 - Do not sample one texture with multiple sampler states if GL/GLES is a target.
 - Match varyings by semantic name and index, not variable name.
 - Recompile all shaders after changing the reflection layout or axslcc runtime
-  ABI.
+  ABI. Updating axslcc alone does not refresh previously compiled archives, and
+  axmol loads the copy under `<exeDir>/axslc`, not the compiler output folder.

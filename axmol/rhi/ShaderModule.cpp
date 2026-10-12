@@ -56,13 +56,13 @@ void ShaderModule::parseShaderCode(void)
     auto sc_size = ibs.read<uint32_t>();
     struct sc_chunk chunk;
     ibs.read_bytes(&chunk, static_cast<int>(sizeof(chunk)));
-    if (chunk.major != 3 || chunk.minor < 99)
+    if (chunk.major != SC_ABI_MAJOR)
     {
         AXLOGE(
-            "Unsupported axslcc shader chunk version: found {}.{}, required 3.99 or newer. "
-            "Please update/recompile the shader.",
-            chunk.major, chunk.minor);
-        assert(false && "axmol: Shader version too old");
+            "Unsupported axslcc shader chunk version: found {}.{}.{}, required 4.0.0 or newer. "
+            "Please re-run setup.ps1, then recompile all shaders.",
+            chunk.major, chunk.minor, chunk.patch);
+        assert(false && "axmol: Shader version mismatch");
     }
 
     // find target entry: prefer precompiled bytecode when available

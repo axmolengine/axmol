@@ -1,5 +1,12 @@
-// The Axmol Shader Compiler spec, define macros and structs
-// match with axslcc-3.99.0+
+/****************************************************************************
+ Copyright (c) 2026 Simdsoft Limited.
+
+ https://axmol.dev/
+
+ SPDX-License-Identifier: MIT
+ ****************************************************************************/
+// Axmol Shader Compiler Spec: Macro and Struct Definitions (Inspired by glslcc)
+// match with axslcc-4.0.0+
 
 #pragma once
 
@@ -13,7 +20,7 @@ namespace axslc
 
 #pragma pack(push, 1)
 
-#define SC_CHUNK          sc_makefourcc('A', 'X', 'S', 'C')
+#define SC_CHUNK          sc_makefourcc('A', 'X', 'S', 'A')
 #define SC_CHUNK_STAG     sc_makefourcc('S', 'T', 'A', 'G')
 #define SC_CHUNK_REFL     sc_makefourcc('R', 'E', 'F', 'L')
 #define SC_CHUNK_CODE     sc_makefourcc('C', 'O', 'D', 'E')
@@ -31,6 +38,8 @@ namespace axslc
 #define SC_STAGE_COMPUTE  sc_makefourcc('C', 'O', 'M', 'P')
 
 #define SC_NAME_LEN       32
+
+#define SC_ABI_MAJOR      4
 
 // The axslcc sampler presets
 struct SamplerPreset
@@ -75,10 +84,10 @@ struct SamplerPreset
         Count
     };
 };
-inline constexpr uint16_t kPresetSamplerDescriptorSet   = 1;
-inline constexpr uint16_t kCustomSamplerDescriptorSet   = 2;
-inline constexpr uint16_t kInvalidTextureSamplerRef     = 0xffff;
-inline constexpr uint16_t kTextureSamplerRefCustomBit   = 0x8000;
+inline constexpr uint16_t kPresetSamplerDescriptorSet = 1;
+inline constexpr uint16_t kCustomSamplerDescriptorSet = 2;
+inline constexpr uint16_t kInvalidTextureSamplerRef = 0xffff;
+inline constexpr uint16_t kTextureSamplerRefCustomBit = 0x8000;
 inline constexpr uint16_t kTextureSamplerRefBindingMask = 0x7fff;
 
 inline constexpr int16_t kInvalidSamplerPreset = -1;
@@ -134,12 +143,15 @@ enum SCType : uint16_t
 };
 
 // sc chunk aka file header
+// Compilers predating the patch field stored num_targets in the third slot and left the fourth
+// zero. A valid header always has num_targets >= 1, so a reader can recognize such an archive by
+// num_targets == 0 and ask for a recompile instead of parsing the target table wrong.
 struct sc_chunk
 {
     uint16_t major;  // SC_VERSION_MAJOR
     uint16_t minor;  // SC_VERSION_MINOR
+    uint16_t patch;  // SC_VERSION_PATCH
     uint16_t num_targets;
-    uint16_t reserved;
 };
 
 struct sc_target_entry
