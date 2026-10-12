@@ -177,8 +177,10 @@ take the following slots in source order.
 `vs_ub` and `fs_ub` are only the conventional names for the single block of each
 stage; the compiler never looks them up.
 
-The annotation is written into the generated HLSL text, so a block gets its slot
-only when `axslcc` recognizes the declaration there. Author cbuffers so that:
+The annotation is injected into the HLSL source before it reaches DXC, and the
+D3D targets then carry the same registers in their emitted HLSL. A declaration
+`axslcc` cannot parse stops the build instead of guessing, so author cbuffers so
+that:
 
 - `{` follows the block name after only ASCII whitespace or comments;
 - the declaration is in the shader file itself or in `base.hlsli`, which is the
@@ -189,10 +191,13 @@ only when `axslcc` recognizes the declaration there. Author cbuffers so that:
 
 A `cbuffer` that appears only inside a comment is ignored. A declared but
 unreferenced block still consumes a source-order slot before being dropped from
-reflection, shifting the slots of blocks that follow. These
-assignments are backend/reflection details; user shaders should not spell them
-manually, and explicit `register(...)` on a resource is rejected. Verify with
-`axslcc -S` and read the emitted binding instead of assuming it.
+reflection, shifting the slots of blocks that follow.
+
+Anything else between the block name and its `{` is rejected with
+`cbuffer 'X' is not followed by '{', so axslcc cannot assign it a register`.
+These assignments are backend/reflection details; user shaders should not spell
+them manually, and explicit `register(...)` on a resource is rejected. Verify
+with `axslcc -S` and read the emitted binding instead of assuming it.
 
 Runtime note: the D3D12 backend uses a UBO's binding directly as its root
 parameter index, so the blocks of a program must form a dense, ascending set
@@ -531,8 +536,8 @@ Runtime reflection contains the resources the backend needs to bind:
 - compute local workgroup size.
 
 It does not contain texture/sampler sampling pairs. Texture/sampler pair
-analysis is a compiler-internal step used for GL/GLES lowering and Vulkan
-combined-mode preparation.
+analysis is a compiler-internal step used only for GL/GLES lowering; Vulkan
+always uses separate sampled-image and sampler descriptors.
 
 ## Checklist
 
@@ -540,8 +545,9 @@ combined-mode preparation.
 - Do not write manual `: register(...)` annotations.
 - Use `vs_ub` for vertex uniforms and `fs_ub` for fragment uniforms; `axslcc`
   assigns their backend bindings.
-- Write `cbuffer Name {` with the brace directly after the name, and declare it
-  in the shader file or in `base.hlsli`; see Uniform Buffers.
+- Write `cbuffer Name {` with only whitespace or comments between the name and
+  the brace, and declare it in the shader file or in `base.hlsli`; see
+  Uniform Buffers.
 - Declare textures and storage resources without binding syntax.
 - Avoid unsupported HLSL resource forms such as `ConstantBuffer<T>`,
   `Texture2DMS`, `AppendStructuredBuffer<T>`, and `ConsumeStructuredBuffer<T>`.
@@ -552,5 +558,8 @@ combined-mode preparation.
 - Do not sample one texture with multiple sampler states if GL/GLES is a target.
 - Match varyings by semantic name and index, not variable name.
 - Recompile all shaders after changing the reflection layout or axslcc runtime
-  ABI. Updating axslcc alone does not refresh previously compiled archives, and
+  ABI. Since axslcc 4.0.0 an archive is identified by the `AXSA` container and
+  stamped with the ABI generation in its header, and the engine rejects any
+  archive from another generation at load time instead of misparsing it.
+  Updating axslcc alone does not refresh previously compiled archives, and
   axmol loads the copy under `<exeDir>/axslc`, not the compiler output folder.
