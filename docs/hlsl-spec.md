@@ -180,17 +180,16 @@ stage; the compiler never looks them up.
 The annotation is written into the generated HLSL text, so a block gets its slot
 only when `axslcc` recognizes the declaration there. Author cbuffers so that:
 
-- `{` follows the block name directly, with no comment and no non-ASCII space
-  between them;
+- `{` follows the block name after only ASCII whitespace or comments;
 - the declaration is in the shader file itself or in `base.hlsli`, which is the
   only header inlined before annotation. A cbuffer arriving from any other
   include is resolved afterwards by the compiler's own include handler and keeps
   the register that compiler picked;
 - the declaration is written literally, not produced by a macro.
 
-Both silent cases shift the slots of the blocks that follow: a `cbuffer` that
-appears only inside a comment still consumes a slot, while a block that is
-declared but never referenced is dropped from reflection entirely. These
+A `cbuffer` that appears only inside a comment is ignored. A declared but
+unreferenced block still consumes a source-order slot before being dropped from
+reflection, shifting the slots of blocks that follow. These
 assignments are backend/reflection details; user shaders should not spell them
 manually, and explicit `register(...)` on a resource is rejected. Verify with
 `axslcc -S` and read the emitted binding instead of assuming it.

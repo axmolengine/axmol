@@ -59,10 +59,11 @@ void ShaderModule::parseShaderCode(void)
     if (chunk.major != SC_ABI_MAJOR)
     {
         AXLOGE(
-            "Unsupported axslcc shader chunk version: found {}.{}.{}, required 4.0.0 or newer. "
+            "Unsupported axslcc shader chunk version: found {}.{}.{}, required a 4.x archive. "
             "Please re-run setup.ps1, then recompile all shaders.",
             chunk.major, chunk.minor, chunk.patch);
         assert(false && "axmol: Shader version mismatch");
+        return;
     }
 
     // find target entry: prefer precompiled bytecode when available
