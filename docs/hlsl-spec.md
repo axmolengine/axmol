@@ -542,12 +542,11 @@ always uses separate sampled-image and sampler descriptors.
 ## Checklist
 
 - Include `base.hlsli` when using preset samplers.
-- Do not write manual `: register(...)` annotations.
+- Do not write manual `: register(...)` or `: packoffset(...)` annotations.
 - Use `vs_ub` for vertex uniforms and `fs_ub` for fragment uniforms; `axslcc`
   assigns their backend bindings.
-- Write `cbuffer Name {` with only whitespace or comments between the name and
-  the brace, and declare it in the shader file or in `base.hlsli`; see
-  Uniform Buffers.
+- Declare cbuffers literally, in the shader file or in `base.hlsli`, which is
+  the only header inlined before binding assignment; see Uniform Buffers.
 - Declare textures and storage resources without binding syntax.
 - Avoid unsupported HLSL resource forms such as `ConstantBuffer<T>`,
   `Texture2DMS`, `AppendStructuredBuffer<T>`, and `ConsumeStructuredBuffer<T>`.
