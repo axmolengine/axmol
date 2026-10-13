@@ -28,7 +28,7 @@ separately. Upstream badges show upstream releases, not Axmol's configured versi
 ## axslcc
 
 - [![github](https://img.shields.io/github/v/release/axmolengine/axslcc?label=Upstream)](https://github.com/axmolengine/axslcc)
-- Pinned version: 4.0.0
+- Pinned version: 4.0.1
 - License: [MIT](https://github.com/axmolengine/axslcc/blob/master/LICENSE)
 - Platform: Win32/macOS/Linux
 - Managed by: `1k/build.profiles`
