@@ -51,7 +51,7 @@
 
 ## fast_float
 - [![Upstream](https://img.shields.io/github/v/release/fastfloat/fast_float?label=Upstream)](https://github.com/fastfloat/fast_float)
-- Version: 8.3.0
+- Version: 8.3.2
 - License: MIT
 
 ## flatbuffers
