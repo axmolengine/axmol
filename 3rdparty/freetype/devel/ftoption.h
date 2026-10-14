@@ -439,8 +439,10 @@ FT_BEGIN_HEADER
 
   /**************************************************************************
    *
-   * The size in bytes of the render pool used by the scan-line converter to
-   * do all of its work.
+   * The size in bytes of the stack render pool used by the scan-line
+   * converters.  Use this option to limit the stack usage.  The memory
+   * requirements are proportional to size and complexity of a given glyph.
+   * FreeType's rasterizers switch to dynamic allocations when necessary.
    */
 #define FT_RENDER_POOL_SIZE  16384L
 
@@ -667,6 +669,7 @@ FT_BEGIN_HEADER
 #define TT_CONFIG_CMAP_FORMAT_12
 #define TT_CONFIG_CMAP_FORMAT_13
 #define TT_CONFIG_CMAP_FORMAT_14
+#define TT_CONFIG_CMAP_FORMAT_15
 
 
   /*************************************************************************/
@@ -770,6 +773,21 @@ FT_BEGIN_HEADER
    * added to the OpenType standard.
    */
 /* #define TT_CONFIG_OPTION_NO_BORING_EXPANSION */
+
+
+  /**************************************************************************
+   *
+   * Define `TT_CONFIG_OPTION_VARC` if you want to include support for
+   * variable composite glyphs (the 'VARC' table).  This is part of the
+   * 'boring' OpenType specification expansions.
+   *
+   *   https://github.com/harfbuzz/boring-expansion-spec/blob/main/VARC.md
+   *
+   * Variable composites enable more efficient encoding of variable glyphs
+   * by allowing glyphs to be composed from other glyphs with variable
+   * transformations and axis value overrides.
+   */
+#define TT_CONFIG_OPTION_VARC
 
 
   /**************************************************************************
