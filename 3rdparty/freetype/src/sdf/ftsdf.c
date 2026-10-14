@@ -3614,10 +3614,13 @@
       else
         internal_params.overload_sign = 0;
 
-      /* Make `contour->next` NULL so that there is   */
-      /* one contour in the list.  Also hold the next */
-      /* contour in a temporary variable so as to     */
-      /* restore the original value.                  */
+      /* Make `contour->next` NULL so that there is one    */
+      /* contour in the list.  Also hold the next contour  */
+      /* in a temporary variable to continue the iteration */
+      /* afterwards, since the `sdf_generate_subdivision`  */
+      /* call below frees the current `contour` (through   */
+      /* `split_sdf_shape`) and it must no longer be       */
+      /* dereferenced.                                     */
       temp_contour  = contour->next;
       contour->next = NULL;
 
@@ -3630,9 +3633,6 @@
                                          &temp_shape,
                                          spread,
                                          &bitmaps[i] ) );
-
-      /* Restore the original `next` variable. */
-      contour->next = temp_contour;
 
       /* Since `split_sdf_shape` deallocated the original */
       /* contours list we need to assign the new value to */
@@ -3650,7 +3650,10 @@
           orientations[i] = SDF_ORIENTATION_CW;
       }
 
-      contour = contour->next;
+      /* Advance using the saved pointer; `contour` itself */
+      /* has been freed by `split_sdf_shape` and must not  */
+      /* be dereferenced.                                  */
+      contour = temp_contour;
     }
 
     /* assign the new contour list to `shape->contours` */

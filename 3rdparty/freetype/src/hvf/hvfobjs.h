@@ -115,8 +115,6 @@ FT_BEGIN_HEADER
     FT_GlyphLoader  loader;     /* Standard FreeType loader.            */
     FT_Outline*     outline;    /* Points to `loader->current.outline`. */
     FT_Bool         path_begun; /* Path state tracking.                 */
-    
-    HVF_Face  face; /* Reference to face. */
 
     /* Pre-calculated scaling factors for efficient coordinate conversion. */
     HVFXYCoord  x_scale_fixed; /* x_scale * 65536.0 (or just 65536.0) */

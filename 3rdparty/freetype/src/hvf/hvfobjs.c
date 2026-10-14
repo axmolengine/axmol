@@ -202,8 +202,8 @@
       face->num_axes = mm_var->num_axis;
       
       /* Allocate storage for HVF axis coordinates. */
-      if ( !( FT_MEM_QNEW_ARRAY( *(HVFAxisValue**)&face->axis_coords,
-                                 face->num_axes ) ) )
+      if ( FT_QNEW_ARRAY( *(HVFAxisValue**)&face->axis_coords,
+                           face->num_axes ) )
       {
         face->num_axes = 0;
         goto Cleanup;
@@ -242,7 +242,7 @@
       return FT_Err_Ok;
 
     /* Allocate temporary storage for current FreeType coordinates. */
-    if ( !( FT_MEM_QNEW_ARRAY( ft_coords, face->num_axes ) ) )
+    if ( FT_QNEW_ARRAY( ft_coords, face->num_axes ) )
       return error;
 
     /* Get current variation coordinates. */

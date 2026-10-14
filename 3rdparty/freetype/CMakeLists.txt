@@ -61,7 +61,7 @@
 #
 # Some notes.
 #
-# - Say `cmake -LAH` to see all configuration options.
+# - Say `cmake -B build -LAH` to see all configuration options.
 #
 # - `cmake' creates configuration files in
 #
@@ -164,8 +164,8 @@ endif ()
 project(freetype C)
 
 set(VERSION_MAJOR "2")
-set(VERSION_MINOR "14")
-set(VERSION_PATCH "3")
+set(VERSION_MINOR "15")
+set(VERSION_PATCH "0")
 
 # Generate LIBRARY_VERSION and LIBRARY_SOVERSION.
 set(LIBTOOL_REGEX "version_info='([0-9]+):([0-9]+):([0-9]+)'")
@@ -227,6 +227,9 @@ option(FT_DISABLE_HVF
 
 option(FT_ENABLE_ERROR_STRINGS
   "Enable support for meaningful error descriptions." OFF)
+
+option(FT_DISABLE_STREAM_SUPPORT
+  "Disable file stream support and require memory-loaded fonts." OFF)
 
 # Disallow in-source builds.
 if ("${CMAKE_BINARY_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
@@ -399,6 +402,11 @@ endif ()
 # Create the options file.
 file(READ "${PROJECT_SOURCE_DIR}/include/freetype/config/ftoption.h"
   FTOPTION_H)
+if (FT_DISABLE_STREAM_SUPPORT)
+  string(REGEX REPLACE
+    "/\\* +(#define +FT_CONFIG_OPTION_DISABLE_STREAM_SUPPORT) +\\*/" "\\1"
+    FTOPTION_H "${FTOPTION_H}")
+endif ()
 if (ZLIB_FOUND)
   string(REGEX REPLACE
     "/\\* +(#define +FT_CONFIG_OPTION_SYSTEM_ZLIB) +\\*/" "\\1"
@@ -501,7 +509,9 @@ set(BASE_SRCS
   src/winfonts/winfnt.c
 )
 
-if (WIN32)
+if (FT_DISABLE_STREAM_SUPPORT)
+  list(APPEND BASE_SRCS "src/base/ftsystem.c")
+elseif (WIN32)
   list(APPEND BASE_SRCS "builds/windows/ftsystem.c")
 elseif (UNIX)
   list(APPEND BASE_SRCS "builds/unix/ftsystem.c")
@@ -558,9 +568,22 @@ if (HVF_RUNTIME_AVAILABLE)
 endif ()
 
 if (BUILD_SHARED_LIBS)
-  set_target_properties(freetype PROPERTIES
-    VERSION ${LIBRARY_VERSION}
-    SOVERSION ${LIBRARY_SOVERSION})
+  if (CMAKE_SYSTEM_NAME STREQUAL "OpenBSD")
+    # For OpenBSD, libtool follows `sunos` version type.
+    set_target_properties(freetype PROPERTIES
+      # libtool does not define its internal `soname_spec` variable
+      # for OpenBSD. So skipping the SOVERSION option.
+      VERSION ${LIBTOOL_CURRENT}.${LIBTOOL_REVISION})
+  elseif (CMAKE_SYSTEM_NAME STREQUAL "NetBSD")
+    # For NetBSD, libtool follows `sunos` version type.
+    set_target_properties(freetype PROPERTIES
+      VERSION ${LIBTOOL_CURRENT}.${LIBTOOL_REVISION}
+      SOVERSION ${LIBTOOL_CURRENT})
+  else ()
+    set_target_properties(freetype PROPERTIES
+      VERSION ${LIBRARY_VERSION}
+      SOVERSION ${LIBRARY_SOVERSION})
+  endif ()
 endif ()
 
 # Pick up ftconfig.h and ftoption.h generated above, first.
