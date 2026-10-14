@@ -271,7 +271,7 @@
 
 ## xxHash
 - [![Upstream](https://img.shields.io/github/v/release/Cyan4973/xxHash?label=Upstream)](https://github.com/Cyan4973/xxHash)
-- Version: 0.8.3
+- Version: 0.8.4
 - License: BSD-2-Clause
 
 ## yasio
