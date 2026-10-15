@@ -18,34 +18,36 @@ static Vec2 sGlobalDragStart;
 static Rect sGlobalRect;
 static bool sUpdateInDragging;
 
-GObject::GObject() : _scale{1, 1},
-                     _sizePercentInGroup(0.0f),
-                     _pivotAsAnchor(false),
-                     _alpha(1.0f),
-                     _rotation(0.0f),
-                     _visible(true),
-                     _internalVisible(true),
-                     _handlingController(false),
-                     _touchable(true),
-                     _grayed(false),
-                     _blendMode(BlendMode::Normal),
-                     _finalGrayed(false),
-                     _draggable(false),
-                     _dragBounds(nullptr),
-                     _dragTesting(false),
-                     _sortingOrder(0),
-                     _focusable(false),
-                     _pixelSnapping(false),
-                     _group(nullptr),
-                     _parent(nullptr),
-                     _displayObject(nullptr),
-                     _sizeImplType(0),
-                     _underConstruct(false),
-                     _gearLocked(false),
-                     _packageItem(nullptr),
-                     _data(nullptr),
-                     _touchDisabled(false),
-                     _alignToBL(false)
+GObject::GObject() : _scale{ 1, 1 },
+_sizePercentInGroup(0.0f),
+_pivotAsAnchor(false),
+_alpha(1.0f),
+_rotation(0.0f),
+_skewX(0.0f),
+_skewY(0.0f),
+_visible(true),
+_internalVisible(true),
+_handlingController(false),
+_touchable(true),
+_grayed(false),
+_blendMode(BlendMode::Normal),
+_finalGrayed(false),
+_draggable(false),
+_dragBounds(nullptr),
+_dragTesting(false),
+_sortingOrder(0),
+_focusable(false),
+_pixelSnapping(false),
+_group(nullptr),
+_parent(nullptr),
+_displayObject(nullptr),
+_sizeImplType(0),
+_underConstruct(false),
+_gearLocked(false),
+_packageItem(nullptr),
+_data(nullptr),
+_touchDisabled(false),
+_alignToBL(false)
 {
     static uint64_t _gInstanceCounter = 1;
     _uid = _gInstanceCounter++;
@@ -276,12 +278,22 @@ void GObject::setScale(float xv, float yv)
 
 void GObject::setSkewX(float value)
 {
-    _displayObject->setSkewX(value);
+    if (_skewX != value)
+    {
+        _skewX = value;
+        _displayObject->setRotationSkewX(_skewX + _rotation);  // Need skewX and rotation for correct drawing
+        updateGear(3);
+    }
 }
 
 void GObject::setSkewY(float value)
 {
-    _displayObject->setSkewY(value);
+    if (_skewY != value)
+    {
+        _skewY = value;
+        _displayObject->setRotationSkewY(_skewY + _rotation); // Need skewY and rotation for correct drawing
+        updateGear(3);
+    }
 }
 
 void GObject::setRotation(float value)
@@ -289,7 +301,8 @@ void GObject::setRotation(float value)
     if (_rotation != value)
     {
         _rotation = value;
-        _displayObject->setRotation(_rotation);
+        _displayObject->setRotationSkewX(_skewX + _rotation); // Need skewX and rotation for correct drawing
+        _displayObject->setRotationSkewY(_skewY + _rotation); // Need skewY and rotation for correct drawing
         updateGear(3);
     }
 }
@@ -514,13 +527,13 @@ ax::Rect GObject::transformRect(const ax::Rect& rect, GObject* targetSpace)
     if (targetSpace == _parent) // optimization
     {
         return Rect((_position.x + rect.origin.x) * _scale.x,
-                    (_position.y + rect.origin.y) * _scale.y,
-                    rect.size.width * _scale.x,
-                    rect.size.height * _scale.y);
+            (_position.y + rect.origin.y) * _scale.y,
+            rect.size.width * _scale.x,
+            rect.size.height * _scale.y);
     }
     else
     {
-        float result[4]{FLT_MAX, FLT_MAX, -FLT_MAX, -FLT_MAX};
+        float result[4]{ FLT_MAX, FLT_MAX, -FLT_MAX, -FLT_MAX };
 
         transformRectPoint(rect.origin, result, targetSpace);
         transformRectPoint(Vec2(rect.getMaxX(), rect.origin.y), result, targetSpace);
