@@ -271,6 +271,9 @@ options:
                         [optional] Set the path where to place the new project, default is current directory.
     -l {cpp,lua}
                         [optional] Major programming language you want to use, should be [cpp | lua], default is cpp.
+    -m {classic,2d,3d}
+                        [optional] Starter scene template: classic, 2d (orthographic camera) or 3d (perspective
+                        camera), default is classic. Only effective for cpp projects.
     --portrait
                         [optional] set the project be portrait, default is landscape.
     -i[solated]
