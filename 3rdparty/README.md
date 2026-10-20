@@ -51,7 +51,7 @@
 
 ## fast_float
 - [![Upstream](https://img.shields.io/github/v/release/fastfloat/fast_float?label=Upstream)](https://github.com/fastfloat/fast_float)
-- Version: 8.3.0
+- Version: 8.3.2
 - License: MIT
 
 ## flatbuffers
@@ -67,9 +67,8 @@
 
 ## FreeType
 - [![Upstream](https://img.shields.io/gitlab/v/tag/freetype/freetype?label=Upstream)](https://gitlab.freedesktop.org/freetype/freetype)
-- Version: 2.14.3-a6d4860 (Until Apr 12, 2026), with modifications:
+- Version: 2.15.0, with modifications:
   - ftsystem.c: Use UTF-8 instead ACP for Windows paths
-  - hvfload.c: Fix glyph->metrics.height too-small(=4) issue
 - License: BSD-style (The FreeType Project)
 
 ## Glad
@@ -206,7 +205,7 @@
 
 ## png
 - [![Upstream](https://img.shields.io/github/v/tag/glennrp/libpng?label=Upstream)](https://github.com/glennrp/libpng)
-- Version: 1.6.58
+- Version: 1.6.59
 - License: PNG Reference Library License version 2
 
 ## poly2tri
@@ -241,7 +240,7 @@
 
 ## simdjson
 - [![Upstream](https://img.shields.io/github/v/tag/simdjson/simdjson?label=Upstream)](https://github.com/simdjson/simdjson)
-- Version: 4.6.11
+- Version: 5.0.4
 - License: Apache-2.0
 
 ## stb (stb_image)
@@ -271,7 +270,7 @@
 
 ## xxHash
 - [![Upstream](https://img.shields.io/github/v/release/Cyan4973/xxHash?label=Upstream)](https://github.com/Cyan4973/xxHash)
-- Version: 0.8.3
+- Version: 0.8.4
 - License: BSD-2-Clause
 
 ## yasio
