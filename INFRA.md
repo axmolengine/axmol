@@ -9,7 +9,7 @@ separately. Upstream badges show upstream releases, not Axmol's configured versi
 
 - [![github](https://img.shields.io/github/v/release/PowerShell/PowerShell?label=Upstream)](https://github.com/PowerShell/PowerShell)
 - Minimum version: 7.4.0
-- Preferred version: 7.6.6
+- Preferred version: 7.6.7
 - License: MIT
 - Platform: Win32/macOS/Linux
 - Managed by: `1k/pwshi.sh`
@@ -19,7 +19,7 @@ separately. Upstream badges show upstream releases, not Axmol's configured versi
 
 - [![github](https://img.shields.io/github/v/release/Kitware/CMake?label=Upstream)](https://github.com/Kitware/CMake)
 - Minimum version (Axmol command line): 4.2.0
-- Preferred version: 4.4.3
+- Preferred version: 4.4.4
 - License: [BSD-3-Clause](https://cmake.org/licensing/)
 - Platform: Win32/macOS/Linux
 - Managed by: `1k/build.profiles`
@@ -93,7 +93,7 @@ separately. Upstream badges show upstream releases, not Axmol's configured versi
 ## Gradle
 
 - [![github](https://img.shields.io/github/v/release/gradle/gradle?label=Upstream)](https://github.com/gradle/gradle)
-- Pinned version: 9.8.0
+- Pinned version: 9.8.2
 - License: Apache-2.0
 - Platform: Android
 - Managed by: `1k/build.profiles`
@@ -111,7 +111,7 @@ separately. Upstream badges show upstream releases, not Axmol's configured versi
 
 - [![github](https://img.shields.io/github/v/tag/emscripten-core/emsdk?label=Upstream)](https://github.com/emscripten-core/emsdk)
 - Minimum version: 3.1.73
-- Preferred version: 6.0.10
+- Preferred version: 6.0.13
 - License: Apache-2.0
 - Platform: WebAssembly (build host: Win32/macOS/Linux)
 - Managed by: `1k/build.profiles`
