@@ -136,10 +136,7 @@ void GGraph::updateShape()
             if (_fillColor.a == 0) // not solid
                 _shape->drawCornerRect(Vec2(lineSize05, lineSize05), Vec2(wl2, hl2), _lineColor, lineSize2,
                                        _cornerRadius[2], _cornerRadius[0], _cornerRadius[1], _cornerRadius[3]);
-            else if (_lineSize != 0) // solid and border
-                _shape->drawSolidCornerRect(Vec2(lineSize05, lineSize05), Vec2(wl2, hl2), _fillColor, _lineColor,
-                    lineSize2, _cornerRadius[2], _cornerRadius[0], _cornerRadius[1], _cornerRadius[3]);
-            else // solid no border
+            else // solid with/without border
                 _shape->drawSolidCornerRect(Vec2(lineSize05, lineSize05), Vec2(wl2, hl2), _fillColor, _lineColor,
                                              lineSize2, _cornerRadius[2], _cornerRadius[0], _cornerRadius[1],
                                              _cornerRadius[3]);
