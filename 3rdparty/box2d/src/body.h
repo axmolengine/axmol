@@ -4,14 +4,12 @@
 #pragma once
 
 #include "container.h"
+#include "physics_world.h"
+#include "solver_set.h"
 
+#include "box2d/constants.h"
 #include "box2d/math_functions.h"
 #include "box2d/types.h"
-
-// Length of body debug name
-#define B2_NAME_LENGTH 32
-
-typedef struct b2World b2World;
 
 enum b2BodyFlags
 {
@@ -24,7 +22,7 @@ enum b2BodyFlags
 	// This body has fixed rotation
 	b2_lockAngularZ = 0x00000004,
 
-	// This flag is used for debug draw
+	// This flag is used for debug draw and contact recycling. Only on b2BodySim.
 	b2_isFast = 0x00000008,
 
 	// This dynamic body does a final CCD pass against all body types, but not other bullets
@@ -33,14 +31,15 @@ enum b2BodyFlags
 	// This body was speed capped in the current time step
 	b2_isSpeedCapped = 0x00000020,
 
-	// This body had a time of impact event in the current time step
+	// This body had a time of impact event in the current time step (body sim only).
 	b2_hadTimeOfImpact = 0x00000040,
 
 	// This body has no limit on angular velocity
 	b2_allowFastRotation = 0x00000080,
 
-	// This body need's to have its AABB increased
-	b2_enlargeBounds = 0x00000100,
+	// This bullet body needs to have its AABB increased. Needed because bullets don't follow
+	// the standard broad-phase update.
+	b2_enlargeBulletBounds = 0x00000100,
 
 	// This body is dynamic so the solver should write to it.
 	// This prevents writing to kinematic bodies that causes a multithreaded sharing
@@ -49,18 +48,26 @@ enum b2BodyFlags
 	b2_dynamicFlag = 0x00000200,
 
 	// Flag to indicate the user has used the updateBodyMass option to defer mass
-	// computation but b2Body_ApplyMassFromShapes was not called before the world step.
+	// computation but b2Body_UpdateMassFromShapes was not called before the world step.
 	b2_dirtyMass = 0x00000400,
+
+	b2_enableSleep = 0x00000800,
+
+	b2_bodyEnableContactRecycling = 0x00001000,
 
 	// All lock flags
 	b2_allLocks = b2_lockAngularZ | b2_lockLinearX | b2_lockLinearY,
+
+	// If this flag is set then the body has fixed rotation
+	b2_fixedRotation = b2_lockAngularZ,
+
+	// These flags are transient per time step. These may be different across b2Body, b2BodySim, and b2BodyState.
+	b2_bodyTransientFlags = b2_isSpeedCapped | b2_hadTimeOfImpact,
 };
 
 // Body organizational details that are not used in the solver.
 typedef struct b2Body
 {
-	char name[B2_NAME_LENGTH];
-
 	void* userData;
 
 	// index of solver set stored in b2World
@@ -98,6 +105,7 @@ typedef struct b2Body
 
 	float sleepThreshold;
 	float sleepTime;
+	float safetyFactor;
 
 	// this is used to adjust the fellAsleep flag in the body move array
 	int bodyMoveIndex;
@@ -113,8 +121,7 @@ typedef struct b2Body
 	// Used to check for invalid b2BodyId
 	uint16_t generation;
 
-	// todo move into flags
-	bool enableSleep;
+	char name[B2_NAME_LENGTH + 1];
 } b2Body;
 
 // Body State
@@ -168,15 +175,15 @@ static const b2BodyState b2_identityBodyState = { { 0.0f, 0.0f }, 0.0f, 0, { 0.0
 // Transform data used for collision and solver preparation.
 typedef struct b2BodySim
 {
-	// transform for body origin
-	b2Transform transform;
+	// transform for body origin, double translation in large world mode
+	b2WorldTransform transform;
 
 	// center of mass position in world space
-	b2Vec2 center;
+	b2Pos center;
 
 	// previous rotation and COM for TOI
 	b2Rot rotation0;
-	b2Vec2 center0;
+	b2Pos center0;
 
 	// location of center of mass relative to the body origin
 	b2Vec2 localCenter;
@@ -201,37 +208,88 @@ typedef struct b2BodySim
 	uint32_t flags;
 } b2BodySim;
 
-b2DeclareArray( b2Body );
-b2DeclareArray( b2BodySim );
-b2DeclareArray( b2BodyState );
-
 // Get a validated body from a world using an id.
 b2Body* b2GetBodyFullId( b2World* world, b2BodyId bodyId );
 
-b2Transform b2GetBodyTransformQuick( b2World* world, b2Body* body );
-b2Transform b2GetBodyTransform( b2World* world, int bodyId );
+b2WorldTransform b2GetBodyTransformQuick( b2World* world, b2Body* body );
+b2WorldTransform b2GetBodyTransform( b2World* world, int bodyId );
 
 // Create a b2BodyId from a raw id.
 b2BodyId b2MakeBodyId( b2World* world, int bodyId );
 
 bool b2ShouldBodiesCollide( b2World* world, b2Body* bodyA, b2Body* bodyB );
 
-b2BodySim* b2GetBodySim( b2World* world, b2Body* body );
-b2BodyState* b2GetBodyState( b2World* world, b2Body* body );
-void b2RemoveBodySim( b2Array( b2BodySim )* bodySims, b2Array( b2Body )* bodies, int localIndex );
+void b2RefreshBodyContactIndices( b2World* world, b2Body* body );
 
-// careful calling this because it can invalidate body, state, joint, and contact pointers
+// Careful calling this because it can invalidate body, state, joint, and contact pointers.
 bool b2WakeBody( b2World* world, b2Body* body );
 
 void b2UpdateBodyMassData( b2World* world, b2Body* body );
+void b2SyncBodyFlags( b2World* world, b2Body* body );
 
-static inline b2Sweep b2MakeSweep( const b2BodySim* bodySim )
+// Build a sweep relative to a base position so continuous collision keeps float precision far
+// from the origin. The base cancels out of the relative motion the TOI actually solves.
+static inline b2Sweep b2MakeRelativeSweep( const b2BodySim* bodySim, b2Pos base )
 {
 	b2Sweep s;
-	s.c1 = bodySim->center0;
-	s.c2 = bodySim->center;
+	s.c1 = b2SubPos( bodySim->center0, base );
+	s.c2 = b2SubPos( bodySim->center, base );
 	s.q1 = bodySim->rotation0;
 	s.q2 = bodySim->transform.q;
 	s.localCenter = bodySim->localCenter;
 	return s;
+}
+
+static inline b2BodySim* b2GetBodySim( b2World* world, b2Body* body )
+{
+	b2SolverSet* set = b2Array_Get( world->solverSets, body->setIndex );
+	b2BodySim* bodySim = b2Array_Get( set->bodySims, body->localIndex );
+	return bodySim;
+}
+
+static inline b2BodyState* b2GetBodyState( b2World* world, b2Body* body )
+{
+	if ( body->setIndex == b2_awakeSet )
+	{
+		b2SolverSet* set = b2Array_Get( world->solverSets, b2_awakeSet );
+		return b2Array_Get( set->bodyStates, body->localIndex );
+	}
+
+	return NULL;
+}
+
+// This encodes the body sim index for storage in the contact sim. This helps
+// avoid a lookup and cache miss in the narrow phase.
+static inline int b2EncodeBodySimIndex( const b2Body* body )
+{
+	if ( body->setIndex == b2_awakeSet )
+	{
+		return body->localIndex;
+	}
+
+	if ( body->setIndex == b2_staticSet )
+	{
+		return -( body->localIndex + 2 );
+	}
+
+	return B2_NULL_INDEX;
+}
+
+static inline bool b2IsStaticSimIndex( int encodedBodySimIndex )
+{
+	return encodedBodySimIndex < B2_NULL_INDEX;
+}
+
+// In the contact solver a static body sim is expected to have null index.
+static inline int b2DecodeAwakeIndex( int encodedBodySimIndex )
+{
+	return encodedBodySimIndex >= 0 ? encodedBodySimIndex : B2_NULL_INDEX;
+}
+
+// When a body goes to sleep the contact sim has a null index for it. This
+// also handles the case where the body is static and has an encoded
+// sim index of -2 or less.
+static inline int b2SleepBodySimIndex( int encodedIndex )
+{
+	return encodedIndex >= 0 ? B2_NULL_INDEX : encodedIndex;
 }

@@ -970,7 +970,7 @@ public:
 			uint64_t ticks = b2GetTicks();
 
 			// This will wake the island
-			b2DestroyJoint( jointId, true );
+			b2DestroyJoint( jointId);
 			m_wakeTotal += b2GetMillisecondsAndReset( &ticks );
 
 			// Put the island back to sleep. It must be split because a constraint was removed.
@@ -1133,7 +1133,7 @@ public:
 					}
 
 					// All shapes have been added so I can efficiently compute the mass properties.
-					b2Body_ApplyMassFromShapes( bodyId );
+					b2Body_UpdateMassFromShapes( bodyId );
 				}
 			}
 		}
@@ -1192,7 +1192,7 @@ public:
 		}
 
 		// All shapes have been added so I can efficiently compute the mass properties.
-		b2Body_ApplyMassFromShapes( bodyId );
+		b2Body_UpdateMassFromShapes( bodyId );
 	}
 
 	static Sample* Create( SampleContext* context )
@@ -1427,7 +1427,7 @@ public:
 		OverlapResult* result = (OverlapResult*)context;
 		if ( result->count < 32 )
 		{
-			b2AABB aabb = b2Shape_GetAABB( shapeId );
+			b2AABB aabb = b2Body_ComputeBounds( b2Shape_GetBody( shapeId ) );
 			result->points[result->count] = b2AABB_Center( aabb );
 			result->count += 1;
 		}
@@ -1496,7 +1496,7 @@ public:
 				b2Vec2 translation = m_translations[i];
 
 				CastResult result;
-				b2TreeStats traversalResult = b2World_CastShape( m_worldId, &proxy, translation, filter, CastCallback, &result );
+				b2TreeStats traversalResult = b2World_CastShape( m_worldId, b2Pos_zero, &proxy, translation, filter, CastCallback, &result );
 
 				if ( i == m_drawIndex )
 				{
@@ -1538,7 +1538,7 @@ public:
 				b2AABB aabb = { origin - extent, origin + extent };
 
 				result.count = 0;
-				b2TreeStats traversalResult = b2World_OverlapAABB( m_worldId, aabb, filter, OverlapCallback, &result );
+				b2TreeStats traversalResult = b2World_OverlapAABB( m_worldId, b2Pos_zero, aabb, filter, OverlapCallback, &result );
 
 				if ( i == m_drawIndex )
 				{
@@ -1770,9 +1770,8 @@ public:
 			for ( int i = 0; i < m_count; ++i )
 			{
 				b2SimplexCache cache = {};
-				input.transformA = m_transformAs[i];
-				input.transformB = m_transformBs[i];
-				m_outputs[i] = b2ShapeDistance( &input, &cache, nullptr, 0 );
+				input.transform = b2InvMulTransforms( m_transformAs[i], m_transformBs[i] );
+				m_outputs[i] = b2ComputeShapeDistance( &input, &cache, nullptr, 0 );
 				totalIterations += m_outputs[i].iterations;
 			}
 

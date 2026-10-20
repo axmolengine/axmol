@@ -1,15 +1,18 @@
 // SPDX-FileCopyrightText: 2026 Erin Catto
 // SPDX-License-Identifier: MIT
 
-#include "atomic.h"
-#include "core.h"
 #include "scheduler.h"
+
+#include "core.h"
+#include "platform.h"
 
 #include "box2d/base.h"
 #include "box2d/constants.h"
 
 #include <stdio.h>
 #include <string.h>
+
+#define B2_SCHEDULER_SPIN_MILLISECONDS 0.05f
 
 enum b2SchedulerTaskStatus
 {
@@ -21,7 +24,7 @@ enum b2SchedulerTaskStatus
 
 typedef struct b2SchedulerTask
 {
-	b2TaskCallback* callback;
+	b2TaskCallbackFcn* callback;
 	void* taskContext;
 	b2AtomicInt status;
 } b2SchedulerTask;
@@ -47,8 +50,61 @@ typedef struct b2Scheduler
 	b2AtomicInt nextSlot;
 
 	b2Semaphore* taskSemaphore;
+	b2AtomicInt sleeperCount;
 	b2AtomicInt shutdown;
 } b2Scheduler;
+
+static bool b2SchedulerHasPending( b2Scheduler* scheduler )
+{
+	int taskCount = b2AtomicLoadInt( &scheduler->nextSlot );
+	for ( int t = 0; t < taskCount; ++t )
+	{
+		if ( b2AtomicLoadInt( &scheduler->tasks[t].status ) == b2_schedulerPending )
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+static bool b2SchedulerSpin( b2Scheduler* scheduler )
+{
+	uint64_t ticks = b2GetTicks();
+	while ( true )
+	{
+		if ( b2SchedulerHasPending( scheduler ) || b2AtomicLoadInt( &scheduler->shutdown ) != 0 )
+		{
+			return true;
+		}
+
+		if ( b2GetMilliseconds( ticks ) >= B2_SCHEDULER_SPIN_MILLISECONDS )
+		{
+			return false;
+		}
+
+		for ( int i = 0; i < 8; ++i )
+		{
+			b2Pause();
+		}
+	}
+}
+
+static bool b2SchedulerTakeSleeper( b2Scheduler* scheduler )
+{
+	int sleeperCount = b2AtomicLoadInt( &scheduler->sleeperCount );
+	while ( sleeperCount > 0 )
+	{
+		if ( b2AtomicCompareExchangeInt( &scheduler->sleeperCount, sleeperCount, sleeperCount - 1 ) )
+		{
+			return true;
+		}
+
+		sleeperCount = b2AtomicLoadInt( &scheduler->sleeperCount );
+	}
+
+	return false;
+}
 
 // Try to claim and execute one pending task.
 // Returns true if work was performed, false otherwise.
@@ -85,17 +141,30 @@ static void b2SchedulerWorkerMain( void* context )
 
 	while ( true )
 	{
-		b2WaitSemaphore( scheduler->taskSemaphore );
+		// Claim and execute all available work
+		while ( b2SchedulerExecuteOne( scheduler ) )
+		{
+		}
 
 		if ( b2AtomicLoadInt( &scheduler->shutdown ) != 0 )
 		{
 			break;
 		}
 
-		// Claim and execute all available work
-		while ( b2SchedulerExecuteOne( scheduler ) )
+		if ( b2SchedulerSpin( scheduler ) )
 		{
+			continue;
 		}
+
+		b2AtomicFetchAddInt( &scheduler->sleeperCount, 1 );
+
+		if ( b2SchedulerHasPending( scheduler ) || b2AtomicLoadInt( &scheduler->shutdown ) != 0 )
+		{
+			b2SchedulerTakeSleeper( scheduler );
+			continue;
+		}
+
+		b2WaitSemaphore( scheduler->taskSemaphore );
 	}
 }
 
@@ -110,6 +179,7 @@ b2Scheduler* b2CreateScheduler( int workerCount )
 	int threadCount = workerCount - 1;
 	scheduler->threadCount = threadCount;
 	scheduler->taskSemaphore = b2CreateSemaphore( 0 );
+	b2AtomicStoreInt( &scheduler->sleeperCount, 0 );
 	b2AtomicStoreInt( &scheduler->shutdown, 0 );
 	b2AtomicStoreInt( &scheduler->nextSlot, 0 );
 
@@ -153,7 +223,7 @@ void b2ResetScheduler( b2Scheduler* scheduler )
 	b2AtomicStoreInt( &scheduler->nextSlot, 0 );
 }
 
-void* b2SchedulerEnqueueTask( b2TaskCallback* task, void* taskContext, void* userContext )
+void* b2SchedulerEnqueueTask( b2TaskCallbackFcn* task, void* taskContext, void* userContext )
 {
 	b2Scheduler* scheduler = userContext;
 
@@ -168,7 +238,10 @@ void* b2SchedulerEnqueueTask( b2TaskCallback* task, void* taskContext, void* use
 	b2AtomicStoreInt( &schedulerTask->status, b2_schedulerPending );
 
 	// One wake per enqueue is enough: at most one worker picks up each task.
-	b2SignalSemaphore( scheduler->taskSemaphore );
+	if ( b2SchedulerTakeSleeper( scheduler ) )
+	{
+		b2SignalSemaphore( scheduler->taskSemaphore );
+	}
 
 	return schedulerTask;
 }

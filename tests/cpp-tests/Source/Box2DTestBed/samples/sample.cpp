@@ -74,10 +74,10 @@ static int jsoneq( const char* json, jsmntok_t* tok, const char* s )
 	return -1;
 }
 
-void DrawPolygonFcn( const b2Vec2* vertices, int vertexCount, b2HexColor color, void* context )
+void DrawPolygonFcn( b2WorldTransform transform, const b2Vec2* vertices, int vertexCount, b2HexColor color, void* context )
 {
 	SampleContext* sampleContext = static_cast<SampleContext*>( context );
-	DrawPolygon( sampleContext->draw, vertices, vertexCount, color );
+	DrawSolidPolygon( sampleContext->draw, transform, vertices, vertexCount, 0.0f, color );
 }
 
 void DrawSolidPolygonFcn( b2Transform transform, const b2Vec2* vertices, int vertexCount, float radius, b2HexColor color,
@@ -93,9 +93,11 @@ void DrawCircleFcn( b2Vec2 center, float radius, b2HexColor color, void* context
 	DrawCircle( sampleContext->draw, center, radius, color );
 }
 
-void DrawSolidCircleFcn( b2Transform transform, float radius, b2HexColor color, void* context )
+void DrawSolidCircleFcn( b2WorldTransform transform, b2Vec2 center, float radius, b2HexColor color, void* context )
 {
 	SampleContext* sampleContext = static_cast<SampleContext*>( context );
+	transform.p = center;
+	transform.p = center;
 	DrawSolidCircle( sampleContext->draw, transform, radius, color );
 }
 
@@ -341,7 +343,7 @@ void Sample::MouseDown( b2Vec2 p, int button, int mod )
 
 		// Query the world for overlapping shapes.
 		QueryContext queryContext = { p, b2_nullBodyId };
-		b2World_OverlapAABB( m_worldId, box, b2DefaultQueryFilter(), QueryCallback, &queryContext );
+		b2World_OverlapAABB( m_worldId, b2Pos_zero, box, b2DefaultQueryFilter(), QueryCallback, &queryContext );
 
 		if ( B2_IS_NON_NULL( queryContext.bodyId ) )
 		{
@@ -380,7 +382,7 @@ void Sample::MouseUp( b2Vec2 p, int button )
 {
 	if ( B2_IS_NON_NULL( m_mouseJointId ) && button == GLFW_MOUSE_BUTTON_1 )
 	{
-		b2DestroyJoint( m_mouseJointId, true );
+		b2DestroyJoint( m_mouseJointId);
 		m_mouseJointId = b2_nullJointId;
 
 		b2DestroyBody( m_mouseBodyId );
@@ -535,7 +537,7 @@ void Sample::Step()
 		m_totalProfile.solveImpulses += p.solveImpulses;
 		m_totalProfile.integratePositions += p.integratePositions;
 		m_totalProfile.relaxImpulses += p.relaxImpulses;
-		m_totalProfile.applyRestitution += p.applyRestitution;
+		m_totalProfile.restitution += p.restitution;
 		m_totalProfile.storeImpulses += p.storeImpulses;
 		m_totalProfile.transforms += p.transforms;
 		m_totalProfile.splitIslands += p.splitIslands;
@@ -578,7 +580,7 @@ void Sample::UpdateGui()
 			histories[9][i] = p.solveImpulses;
 			histories[10][i] = p.integratePositions;
 			histories[11][i] = p.relaxImpulses;
-			histories[12][i] = p.applyRestitution;
+			histories[12][i] = p.restitution;
 			histories[13][i] = p.storeImpulses;
 			histories[14][i] = p.splitIslands;
 			histories[15][i] = p.transforms;
@@ -604,7 +606,7 @@ void Sample::UpdateGui()
 			cur.solveImpulses,
 			cur.integratePositions,
 			cur.relaxImpulses,
-			cur.applyRestitution,
+			cur.restitution,
 			cur.storeImpulses,
 			cur.splitIslands,
 			cur.transforms,
@@ -632,7 +634,7 @@ void Sample::UpdateGui()
 			avg[9] = scale * m_totalProfile.solveImpulses;
 			avg[10] = scale * m_totalProfile.integratePositions;
 			avg[11] = scale * m_totalProfile.relaxImpulses;
-			avg[12] = scale * m_totalProfile.applyRestitution;
+			avg[12] = scale * m_totalProfile.restitution;
 			avg[13] = scale * m_totalProfile.storeImpulses;
 			avg[14] = scale * m_totalProfile.splitIslands;
 			avg[15] = scale * m_totalProfile.transforms;

@@ -71,7 +71,7 @@ public:
 		b2ChainDef worldChainDef = b2DefaultChainDef();
 		worldChainDef.userData = nullptr;
 		worldChainDef.points = points;
-		worldChainDef.count = 4;
+		worldChainDef.pointCount = 4;
 		worldChainDef.filter.categoryBits = 0x1;
 		worldChainDef.filter.maskBits = 0x1;
 		worldChainDef.filter.groupIndex = 0;
@@ -213,7 +213,7 @@ public:
 		CastContext_Single context;
 		context.startPos = start;
 		context.translation = { translation.x, translation.y };
-		b2World_CastShape( m_worldId, &transformedShape, translation, filter, &b2CastResult_Closest, &context );
+		b2World_CastShape( m_worldId, b2Pos_zero, &transformedShape, translation, filter, &b2CastResult_Closest, &context );
 
 		if ( context.hit )
 		{

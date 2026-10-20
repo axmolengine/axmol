@@ -312,8 +312,7 @@ public:
 		b2DistanceInput input;
 		input.proxyA = m_proxyA;
 		input.proxyB = m_proxyB;
-		input.transformA = b2Transform_identity;
-		input.transformB = m_transform;
+		input.transform = m_transform;
 		input.useRadii = m_radiusA > 0.0f || m_radiusB > 0.0f;
 
 		if ( m_useCache == false )
@@ -321,7 +320,7 @@ public:
 			m_cache.count = 0;
 		}
 
-		b2DistanceOutput output = b2ShapeDistance( &input, &m_cache, m_simplexes, m_simplexCapacity );
+		b2DistanceOutput output = b2ComputeShapeDistance( &input, &m_cache, m_simplexes, m_simplexCapacity );
 
 		m_simplexCount = output.simplexCount;
 
@@ -487,7 +486,7 @@ public:
 
 		m_rowCount = m_isDebug ? 100 : 1000;
 		m_columnCount = m_isDebug ? 100 : 1000;
-		memset( &m_tree, 0, sizeof( m_tree ) );
+		m_tree = nullptr;
 		BuildTree();
 		m_timeStamp = 0;
 		m_updateType = Update_Incremental;
@@ -503,12 +502,12 @@ public:
 	{
 		free( m_proxies );
 		free( m_moveBuffer );
-		b2DynamicTree_Destroy( &m_tree );
+		if (m_tree) b2DestroyDynamicTree( m_tree );
 	}
 
 	void BuildTree()
 	{
-		b2DynamicTree_Destroy( &m_tree );
+		if (m_tree) b2DestroyDynamicTree( m_tree );
 		free( m_proxies );
 		free( m_moveBuffer );
 
@@ -521,7 +520,7 @@ public:
 
 		float y = -4.0f;
 
-		m_tree = b2DynamicTree_Create( 16 );
+		m_tree = b2CreateDynamicTree( 16 );
 
 		const b2Vec2 aabbMargin = { 0.1f, 0.1f };
 
@@ -556,7 +555,7 @@ public:
 					p->fatBox.lowerBound = b2Sub( p->box.lowerBound, aabbMargin );
 					p->fatBox.upperBound = b2Add( p->box.upperBound, aabbMargin );
 
-					p->proxyId = b2DynamicTree_CreateProxy( &m_tree, p->fatBox, B2_DEFAULT_CATEGORY_BITS, m_proxyCount );
+					p->proxyId = b2CreateTreeProxy( m_tree, p->fatBox, B2_DEFAULT_CATEGORY_BITS, m_proxyCount );
 					p->rayStamp = -1;
 					p->queryStamp = -1;
 					p->moved = false;
@@ -615,24 +614,6 @@ public:
 		{
 		}
 
-		if ( ImGui::RadioButton( "Incremental", m_updateType == Update_Incremental ) )
-		{
-			m_updateType = Update_Incremental;
-			changed = true;
-		}
-
-		if ( ImGui::RadioButton( "Full Rebuild", m_updateType == Update_FullRebuild ) )
-		{
-			m_updateType = Update_FullRebuild;
-			changed = true;
-		}
-
-		if ( ImGui::RadioButton( "Partial Rebuild", m_updateType == Update_PartialRebuild ) )
-		{
-			m_updateType = Update_PartialRebuild;
-			changed = true;
-		}
-
 		ImGui::Separator();
 
 		ImGui::Text( "mouse button 1: ray cast" );
@@ -685,7 +666,7 @@ public:
 		if ( m_queryDrag )
 		{
 			b2AABB box = { b2Min( m_startPoint, m_endPoint ), b2Max( m_startPoint, m_endPoint ) };
-			b2DynamicTree_Query( &m_tree, box, B2_DEFAULT_MASK_BITS, QueryCallback, this );
+			b2DynamicTree_OverlapAABB( m_tree, box, B2_DEFAULT_MASK_BITS, QueryCallback, this );
 
 			DrawBounds( m_draw, box, b2_colorWhite );
 		}
@@ -696,7 +677,7 @@ public:
 		if ( m_rayDrag )
 		{
 			b2RayCastInput input = { m_startPoint, b2Sub( m_endPoint, m_startPoint ), 1.0f };
-			b2TreeStats result = b2DynamicTree_RayCast( &m_tree, &input, B2_DEFAULT_MASK_BITS, RayCallback, this );
+			b2TreeStats result = b2DynamicTree_CastRay( m_tree, &input, B2_DEFAULT_MASK_BITS, RayCallback, this );
 
 			DrawLine( m_draw, m_startPoint, m_endPoint, b2_colorWhite );
 			DrawPoint( m_draw, m_startPoint, 5.0f, b2_colorGreen );
@@ -764,7 +745,7 @@ public:
 					Proxy* p = m_proxies + i;
 					if ( p->moved )
 					{
-						b2DynamicTree_MoveProxy( &m_tree, p->proxyId, p->fatBox );
+						b2DynamicTree_MoveProxy( m_tree, p->proxyId, p->fatBox );
 					}
 				}
 				float ms = b2GetMilliseconds( ticks );
@@ -779,12 +760,12 @@ public:
 					Proxy* p = m_proxies + i;
 					if ( p->moved )
 					{
-						b2DynamicTree_EnlargeProxy( &m_tree, p->proxyId, p->fatBox );
+						b2DynamicTree_MoveProxy( m_tree, p->proxyId, p->fatBox );
 					}
 				}
 
 				uint64_t ticks = b2GetTicks();
-				int boxCount = b2DynamicTree_Rebuild( &m_tree, true );
+				int boxCount = 0;
 				float ms = b2GetMilliseconds( ticks );
 				DrawTextLine( "full build %d : %.3f ms", boxCount, ms );
 			}
@@ -797,12 +778,12 @@ public:
 					Proxy* p = m_proxies + i;
 					if ( p->moved )
 					{
-						b2DynamicTree_EnlargeProxy( &m_tree, p->proxyId, p->fatBox );
+						b2DynamicTree_MoveProxy( m_tree, p->proxyId, p->fatBox );
 					}
 				}
 
 				uint64_t ticks = b2GetTicks();
-				int boxCount = b2DynamicTree_Rebuild( &m_tree, false );
+				int boxCount = 0;
 				float ms = b2GetMilliseconds( ticks );
 				DrawTextLine( "partial rebuild %d : %.3f ms", boxCount, ms );
 			}
@@ -812,13 +793,13 @@ public:
 				break;
 		}
 
-		int height = b2DynamicTree_GetHeight( &m_tree );
-		float areaRatio = b2DynamicTree_GetAreaRatio( &m_tree );
+		int height = b2DynamicTree_GetHeight( m_tree );
+		float areaRatio = b2DynamicTree_GetAreaRatio( m_tree );
 
 		int hmin = (int)( ceilf( logf( (float)m_proxyCount ) / logf( 2.0f ) - 1.0f ) );
 		DrawTextLine( "proxies = %d, height = %d, hmin = %d, area ratio = %.1f", m_proxyCount, height, hmin, areaRatio );
 
-		b2DynamicTree_Validate( &m_tree );
+		b2DynamicTree_Validate( m_tree );
 
 		m_timeStamp += 1;
 	}
@@ -828,7 +809,7 @@ public:
 		return new DynamicTree( context );
 	}
 
-	b2DynamicTree m_tree;
+	b2DynamicTree* m_tree;
 	int m_rowCount, m_columnCount;
 	Proxy* m_proxies;
 	int* m_moveBuffer;
@@ -1066,7 +1047,7 @@ public:
 			b2Vec2 translation = b2InvRotateVector( transform.q, b2Sub( m_rayEnd, m_rayStart ) );
 			b2RayCastInput input = { start, translation, maxFraction };
 
-			b2CastOutput localOutput = b2RayCastCircle( &m_circle, &input );
+			b2CastOutput localOutput = b2CastRayCircle( &m_circle, &input );
 			if ( localOutput.hit )
 			{
 				output = localOutput;
@@ -1089,7 +1070,7 @@ public:
 			b2Vec2 translation = b2InvRotateVector( transform.q, b2Sub( m_rayEnd, m_rayStart ) );
 			b2RayCastInput input = { start, translation, maxFraction };
 
-			b2CastOutput localOutput = b2RayCastCapsule( &m_capsule, &input );
+			b2CastOutput localOutput = b2CastRayCapsule( &m_capsule, &input );
 			if ( localOutput.hit )
 			{
 				output = localOutput;
@@ -1110,7 +1091,7 @@ public:
 			b2Vec2 translation = b2InvRotateVector( transform.q, b2Sub( m_rayEnd, m_rayStart ) );
 			b2RayCastInput input = { start, translation, maxFraction };
 
-			b2CastOutput localOutput = b2RayCastPolygon( &m_box, &input );
+			b2CastOutput localOutput = b2CastRayPolygon( &m_box, &input );
 			if ( localOutput.hit )
 			{
 				output = localOutput;
@@ -1131,7 +1112,7 @@ public:
 			b2Vec2 translation = b2InvRotateVector( transform.q, b2Sub( m_rayEnd, m_rayStart ) );
 			b2RayCastInput input = { start, translation, maxFraction };
 
-			b2CastOutput localOutput = b2RayCastPolygon( &m_triangle, &input );
+			b2CastOutput localOutput = b2CastRayPolygon( &m_triangle, &input );
 			if ( localOutput.hit )
 			{
 				output = localOutput;
@@ -1155,7 +1136,7 @@ public:
 			b2Vec2 translation = b2InvRotateVector( transform.q, b2Sub( m_rayEnd, m_rayStart ) );
 			b2RayCastInput input = { start, translation, maxFraction };
 
-			b2CastOutput localOutput = b2RayCastSegment( &m_segment, &input, false );
+			b2CastOutput localOutput = b2CastRaySegment( &m_segment, &input, false );
 			if ( localOutput.hit )
 			{
 				output = localOutput;
@@ -1527,7 +1508,7 @@ public:
 			b2Vec2 points[4] = { { 1.0f, 0.0f }, { -1.0f, 0.0f }, { -1.0f, -1.0f }, { 1.0f, -1.0f } };
 			b2ChainDef chainDef = b2DefaultChainDef();
 			chainDef.points = points;
-			chainDef.count = 4;
+			chainDef.pointCount = 4;
 			chainDef.isLoop = true;
 			b2CreateChain( m_bodyIds[m_bodyIndex], &chainDef );
 		}
@@ -1732,13 +1713,13 @@ public:
 					break;
 			}
 
-			b2CastResultFcn* functions[] = {
+			b2CastResultCallbackFcn* functions[] = {
 				RayCastAnyCallback,
 				RayCastClosestCallback,
 				RayCastMultipleCallback,
 				RayCastSortedCallback,
 			};
-			b2CastResultFcn* modeFcn = functions[m_mode];
+			b2CastResultCallbackFcn* modeFcn = functions[m_mode];
 
 			CastContext context = {};
 
@@ -1773,7 +1754,7 @@ public:
 					proxy = b2MakeProxy( box.vertices, box.count, box.radius );
 				}
 
-				b2World_CastShape( m_worldId, &proxy, rayTranslation, b2DefaultQueryFilter(), modeFcn, &context );
+				b2World_CastShape( m_worldId, b2Pos_zero, &proxy, rayTranslation, b2DefaultQueryFilter(), modeFcn, &context );
 			}
 
 			if ( context.count > 0 )
@@ -2184,7 +2165,7 @@ public:
 			DrawPolygon( m_draw, box.vertices, box.count, b2_colorWhite );
 		}
 
-		b2World_OverlapShape( m_worldId, &proxy, b2DefaultQueryFilter(), OverlapResultFcn, this );
+		b2World_OverlapShape( m_worldId, b2Pos_zero, &proxy, b2DefaultQueryFilter(), OverlapResultFcn, this );
 
 		if ( B2_IS_NON_NULL( m_bodyIds[m_ignoreIndex] ) )
 		{
@@ -2374,7 +2355,7 @@ public:
 		}
 	}
 
-	void DrawManifold( const b2Manifold* manifold, b2Vec2 origin1, b2Vec2 origin2 )
+	void DrawManifold( const b2LocalManifold* manifold, b2Vec2 origin1, b2Vec2 origin2 )
 	{
 		if ( m_showCount )
 		{
@@ -2384,16 +2365,16 @@ public:
 
 		for ( int i = 0; i < manifold->pointCount; ++i )
 		{
-			const b2ManifoldPoint* mp = manifold->points + i;
+			const b2LocalManifoldPoint* mp = manifold->points + i;
 
-			b2Vec2 p1 = mp->clipPoint;
-			b2Vec2 p2 = b2MulAdd( p1, 0.5f, manifold->normal );
+			b2Vec2 p1 = mp->point;
+			b2Vec2 p2 = b2MulAdd( p1, 0.5f, b2Vec2_zero );
 			DrawLine( m_draw, p1, p2, b2_colorViolet );
 
 			if ( m_showAnchors )
 			{
-				DrawPoint( m_draw, b2Add( origin1, mp->anchorA ), 5.0f, b2_colorRed );
-				DrawPoint( m_draw, b2Add( origin2, mp->anchorB ), 5.0f, b2_colorGreen );
+				DrawPoint( m_draw, b2Add( origin1, mp->point ), 5.0f, b2_colorRed );
+				DrawPoint( m_draw, b2Add( origin2, mp->point ), 5.0f, b2_colorGreen );
 			}
 			else
 			{
@@ -2441,7 +2422,7 @@ public:
 			b2Transform transform1 = { offset, b2Rot_identity };
 			b2Transform transform2 = { b2Add( m_transform.p, offset ), m_transform.q };
 
-			b2Manifold m = b2CollideCircles( &circle1, transform1, &circle2, transform2 );
+			b2LocalManifold m = b2CollideCircles( &circle1, &circle2, b2InvMulTransforms( transform1, transform2 ) );
 
 			b2Vec2 center1 = b2TransformPoint( transform1, circle1.center );
 			DrawSolidCircle( m_draw, { center1, transform1.q }, circle1.radius, color1 );
@@ -2461,7 +2442,7 @@ public:
 			b2Transform transform1 = { offset, b2Rot_identity };
 			b2Transform transform2 = { b2Add( m_transform.p, offset ), m_transform.q };
 
-			b2Manifold m = b2CollideCapsuleAndCircle( &capsule, transform1, &circle, transform2 );
+			b2LocalManifold m = b2CollideCapsuleAndCircle( &capsule, &circle, b2InvMulTransforms( transform1, transform2 ) );
 
 			b2Vec2 v1 = b2TransformPoint( transform1, capsule.center1 );
 			b2Vec2 v2 = b2TransformPoint( transform1, capsule.center2 );
@@ -2483,7 +2464,7 @@ public:
 			b2Transform transform1 = { offset, b2Rot_identity };
 			b2Transform transform2 = { b2Add( m_transform.p, offset ), m_transform.q };
 
-			b2Manifold m = b2CollideSegmentAndCircle( &segment, transform1, &circle, transform2 );
+			b2LocalManifold m = b2CollideSegmentAndCircle( &segment, &circle, b2InvMulTransforms( transform1, transform2 ) );
 
 			b2Vec2 p1 = b2TransformPoint( transform1, segment.point1 );
 			b2Vec2 p2 = b2TransformPoint( transform1, segment.point2 );
@@ -2506,7 +2487,7 @@ public:
 			b2Transform transform1 = { offset, b2Rot_identity };
 			b2Transform transform2 = { b2Add( m_transform.p, offset ), m_transform.q };
 
-			b2Manifold m = b2CollidePolygonAndCircle( &box, transform1, &circle, transform2 );
+			b2LocalManifold m = b2CollidePolygonAndCircle( &box, &circle, b2InvMulTransforms( transform1, transform2 ) );
 
 			DrawSolidPolygon( m_draw, transform1, box.vertices, box.count, m_round, color1 );
 
@@ -2526,7 +2507,7 @@ public:
 			b2Transform transform1 = { offset, b2Rot_identity };
 			b2Transform transform2 = { b2Add( m_transform.p, offset ), m_transform.q };
 
-			b2Manifold m = b2CollideCapsules( &capsule1, transform1, &capsule2, transform2 );
+			b2LocalManifold m = b2CollideCapsules( &capsule1, &capsule2, b2InvMulTransforms( transform1, transform2 ) );
 
 			b2Vec2 v1 = b2TransformPoint( transform1, capsule1.center1 );
 			b2Vec2 v2 = b2TransformPoint( transform1, capsule1.center2 );
@@ -2549,7 +2530,7 @@ public:
 			b2Transform transform1 = { offset, b2Rot_identity };
 			b2Transform transform2 = { b2Add( m_transform.p, offset ), m_transform.q };
 
-			b2Manifold m = b2CollidePolygonAndCapsule( &box, transform1, &capsule, transform2 );
+			b2LocalManifold m = b2CollidePolygonAndCapsule( &box, &capsule, b2InvMulTransforms( transform1, transform2 ) );
 
 			DrawSolidPolygon( m_draw, transform1, box.vertices, box.count, box.radius, color1 );
 
@@ -2570,7 +2551,7 @@ public:
 			b2Transform transform1 = { offset, b2Rot_identity };
 			b2Transform transform2 = { b2Add( m_transform.p, offset ), m_transform.q };
 
-			b2Manifold m = b2CollideSegmentAndCapsule( &segment, transform1, &capsule, transform2 );
+			b2LocalManifold m = b2CollideSegmentAndCapsule( &segment, &capsule, b2InvMulTransforms( transform1, transform2 ) );
 
 			b2Vec2 p1 = b2TransformPoint( transform1, segment.point1 );
 			b2Vec2 p2 = b2TransformPoint( transform1, segment.point2 );
@@ -2597,7 +2578,7 @@ public:
 			b2Transform transform1 = { offset, b2Rot_identity };
 			b2Transform transform2 = { b2Add( m_transform.p, offset ), m_transform.q };
 
-			b2Manifold m = b2CollidePolygons( &box1, transform1, &box, transform2 );
+			b2LocalManifold m = b2CollidePolygons( &box1, &box, b2InvMulTransforms( transform1, transform2 ) );
 
 			DrawSolidPolygon( m_draw, transform1, box1.vertices, box1.count, box1.radius, color1 );
 			DrawSolidPolygon( m_draw, transform2, box.vertices, box.count, box.radius, color2 );
@@ -2616,7 +2597,7 @@ public:
 			b2Transform transform2 = { b2Add( m_transform.p, offset ), m_transform.q };
 			// b2Transform transform2 = {b2Add({0.0f, -0.1f}, offset), {0.0f, 1.0f}};
 
-			b2Manifold m = b2CollidePolygons( &box1, transform1, &box, transform2 );
+			b2LocalManifold m = b2CollidePolygons( &box1, &box, b2InvMulTransforms( transform1, transform2 ) );
 
 			DrawSolidPolygon( m_draw, transform1, box1.vertices, box1.count, box1.radius, color1 );
 			DrawSolidPolygon( m_draw, transform2, box.vertices, box.count, box.radius, color2 );
@@ -2636,7 +2617,7 @@ public:
 			b2Transform transform2 = { b2Add( m_transform.p, offset ), m_transform.q };
 			// b2Transform transform2 = {b2Add({0.0f, -0.1f}, offset), {0.0f, 1.0f}};
 
-			b2Manifold m = b2CollidePolygons( &box, transform1, &rox, transform2 );
+			b2LocalManifold m = b2CollidePolygons( &box, &rox, b2InvMulTransforms( transform1, transform2 ) );
 
 			DrawSolidPolygon( m_draw, transform1, box.vertices, box.count, box.radius, color1 );
 			DrawSolidPolygon( m_draw, transform2, rox.vertices, rox.count, rox.radius, color2 );
@@ -2656,7 +2637,7 @@ public:
 			// b2Transform transform1 = {{6.48024225f, 2.07872653f}, {-0.938356698f, 0.345668465f}};
 			// b2Transform transform2 = {{5.52862263f, 2.51146317f}, {-0.859374702f, -0.511346340f}};
 
-			b2Manifold m = b2CollidePolygons( &rox, transform1, &rox, transform2 );
+			b2LocalManifold m = b2CollidePolygons( &rox, &rox, b2InvMulTransforms( transform1, transform2 ) );
 
 			DrawSolidPolygon( m_draw, transform1, rox.vertices, rox.count, rox.radius, color1 );
 			DrawSolidPolygon( m_draw, transform2, rox.vertices, rox.count, rox.radius, color2 );
@@ -2676,7 +2657,7 @@ public:
 			b2Transform transform2 = { b2Add( m_transform.p, offset ), m_transform.q };
 			// b2Transform transform2 = {b2Add({-1.44583416f, 0.397352695f}, offset), m_transform.q};
 
-			b2Manifold m = b2CollideSegmentAndPolygon( &segment, transform1, &rox, transform2 );
+			b2LocalManifold m = b2CollideSegmentAndPolygon( &segment, &rox, b2InvMulTransforms( transform1, transform2 ) );
 
 			b2Vec2 p1 = b2TransformPoint( transform1, segment.point1 );
 			b2Vec2 p2 = b2TransformPoint( transform1, segment.point2 );
@@ -2697,7 +2678,7 @@ public:
 			b2Transform transform2 = { b2Add( m_transform.p, offset ), m_transform.q };
 			// b2Transform transform2 = {b2Add({0.0f, -0.1f}, offset), {0.0f, 1.0f}};
 
-			b2Manifold m = b2CollidePolygons( &wox, transform1, &wox, transform2 );
+			b2LocalManifold m = b2CollidePolygons( &wox, &wox, b2InvMulTransforms( transform1, transform2 ) );
 
 			DrawSolidPolygon( m_draw, transform1, wox.vertices, wox.count, wox.radius, color1 );
 			DrawSolidPolygon( m_draw, transform1, wox.vertices, wox.count, 0.0f, color1 );
@@ -2724,7 +2705,7 @@ public:
 			b2Transform transform2 = { b2Add( m_transform.p, offset ), m_transform.q };
 			// b2Transform transform2 = {b2Add({0.0f, -0.1f}, offset), {0.0f, 1.0f}};
 
-			b2Manifold m = b2CollidePolygons( &w1, transform1, &w2, transform2 );
+			b2LocalManifold m = b2CollidePolygons( &w1, &w2, b2InvMulTransforms( transform1, transform2 ) );
 
 			DrawSolidPolygon( m_draw, transform1, w1.vertices, w1.count, w1.radius, color1 );
 			DrawSolidPolygon( m_draw, transform1, w1.vertices, w1.count, 0.0f, color1 );
@@ -2749,7 +2730,7 @@ public:
 			b2Transform transform2 = { b2Add( m_transform.p, offset ), m_transform.q };
 			// b2Transform transform2 = {b2Add({0.0f, -0.1f}, offset), {0.0f, 1.0f}};
 
-			b2Manifold m = b2CollidePolygons( &box, transform1, &tri, transform2 );
+			b2LocalManifold m = b2CollidePolygons( &box, &tri, b2InvMulTransforms( transform1, transform2 ) );
 
 			DrawSolidPolygon( m_draw, transform1, box.vertices, box.count, 0.0f, color1 );
 			DrawSolidPolygon( m_draw, transform2, tri.vertices, tri.count, 0.0f, color2 );
@@ -2767,7 +2748,7 @@ public:
 			b2Transform transform1 = { offset, b2Rot_identity };
 			b2Transform transform2 = { b2Add( m_transform.p, offset ), m_transform.q };
 
-			b2Manifold m = b2CollideChainSegmentAndCircle( &segment, transform1, &circle, transform2 );
+			b2LocalManifold m = b2CollideChainSegmentAndCircle( &segment, &circle, b2InvMulTransforms( transform1, transform2 ) );
 
 			b2Vec2 g1 = b2TransformPoint( transform1, segment.ghost1 );
 			b2Vec2 g2 = b2TransformPoint( transform1, segment.ghost2 );
@@ -2799,8 +2780,8 @@ public:
 			b2Transform transform1 = { offset, b2Rot_identity };
 			b2Transform transform2 = { b2Add( m_transform.p, offset ), m_transform.q };
 
-			b2Manifold m1 = b2CollideChainSegmentAndPolygon( &segment1, transform1, &rox, transform2, &m_smgroxCache1 );
-			b2Manifold m2 = b2CollideChainSegmentAndPolygon( &segment2, transform1, &rox, transform2, &m_smgroxCache2 );
+			b2LocalManifold m1 = b2CollideChainSegmentAndPolygon( &segment1, &rox, b2InvMulTransforms( transform1, transform2 ), &m_smgroxCache1 );
+			b2LocalManifold m2 = b2CollideChainSegmentAndPolygon( &segment2, &rox, b2InvMulTransforms( transform1, transform2 ), &m_smgroxCache2 );
 
 			{
 				b2Vec2 g2 = b2TransformPoint( transform1, segment1.ghost2 );
@@ -2840,8 +2821,8 @@ public:
 			b2Transform transform1 = { offset, b2Rot_identity };
 			b2Transform transform2 = { b2Add( m_transform.p, offset ), m_transform.q };
 
-			b2Manifold m1 = b2CollideChainSegmentAndCapsule( &segment1, transform1, &capsule, transform2, &m_smgcapCache1 );
-			b2Manifold m2 = b2CollideChainSegmentAndCapsule( &segment2, transform1, &capsule, transform2, &m_smgcapCache2 );
+			b2LocalManifold m1 = b2CollideChainSegmentAndCapsule( &segment1, &capsule, b2InvMulTransforms( transform1, transform2 ), &m_smgcapCache1 );
+			b2LocalManifold m2 = b2CollideChainSegmentAndCapsule( &segment2, &capsule, b2InvMulTransforms( transform1, transform2 ), &m_smgcapCache2 );
 
 			{
 				b2Vec2 g2 = b2TransformPoint( transform1, segment1.ghost2 );
@@ -3101,7 +3082,7 @@ public:
 		{
 			const b2ManifoldPoint* mp = manifold->points + i;
 
-			b2Vec2 p1 = mp->clipPoint;
+			b2Vec2 p1 = mp->anchorA;
 			b2Vec2 p2 = b2MulAdd( p1, 0.5f, manifold->normal );
 			DrawLine( m_draw, p1, p2, b2_colorWhite );
 
@@ -3128,6 +3109,19 @@ public:
 				DrawWorldString( m_draw, m_camera, p, b2_colorWhite, "%.3f", mp->separation );
 			}
 		}
+	}
+
+	void DrawManifold( const b2LocalManifold* manifold, b2Vec2 originA, b2Vec2 originB )
+	{
+		for ( int i = 0; i < manifold->pointCount; ++i )
+		{
+			const b2LocalManifoldPoint* mp = manifold->points + i;
+			b2Vec2 p1 = b2Add( originA, mp->point );
+			DrawPoint( m_draw, p1, 5.0f, b2_colorGreen );
+			if ( m_showIds ) DrawWorldString( m_draw, m_camera, { p1.x + 0.05f, p1.y - 0.02f }, b2_colorWhite, "0x%04x", mp->id );
+			if ( m_showSeparation ) DrawWorldString( m_draw, m_camera, { p1.x + 0.05f, p1.y + 0.03f }, b2_colorWhite, "%.3f", mp->separation );
+		}
+		(void)originB;
 	}
 
 	void Step() override
@@ -3157,8 +3151,8 @@ public:
 			for ( int i = 0; i < m_count; ++i )
 			{
 				const b2ChainSegment* segment = m_segments + i;
-				b2Manifold m = b2CollideChainSegmentAndCircle( segment, transform1, &circle, transform2 );
-				DrawManifold( &m );
+				b2LocalManifold m = b2CollideChainSegmentAndCircle( segment, &circle, b2InvMulTransforms( transform1, transform2 ) );
+				DrawManifold( &m, transform1.p, transform2.p );
 			}
 		}
 		else if ( m_shapeType == e_boxShape )
@@ -3171,8 +3165,8 @@ public:
 			{
 				const b2ChainSegment* segment = m_segments + i;
 				b2SimplexCache cache = {};
-				b2Manifold m = b2CollideChainSegmentAndPolygon( segment, transform1, &rox, transform2, &cache );
-				DrawManifold( &m );
+				b2LocalManifold m = b2CollideChainSegmentAndPolygon( segment, &rox, b2InvMulTransforms( transform1, transform2 ), &cache );
+				DrawManifold( &m, transform1.p, transform2.p );
 			}
 		}
 	}
@@ -3505,13 +3499,12 @@ public:
 		b2ShapeCastPairInput input = {};
 		input.proxyA = m_proxyA;
 		input.proxyB = m_proxyB;
-		input.transformA = b2Transform_identity;
-		input.transformB = m_transform;
+		input.transform = m_transform;
 		input.translationB = m_translation;
 		input.maxFraction = 1.0f;
 		input.canEncroach = m_encroach;
 
-		b2CastOutput output = b2ShapeCast( &input );
+		b2CastOutput output = b2CastShape( &input );
 
 		b2Transform transform;
 		transform.q = m_transform.q;
@@ -3520,12 +3513,11 @@ public:
 		b2DistanceInput distanceInput;
 		distanceInput.proxyA = m_proxyA;
 		distanceInput.proxyB = m_proxyB;
-		distanceInput.transformA = b2Transform_identity;
-		distanceInput.transformB = transform;
+		distanceInput.transform = transform;
 		distanceInput.useRadii = false;
 		b2SimplexCache distanceCache;
 		distanceCache.count = 0;
-		b2DistanceOutput distanceOutput = b2ShapeDistance( &distanceInput, &distanceCache, nullptr, 0 );
+		b2DistanceOutput distanceOutput = b2ComputeShapeDistance( &distanceInput, &distanceCache, nullptr, 0 );
 
 		DrawTextLine( "hit = %s, iterations = %d, fraction = %g, distance = %g", output.hit ? "true" : "false", output.iterations,
 					  output.fraction, distanceOutput.distance );
@@ -3647,7 +3639,7 @@ public:
 		input.sweepB = sweepB;
 		input.maxFraction = 1.0f;
 
-		b2TOIOutput output = b2TimeOfImpact( &input );
+		b2TOIOutput output = b2ComputeTimeOfImpact( &input );
 
 		DrawTextLine( "toi = %g", output.fraction );
 
@@ -3695,11 +3687,10 @@ public:
 			b2DistanceInput distanceInput;
 			distanceInput.proxyA = input.proxyA;
 			distanceInput.proxyB = input.proxyB;
-			distanceInput.transformA = b2GetSweepTransform( &sweepA, output.fraction );
-			distanceInput.transformB = b2GetSweepTransform( &sweepB, output.fraction );
+			distanceInput.transform = b2InvMulTransforms( b2GetSweepTransform( &sweepA, output.fraction ), b2GetSweepTransform( &sweepB, output.fraction ) );
 			distanceInput.useRadii = false;
 			b2SimplexCache cache = { 0 };
-			b2DistanceOutput distanceOutput = b2ShapeDistance( &distanceInput, &cache, nullptr, 0 );
+			b2DistanceOutput distanceOutput = b2ComputeShapeDistance( &distanceInput, &cache, nullptr, 0 );
 			DrawTextLine( "distance = %g", distanceOutput.distance );
 		}
 

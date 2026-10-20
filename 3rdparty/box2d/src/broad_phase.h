@@ -3,15 +3,13 @@
 
 #pragma once
 
-#include "container.h"
+#include "dynamic_tree.h"
 #include "table.h"
 
 #include "box2d/collision.h"
 #include "box2d/types.h"
 
 typedef struct b2Shape b2Shape;
-typedef struct b2MovePair b2MovePair;
-typedef struct b2MoveResult b2MoveResult;
 typedef struct b2Stack b2Stack;
 typedef struct b2World b2World;
 
@@ -25,27 +23,14 @@ typedef struct b2World b2World;
 /// It is up to the client to consume the new pairs and to track subsequent overlap.
 typedef struct b2BroadPhase
 {
+	// One tree for each body type.
 	b2DynamicTree trees[b2_bodyTypeCount];
 
-	// The move set and array are used to track shapes that have moved significantly
-	// and need a pair query for new contacts. The array has a deterministic order.
-	// todo perhaps just a move set?
-	// todo implement a 32bit hash set for faster lookup
-	// todo moveSet can grow quite large on the first time step and remain large
-	b2HashSet moveSet;
-	b2Array( int ) moveArray;
-
-	// These are the results from the pair query and are used to create new contacts
-	// in deterministic order. There is a move result linked list for each moving shape and
-	// these follow the dynamic tree query order for determinism.
-	b2MoveResult* moveResults;
-	b2MovePair* movePairs;
-	int movePairCapacity;
-	b2AtomicInt movePairIndex;
+	// The moved siblings gathered from the dynamic body tree.
+	int* movedSiblings;
 
 	// Tracks shape pairs that have a b2Contact
 	b2HashSet pairSet;
-
 } b2BroadPhase;
 
 void b2CreateBroadPhase( b2BroadPhase* bp, const b2Capacity* capacity );
@@ -56,24 +41,24 @@ int b2BroadPhase_CreateProxy( b2BroadPhase* bp, b2BodyType proxyType, b2AABB aab
 void b2BroadPhase_DestroyProxy( b2BroadPhase* bp, int proxyKey );
 
 void b2BroadPhase_MoveProxy( b2BroadPhase* bp, int proxyKey, b2AABB aabb );
-void b2BroadPhase_EnlargeProxy( b2BroadPhase* bp, int proxyKey, b2AABB aabb );
-
-int b2BroadPhase_GetShapeIndex( b2BroadPhase* bp, int proxyKey );
 
 void b2UpdateBroadPhasePairs( b2World* world );
-bool b2BroadPhase_TestOverlap( const b2BroadPhase* bp, int proxyKeyA, int proxyKeyB );
+
+void b2RadixSortKeys( uint64_t* keys, uint64_t* tempKeys, int count );
 
 void b2ValidateBroadphase( const b2BroadPhase* bp );
 void b2ValidateNoEnlarged( const b2BroadPhase* bp );
 
-// This is what triggers new contact pairs to be created
-// Warning: this must be called in deterministic order
-static inline void b2BufferMove( b2BroadPhase* bp, int queryProxy )
+static inline void b2BroadPhase_MarkProxyMovedSerial( b2BroadPhase* bp, int proxyKey )
 {
-	// Adding 1 because 0 is the sentinel
-	bool alreadyAdded = b2AddKey( &bp->moveSet, queryProxy + 1 );
-	if ( alreadyAdded == false )
-	{
-		b2Array_Push( bp->moveArray, queryProxy );
-	}
+	b2BodyType proxyType = B2_PROXY_TYPE( proxyKey );
+	int proxyId = B2_PROXY_ID( proxyKey );
+	b2DynamicTree_MarkProxyMovedSerial( bp->trees + proxyType, proxyId );
+}
+
+static inline void b2BroadPhase_MarkProxyMoved( b2BroadPhase* bp, int proxyKey, b2AABB aabb )
+{
+	b2BodyType proxyType = B2_PROXY_TYPE( proxyKey );
+	int proxyId = B2_PROXY_ID( proxyKey );
+	b2DynamicTree_MarkProxyMoved( bp->trees + proxyType, proxyId, aabb );
 }

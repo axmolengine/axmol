@@ -300,7 +300,7 @@ public:
 
 		b2ChainDef chainDef = b2DefaultChainDef();
 		chainDef.points = points;
-		chainDef.count = 4;
+		chainDef.pointCount = 4;
 		chainDef.isLoop = true;
 
 		b2CreateChain( groundId, &chainDef );
@@ -423,7 +423,7 @@ public:
 
 			b2ChainDef chainDef = b2DefaultChainDef();
 			chainDef.points = points;
-			chainDef.count = count;
+			chainDef.pointCount = count;
 			chainDef.isLoop = true;
 
 			b2CreateChain( groundId, &chainDef );
@@ -723,7 +723,7 @@ public:
 
 			b2ChainDef chainDef = b2DefaultChainDef();
 			chainDef.points = points;
-			chainDef.count = 20;
+			chainDef.pointCount = 20;
 			chainDef.isLoop = true;
 			chainDef.materials = &material;
 			chainDef.materialCount = 1;
@@ -1481,7 +1481,7 @@ public:
 			case GLFW_KEY_V:
 				Clear();
 				m_speculative = !m_speculative;
-				b2World_EnableSpeculative( m_worldId, m_speculative );
+				b2World_EnableContinuous( m_worldId, m_speculative );
 				break;
 
 			case GLFW_KEY_S:
@@ -1583,7 +1583,7 @@ public:
 
 			b2ChainDef chainDef = b2DefaultChainDef();
 			chainDef.points = vs;
-			chainDef.count = 5;
+			chainDef.pointCount = 5;
 			chainDef.isLoop = true;
 			b2CreateChain( groundId, &chainDef );
 		}
@@ -1703,13 +1703,13 @@ public:
 
 		if ( glfwGetKey( m_context->window, GLFW_KEY_SPACE ) == GLFW_PRESS )
 		{
-			b2RevoluteJoint_SetMotorSpeed( m_leftJointId, 20.0f );
-			b2RevoluteJoint_SetMotorSpeed( m_rightJointId, -20.0f );
+			b2RevoluteJoint_SetTargetMotorSpeed( m_leftJointId, 20.0f );
+			b2RevoluteJoint_SetTargetMotorSpeed( m_rightJointId, -20.0f );
 		}
 		else
 		{
-			b2RevoluteJoint_SetMotorSpeed( m_leftJointId, -10.0f );
-			b2RevoluteJoint_SetMotorSpeed( m_rightJointId, 10.0f );
+			b2RevoluteJoint_SetTargetMotorSpeed( m_leftJointId, -10.0f );
+			b2RevoluteJoint_SetTargetMotorSpeed( m_rightJointId, 10.0f );
 		}
 	}
 
