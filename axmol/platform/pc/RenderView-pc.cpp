@@ -256,6 +256,7 @@ struct KeyCodeItem
     KeyboardEvent::KeyCode keyCode;
 };
 
+// clang-format off
 static constexpr KeyCodeItem s_keyCodeItems[] = {
     /* The unknown key */
     {GLFW_KEY_UNKNOWN, KeyboardEvent::KeyCode::KEY_NONE},
@@ -383,7 +384,9 @@ static constexpr KeyCodeItem s_keyCodeItems[] = {
     {GLFW_KEY_RIGHT_ALT, KeyboardEvent::KeyCode::KEY_RIGHT_ALT},
     {GLFW_KEY_RIGHT_SUPER, KeyboardEvent::KeyCode::KEY_HYPER},
     {GLFW_KEY_MENU, KeyboardEvent::KeyCode::KEY_MENU},
-    {GLFW_KEY_LAST, KeyboardEvent::KeyCode::KEY_NONE}};
+    {GLFW_KEY_LAST, KeyboardEvent::KeyCode::KEY_NONE}
+};
+// clang-format on
 
 static uint32_t mapModifiers(int glfwMods)
 {
@@ -990,6 +993,51 @@ RenderView* RenderView::createWithFullscreen(std::string_view viewName,
     return nullptr;
 }
 
+#if defined(__EMSCRIPTEN__) && __SIZEOF_POINTER__ == 8
+static void installWasm64ShaderSourceLengthFix()
+{
+    // Emscripten's WebGL glue currently reads glShaderSource's GLint lengths
+    // using POINTER_SIZE. Replace only the length load; preserve pointer-width
+    // reads for the string array and avoid copying shader source data.
+    // clang-format off
+    EM_ASM({
+        if (typeof GL === 'undefined' || typeof GL.getSource !== 'function') {
+            console.error('[Axmol] Cannot install the wasm64 glShaderSource length fix: GL.getSource is unavailable.');
+            return;
+        }
+        if (GL.__axmolWasm64ShaderSourceLengthFixed) {
+            return;
+        }
+
+        GL.getSource = function(shader, count, string, length) {
+            var source = '';
+            var stringArray = Number(string);
+            var lengthArray = length ? Number(length) : 0;
+            for (var i = 0; i < count; ++i) {
+                var sourcePtr = Number(HEAPU64[(stringArray + i * 8) / 8]);
+                var sourceLen = length ? HEAP32[(lengthArray + i * 4) / 4] : undefined;
+                source += UTF8ToString(sourcePtr, sourceLen);
+            }
+            if (typeof GLEmulation !== 'undefined') {
+                var type = GLctx.getShaderParameter(GL.shaders[shader], 0x8B4F /* GL_SHADER_TYPE */);
+                if (type == 0x8B30 /* GL_FRAGMENT_SHADER */ &&
+                    (GLEmulation.findToken(source, 'dFdx') || GLEmulation.findToken(source, 'dFdy') ||
+                     GLEmulation.findToken(source, 'fwidth'))) {
+                    source = '#extension GL_OES_standard_derivatives : enable\n' + source;
+                    var extension = GLctx.getExtension('OES_standard_derivatives');
+                    if (!extension && GL.debug && typeof dbg === 'function') {
+                        dbg('Shader attempts to use the standard derivatives extension which is not available.');
+                    }
+                }
+            }
+            return source;
+        };
+        GL.__axmolWasm64ShaderSourceLengthFixed = true;
+    });
+    // clang-format on
+}
+#endif
+
 bool RenderView::initWithRect(std::string_view viewName, const ax::Rect& rect, float windowZoomFactor, bool resizable)
 {
     _viewName         = viewName;
@@ -1110,6 +1158,10 @@ bool RenderView::initWithRect(std::string_view viewName, const ax::Rect& rect, f
     {
         glfwMakeContextCurrent(_mainWindow);
         GraphicsCore::activate();
+
+#if defined(__EMSCRIPTEN__) && __SIZEOF_POINTER__ == 8
+        installWasm64ShaderSourceLengthFix();
+#endif
 
         glfwSetWindowUserPointer(_mainWindow, gl::__state);
     }
