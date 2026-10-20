@@ -1159,9 +1159,9 @@ bool RenderView::initWithRect(std::string_view viewName, const ax::Rect& rect, f
         glfwMakeContextCurrent(_mainWindow);
         GraphicsCore::activate();
 
-#if defined(__EMSCRIPTEN__) && __SIZEOF_POINTER__ == 8
+#    if defined(__EMSCRIPTEN__) && __SIZEOF_POINTER__ == 8
         installWasm64ShaderSourceLengthFix();
-#endif
+#    endif
 
         glfwSetWindowUserPointer(_mainWindow, gl::__state);
     }
