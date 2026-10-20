@@ -140,7 +140,7 @@ void DrawCircle(SampleDraw* draw, b2Vec2 center, float radius, b2HexColor color)
 
 void DrawSolidCircle(SampleDraw* draw, b2Transform transform, float radius, b2HexColor color)
 {
-    draw->impl->getB2DebugDraw().DrawSolidCircleFcn(transform, radius, color, draw->impl);
+    draw->impl->getB2DebugDraw().DrawSolidCircleFcn(transform, transform.p, radius, color, draw->impl);
 }
 
 void DrawSolidCapsule(SampleDraw* draw, b2Vec2 p1, b2Vec2 p2, float radius, b2HexColor color)
@@ -150,7 +150,7 @@ void DrawSolidCapsule(SampleDraw* draw, b2Vec2 p1, b2Vec2 p2, float radius, b2He
 
 void DrawPolygon(SampleDraw* draw, const b2Vec2* vertices, int vertexCount, b2HexColor color)
 {
-    draw->impl->getB2DebugDraw().DrawPolygonFcn(vertices, vertexCount, color, draw->impl);
+    draw->impl->getB2DebugDraw().DrawPolygonFcn(b2Transform_identity, vertices, vertexCount, color, draw->impl);
 }
 
 void DrawSolidPolygon(SampleDraw* draw,

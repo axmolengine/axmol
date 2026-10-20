@@ -62,7 +62,7 @@ public:
 	{
 		for ( int i = 0; i < m_count; ++i )
 		{
-			b2DestroyJoint( m_jointIds[i], false );
+			b2DestroyJoint( m_jointIds[i]);
 			m_jointIds[i] = b2_nullJointId;
 		}
 
@@ -129,7 +129,7 @@ public:
 		{
 			for ( int i = 0; i < m_count; ++i )
 			{
-				b2DistanceJoint_SetLength( m_jointIds[i], m_length );
+				b2DistanceJoint_SetRestLength( m_jointIds[i], m_length );
 				b2Joint_WakeBodies( m_jointIds[i] );
 			}
 		}
@@ -197,7 +197,7 @@ public:
 			{
 				for ( int i = 0; i < m_count; ++i )
 				{
-					b2DistanceJoint_SetLengthRange( m_jointIds[i], m_minLength, m_maxLength );
+					b2DistanceJoint_SetLimits( m_jointIds[i], m_minLength, m_maxLength );
 					b2Joint_WakeBodies( m_jointIds[i] );
 				}
 			}
@@ -206,7 +206,7 @@ public:
 			{
 				for ( int i = 0; i < m_count; ++i )
 				{
-					b2DistanceJoint_SetLengthRange( m_jointIds[i], m_minLength, m_maxLength );
+					b2DistanceJoint_SetLimits( m_jointIds[i], m_minLength, m_maxLength );
 					b2Joint_WakeBodies( m_jointIds[i] );
 				}
 			}
@@ -733,7 +733,7 @@ public:
 
 			if ( ImGui::SliderFloat( "Speed", &m_motorSpeed, -20.0f, 20.0f, "%.0f" ) )
 			{
-				b2RevoluteJoint_SetMotorSpeed( m_jointId1, m_motorSpeed );
+				b2RevoluteJoint_SetTargetMotorSpeed( m_jointId1, m_motorSpeed );
 				b2Joint_WakeBodies( m_jointId1 );
 			}
 		}
@@ -772,13 +772,13 @@ public:
 	{
 		Sample::Step();
 
-		float angle1 = b2RevoluteJoint_GetAngle( m_jointId1 );
+		float angle1 = b2RevoluteJoint_GetCurrentAngle( m_jointId1 );
 		DrawTextLine( "Angle (Deg) 1 = %2.1f", angle1 );
 
-		float torque1 = b2RevoluteJoint_GetMotorTorque( m_jointId1 );
+		float torque1 = b2RevoluteJoint_GetCurrentMotorTorque( m_jointId1 );
 		DrawTextLine( "Motor Torque 1 = %4.1f", torque1 );
 
-		float torque2 = b2RevoluteJoint_GetMotorTorque( m_jointId2 );
+		float torque2 = b2RevoluteJoint_GetCurrentMotorTorque( m_jointId2 );
 		DrawTextLine( "Motor Torque 2 = %4.1f", torque2 );
 	}
 
@@ -895,7 +895,7 @@ public:
 
 			if ( ImGui::SliderFloat( "Speed", &m_motorSpeed, -40.0f, 40.0f, "%.0f" ) )
 			{
-				b2PrismaticJoint_SetMotorSpeed( m_jointId, m_motorSpeed );
+				b2PrismaticJoint_SetTargetMotorSpeed( m_jointId, m_motorSpeed );
 				b2Joint_WakeBodies( m_jointId );
 			}
 		}
@@ -934,13 +934,13 @@ public:
 	{
 		Sample::Step();
 
-		float force = b2PrismaticJoint_GetMotorForce( m_jointId );
+		float force = b2PrismaticJoint_GetCurrentMotorForce( m_jointId );
 		DrawTextLine( "Motor Force = %4.1f", force );
 
-		float translation = b2PrismaticJoint_GetTranslation( m_jointId );
+		float translation = b2PrismaticJoint_GetCurrentTranslation( m_jointId );
 		DrawTextLine( "Translation = %4.1f", translation );
 
-		float speed = b2PrismaticJoint_GetSpeed( m_jointId );
+		float speed = b2PrismaticJoint_GetCurrentSpeed( m_jointId );
 		DrawTextLine( "Speed = %4.8f", speed );
 	}
 
@@ -1046,7 +1046,7 @@ public:
 
 			if ( ImGui::SliderFloat( "Speed", &m_motorSpeed, -20.0f, 20.0f, "%.0f" ) )
 			{
-				b2WheelJoint_SetMotorSpeed( m_jointId, m_motorSpeed );
+				b2WheelJoint_SetTargetMotorSpeed( m_jointId, m_motorSpeed );
 			}
 		}
 
@@ -1075,7 +1075,7 @@ public:
 	{
 		Sample::Step();
 
-		float torque = b2WheelJoint_GetMotorTorque( m_jointId );
+		float torque = b2WheelJoint_GetCurrentMotorTorque( m_jointId );
 		DrawTextLine( "Motor Torque = %4.1f", torque );
 	}
 
@@ -1993,7 +1993,7 @@ public:
 			b2Vec2 force = b2Joint_GetConstraintForce( m_jointIds[i] );
 			if ( b2LengthSquared( force ) > m_breakForce * m_breakForce )
 			{
-				b2DestroyJoint( m_jointIds[i], true );
+				b2DestroyJoint( m_jointIds[i]);
 				m_jointIds[i] = b2_nullJointId;
 			}
 			else
@@ -2314,7 +2314,7 @@ public:
 
 		b2Vec2 vB = b2Body_GetLinearVelocity( m_bodyId );
 		float omegaB = b2Body_GetAngularVelocity( m_bodyId );
-		b2Vec2 pB = b2Body_GetWorldCenterOfMass( m_bodyId );
+		b2Vec2 pB = b2Body_GetWorldCenter( m_bodyId );
 
 		for ( int i = 0; i < 2; ++i )
 		{
@@ -2416,7 +2416,7 @@ public:
 
 			b2ChainDef chainDef = b2DefaultChainDef();
 			chainDef.points = points;
-			chainDef.count = 25;
+			chainDef.pointCount = 25;
 			chainDef.isLoop = true;
 			b2CreateChain( groundId, &chainDef );
 
@@ -2992,7 +2992,7 @@ public:
 
 		if ( ImGui::SliderFloat( "Speed", &m_motorSpeed, -0.3f, 0.3f, "%.2f" ) )
 		{
-			b2DistanceJoint_SetMotorSpeed( m_liftJointId, m_motorSpeed );
+			b2DistanceJoint_SetTargetMotorSpeed( m_liftJointId, m_motorSpeed );
 			b2Joint_WakeBodies( m_liftJointId );
 		}
 
@@ -3052,7 +3052,7 @@ public:
 
 			b2ChainDef chainDef = b2DefaultChainDef();
 			chainDef.points = points;
-			chainDef.count = count;
+			chainDef.pointCount = count;
 			chainDef.isLoop = true;
 			chainDef.materials = &material;
 			chainDef.materialCount = 1;
@@ -3305,7 +3305,7 @@ public:
 
 		if ( ImGui::SliderFloat( "Speed", &m_motorSpeed, -0.3f, 0.3f, "%.2f" ) )
 		{
-			b2RevoluteJoint_SetMotorSpeed( m_driverId, m_motorSpeed );
+			b2RevoluteJoint_SetTargetMotorSpeed( m_driverId, m_motorSpeed );
 			b2Joint_WakeBodies( m_driverId );
 		}
 
@@ -3317,14 +3317,14 @@ public:
 		if ( glfwGetKey( m_context->window, GLFW_KEY_A ) )
 		{
 			m_motorSpeed = b2MaxFloat( -0.3f, m_motorSpeed - 0.01f );
-			b2RevoluteJoint_SetMotorSpeed( m_driverId, m_motorSpeed );
+			b2RevoluteJoint_SetTargetMotorSpeed( m_driverId, m_motorSpeed );
 			b2Joint_WakeBodies( m_driverId );
 		}
 
 		if ( glfwGetKey( m_context->window, GLFW_KEY_D ) )
 		{
 			m_motorSpeed = b2MinFloat( 0.3f, m_motorSpeed + 0.01f );
-			b2RevoluteJoint_SetMotorSpeed( m_driverId, m_motorSpeed );
+			b2RevoluteJoint_SetTargetMotorSpeed( m_driverId, m_motorSpeed );
 			b2Joint_WakeBodies( m_driverId );
 		}
 

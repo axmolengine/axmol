@@ -358,11 +358,7 @@ public:
     AX_DEPRECATED("3.0") inline void step(float dt) { stepSimulation(dt); }
 
 protected:
-    static bool handlePreSolve(b2ShapeId shapeIdA,
-                               b2ShapeId shapeIdB,
-                               b2Vec2 point,
-                               b2Vec2 normal,
-                               PhysicsWorld2D* world);
+    static void handlePreSolve(b2ShapeId shapeIdA, b2ShapeId shapeIdB, b2Manifold* manifold, void* context);
 
     virtual bool onPreSolve(b2ShapeId shapeIdA, b2ShapeId shapeIdB, const b2Vec2& point, const b2Vec2& normal);
     virtual void dispatchContactEvents();

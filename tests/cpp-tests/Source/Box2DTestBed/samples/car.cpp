@@ -112,8 +112,8 @@ void Car::Despawn()
 {
 	assert( m_isSpawned == true );
 
-	b2DestroyJoint( m_rearAxleId, false );
-	b2DestroyJoint( m_frontAxleId, false );
+	b2DestroyJoint( m_rearAxleId);
+	b2DestroyJoint( m_frontAxleId);
 	b2DestroyBody( m_rearWheelId );
 	b2DestroyBody( m_frontWheelId );
 	b2DestroyBody( m_chassisId );
@@ -123,8 +123,8 @@ void Car::Despawn()
 
 void Car::SetSpeed( float speed )
 {
-	b2WheelJoint_SetMotorSpeed( m_rearAxleId, speed );
-	b2WheelJoint_SetMotorSpeed( m_frontAxleId, speed );
+	b2WheelJoint_SetTargetMotorSpeed( m_rearAxleId, speed );
+	b2WheelJoint_SetTargetMotorSpeed( m_frontAxleId, speed );
 	b2Joint_WakeBodies( m_rearAxleId );
 }
 
@@ -261,8 +261,8 @@ void Truck::Despawn()
 {
 	assert( m_isSpawned == true );
 
-	b2DestroyJoint( m_rearAxleId, false );
-	b2DestroyJoint( m_frontAxleId, false );
+	b2DestroyJoint( m_rearAxleId);
+	b2DestroyJoint( m_frontAxleId);
 	b2DestroyBody( m_rearWheelId );
 	b2DestroyBody( m_frontWheelId );
 	b2DestroyBody( m_chassisId );
@@ -272,8 +272,8 @@ void Truck::Despawn()
 
 void Truck::SetSpeed( float speed )
 {
-	b2WheelJoint_SetMotorSpeed( m_rearAxleId, speed );
-	b2WheelJoint_SetMotorSpeed( m_frontAxleId, speed );
+	b2WheelJoint_SetTargetMotorSpeed( m_rearAxleId, speed );
+	b2WheelJoint_SetTargetMotorSpeed( m_frontAxleId, speed );
 	b2Joint_WakeBodies( m_rearAxleId );
 }
 

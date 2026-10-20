@@ -3,11 +3,12 @@
 
 #pragma once
 
-#include "body.h"
 #include "contact.h"
+#include "container.h"
 #include "island.h"
 #include "joint.h"
 
+typedef struct b2Body b2Body;
 typedef struct b2World b2World;
 
 // The solver set type by index
@@ -70,6 +71,8 @@ void b2TrySleepIsland( b2World* world, int islandId );
 // Merge set 2 into set 1 then destroy set 2.
 // Warning: any pointers into these sets will be orphaned.
 void b2MergeSolverSets( b2World* world, int setIndex1, int setIndex2 );
+
+b2Body* b2RemoveBodySim( b2World* world, b2SolverSet* set, int localIndex );
 
 void b2TransferBody( b2World* world, b2SolverSet* targetSet, b2SolverSet* sourceSet, b2Body* body );
 void b2TransferJoint( b2World* world, b2SolverSet* targetSet, b2SolverSet* sourceSet, b2Joint* joint );

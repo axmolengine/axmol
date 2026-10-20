@@ -219,7 +219,7 @@ struct PhysicsWorld2DJobContext
     }
 };
 
-static void* b2EnqueueTask(b2TaskCallback* task, void* taskContext, void* userContext)
+static void* b2EnqueueTask(b2TaskCallbackFcn* task, void* taskContext, void* userContext)
 {
     auto context = static_cast<PhysicsWorld2DJobContext*>(userContext);
     auto slot    = context->acquireSlot();
@@ -339,7 +339,7 @@ void PhysicsWorld2D::overlapBox(PhysicsQueryCallback2D func, const Rect& rect, v
         BoxQueryCallbackContext context = {this, func, data};
 
         auto filter = b2DefaultQueryFilter();
-        b2World_OverlapAABB(_worldId, b2util::cast(rect), b2DefaultQueryFilter(),
+        b2World_OverlapAABB(_worldId, b2Pos_zero, b2util::cast(rect), b2DefaultQueryFilter(),
                             PhysicsQueryCallbacks2D::handleBoxOverlap, &context);
     }
 }
@@ -350,7 +350,7 @@ Collider2D* PhysicsWorld2D::overlapBox(const Rect& rect) const
 
     BoxQueryNearestResultContext context = {&collider};
 
-    b2World_OverlapAABB(_worldId, b2util::cast(rect), b2DefaultQueryFilter(),
+    b2World_OverlapAABB(_worldId, b2Pos_zero, b2util::cast(rect), b2DefaultQueryFilter(),
                         PhysicsQueryCallbacks2D::handleBoxOverlapNearestResult, &context);
 
     return collider;
@@ -362,7 +362,7 @@ Vector<Collider2D*> PhysicsWorld2D::overlapBoxAll(const Rect& rect) const
 
     BoxQueryResultContext context = {&arr};
 
-    b2World_OverlapAABB(_worldId, b2util::cast(rect), b2DefaultQueryFilter(),
+    b2World_OverlapAABB(_worldId, b2Pos_zero, b2util::cast(rect), b2DefaultQueryFilter(),
                         PhysicsQueryCallbacks2D::handleBoxOverlapResult, &context);
 
     return arr;
@@ -382,7 +382,7 @@ void PhysicsWorld2D::overlapPoint(PhysicsQueryCallback2D func, const Vec2& point
         aabb.upperBound = b2Add(context.p, d);
 
         auto filter = b2DefaultQueryFilter();
-        b2World_OverlapAABB(_worldId, aabb, b2DefaultQueryFilter(), PhysicsQueryCallbacks2D::handlePointOverlap,
+        b2World_OverlapAABB(_worldId, b2Pos_zero, aabb, b2DefaultQueryFilter(), PhysicsQueryCallbacks2D::handlePointOverlap,
                             &context);
     }
 }
@@ -398,7 +398,7 @@ Collider2D* PhysicsWorld2D::overlapPoint(const Vec2& point) const
     aabb.lowerBound = b2Sub(context.p, d);
     aabb.upperBound = b2Add(context.p, d);
 
-    b2World_OverlapAABB(_worldId, aabb, b2DefaultQueryFilter(),
+    b2World_OverlapAABB(_worldId, b2Pos_zero, aabb, b2DefaultQueryFilter(),
                         PhysicsQueryCallbacks2D::handlePointOverlapNearestResult, &context);
 
     return collider;
@@ -415,7 +415,7 @@ Vector<Collider2D*> PhysicsWorld2D::overlapPointAll(const Vec2& point) const
     aabb.lowerBound = b2Sub(context.p, d);
     aabb.upperBound = b2Add(context.p, d);
 
-    b2World_OverlapAABB(_worldId, aabb, b2DefaultQueryFilter(), PhysicsQueryCallbacks2D::handlePointOverlapResult,
+    b2World_OverlapAABB(_worldId, b2Pos_zero, aabb, b2DefaultQueryFilter(), PhysicsQueryCallbacks2D::handlePointOverlapResult,
                         &context);
 
     return arr;
@@ -462,7 +462,7 @@ bool PhysicsWorld2D::init(Scene* scene)
 
         AX_BREAK_IF(!b2World_IsValid(_worldId));
 
-        b2World_SetPreSolveCallback(_worldId, (b2PreSolveFcn*)handlePreSolve, this);
+        b2World_SetPreSolveCallback(_worldId, handlePreSolve, nullptr, this);
 
         _scene           = scene;
         _eventDispatcher = scene->getEventDispatcher();
@@ -630,14 +630,21 @@ void PhysicsWorld2D::dispatchContactEvents()
     }
 }
 
-bool PhysicsWorld2D::handlePreSolve(b2ShapeId shapeIdA,
-                                    b2ShapeId shapeIdB,
-                                    b2Vec2 point,
-                                    b2Vec2 normal,
-                                    PhysicsWorld2D* world)
+void PhysicsWorld2D::handlePreSolve(b2ShapeId shapeIdA, b2ShapeId shapeIdB, b2Manifold* manifold, void* context)
 {
+    auto world = static_cast<PhysicsWorld2D*>(context);
+    if (!manifold || manifold->pointCount == 0)
+        return;
 
-    return world->onPreSolve(shapeIdA, shapeIdB, point, normal);
+    const auto& point = manifold->points[0];
+    const b2Pos centerA = b2Body_GetWorldCenter(b2Shape_GetBody(shapeIdA));
+    const b2Pos centerB = b2Body_GetWorldCenter(b2Shape_GetBody(shapeIdB));
+    const b2Vec2 pointA = b2SubPos(b2OffsetPos(centerA, point.anchorA), b2Pos_zero);
+    const b2Vec2 pointB = b2SubPos(b2OffsetPos(centerB, point.anchorB), b2Pos_zero);
+    const b2Vec2 contactPoint = b2MulSV(0.5f, b2Add(pointA, pointB));
+
+    if (!world->onPreSolve(shapeIdA, shapeIdB, contactPoint, manifold->normal))
+        manifold->pointCount = 0;
 }
 
 bool PhysicsWorld2D::onPreSolve(b2ShapeId shapeIdA, b2ShapeId shapeIdB, const b2Vec2& point, const b2Vec2& normal)

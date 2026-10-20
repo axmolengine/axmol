@@ -263,7 +263,7 @@ void Rigidbody2D::setBodyType(BodyType bodyType)
             b2Body_SetType(_bodyId, static_cast<b2BodyType>(_bodyType));
             if (isDynamic())
             {
-                b2Body_ApplyMassFromShapes(_bodyId);
+                b2Body_UpdateMassFromShapes(_bodyId);
             }
         }
     }
@@ -319,7 +319,7 @@ void Rigidbody2D::syncMassData()
     {
         if (_autoMassDirty)
         {
-            b2Body_ApplyMassFromShapes(_bodyId);
+            b2Body_UpdateMassFromShapes(_bodyId);
             massData = b2Body_GetMassData(_bodyId);
         }
         _mass   = massData.mass;
@@ -381,7 +381,7 @@ void Rigidbody2D::setScale(float scaleX, float scaleY)
     }
 
     if (isAttached())
-        b2Body_ApplyMassFromShapes(_bodyId);
+        b2Body_UpdateMassFromShapes(_bodyId);
 }
 
 void Rigidbody2D::setPosition(float positionX, float positionY)
