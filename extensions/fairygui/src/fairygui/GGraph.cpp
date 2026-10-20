@@ -123,22 +123,26 @@ void GGraph::updateShape()
     const float lineSize05 = _lineSize * 0.5f;
     const float lineSize2  = _lineSize * 2.0f;
 
-    switch (_type) // Rectangle
+    switch (_type) 
     {
-    case 1:
+    case 1:  // Rectangle (+ optional corner radius)
     {
         float wl  = _size.width - _lineSize;
         float hl  = _size.height - _lineSize;
         float wl2 = _size.width - lineSize05;
         float hl2 = _size.height - lineSize05;
-        if (_cornerRadius)
+        if (_cornerRadius) 
         {
-            if (_lineSize != 0)
+            if (_fillColor.a == 0) // not solid
+                _shape->drawCornerRect(Vec2(lineSize05, lineSize05), Vec2(wl2, hl2), _lineColor, lineSize2,
+                                       _cornerRadius[2], _cornerRadius[0], _cornerRadius[1], _cornerRadius[3]);
+            else if (_lineSize != 0) // solid and border
                 _shape->drawSolidCornerRect(Vec2(lineSize05, lineSize05), Vec2(wl2, hl2), _fillColor, _lineColor,
                     lineSize2, _cornerRadius[2], _cornerRadius[0], _cornerRadius[1], _cornerRadius[3]);
-            else
-                _shape->drawCornerRect(Vec2(lineSize05, lineSize05), Vec2(wl2, hl2), _lineColor, lineSize2,
-                    _cornerRadius[2], _cornerRadius[0], _cornerRadius[1], _cornerRadius[3]);
+            else // solid no border
+                _shape->drawSolidCornerRect(Vec2(lineSize05, lineSize05), Vec2(wl2, hl2), _fillColor, _lineColor,
+                                             lineSize2, _cornerRadius[2], _cornerRadius[0], _cornerRadius[1],
+                                             _cornerRadius[3]);
         }
         else if (_lineSize != 0)
         {
