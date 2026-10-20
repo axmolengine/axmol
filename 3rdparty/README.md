@@ -177,7 +177,7 @@
 
 ## OpenXR-SDK
 - [![Upstream](https://img.shields.io/github/v/release/KhronosGroup/OpenXR-SDK?label=Upstream)](https://github.com/KhronosGroup/OpenXR-SDK)
-- Version: 1.1.63
+- Version: 1.1.65
 - License: Apache-2.0
 
 ## OpenAL Soft
@@ -240,7 +240,7 @@
 
 ## simdjson
 - [![Upstream](https://img.shields.io/github/v/tag/simdjson/simdjson?label=Upstream)](https://github.com/simdjson/simdjson)
-- Version: 5.0.4
+- Version: 5.0.5
 - License: Apache-2.0
 
 ## stb (stb_image)
