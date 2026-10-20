@@ -73,7 +73,8 @@ void ContactEvent2D::generateContactData()
     _contactInfo.pointCount = contactData.manifold.pointCount;
     for (auto i = 0; i < contactData.manifold.pointCount && i < ContactInfo2D::POINT_MAX; ++i)
     {
-        _contactInfo.points[i].point          = b2util::cast(b2MulSV(0.5f, b2Add(contactData.manifold.points[i].anchorA, contactData.manifold.points[i].anchorB)));
+        _contactInfo.points[i].point = b2util::cast(
+            b2MulSV(0.5f, b2Add(contactData.manifold.points[i].anchorA, contactData.manifold.points[i].anchorB)));
         _contactInfo.points[i].normalImpulse  = contactData.manifold.points[i].normalImpulse;
         _contactInfo.points[i].tangentImpulse = contactData.manifold.points[i].tangentImpulse;
         _contactInfo.points[i].normalVelocity = contactData.manifold.points[i].normalVelocity;

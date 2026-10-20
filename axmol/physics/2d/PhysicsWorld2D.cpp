@@ -382,8 +382,8 @@ void PhysicsWorld2D::overlapPoint(PhysicsQueryCallback2D func, const Vec2& point
         aabb.upperBound = b2Add(context.p, d);
 
         auto filter = b2DefaultQueryFilter();
-        b2World_OverlapAABB(_worldId, b2Pos_zero, aabb, b2DefaultQueryFilter(), PhysicsQueryCallbacks2D::handlePointOverlap,
-                            &context);
+        b2World_OverlapAABB(_worldId, b2Pos_zero, aabb, b2DefaultQueryFilter(),
+                            PhysicsQueryCallbacks2D::handlePointOverlap, &context);
     }
 }
 
@@ -415,8 +415,8 @@ Vector<Collider2D*> PhysicsWorld2D::overlapPointAll(const Vec2& point) const
     aabb.lowerBound = b2Sub(context.p, d);
     aabb.upperBound = b2Add(context.p, d);
 
-    b2World_OverlapAABB(_worldId, b2Pos_zero, aabb, b2DefaultQueryFilter(), PhysicsQueryCallbacks2D::handlePointOverlapResult,
-                        &context);
+    b2World_OverlapAABB(_worldId, b2Pos_zero, aabb, b2DefaultQueryFilter(),
+                        PhysicsQueryCallbacks2D::handlePointOverlapResult, &context);
 
     return arr;
 }
@@ -636,11 +636,11 @@ void PhysicsWorld2D::handlePreSolve(b2ShapeId shapeIdA, b2ShapeId shapeIdB, b2Ma
     if (!manifold || manifold->pointCount == 0)
         return;
 
-    const auto& point = manifold->points[0];
-    const b2Pos centerA = b2Body_GetWorldCenter(b2Shape_GetBody(shapeIdA));
-    const b2Pos centerB = b2Body_GetWorldCenter(b2Shape_GetBody(shapeIdB));
-    const b2Vec2 pointA = b2SubPos(b2OffsetPos(centerA, point.anchorA), b2Pos_zero);
-    const b2Vec2 pointB = b2SubPos(b2OffsetPos(centerB, point.anchorB), b2Pos_zero);
+    const auto& point         = manifold->points[0];
+    const b2Pos centerA       = b2Body_GetWorldCenter(b2Shape_GetBody(shapeIdA));
+    const b2Pos centerB       = b2Body_GetWorldCenter(b2Shape_GetBody(shapeIdB));
+    const b2Vec2 pointA       = b2SubPos(b2OffsetPos(centerA, point.anchorA), b2Pos_zero);
+    const b2Vec2 pointB       = b2SubPos(b2OffsetPos(centerB, point.anchorB), b2Pos_zero);
     const b2Vec2 contactPoint = b2MulSV(0.5f, b2Add(pointA, pointB));
 
     if (!world->onPreSolve(shapeIdA, shapeIdB, contactPoint, manifold->normal))
