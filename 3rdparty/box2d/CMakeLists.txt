@@ -29,14 +29,24 @@ endif()
 
 set_target_properties(${target_name} PROPERTIES C_STANDARD 17 C_STANDARD_REQUIRED TRUE)
 
-if(_simdc_defines)
-  target_compile_definitions(${target_name} PRIVATE ${_simdc_defines})
+# Match upstream Box2D SIMD configuration. Axmol's _simdc_defines describe
+# Axmol intrinsics and do not select Box2D's SIMD implementation.
+option(BOX2D_DISABLE_SIMD "Disable SIMD math (slower)" OFF)
+if(BOX2D_DISABLE_SIMD)
+  target_compile_definitions(${target_name} PRIVATE BOX2D_DISABLE_SIMD)
+elseif(EMSCRIPTEN)
+  # Box2D maps WebAssembly to its SSE2 path.
+  target_compile_options(${target_name} PRIVATE -msimd128 -msse2)
+endif()
 
-  if(_simdc_options)
-    target_compile_options(${target_name} PRIVATE ${_simdc_options})
-  endif()
-else()
-  target_compile_definitions(${target_name} PUBLIC BOX2D_DISABLE_SIMD=1)
+# Upstream compiles only the width-8 solver with AVX2 on MSVC, leaving the
+# rest of Box2D on the baseline instruction set.
+if(NOT BOX2D_DISABLE_SIMD AND MSVC
+   AND NOT CMAKE_C_COMPILER_ID STREQUAL "Clang"
+   AND CMAKE_C_COMPILER_ARCHITECTURE_ID MATCHES "^(x64|X86)$")
+  set_source_files_properties(
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/contact_solver_w8.c"
+    PROPERTIES COMPILE_OPTIONS "/arch:AVX2")
 endif()
 
 target_include_directories(${target_name}

@@ -92,7 +92,7 @@ public:
 
 			b2ChainDef chainDef = b2DefaultChainDef();
 			chainDef.points = points;
-			chainDef.count = count;
+			chainDef.pointCount = count;
 			chainDef.isLoop = true;
 
 			b2CreateChain( groundId1, &chainDef );
@@ -122,7 +122,7 @@ public:
 
 			b2ChainDef chainDef = b2DefaultChainDef();
 			chainDef.points = points;
-			chainDef.count = count;
+			chainDef.pointCount = count;
 			chainDef.isLoop = true;
 
 			b2CreateChain( groundId2, &chainDef );
@@ -310,7 +310,7 @@ public:
 			translation = { 0.0f, -rayLength };
 		}
 
-		b2World_CastShape( m_worldId, &proxy, translation, pogoFilter, CastCallback, &castResult );
+		b2World_CastShape( m_worldId, b2Pos_zero, &proxy, translation, pogoFilter, CastCallback, &castResult );
 
 		// Avoid snapping to ground if still going up
 		if ( m_onGround == false )
@@ -388,14 +388,14 @@ public:
 			mover.center2 = b2TransformPoint( m_transform, m_capsule.center2 );
 			mover.radius = m_capsule.radius;
 
-			b2World_CollideMover( m_worldId, &mover, collideFilter, PlaneResultFcn, this );
+			b2World_CollideMover( m_worldId, b2Pos_zero, &mover, collideFilter, PlaneResultFcn, this );
 			b2PlaneSolverResult result = b2SolvePlanes( target - m_transform.p, m_planes, m_planeCount );
 
 			m_totalIterations += result.iterationCount;
 
-			float fraction = b2World_CastMover( m_worldId, &mover, result.translation, castFilter );
+			float fraction = b2World_CastMover( m_worldId, b2Pos_zero, &mover, result.delta, castFilter );
 
-			b2Vec2 delta = fraction * result.translation;
+			b2Vec2 delta = fraction * result.delta;
 			m_transform.p += delta;
 
 			if ( b2LengthSquared( delta ) < tolerance * tolerance )
@@ -480,7 +480,7 @@ public:
 			return true;
 		}
 
-		b2Vec2 center = b2Body_GetWorldCenterOfMass( bodyId );
+		b2Vec2 center = b2Body_GetWorldCenter( bodyId );
 		b2Vec2 direction = b2Normalize( center - self->m_transform.p );
 		b2Vec2 impulse = b2Vec2{ 2.0f * direction.x, 2.0f };
 		b2Body_ApplyLinearImpulseToCenter( bodyId, impulse, true );
@@ -496,7 +496,7 @@ public:
 			b2Circle circle = { point, 0.5f };
 			b2ShapeProxy proxy = b2MakeProxy( &circle.center, 1, circle.radius );
 			b2QueryFilter filter = { MoverBit, DebrisBit };
-			b2World_OverlapShape( m_worldId, &proxy, filter, Kick, this );
+			b2World_OverlapShape( m_worldId, b2Pos_zero, &proxy, filter, Kick, this );
 			DrawCircle( m_draw, circle.center, circle.radius, b2_colorGoldenRod );
 		}
 
@@ -679,7 +679,7 @@ public:
 
 			b2ChainDef chainDef = b2DefaultChainDef();
 			chainDef.points = points;
-			chainDef.count = count;
+			chainDef.pointCount = count;
 			chainDef.isLoop = true;
 
 			b2CreateChain( groundId1, &chainDef );
@@ -709,7 +709,7 @@ public:
 
 			b2ChainDef chainDef = b2DefaultChainDef();
 			chainDef.points = points;
-			chainDef.count = count;
+			chainDef.pointCount = count;
 			chainDef.isLoop = true;
 
 			b2CreateChain( groundId2, &chainDef );
@@ -850,7 +850,7 @@ public:
 
 			// Try again with a circle cast
 			b2ShapeProxy proxy = b2MakeProxy( &origin, 1, 0.9f * m_capsuleRadius );
-			b2World_CastShape( m_worldId, &proxy, translation, pogoFilter, CastCallback, &m_floorResult );
+			b2World_CastShape( m_worldId, b2Pos_zero, &proxy, translation, pogoFilter, CastCallback, &m_floorResult );
 		}
 
 		if ( m_floorResult.hit == true)
@@ -1249,7 +1249,7 @@ public:
 			translation = { 0.0f, -rayLength };
 		}
 
-		b2World_CastShape( m_worldId, &proxy, translation, pogoFilter, CastCallback, &castResult );
+		b2World_CastShape( m_worldId, b2Pos_zero, &proxy, translation, pogoFilter, CastCallback, &castResult );
 
 		// Avoid snapping to ground if still going up
 		if ( m_onGround == false )
@@ -1335,14 +1335,14 @@ public:
 			mover.center2 = b2TransformPoint( m_transform, m_capsule.center2 );
 			mover.radius = m_capsule.radius;
 
-			b2World_CollideMover( m_worldId, &mover, collideFilter, PlaneResultFcn, this );
+			b2World_CollideMover( m_worldId, b2Pos_zero, &mover, collideFilter, PlaneResultFcn, this );
 			b2PlaneSolverResult result = b2SolvePlanes( target, m_planes, m_planeCount );
 
 			m_totalIterations += result.iterationCount;
 
 			b2Vec2 moverTranslation = result.position - m_transform.p;
 
-			float fraction = b2World_CastMover( m_worldId, &mover, moverTranslation, castFilter );
+			float fraction = b2World_CastMover( m_worldId, b2Pos_zero, &mover, moverTranslation, castFilter );
 
 			b2Vec2 delta = fraction * moverTranslation;
 			m_transform.p += delta;
@@ -1422,7 +1422,7 @@ public:
 			return true;
 		}
 
-		b2Vec2 center = b2Body_GetWorldCenterOfMass( bodyId );
+		b2Vec2 center = b2Body_GetWorldCenter( bodyId );
 		b2Vec2 direction = b2Normalize( center - self->m_transform.p );
 		b2Vec2 impulse = b2Vec2{ 2.0f * direction.x, 2.0f };
 		b2Body_ApplyLinearImpulseToCenter( bodyId, impulse, true );
@@ -1438,7 +1438,7 @@ public:
 			b2Circle circle = { point, 0.5f };
 			b2ShapeProxy proxy = b2MakeProxy( &circle.center, 1, circle.radius );
 			b2QueryFilter filter = { MoverBit, DebrisBit };
-			b2World_OverlapShape( m_worldId, &proxy, filter, Kick, this );
+			b2World_OverlapShape( m_worldId, b2Pos_zero, &proxy, filter, Kick, this );
 			m_context->draw.DrawCircle( circle.center, circle.radius, b2_colorGoldenRod );
 		}
 

@@ -30,7 +30,7 @@ b2Transform b2GetSweepTransform( const b2Sweep* sweep, float time )
 }
 
 /// Follows Ericson 5.1.9 Closest Points of Two Line Segments
-b2SegmentDistanceResult b2SegmentDistance( b2Vec2 p1, b2Vec2 q1, b2Vec2 p2, b2Vec2 q2 )
+b2SegmentDistanceResult b2ComputeSegmentDistance( b2Vec2 p1, b2Vec2 q1, b2Vec2 p2, b2Vec2 q2 )
 {
 	b2SegmentDistanceResult result = { 0 };
 
@@ -421,7 +421,7 @@ static b2Vec2 b2SolveSimplex3( b2Simplex* s )
 // Uses GJK for computing the distance between convex shapes.
 // https://box2d.org/files/ErinCatto_GJK_GDC2010.pdf
 // I spent time optimizing this and could find no further significant gains 3/30/2025
-b2DistanceOutput b2ShapeDistance( const b2DistanceInput* input, b2SimplexCache* cache, b2Simplex* simplexes, int simplexCapacity )
+b2DistanceOutput b2ComputeShapeDistance( const b2DistanceInput* input, b2SimplexCache* cache, b2Simplex* simplexes, int simplexCapacity )
 {
 	B2_UNUSED( simplexes, simplexCapacity );
 	B2_ASSERT( input->proxyA.count > 0 && input->proxyB.count > 0 );
@@ -436,12 +436,11 @@ b2DistanceOutput b2ShapeDistance( const b2DistanceInput* input, b2SimplexCache* 
 	// This is still a performance gain at 8 points.
 	b2ShapeProxy localProxyB;
 	{
-		b2Transform transform = b2InvMulTransforms( input->transformA, input->transformB );
 		localProxyB.count = input->proxyB.count;
 		localProxyB.radius = input->proxyB.radius;
 		for ( int i = 0; i < localProxyB.count; ++i )
 		{
-			localProxyB.points[i] = b2TransformPoint( transform, input->proxyB.points[i] );
+			localProxyB.points[i] = b2TransformPoint( input->transform, input->proxyB.points[i] );
 		}
 	}
 
@@ -499,10 +498,12 @@ b2DistanceOutput b2ShapeDistance( const b2DistanceInput* input, b2SimplexCache* 
 		if ( simplex.count == 3 )
 		{
 			// Overlap
+			*cache = b2MakeSimplexCache( &simplex );
 			b2Vec2 localPointA, localPointB;
 			b2ComputeWitnessPoints( &simplex, &localPointA, &localPointB );
-			output.pointA = b2TransformPoint( input->transformA, localPointA );
-			output.pointB = b2TransformPoint( input->transformA, localPointB );
+			output.distance = 0.0f;
+			output.pointA = localPointA;
+			output.pointB = localPointB;
 			return output;
 		}
 
@@ -515,7 +516,7 @@ b2DistanceOutput b2ShapeDistance( const b2DistanceInput* input, b2SimplexCache* 
 #endif
 
 		// Ensure the search direction is numerically fit.
-		if ( b2Dot( d, d ) < FLT_EPSILON * FLT_EPSILON )
+		if ( b2Dot( d, d ) < 1000.0f * FLT_MIN )
 		{
 			// This is unlikely but could lead to bad cycling.
 			// The branch predictor seems to make this check have low cost.
@@ -523,11 +524,14 @@ b2DistanceOutput b2ShapeDistance( const b2DistanceInput* input, b2SimplexCache* 
 			// The origin is probably contained by a line segment
 			// or triangle. Thus the shapes are overlapped.
 
+			*cache = b2MakeSimplexCache( &simplex );
+
 			// Must return overlap due to invalid normal.
 			b2Vec2 localPointA, localPointB;
 			b2ComputeWitnessPoints( &simplex, &localPointA, &localPointB );
-			output.pointA = b2TransformPoint( input->transformA, localPointA );
-			output.pointB = b2TransformPoint( input->transformA, localPointB );
+			output.distance = 0.0f;
+			output.pointA = localPointA;
+			output.pointB = localPointB;
 			return output;
 		}
 
@@ -575,17 +579,16 @@ b2DistanceOutput b2ShapeDistance( const b2DistanceInput* input, b2SimplexCache* 
 	}
 #endif
 
-	// Prepare output
+	// Prepare output in frame A
 	b2Vec2 normal = b2Normalize( nonUnitNormal );
 	B2_ASSERT( b2IsNormalized( normal ) );
-	normal = b2RotateVector( input->transformA.q, normal );
 
 	b2Vec2 localPointA, localPointB;
 	b2ComputeWitnessPoints( &simplex, &localPointA, &localPointB );
 	output.normal = normal;
 	output.distance = b2Distance( localPointA, localPointB );
-	output.pointA = b2TransformPoint( input->transformA, localPointA );
-	output.pointB = b2TransformPoint( input->transformA, localPointB );
+	output.pointA = localPointA;
+	output.pointB = localPointB;
 	output.iterations = iteration;
 	output.simplexCount = simplexIndex;
 
@@ -608,7 +611,7 @@ b2DistanceOutput b2ShapeDistance( const b2DistanceInput* input, b2SimplexCache* 
 }
 
 // Shape cast using conservative advancement
-b2CastOutput b2ShapeCast( const b2ShapeCastPairInput* input )
+b2CastOutput b2CastShape( const b2ShapeCastPairInput* input )
 {
 	// Compute tolerance
 	float linearSlop = B2_LINEAR_SLOP;
@@ -626,9 +629,11 @@ b2CastOutput b2ShapeCast( const b2ShapeCastPairInput* input )
 	b2DistanceInput distanceInput = { 0 };
 	distanceInput.proxyA = input->proxyA;
 	distanceInput.proxyB = input->proxyB;
-	distanceInput.transformA = input->transformA;
-	distanceInput.transformB = input->transformB;
 	distanceInput.useRadii = false;
+
+	// The whole cast runs in frame A. Advance the relative pose of B in float each iteration,
+	// which keeps the math near the local origin and avoids re-relativizing world poses.
+	distanceInput.transform = input->transform;
 
 	b2Vec2 delta2 = input->translationB;
 	b2CastOutput output = { 0 };
@@ -640,7 +645,7 @@ b2CastOutput b2ShapeCast( const b2ShapeCastPairInput* input )
 	{
 		output.iterations += 1;
 
-		b2DistanceOutput distanceOutput = b2ShapeDistance( &distanceInput, &cache, NULL, 0 );
+		b2DistanceOutput distanceOutput = b2ComputeShapeDistance( &distanceInput, &cache, NULL, 0 );
 
 		if ( distanceOutput.distance < target + tolerance )
 		{
@@ -693,14 +698,16 @@ b2CastOutput b2ShapeCast( const b2ShapeCastPairInput* input )
 			return output;
 		}
 
-		distanceInput.transformB.p = b2MulAdd( input->transformB.p, fraction, delta2 );
+		distanceInput.transform.p = b2MulAdd( input->transform.p, fraction, delta2 );
 	}
 
 	// Failure!
 	return output;
 }
 
+// Note: the code below is experimental and probably broken
 #if 0
+
 static inline b2Vec2 b2ComputeSimplexClosestPoint( const b2Simplex* s )
 {
 	if ( s->count == 1 )
@@ -730,7 +737,7 @@ typedef struct b2ShapeCastData
 // "Smooth Mesh Contacts with GJK" in Game Physics Pearls. 2010
 // This needs the simplex of A - B because the translation is for B and this
 // is how the relative motion works out when both shapes are translating.
-// This is similar to ray vs polygon and involves plane clipping. See b2RayCastPolygon.
+// This is similar to ray vs polygon and involves plane clipping. See b2CastRayPolygon.
 // In this case the polygon is just points and there are no planes. This uses a modified
 // version of GJK to generate planes for clipping.
 // The algorithm works by incrementally building clipping planes using GJK. Once a valid
@@ -748,7 +755,7 @@ b2CastOutput b2ShapeCastMerged( const b2ShapeCastPairInput* input, b2ShapeCastDa
 
 	b2ShapeProxy proxyA = input->proxyA;
 
-	b2Transform xf = b2InvMulTransforms( input->transformA, input->transformB );
+	b2Transform xf = input->transform;
 
 	// Put proxyB in proxyA's frame to reduce round-off error
 	b2ShapeProxy proxyB;
@@ -763,7 +770,7 @@ b2CastOutput b2ShapeCastMerged( const b2ShapeCastPairInput* input, b2ShapeCastDa
 
 	float radius = proxyA.radius + proxyB.radius;
 
-	b2Vec2 r = b2RotateVector( xf.q, input->translationB );
+	b2Vec2 r = input->translationB;
 	float lambda = 0.0f;
 	float maxFraction = input->maxFraction;
 
@@ -905,8 +912,9 @@ b2CastOutput b2ShapeCastMerged( const b2ShapeCastPairInput* input, b2ShapeCastDa
 	b2Vec2 n = b2Normalize( b2Neg( v ) );
 	b2Vec2 point = { pointA.x + proxyA.radius * n.x, pointA.y + proxyA.radius * n.y };
 
-	output.point = b2TransformPoint( input->transformA, point );
-	output.normal = b2RotateVector( input->transformA.q, n );
+	// Results stay in frame A, matching b2CastShape
+	output.point = point;
+	output.normal = n;
 	output.fraction = lambda;
 	output.iterations = iteration;
 	output.hit = true;
@@ -1137,7 +1145,7 @@ static float b2EvaluateSeparation( const b2SeparationFunction* f, int indexA, in
 
 // CCD via the local separating axis method. This seeks progression
 // by computing the largest time at which separation is maintained.
-b2TOIOutput b2TimeOfImpact( const b2TOIInput* input )
+b2TOIOutput b2ComputeTimeOfImpact( const b2TOIInput* input )
 {
 #if B2_SNOOP_TOI_COUNTERS
 	uint64_t ticks = b2GetTicks();
@@ -1184,9 +1192,15 @@ b2TOIOutput b2TimeOfImpact( const b2TOIInput* input )
 	for ( ;; )
 	{
 		// Get the distance between shapes. We can also use the results to get a separating axis.
-		distanceInput.transformA = b2GetSweepTransform( &sweepA, t1 );
-		distanceInput.transformB = b2GetSweepTransform( &sweepB, t1 );
-		b2DistanceOutput distanceOutput = b2ShapeDistance( &distanceInput, &cache, NULL, 0 );
+		b2Transform xfA = b2GetSweepTransform( &sweepA, t1 );
+		b2Transform xfB = b2GetSweepTransform( &sweepB, t1 );
+		distanceInput.transform = b2InvMulTransforms( xfA, xfB );
+		b2DistanceOutput distanceOutput = b2ComputeShapeDistance( &distanceInput, &cache, NULL, 0 );
+
+		// The distance query runs in frame A, project the witness data back to world
+		b2Vec2 worldNormal = b2RotateVector( xfA.q, distanceOutput.normal );
+		b2Vec2 worldPointA = b2TransformPoint( xfA, distanceOutput.pointA );
+		b2Vec2 worldPointB = b2TransformPoint( xfA, distanceOutput.pointB );
 
 		// Progressive time of impact. This handles slender geometry well but introduces
 		// significant time loss.
@@ -1228,10 +1242,10 @@ b2TOIOutput b2TimeOfImpact( const b2TOIInput* input )
 			b2_toiHitCount += 1;
 #endif
 			// Averaged hit point
-			b2Vec2 pA = b2MulAdd( distanceOutput.pointA, proxyA->radius, distanceOutput.normal );
-			b2Vec2 pB = b2MulAdd( distanceOutput.pointB, -proxyB->radius, distanceOutput.normal );
+			b2Vec2 pA = b2MulAdd( worldPointA, proxyA->radius, worldNormal );
+			b2Vec2 pB = b2MulAdd( worldPointB, -proxyB->radius, worldNormal );
 			output.point = b2Lerp( pA, pB, 0.5f );
-			output.normal = distanceOutput.normal;
+			output.normal = worldNormal;
 			output.fraction = t1;
 			break;
 		}
@@ -1320,10 +1334,10 @@ b2TOIOutput b2TimeOfImpact( const b2TOIInput* input )
 				b2_toiHitCount += 1;
 #endif
 				// Averaged hit point
-				b2Vec2 pA = b2MulAdd( distanceOutput.pointA, proxyA->radius, distanceOutput.normal );
-				b2Vec2 pB = b2MulAdd( distanceOutput.pointB, -proxyB->radius, distanceOutput.normal );
+				b2Vec2 pA = b2MulAdd( worldPointA, proxyA->radius, worldNormal );
+				b2Vec2 pB = b2MulAdd( worldPointB, -proxyB->radius, worldNormal );
 				output.point = b2Lerp( pA, pB, 0.5f );
-				output.normal = distanceOutput.normal;
+				output.normal = worldNormal;
 				output.fraction = t1;
 				done = true;
 				break;
@@ -1406,10 +1420,10 @@ b2TOIOutput b2TimeOfImpact( const b2TOIInput* input )
 			b2_toiFailedCount += 1;
 #endif
 			// Averaged hit point
-			b2Vec2 pA = b2MulAdd( distanceOutput.pointA, proxyA->radius, distanceOutput.normal );
-			b2Vec2 pB = b2MulAdd( distanceOutput.pointB, -proxyB->radius, distanceOutput.normal );
+			b2Vec2 pA = b2MulAdd( worldPointA, proxyA->radius, worldNormal );
+			b2Vec2 pB = b2MulAdd( worldPointB, -proxyB->radius, worldNormal );
 			output.point = b2Lerp( pA, pB, 0.5f );
-			output.normal = distanceOutput.normal;
+			output.normal = worldNormal;
 			output.fraction = t1;
 			break;
 		}

@@ -115,7 +115,7 @@ public:
 
 		b2ChainDef chainDef = b2DefaultChainDef();
 		chainDef.points = points;
-		chainDef.count = count;
+		chainDef.pointCount = count;
 		chainDef.materials = &m_material;
 		chainDef.materialCount = 1;
 		chainDef.isLoop = true;
@@ -419,16 +419,16 @@ public:
 
 		if ( m_drawBodyAABBs )
 		{
-			b2AABB aabb = b2Body_ComputeAABB( m_table1Id );
+			b2AABB aabb = b2Body_ComputeBounds( m_table1Id );
 			DrawBounds( m_draw, aabb, b2_colorYellow );
 
-			aabb = b2Body_ComputeAABB( m_table2Id );
+			aabb = b2Body_ComputeBounds( m_table2Id );
 			DrawBounds( m_draw, aabb, b2_colorYellow );
 
-			aabb = b2Body_ComputeAABB( m_ship1Id );
+			aabb = b2Body_ComputeBounds( m_ship1Id );
 			DrawBounds( m_draw, aabb, b2_colorYellow );
 
-			aabb = b2Body_ComputeAABB( m_ship2Id );
+			aabb = b2Body_ComputeBounds( m_ship2Id );
 			DrawBounds( m_draw, aabb, b2_colorYellow );
 		}
 	}
@@ -1146,7 +1146,7 @@ public:
 
 			b2ChainDef chainDef = b2DefaultChainDef();
 			chainDef.points = points;
-			chainDef.count = count;
+			chainDef.pointCount = count;
 			chainDef.isLoop = true;
 			chainDef.materials = materials;
 			chainDef.materialCount = count;
@@ -1307,7 +1307,7 @@ public:
 		}
 
 		b2BodyId bodyId = b2Shape_GetBody( m_shapeId );
-		b2Body_ApplyMassFromShapes( bodyId );
+		b2Body_UpdateMassFromShapes( bodyId );
 	}
 
 	void UpdateGui() override
@@ -1421,7 +1421,7 @@ public:
 		{
 			b2ChainDef chainDef = b2DefaultChainDef();
 			chainDef.points = points1;
-			chainDef.count = count1;
+			chainDef.pointCount = count1;
 			chainDef.isLoop = false;
 			b2CreateChain( groundId, &chainDef );
 		}
@@ -1429,7 +1429,7 @@ public:
 		{
 			b2ChainDef chainDef = b2DefaultChainDef();
 			chainDef.points = points2;
-			chainDef.count = count2;
+			chainDef.pointCount = count2;
 			chainDef.isLoop = false;
 			b2CreateChain( groundId, &chainDef );
 		}

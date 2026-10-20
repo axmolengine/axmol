@@ -376,7 +376,7 @@ void CreateSpinner( b2WorldId worldId )
 
 		b2ChainDef chainDef = b2DefaultChainDef();
 		chainDef.points = points;
-		chainDef.count = SPINNER_POINT_COUNT;
+		chainDef.pointCount = SPINNER_POINT_COUNT;
 		chainDef.isLoop = true;
 		chainDef.materials = &material;
 		chainDef.materialCount = 1;
@@ -459,7 +459,7 @@ float StepSpinner( b2WorldId worldId, int stepCount )
 	(void)worldId;
 	(void)stepCount;
 
-	return b2RevoluteJoint_GetAngle( g_spinnerData.spinnerId );
+	return b2RevoluteJoint_GetCurrentAngle( g_spinnerData.spinnerId );
 }
 
 void CreateSmash( b2WorldId worldId )

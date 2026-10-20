@@ -351,14 +351,6 @@ void Box2DTestBed::renderSamples()
 
                 ImGui::Separator();
 
-                {
-                    bool changed            = false;
-                    const char* drawTypes[] = {"None", "Clip", "AnchorA", "AnchorB", "Average"};
-                    int drawType            = int(s_context.debugDraw.contactDrawType);
-                    changed = changed || ImGui::Combo("Contact", &drawType, drawTypes, IM_ARRAYSIZE(drawTypes));
-                    s_context.debugDraw.contactDrawType = b2ContactDrawType(drawType);
-                }
-
                 ImGui::Checkbox("Contact Normals", &s_context.debugDraw.drawContactNormals);
                 ImGui::Checkbox("Contact Features", &s_context.debugDraw.drawContactFeatures);
                 ImGui::Checkbox("Contact Forces", &s_context.debugDraw.drawContactForces);

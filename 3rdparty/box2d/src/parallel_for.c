@@ -3,9 +3,9 @@
 
 #include "parallel_for.h"
 
-#include "atomic.h"
 #include "core.h"
 #include "physics_world.h"
+#include "platform.h"
 
 #include "box2d/base.h"
 #include "box2d/constants.h"
@@ -76,7 +76,7 @@ void b2ParallelFor( b2World* world, b2ParallelForCallback* callback, int itemCou
 	// Target multiple blocks per worker to reduce thread stalls.
 	// block size grows once items exceed maxBlockCount * minRange
 	// so the block count stays bounded and per-block sync overhead stays low.
-	int blocksPerWorker = 4;
+	int blocksPerWorker = 8;
 	int maxBlockCount = blocksPerWorker * workerCount;
 
 	int blockSize;
@@ -112,7 +112,7 @@ void b2ParallelFor( b2World* world, b2ParallelForCallback* callback, int itemCou
 		tasks[i].shared = &shared;
 		tasks[i].workerIndex = i;
 
-		if (world->taskCount < B2_MAX_TASKS)
+		if ( world->taskCount < B2_MAX_TASKS )
 		{
 			handles[i] = world->enqueueTaskFcn( &b2ParallelForTrampoline, tasks + i, world->userTaskContext );
 			world->taskCount += 1;

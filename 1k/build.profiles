@@ -10,7 +10,7 @@ axslcc=4.0.1
 
 # The cmake, @gradle @axmol-cmdline
 # as latest as possible
-cmake=4.2.0~4.4.3+
+cmake=4.2.0~4.4.4+
 
 # The ninja
 ninja=1.10.0~1.13.2+
@@ -58,7 +58,7 @@ min_sdk=23
 
 # The gradle version, @setup.ps1
 # as latest as possible
-gradle=9.8.0
+gradle=9.8.2
 
 # The android gradle plugin, @setup.ps1
 # as stable as possible, match with build-tools,android-studio
@@ -88,7 +88,7 @@ media3=1.11.1
 # - since emsdk-4.0.0+ can't be debugging via chrome properly on windows (macos and linux no this issue), since emsdk 5.0.0, issue resolved
 # - axmol can build with emsdk-3.1.73+
 # - please use emsdk-3.1.73/5.0.0+ if you want debug axmol wasm app properly
-emsdk=3.1.73~6.0.10+
+emsdk=3.1.73~6.0.13+
 
 # --- endregion
 
@@ -100,6 +100,6 @@ lz4=v1.10.0
 sample-assets=master
 live2d-core=5.5
 lunasvg=v3.5.0
-openxr=release-1.1.63
+openxr=release-1.1.65
 tracy=v0.14.1
 # --- endregion

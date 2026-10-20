@@ -82,7 +82,7 @@ void Joint2D::detachFromBody()
 {
     if (isAttached())
     {
-        b2DestroyJoint(_jointId, true);
+        b2DestroyJoint(_jointId);
         _jointId      = b2_nullJointId;
         _attachedBody = nullptr;
     }
@@ -315,7 +315,7 @@ void DistanceJoint2D::setLength(float value)
 {
     _restLength = std::clamp<float>(value, phconsts::LinearSlop, phconsts::LinearHuge);
     if (isAttached())
-        b2DistanceJoint_SetLength(_jointId, value);
+        b2DistanceJoint_SetRestLength(_jointId, value);
 }
 
 void DistanceJoint2D::setUseLimits(bool bval)
@@ -337,7 +337,7 @@ void DistanceJoint2D::setLimits(const JointLengthLimit2D& limits)
 
     setUseLimits(true);
     if (isAttached())
-        b2DistanceJoint_SetLengthRange(_jointId, _limits.x, _limits.x);
+        b2DistanceJoint_SetLimits(_jointId, _limits.x, _limits.y);
 }
 
 #    pragma endregion
@@ -411,7 +411,7 @@ void SpringJoint2D::setRestLength(float restLength)
 {
     _restLength = restLength;
     if (isAttached())
-        b2DistanceJoint_SetLength(_jointId, restLength);
+        b2DistanceJoint_SetRestLength(_jointId, restLength);
 }
 
 float SpringJoint2D::getStiffness() const
@@ -526,7 +526,7 @@ void SliderJoint2D::setMotor(const JointMotor2D& motor)
     setUseMotor(true);
     if (isAttached())
     {
-        b2PrismaticJoint_SetMotorSpeed(_jointId, motor.x);
+        b2PrismaticJoint_SetTargetMotorSpeed(_jointId, motor.x);
         b2PrismaticJoint_SetMaxMotorForce(_jointId, motor.y);
     }
 }
@@ -541,17 +541,17 @@ void SliderJoint2D::setLimits(const JointTranslationLimits2D& limits)
 
 float SliderJoint2D::getJointTranslation() const
 {
-    return isAttached() ? b2PrismaticJoint_GetTranslation(_jointId) : 0.0f;
+    return isAttached() ? b2PrismaticJoint_GetCurrentTranslation(_jointId) : 0.0f;
 }
 
 float SliderJoint2D::getJointSpeed() const
 {
-    return isAttached() ? AX_RADIANS_TO_DEGREES(b2PrismaticJoint_GetSpeed(_jointId)) : 0.0f;
+    return isAttached() ? AX_RADIANS_TO_DEGREES(b2PrismaticJoint_GetCurrentSpeed(_jointId)) : 0.0f;
 }
 
 float SliderJoint2D::getMotorForce() const
 {
-    return isAttached() ? b2PrismaticJoint_GetMotorForce(_jointId) : 0.0f;
+    return isAttached() ? b2PrismaticJoint_GetCurrentMotorForce(_jointId) : 0.0f;
 }
 
 #    pragma endregion
@@ -624,7 +624,7 @@ void WheelJoint2D::setMotor(const JointMotor2D& motor)
     setUseMotor(true);
     if (isAttached())
     {
-        b2WheelJoint_SetMotorSpeed(_jointId, MathUtil::radians(motor.x));
+        b2WheelJoint_SetTargetMotorSpeed(_jointId, MathUtil::radians(motor.x));
         b2WheelJoint_SetMaxMotorTorque(_jointId, motor.y);
     }
 }
@@ -663,7 +663,7 @@ void WheelJoint2D::setStiffness(float hertz)
 
 float WheelJoint2D::getMotorTorque() const
 {
-    return isAttached() ? b2WheelJoint_GetMotorTorque(_jointId) : _motor.y;
+    return isAttached() ? b2WheelJoint_GetCurrentMotorTorque(_jointId) : _motor.y;
 }
 
 #    pragma endregion
@@ -736,14 +736,14 @@ void PivotJoint2D::setMotor(const JointMotor2D& motor)
 
     if (isAttached())
     {
-        b2RevoluteJoint_SetMotorSpeed(_jointId, motor.x);
+        b2RevoluteJoint_SetTargetMotorSpeed(_jointId, motor.x);
         b2RevoluteJoint_SetMaxMotorTorque(_jointId, motor.y);
     }
 }
 
 float PivotJoint2D::getMotorTorque() const
 {
-    return isAttached() ? b2RevoluteJoint_GetMotorTorque(_jointId) : 0.0f;
+    return isAttached() ? b2RevoluteJoint_GetCurrentMotorTorque(_jointId) : 0.0f;
 }
 
 void PivotJoint2D::setLimits(const JointAngleLimits2D& limits)
@@ -784,7 +784,7 @@ void PivotJoint2D::setSpringFrequency(float value)
 
 float PivotJoint2D::getReferenceAngle() const
 {
-    return isAttached() ? b2RevoluteJoint_GetAngle(_jointId) : 0.0f;
+    return isAttached() ? b2RevoluteJoint_GetCurrentAngle(_jointId) : 0.0f;
 }
 
 #    pragma endregion
@@ -1014,7 +1014,7 @@ bool TargetJoint2D::attachToBody()
             return false;
 
         _attachedBody->setBodyType(Rigidbody2D::KinematicBody);
-        b2Body_EnableSleep(_attachedBody->internalHandle(), false);
+        b2Body_EnableSleeping(_attachedBody->internalHandle(), false);
 
         b2MotorJointDef jointDef = b2DefaultMotorJointDef();
         configureBaseSettings(jointDef.base);

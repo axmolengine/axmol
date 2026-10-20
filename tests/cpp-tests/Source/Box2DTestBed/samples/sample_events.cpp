@@ -96,7 +96,7 @@ public:
 
 			b2ChainDef chainDef = b2DefaultChainDef();
 			chainDef.points = points;
-			chainDef.count = count;
+			chainDef.pointCount = count;
 			chainDef.isLoop = true;
 			chainDef.materials = &material;
 			chainDef.materialCount = 1;
@@ -710,7 +710,7 @@ public:
 
 			b2ChainDef chainDef = b2DefaultChainDef();
 			chainDef.points = points;
-			chainDef.count = 20;
+			chainDef.pointCount = 20;
 			chainDef.filter.categoryBits = GROUND;
 			chainDef.filter.maskBits = FOOT | PLAYER;
 			chainDef.isLoop = false;
@@ -791,7 +791,7 @@ public:
 		for ( int i = 0; i < count; ++i )
 		{
 			b2ShapeId shapeId = m_visitorIds[i];
-			b2AABB aabb = b2Shape_GetAABB( shapeId );
+			b2AABB aabb = b2Body_ComputeBounds( b2Shape_GetBody( shapeId ) );
 			b2Vec2 point = b2AABB_Center( aabb );
 			DrawPoint( m_draw, point, 10.0f, b2_colorWhite );
 		}
@@ -839,7 +839,7 @@ public:
 			b2Vec2 points[] = { { 40.0f, -40.0f }, { -40.0f, -40.0f }, { -40.0f, 40.0f }, { 40.0f, 40.0f } };
 
 			b2ChainDef chainDef = b2DefaultChainDef();
-			chainDef.count = 4;
+			chainDef.pointCount = 4;
 			chainDef.points = points;
 			chainDef.isLoop = true;
 
@@ -1016,9 +1016,9 @@ public:
 						for ( int k = 0; k < manifold.pointCount; ++k )
 						{
 							b2ManifoldPoint point = manifold.points[k];
-							DrawLine( m_draw, point.clipPoint, point.clipPoint + point.totalNormalImpulse * normal,
+							DrawLine( m_draw, point.anchorA, point.anchorA + point.totalNormalImpulse * normal,
 									  b2_colorBlueViolet );
-							DrawPoint( m_draw, point.clipPoint, 10.0f, b2_colorWhite );
+							DrawPoint( m_draw, point.anchorA, 10.0f, b2_colorWhite );
 						}
 					}
 				}
@@ -1047,9 +1047,9 @@ public:
 						for ( int k = 0; k < manifold.pointCount; ++k )
 						{
 							b2ManifoldPoint point = manifold.points[k];
-							DrawLine( m_draw, point.clipPoint, point.clipPoint + point.totalNormalImpulse * normal,
+							DrawLine( m_draw, point.anchorA, point.anchorA + point.totalNormalImpulse * normal,
 									  b2_colorYellowGreen );
-							DrawPoint( m_draw, point.clipPoint, 10.0f, b2_colorWhite );
+							DrawPoint( m_draw, point.anchorA, 10.0f, b2_colorWhite );
 						}
 					}
 				}
@@ -1200,7 +1200,7 @@ public:
 		if ( destroyCount > 0 )
 		{
 			// Update mass just once
-			b2Body_ApplyMassFromShapes( m_playerId );
+			b2Body_UpdateMassFromShapes( m_playerId );
 		}
 
 		if ( m_context->hertz > 0.0f && m_context->pause == false )
@@ -1243,7 +1243,7 @@ public:
 			m_context->camera.zoom = 25.0f * 0.4f;
 		}
 
-		b2World_SetPreSolveCallback( m_worldId, PreSolveStatic, this );
+		b2World_SetPreSolveCallback( m_worldId, PreSolveStatic, nullptr, this );
 
 		// Ground
 		{
@@ -1311,10 +1311,10 @@ public:
 		m_jumping = false;
 	}
 
-	static bool PreSolveStatic( b2ShapeId shapeIdA, b2ShapeId shapeIdB, b2Vec2 point, b2Vec2 normal, void* context )
+	static void PreSolveStatic( b2ShapeId shapeIdA, b2ShapeId shapeIdB, b2Manifold* manifold, void* context )
 	{
 		Platform* self = static_cast<Platform*>( context );
-		return self->PreSolve( shapeIdA, shapeIdB, point, normal );
+		if (manifold->pointCount > 0) self->PreSolve( shapeIdA, shapeIdB, manifold->points[0].anchorA, manifold->normal );
 	}
 
 	// This callback must be thread-safe. It may be called multiple times simultaneously.
@@ -2063,7 +2063,7 @@ public:
 			{
 				int index = (int)(intptr_t)event->userData;
 				assert( 0 <= index && index < e_count );
-				b2DestroyJoint( event->jointId, true );
+				b2DestroyJoint( event->jointId);
 				m_jointIds[index] = b2_nullJointId;
 			}
 		}
@@ -2108,7 +2108,7 @@ public:
 
 			b2ChainDef chainDef = b2DefaultChainDef();
 			chainDef.points = points;
-			chainDef.count = 22;
+			chainDef.pointCount = 22;
 			chainDef.isLoop = true;
 
 			b2CreateChain( groundId, &chainDef );
@@ -2158,7 +2158,7 @@ public:
 			for ( int i = 0; i < data.manifold.pointCount; ++i )
 			{
 				const b2ManifoldPoint* manifoldPoint = data.manifold.points + i;
-				b2Vec2 p1 = manifoldPoint->clipPoint;
+				b2Vec2 p1 = manifoldPoint->anchorA;
 				b2Vec2 p2 = p1 + manifoldPoint->totalNormalImpulse * data.manifold.normal;
 				DrawLine( m_draw, p1, p2, b2_colorCrimson );
 				DrawPoint( m_draw, p1, 6.0f, b2_colorCrimson );
@@ -2354,14 +2354,14 @@ public:
 			b2Body_SetLinearVelocity( m_kinematicBodyId, { 0.5f, 0.0f } );
 		}
 
-		float x = b2PrismaticJoint_GetTranslation( m_jointId );
+		float x = b2PrismaticJoint_GetCurrentTranslation( m_jointId );
 		if ( x > 1.0f )
 		{
-			b2PrismaticJoint_SetMotorSpeed( m_jointId, -0.5f );
+			b2PrismaticJoint_SetTargetMotorSpeed( m_jointId, -0.5f );
 		}
 		else if ( x < -1.0f )
 		{
-			b2PrismaticJoint_SetMotorSpeed( m_jointId, 0.5f );
+			b2PrismaticJoint_SetTargetMotorSpeed( m_jointId, 0.5f );
 		}
 
 		Sample::Step();
@@ -2551,7 +2551,7 @@ public:
 					if ( data.manifold.pointCount > 0 )
 					{
 						b2ExplosionDef explosionDef = b2DefaultExplosionDef();
-						explosionDef.position = data.manifold.points[0].clipPoint;
+						explosionDef.position = data.manifold.points[0].anchorA;
 						explosionDef.radius = 1.0f;
 						explosionDef.impulsePerLength = 20.0f;
 						b2World_Explode( m_worldId, &explosionDef );
