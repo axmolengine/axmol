@@ -36,8 +36,7 @@ class Mesh;
 class Texture2D;
 class MeshSkin;
 class AttachNode;
-struct NodeData;
-/** @brief MeshRenderer: A mesh can be loaded from model files, .obj, .c3t, .c3b
+/** @brief MeshRenderer: A mesh can be loaded from model files, .obj, .gltf, .glb, .c3t, .c3b
  *and a mesh renderer renders a list of these loaded meshes with specified materials
  */
 class AX_DLL MeshRenderer : public Node, public BlendProtocol
@@ -300,6 +299,7 @@ protected:
     Texture2D* setMeshTexture(Mesh* mesh,
                               std::string_view texPath,
                               NTextureData::Usage usage = NTextureData::Usage::Diffuse);
+    Texture2D* setMeshTexture(Mesh* mesh, const NTextureData& textureData);
 
     /** set model texture from model path when model file not contains texture and texPath is empty
      * only for create mesh renderer

@@ -336,17 +336,20 @@ void Animate3D::update(float t)
                     auto curve = it.second;
                     if (curve->translateCurve)
                     {
-                        curve->translateCurve->evaluate(t, transDst, _translateEvaluate);
+                        curve->translateCurve->evaluate(
+                            t, transDst, curve->translateStep ? EvaluateType::INT_STEP : _translateEvaluate);
                         trans = &transDst[0];
                     }
                     if (curve->rotCurve)
                     {
-                        curve->rotCurve->evaluate(t, rotDst, _roteEvaluate);
+                        curve->rotCurve->evaluate(t, rotDst,
+                                                  curve->rotateStep ? EvaluateType::INT_STEP : _roteEvaluate);
                         rot = &rotDst[0];
                     }
                     if (curve->scaleCurve)
                     {
-                        curve->scaleCurve->evaluate(t, scaleDst, _scaleEvaluate);
+                        curve->scaleCurve->evaluate(t, scaleDst,
+                                                    curve->scaleStep ? EvaluateType::INT_STEP : _scaleEvaluate);
                         scale = &scaleDst[0];
                     }
                     bone->setAnimationValue(trans, rot, scale, this, _weight);
@@ -359,18 +362,21 @@ void Animate3D::update(float t)
                     Mat4 transform;
                     if (curve->translateCurve)
                     {
-                        curve->translateCurve->evaluate(t, transDst, _translateEvaluate);
+                        curve->translateCurve->evaluate(
+                            t, transDst, curve->translateStep ? EvaluateType::INT_STEP : _translateEvaluate);
                         transform.translate(transDst[0], transDst[1], transDst[2]);
                     }
                     if (curve->rotCurve)
                     {
-                        curve->rotCurve->evaluate(t, rotDst, _roteEvaluate);
+                        curve->rotCurve->evaluate(t, rotDst,
+                                                  curve->rotateStep ? EvaluateType::INT_STEP : _roteEvaluate);
                         Quat qua(rotDst[0], rotDst[1], rotDst[2], rotDst[3]);
                         transform.rotate(qua);
                     }
                     if (curve->scaleCurve)
                     {
-                        curve->scaleCurve->evaluate(t, scaleDst, _scaleEvaluate);
+                        curve->scaleCurve->evaluate(t, scaleDst,
+                                                    curve->scaleStep ? EvaluateType::INT_STEP : _scaleEvaluate);
                         transform.scale(scaleDst[0], scaleDst[1], scaleDst[2]);
                     }
                     node->setAdditionalTransform(&transform);
