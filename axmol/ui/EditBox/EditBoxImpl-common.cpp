@@ -143,7 +143,8 @@ void EditBoxImplCommon::placeInactiveLabels(const Vec2& size)
         if (_labelPlaceHolder)
         {
             auto placeholderSize = _labelPlaceHolder->getContentSize();
-            _labelPlaceHolder->setPosition(Vec2((float)AX_EDIT_BOX_PADDING, (size.height + placeholderSize.height) / 2));
+            _labelPlaceHolder->setPosition(
+                Vec2((float)AX_EDIT_BOX_PADDING, (size.height + placeholderSize.height) / 2));
             _labelPlaceHolder->setVerticalAlignment(TextVAlignment::CENTER);
         }
     }
