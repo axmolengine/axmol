@@ -308,7 +308,7 @@ void HtmlParser::parse(const std::string& source, const TextFormat& format, std:
     string xmlText = "<dummy>" + source + "</dummy>";
     SAXParser parser;
     parser.setDelegator(this);
-    parser.parseIntrusive(&xmlText.front(), xmlText.length(), SAXParser::ParseOption::HTML);
+    parser.parseIntrusive(&xmlText.front(), xmlText.length(), SAXParser::ParseOption::NORMAL);
 }
 
 NS_FGUI_END
