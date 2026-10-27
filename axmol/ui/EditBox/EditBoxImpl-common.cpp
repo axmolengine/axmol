@@ -211,6 +211,8 @@ void EditBoxImplCommon::setInputFlag(EditBox::InputFlag inputFlag)
 {
     _editBoxInputFlag = inputFlag;
     this->setNativeInputFlag(inputFlag);
+    if (_label)
+        refreshInactiveText();
 }
 
 void EditBoxImplCommon::setReturnType(EditBox::KeyboardReturnType returnType)

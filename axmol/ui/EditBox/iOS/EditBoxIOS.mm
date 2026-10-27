@@ -179,6 +179,7 @@
 - (void)setInputFlag:(ax::ui::EditBox::InputFlag)flag
 {
     self.dataInputMode = flag;
+    self.textInput.axui_secureTextEntry = NO;
     switch (flag)
     {
     case ax::ui::EditBox::InputFlag::PASSWORD:
