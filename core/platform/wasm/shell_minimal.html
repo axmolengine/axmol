@@ -143,7 +143,7 @@
           canvas.addEventListener("webglcontextlost", function(e) { Module.ccall('axmol_webglcontextlost'); alert('WebGL context lost. You will need to reload the page.'); e.preventDefault(); }, false);
           canvas.addEventListener("webglcontextrestored", function(e) { Module.ccall('axmol_webglcontextrestored'); e.preventDefault(); }, false);
 
-          document.addEventListener("visibilitychange", () => { Module.ccall('axmol_hdoc_visibilitychange', document.hidden); });
+          document.addEventListener("visibilitychange", () => { Module.ccall("axmol_hdoc_visibilitychange", null, ["number"], [document.hidden ? 1 : 0]); });
 
           return canvas;
         })(),
