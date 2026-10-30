@@ -17,6 +17,7 @@ SPDX-License-Identifier: MIT
 #    include "axmol/ui/EditBox/EditBox.h"
 #    include <tchar.h>
 #    include <stdio.h>
+#    include <cmath>
 #    include "axmol/2d/Label.h"
 #    include "axmol/base/Director.h"
 #    include "axmol/base/text_utils.h"
@@ -284,9 +285,8 @@ void EditBoxImplWin::setNativeVisible(bool visible)
 
 void EditBoxImplWin::updateNativeFrame(const Rect& rect)
 {
-    ::SetWindowPos(_hwndEdit, HWND_NOTOPMOST, static_cast<int>(rect.origin.x), static_cast<int>(rect.origin.y),
-                   static_cast<int>(rect.size.width), static_cast<int>(rect.size.height),
-                   SWP_NOZORDER | SWP_NOACTIVATE);
+    ::SetWindowPos(_hwndEdit, HWND_NOTOPMOST, std::lround(rect.origin.x), std::lround(rect.origin.y),
+                   std::lround(rect.size.width), std::lround(rect.size.height), SWP_NOZORDER | SWP_NOACTIVATE);
 }
 
 std::string_view EditBoxImplWin::getNativeDefaultFontName()
