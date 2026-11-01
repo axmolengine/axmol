@@ -83,7 +83,7 @@ Axmol began in November 2019 as a fork of Cocos2d-x v4.0 and has continued to ev
 
 Ask questions in [GitHub Discussions](https://github.com/axmolengine/axmol/discussions), join [Discord](https://discord.gg/QjaQBhFVay), or read the [contribution guide](CONTRIBUTING.md) and [contributors list](AUTHORS.md). If Axmol is useful to you, a GitHub star helps others discover it. You can also [support development](https://axmol.dev/sponsor).
 
-### Corporate Diamond sponsor
+### Corporate Patron
 
 <a href="https://scorewarrior.com/?utm_source=axmol"><img src="https://cdn.prod.website-files.com/633da33305ac754156026dd8/63566f1edf5f0712f94f7f1b_sw-triangle-821890.svg" height="96" alt="Scorewarrior"></a>
 

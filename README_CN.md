@@ -86,7 +86,7 @@ Axmol 于 2019 年 11 月从 Cocos2d-x v4.0 分支开始，并在贡献者的参
 
 欢迎在 [GitHub Discussions](https://github.com/axmolengine/axmol/discussions) 提问，加入 [Discord](https://discord.gg/QjaQBhFVay) 或[QQ 群](https://jq.qq.com/?_wv=1027&k=nvNmzOIY)，并阅读[贡献指南](CONTRIBUTING.md)和[贡献者名单](AUTHORS.md)。如果 Axmol 对你有帮助，GitHub star 能帮助更多人发现项目。你也可以[支持项目开发](https://axmol.dev/sponsor)。
 
-### 企业钻石级赞助者
+### 至臻赞助企业
 
 <a href="https://scorewarrior.com/?utm_source=axmol"><img src="https://cdn.prod.website-files.com/633da33305ac754156026dd8/63566f1edf5f0712f94f7f1b_sw-triangle-821890.svg" height="96" alt="Scorewarrior"></a>
 
