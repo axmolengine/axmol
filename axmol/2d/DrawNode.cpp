@@ -1407,11 +1407,10 @@ void DrawNode::_drawCircle(const Vec2& center, float radius, const Color& color,
 
 void DrawNode::_drawColoredTriangle(const Vec2* vertices3, const Color* color3)
 {
-    constexpr int VERTEX_COUNT = 3;
-    Vec2 _vertices3[VERTEX_COUNT];
-    applyLocalTransform(vertices3, _vertices3, VERTEX_COUNT);
+    unsigned int vertexCount = 3;
+    auto _vertices3          = _transform(vertices3, vertexCount, false);
 
-    auto triangles  = reinterpret_cast<V2F_T2F_C4F_Triangle*>(expandBufferAndGetPointer(_triangles, VERTEX_COUNT));
+    auto triangles  = reinterpret_cast<V2F_T2F_C4F_Triangle*>(expandBufferAndGetPointer(_triangles, vertexCount));
     _trianglesDirty = true;
 
     triangles[0] = {{_vertices3[0], Vec2::zero, color3[0]},
