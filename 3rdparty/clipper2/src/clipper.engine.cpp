@@ -1,8 +1,8 @@
 /*******************************************************************************
 * Author    :  Angus Johnson                                                   *
-* Date      :  5 November 2025                                                 *
+* Date      :  21 February 2026                                                *
 * Website   :  https://www.angusj.com                                          *
-* Copyright :  Angus Johnson 2010-2025                                         *
+* Copyright :  Angus Johnson 2010-2026                                         *
 * Purpose   :  This is the main polygon clipping module                        *
 * License   :  https://www.boost.org/LICENSE_1_0.txt                           *
 *******************************************************************************/
@@ -617,7 +617,7 @@ namespace Clipper2Lib {
         {return a + path.size(); });
     if (total_vertex_count == 0) return;
 
-    Vertex* vertices = new Vertex[total_vertex_count], * v = vertices;
+    Vertex* allVertices = new Vertex[total_vertex_count], * v = allVertices;
     for (const Path64& path : paths)
     {
       //for each path create a circular double linked list of vertices
@@ -709,7 +709,7 @@ namespace Clipper2Lib {
       }
     } // end processing current path
 
-    vertexLists.emplace_back(vertices);
+    vertexLists.emplace_back(allVertices);
   }
 
   //------------------------------------------------------------------------------
@@ -790,10 +790,8 @@ namespace Clipper2Lib {
       std::stable_sort(minima_list_.begin(), minima_list_.end(), LocMinSorter()); //#594
       minima_list_sorted_ = true;
     }
-    LocalMinimaList::const_reverse_iterator i;
-    for (i = minima_list_.rbegin(); i != minima_list_.rend(); ++i)
-      InsertScanline((*i)->vertex->pt.y);
-
+    // the local minima aren't added to scanline_list_ since they're already
+    // sorted, instead PopScanline() merges them with scanline_list_
     current_locmin_iter_ = minima_list_.begin();
     actives_ = nullptr;
     sel_ = nullptr;
@@ -860,20 +858,41 @@ namespace Clipper2Lib {
   }
 
 
+  bool ClipperBase::PeekLocMinY(int64_t& y) const
+  {
+    if (current_locmin_iter_ == minima_list_.end()) return false;
+
+    y = (*current_locmin_iter_)->vertex->pt.y;
+    return true;
+  }
+
+
   bool ClipperBase::PopScanline(int64_t& y)
   {
-    if (scanline_list_.empty()) return false;
-    y = scanline_list_.top();
-    scanline_list_.pop();
+    // the next scanline is the larger of the next local minima's y (local
+    // minima are sorted by descending y) and the top of scanline_list_
+    int64_t locmin_y = 0;
+    const bool has_locmin = PeekLocMinY(locmin_y);
+
+    if (!has_locmin && scanline_list_.empty()) return false;
+
+    y = has_locmin ? locmin_y : scanline_list_.top();
+
+    if (!scanline_list_.empty() && scanline_list_.top() > y) y = scanline_list_.top();
+
     while (!scanline_list_.empty() && y == scanline_list_.top())
       scanline_list_.pop();  // Pop duplicates.
+
     return true;
   }
 
 
   bool ClipperBase::PopLocalMinima(int64_t y, LocalMinima*& local_minima)
   {
-    if (current_locmin_iter_ == minima_list_.end() || (*current_locmin_iter_)->vertex->pt.y != y) return false;
+    int64_t locmin_y = 0;
+
+    if (!PeekLocMinY(locmin_y) || locmin_y != y) return false;
+
     local_minima = (current_locmin_iter_++)->get();
     return true;
   }
@@ -1653,25 +1672,14 @@ namespace Clipper2Lib {
       if (SegmentsIntersect(op2->prev->pt,
         op2->pt, op2->next->pt, op2->next->next->pt))
       {
-        if (SegmentsIntersect(op2->prev->pt,
-          op2->pt, op2->next->next->pt, op2->next->next->next->pt))
-        {
-          // adjacent intersections (ie a micro self-intersections)
-          op2 = DuplicateOp(op2, false);
-          op2->pt = op2->next->next->next->pt;
-          op2 = op2->next;
-        }
-        else
-        {
-          if (op2 == outrec->pts || op2->next == outrec->pts)
-            outrec->pts = outrec->pts->prev;
-          DoSplitOp(outrec, op2);
-          if (!outrec->pts) break;
-          op2 = outrec->pts;
-          if (op2->prev == op2->next->next)
-            break; // again, because triangles can't self-intersect
-          continue;
-        }
+        if (op2 == outrec->pts || op2->next == outrec->pts)
+          outrec->pts = outrec->pts->prev;
+        DoSplitOp(outrec, op2);
+        if (!outrec->pts) break;
+        op2 = outrec->pts;
+        if (op2->prev == op2->next->next)
+          break; // again, because triangles can't self-intersect
+        continue;
       }
       else
         op2 = op2->next;
@@ -2110,10 +2118,13 @@ namespace Clipper2Lib {
   }
 
 
-  inline void ClipperBase::AdjustCurrXAndCopyToSEL(const int64_t top_y)
+  // returns true when the edges are still sorted by curr_x (ie no intersections)
+  inline bool ClipperBase::AdjustCurrXAndCopyToSEL(const int64_t top_y)
   {
     Active* e = actives_;
     sel_ = e;
+    bool sorted = true;
+    int64_t prev_x = std::numeric_limits<int64_t>::min();
     while (e)
     {
       e->prev_in_sel = e->prev_in_ael;
@@ -2121,9 +2132,13 @@ namespace Clipper2Lib {
       e->jump = e->next_in_sel;
       // it is safe to ignore 'joined' edges here because
       // if necessary they will be split in IntersectEdges()
-      e->curr_x = TopX(*e, top_y);
+      int64_t x = TopX(*e, top_y);
+      e->curr_x = x;
+      if (x < prev_x) sorted = false;
+      prev_x = x;
       e = e->next_in_ael;
     }
+    return sorted;
   }
 
   bool ClipperBase::ExecuteInternal(ClipType ct, FillRule fillrule, bool use_polytrees)
@@ -2346,6 +2361,7 @@ namespace Clipper2Lib {
 
   void ClipperBase::DoIntersections(const int64_t top_y)
   {
+    curr_x_at_top_ = false;
     if (BuildIntersectList(top_y))
     {
       ProcessIntersectList();
@@ -2393,7 +2409,13 @@ namespace Clipper2Lib {
 
     //Calculate edge positions at the top of the current scanbeam, and from this
     //we will determine the intersections required to reach these new positions.
-    AdjustCurrXAndCopyToSEL(top_y);
+    //If the edges are still in order there are no intersections, so the merge
+    //sort (which always does log2(n) passes over the edges) can be skipped.
+    if (AdjustCurrXAndCopyToSEL(top_y))
+    {
+      curr_x_at_top_ = true;
+      return false;
+    }
     //Find all edge intersections in the current scanbeam using a stable merge
     //sort that ensures only adjacent edges are intersecting. Intersect info is
     //stored in FIntersectList ready to be processed in ProcessIntersectList.
@@ -2729,7 +2751,7 @@ namespace Clipper2Lib {
             PushHorz(*e);  // horizontals are processed later
         }
       }
-      else // i.e. not the top of the edge
+      else if (!curr_x_at_top_) // i.e. not the top of the edge
         e->curr_x = TopX(*e, y);
 
       e = e->next_in_ael;
@@ -2944,8 +2966,14 @@ namespace Clipper2Lib {
     for (size_t idx = 0; idx < splits->size(); ++idx)
     {
       OutRec* split = (*splits)[idx]; 
-      if (!split->pts && split->splits &&
-        CheckSplitOwner(outrec, split->splits)) return true; //#942
+      if (!split->pts && split->splits)
+      {
+        if (split->recursive_split == outrec) continue;
+        split->recursive_split = outrec; // emptied OutRecs can reference each other
+
+        if (CheckSplitOwner(outrec, split->splits)) return true; //#942
+      }
+
       split = GetRealOutRec(split);
       if (!split || split == outrec || split->recursive_split == outrec) continue;
       split->recursive_split = outrec; // prevent infinite loops

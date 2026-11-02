@@ -138,7 +138,7 @@ namespace Clipper2Lib
       }
     }
 
-    explicit Point() : x(0), y(0), z(0) {};
+    explicit Point() : x(0), y(0), z(0) {}
 
     template <typename T2>
     Point(const T2 x_, const T2 y_, const z_type z_ = 0)
@@ -190,7 +190,7 @@ namespace Clipper2Lib
       }
     }
 
-    explicit Point() : x(0), y(0) {};
+    explicit Point() : x(0), y(0) {}
 
     template <typename T2>
     Point(const T2 x_, const T2 y_) { Init(x_, y_); }
@@ -367,13 +367,13 @@ namespace Clipper2Lib
       bottom *= scale;
     }
 
-    bool IsEmpty() const { return bottom <= top || right <= left; };
+    bool IsEmpty() const { return bottom <= top || right <= left; }
 
     bool Intersects(const Rect<T>& rec) const
     {
       return ((std::max)(left, rec.left) <= (std::min)(right, rec.right)) &&
         ((std::max)(top, rec.top) <= (std::min)(bottom, rec.bottom));
-    };
+    }
 
     bool operator==(const Rect<T>& other) const {
       return left == other.left && right == other.right &&
@@ -707,7 +707,7 @@ namespace Clipper2Lib
     bool operator==(const UInt128Struct& other) const
     {
       return lo == other.lo && hi == other.hi;
-    };
+    }
 
   };
 
@@ -888,7 +888,7 @@ namespace Clipper2Lib
   // be constrained to seg1. However, it's possible that 'ip' won't be inside
   // seg2, even when 'ip' hasn't been constrained (ie 'ip' is inside seg1).
 
-#if CLIPPER2_HI_PRECISION
+#if defined(CLIPPER2_HI_PRECISION) && CLIPPER2_HI_PRECISION
   // caution: this will compromise performance
   // https://github.com/AngusJohnson/Clipper2/issues/317#issuecomment-1314023253
   // See also CPP/BenchMark/GetIntersectPtBenchmark.cpp

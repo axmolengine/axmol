@@ -20,7 +20,7 @@
 - License: MIT
 
 ## Clipper2
-- [![Upstream](https://img.shields.io/github/v/tag/AngusJohnson/Clipper2?label=Upstream)](https://github.com/AngusJohnson/Clipper2)
+- [![Upstream](https://img.shields.io/github/v/tag/PolyClipping/Clipper2?label=Upstream)](https://github.com/PolyClipping/Clipper2)
 - Version: 2.0.1
 - License: BSL-1.0
 
