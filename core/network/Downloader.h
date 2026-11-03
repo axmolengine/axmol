@@ -57,6 +57,7 @@ public:
     const static int ERROR_RENAME_FILE_FAILED  = -7;
     const static int ERROR_CHECK_SUM_FAILED    = -8;
     const static int ERROR_ORIGIN_FILE_MISSING = -9;
+    const static int ERROR_TASK_CANCELLED      = -10;
 
     std::string identifier;
     std::string requestURL;
@@ -86,7 +87,10 @@ public:
     virtual ~DownloadTask();
 
     // Cancel the download, it's useful for ios platform switch wifi to 4g
-    void cancel();
+    // Once the task has actually stopped, Downloader::onTaskCancelled is invoked (not onTaskError).
+    // @param cleanup false (default): keep the partially downloaded temp files (.tmp and .tmp.digest) so the
+    //                download can be resumed later. true: remove them once the task has stopped.
+    void cancel(bool cleanup = false);
 
     std::string checksum;  // The MD5 checksum for check only when download finished.
     bool background;       // Does the task is background (all callback will invoke on downloader thread)
@@ -121,6 +125,12 @@ public:
     std::function<void(const DownloadTask& task, int errorCode, int errorCodeInternal, std::string_view errorStr)>
         onTaskError;
 
+    /**
+     * Invoked once a task cancelled via DownloadTask::cancel() has actually stopped.
+     * It is safe to call Downloader::cleanup(task) from within this callback.
+     */
+    std::function<void(const DownloadTask& task)> onTaskCancelled;
+
     void setOnFileTaskSuccess(const std::function<void(const DownloadTask& task)>& callback)
     {
         onFileTaskSuccess = callback;
@@ -137,6 +147,20 @@ public:
     {
         onTaskError = callback;
     };
+
+    void setOnTaskCancelled(const std::function<void(const DownloadTask& task)>& callback)
+    {
+        onTaskCancelled = callback;
+    };
+
+    /**
+     * Removes the partially downloaded temp files (the temp file and its .digest) of a file task.
+     * The task must have finished (successfully, with an error, or cancelled, e.g. from onTaskCancelled),
+     * the downloaded target file is never touched.
+     * @return true if the temp files don't exist anymore, false if the task is still running,
+     *         isn't a file task or a file could not be removed.
+     */
+    bool cleanup(const DownloadTask& task);
 
     std::shared_ptr<DownloadTask> createDownloadDataTask(std::string_view srcUrl, std::string_view identifier = "");
 

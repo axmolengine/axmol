@@ -77,10 +77,10 @@ DownloadTask::~DownloadTask()
     AXLOGD("Destruct DownloadTask {}", fmt::ptr(this));
 }
 
-void DownloadTask::cancel()
+void DownloadTask::cancel(bool cleanup)
 {
     if (_context)
-        _context->cancel();
+        _context->cancel(cleanup);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -100,6 +100,15 @@ Downloader::Downloader(const DownloaderHints& hints)
 
     _impl->onTaskFinish = [this](const DownloadTask& task, int errorCode, int errorCodeInternal,
                                  std::string_view errorStr, std::vector<unsigned char>& data) {
+        if (DownloadTask::ERROR_TASK_CANCELLED == errorCode)
+        {
+            if (onTaskCancelled)
+            {
+                onTaskCancelled(task);
+            }
+            return;
+        }
+
         if (DownloadTask::ERROR_NO_ERROR != errorCode)
         {
             if (onTaskError)
@@ -131,6 +140,11 @@ Downloader::Downloader(const DownloaderHints& hints)
 Downloader::~Downloader()
 {
     AXLOGD("Destruct Downloader {}", fmt::ptr(this));
+}
+
+bool Downloader::cleanup(const DownloadTask& task)
+{
+    return _impl->cleanupTask(task);
 }
 
 std::shared_ptr<DownloadTask> Downloader::createDownloadDataTask(std::string_view srcUrl,

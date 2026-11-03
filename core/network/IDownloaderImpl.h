@@ -43,7 +43,7 @@ class AX_DLL IDownloadContext
 {
 public:
     virtual ~IDownloadContext(){}
-    virtual void cancel() {}
+    virtual void cancel(bool /*cleanup*/ = false) {}
 };
 
 class IDownloaderImpl
@@ -61,6 +61,9 @@ public:
         onTaskFinish;
 
     virtual void startTask(std::shared_ptr<DownloadTask>& task) = 0;
+
+    // Remove the temp files of a finished file task
+    virtual bool cleanupTask(const DownloadTask& /*task*/) { return false; }
 };
 
 }  // namespace network
