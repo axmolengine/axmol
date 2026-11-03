@@ -1,9 +1,9 @@
 /*******************************************************************************
 * Author    :  Angus Johnson                                                   *
-* Date      :  13 December 2025                                                *
+* Date      :  21 February 2026                                                *
 * Release   :  BETA RELEASE                                                    *
 * Website   :  https://www.angusj.com                                          *
-* Copyright :  Angus Johnson 2010-2025                                         *
+* Copyright :  Angus Johnson 2010-2026                                         *
 * Purpose   :  Constrained Delaunay Triangulation                              *
 * License   :  https://www.boost.org/LICENSE_1_0.txt                           *
 *******************************************************************************/
@@ -196,7 +196,7 @@ namespace Clipper2Lib
   static void RemoveEdgeFromVertex(Vertex2* vert, Edge* edge)
   {
     auto it = std::find(vert->edges.begin(), vert->edges.end(), edge);
-    if (it == vert->edges.end()) throw "oops!";
+    if (it == vert->edges.end()) DoError(undefined_error_i);
     vert->edges.erase(it);
   }
 
@@ -303,6 +303,9 @@ namespace Clipper2Lib
   static IntersectKind SegsIntersect(const Point64 s1a, const Point64 s1b, 
     const Point64 s2a, const Point64 s2b)
   {
+    //ignore segments sharing an end-point
+    if (s1a == s2a || s1b == s2a || s1b == s2b) return IntersectKind::none;
+
     double dy1 = static_cast<double>(s1b.y - s1a.y);
     double dx1 = static_cast<double>(s1b.x - s1a.x);
     double dy2 = static_cast<double>(s2b.y - s2a.y);
@@ -311,10 +314,10 @@ namespace Clipper2Lib
     if (cp == 0) return IntersectKind::collinear;
 
     double t = (static_cast<double>(s1a.x - s2a.x) * dy2 - 
-      static_cast<double>(s1a.y - s2a.y) * dx2);
-    //ignore segments that 'intersect' at an end-point
-    if (t == 0) return IntersectKind::none;
-    if (t > 0)
+      static_cast<double>(s1a.y - s2a.y) * dx2);    
+
+    // nb: testing for t == 0 is unreliable due to float imprecision
+    if (t >= 0)
     {
       if (cp < 0 || t >= cp) return IntersectKind::none;
     }
@@ -326,8 +329,7 @@ namespace Clipper2Lib
     // so far, the *segment* 's1' intersects the *line* through 's2',
     // but now make sure it also intersects the *segment* 's2'
     t = ((s1a.x - s2a.x) * dy1 - (s1a.y - s2a.y) * dx1);
-    if (t == 0) return IntersectKind::none;
-    if (t > 0)
+    if (t >= 0)
     {
       if (cp > 0 && t < cp) return IntersectKind::intersect;
     }
@@ -434,7 +436,7 @@ namespace Clipper2Lib
     for (int i = 1; i < 3; ++i)
     {
       edge->triA->edges[i] = edgesA[i];
-      if (!edgesA[i]) throw "oops"; // stops compiler warnings 
+      if (!edgesA[i]) DoError(undefined_error_i);
       if (IsLooseEdge(*edgesA[i]))
         pendingDelaunayStack.push(edgesA[i]);
       // since each edge has its own triangleA and triangleB, we have to be careful
@@ -445,14 +447,14 @@ namespace Clipper2Lib
         edgesA[i]->triA = edge->triA;
       else if (edgesA[i]->triB == edge->triB)
         edgesA[i]->triB = edge->triA;
-      else throw "oops";
+      else DoError(undefined_error_i);
     }
 
     edge->triB->edges[0] = edge;
     for (int i = 1; i < 3; ++i)
     {
       edge->triB->edges[i] = edgesB[i];
-      if (!edgesB[i]) throw "oops"; // stops compiler warnings 
+      if (!edgesB[i]) DoError(undefined_error_i);
       if (IsLooseEdge(*edgesB[i]))
         pendingDelaunayStack.push(edgesB[i]);
       // since each edge has its own triangleA and triangleB, we have to be careful
@@ -463,7 +465,7 @@ namespace Clipper2Lib
         edgesB[i]->triA = edge->triB;
       else if (edgesB[i]->triB == edge->triA)
         edgesB[i]->triB = edge->triB;
-      else throw "oops";
+      else DoError(undefined_error_i);
     }
 
   }
@@ -1202,7 +1204,7 @@ namespace Clipper2Lib
 
   TriangulateResult Triangulate(const PathsD& pp, int decPlaces, PathsD& solution, bool useDelaunay)
   {
-    int ec;
+    int ec = 0;
     double scale;
     TriangulateResult result;
     if (decPlaces <= 0) scale = 1;
