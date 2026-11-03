@@ -5,12 +5,13 @@ namespace ax
 {
 enum class ContactEventBits : uint32_t
 {
-    None     = 0,
-    PreSolve = 1 << 0,
-    Hit      = 1 << 1,
-    Contact  = 1 << 2,
-    Sensor   = 1 << 3,
-    AllBits  = PreSolve | Hit | Contact | Sensor
+    None      = 0,
+    PreSolve  = 1 << 0,
+    Hit       = 1 << 1,
+    Contact   = 1 << 2,
+    Sensor    = 1 << 3,
+    Persisted = 1 << 4,
+    AllBits   = PreSolve | Hit | Contact | Sensor | Persisted
 };
 
 AX_ENABLE_BITMASK_OPS(ContactEventBits);
