@@ -227,10 +227,11 @@
         [self createPasswordTextField];
     }
 
+    self.dataInputMode = inputFlag;
+
     switch (inputFlag)
     {
     case ax::ui::EditBox::InputFlag::PASSWORD:
-        self.dataInputMode = inputFlag;
         break;
     case ax::ui::EditBox::InputFlag::INITIAL_CAPS_WORD:
         AXLOGD("INITIAL_CAPS_WORD not implemented");
