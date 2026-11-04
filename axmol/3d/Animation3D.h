@@ -58,10 +58,13 @@ public:
         typedef AnimationCurve<4> AnimationCurveQuat;
         /**translation curve*/
         AnimationCurveVec3* translateCurve;
+        bool translateStep;
         /**rotation curve*/
         AnimationCurveQuat* rotCurve;
+        bool rotateStep;
         /**scaling curve*/
         AnimationCurveVec3* scaleCurve;
+        bool scaleStep;
         /**constructor */
         Curve();
         /**constructor */

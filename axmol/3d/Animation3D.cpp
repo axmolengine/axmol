@@ -10,9 +10,13 @@
 
 #include "axmol/3d/Animation3D.h"
 #include "axmol/3d/Bundle3D.h"
+#include "axmol/3d/GltfLoader.h"
 #include "axmol/platform/FileUtils.h"
 #include "axmol/tlx/vector.hpp"
 #include "axmol/tlx/utility.hpp"
+
+#include <algorithm>
+#include <ctype.h>
 
 namespace ax
 {
@@ -41,6 +45,19 @@ Animation3D* Animation3D::create(std::string_view fileName, std::string_view ani
 bool Animation3D::initWithFile(std::string_view filename, std::string_view animationName)
 {
     std::string fullPath = FileUtils::getInstance()->fullPathForFilename(filename);
+
+    auto extension = FileUtils::getPathExtension(fullPath);
+    std::transform(extension.begin(), extension.end(), extension.begin(),
+                   [](unsigned char character) { return static_cast<char>(std::tolower(character)); });
+    if (extension == ".gltf" || extension == ".glb")
+    {
+        Animation3DData animationdata;
+        if (!GltfLoader::loadAnimationData(animationdata, fullPath, animationName) || !init(animationdata))
+            return false;
+        fullPath.append("#").append(animationName);
+        Animation3DCache::getInstance()->addAnimation(fullPath, this);
+        return true;
+    }
 
     // load animation here
     auto bundle = Bundle3D::createBundle();
@@ -78,7 +95,14 @@ Animation3D::~Animation3D()
     }
 }
 
-Animation3D::Curve::Curve() : translateCurve(nullptr), rotCurve(nullptr), scaleCurve(nullptr) {}
+Animation3D::Curve::Curve()
+    : translateCurve(nullptr)
+    , translateStep(false)
+    , rotCurve(nullptr)
+    , rotateStep(false)
+    , scaleCurve(nullptr)
+    , scaleStep(false)
+{}
 Animation3D::Curve::~Curve()
 {
     AX_SAFE_RELEASE_NULL(translateCurve);
@@ -113,6 +137,7 @@ bool Animation3D::init(const Animation3DData& data)
                                       [](const auto& keyIter) { return keyIter._key; });
 
             curve->translateCurve = Curve::AnimationCurveVec3::create(&keys[0], &values[0].x, (int)keys.size());
+            curve->translateStep  = data._translationStep.find(iter.first) != data._translationStep.end();
             if (curve->translateCurve)
                 curve->translateCurve->retain();
         }
@@ -138,7 +163,8 @@ bool Animation3D::init(const Animation3DData& data)
             tlx::resize_and_transform(iter.second.begin(), iter.second.end(), values,
                                       [](const auto& keyIter) { return keyIter._key; });
 
-            curve->rotCurve = Curve::AnimationCurveQuat::create(&keys[0], &values[0].x, (int)keys.size());
+            curve->rotCurve   = Curve::AnimationCurveQuat::create(&keys[0], &values[0].x, (int)keys.size());
+            curve->rotateStep = data._rotationStep.find(iter.first) != data._rotationStep.end();
             if (curve->rotCurve)
                 curve->rotCurve->retain();
         }
@@ -165,6 +191,7 @@ bool Animation3D::init(const Animation3DData& data)
                                       [](const auto& keyIter) { return keyIter._key; });
 
             curve->scaleCurve = Curve::AnimationCurveVec3::create(&keys[0], &values[0].x, (int)keys.size());
+            curve->scaleStep  = data._scaleStep.find(iter.first) != data._scaleStep.end();
             if (curve->scaleCurve)
                 curve->scaleCurve->retain();
         }
