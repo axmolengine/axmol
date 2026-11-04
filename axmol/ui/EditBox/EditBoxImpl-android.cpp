@@ -15,6 +15,7 @@
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 
 #    include "axmol/ui/EditBox/EditBox.h"
+#    include <cmath>
 #    include <jni.h>
 #    include "axmol/platform/android/jni/JniHelper.h"
 #    include "axmol/2d/Label.h"
@@ -133,8 +134,9 @@ void EditBoxImplAndroid::setNativeVisible(bool visible)
 
 void EditBoxImplAndroid::updateNativeFrame(const Rect& rect)
 {
-    JniHelper::callStaticVoidMethod(editBoxClassName, "setEditBoxViewRect", _editBoxIndex, (int)rect.origin.x,
-                                    (int)rect.origin.y, (int)rect.size.width, (int)rect.size.height);
+    JniHelper::callStaticVoidMethod(editBoxClassName, "setEditBoxViewRect", _editBoxIndex,
+                                    (int)std::lround(rect.origin.x), (int)std::lround(rect.origin.y),
+                                    (int)std::lround(rect.size.width), (int)std::lround(rect.size.height));
 }
 
 void EditBoxImplAndroid::nativeOpenKeyboard()
