@@ -26,6 +26,7 @@
 
 #include "axmol/base/Types.h"
 #include "axmol/platform/apple/Device-apple.h"
+#include "axmol/platform/apple/FoundationBridge.h"
 
 namespace FontUtils
 {
@@ -238,7 +239,7 @@ static bool prepareTextLayout(std::string_view text,
     if (text.empty())
         return false;
 
-    auto* string = [[NSString alloc] initWithBytes:text.data() length:text.size() encoding:NSUTF8StringEncoding];
+    auto* string = svtons(text);
     if (!string)
         return false;
 

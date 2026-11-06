@@ -9,6 +9,7 @@ https://axmol.dev/
 SPDX-License-Identifier: MIT
 ****************************************************************************/
 #include "axmol/platform/Device.h"
+#include "axmol/platform/apple/FoundationBridge.h"
 #include <Foundation/Foundation.h>
 #include <Cocoa/Cocoa.h>
 #include <string>
@@ -43,9 +44,7 @@ void Device::setClipboardText(std::string_view text)
         NSPasteboard* pb = [NSPasteboard generalPasteboard];
         [pb clearContents];
 
-        NSString* s = [[NSString alloc] initWithBytes:text.data()
-                                               length:(NSUInteger)text.size()
-                                             encoding:NSUTF8StringEncoding];
+        NSString* s = svtons(text);
         if (s)
             [pb setString:s forType:NSPasteboardTypeString];
     }

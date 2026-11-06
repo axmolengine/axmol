@@ -12,6 +12,7 @@ SPDX-License-Identifier: MIT
 #import <Foundation/Foundation.h>
 
 #include "axmol/platform/apple/FileUtils-apple.h"
+#include "axmol/platform/apple/FoundationBridge.h"
 
 #include <ftw.h>
 
@@ -139,11 +140,7 @@ bool FileUtilsApple::isFileExistInternal(std::string_view filePath) const
     {
         // Search path is an absolute path.
         BOOL isDir = NO;
-        if ([s_fileManager fileExistsAtPath:[[NSString alloc] initWithBytes:filePath.data()
-                                                                     length:filePath.size()
-                                                                   encoding:NSUTF8StringEncoding]
-                                isDirectory:&isDir] &&
-            !isDir)
+        if ([s_fileManager fileExistsAtPath:svtons(filePath) isDirectory:&isDir] && !isDir)
         {
             ret = true;
         }
@@ -165,7 +162,7 @@ std::string FileUtilsApple::getPathForDirectory(std::string_view dir, std::strin
     if (path[0] == '/')
     {
         BOOL isDir = NO;
-        if ([s_fileManager fileExistsAtPath:[[NSString alloc] initWithBytes:path.data()
+        if ([s_fileManager fileExistsAtPath:[[NSString alloc] initWithBytes:path.c_str()
                                                                      length:path.size()
                                                                    encoding:NSUTF8StringEncoding]
                                 isDirectory:&isDir])
@@ -207,19 +204,13 @@ std::string FileUtilsApple::getFullPathForFilenameWithinDirectory(std::string_vi
         NSString* path = nil;
         if (!directory.empty())
         {
-            path = [pimpl_->getBundle() pathForResource:[[NSString alloc] initWithBytes:filename.data()
-                                                                                 length:filename.size()
-                                                                               encoding:NSUTF8StringEncoding]
+            path = [pimpl_->getBundle() pathForResource:svtons(filename)
                                                  ofType:nil
-                                            inDirectory:[[NSString alloc] initWithBytes:directory.data()
-                                                                                 length:directory.size()
-                                                                               encoding:NSUTF8StringEncoding]];
+                                            inDirectory:svtons(directory)];
         }
         else
         {
-            path = [pimpl_->getBundle() pathForResource:[[NSString alloc] initWithBytes:filename.data()
-                                                                                 length:filename.size()
-                                                                               encoding:NSUTF8StringEncoding]
+            path = [pimpl_->getBundle() pathForResource:svtons(filename)
                                                  ofType:nil];
         }
         if (path != nil)
@@ -245,9 +236,7 @@ bool FileUtilsApple::createDirectories(std::string_view path) const
 
     NSError* error;
 
-    bool result = [s_fileManager createDirectoryAtPath:[[NSString alloc] initWithBytes:path.data()
-                                                                                length:path.size()
-                                                                              encoding:NSUTF8StringEncoding]
+    bool result = [s_fileManager createDirectoryAtPath:svtons(path)
                            withIntermediateDirectories:YES
                                             attributes:nil
                                                  error:&error];

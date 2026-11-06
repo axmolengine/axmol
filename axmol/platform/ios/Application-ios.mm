@@ -107,6 +107,7 @@ bool Application::openURL(std::string_view url)
 
     id application = [UIApplication sharedApplication];
     [application openURL:nsUrl options:@{} completionHandler:nil];
+    return true;
 }
 
 void Application::postBoundaryTaskSignal()

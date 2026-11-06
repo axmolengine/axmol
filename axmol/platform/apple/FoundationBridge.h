@@ -16,6 +16,6 @@ namespace ax
 static NSString* svtons(std::string_view str)
 {
     return !str.empty() ? [[NSString alloc] initWithBytes:str.data() length:str.length() encoding:NSUTF8StringEncoding]
-                        : nil;
+                        : @"";
 }
 }  // namespace ax
