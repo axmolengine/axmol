@@ -15,6 +15,7 @@
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/AccelerationEvent.h"
 #include "axmol/base/Director.h"
+#include "axmol/platform/apple/FoundationBridge.h"
 
 // Accelerometer
 #if !defined(AX_TARGET_OS_TVOS)
@@ -579,9 +580,7 @@ void Device::setClipboardText(std::string_view text)
 #if TARGET_OS_IOS
     @autoreleasepool
     {
-        NSString* s = [[NSString alloc] initWithBytes:text.data() length:text.length() encoding:NSUTF8StringEncoding];
-        if (!s)
-            s = @"";
+        NSString* s                             = svtons(text);
         [UIPasteboard generalPasteboard].string = s;
     }
 #endif
