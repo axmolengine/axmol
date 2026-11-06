@@ -637,7 +637,7 @@ function(ax_setup_app_config app_name)
         ax_target_embed_compiled_shaders(${app_name} ${rt_output} FILES ${all_compiled_shaders})
       else()
         # refer to: https://emscripten.org/docs/porting/files/packaging_files.html
-        target_link_options(${app_name} PRIVATE ${AX_WASM_ASSETS_LINKER_FLAG} ${AXSLCC_OUT_DIR}@axslc/)
+        target_link_options(${app_name} PRIVATE "SHELL:${AX_WASM_ASSETS_LINKER_FLAG} \"${AXSLCC_OUT_DIR}@axslc/\"")
       endif()
     endif()
   endif()
@@ -668,13 +668,17 @@ macro(ax_setup_app_props app_name)
       "-sEXPORTED_FUNCTIONS=[${AX_WASM_EXPORTS}]"
       "-sEXPORTED_RUNTIME_METHODS=[ccall,cwrap,HEAPU8,requestFullscreen,lengthBytesUTF8,stringToUTF8,IDBFS]"
     )
-    set(EMSCRIPTEN_LINK_FLAGS "-lidbfs.js -s MIN_WEBGL_VERSION=2 -s MAX_WEBGL_VERSION=2 -s STACK_SIZE=4mb --shell-file ${AX_WASM_SHELL_FILE} --use-preload-cache")
+    target_link_options(${app_name} PRIVATE
+      -lidbfs.js -sMIN_WEBGL_VERSION=2 -sMAX_WEBGL_VERSION=2 -sSTACK_SIZE=4mb
+      "SHELL:--shell-file \"${AX_WASM_SHELL_FILE}\""
+      --use-preload-cache
+    )
 
-    # string(APPEND EMSCRIPTEN_LINK_FLAGS " -s SEPARATE_DWARF_URL=http://127.0.0.1:6931/${app_name}.debug.wasm")
-    # string(APPEND EMSCRIPTEN_LINK_FLAGS " -gseparate-dwarf=${CMAKE_BINARY_DIR}/bin/${app_name}/${app_name}.debug.wasm")
-    # string(APPEND EMSCRIPTEN_LINK_FLAGS " -gsplit-dwarf")
+    # target_link_options(${app_name} PRIVATE "-sSEPARATE_DWARF_URL=http://127.0.0.1:6931/${app_name}.debug.wasm")
+    # target_link_options(${app_name} PRIVATE "-gseparate-dwarf=${CMAKE_BINARY_DIR}/bin/${app_name}/${app_name}.debug.wasm")
+    # target_link_options(${app_name} PRIVATE -gsplit-dwarf)
     if(AX_WASM_GENERATE_SYMBOL_FILE)
-      string(APPEND EMSCRIPTEN_LINK_FLAGS " -g --emit-symbol-map")
+      target_link_options(${app_name} PRIVATE -g --emit-symbol-map)
     endif()
 
     if(NOT DEFINED _APP_RES_FOLDER)
@@ -682,10 +686,8 @@ macro(ax_setup_app_props app_name)
     endif()
 
     foreach(FOLDER IN LISTS _APP_RES_FOLDER)
-      string(APPEND EMSCRIPTEN_LINK_FLAGS " ${AX_WASM_ASSETS_LINKER_FLAG} ${FOLDER}/@/")
+      target_link_options(${app_name} PRIVATE "SHELL:${AX_WASM_ASSETS_LINKER_FLAG} \"${FOLDER}/@/\"")
     endforeach()
-
-    set_target_properties(${app_name} PROPERTIES LINK_FLAGS "${EMSCRIPTEN_LINK_FLAGS}")
   endif()
 
   if(MSVC)
