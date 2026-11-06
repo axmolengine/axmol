@@ -15,6 +15,7 @@
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/AccelerationEvent.h"
 #include "axmol/base/Director.h"
+#include "axmol/platform/apple/FoundationBridge.h"
 
 // Accelerometer
 #if !defined(AX_TARGET_OS_TVOS)
