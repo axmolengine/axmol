@@ -579,7 +579,7 @@ void Device::setClipboardText(std::string_view text)
 #if TARGET_OS_IOS
     @autoreleasepool
     {
-        NSString* s = svtons(text);
+        NSString* s                             = svtons(text);
         [UIPasteboard generalPasteboard].string = s;
     }
 #endif

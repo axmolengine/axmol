@@ -204,14 +204,11 @@ std::string FileUtilsApple::getFullPathForFilenameWithinDirectory(std::string_vi
         NSString* path = nil;
         if (!directory.empty())
         {
-            path = [pimpl_->getBundle() pathForResource:svtons(filename)
-                                                 ofType:nil
-                                            inDirectory:svtons(directory)];
+            path = [pimpl_->getBundle() pathForResource:svtons(filename) ofType:nil inDirectory:svtons(directory)];
         }
         else
         {
-            path = [pimpl_->getBundle() pathForResource:svtons(filename)
-                                                 ofType:nil];
+            path = [pimpl_->getBundle() pathForResource:svtons(filename) ofType:nil];
         }
         if (path != nil)
             ret = [path UTF8String];
