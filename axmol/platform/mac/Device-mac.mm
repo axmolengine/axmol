@@ -44,9 +44,8 @@ void Device::setClipboardText(std::string_view text)
         NSPasteboard* pb = [NSPasteboard generalPasteboard];
         [pb clearContents];
 
-        NSString* s = svtons(text);
-        if (s)
-            [pb setString:s forType:NSPasteboardTypeString];
+        if (!text.empty())
+            [pb setString:svtons(text) forType:NSPasteboardTypeString];
     }
 }
 
