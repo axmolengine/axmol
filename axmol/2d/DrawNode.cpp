@@ -991,14 +991,15 @@ void DrawNode::_drawCornerRect(const Vec2& origin,
         _drawPie({destination.x - crRB, origin.y + crRB}, crRB, 0.0f, 270.0f, 360.0f, 1.0f, 1.0f, Color(), color,
                  DrawMode::Line, thickness);
         // Draw the four edges
-        _drawSegment(Vec2(origin.x + crLB, origin.y), Vec2(destination.x - crRB, origin.y), color,
-                     thickness);  // Bottom edge
-        _drawSegment(Vec2(origin.x + crLT, destination.y), Vec2(destination.x - crRT, destination.y), color,
-                     thickness);  // Top edge
-        _drawSegment(Vec2(origin.x, origin.y + crLB), Vec2(origin.x, destination.y - crLT), color,
-                     thickness);  // Left edge
-        _drawSegment(Vec2(destination.x, origin.y + crRB), Vec2(destination.x, destination.y - crRT), color,
-                     thickness);  // Right edge
+
+        _drawSegment(Vec2(origin.x + crLB, origin.y), Vec2(destination.x - crRB, origin.y), color, thickness,
+                     DrawNode::EndStyle::Butt, DrawNode::EndStyle::Butt);  // Bottom edge
+        _drawSegment(Vec2(origin.x + crLT, destination.y), Vec2(destination.x - crRT, destination.y), color, thickness,
+                     DrawNode::EndStyle::Butt, DrawNode::EndStyle::Butt);  // Top edge
+        _drawSegment(Vec2(origin.x, origin.y + crLB), Vec2(origin.x, destination.y - crLT), color, thickness,
+                     DrawNode::EndStyle::Butt, DrawNode::EndStyle::Butt);  // Left edge
+        _drawSegment(Vec2(destination.x, origin.y + crRB), Vec2(destination.x, destination.y - crRT), color, thickness,
+                     DrawNode::EndStyle::Butt, DrawNode::EndStyle::Butt);  // Right edge
         break;
     }
 
@@ -1056,14 +1057,14 @@ void DrawNode::_drawSolidCornerRect(const Vec2& origin,
         _drawPie({destination.x - crRB, origin.y + crRB}, crRB, 0.0f, 270.0f, 360.0f, 1.0f, 1.0f, fillColor,
                  borderColor, DrawMode::FillWithLine, thickness);
         // Lines
-        _drawSegment(Vec2(origin.x + crLB, origin.y), Vec2(destination.x - crRB, origin.y), borderColor,
-                     thickness);  // Bottom line
+        _drawSegment(Vec2(origin.x + crLB, origin.y), Vec2(destination.x - crRB, origin.y), borderColor, thickness,
+                     DrawNode::EndStyle::Butt, DrawNode::EndStyle::Butt);  // Bottom edge
         _drawSegment(Vec2(origin.x + crLT, destination.y), Vec2(destination.x - crRT, destination.y), borderColor,
-                     thickness);  // Top line
-        _drawSegment(Vec2(origin.x, origin.y + crLB), Vec2(origin.x, destination.y - crLT), borderColor,
-                     thickness);  // Left line
+                     thickness, DrawNode::EndStyle::Butt, DrawNode::EndStyle::Butt);  // Top edge
+        _drawSegment(Vec2(origin.x, origin.y + crLB), Vec2(origin.x, destination.y - crLT), borderColor, thickness,
+                     DrawNode::EndStyle::Butt, DrawNode::EndStyle::Butt);  // Left edge
         _drawSegment(Vec2(destination.x, origin.y + crRB), Vec2(destination.x, destination.y - crRT), borderColor,
-                     thickness);  // Right line
+                     thickness, DrawNode::EndStyle::Butt, DrawNode::EndStyle::Butt);  // Right edge
 
         break;
     }
