@@ -4,7 +4,7 @@
     <application>
         <activity
             android:name="com.jakewharton.processphoenix.ProcessPhoenix"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
             android:process=":phoenix"
             android:exported="false"
             />
