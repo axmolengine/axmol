@@ -577,6 +577,9 @@ public class AxmolPlayer extends FrameLayout {
     }
 
     public void waitForPauseToComplete() {
+        // Null when the activity stops before the engine is initialized (paused before
+        // the first onSurfaceCreated): no native pause happened, so there is nothing to wait for.
+        if (mNativePauseComplete == null) return;
         while (mNativePauseComplete.getCount() > 0) {
             try {
                 mNativePauseComplete.await();
