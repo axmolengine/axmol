@@ -9,7 +9,7 @@ separately. Upstream badges show upstream releases, not Axmol's configured versi
 
 - [![github](https://img.shields.io/github/v/release/PowerShell/PowerShell?label=Upstream)](https://github.com/PowerShell/PowerShell)
 - Minimum version: 7.4.0
-- Preferred version: 7.6.7
+- Preferred version: 7.6.9
 - License: MIT
 - Platform: Win32/macOS/Linux
 - Managed by: `1k/pwshi.sh`
@@ -19,7 +19,7 @@ separately. Upstream badges show upstream releases, not Axmol's configured versi
 
 - [![github](https://img.shields.io/github/v/release/Kitware/CMake?label=Upstream)](https://github.com/Kitware/CMake)
 - Minimum version (Axmol command line): 4.2.0
-- Preferred version: 4.4.4
+- Preferred version: 4.4.5
 - License: [BSD-3-Clause](https://cmake.org/licensing/)
 - Platform: Win32/macOS/Linux
 - Managed by: `1k/build.profiles`
@@ -57,8 +57,8 @@ separately. Upstream badges show upstream releases, not Axmol's configured versi
 ## Microsoft.Web.WebView2
 
 - [![nuget](https://img.shields.io/nuget/v/Microsoft.Web.WebView2?label=Upstream)](https://www.nuget.org/packages/Microsoft.Web.WebView2)
-- Version: 1.0.4258.31
-- License: https://www.nuget.org/packages/Microsoft.Web.WebView2/1.0.4191.47/License
+- Version: 1.0.4314.35
+- License: https://www.nuget.org/packages/Microsoft.Web.WebView2/1.0.4314.35/License
 - Platform: Win32
 - Managed by: `cmake/Modules/AXConfigDefine.cmake`
 
