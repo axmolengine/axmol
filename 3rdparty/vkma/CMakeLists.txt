@@ -14,8 +14,8 @@ if(MSVC_IDE)
 endif()
 
 add_library(${target_name}
-    ${${target_name}_src}
-  )
+  ${${target_name}_src}
+)
 
 if(WIN32 AND BUILD_SHARED_LIBS)
   target_compile_definitions(${target_name}
