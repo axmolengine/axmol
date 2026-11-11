@@ -214,6 +214,7 @@ void register_ax_base_members_5(lua_State* L)
     class_13_RenderViewCore.method("getScaleY", static_cast<float (ax::RenderViewCore::*)() const>(&ax::RenderViewCore::getScaleY));
     class_13_RenderViewCore.method("getSceneCompositor", static_cast<ax::SceneCompositor * (ax::RenderViewCore::*)() const>(&ax::RenderViewCore::getSceneCompositor));
     class_13_RenderViewCore.method("getScissorInPoints", static_cast<ax::Rect (ax::RenderViewCore::*)() const>(&ax::RenderViewCore::getScissorInPoints));
+    class_13_RenderViewCore.method("getSurfaceHandle", static_cast<ax::SurfaceHandle (ax::RenderViewCore::*)() const>(&ax::RenderViewCore::getSurfaceHandle));
     class_13_RenderViewCore.method("getViewName", static_cast<std::string_view (ax::RenderViewCore::*)() const>(&ax::RenderViewCore::getViewName));
     class_13_RenderViewCore.method("getViewportRect", static_cast<const ax::Rect & (ax::RenderViewCore::*)() const>(&ax::RenderViewCore::getViewportRect));
     class_13_RenderViewCore.method("getVisibleOrigin", static_cast<ax::Vec2 (ax::RenderViewCore::*)() const>(&ax::RenderViewCore::getVisibleOrigin));

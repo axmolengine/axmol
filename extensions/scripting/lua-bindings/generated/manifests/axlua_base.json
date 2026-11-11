@@ -24836,6 +24836,17 @@
           "isVariadic": false
         },
         {
+          "nativeName": "getSurfaceHandle",
+          "luaName": "getSurfaceHandle",
+          "declaringType": "ax::RenderViewCore",
+          "returnType": "ax::SurfaceHandle",
+          "parameterTypes": [],
+          "defaultValues": [],
+          "isStatic": false,
+          "isConst": true,
+          "isVariadic": false
+        },
+        {
           "nativeName": "getViewName",
           "luaName": "getViewName",
           "declaringType": "ax::RenderViewCore",
