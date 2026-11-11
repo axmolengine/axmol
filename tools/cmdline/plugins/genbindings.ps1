@@ -298,8 +298,8 @@ function Ensure-Ndk {
     if (-not (Test-Path $setupScript -PathType Leaf)) {
         throw "Axmol setup script was not found: $setupScript"
     }
-    Write-Host 'Android NDK was not found; invoking setup.ps1 -p android as the legacy genbindings flow did.'
-    & pwsh -NoProfile -File $setupScript -p android
+    Write-Host 'Android NDK was not found; invoking setup.ps1 -p android.'
+    &$setupScript -p android
     if ($LASTEXITCODE -ne 0) {
         throw "Axmol Android toolchain setup failed with exit code $LASTEXITCODE."
     }

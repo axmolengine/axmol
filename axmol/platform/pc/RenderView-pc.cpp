@@ -898,15 +898,11 @@ void* RenderView::getNativeWindow() const
 
 SurfaceHandle RenderView::getNativeDisplay() const
 {
-    auto driverType = GraphicsCore::backend();
-    if (driverType == rhi::GraphicsBackend::Vulkan)
-        return _vkSurface;
-
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
     return glfwGetWin32Window(_mainWindow);
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_MAC
-    return driverType == rhi::GraphicsBackend::Metal ? (__bridge void*)glfwGetCocoaView(_mainWindow)
-                                                     : (__bridge void*)glfwGetNSGLContext(_mainWindow);
+    return GraphicsCore::backend() == rhi::GraphicsBackend::Metal ? (__bridge void*)glfwGetCocoaView(_mainWindow)
+                                                                  : (__bridge void*)glfwGetNSGLContext(_mainWindow);
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
 #    if defined(AX_ENABLE_WAYLAND)
     int platform = glfwGetPlatform();
@@ -917,6 +913,14 @@ SurfaceHandle RenderView::getNativeDisplay() const
 #else
     return nullptr;
 #endif
+}
+
+SurfaceHandle RenderView::getSurfaceHandle() const
+{
+    if (GraphicsCore::backend() == rhi::GraphicsBackend::Vulkan)
+        return _vkSurface;
+
+    return getNativeDisplay();
 }
 
 WindowPlatform RenderView::getWindowPlatform() const

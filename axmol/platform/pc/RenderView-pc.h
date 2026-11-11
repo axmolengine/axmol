@@ -110,6 +110,7 @@ public:
 
     void* getNativeWindow() const override;
     SurfaceHandle getNativeDisplay() const override;
+    SurfaceHandle getSurfaceHandle() const override;
     WindowPlatform getWindowPlatform() const override;
 
     void setViewName(std::string_view viewName) override;

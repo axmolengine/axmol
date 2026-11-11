@@ -15,7 +15,9 @@
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX) && defined(AX_HAVE_WEBKIT2GTK)
 
 #    include <sys/stat.h>
+#    include <algorithm>
 #    include <chrono>  // chrono_literals
+#    include <cmath>   // lround
 #    include <thread>  // this_thread::sleep_for
 #    include <gtk/gtk.h>
 #    include <webkit2/webkit2.h>
@@ -141,20 +143,6 @@ static inline void apply_webkit_dmabuf_workaround()
 }
 }  // namespace webkit_dmabuf
 
-static double getDeviceScaleFactor(GdkMonitor* monitor)
-{
-    static double scale_factor      = 1.0;
-    static GdkMonitor* last_monitor = nullptr;
-
-    if (last_monitor != monitor)
-    {
-        last_monitor = monitor;
-        return (double)gdk_monitor_get_scale_factor(last_monitor);
-    }
-
-    return scale_factor;
-}
-
 static inline std::string create_init_script(const std::string& post_fn)
 {
     auto js = std::string{} +
@@ -264,8 +252,17 @@ class GTKWebKit
 public:
     GTKWebKit() : isXwayland(webkit_dmabuf::is_wayland_display())
     {
-        auto renderView   = ax::Director::getInstance()->getRenderView();
-        m_X11Display      = static_cast<Display*>(renderView->getNativeDisplay());
+        auto renderView = ax::Director::getInstance()->getRenderView();
+
+        if (renderView && renderView->getWindowPlatform() == WindowPlatform::X11)
+            m_X11Display = static_cast<Display*>(renderView->getNativeDisplay());
+
+        if (!m_X11Display)
+        {
+            AXLOGE("Creating WebView failed: no X11 display, WebView only supports the X11 window platform for now.");
+            return;
+        }
+
         m_ParentX11Window = reinterpret_cast<Window>(renderView->getNativeWindow());
 
         init_gtk_platform_with_display(m_X11Display);
@@ -474,11 +471,20 @@ public:
     {
         AXLOGI("Pos: {}, {}, Size: w:{}, h:{}", x, y, width, height);
 
-        gtk_window_resize(GTK_WINDOW(m_Window), width, height);
-        gtk_window_move(GTK_WINDOW(m_Window), x, y);
+        // The values are OS native pixels (see ui::InputSystem::getNodeNativeWindowRect), while GTK geometry is
+        // in logical units: GDK multiplies them by the scale factor of the monitor when talking to X11.
+        const double monitorScale = getMonitorScale();
+        const auto gtkX           = static_cast<int>(std::lround(x / monitorScale));
+        const auto gtkY           = static_cast<int>(std::lround(y / monitorScale));
+        const auto gtkWidth       = std::max(static_cast<int>(std::lround(width / monitorScale)), 1);
+        const auto gtkHeight      = std::max(static_cast<int>(std::lround(height / monitorScale)), 1);
+
+        gtk_window_resize(GTK_WINDOW(m_Window), gtkWidth, gtkHeight);
+        gtk_window_move(GTK_WINDOW(m_Window), gtkX, gtkY);
 
         setScalesPageToFit(m_ScalesPageToFit);
 
+        // Keep the frame as received: the X11 calls below (XReparentWindow) work in native pixels.
         m_LastPos  = ax::Vec2((float)x, (float)y);
         m_LastSize = ax::Vec2((float)width, (float)height);
     }
@@ -546,13 +552,25 @@ public:
     {
         m_ScalesPageToFit = scalesPageToFit;
 
-        // get current monitor
-        auto* manager = gdk_display_manager_get();
-        auto* display = gdk_display_manager_get_default_display(manager);
-        m_Monitor     = gdk_display_get_monitor_at_window(display, gtk_widget_get_window(m_Window));
+        // WebKitGTK already reports the monitor scale factor as devicePixelRatio and maps CSS pixels to logical
+        // units by itself (a 1024x768 GTK window on a 2x monitor reports innerWidth=1024, dpr=2), so zooming by
+        // the device scale here would scale the page twice and crop it.
+        webkit_web_view_set_zoom_level(WEBKIT_WEB_VIEW(m_WebView), 1.0);
+    }
 
-        webkit_web_view_set_zoom_level(WEBKIT_WEB_VIEW(m_WebView),
-                                       m_ScalesPageToFit ? getDeviceScaleFactor(m_Monitor) : 1.0);
+    // Scale factor of the monitor the web view is on: GTK logical units per OS native pixel.
+    double getMonitorScale()
+    {
+        auto* display = gdk_display_manager_get_default_display(gdk_display_manager_get());
+        if (display == nullptr || m_Window == nullptr)
+            return 1.0;
+
+        auto* window = gtk_widget_get_window(m_Window);
+        if (window == nullptr)
+            return 1.0;
+
+        auto* monitor = gdk_display_get_monitor_at_window(display, window);
+        return monitor != nullptr ? (double)gdk_monitor_get_scale_factor(monitor) : 1.0;
     }
 
     void setWebViewVisible(bool visible)
@@ -653,18 +671,17 @@ private:
 private:
     const bool isXwayland;
 
-    Display* m_X11Display;
-    Window m_ParentX11Window;
-    Window m_ChildX11Window;
-    GtkWidget* m_Window;
-    GtkWidget* m_WebView;
-    GdkMonitor* m_Monitor;
-    WebKitUserScript* m_InitScript;
-    WebKitUserContentManager* m_UserContentManager;
+    Display* m_X11Display{nullptr};
+    Window m_ParentX11Window{0};
+    Window m_ChildX11Window{0};
+    GtkWidget* m_Window{nullptr};
+    GtkWidget* m_WebView{nullptr};
+    WebKitUserScript* m_InitScript{nullptr};
+    WebKitUserContentManager* m_UserContentManager{nullptr};
 
     std::string m_JsScheme;
-    bool m_ScalesPageToFit;
-    bool m_WebViewHidden;
+    bool m_ScalesPageToFit{false};
+    bool m_WebViewHidden{false};
 
     ContinueUrlCallback_t m_ShouldStartLoading;
     GeneralUrlCallback_t m_DidFinishLoading;
@@ -846,17 +863,32 @@ void WebViewImpl::setScalesPageToFit(const bool scalesPageToFit)
     }
 }
 
-void WebViewImpl::draw(Renderer* renderer, Mat4 const& transform, uint32_t flags)
+void WebViewImpl::draw(Renderer* /*renderer*/, Mat4 const& /*transform*/, uint32_t /*flags*/)
 {
     if (!_createSucceeded)
     {
         return;
     }
-    if (flags & Node::FLAGS_TRANSFORM_DIRTY)
+
+    // The web view is a separate native window, so its frame doesn't only depend on the node transform: it also
+    // follows the window size, the design resolution scale, the letterbox offset and the DPI of the monitor it's on.
+    // Recompute it every frame and only touch the native window when the result really changed, which keeps the
+    // embedded view aligned on window resize, fullscreen and DPI change.
+    const auto uiRect = ax::ui::Helper::getNodeNativeWindowRect(_webView);
+    const auto x      = static_cast<int>(uiRect.origin.x);
+    const auto y      = static_cast<int>(uiRect.origin.y);
+    // gtk_window_resize requires a positive size: keep the frame valid when the node is collapsed instead of
+    // spamming GTK criticals.
+    const auto width  = std::max(static_cast<int>(uiRect.size.width), 1);
+    const auto height = std::max(static_cast<int>(uiRect.size.height), 1);
+
+    if (x != _nativeX || y != _nativeY || width != _nativeWidth || height != _nativeHeight)
     {
-        const auto uiRect = ax::ui::Helper::getNodeNativeWindowRect(_webView);
-        _gtkWebKit->setWebViewRect(static_cast<int>(uiRect.origin.x), static_cast<int>(uiRect.origin.y),
-                                   static_cast<int>(uiRect.size.width), static_cast<int>(uiRect.size.height));
+        _nativeX      = x;
+        _nativeY      = y;
+        _nativeWidth  = width;
+        _nativeHeight = height;
+        _gtkWebKit->setWebViewRect(x, y, width, height);
     }
 
     _gtkWebKit->update();

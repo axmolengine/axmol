@@ -310,7 +310,7 @@ void RenderViewCore::onSurfaceResized()
     auto director = Director::getInstance();
     auto renderer = director->getRenderer();
     if (renderer)
-        renderer->updateSurface(getNativeDisplay(), screenWidth, screenHeight);
+        renderer->updateSurface(getSurfaceHandle(), screenWidth, screenHeight);
     _sceneCompositor->onRenderViewChanged(this);
 }
 

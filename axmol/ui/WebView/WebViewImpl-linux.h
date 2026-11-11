@@ -69,6 +69,12 @@ private:
     bool _createSucceeded;
     GTKWebKit* _gtkWebKit;
     WebView* _webView;
+
+    // The native frame applied to the GTK window, -1 means "not applied yet".
+    int _nativeX{0};
+    int _nativeY{0};
+    int _nativeWidth{-1};
+    int _nativeHeight{-1};
 };
 }  // namespace ui
 }  // namespace ax

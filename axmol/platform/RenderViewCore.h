@@ -398,8 +398,18 @@ public:
      *   linux: x11 or wayland display
      *   macOS: NSGLContext*
      *   iOS/tvOS: EARenderViewBase*
+     *
+     * @note It never returns a RHI surface handle, use getSurfaceHandle() for that.
      */
     virtual SurfaceHandle getNativeDisplay() const { return nullptr; }
+
+    /**
+     * @brief Get the surface handle the graphics context is created and updated with
+     *
+     * Defaults to getNativeDisplay() and only needs an override where the RHI surface is not the
+     * native display object, e.g. a VkSurfaceKHR when the Vulkan backend is active.
+     */
+    virtual SurfaceHandle getSurfaceHandle() const { return getNativeDisplay(); }
 
     /**
      * @brief Get the Window Platform object
