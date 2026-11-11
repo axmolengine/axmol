@@ -1781,7 +1781,8 @@ auto UpdateDeviceParams(gsl::not_null<al::Device*> device,
          * configuration in aluInitEffectPanning.
          */
         std::ranges::for_each(context->mEffectSlotClusters
-            | std::views::transform(&ContextBase::EffectSlotCluster::operator*)
+            | std::views::transform([](ContextBase::EffectSlotCluster const &clusterptr)
+                -> std::array<EffectSlotBase, 4>& { return *clusterptr; })
             | std::views::join, [](EffectSlotBase &slot)
         {
             slot.mWetBuffer.clear();
