@@ -551,12 +551,9 @@ bool GraphicsContextImpl::beginFrame()
     // wait for previous frame to finish
     auto& currentFence = _inFlightFences[_frameIndex];
     vkWaitForFences(_device, 1, &currentFence, VK_TRUE, UINT64_MAX);
-    vkResetFences(_device, 1, &currentFence);
 
     _completedFenceValue = currentFence.fenceValue;
     _driver->processDisposalQueue(_completedFenceValue);
-
-    currentFence.fenceValue = ++_frameFenceValue;
 
     // Reset uniform ring write head for this frame
     resetUniformRingForCurrentFrame();
@@ -569,6 +566,11 @@ bool GraphicsContextImpl::beginFrame()
         return false;
 
     AXASSERT(_imageIndex < maxImageIndex, "swapchain image index out of range!");
+
+    // An out-of-date swapchain skips submission. Keep the fence signaled until
+    // acquisition succeeds so a skipped frame cannot deadlock a later fence wait.
+    vkResetFences(_device, 1, &currentFence);
+    currentFence.fenceValue = ++_frameFenceValue;
 
     _inFrame                       = true;
     _frameAcquireSemaphoreConsumed = false;
