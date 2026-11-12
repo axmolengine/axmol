@@ -19,7 +19,7 @@ if(AX_ENABLE_GL)
 endif()
 
 if(AX_ENABLE_VK)
-  list(APPEND target_src_files "include/glad/vulkan.h" src/vulkan.c src/vk_mem_alloc.cpp)
+  list(APPEND target_src_files "include/glad/vulkan.h" src/vulkan.c)
 endif()
 
 add_library(${target_name} ${target_src_files})
@@ -28,8 +28,6 @@ if(BUILD_SHARED_LIBS)
   target_compile_definitions(${target_name}
     PUBLIC GLAD_API_CALL_EXPORT=1
     PRIVATE GLAD_API_CALL_EXPORT_BUILD=1
-    PRIVATE VMA_CALL_PRE=__declspec\(dllexport\)
-    INTERFACE VMA_CALL_PRE=__declspec\(dllimport\)
   )
 
   if(NOT WINDOWS AND AX_ENABLE_GL)

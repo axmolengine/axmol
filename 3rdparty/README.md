@@ -76,8 +76,6 @@
 - Version: 2.0.8
 - License: MIT
 
-`vk_mem_alloc.h` is taken from https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator Version: 3.4.0
-
 ## glfw
 - [![Upstream](https://img.shields.io/github/v/release/glfw/glfw?label=Upstream)](https://github.com/glfw/glfw)
 - Version: 3.5.1 , with modifications to improve IME support, see: https://github.com/axmolengine/glfw
@@ -191,6 +189,7 @@
   - Disable non‑standard [[clang::nonblocking]] attribute to avoid compiler compatibility issues
   - Restrict warning flags scope to target: `alsoft.common`
   - Fix compile error with fmt 12.2.0
+  - Fix `alc.cpp` compile error with MSVC 14.52
 - License: LGPL-2.1
 
 ## OpenSSL
@@ -257,6 +256,11 @@
 - Upstream: https://github.com/simdsoft/mz12
 - Version: 1.2, with bugfixs & improvements
 - License: zlib
+
+## vkma (VulkanMemoryAllocator)
+-  [![Upstream](https://img.shields.io/github/v/release/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator?label=Upstream)](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator)
+- Version: 3.5.0
+- License: MIT
 
 ## webp
 - [![Upstream](https://img.shields.io/github/v/tag/webmproject/libwebp?label=Upstream)](https://github.com/webmproject/libwebp)
