@@ -103,6 +103,7 @@ set(_AX_2D_SRC
   2d/FontAtlas.cpp
   2d/FontCharMap.cpp
   2d/Font.cpp
+  2d/FontFallback.cpp
   2d/FontFNT.cpp
   2d/FontFreeType.cpp
   2d/Grid.cpp

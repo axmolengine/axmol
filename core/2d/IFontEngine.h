@@ -36,13 +36,12 @@ typedef struct FT_BBox_ FT_BBox;
 
 namespace ax
 {
-
 /**
  * @addtogroup _2d
  * @{
  */
 
-struct FontFaceInfo
+struct AX_DEPRECATED(2.11.6, "Will be removed with the corresponding functoins from IFontEngine.") FontFaceInfo
 {
     FT_Face face                   = nullptr;
     long index                     = 0;
@@ -55,7 +54,14 @@ struct FontFaceInfo
 class IFontEngine
 {
 public:
+    virtual ~IFontEngine() {}
+    AX_DEPRECATED(2.11.6, "Use the variant with the family instead.")
     virtual FontFaceInfo* lookupFontFaceForCodepoint(char32_t charCode) = 0;
+
+    virtual std::string lookupFontFaceForCodepoint(char32_t charCode, std::string_view family, bool bold, bool italic)
+    {
+        return {};
+    }
 };
 
-}
+}  // namespace ax

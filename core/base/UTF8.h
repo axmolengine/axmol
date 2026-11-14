@@ -183,6 +183,16 @@ AX_DLL bool isUnicodeSpace(char32_t ch);
 AX_DLL bool isCJKUnicode(char32_t ch);
 
 /**
+ *  @brief Whether the character is a variant selector.
+ *  @param ch    The unicode character.
+ *  @returns     Whether the character is a variant selector.
+ *
+ *  @see https://en.wikipedia.org/wiki/Variation_Selectors_(Unicode_block)
+ *
+ */
+AX_DLL bool isVariantSelector(char32_t ch);
+
+/**
  *  @brief Whether the character is a non-breaking character.
  *  @param ch    The unicode character.
  *  @returns     Whether the character is a non-breaking character.

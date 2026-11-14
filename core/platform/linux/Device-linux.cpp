@@ -26,6 +26,7 @@ THE SOFTWARE.
 ****************************************************************************/
 #include "platform/Device.h"
 #include "platform/FileUtils.h"
+#include "platform/linux/SystemFonts-linux.h"
 
 #include <X11/Xlib.h>
 #include <stdio.h>
@@ -35,7 +36,6 @@ THE SOFTWARE.
 #include <map>
 #include <string>
 #include <sstream>
-#include <fontconfig/fontconfig.h>
 
 #include "ft2build.h"
 #include FT_FREETYPE_H
@@ -119,7 +119,6 @@ public:
     BitmapDC()
     {
         libError = FT_Init_FreeType(&library);
-        FcInit();
         _data = NULL;
         reset();
     }
@@ -127,7 +126,6 @@ public:
     ~BitmapDC()
     {
         FT_Done_FreeType(library);
-        FcFini();
 
         reset();
     }
@@ -402,29 +400,13 @@ public:
             }
         }
 
-        // use fontconfig to match the parameter against the fonts installed on the system
-        FcPattern* pattern = FcPatternBuild(0, FC_FAMILY, FcTypeString, family_name, (char*)0);
-        FcConfigSubstitute(0, pattern, FcMatchPattern);
-        FcDefaultSubstitute(pattern);
+        fontPath = _systemFonts.fontForFamily(family_name);
 
-        FcResult result;
-        FcPattern* font = FcFontMatch(0, pattern, &result);
-        if (font)
+        if (!fontPath.empty())
         {
-            FcChar8* s = NULL;
-            if (FcPatternGetString(font, FC_FILE, 0, &s) == FcResultMatch)
-            {
-                fontPath = (const char*)s;
-
-                FcPatternDestroy(font);
-                FcPatternDestroy(pattern);
-
-                fontCache.insert(std::pair<std::string, std::string>(family_name, fontPath));
-                return fontPath;
-            }
-            FcPatternDestroy(font);
+            fontCache.insert(std::pair<std::string, std::string>(family_name, fontPath));
+            return fontPath;
         }
-        FcPatternDestroy(pattern);
 
         return family_name;
     }
@@ -541,7 +523,7 @@ public:
 
 public:
     FT_Library library;
-
+    SystemFonts _systemFonts;
     unsigned char* _data;
     int libError;
     std::vector<LineBreakLine> textLines;

@@ -28,6 +28,7 @@
 #include "ui/UIEditBox/UIEditBox.h"
 #include "ui/UIEditBox/UIEditBoxImpl.h"
 #include "ui/UIHelper.h"
+#include "2d/IFontEngine.h"
 
 namespace ax
 {
@@ -42,7 +43,10 @@ static const int DISABLED_RENDERER_Z = (-2);
 static const float CHECK_EDITBOX_POSITION_INTERVAL = 0.1f;
 
 EditBox::EditBox()
-    : _normalTextureSize(_contentSize), _pressedTextureSize(_contentSize), _disabledTextureSize(_contentSize)
+    : _normalTextureSize(_contentSize)
+    , _pressedTextureSize(_contentSize)
+    , _disabledTextureSize(_contentSize)
+    , _fontFallbackEngine(nullptr)
 {}
 
 EditBox::~EditBox()
@@ -63,18 +67,29 @@ void EditBox::closeKeyboard() const
     _editBoxImpl->closeKeyboard();
 }
 
-EditBox* EditBox::create(const Vec2& size, std::string_view normalImage, TextureResType texType)
+IFontEngine* EditBox::getFontFallbackEngine() const
 {
-    return EditBox::create(size, normalImage, "", "", texType);
+    return _fontFallbackEngine;
+}
+
+EditBox* EditBox::create(const Vec2& size,
+                         std::string_view normalImage,
+                         TextureResType texType,
+                         IFontEngine* fontFallbackEngine)
+{
+    return EditBox::create(size, normalImage, "", "", texType, fontFallbackEngine);
 }
 
 EditBox* EditBox::create(const Vec2& size,
                          std::string_view normalImage,
                          std::string_view pressedImage /* = "" */,
                          std::string_view disabledImage /* = "" */,
-                         TextureResType texType /* = TextureResType::LOCAL */)
+                         TextureResType texType /* = TextureResType::LOCAL */,
+                         IFontEngine* fontFallbackEngine)
 {
-    EditBox* pRet = new EditBox();
+    EditBox* pRet             = new EditBox();
+    pRet->_fontFallbackEngine = fontFallbackEngine;
+
     if (pRet->initWithSizeAndTexture(size, normalImage, pressedImage, disabledImage, texType))
     {
         pRet->autorelease();
@@ -90,9 +105,12 @@ EditBox* EditBox::create(const Vec2& size,
 EditBox* EditBox::create(const Vec2& size,
                          ax::ui::Scale9Sprite* normalSprite,
                          ui::Scale9Sprite* pressedSprite,
-                         Scale9Sprite* disabledSprite)
+                         Scale9Sprite* disabledSprite,
+                         IFontEngine* fontFallbackEngine)
 {
-    EditBox* pRet = new EditBox();
+    EditBox* pRet             = new EditBox();
+    pRet->_fontFallbackEngine = fontFallbackEngine;
+
     if (pRet->initWithSizeAndBackgroundSprite(size, normalSprite, pressedSprite, disabledSprite))
     {
         pRet->autorelease();
