@@ -120,6 +120,9 @@ static constexpr unsigned int WEIGHTS_MAX_DECIMATION_MODES { 87 };
 /** @brief The high default error used to initialize error trackers. */
 static constexpr float ERROR_CALC_DEFAULT { 1e30f };
 
+/** @brief The maximum alpha-scale kernel radius. */
+static constexpr unsigned int ALPHASCALE_MAX_RADIUS { 64 };
+
 /**
  * @brief The minimum tuning setting threshold for the one partition fast path.
  */
