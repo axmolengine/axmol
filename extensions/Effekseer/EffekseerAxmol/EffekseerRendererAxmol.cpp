@@ -1177,12 +1177,33 @@ EffekseerRenderer::DistortingCallback* createDistortingCallback()
     return new DistortingCallbackAxmol();
 }
 
+// The advanced pixel shaders declare named SamplerStates (sampler_colorTex, ...).
+// Program creation fails if they are not registered.
+static void RegisterAdvancedEffekseerSamplers()
+{
+    static bool registered = false;
+    if (registered)
+        return;
+
+    auto* registry = ax::rhi::SamplerRegistry::getInstance();
+    const ax::rhi::SamplerDesc defaultSampler{};
+    for (const auto* name : {"sampler_colorTex", "sampler_normalTex", "sampler_alphaTex",
+                             "sampler_uvDistortionTex", "sampler_blendTex", "sampler_blendAlphaTex",
+                             "sampler_blendUVDistortionTex", "sampler_depthTex", "sampler_backTex"})
+    {
+        registry->registerSampler(name, defaultSampler);
+    }
+    registered = true;
+}
+
 class Shader : public EffekseerRenderer::ShaderBase
 {
 public:
-    Shader(const std::string& vsName, const std::string& psName, bool isDistortion = false)
+    Shader(const std::string& vsName, const std::string& psName, bool isDistortion = false, bool isModel = false)
     {
         _isDistortion = isDistortion;
+        _isModel = isModel;
+        RegisterAdvancedEffekseerSamplers();
         auto program = ax::ProgramManager::getInstance()->loadProgram(vsName, psName);
         _programState = new ax::rhi::ProgramState(program);
         _program = program;
@@ -1237,6 +1258,56 @@ public:
         _samplerLocations[5] = _program->getSamplerLocation("sampler_blendAlphaTex");
         _samplerLocations[6] = _program->getSamplerLocation("sampler_blendUVDistortionTex");
         _samplerLocations[7] = _program->getSamplerLocation("sampler_depthTex");
+
+        // The advanced pixel shaders name their textures _colorTex/_alphaTex/... instead of u_tex0..7.
+        // Resolve them in register order: the collector packs the same order the shaders declare.
+        for (int i = 0; i < 8; ++i)
+            _advancedTextureRegister[i] = i;
+
+        bool hasAdvancedTextures = false;
+        for (auto& e : _program->getActiveTextureInfos())
+        {
+            if (e.first == "_colorTex")
+            {
+                hasAdvancedTextures = true;
+                break;
+            }
+        }
+
+        if (hasAdvancedTextures)
+        {
+            std::vector<std::pair<int, std::string_view>> declared;
+            for (auto& e : _program->getActiveTextureInfos())
+            {
+                if (e.second->location >= 0)
+                    declared.emplace_back(e.second->location, e.first);
+            }
+            std::sort(declared.begin(), declared.end());
+
+            for (size_t i = 0; i < declared.size() && i < 8; ++i)
+            {
+                _advancedTextureLocations[i] = _programState->getUniformLocation(declared[i].second);
+                _advancedTextureRegister[i]  = declared[i].first;
+                _samplerLocations[i]         = _program->getTextureSamplerLocation(declared[i].first);
+            }
+        }
+
+        if (isModel)
+        {
+            // Model vertex shader uniforms (model_vs.hlsl / ad_model_vs.hlsl).
+            _modelMatrixLocation              = _programState->getUniformLocation("mModel");
+            _modelUVLocation                  = _programState->getUniformLocation("fUV");
+            _modelColorLocation               = _programState->getUniformLocation("fModelColor");
+            _modelAlphaUVLocation             = _programState->getUniformLocation("fAlphaUV");
+            _modelUVDistortionUVLocation      = _programState->getUniformLocation("fUVDistortionUV");
+            _modelBlendUVLocation             = _programState->getUniformLocation("fBlendUV");
+            _modelBlendAlphaUVLocation        = _programState->getUniformLocation("fBlendAlphaUV");
+            _modelBlendUVDistortionUVLocation = _programState->getUniformLocation("fBlendUVDistortionUV");
+            _modelFlipbookParam1Location      = _programState->getUniformLocation("flipbookParameter1");
+            _modelFlipbookParam2Location      = _programState->getUniformLocation("flipbookParameter2");
+            _modelFlipbookIndexLocation       = _programState->getUniformLocation("fFlipbookIndexAndNextRate");
+            _modelAlphaThresholdLocation      = _programState->getUniformLocation("fModelAlphaThreshold");
+        }
     }
 
     ~Shader() override
@@ -1253,7 +1324,11 @@ public:
 
     void SetConstantBuffer() override
     {
-        if (_vs.size() >= sizeof(EffekseerRenderer::StandardRendererVertexBuffer))
+        if (_isModel)
+        {
+            SetModelConstantBuffer();
+        }
+        else if (_vs.size() >= sizeof(EffekseerRenderer::StandardRendererVertexBuffer))
         {
             auto vcb = reinterpret_cast<const EffekseerRenderer::StandardRendererVertexBuffer*>(_vs.data());
             ax::Mat4 m;
@@ -1305,6 +1380,43 @@ public:
         }
     }
 
+    // The base writes the plain (224 B) or advanced (368 B) struct into _vs; its size selects the layout.
+    void SetModelConstantBuffer()
+    {
+        if (_vs.size() >= sizeof(EffekseerRenderer::ModelRendererAdvancedVertexConstantBuffer<1>))
+        {
+            auto* vcb = reinterpret_cast<const EffekseerRenderer::ModelRendererAdvancedVertexConstantBuffer<1>*>(
+                _vs.data());
+            _programState->setUniform(_cameraProjLocation, vcb->CameraMatrix.Values, sizeof(float) * 16);
+            _programState->setUniform(_modelMatrixLocation, vcb->ModelMatrix[0].Values, sizeof(float) * 16);
+            _programState->setUniform(_modelUVLocation, vcb->ModelUV[0], sizeof(float) * 4);
+            _programState->setUniform(_modelAlphaUVLocation, vcb->ModelAlphaUV[0], sizeof(float) * 4);
+            _programState->setUniform(_modelUVDistortionUVLocation, vcb->ModelUVDistortionUV[0], sizeof(float) * 4);
+            _programState->setUniform(_modelBlendUVLocation, vcb->ModelBlendUV[0], sizeof(float) * 4);
+            _programState->setUniform(_modelBlendAlphaUVLocation, vcb->ModelBlendAlphaUV[0], sizeof(float) * 4);
+            _programState->setUniform(
+                _modelBlendUVDistortionUVLocation, vcb->ModelBlendUVDistortionUV[0], sizeof(float) * 4);
+            _programState->setUniform(
+                _modelFlipbookParam1Location, vcb->ModelFlipbookParameter.Buffer, sizeof(float) * 4);
+            _programState->setUniform(
+                _modelFlipbookParam2Location, vcb->ModelFlipbookParameter.Buffer + 4, sizeof(float) * 4);
+            _programState->setUniform(
+                _modelFlipbookIndexLocation, vcb->ModelFlipbookIndexAndNextRate[0], sizeof(float) * 4);
+            _programState->setUniform(_modelAlphaThresholdLocation, vcb->ModelAlphaThreshold[0], sizeof(float) * 4);
+            _programState->setUniform(_modelColorLocation, vcb->ModelColor[0], sizeof(float) * 4);
+            _programState->setUniform(_uvInversedLocation, vcb->UVInversed, sizeof(float) * 4);
+        }
+        else if (_vs.size() >= sizeof(EffekseerRenderer::ModelRendererVertexConstantBuffer<1>))
+        {
+            auto* vcb = reinterpret_cast<const EffekseerRenderer::ModelRendererVertexConstantBuffer<1>*>(_vs.data());
+            _programState->setUniform(_cameraProjLocation, vcb->CameraMatrix.Values, sizeof(float) * 16);
+            _programState->setUniform(_modelMatrixLocation, vcb->ModelMatrix[0].Values, sizeof(float) * 16);
+            _programState->setUniform(_modelUVLocation, vcb->ModelUV[0], sizeof(float) * 4);
+            _programState->setUniform(_modelColorLocation, vcb->ModelColor[0], sizeof(float) * 4);
+            _programState->setUniform(_uvInversedLocation, vcb->UVInversed, sizeof(float) * 4);
+        }
+    }
+
     ax::rhi::ProgramState* programState() const { return _programState; }
 
     void SetSamplerModes(const float* modes)
@@ -1322,7 +1434,34 @@ public:
         const bool isLighting = (stride == sizeof(EffekseerRenderer::LightingVertex) ||
                                  stride == sizeof(EffekseerRenderer::AdvancedLightingVertex));
         ax::rhi::VertexLayoutDesc desc;
-        if (isLighting)
+        // Effekseer::Model::Vertex is 68 bytes: Position(12) Normal(12) Binormal(12) Tangent(12)
+        // UV1(8) UV2(8) Color(4), consumed by model_vs.hlsl as POSITION0 / NORMAL0..3 / TEXCOORD0..1.
+        if (stride == static_cast<int32_t>(sizeof(Effekseer::Model::Vertex)))
+        {
+            desc.startLayout(7);
+            desc.addAttrib(
+                _program->getVertexInputDesc(ax::rhi::VertexSemantic::POSITION),
+                ax::rhi::VertexElementType::FLOAT3, 0, false);
+            desc.addAttrib(
+                _program->getVertexInputDesc(ax::rhi::VertexSemantic::NORMAL),
+                ax::rhi::VertexElementType::FLOAT3, 12, false);
+            desc.addAttrib(
+                _program->getVertexInputDesc(ax::rhi::VertexSemantic{"NORMAL", 1}),
+                ax::rhi::VertexElementType::FLOAT3, 24, false);
+            desc.addAttrib(
+                _program->getVertexInputDesc(ax::rhi::VertexSemantic{"NORMAL", 2}),
+                ax::rhi::VertexElementType::FLOAT3, 36, false);
+            desc.addAttrib(
+                _program->getVertexInputDesc(ax::rhi::VertexSemantic::TEXCOORD0),
+                ax::rhi::VertexElementType::FLOAT2, 48, false);
+            desc.addAttrib(
+                _program->getVertexInputDesc(ax::rhi::VertexSemantic::TEXCOORD1),
+                ax::rhi::VertexElementType::FLOAT2, 56, false);
+            desc.addAttrib(
+                _program->getVertexInputDesc(ax::rhi::VertexSemantic{"NORMAL", 3}),
+                ax::rhi::VertexElementType::UBYTE4, 64, true);
+        }
+        else if (isLighting)
         {
             // LightingVertex: Pos(12) + Col(4) + Normal(4) + Tangent(4) + UV(8) + UV2(8) = 40
             desc.startLayout(6);
@@ -1349,8 +1488,11 @@ public:
 
     void setTexture(int slot, ax::rhi::Texture* texture)
     {
-        if (texture && slot >= 0 && slot < 8)
-            _programState->setTexture(_textureLocations[slot], slot, texture);
+        if (!texture || slot < 0 || slot >= 8)
+            return;
+        // Plain programs declare u_tex0..7, advanced ones _colorTex/...; only one set resolves.
+        const auto& location = _textureLocations[slot] ? _textureLocations[slot] : _advancedTextureLocations[slot];
+        _programState->setTexture(location, _advancedTextureRegister[slot], texture);
     }
 
     bool setSampler(int slot, const ax::rhi::SamplerDesc& samplerDesc)
@@ -1415,7 +1557,25 @@ private:
     ax::rhi::UniformLocation _miscFlagsLocation;
 
     ax::rhi::UniformLocation _textureLocations[8];
+    ax::rhi::UniformLocation _advancedTextureLocations[8]{};
     ax::rhi::SamplerLocation _samplerLocations[8];
+    // Slot -> reflected texture register. The texture unit must equal it: the sampler binds at the
+    // register, the texture at the unit.
+    int _advancedTextureRegister[8]{};
+
+    bool _isModel = false;
+    ax::rhi::UniformLocation _modelMatrixLocation;
+    ax::rhi::UniformLocation _modelUVLocation;
+    ax::rhi::UniformLocation _modelColorLocation;
+    ax::rhi::UniformLocation _modelAlphaUVLocation;
+    ax::rhi::UniformLocation _modelUVDistortionUVLocation;
+    ax::rhi::UniformLocation _modelBlendUVLocation;
+    ax::rhi::UniformLocation _modelBlendAlphaUVLocation;
+    ax::rhi::UniformLocation _modelBlendUVDistortionUVLocation;
+    ax::rhi::UniformLocation _modelFlipbookParam1Location;
+    ax::rhi::UniformLocation _modelFlipbookParam2Location;
+    ax::rhi::UniformLocation _modelFlipbookIndexLocation;
+    ax::rhi::UniformLocation _modelAlphaThresholdLocation;
 };
 
 namespace
@@ -1777,9 +1937,117 @@ Effekseer::RingRendererRef Renderer::CreateRingRenderer()
     return Effekseer::MakeRefPtr<RendererAdapter<EffekseerRenderer::RingRendererBase<Renderer, false>>>(this);
 }
 
+// Supplies the host surface ModelRendererBase calls: six shaders sized to the constant-buffer
+// structs the base selects, StoreBufferToGPU, and the non-instanced EndRendering_ dispatch.
+class ModelRenderer final : public EffekseerRenderer::ModelRendererBase
+{
+public:
+    static Effekseer::ModelRendererRef Create(Renderer* renderer)
+    {
+        if (renderer == nullptr)
+            return nullptr;
+        auto ret = Effekseer::MakeRefPtr<ModelRenderer>();
+        if (!ret->Init(renderer))
+            return nullptr;
+        return ret;
+    }
+
+    ~ModelRenderer() override
+    {
+        delete _shaderAdLit;
+        delete _shaderAdUnlit;
+        delete _shaderAdDistortion;
+        delete _shaderLit;
+        delete _shaderUnlit;
+        delete _shaderDistortion;
+    }
+
+    void BeginRendering(
+        const Effekseer::ModelRenderer::NodeParameter& parameter, int32_t count, void* userData) override
+    {
+        BeginRendering_(_renderer, parameter, count, userData);
+    }
+
+    void Rendering(
+        const Effekseer::ModelRenderer::NodeParameter& parameter,
+        const InstanceParameter& instanceParameter,
+        void* userData) override
+    {
+        Rendering_(_renderer, parameter, instanceParameter, userData);
+    }
+
+    void EndRendering(const Effekseer::ModelRenderer::NodeParameter& parameter, void* userData) override
+    {
+        if (!parameter.IsExternalMode && parameter.ModelIndex < 0)
+            return;
+
+        Effekseer::ModelRef model = nullptr;
+        if (parameter.IsExternalMode)
+            model = parameter.ExternalModel;
+        else if (parameter.IsProceduralMode)
+            model = parameter.EffectPointer->GetProceduralModel(parameter.ModelIndex);
+        else
+            model = parameter.EffectPointer->GetModel(parameter.ModelIndex);
+
+        if (model == nullptr)
+            return;
+
+        model->StoreBufferToGPU(_renderer->GetGraphicsDevice().Get());
+        if (!model->GetIsBufferStoredOnGPU())
+            return;
+
+        EndRendering_<Renderer, Shader, Effekseer::Model, false, 1>(_renderer,
+                                                                   _shaderAdLit, _shaderAdUnlit, _shaderAdDistortion,
+                                                                   _shaderLit, _shaderUnlit, _shaderDistortion,
+                                                                   parameter, userData);
+    }
+
+private:
+    bool Init(Renderer* renderer)
+    {
+        _renderer = renderer;
+
+        _shaderAdLit        = new Shader("custom/ad_model_vs_1", "custom/ad_model_ps_1", false, true);
+        _shaderAdUnlit      = new Shader("custom/ad_model_vs", "custom/ad_model_ps", false, true);
+        _shaderAdDistortion = new Shader("custom/ad_model_vs_2", "custom/ad_model_distortion_ps_1", true, true);
+        _shaderLit          = new Shader("custom/model_vs_1", "custom/model_ps_1", false, true);
+        _shaderUnlit        = new Shader("custom/model_vs", "custom/model_ps", false, true);
+        _shaderDistortion   = new Shader("custom/model_vs_2", "custom/model_distortion_ps_1", true, true);
+
+        for (auto* shader : {_shaderAdLit, _shaderAdUnlit})
+        {
+            shader->SetVertexConstantBufferSize(
+                sizeof(EffekseerRenderer::ModelRendererAdvancedVertexConstantBuffer<1>));
+            shader->SetPixelConstantBufferSize(sizeof(EffekseerRenderer::PixelConstantBuffer));
+        }
+        _shaderAdDistortion->SetVertexConstantBufferSize(
+            sizeof(EffekseerRenderer::ModelRendererAdvancedVertexConstantBuffer<1>));
+        _shaderAdDistortion->SetPixelConstantBufferSize(sizeof(EffekseerRenderer::PixelConstantBufferDistortion));
+
+        for (auto* shader : {_shaderLit, _shaderUnlit})
+        {
+            shader->SetVertexConstantBufferSize(sizeof(EffekseerRenderer::ModelRendererVertexConstantBuffer<1>));
+            shader->SetPixelConstantBufferSize(sizeof(EffekseerRenderer::PixelConstantBuffer));
+        }
+        _shaderDistortion->SetVertexConstantBufferSize(sizeof(EffekseerRenderer::ModelRendererVertexConstantBuffer<1>));
+        _shaderDistortion->SetPixelConstantBufferSize(sizeof(EffekseerRenderer::PixelConstantBufferDistortion));
+
+        return _shaderAdLit != nullptr && _shaderAdUnlit != nullptr && _shaderAdDistortion != nullptr &&
+               _shaderLit != nullptr && _shaderUnlit != nullptr && _shaderDistortion != nullptr;
+    }
+
+    Renderer* _renderer = nullptr;
+    Shader* _shaderAdLit = nullptr;
+    Shader* _shaderAdUnlit = nullptr;
+    Shader* _shaderAdDistortion = nullptr;
+    Shader* _shaderLit = nullptr;
+    Shader* _shaderUnlit = nullptr;
+    Shader* _shaderDistortion = nullptr;
+};
+
 Effekseer::ModelRendererRef Renderer::CreateModelRenderer()
 {
-    return nullptr;
+    return ModelRenderer::Create(this);
 }
 
 Effekseer::TrackRendererRef Renderer::CreateTrackRenderer()
@@ -1907,9 +2175,11 @@ void Renderer::SetTextures(EffekseerRenderer::ShaderBase* shaderBase, Effekseer:
     shader->SetSamplerModes(samplerModes);
 }
 
-void Renderer::DrawSprites(int32_t spriteCount, int32_t vertexOffset)
+void Renderer::DrawIndexed(int32_t vertexCount, int32_t indexCount, int32_t vertexOffset)
 {
-    if (!_axRenderer || !_currentShader || !_currentVertexBuffer || !_currentIndexBuffer || spriteCount <= 0)
+    if (!_axRenderer || !_currentShader || !_currentVertexBuffer || !_currentIndexBuffer)
+        return;
+    if (vertexCount <= 0 || indexCount <= 0)
         return;
 
     auto shader = static_cast<Shader*>(_currentShader);
@@ -1917,8 +2187,7 @@ void Renderer::DrawSprites(int32_t spriteCount, int32_t vertexOffset)
 
     auto vb = static_cast<VertexBufferAX*>(_currentVertexBuffer.Get());
     auto ib = static_cast<IndexBufferAX*>(_currentIndexBuffer.Get());
-    const auto vertexCount = static_cast<size_t>(spriteCount * 4);
-    const auto vertexBytes = vertexCount * static_cast<size_t>(_currentVertexStride);
+    const auto vertexBytes = static_cast<size_t>(vertexCount) * static_cast<size_t>(_currentVertexStride);
     const auto vertexOffsetBytes = static_cast<size_t>(vertexOffset) * static_cast<size_t>(_currentVertexStride);
     if (vertexOffsetBytes + vertexBytes > vb->shadowSize())
         return;
@@ -1970,8 +2239,12 @@ void Renderer::DrawSprites(int32_t spriteCount, int32_t vertexOffset)
         command->createVertexBuffer(static_cast<size_t>(_currentVertexStride), vertexCount, ax::CustomCommand::BufferUsage::DYNAMIC);
     command->updateVertexBuffer(vb->shadowData() + vertexOffsetBytes, vertexBytes);
 
-    command->setIndexBuffer(ib->get(), ax::CustomCommand::IndexFormat::U_SHORT);
-    command->setIndexDrawInfo(0, static_cast<size_t>(spriteCount * 6));
+    // Model index buffers are 32-bit (Effekseer::Model::Face is int32_t[3]); sprite batches are 16-bit.
+    const auto indexFormat = ib->getStrideType() == Effekseer::Backend::IndexBufferStrideType::Stride2
+                                 ? ax::CustomCommand::IndexFormat::U_SHORT
+                                 : ax::CustomCommand::IndexFormat::U_INT;
+    command->setIndexBuffer(ib->get(), indexFormat);
+    command->setIndexDrawInfo(0, static_cast<size_t>(indexCount));
 
     auto& blendDesc = command->blendDesc();
     blendDesc.blendEnabled = true;
@@ -2019,13 +2292,17 @@ void Renderer::DrawSprites(int32_t spriteCount, int32_t vertexOffset)
     _axRenderer->addCommand(command);
 
     GetImpl()->drawcallCount++;
-    GetImpl()->drawvertexCount += spriteCount * 4;
+    GetImpl()->drawvertexCount += vertexCount;
+}
+
+void Renderer::DrawSprites(int32_t spriteCount, int32_t vertexOffset)
+{
+    DrawIndexed(spriteCount * 4, spriteCount * 6, vertexOffset);
 }
 
 void Renderer::DrawPolygon(int32_t vertexCount, int32_t indexCount)
 {
-    AX_UNUSED_PARAM(vertexCount);
-    AX_UNUSED_PARAM(indexCount);
+    DrawIndexed(vertexCount, indexCount, 0);
 }
 
 void Renderer::DrawPolygonInstanced(int32_t vertexCount, int32_t indexCount, int32_t instanceCount)

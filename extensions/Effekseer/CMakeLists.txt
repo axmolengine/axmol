@@ -28,13 +28,35 @@ set(_SHADER_DIR "${CMAKE_CURRENT_LIST_DIR}/Shaders")
 
 ax_find_shaders(${_SHADER_DIR} _shader_src)
 
-# Phase 1: exclude model/advanced shaders (need __INST__ define or not used yet)
+# Phase 1: exclude the advanced sprite shader (not used yet)
 list(REMOVE_ITEM _shader_src
-  "${_SHADER_DIR}/model_vs.hlsl"
-  "${_SHADER_DIR}/ad_model_vs.hlsl"
   "${_SHADER_DIR}/ad_sprite_unlit_vs.hlsl"
+)
+
+set_source_files_properties(
+  "${_SHADER_DIR}/model_vs.hlsl"
+  PROPERTIES
+    AXSLCC_DEFINES "DISABLE_INSTANCE;__INST__=1"
+    AXSLCC_VARIANT_DEFINES "ENABLE_LIGHTING=1;ENABLE_DISTORTION=1"
+)
+
+set_source_files_properties(
+  "${_SHADER_DIR}/ad_model_vs.hlsl"
+  PROPERTIES
+    AXSLCC_DEFINES "DISABLE_INSTANCE;__INST__=1"
+    AXSLCC_VARIANT_DEFINES "ENABLE_LIGHTING=1;ENABLE_DISTORTION=1"
+)
+
+set_source_files_properties(
   "${_SHADER_DIR}/ad_model_ps.hlsl"
+  PROPERTIES
+    AXSLCC_VARIANT_DEFINES "ENABLE_LIGHTING=1"
+)
+
+set_source_files_properties(
   "${_SHADER_DIR}/ad_model_distortion_ps.hlsl"
+  PROPERTIES
+    AXSLCC_VARIANT_DEFINES "DISABLED_SOFT_PARTICLE"
 )
 
 set_source_files_properties(
