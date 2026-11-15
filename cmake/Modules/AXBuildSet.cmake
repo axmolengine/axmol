@@ -26,8 +26,8 @@ set(_AX_EXTENSION_LIBS "" CACHE INTERNAL "extensions for auto link to target app
 
 # configure android AXSLCC compile output, this is the first include cmake module
 if(ANDROID)
-  file(TO_NATIVE_PATH "${_AX_ANDROID_PROJECT_DIR}/build/runtime/axslc" _AXSLCC_OUT_DIR)
-  set(AXSLCC_OUT_DIR "${_AXSLCC_OUT_DIR}" CACHE STRING "" FORCE)
+  # Keep the CMake path unescaped; shader commands handle shell quoting with VERBATIM.
+  set(AXSLCC_OUT_DIR "${_AX_ANDROID_PROJECT_DIR}/build/runtime/axslc" CACHE STRING "" FORCE)
   message(AUTHOR_WARNING "Set AXSLCC_OUT_DIR to ${AXSLCC_OUT_DIR} for android")
 endif()
 
