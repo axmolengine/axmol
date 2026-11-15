@@ -998,7 +998,7 @@ static inline uint16_t float_to_float16(float a)
 ASTCENC_SIMD_INLINE vfloat4 float16_to_float(vint4 a)
 {
 #if ASTCENC_F16C >= 1
-	__m128i packed = _mm_packs_epi32(a.m, a.m);
+	__m128i packed = _mm_packus_epi32(a.m, a.m);
 	__m128 f32 = _mm_cvtph_ps(packed);
 	return vfloat4(f32);
 #else

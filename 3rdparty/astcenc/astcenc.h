@@ -744,7 +744,7 @@ ASTCENC_PUBLIC enum astcenc_error astcenc_config_init(
  * read-only data tables it needs from the ancestor "root" context, rather than creating its own,
  * which saves a considerable amount of memory per child. You must only free the root context once
  * all descendant contexts have been freed. When you pass a @c parent_context the config is taken
- * from the parent, and so @c context must be @c nullptr.
+ * from the parent, and so @c config must be @c nullptr.
  *
  * Contexts can be allocated to support only decompression using the @c ASTCENC_FLG_DECOMPRESS_ONLY
  * flag when creating the configuration. The compression functions will fail if invoked. For a

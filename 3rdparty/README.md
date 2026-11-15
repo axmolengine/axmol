@@ -6,7 +6,7 @@
 
 ## astcenc
 - [![Upstream](https://img.shields.io/github/v/release/ARM-software/astc-encoder?label=Upstream)](https://github.com/ARM-software/astc-encoder)
-- Version: 5.7.0
+- Version: 5.7.1
 - License: Apache-2.0
 
 ## Box2D
@@ -51,7 +51,7 @@
 
 ## fast_float
 - [![Upstream](https://img.shields.io/github/v/release/fastfloat/fast_float?label=Upstream)](https://github.com/fastfloat/fast_float)
-- Version: 8.3.2
+- Version: 8.3.3
 - License: MIT
 
 ## flatbuffers
@@ -61,7 +61,7 @@
 
 ## {fmt}
 - [![Upstream](https://img.shields.io/github/v/release/fmtlib/fmt?label=Upstream)](https://github.com/fmtlib/fmt)
-- Version: 12.2.0
+- Version: 12.2.1
 
 - License: MIT
 
@@ -86,7 +86,7 @@
 - Version: 1.5.16
 - License: MIT
 
-## jni.hpps
+## jni.hpp
 - [![Upstream](https://img.shields.io/github/v/release/mapbox/jni.hpp?label=Upstream)](https://github.com/mapbox/jni.hpp)
 - Version: v4.0.0
 - License: MIT-like
@@ -108,7 +108,7 @@
 
 ## llhttp
 - [![Upstream](https://img.shields.io/github/v/release/nodejs/llhttp?label=Upstream)](https://github.com/nodejs/llhttp)
-- Version: 9.4.3
+- Version: 9.4.4
 - License: MIT
 
 ## lua
@@ -134,7 +134,7 @@
 
 ## lz4
 - [![Upstream](https://img.shields.io/github/v/release/lz4/lz4?label=Upstream)](https://github.com/lz4/lz4)
-- Version: 1.10.0
+- Version: 1.11.1
 - License: BSD 2-Clause
 
 ## minimp3
@@ -239,7 +239,7 @@
 
 ## simdjson
 - [![Upstream](https://img.shields.io/github/v/tag/simdjson/simdjson?label=Upstream)](https://github.com/simdjson/simdjson)
-- Version: 5.0.5
+- Version: 5.1.1
 - License: Apache-2.0
 
 ## stb (stb_image)
@@ -249,7 +249,7 @@
 
 ## tracy
 - [![Upstream](https://img.shields.io/github/v/release/wolfpld/tracy?label=Upstream)](https://github.com/wolfpld/tracy)
-- Version: 0.14.1
+- Version: 0.15.0
 - License: BSD-3-Clause
 
 ## unzip (minizip-1.2)

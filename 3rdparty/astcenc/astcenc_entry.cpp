@@ -448,6 +448,10 @@ static astcenc_error validate_config(
 		return status;
 	}
 
+	// A block_z of zero is accepted to mean 2D. Normalize to 1u so later code paths
+	// can safely use it as a divisor or loop limit
+	config.block_z = astc::max(config.block_z, 1u);
+
 	status = validate_block_size(config.block_x, config.block_y, config.block_z);
 	if (status != ASTCENC_SUCCESS)
 	{
@@ -463,6 +467,9 @@ static astcenc_error validate_config(
 #endif
 
 	config.rgbm_m_scale = astc::max(config.rgbm_m_scale, 1.0f);
+
+	// Clamp alpha-scale kernel radius to put an upper bound on memory use
+	config.a_scale_radius = astc::min(config.a_scale_radius, ALPHASCALE_MAX_RADIUS);
 
 	config.tune_partition_count_limit = astc::clamp(config.tune_partition_count_limit, 1u, 4u);
 	config.tune_2partition_index_limit = astc::clamp(config.tune_2partition_index_limit, 1u, BLOCK_MAX_PARTITIONINGS);
@@ -899,7 +906,7 @@ static void compress_image(
 	const block_size_descriptor& bsd = *ctx.bsd;
 	astcenc_profile decode_mode = ctx.config.profile;
 
-	image_block blk;
+	image_block blk {};
 
 	size_t block_x = bsd.dim_x;
 	size_t block_y = bsd.dim_y;
