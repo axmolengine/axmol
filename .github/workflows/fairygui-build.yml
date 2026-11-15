@@ -1,0 +1,67 @@
+name: FairyGUI build
+
+on:
+  pull_request:
+    branches:
+      - dev
+    paths:
+      - 'extensions/fairygui/**'
+      - 'tests/fairygui-tests/**'
+      - '.github/workflows/fairygui-build.yml'
+  push:
+    branches:
+      - dev
+    paths:
+      - 'extensions/fairygui/**'
+      - 'tests/fairygui-tests/**'
+      - '.github/workflows/fairygui-build.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fairygui-win-x64:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Build FairyGUI tests
+        shell: pwsh
+        run: .\tools\cmdline\axmol -p win32 -a x64 -xc '-DAX_ENABLE_EXT_FAIRYGUI=ON' -O3 -t fairygui-tests
+
+      - name: Package FairyGUI test
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $dst = 'build/fairygui-artifact'
+
+          New-Item -ItemType Directory -Force -Path "$dst/Content", "$dst/axslc" | Out-Null
+
+          Copy-Item 'build/bin/fairygui-tests/Release/*.exe' $dst
+          Copy-Item 'build/bin/fairygui-tests/Release/*.dll' $dst
+
+          Copy-Item 'tests/fairygui-tests/Content/*' "$dst/Content" -Recurse -Force
+          Copy-Item 'build/runtime/axslc/*' "$dst/axslc" -Recurse -Force
+
+          Copy-Item 'LICENSE' "$dst/LICENSE-Axmol.txt"
+          Copy-Item 'cache/sample-assets/LICENSE' "$dst/LICENSE-sample-assets.txt"
+
+          if (-not (Test-Path "$dst/fairygui-tests.exe")) {
+            throw 'FairyGUI executable is missing'
+          }
+
+          if (-not (Get-ChildItem "$dst/Content" -Recurse -File | Select-Object -First 1)) {
+            throw 'FairyGUI content is missing'
+          }
+
+          if (-not (Get-ChildItem "$dst/axslc" -Recurse -File | Select-Object -First 1)) {
+            throw 'Shader tools are missing'
+          }
+
+      - name: Upload FairyGUI artifacts
+        uses: actions/upload-artifact@v6
+        with:
+          name: fairygui-windows-x64
+          path: build/fairygui-artifact/
+          if-no-files-found: error
