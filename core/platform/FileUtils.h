@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include <unordered_map>
 #include <type_traits>
 #include <mutex>
+#include <cstdint>
 #include <memory>
 
 #include "platform/IFileStream.h"
@@ -313,11 +314,17 @@ public:
 
     /**
      * Get default resource root path.
+     *
+     * @note Returns a reference to internal storage. Do not use it concurrently
+     * with changes to the resource root path.
      */
     const std::string& getDefaultResourceRootPath() const;
 
     /**
      * Set default resource root path.
+     *
+     * @note Do not change the resource root concurrently with file operations.
+     * Platform-specific implementations may access the root path directly.
      */
     void setDefaultResourceRootPath(std::string_view path);
 
@@ -337,12 +344,16 @@ public:
      *        Therefore, If you want to get the original search paths, please call 'getOriginalSearchPaths()' instead.
      *  @see fullPathForFilename(const char*).
      *  @lua NA
+     *  @note Returns a reference to internal storage. Callers must synchronize
+     *  with concurrent search-path modifications.
      */
     virtual const std::vector<std::string>& getSearchPaths() const;
 
     /**
      *  Gets the original search path array set by 'setSearchPaths' or 'addSearchPath'.
      *  @return The array of the original search paths
+     *  @note Returns a reference to internal storage. Callers must synchronize
+     *  with concurrent search-path modifications.
      */
     virtual const std::vector<std::string>& getOriginalSearchPaths() const;
 
@@ -762,11 +773,19 @@ public:
     AX_DEPRECATED(2.1) void listFilesRecursivelyAsync(std::string_view dirPath,
                                            std::function<void(std::vector<std::string>)> callback) const;
 #endif
-    /** Returns the full path cache. */
-    const hlookup::string_map<std::string> getFullPathCache() const { return _fullPathCache; }
+    /** Returns a snapshot of the full path cache. */
+    const hlookup::string_map<std::string> getFullPathCache() const
+    {
+        std::lock_guard<std::mutex> lock(_pathMutex);
+        return _fullPathCache;
+    }
 
-    /** Returns the full path cache. */
-    const hlookup::string_map<std::string> getFullPathCacheDir() const { return _fullPathCacheDir; }
+    /** Returns a snapshot of the directory path cache. */
+    const hlookup::string_map<std::string> getFullPathCacheDir() const
+    {
+        std::lock_guard<std::mutex> lock(_pathMutex);
+        return _fullPathCacheDir;
+    }
 
     /**
      *  Checks whether a file exists without considering search paths and resolution orders.
@@ -831,6 +850,15 @@ protected:
      */
     virtual std::string getFullPathForFilenameWithinDirectory(std::string_view directory,
                                                               std::string_view filename) const;
+
+    // Rebuilds search paths and invalidates caches. Caller must hold _pathMutex.
+    void rebuildSearchPathsLocked();
+
+    // Protects path caches and search path configuration.
+    mutable std::mutex _pathMutex;
+
+    // Incremented when search paths or cached entries are invalidated.
+    std::uint64_t _pathConfigVersion = 0;
 
     /**
      * The vector contains search paths.

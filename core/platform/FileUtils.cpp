@@ -539,8 +539,10 @@ bool FileUtils::init()
 
 void FileUtils::purgeCachedEntries()
 {
+    std::lock_guard<std::mutex> lock(_pathMutex);
     _fullPathCache.clear();
     _fullPathCacheDir.clear();
+    ++_pathConfigVersion;
 }
 
 std::string FileUtils::getStringFromFile(std::string_view filename) const
@@ -664,101 +666,152 @@ std::string FileUtils::fullPathForFilename(std::string_view filename) const
         return "";
     }
 
-    /*
-     * As we know, this function 'fullPathForFilename' will be calling when load any file, how to ensure this thread
-     * safe Step: a. call this function at main-thread always b. use the really fullPath to call
-     * getStringFromFile/getDataFromFile at sub-thread c. then this function will call again with really fullPath d.
-     * then isAbsolutePath avoid to access _fullPathCache _fullPathCache concurrent
-     */
     if (isAbsolutePath(filename))
     {
         return std::string{filename};
     }
 
-    // Already Cached ?
-    auto cacheIter = _fullPathCache.find(filename);
-    if (cacheIter != _fullPathCache.end())
+    while (true)
     {
-        return cacheIter->second;
-    }
+        std::vector<std::string> searchPaths;
+        std::uint64_t version;
 
-    std::string fullpath;
-
-    for (const auto& searchIt : _searchPathArray)
-    {
-        fullpath = this->getPathForFilename(filename, searchIt);
-
-        if (!fullpath.empty())
+        // Snapshot search paths under the lock to avoid holding it during file I/O.
         {
-            // Using the filename passed in as key.
-            _fullPathCache.emplace(filename, fullpath);
-            return fullpath;
+            std::lock_guard<std::mutex> lock(_pathMutex);
+
+            auto cacheIter = _fullPathCache.find(filename);
+            if (cacheIter != _fullPathCache.end())
+            {
+                return cacheIter->second;
+            }
+
+            searchPaths = _searchPathArray;
+            version = _pathConfigVersion;
         }
-    }
 
-    if (isPopupNotify())
-    {
-        AXLOGD("fullPathForFilename: No file found at {}. Possible missing file.", filename);
-    }
+        std::string fullpath;
 
-    // The file wasn't found, return empty string.
-    return std::string{};
+        for (const auto& searchIt : searchPaths)
+        {
+            fullpath = this->getPathForFilename(filename, searchIt);
+
+            if (!fullpath.empty())
+            {
+                break;
+            }
+        }
+
+        {
+            std::lock_guard<std::mutex> lock(_pathMutex);
+
+            // Retry if the search paths or caches were invalidated during the lookup.
+            if (version != _pathConfigVersion)
+            {
+                continue;
+            }
+
+            if (!fullpath.empty())
+            {
+                return _fullPathCache.emplace(filename, fullpath).first->second;
+            }
+        }
+
+        if (isPopupNotify())
+        {
+            AXLOGD("fullPathForFilename: No file found at {}. Possible missing file.", filename);
+        }
+
+        return std::string{};
+    }
 }
 
 std::string FileUtils::fullPathForDirectory(std::string_view dir) const
 {
-    auto result = std::string();
-
     if (dir.empty())
     {
-        // result is ""
+        return {};
     }
-    else if (isAbsolutePath(dir))
+
+    if (isAbsolutePath(dir))
     {
-        result = dir;
-    }
-    else
-    {
-        // Already Cached ?
-        auto cacheIter = _fullPathCacheDir.find(dir);
-        if (cacheIter != _fullPathCacheDir.end())
+        std::string result{dir};
+        if (result.back() != '/')
         {
-            result = cacheIter->second;
+            result += '/';
         }
-        else
+        return result;
+    }
+
+    std::string longdir{dir};
+    if (longdir.back() != '/')
+    {
+        longdir += '/';
+    }
+
+    while (true)
+    {
+        std::vector<std::string> searchPaths;
+        std::uint64_t version;
+
         {
-            std::string longdir{dir};
+            std::lock_guard<std::mutex> lock(_pathMutex);
 
-            if (longdir[longdir.length() - 1] != '/')
+            auto cacheIter = _fullPathCacheDir.find(dir);
+            if (cacheIter != _fullPathCacheDir.end())
             {
-                longdir += "/";
-            }
-
-            for (const auto& searchIt : _searchPathArray)
-            {
-                auto fullpath = this->getPathForDirectory(longdir, searchIt);
-                if (!fullpath.empty() && isDirectoryExistInternal(fullpath))
+                std::string result = cacheIter->second;
+                if (!result.empty() && result.back() != '/')
                 {
-                    // Using the filename passed in as key.
-                    _fullPathCacheDir.emplace(dir, fullpath);
-                    result = fullpath;
-                    break;
+                    result += '/';
                 }
+                return result;
             }
 
-            if (result.empty() && isPopupNotify())
+            // Snapshot search paths before querying the filesystem.
+            searchPaths = _searchPathArray;
+            version = _pathConfigVersion;
+        }
+
+        std::string result;
+
+        for (const auto& searchIt : searchPaths)
+        {
+            auto fullpath = this->getPathForDirectory(longdir, searchIt);
+            if (!fullpath.empty() && isDirectoryExistInternal(fullpath))
             {
-                AXLOGD("fullPathForDirectory: No directory found at {}. Possible missing directory.", dir);
+                result = std::move(fullpath);
+                break;
             }
         }
-    }
 
-    if (!result.empty() && result.back() != '/')
-    {
-        result += '/';
-    }
+        {
+            std::lock_guard<std::mutex> lock(_pathMutex);
 
-    return result;
+            // Retry if the configuration changed during the lookup.
+            if (version != _pathConfigVersion)
+            {
+                continue;
+            }
+
+            if (!result.empty())
+            {
+                result = _fullPathCacheDir.emplace(dir, result).first->second;
+            }
+        }
+
+        if (result.empty() && isPopupNotify())
+        {
+            AXLOGD("fullPathForDirectory: No directory found at {}. Possible missing directory.", dir);
+        }
+
+        if (!result.empty() && result.back() != '/')
+        {
+            result += '/';
+        }
+
+        return result;
+    }
 }
 
 std::string FileUtils::fullPathFromRelativeFile(std::string_view filename, std::string_view relativeFile) const
@@ -791,25 +844,33 @@ const std::string& FileUtils::getDefaultResourceRootPath() const
 
 void FileUtils::setDefaultResourceRootPath(std::string_view path)
 {
-    if (_defaultResRootPath != path)
-    {
-        _fullPathCache.clear();
-        _fullPathCacheDir.clear();
-        _defaultResRootPath = path;
-        if (!_defaultResRootPath.empty() && _defaultResRootPath[_defaultResRootPath.length() - 1] != '/')
-        {
-            _defaultResRootPath += '/';
-        }
+    std::lock_guard<std::mutex> lock(_pathMutex);
 
-        // Updates search paths
-        setSearchPaths(_originalSearchPaths);
+    if (_defaultResRootPath == path)
+    {
+        return;
     }
+
+    _defaultResRootPath = path;
+    if (!_defaultResRootPath.empty() && _defaultResRootPath.back() != '/')
+    {
+        _defaultResRootPath += '/';
+    }
+
+    rebuildSearchPathsLocked();
 }
 
 void FileUtils::setSearchPaths(const std::vector<std::string>& searchPaths)
 {
+    std::lock_guard<std::mutex> lock(_pathMutex);
+
+    _originalSearchPaths = searchPaths;
+    rebuildSearchPathsLocked();
+}
+
+void FileUtils::rebuildSearchPathsLocked()
+{
     bool existDefaultRootPath = false;
-    _originalSearchPaths      = searchPaths;
 
     _fullPathCache.clear();
     _fullPathCacheDir.clear();
@@ -821,30 +882,37 @@ void FileUtils::setSearchPaths(const std::vector<std::string>& searchPaths)
         std::string fullPath;
 
         if (!isAbsolutePath(path))
-        {  // Not an absolute path
+        {
             prefix = _defaultResRootPath;
         }
+
         fullPath = prefix + path;
-        if (!path.empty() && path[path.length() - 1] != '/')
+        if (!path.empty() && path.back() != '/')
         {
             fullPath += "/";
         }
+
         if (!existDefaultRootPath && path == _defaultResRootPath)
         {
             existDefaultRootPath = true;
         }
+
         _searchPathArray.emplace_back(fullPath);
     }
 
     if (!existDefaultRootPath)
     {
-        // AXLOGD("Default root path doesn't exist, adding it.");
         _searchPathArray.emplace_back(_defaultResRootPath);
     }
+
+    // Invalidate lookups started with the previous search configuration.
+    ++_pathConfigVersion;
 }
 
 void FileUtils::addSearchPath(std::string_view searchpath, const bool front)
 {
+    std::lock_guard<std::mutex> lock(_pathMutex);
+
     std::string path;
     if (!isAbsolutePath(searchpath))
         path = _defaultResRootPath;
@@ -879,6 +947,11 @@ void FileUtils::addSearchPath(std::string_view searchpath, const bool front)
         _originalSearchPaths.emplace_back(std::string{searchpath});
         _searchPathArray.emplace_back(std::move(path));
     }
+
+    // Invalidate cached paths after changing the search order.
+    _fullPathCache.clear();
+    _fullPathCacheDir.clear();
+    ++_pathConfigVersion;
 }
 
 std::string FileUtils::getFullPathForFilenameWithinDirectory(std::string_view directory,
