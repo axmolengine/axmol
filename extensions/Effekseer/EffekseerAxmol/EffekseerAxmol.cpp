@@ -483,6 +483,8 @@ bool EffectManager::initialize(ax::Size visibleSize)
     _manager->SetRibbonRenderer(_renderer->CreateRibbonRenderer());
     _manager->SetRingRenderer(_renderer->CreateRingRenderer());
     _manager->SetTrackRenderer(_renderer->CreateTrackRenderer());
+    // Manager::GetModelRenderer() returns null without this, so every EmitterModel node is dropped.
+    _manager->SetModelRenderer(_renderer->CreateModelRenderer());
 
     // Register the GPU particle system when the backend supports compute/storage/Texture3D.
     Effekseer::GpuParticleSystem::Settings gpuSettings;

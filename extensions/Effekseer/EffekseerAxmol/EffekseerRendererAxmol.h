@@ -63,6 +63,7 @@ public:
     void SetPixelBufferToShader(const void* data, int32_t size, int32_t dstOffset);
     void SetTextures(EffekseerRenderer::ShaderBase* shader, Effekseer::Backend::TextureRef* textures, int32_t count);
     void DrawSprites(int32_t spriteCount, int32_t vertexOffset);
+    void DrawIndexed(int32_t vertexCount, int32_t indexCount, int32_t vertexOffset);
     void DrawPolygon(int32_t vertexCount, int32_t indexCount);
     void DrawPolygonInstanced(int32_t vertexCount, int32_t indexCount, int32_t instanceCount);
     void ResetStateForDefferedContext() {}

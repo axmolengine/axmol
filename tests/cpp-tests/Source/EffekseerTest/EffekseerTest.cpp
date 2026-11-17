@@ -21,6 +21,7 @@ static const TestEffect _effects[] = {
     {"Laser04.efkefc",            "Laser04",                1.0f},
     {"TriggerLaser.efkefc",       "Trigger Laser",          1.0f},
     {"Simple_Distortion.efkefc",  "Simple Distortion",      1.0f},
+    {"Simple_Model_UV.efkefc",    "Simple Model UV",        1.0f},
 
     // GPU particles (require compute/storage/Texture3D backend support)
     {"GpuParticles_sprite_simple.efkefc",    "GPU Sprite Simple",    1.0f},
