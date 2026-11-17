@@ -85,10 +85,48 @@ if ($IsMacOS) {
     }
 }
 
+# Shared standard artifact layout for build results, deployment and launch.
+function axmol_artifact_paths($target, [switch]$apk) {
+    if (!$target -or $target -eq 'axmol-sdk') { return }
+    if ($TARGET_OS -eq 'android' -and $is_gradlew) {
+        $variant = if ($optimize_flag -eq 'Debug') { 'debug' } else { 'release' }
+        $outputs_dir = Join-Path $proj_dir 'proj.android/app/build/outputs'
+        if ($options.aab -and !$apk) {
+            $bundle_dir = Join-Path $outputs_dir "bundle/$variant"
+            if (Test-Path -LiteralPath $bundle_dir -PathType Container) {
+                Get-ChildItem -LiteralPath $bundle_dir -Filter '*.aab' -File | Select-Object -ExpandProperty FullName
+            }
+        }
+        else {
+            $apk_dir = Join-Path $outputs_dir "apk/$variant"
+            $metadata_file = Join-Path $apk_dir 'output-metadata.json'
+            if (Test-Path -LiteralPath $metadata_file -PathType Leaf) {
+                $metadata = Get-Content -LiteralPath $metadata_file -Raw | ConvertFrom-Json
+                foreach ($element in $metadata.elements) {
+                    if ($element.outputFile) { Join-Path $apk_dir $element.outputFile }
+                }
+            }
+        }
+        return
+    }
+    if (!$BUILD_DIR -or $options.xt -ne 'cmake') { return }
+    $multi_config = $cmake_generator -match '^(Visual Studio|Ninja Multi-Config|Xcode)' -or
+        (!$cmake_generator -and $TARGET_OS -eq 'win32')
+    $config_subdir = if ($multi_config) { "$optimize_flag/" } else { '' }
+    $relative_path = switch ($TARGET_OS) {
+        'win32' { "bin/$target/$config_subdir$target.exe" }
+        'linux' { "bin/$target/$config_subdir$target" }
+        { $_ -in 'osx', 'ios', 'tvos' } { "build/$optimize_flag/$target.app" }
+        { $_ -in 'wasm', 'wasm64' } { "bin/$target/$config_subdir$target.html" }
+    }
+    if ($relative_path) { Join-Path $BUILD_DIR $relative_path }
+}
+
 function axmol_build() {
     $sub_args = $args
     println $sub_args
     $build_script = Join-Path $PSScriptRoot 'plugins/build.ps1'
+    $cm_targets = $null
     if ("$args".Contains('-d')) {
         # have proj dir
         . $build_script @sub_args
@@ -96,6 +134,42 @@ function axmol_build() {
     else {
         . $build_script @sub_args -d (Get-Location).Path
     }
+    $build_succeeded = $?
+    $build_exit_code = $LASTEXITCODE
+    if ($build_succeeded -and $build_exit_code -eq 0 -and !$configOnly -and !$setupOnly -and !$ndkOnly -and
+        (($TARGET_OS -eq 'android' -and $is_gradlew) -or $null -ne $cm_targets)) {
+        $artifacts = @()
+        $result_build_dir = $null
+        try {
+            $proj_dir = (Resolve-Path -LiteralPath $proj_dir).ProviderPath
+            if ($BUILD_DIR) {
+                $path = if ([System.IO.Path]::IsPathRooted($BUILD_DIR)) { $BUILD_DIR } else { Join-Path $proj_dir $BUILD_DIR }
+                $BUILD_DIR = $result_build_dir = realpath $path
+            }
+            $targets = if ($TARGET_OS -eq 'android' -and $is_gradlew) { @($cmake_target) } else { $cm_targets }
+            $artifacts = @(foreach ($target in ($targets | Select-Object -Unique)) {
+                foreach ($path in (axmol_artifact_paths $target)) {
+                    $path_type = if ($TARGET_OS -in 'osx', 'ios', 'tvos') { 'Container' } else { 'Leaf' }
+                    if (Test-Path -LiteralPath $path -PathType $path_type) {
+                        @{ target = $target; path = (Resolve-Path -LiteralPath $path).ProviderPath }
+                    }
+                }
+            })
+        }
+        catch {
+            Write-Warning "Unable to locate build artifacts: $_"
+        }
+        $result = [ordered]@{
+            version   = 1
+            buildDir  = $result_build_dir
+            config    = $optimize_flag
+            targetOS  = $TARGET_OS
+            targetCPU = $TARGET_CPU
+            artifacts = $artifacts
+        }
+        Write-Host ('AXMOL_BUILD_RESULT=' + ($result | ConvertTo-Json -Compress -Depth 4))
+    }
+    $Global:LASTEXITCODE = $build_exit_code
 }
 
 function axmol_deploy() {
@@ -138,14 +212,12 @@ function axmol_deploy() {
         println "Deploy $cmake_target done: $appxPkgName"
     }
     elseif ($TARGET_OS -eq 'win32') {
-        $win32exePath = Join-Path $BUILD_DIR "bin/$cmake_target/$optimize_flag/$cmake_target.exe"
+        $win32exePath = axmol_artifact_paths $cmake_target
         println "Deploy $cmake_target done: $win32exePath"
     }
     elseif ($TARGET_OS -eq 'android') {
-        $optimize_flag_lower = $optimize_flag.ToLower()
-        $apkDir = Join-Path $proj_dir "proj.android/app/build/outputs/apk/$optimize_flag_lower"
-        $apkName = (Get-ChildItem -Path "$apkDir/*.apk").Name
-        $apkFullPath = Join-Path $apkDir $apkName
+        $apkFullPaths = @(axmol_artifact_paths $cmake_target -apk)
+        $apkDir = Split-Path $apkFullPaths[0] -Parent
 
         # read applicationId aka package name
         $outputMetaFile = Join-Path $apkDir 'output-metadata.json'
@@ -161,14 +233,15 @@ function axmol_deploy() {
         if (!$adb_cmd) {
             $1k.addpath("$env:ANDROID_HOME/platform-tools", $false)
         }
-        adb install -t -r $apkFullPath
-        if ($?) {
-            println "Deploy $cmake_target done: $androidAppId/$androidActivity"
+        foreach ($apkFullPath in $apkFullPaths) {
+            adb install -t -r $apkFullPath
+            if (!$?) { return }
         }
+        println "Deploy $cmake_target done: $androidAppId/$androidActivity"
     }
     elseif ($TARGET_OS -eq 'ios' -or $TARGET_OS -eq 'tvos') {
         if ($options.a -eq 'x64') {
-            $ios_app_path = Join-Path $BUILD_DIR "build/$optimize_flag/$cmake_target.app"
+            $ios_app_path = axmol_artifact_paths $cmake_target
             $ios_bundle_id = get_bundle_id($ios_app_path)
 
             println 'Finding avaiable simualtor ...'
@@ -235,18 +308,18 @@ function axmol_run() {
         }
     }
     elseif ($TARGET_OS -eq 'osx') {
-        $launch_macapp = Join-Path $BUILD_DIR "build/$optimize_flag/$cmake_target.app/Contents/MacOS/$cmake_target"
+        $launch_macapp = Join-Path (axmol_artifact_paths $cmake_target) "Contents/MacOS/$cmake_target"
         & $launch_macapp
     }
     elseif ($TARGET_OS -eq 'linux') {
-        $launch_linuxapp = Join-Path $BUILD_DIR "bin/$cmake_target/$cmake_target"
+        $launch_linuxapp = axmol_artifact_paths $cmake_target
         println "Launching $launch_linuxapp ..."
         $additional_args = @()
         if ($wait) { $additional_args = @{NoNewWindow = $true; Wait = $true } }
         Start-Process -FilePath $launch_linuxapp -WorkingDirectory $(Split-Path $launch_linuxapp -Parent) @additional_args
     }
     elseif ($TARGET_OS.startsWith('wasm')) {
-        $launch_wasmapp = Join-Path $BUILD_DIR "bin/$cmake_target/$cmake_target.html"
+        $launch_wasmapp = axmol_artifact_paths $cmake_target
         println "Launching $launch_wasmapp ..."
         emrun $launch_wasmapp
     }
