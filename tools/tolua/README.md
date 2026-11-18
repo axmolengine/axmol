@@ -1,6 +1,23 @@
 How to Use bindings-generator
 ==================
 
+Lua feature switches
+--------------------
+
+Generate Lua bindings with the parser's superset of features enabled. The generated
+`axlua_base_auto.cpp` remains one file: optional declarations, functions, and
+registration calls carry the feature guards found in their C++ headers. The Lua
+templates also guard registration of optional classes. The extension parser enables
+GUI, AssetsManager, and Particle3D so their bindings remain available when those
+features are enabled later.
+
+Changing `AX_ENABLE_*` options in an application requires CMake configuration and
+C++ compilation, but does not require rerunning `genbindings.py`. If bindings are
+regenerated after a header or API change, use this generator and its Lua templates;
+editing only `extensions/scripting/lua-bindings/auto/*.cpp` would lose these guards.
+Keep optional features available to the parser during regeneration, then build the
+desired application configuration separately.
+
 Prerequisites
 ------------
 1. Download libclang from https://github.com/simdsoft/1kiss/releases/download/llvmorg-15.0.7/llvmorg-15.0.7.zip

@@ -101,6 +101,59 @@ set(lua_bindings_auto_files
   auto/axlua_fairygui_auto.cpp
 )
 
+if(NOT AX_ENABLE_PHYSICS)
+  list(REMOVE_ITEM lua_bindings_manual_files manual/physics/axlua_physics_manual.cpp)
+  list(REMOVE_ITEM lua_bindings_auto_files auto/axlua_physics_auto.cpp)
+endif()
+if(NOT AX_ENABLE_3D)
+  list(REMOVE_ITEM lua_bindings_manual_files manual/3d/axlua_3d_manual.cpp)
+  list(REMOVE_ITEM lua_bindings_auto_files auto/axlua_3d_auto.cpp)
+endif()
+if(NOT AX_ENABLE_AUDIO)
+  list(REMOVE_ITEM lua_bindings_manual_files manual/audioengine/axlua_audioengine_manual.cpp)
+  list(REMOVE_ITEM lua_bindings_auto_files auto/axlua_audioengine_auto.cpp)
+endif()
+if(NOT AX_ENABLE_EXT_COCOSTUDIO)
+  list(REMOVE_ITEM lua_bindings_manual_files
+    manual/cocostudio/CustomGUIReader.cpp
+    manual/cocostudio/axlua_cocostudio_manual.cpp
+    manual/cocostudio/lua-cocostudio-conversions.cpp
+    manual/cocostudio/axlua_csloader_manual.cpp)
+  list(REMOVE_ITEM lua_bindings_auto_files auto/axlua_studio_auto.cpp auto/axlua_csloader_auto.cpp)
+endif()
+if(NOT AX_ENABLE_EXT_SPINE)
+  list(REMOVE_ITEM lua_bindings_manual_files
+    manual/spine/axlua_spine_manual.cpp manual/spine/LuaSkeletonAnimation.cpp)
+  list(REMOVE_ITEM lua_bindings_auto_files auto/axlua_spine_auto.cpp)
+endif()
+if(NOT AX_ENABLE_3D_PHYSICS)
+  list(REMOVE_ITEM lua_bindings_manual_files manual/physics3d/axlua_physics3d_manual.cpp)
+  list(REMOVE_ITEM lua_bindings_auto_files auto/axlua_physics3d_auto.cpp)
+endif()
+if(NOT AX_ENABLE_NAVMESH)
+  list(REMOVE_ITEM lua_bindings_manual_files
+    manual/navmesh/axlua_navmesh_conversions.cpp manual/navmesh/axlua_navmesh_manual.cpp)
+  list(REMOVE_ITEM lua_bindings_auto_files auto/axlua_navmesh_auto.cpp)
+endif()
+if(NOT AX_ENABLE_EXT_FAIRYGUI)
+  list(REMOVE_ITEM lua_bindings_manual_files
+    manual/fairygui/axlua_fairygui_manual.cpp manual/fairygui/axlua_fairygui_conversions.cpp)
+  list(REMOVE_ITEM lua_bindings_auto_files auto/axlua_fairygui_auto.cpp)
+endif()
+if(NOT (AX_ENABLE_EXT_GUI OR AX_ENABLE_EXT_ASSETMANAGER OR AX_ENABLE_EXT_PARTICLE3D))
+  list(REMOVE_ITEM lua_bindings_manual_files manual/extension/axlua_extension_manual.cpp)
+  list(REMOVE_ITEM lua_bindings_auto_files auto/axlua_extension_auto.cpp)
+endif()
+if(NOT AX_ENABLE_HTTP)
+  list(REMOVE_ITEM lua_bindings_manual_files manual/network/lua_xml_http_request.cpp manual/network/lua_downloader.cpp)
+endif()
+if(NOT AX_ENABLE_WEBSOCKET)
+  list(REMOVE_ITEM lua_bindings_manual_files manual/network/lua_websocket.cpp)
+endif()
+if(NOT (AX_ENABLE_HTTP OR AX_ENABLE_WEBSOCKET))
+  list(REMOVE_ITEM lua_bindings_manual_files manual/network/axlua_network_manual.cpp)
+endif()
+
 if(APPLE)
   # CCLuaObjcBridge.mm needed by ios and mac
   set(lua_bindings_manual_headers
@@ -124,8 +177,8 @@ if(APPLE)
       ${lua_bindings_manual_files}
       manual/ui/axlua_webview_manual.cpp
       auto/axlua_webview_auto.cpp
-      manual/ui/axlua_video_manual.cpp
-      auto/axlua_video_auto.cpp
+      $<$<BOOL:${AX_ENABLE_MEDIA}>:manual/ui/axlua_video_manual.cpp>
+      $<$<BOOL:${AX_ENABLE_MEDIA}>:auto/axlua_video_auto.cpp>
     )
   endif()
 elseif(ANDROID)
@@ -140,8 +193,8 @@ elseif(ANDROID)
     ${lua_bindings_manual_files}
     manual/ui/axlua_webview_manual.cpp
     auto/axlua_webview_auto.cpp
-    manual/ui/axlua_video_manual.cpp
-    auto/axlua_video_auto.cpp
+    $<$<BOOL:${AX_ENABLE_MEDIA}>:manual/ui/axlua_video_manual.cpp>
+    $<$<BOOL:${AX_ENABLE_MEDIA}>:auto/axlua_video_auto.cpp>
   )
 elseif(WINDOWS)
   if(AX_ENABLE_MFMEDIA)
@@ -195,10 +248,11 @@ set(lua_bindings_headers
   ${_AX_DEPRECATED_HEADER}
 )
 
-set(lua_bindings_files
-  ${lua_bindings_files}
-  "${ax_root}/3rdparty/yasio/yasio/bindings/lyasio.cpp"
-  "${ax_root}/3rdparty/yasio/yasio/bindings/yasio_axlua.cpp")
+if(AX_ENABLE_HTTP OR AX_ENABLE_WEBSOCKET)
+  list(APPEND lua_bindings_files
+    "${ax_root}/3rdparty/yasio/yasio/bindings/lyasio.cpp"
+    "${ax_root}/3rdparty/yasio/yasio/bindings/yasio_axlua.cpp")
+endif()
 
 list(APPEND lua_bindings_files ${lua_bindings_headers})
 
@@ -219,6 +273,13 @@ endif()
 
 ax_config_pred(${_AX_LUA_LIB} AX_ENABLE_EXT_SPINE)
 ax_config_pred(${_AX_LUA_LIB} AX_ENABLE_EXT_FAIRYGUI)
+ax_config_pred(${_AX_LUA_LIB} AX_ENABLE_EXT_GUI)
+ax_config_pred(${_AX_LUA_LIB} AX_ENABLE_EXT_ASSETMANAGER)
+ax_config_pred(${_AX_LUA_LIB} AX_ENABLE_EXT_PARTICLE3D)
+ax_config_pred(${_AX_LUA_LIB} AX_ENABLE_EXT_PHYSICS_NODE)
+ax_config_pred(${_AX_LUA_LIB} AX_ENABLE_EXT_COCOSTUDIO)
+ax_config_pred(${_AX_LUA_LIB} AX_ENABLE_HTTP)
+ax_config_pred(${_AX_LUA_LIB} AX_ENABLE_WEBSOCKET)
 
 get_target_property(lua_ext_depend 3rdparty AX_LUA_DEPEND)
 target_link_libraries(${_AX_LUA_LIB} ${lua_ext_depend})

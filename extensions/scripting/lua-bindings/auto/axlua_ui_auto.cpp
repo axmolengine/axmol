@@ -34950,6 +34950,7 @@ int lua_ax_ui_EditBox_getCapInsetsDisabledRenderer(lua_State* tolua_S)
 
     return 0;
 }
+#if (AX_ENABLE_SCRIPT_BINDING)
 int lua_ax_ui_EditBox_registerScriptEditBoxHandler(lua_State* tolua_S)
 {
     int argc = 0;
@@ -35000,6 +35001,8 @@ int lua_ax_ui_EditBox_registerScriptEditBoxHandler(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (AX_ENABLE_SCRIPT_BINDING)
+#if (AX_ENABLE_SCRIPT_BINDING)
 int lua_ax_ui_EditBox_unregisterScriptEditBoxHandler(lua_State* tolua_S)
 {
     int argc = 0;
@@ -35047,6 +35050,8 @@ int lua_ax_ui_EditBox_unregisterScriptEditBoxHandler(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (AX_ENABLE_SCRIPT_BINDING)
+#if (AX_ENABLE_SCRIPT_BINDING)
 int lua_ax_ui_EditBox_getScriptEditBoxHandler(lua_State* tolua_S)
 {
     int argc = 0;
@@ -35094,6 +35099,7 @@ int lua_ax_ui_EditBox_getScriptEditBoxHandler(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (AX_ENABLE_SCRIPT_BINDING)
 int lua_ax_ui_EditBox_setText(lua_State* tolua_S)
 {
     int argc = 0;
@@ -37051,9 +37057,15 @@ int lua_register_ax_ui_EditBox(lua_State* tolua_S)
         tolua_function(tolua_S,"getCapInsetsPressedRenderer",lua_ax_ui_EditBox_getCapInsetsPressedRenderer);
         tolua_function(tolua_S,"setCapInsetsDisabledRenderer",lua_ax_ui_EditBox_setCapInsetsDisabledRenderer);
         tolua_function(tolua_S,"getCapInsetsDisabledRenderer",lua_ax_ui_EditBox_getCapInsetsDisabledRenderer);
+#if (AX_ENABLE_SCRIPT_BINDING)
         tolua_function(tolua_S,"registerScriptEditBoxHandler",lua_ax_ui_EditBox_registerScriptEditBoxHandler);
+#endif // (AX_ENABLE_SCRIPT_BINDING)
+#if (AX_ENABLE_SCRIPT_BINDING)
         tolua_function(tolua_S,"unregisterScriptEditBoxHandler",lua_ax_ui_EditBox_unregisterScriptEditBoxHandler);
+#endif // (AX_ENABLE_SCRIPT_BINDING)
+#if (AX_ENABLE_SCRIPT_BINDING)
         tolua_function(tolua_S,"getScriptEditBoxHandler",lua_ax_ui_EditBox_getScriptEditBoxHandler);
+#endif // (AX_ENABLE_SCRIPT_BINDING)
         tolua_function(tolua_S,"setText",lua_ax_ui_EditBox_setText);
         tolua_function(tolua_S,"getText",lua_ax_ui_EditBox_getText);
         tolua_function(tolua_S,"setFont",lua_ax_ui_EditBox_setFont);

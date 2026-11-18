@@ -870,12 +870,15 @@ class NativeFunction(object):
     def generate_code(self, current_class=None, generator=None, is_override=False, is_ctor=False):
         self.is_ctor = is_ctor
         gen = current_class.generator if current_class else generator
+        guard = gen.feature_guard_for(self.cursor) if gen.script_type == "lua" else None
         config = gen.config
         if not is_ctor:
             tpl = Template(file=os.path.join(gen.target, "templates", "function.h"),
                         searchList=[current_class, self])
             if not is_override:
-                gen.head_file.write(str(tpl))
+                declaration = str(tpl)
+                if declaration.strip():
+                    gen.write_guarded(gen.head_file, declaration, guard)
         if self.static:
             if 'sfunction' in config['definitions']:
                 tpl = Template(config['definitions']['sfunction'],
@@ -909,7 +912,7 @@ class NativeFunction(object):
                 tpl = Template(file=os.path.join(gen.target, "templates", "ifunction.c"),
                                 searchList=[current_class, self])
         if not is_override:
-            gen.impl_file.write(str(tpl))
+            gen.write_guarded(gen.impl_file, str(tpl), guard)
         # if not is_ctor:
         #     apidoc_function_script = Template(file=os.path.join(gen.target,
         #                                                     "templates",
@@ -971,13 +974,19 @@ class NativeOverloadedFunction(object):
     def generate_code(self, current_class=None, is_override=False, is_ctor=False):
         self.is_ctor = is_ctor
         gen = current_class.generator
+        guards = {gen.feature_guard_for(func.cursor) for func in self.implementations} if gen.script_type == "lua" else {None}
+        if len(guards) != 1:
+            raise ValueError("Mixed feature guards in overload %s::%s" % (current_class.class_name, self.func_name))
+        guard = guards.pop()
         config = gen.config
         static = self.implementations[0].static
         if not is_ctor:
             tpl = Template(file=os.path.join(gen.target, "templates", "function.h"),
                         searchList=[current_class, self])
             if not is_override:
-                gen.head_file.write(str(tpl))
+                declaration = str(tpl)
+                if declaration.strip():
+                    gen.write_guarded(gen.head_file, declaration, guard)
         if static:
             if 'sfunction' in config['definitions']:
                 tpl = Template(config['definitions']['sfunction'],
@@ -1003,7 +1012,7 @@ class NativeOverloadedFunction(object):
             tpl = Template(file=os.path.join(gen.target, "templates", "ifunction_overloaded.c"),
                             searchList=[current_class, self])
         if not is_override:
-            gen.impl_file.write(str(tpl))
+            gen.write_guarded(gen.impl_file, str(tpl), guard)
 
         # if current_class != None and not is_ctor:
         #     if gen.script_type == "lua":
@@ -1125,7 +1134,11 @@ class NativeClass(object):
         #                                searchList=[{"current_class": self}])
         #     self.doc_func_file.write(str(apidoc_fun_head_script))
 
-        self.generator.head_file.write(str(prelude_h))
+        class_guard = self.generator.feature_guard_for(self.cursor) if self.generator.script_type == "lua" else None
+        self.generator.write_guard_start(self.generator.impl_file, class_guard)
+        prelude_header = str(prelude_h)
+        if prelude_header.strip():
+            self.generator.write_guarded(self.generator.head_file, prelude_header, class_guard)
         self.generator.impl_file.write(str(prelude_c))
         # self.generator.doc_file.write(str(apidoc_classhead_script))
         for m in self.methods_clean():
@@ -1146,6 +1159,7 @@ class NativeClass(object):
         #                                                  "apidoc_classfoot.script"),
         #                                searchList=[{"current_class": self}])
         self.generator.impl_file.write(str(register))
+        self.generator.write_guard_end(self.generator.impl_file, class_guard)
         # self.generator.doc_file.write(str(apidoc_classfoot_script))
         # if self.generator.script_type == "lua":
         #     apidoc_fun_foot_script  = Template(file=os.path.join(self.generator.target,
@@ -1363,6 +1377,7 @@ class Generator(object):
         self.macro_judgement = opts['macro_judgement']
         self.hpp_headers = opts['hpp_headers']
         self.cpp_headers = opts['cpp_headers']
+        self._feature_guard_cache = {}
 
         extend_clang_args = []
 
@@ -1424,6 +1439,91 @@ class Generator(object):
             for replace in list_of_replace_headers:
                 header, replaced_header = replace.split("::")
                 self.replace_headers[header] = replaced_header
+
+    @staticmethod
+    def write_guard_start(stream, guard):
+        if guard:
+            stream.write("#if %s\n" % guard)
+
+    @staticmethod
+    def write_guard_end(stream, guard):
+        if guard:
+            stream.write("#endif // %s\n" % guard)
+
+    def write_guarded(self, stream, code, guard):
+        self.write_guard_start(stream, guard)
+        stream.write(code)
+        self.write_guard_end(stream, guard)
+
+    def feature_guard_for(self, cursor):
+        """Keep Lua output subject to the same feature switches as its declaration."""
+        location = cursor.location
+        if not location.file:
+            return None
+        path = location.file.name.replace(os.path.sep, "/")
+        guards = []
+        if "/core/3d/" in path:
+            guards.append("defined(AX_ENABLE_3D)")
+        elif "/core/physics3d/" in path:
+            guards.append("defined(AX_ENABLE_3D_PHYSICS)")
+        elif "/core/physics/" in path:
+            guards.append("defined(AX_ENABLE_PHYSICS)")
+        elif "/extensions/GUI/" in path:
+            guards.append("defined(AX_ENABLE_EXT_GUI)")
+        elif "/extensions/assets-manager/" in path:
+            guards.append("defined(AX_ENABLE_EXT_ASSETMANAGER)")
+        elif "/extensions/Particle3D/" in path:
+            guards.append("defined(AX_ENABLE_EXT_PARTICLE3D)")
+
+        if path not in self._feature_guard_cache:
+            stack = []
+            line_guards = {}
+            with open(path, encoding="utf-8") as source:
+                lines = source.readlines()
+            number = 0
+            while number < len(lines):
+                line = lines[number]
+                number += 1
+                if line.lstrip().startswith("#"):
+                    while line.rstrip().endswith("\\") and number < len(lines):
+                        line = line.rstrip()[:-1] + " " + lines[number].strip()
+                        number += 1
+                    directive = re.match(r"\s*#\s*(if|ifdef|ifndef|elif|else|endif)\b(.*)", line)
+                    if directive:
+                        kind, value = directive.group(1), directive.group(2).strip()
+                        if kind == "if":
+                            stack.append(([value], value))
+                        elif kind == "ifdef":
+                            condition = "defined(%s)" % value
+                            stack.append(([condition], condition))
+                        elif kind == "ifndef":
+                            condition = "!defined(%s)" % value
+                            stack.append(([condition], condition))
+                        elif kind == "elif" and stack:
+                            previous = stack[-1][0]
+                            stack[-1] = (previous + [value], "!(%s) && (%s)" % (" || ".join(previous), value))
+                        elif kind == "else" and stack:
+                            stack[-1] = (stack[-1][0], "!(%s)" % " || ".join(stack[-1][0]))
+                        elif kind == "endif" and stack:
+                            stack.pop()
+                line_guards[number] = tuple(item[1] for item in stack if "AX_ENABLE_" in item[1])
+            self._feature_guard_cache[path] = line_guards
+        guards.extend(self._feature_guard_cache[path].get(location.line, ()))
+        if self.macro_judgement:
+            whole_file_guard = self.macro_judgement.strip().split(None, 1)[-1]
+            guards = [guard for guard in guards if guard != whole_file_guard]
+        guards = list(dict.fromkeys(guards))
+        return " && ".join("(%s)" % guard for guard in guards) if guards else None
+
+    def feature_guard_for_binding(self, binding):
+        if self.script_type != "lua":
+            return None
+        if hasattr(binding, "implementations") and binding.is_overloaded:
+            guards = {self.feature_guard_for(func.cursor) for func in binding.implementations}
+            if len(guards) != 1:
+                raise ValueError("Mixed feature guards in overload %s" % binding.func_name)
+            return guards.pop()
+        return self.feature_guard_for(binding.cursor)
 
 
     def should_rename_function(self, class_name, method_name):

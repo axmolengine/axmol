@@ -33,7 +33,9 @@
 #include "lua-bindings/manual/base/LuaScriptHandlerMgr.h"
 
 using namespace ax;
+#if defined(AX_ENABLE_EXT_GUI) || defined(AX_ENABLE_EXT_ASSETMANAGER)
 USING_NS_AX_EXT;
+#endif
 
 
 class LuaRefMap : public Object
@@ -77,6 +79,7 @@ public:
 
 };
 
+#if defined(AX_ENABLE_EXT_ASSETMANAGER)
 class LuaAssetsManagerDelegateProtocol : public Object, public AssetsManagerDelegateProtocol
 {
 public:
@@ -264,6 +267,9 @@ static void extendEventListenerAssetsManagerEx(lua_State* L)
     lua_pop(L, 1);
 }
 
+#endif // AX_ENABLE_EXT_ASSETMANAGER
+
+#if defined(AX_ENABLE_EXT_PARTICLE3D)
 int axlua_extension_ParticleSystem3D_getParticlePool(lua_State* tolua_S)
 {
     int argc                        = 0;
@@ -409,6 +415,9 @@ static void extendParticlePool(lua_State* tolua_S)
 
 
 
+#endif // AX_ENABLE_EXT_PARTICLE3D
+
+#if defined(AX_ENABLE_EXT_GUI)
 class LuaScrollViewDelegate:public Object, public ScrollViewDelegate
 {
 public:
@@ -1072,15 +1081,23 @@ static void extendTableView(lua_State* L)
     lua_pop(L, 1);
 }
 
+#endif // AX_ENABLE_EXT_GUI
+
 int register_all_ax_extension_manual(lua_State* tolua_S)
 {
+#if defined(AX_ENABLE_EXT_ASSETMANAGER)
     extendAssetsManager(tolua_S);
     extendManifest(tolua_S);
     extendEventListenerAssetsManagerEx(tolua_S);
+#endif
+#if defined(AX_ENABLE_EXT_PARTICLE3D)
     extendParticleSystem3D(tolua_S);
     extendParticlePool(tolua_S);
+#endif
+#if defined(AX_ENABLE_EXT_GUI)
     extendScrollView(tolua_S);
     extendTableView(tolua_S);
+#endif
     return 0;
 }
 

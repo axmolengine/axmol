@@ -26,24 +26,32 @@
 
 #include "ExtensionMacros.h"
 
+#if defined(AX_ENABLE_EXT_GUI)
 #include "GUI/src/GUI/ScrollView/ScrollView.h"
 #include "GUI/src/GUI/ScrollView/TableView.h"
+#endif
 
 // Physics integration
+#if defined(AX_ENABLE_EXT_PHYSICS_NODE)
 #include "physics-nodes/src/physics-nodes/PhysicsDebugNode.h"
 #include "physics-nodes/src/physics-nodes/PhysicsDebugNodeBox2D.h"
 #include "physics-nodes/src/physics-nodes/PhysicsDebugNodeChipmunk2D.h"
 #include "physics-nodes/src/physics-nodes/PhysicsSprite.h"
 #include "physics-nodes/src/physics-nodes/PhysicsSpriteBox2D.h"
 #include "physics-nodes/src/physics-nodes/PhysicsSpriteChipmunk2D.h"
+#endif
 
+#if defined(AX_ENABLE_EXT_ASSETMANAGER)
 #include "assets-manager/src/assets-manager/AssetsManager.h"
 #include "assets-manager/src/assets-manager/AssetsManagerEx.h"
 #include "assets-manager/src/assets-manager/EventAssetsManagerEx.h"
 #include "assets-manager/src/assets-manager/EventListenerAssetsManagerEx.h"
 #include "assets-manager/src/assets-manager/Manifest.h"
+#endif
 
 // Particle System, include Particle Universe Particle System
+#if defined(AX_ENABLE_EXT_PARTICLE3D)
 #include "Particle3D/src/Particle3D/Particle3DRender.h"
 #include "Particle3D/src/Particle3D/ParticleSystem3D.h"
 #include "Particle3D/src/Particle3D/PU/PUParticleSystem3D.h"
+#endif

@@ -37,12 +37,18 @@
 #include "lua-bindings/manual/navmesh/axlua_navmesh_manual.h"
 #include "lua-bindings/manual/fairygui/axlua_fairygui_manual.hpp"
 #include "lua_cjson.h"
+#if defined(AX_ENABLE_HTTP) || defined(AX_ENABLE_WEBSOCKET)
 #include "yasio/bindings/yasio_axlua.hpp"
+#endif
 
 static void lua_register_extensions(lua_State* L)
 {
 
-    static luaL_Reg lua_exts[] = {{"yasio", luaopen_yasio_axlua}, {"cjson", luaopen_cjson}, {NULL, NULL}};
+    static luaL_Reg lua_exts[] = {
+#if defined(AX_ENABLE_HTTP) || defined(AX_ENABLE_WEBSOCKET)
+        {"yasio", luaopen_yasio_axlua},
+#endif
+        {"cjson", luaopen_cjson}, {NULL, NULL}};
 
     lua_getglobal(L, "package");
     lua_getfield(L, -1, "preload");
@@ -58,16 +64,26 @@ static void lua_register_extensions(lua_State* L)
 int lua_module_register(lua_State* L)
 {
     // Don't change the module register order unless you know what your are doing
+#if defined(AX_ENABLE_HTTP) || defined(AX_ENABLE_WEBSOCKET)
     register_network_module(L);
+#endif
+#if defined(AX_ENABLE_EXT_COCOSTUDIO)
     register_cocostudio_module(L);
+#endif
     register_ui_module(L);
+#if defined(AX_ENABLE_EXT_GUI) || defined(AX_ENABLE_EXT_ASSETMANAGER) || defined(AX_ENABLE_EXT_PARTICLE3D)
     register_extension_module(L);
+#endif
     // TODO arnold
 #if defined(AX_ENABLE_EXT_SPINE)
     register_spine_module(L);
 #endif // defined(AX_ENABLE_EXT_SPINE)
+#if defined(AX_ENABLE_3D)
     register_cocos3d_module(L);
+#endif
+#if defined(AX_ENABLE_AUDIO)
     register_audioengine_module(L);
+#endif
 #if defined(AX_ENABLE_3D_PHYSICS)
     register_physics3d_module(L);
 #endif
