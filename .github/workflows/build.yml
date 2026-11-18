@@ -48,7 +48,7 @@ jobs:
     - name: Build
       shell: pwsh
       run: |
-        .\tools\cmdline\axmol -p win32 -a x64 -xc '-DAX_ENABLE_VR=ON,-DAX_ENABLE_OPENXR=ON' -O3 -t cpp-tests
+        .\tools\cmdline\axmol -p win32 -a x64 -xc '-DAX_ENABLE_VR=ON,-DAX_ENABLE_OPENXR=ON' -O3 -t 'cpp-tests,fairygui-tests'
     - name: Check prebuilt workflow
       shell: pwsh
       run: |
@@ -60,6 +60,7 @@ jobs:
         name: windows_x64
         path: |
           build/bin/cpp-tests/**/*
+          build/bin/fairygui-tests/**/*
   win32-arm64:
     needs: [source-check]
     runs-on: windows-11-arm
