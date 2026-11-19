@@ -47,6 +47,7 @@ public:
     virtual ~DownloaderCURL();
 
     virtual void startTask(std::shared_ptr<DownloadTask>& task) override;
+    virtual bool cleanupTask(const DownloadTask& task) override;
 
 protected:
     class Impl;
