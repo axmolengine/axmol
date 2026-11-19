@@ -27,6 +27,12 @@
 #include "TestUtils.h"
 #include "platform/FileUtils.h"
 
+#if !defined(__EMSCRIPTEN__)
+#    include <atomic>
+#    include <thread>
+#    include <vector>
+#endif
+
 using namespace ax;
 
 
@@ -61,6 +67,113 @@ TEST_SUITE("platform/FileUtils") {
 
         CHECK(fu->fullPathForDirectory(path) == path);
     }
+
+#if !defined(__EMSCRIPTEN__)
+    TEST_CASE("concurrent_full_path_lookup") {
+        auto* fileUtils = fu;
+
+        const auto expectedFile = fileUtils->fullPathForFilename("text/123.txt");
+        const auto expectedDirectory = fileUtils->fullPathForDirectory("text");
+
+        REQUIRE(!expectedFile.empty());
+        REQUIRE(!expectedDirectory.empty());
+
+        fileUtils->purgeCachedEntries();
+
+        std::atomic<bool> start{false};
+        std::atomic<bool> success{true};
+        std::vector<std::thread> workers;
+
+        for (int i = 0; i < 8; ++i)
+        {
+            workers.emplace_back([&]() {
+                // Start together to exercise concurrent cache misses.
+                while (!start.load(std::memory_order_acquire))
+                {
+                    std::this_thread::yield();
+                }
+
+                for (int j = 0; j < 200; ++j)
+                {
+                    if (fileUtils->fullPathForFilename("text/123.txt") != expectedFile ||
+                        fileUtils->fullPathForDirectory("text") != expectedDirectory)
+                    {
+                        success.store(false, std::memory_order_relaxed);
+                        return;
+                    }
+                }
+            });
+        }
+
+        start.store(true, std::memory_order_release);
+
+        for (auto& worker : workers)
+        {
+            worker.join();
+        }
+
+        CHECK(success.load(std::memory_order_relaxed));
+    }
+
+    TEST_CASE("concurrent_full_path_lookup_and_invalidation") {
+        auto* fileUtils = fu;
+
+        const auto expectedFile = fileUtils->fullPathForFilename("text/123.txt");
+        const auto expectedDirectory = fileUtils->fullPathForDirectory("text");
+        const auto originalSearchPaths = fileUtils->getOriginalSearchPaths();
+
+        REQUIRE(!expectedFile.empty());
+        REQUIRE(!expectedDirectory.empty());
+
+        std::atomic<bool> start{false};
+        std::atomic<bool> success{true};
+        std::vector<std::thread> readers;
+
+        for (int i = 0; i < 6; ++i)
+        {
+            readers.emplace_back([&]() {
+                while (!start.load(std::memory_order_acquire))
+                {
+                    std::this_thread::yield();
+                }
+
+                for (int j = 0; j < 300; ++j)
+                {
+                    if (fileUtils->fullPathForFilename("text/123.txt") != expectedFile ||
+                        fileUtils->fullPathForDirectory("text") != expectedDirectory)
+                    {
+                        success.store(false, std::memory_order_relaxed);
+                        return;
+                    }
+                }
+            });
+        }
+
+        std::thread invalidator([&]() {
+            while (!start.load(std::memory_order_acquire))
+            {
+                std::this_thread::yield();
+            }
+
+            for (int j = 0; j < 300; ++j)
+            {
+                // Exercise cache clearing and search-path rebuilding.
+                fileUtils->purgeCachedEntries();
+                fileUtils->setSearchPaths(originalSearchPaths);
+            }
+        });
+
+        start.store(true, std::memory_order_release);
+
+        for (auto& reader : readers)
+        {
+            reader.join();
+        }
+        invalidator.join();
+
+        CHECK(success.load(std::memory_order_relaxed));
+    }
+#endif
 
     TEST_CASE("path_ops")
     {
