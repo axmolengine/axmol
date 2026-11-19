@@ -12,7 +12,14 @@ TOLUA_API int register_all_${prefix}(lua_State* tolua_S)
 
     #for jsclass in $sorted_classes
     #if $in_listed_classes(jsclass)
+    #set guard = $feature_guard_for($generated_classes[jsclass].cursor)
+    #if $guard
+\#if $guard
+    #end if
     lua_register_${prefix}_${jsclass}(tolua_S);
+    #if $guard
+\#endif // $guard
+    #end if
     #end if
     #end for
 

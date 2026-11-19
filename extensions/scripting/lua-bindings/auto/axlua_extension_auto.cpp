@@ -2,7 +2,9 @@
 #include "extensions/cocos-ext.h"
 #include "lua-bindings/manual/tolua_fix.h"
 #include "lua-bindings/manual/LuaBasicConversions.h"
+#if (defined(AX_ENABLE_EXT_GUI))
 
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_initWithViewSize(lua_State* tolua_S)
 {
     int argc = 0;
@@ -70,6 +72,8 @@ int lua_ax_extension_ScrollView_initWithViewSize(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_setContentOffset(lua_State* tolua_S)
 {
     int argc = 0;
@@ -137,6 +141,8 @@ int lua_ax_extension_ScrollView_setContentOffset(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_getContentOffset(lua_State* tolua_S)
 {
     int argc = 0;
@@ -184,6 +190,8 @@ int lua_ax_extension_ScrollView_getContentOffset(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_setContentOffsetInDuration(lua_State* tolua_S)
 {
     int argc = 0;
@@ -237,6 +245,8 @@ int lua_ax_extension_ScrollView_setContentOffsetInDuration(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_stopAnimatedContentOffset(lua_State* tolua_S)
 {
     int argc = 0;
@@ -284,6 +294,8 @@ int lua_ax_extension_ScrollView_stopAnimatedContentOffset(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_setZoomScale(lua_State* tolua_S)
 {
     int argc = 0;
@@ -343,6 +355,8 @@ int lua_ax_extension_ScrollView_setZoomScale(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_getZoomScale(lua_State* tolua_S)
 {
     int argc = 0;
@@ -390,6 +404,8 @@ int lua_ax_extension_ScrollView_getZoomScale(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_setZoomScaleInDuration(lua_State* tolua_S)
 {
     int argc = 0;
@@ -443,6 +459,8 @@ int lua_ax_extension_ScrollView_setZoomScaleInDuration(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_setMinScale(lua_State* tolua_S)
 {
     int argc = 0;
@@ -493,6 +511,8 @@ int lua_ax_extension_ScrollView_setMinScale(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_setMaxScale(lua_State* tolua_S)
 {
     int argc = 0;
@@ -543,6 +563,8 @@ int lua_ax_extension_ScrollView_setMaxScale(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_minContainerOffset(lua_State* tolua_S)
 {
     int argc = 0;
@@ -590,6 +612,8 @@ int lua_ax_extension_ScrollView_minContainerOffset(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_maxContainerOffset(lua_State* tolua_S)
 {
     int argc = 0;
@@ -637,6 +661,8 @@ int lua_ax_extension_ScrollView_maxContainerOffset(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_isNodeVisible(lua_State* tolua_S)
 {
     int argc = 0;
@@ -687,6 +713,8 @@ int lua_ax_extension_ScrollView_isNodeVisible(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_pause(lua_State* tolua_S)
 {
     int argc = 0;
@@ -737,6 +765,8 @@ int lua_ax_extension_ScrollView_pause(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_resume(lua_State* tolua_S)
 {
     int argc = 0;
@@ -787,6 +817,8 @@ int lua_ax_extension_ScrollView_resume(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_setTouchEnabled(lua_State* tolua_S)
 {
     int argc = 0;
@@ -837,6 +869,8 @@ int lua_ax_extension_ScrollView_setTouchEnabled(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_isTouchEnabled(lua_State* tolua_S)
 {
     int argc = 0;
@@ -884,6 +918,8 @@ int lua_ax_extension_ScrollView_isTouchEnabled(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_setSwallowTouches(lua_State* tolua_S)
 {
     int argc = 0;
@@ -934,6 +970,8 @@ int lua_ax_extension_ScrollView_setSwallowTouches(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_isDragging(lua_State* tolua_S)
 {
     int argc = 0;
@@ -981,6 +1019,8 @@ int lua_ax_extension_ScrollView_isDragging(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_isTouchMoved(lua_State* tolua_S)
 {
     int argc = 0;
@@ -1028,6 +1068,8 @@ int lua_ax_extension_ScrollView_isTouchMoved(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_isBounceable(lua_State* tolua_S)
 {
     int argc = 0;
@@ -1075,6 +1117,8 @@ int lua_ax_extension_ScrollView_isBounceable(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_setBounceable(lua_State* tolua_S)
 {
     int argc = 0;
@@ -1125,6 +1169,8 @@ int lua_ax_extension_ScrollView_setBounceable(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_getViewSize(lua_State* tolua_S)
 {
     int argc = 0;
@@ -1172,6 +1218,8 @@ int lua_ax_extension_ScrollView_getViewSize(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_setViewSize(lua_State* tolua_S)
 {
     int argc = 0;
@@ -1222,6 +1270,8 @@ int lua_ax_extension_ScrollView_setViewSize(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_getContainer(lua_State* tolua_S)
 {
     int argc = 0;
@@ -1269,6 +1319,8 @@ int lua_ax_extension_ScrollView_getContainer(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_setContainer(lua_State* tolua_S)
 {
     int argc = 0;
@@ -1319,6 +1371,8 @@ int lua_ax_extension_ScrollView_setContainer(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_getDirection(lua_State* tolua_S)
 {
     int argc = 0;
@@ -1366,6 +1420,8 @@ int lua_ax_extension_ScrollView_getDirection(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_setDirection(lua_State* tolua_S)
 {
     int argc = 0;
@@ -1416,6 +1472,8 @@ int lua_ax_extension_ScrollView_setDirection(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_updateInset(lua_State* tolua_S)
 {
     int argc = 0;
@@ -1463,6 +1521,8 @@ int lua_ax_extension_ScrollView_updateInset(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_isClippingToBounds(lua_State* tolua_S)
 {
     int argc = 0;
@@ -1510,6 +1570,8 @@ int lua_ax_extension_ScrollView_isClippingToBounds(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_setClippingToBounds(lua_State* tolua_S)
 {
     int argc = 0;
@@ -1560,6 +1622,8 @@ int lua_ax_extension_ScrollView_setClippingToBounds(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_onTouchBegan(lua_State* tolua_S)
 {
     int argc = 0;
@@ -1613,6 +1677,8 @@ int lua_ax_extension_ScrollView_onTouchBegan(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_onTouchMoved(lua_State* tolua_S)
 {
     int argc = 0;
@@ -1666,6 +1732,8 @@ int lua_ax_extension_ScrollView_onTouchMoved(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_onTouchEnded(lua_State* tolua_S)
 {
     int argc = 0;
@@ -1719,6 +1787,8 @@ int lua_ax_extension_ScrollView_onTouchEnded(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_onTouchCancelled(lua_State* tolua_S)
 {
     int argc = 0;
@@ -1772,6 +1842,8 @@ int lua_ax_extension_ScrollView_onTouchCancelled(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_updateTweenAction(lua_State* tolua_S)
 {
     int argc = 0;
@@ -1825,6 +1897,8 @@ int lua_ax_extension_ScrollView_updateTweenAction(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_hasVisibleParents(lua_State* tolua_S)
 {
     int argc = 0;
@@ -1872,6 +1946,8 @@ int lua_ax_extension_ScrollView_hasVisibleParents(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_create(lua_State* tolua_S)
 {
     int argc = 0;
@@ -1930,6 +2006,8 @@ int lua_ax_extension_ScrollView_create(lua_State* tolua_S)
 #endif
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_ScrollView_constructor(lua_State* tolua_S)
 {
     int argc = 0;
@@ -1966,6 +2044,7 @@ int lua_ax_extension_ScrollView_constructor(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
 
 static int lua_ax_extension_ScrollView_finalize(lua_State* tolua_S)
 {
@@ -1980,51 +2059,130 @@ int lua_register_ax_extension_ScrollView(lua_State* tolua_S)
 
     tolua_beginmodule(tolua_S,"ScrollView");
         tolua_function(tolua_S,"new",lua_ax_extension_ScrollView_constructor);
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"initWithViewSize",lua_ax_extension_ScrollView_initWithViewSize);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"setContentOffset",lua_ax_extension_ScrollView_setContentOffset);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"getContentOffset",lua_ax_extension_ScrollView_getContentOffset);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"setContentOffsetInDuration",lua_ax_extension_ScrollView_setContentOffsetInDuration);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"stopAnimatedContentOffset",lua_ax_extension_ScrollView_stopAnimatedContentOffset);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"setZoomScale",lua_ax_extension_ScrollView_setZoomScale);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"getZoomScale",lua_ax_extension_ScrollView_getZoomScale);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"setZoomScaleInDuration",lua_ax_extension_ScrollView_setZoomScaleInDuration);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"setMinScale",lua_ax_extension_ScrollView_setMinScale);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"setMaxScale",lua_ax_extension_ScrollView_setMaxScale);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"minContainerOffset",lua_ax_extension_ScrollView_minContainerOffset);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"maxContainerOffset",lua_ax_extension_ScrollView_maxContainerOffset);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"isNodeVisible",lua_ax_extension_ScrollView_isNodeVisible);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"pause",lua_ax_extension_ScrollView_pause);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"resume",lua_ax_extension_ScrollView_resume);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"setTouchEnabled",lua_ax_extension_ScrollView_setTouchEnabled);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"isTouchEnabled",lua_ax_extension_ScrollView_isTouchEnabled);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"setSwallowTouches",lua_ax_extension_ScrollView_setSwallowTouches);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"isDragging",lua_ax_extension_ScrollView_isDragging);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"isTouchMoved",lua_ax_extension_ScrollView_isTouchMoved);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"isBounceable",lua_ax_extension_ScrollView_isBounceable);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"setBounceable",lua_ax_extension_ScrollView_setBounceable);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"getViewSize",lua_ax_extension_ScrollView_getViewSize);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"setViewSize",lua_ax_extension_ScrollView_setViewSize);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"getContainer",lua_ax_extension_ScrollView_getContainer);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"setContainer",lua_ax_extension_ScrollView_setContainer);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"getDirection",lua_ax_extension_ScrollView_getDirection);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"setDirection",lua_ax_extension_ScrollView_setDirection);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"updateInset",lua_ax_extension_ScrollView_updateInset);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"isClippingToBounds",lua_ax_extension_ScrollView_isClippingToBounds);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"setClippingToBounds",lua_ax_extension_ScrollView_setClippingToBounds);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"onTouchBegan",lua_ax_extension_ScrollView_onTouchBegan);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"onTouchMoved",lua_ax_extension_ScrollView_onTouchMoved);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"onTouchEnded",lua_ax_extension_ScrollView_onTouchEnded);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"onTouchCancelled",lua_ax_extension_ScrollView_onTouchCancelled);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"updateTweenAction",lua_ax_extension_ScrollView_updateTweenAction);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"hasVisibleParents",lua_ax_extension_ScrollView_hasVisibleParents);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"create", lua_ax_extension_ScrollView_create);
+#endif // (defined(AX_ENABLE_EXT_GUI))
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::extension::ScrollView).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.ScrollView";
     g_typeCast[typeName] = "ax.ScrollView";
     return 1;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_TableViewCell_getIdx(lua_State* tolua_S)
 {
     int argc = 0;
@@ -2072,6 +2230,8 @@ int lua_ax_extension_TableViewCell_getIdx(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_TableViewCell_setIdx(lua_State* tolua_S)
 {
     int argc = 0;
@@ -2122,6 +2282,8 @@ int lua_ax_extension_TableViewCell_setIdx(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_TableViewCell_reset(lua_State* tolua_S)
 {
     int argc = 0;
@@ -2169,6 +2331,8 @@ int lua_ax_extension_TableViewCell_reset(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_TableViewCell_create(lua_State* tolua_S)
 {
     int argc = 0;
@@ -2203,6 +2367,8 @@ int lua_ax_extension_TableViewCell_create(lua_State* tolua_S)
 #endif
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_TableViewCell_constructor(lua_State* tolua_S)
 {
     int argc = 0;
@@ -2239,6 +2405,7 @@ int lua_ax_extension_TableViewCell_constructor(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
 
 static int lua_ax_extension_TableViewCell_finalize(lua_State* tolua_S)
 {
@@ -2253,17 +2420,28 @@ int lua_register_ax_extension_TableViewCell(lua_State* tolua_S)
 
     tolua_beginmodule(tolua_S,"TableViewCell");
         tolua_function(tolua_S,"new",lua_ax_extension_TableViewCell_constructor);
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"getIdx",lua_ax_extension_TableViewCell_getIdx);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"setIdx",lua_ax_extension_TableViewCell_setIdx);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"reset",lua_ax_extension_TableViewCell_reset);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"create", lua_ax_extension_TableViewCell_create);
+#endif // (defined(AX_ENABLE_EXT_GUI))
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::extension::TableViewCell).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.TableViewCell";
     g_typeCast[typeName] = "ax.TableViewCell";
     return 1;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_TableView_initWithViewSize(lua_State* tolua_S)
 {
     int argc = 0;
@@ -2331,6 +2509,8 @@ int lua_ax_extension_TableView_initWithViewSize(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_TableView_setVerticalFillOrder(lua_State* tolua_S)
 {
     int argc = 0;
@@ -2381,6 +2561,8 @@ int lua_ax_extension_TableView_setVerticalFillOrder(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_TableView_getVerticalFillOrder(lua_State* tolua_S)
 {
     int argc = 0;
@@ -2428,6 +2610,8 @@ int lua_ax_extension_TableView_getVerticalFillOrder(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_TableView_updateCellAtIndex(lua_State* tolua_S)
 {
     int argc = 0;
@@ -2478,6 +2662,8 @@ int lua_ax_extension_TableView_updateCellAtIndex(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_TableView_insertCellAtIndex(lua_State* tolua_S)
 {
     int argc = 0;
@@ -2528,6 +2714,8 @@ int lua_ax_extension_TableView_insertCellAtIndex(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_TableView_removeCellAtIndex(lua_State* tolua_S)
 {
     int argc = 0;
@@ -2578,6 +2766,8 @@ int lua_ax_extension_TableView_removeCellAtIndex(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_TableView_reloadData(lua_State* tolua_S)
 {
     int argc = 0;
@@ -2625,6 +2815,8 @@ int lua_ax_extension_TableView_reloadData(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_TableView_dequeueCell(lua_State* tolua_S)
 {
     int argc = 0;
@@ -2672,6 +2864,8 @@ int lua_ax_extension_TableView_dequeueCell(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_TableView_cellAtIndex(lua_State* tolua_S)
 {
     int argc = 0;
@@ -2722,6 +2916,8 @@ int lua_ax_extension_TableView_cellAtIndex(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_TableView_scrollViewDidScroll(lua_State* tolua_S)
 {
     int argc = 0;
@@ -2772,6 +2968,8 @@ int lua_ax_extension_TableView_scrollViewDidScroll(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_TableView_scrollViewDidZoom(lua_State* tolua_S)
 {
     int argc = 0;
@@ -2822,6 +3020,8 @@ int lua_ax_extension_TableView_scrollViewDidZoom(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_TableView__updateContentSize(lua_State* tolua_S)
 {
     int argc = 0;
@@ -2869,6 +3069,8 @@ int lua_ax_extension_TableView__updateContentSize(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
 int lua_ax_extension_TableView_constructor(lua_State* tolua_S)
 {
     int argc = 0;
@@ -2905,6 +3107,7 @@ int lua_ax_extension_TableView_constructor(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
 
 static int lua_ax_extension_TableView_finalize(lua_State* tolua_S)
 {
@@ -2919,25 +3122,52 @@ int lua_register_ax_extension_TableView(lua_State* tolua_S)
 
     tolua_beginmodule(tolua_S,"TableView");
         tolua_function(tolua_S,"new",lua_ax_extension_TableView_constructor);
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"initWithViewSize",lua_ax_extension_TableView_initWithViewSize);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"setVerticalFillOrder",lua_ax_extension_TableView_setVerticalFillOrder);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"getVerticalFillOrder",lua_ax_extension_TableView_getVerticalFillOrder);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"updateCellAtIndex",lua_ax_extension_TableView_updateCellAtIndex);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"insertCellAtIndex",lua_ax_extension_TableView_insertCellAtIndex);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"removeCellAtIndex",lua_ax_extension_TableView_removeCellAtIndex);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"reloadData",lua_ax_extension_TableView_reloadData);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"dequeueCell",lua_ax_extension_TableView_dequeueCell);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"cellAtIndex",lua_ax_extension_TableView_cellAtIndex);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"scrollViewDidScroll",lua_ax_extension_TableView_scrollViewDidScroll);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"scrollViewDidZoom",lua_ax_extension_TableView_scrollViewDidZoom);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
         tolua_function(tolua_S,"_updateContentSize",lua_ax_extension_TableView__updateContentSize);
+#endif // (defined(AX_ENABLE_EXT_GUI))
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::extension::TableView).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.TableView";
     g_typeCast[typeName] = "ax.TableView";
     return 1;
 }
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_AssetsManager_checkUpdate(lua_State* tolua_S)
 {
     int argc = 0;
@@ -2985,6 +3215,8 @@ int lua_ax_extension_AssetsManager_checkUpdate(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_AssetsManager_update(lua_State* tolua_S)
 {
     int argc = 0;
@@ -3032,6 +3264,8 @@ int lua_ax_extension_AssetsManager_update(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_AssetsManager_getPackageUrl(lua_State* tolua_S)
 {
     int argc = 0;
@@ -3079,6 +3313,8 @@ int lua_ax_extension_AssetsManager_getPackageUrl(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_AssetsManager_setPackageUrl(lua_State* tolua_S)
 {
     int argc = 0;
@@ -3129,6 +3365,8 @@ int lua_ax_extension_AssetsManager_setPackageUrl(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_AssetsManager_getVersionFileUrl(lua_State* tolua_S)
 {
     int argc = 0;
@@ -3176,6 +3414,8 @@ int lua_ax_extension_AssetsManager_getVersionFileUrl(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_AssetsManager_setVersionFileUrl(lua_State* tolua_S)
 {
     int argc = 0;
@@ -3226,6 +3466,8 @@ int lua_ax_extension_AssetsManager_setVersionFileUrl(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_AssetsManager_getVersion(lua_State* tolua_S)
 {
     int argc = 0;
@@ -3273,6 +3515,8 @@ int lua_ax_extension_AssetsManager_getVersion(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_AssetsManager_deleteVersion(lua_State* tolua_S)
 {
     int argc = 0;
@@ -3320,6 +3564,8 @@ int lua_ax_extension_AssetsManager_deleteVersion(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_AssetsManager_getStoragePath(lua_State* tolua_S)
 {
     int argc = 0;
@@ -3367,6 +3613,8 @@ int lua_ax_extension_AssetsManager_getStoragePath(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_AssetsManager_setStoragePath(lua_State* tolua_S)
 {
     int argc = 0;
@@ -3417,6 +3665,8 @@ int lua_ax_extension_AssetsManager_setStoragePath(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_AssetsManager_setConnectionTimeout(lua_State* tolua_S)
 {
     int argc = 0;
@@ -3467,6 +3717,8 @@ int lua_ax_extension_AssetsManager_setConnectionTimeout(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_AssetsManager_getConnectionTimeout(lua_State* tolua_S)
 {
     int argc = 0;
@@ -3514,6 +3766,8 @@ int lua_ax_extension_AssetsManager_getConnectionTimeout(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_AssetsManager_create(lua_State* tolua_S)
 {
     int argc = 0;
@@ -3572,6 +3826,8 @@ int lua_ax_extension_AssetsManager_create(lua_State* tolua_S)
 #endif
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_AssetsManager_constructor(lua_State* tolua_S)
 {
     int argc = 0;
@@ -3668,6 +3924,7 @@ int lua_ax_extension_AssetsManager_constructor(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
 
 static int lua_ax_extension_AssetsManager_finalize(lua_State* tolua_S)
 {
@@ -3682,26 +3939,55 @@ int lua_register_ax_extension_AssetsManager(lua_State* tolua_S)
 
     tolua_beginmodule(tolua_S,"AssetsManager");
         tolua_function(tolua_S,"new",lua_ax_extension_AssetsManager_constructor);
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"checkUpdate",lua_ax_extension_AssetsManager_checkUpdate);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"update",lua_ax_extension_AssetsManager_update);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"getPackageUrl",lua_ax_extension_AssetsManager_getPackageUrl);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"setPackageUrl",lua_ax_extension_AssetsManager_setPackageUrl);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"getVersionFileUrl",lua_ax_extension_AssetsManager_getVersionFileUrl);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"setVersionFileUrl",lua_ax_extension_AssetsManager_setVersionFileUrl);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"getVersion",lua_ax_extension_AssetsManager_getVersion);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"deleteVersion",lua_ax_extension_AssetsManager_deleteVersion);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"getStoragePath",lua_ax_extension_AssetsManager_getStoragePath);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"setStoragePath",lua_ax_extension_AssetsManager_setStoragePath);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"setConnectionTimeout",lua_ax_extension_AssetsManager_setConnectionTimeout);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"getConnectionTimeout",lua_ax_extension_AssetsManager_getConnectionTimeout);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"create", lua_ax_extension_AssetsManager_create);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::extension::AssetsManager).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.AssetsManager";
     g_typeCast[typeName] = "ax.AssetsManager";
     return 1;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_EventAssetsManagerEx_getEventCode(lua_State* tolua_S)
 {
     int argc = 0;
@@ -3749,6 +4035,8 @@ int lua_ax_extension_EventAssetsManagerEx_getEventCode(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_EventAssetsManagerEx_getCURLECode(lua_State* tolua_S)
 {
     int argc = 0;
@@ -3796,6 +4084,8 @@ int lua_ax_extension_EventAssetsManagerEx_getCURLECode(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_EventAssetsManagerEx_getCURLMCode(lua_State* tolua_S)
 {
     int argc = 0;
@@ -3843,6 +4133,8 @@ int lua_ax_extension_EventAssetsManagerEx_getCURLMCode(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_EventAssetsManagerEx_getMessage(lua_State* tolua_S)
 {
     int argc = 0;
@@ -3890,6 +4182,8 @@ int lua_ax_extension_EventAssetsManagerEx_getMessage(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_EventAssetsManagerEx_getAssetId(lua_State* tolua_S)
 {
     int argc = 0;
@@ -3937,6 +4231,8 @@ int lua_ax_extension_EventAssetsManagerEx_getAssetId(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_EventAssetsManagerEx_getAssetsManagerEx(lua_State* tolua_S)
 {
     int argc = 0;
@@ -3984,6 +4280,8 @@ int lua_ax_extension_EventAssetsManagerEx_getAssetsManagerEx(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_EventAssetsManagerEx_getPercent(lua_State* tolua_S)
 {
     int argc = 0;
@@ -4031,6 +4329,8 @@ int lua_ax_extension_EventAssetsManagerEx_getPercent(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_EventAssetsManagerEx_getPercentByFile(lua_State* tolua_S)
 {
     int argc = 0;
@@ -4078,6 +4378,8 @@ int lua_ax_extension_EventAssetsManagerEx_getPercentByFile(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
 {
     int argc = 0;
@@ -4324,6 +4626,7 @@ int lua_ax_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
 
 static int lua_ax_extension_EventAssetsManagerEx_finalize(lua_State* tolua_S)
 {
@@ -4338,21 +4641,40 @@ int lua_register_ax_extension_EventAssetsManagerEx(lua_State* tolua_S)
 
     tolua_beginmodule(tolua_S,"EventAssetsManagerEx");
         tolua_function(tolua_S,"new",lua_ax_extension_EventAssetsManagerEx_constructor);
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"getEventCode",lua_ax_extension_EventAssetsManagerEx_getEventCode);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"getCURLECode",lua_ax_extension_EventAssetsManagerEx_getCURLECode);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"getCURLMCode",lua_ax_extension_EventAssetsManagerEx_getCURLMCode);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"getMessage",lua_ax_extension_EventAssetsManagerEx_getMessage);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"getAssetId",lua_ax_extension_EventAssetsManagerEx_getAssetId);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"getAssetsManagerEx",lua_ax_extension_EventAssetsManagerEx_getAssetsManagerEx);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"getPercent",lua_ax_extension_EventAssetsManagerEx_getPercent);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"getPercentByFile",lua_ax_extension_EventAssetsManagerEx_getPercentByFile);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::extension::EventAssetsManagerEx).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.EventAssetsManagerEx";
     g_typeCast[typeName] = "ax.EventAssetsManagerEx";
     return 1;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_Manifest_isVersionLoaded(lua_State* tolua_S)
 {
     int argc = 0;
@@ -4400,6 +4722,8 @@ int lua_ax_extension_Manifest_isVersionLoaded(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_Manifest_isLoaded(lua_State* tolua_S)
 {
     int argc = 0;
@@ -4447,6 +4771,8 @@ int lua_ax_extension_Manifest_isLoaded(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_Manifest_getPackageUrl(lua_State* tolua_S)
 {
     int argc = 0;
@@ -4494,6 +4820,8 @@ int lua_ax_extension_Manifest_getPackageUrl(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_Manifest_getManifestFileUrl(lua_State* tolua_S)
 {
     int argc = 0;
@@ -4541,6 +4869,8 @@ int lua_ax_extension_Manifest_getManifestFileUrl(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_Manifest_getVersionFileUrl(lua_State* tolua_S)
 {
     int argc = 0;
@@ -4588,6 +4918,8 @@ int lua_ax_extension_Manifest_getVersionFileUrl(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_Manifest_getVersion(lua_State* tolua_S)
 {
     int argc = 0;
@@ -4635,6 +4967,8 @@ int lua_ax_extension_Manifest_getVersion(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_Manifest_getSearchPaths(lua_State* tolua_S)
 {
     int argc = 0;
@@ -4682,6 +5016,7 @@ int lua_ax_extension_Manifest_getSearchPaths(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
 static int lua_ax_extension_Manifest_finalize(lua_State* tolua_S)
 {
     AXLOGV("luabindings: finalizing LUA object (Manifest)");
@@ -4694,20 +5029,37 @@ int lua_register_ax_extension_Manifest(lua_State* tolua_S)
     tolua_cclass(tolua_S,"Manifest","ax.Manifest","ax.Object",nullptr);
 
     tolua_beginmodule(tolua_S,"Manifest");
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"isVersionLoaded",lua_ax_extension_Manifest_isVersionLoaded);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"isLoaded",lua_ax_extension_Manifest_isLoaded);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"getPackageUrl",lua_ax_extension_Manifest_getPackageUrl);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"getManifestFileUrl",lua_ax_extension_Manifest_getManifestFileUrl);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"getVersionFileUrl",lua_ax_extension_Manifest_getVersionFileUrl);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"getVersion",lua_ax_extension_Manifest_getVersion);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"getSearchPaths",lua_ax_extension_Manifest_getSearchPaths);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::extension::Manifest).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.Manifest";
     g_typeCast[typeName] = "ax.Manifest";
     return 1;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_AssetsManagerEx_checkUpdate(lua_State* tolua_S)
 {
     int argc = 0;
@@ -4755,6 +5107,8 @@ int lua_ax_extension_AssetsManagerEx_checkUpdate(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_AssetsManagerEx_update(lua_State* tolua_S)
 {
     int argc = 0;
@@ -4802,6 +5156,8 @@ int lua_ax_extension_AssetsManagerEx_update(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_AssetsManagerEx_downloadFailedAssets(lua_State* tolua_S)
 {
     int argc = 0;
@@ -4849,6 +5205,8 @@ int lua_ax_extension_AssetsManagerEx_downloadFailedAssets(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_AssetsManagerEx_getState(lua_State* tolua_S)
 {
     int argc = 0;
@@ -4896,6 +5254,8 @@ int lua_ax_extension_AssetsManagerEx_getState(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_AssetsManagerEx_getStoragePath(lua_State* tolua_S)
 {
     int argc = 0;
@@ -4943,6 +5303,8 @@ int lua_ax_extension_AssetsManagerEx_getStoragePath(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_AssetsManagerEx_getLocalManifest(lua_State* tolua_S)
 {
     int argc = 0;
@@ -4990,6 +5352,8 @@ int lua_ax_extension_AssetsManagerEx_getLocalManifest(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_AssetsManagerEx_getRemoteManifest(lua_State* tolua_S)
 {
     int argc = 0;
@@ -5037,6 +5401,8 @@ int lua_ax_extension_AssetsManagerEx_getRemoteManifest(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_AssetsManagerEx_getMaxConcurrentTask(lua_State* tolua_S)
 {
     int argc = 0;
@@ -5084,6 +5450,8 @@ int lua_ax_extension_AssetsManagerEx_getMaxConcurrentTask(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_AssetsManagerEx_setMaxConcurrentTask(lua_State* tolua_S)
 {
     int argc = 0;
@@ -5134,6 +5502,8 @@ int lua_ax_extension_AssetsManagerEx_setMaxConcurrentTask(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_AssetsManagerEx_setVersionCompareHandle(lua_State* tolua_S)
 {
     int argc = 0;
@@ -5188,6 +5558,8 @@ int lua_ax_extension_AssetsManagerEx_setVersionCompareHandle(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_AssetsManagerEx_setVerifyCallback(lua_State* tolua_S)
 {
     int argc = 0;
@@ -5242,6 +5614,8 @@ int lua_ax_extension_AssetsManagerEx_setVerifyCallback(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_AssetsManagerEx_create(lua_State* tolua_S)
 {
     int argc = 0;
@@ -5280,6 +5654,8 @@ int lua_ax_extension_AssetsManagerEx_create(lua_State* tolua_S)
 #endif
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_AssetsManagerEx_constructor(lua_State* tolua_S)
 {
     int argc = 0;
@@ -5322,6 +5698,7 @@ int lua_ax_extension_AssetsManagerEx_constructor(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
 
 static int lua_ax_extension_AssetsManagerEx_finalize(lua_State* tolua_S)
 {
@@ -5336,25 +5713,52 @@ int lua_register_ax_extension_AssetsManagerEx(lua_State* tolua_S)
 
     tolua_beginmodule(tolua_S,"AssetsManagerEx");
         tolua_function(tolua_S,"new",lua_ax_extension_AssetsManagerEx_constructor);
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"checkUpdate",lua_ax_extension_AssetsManagerEx_checkUpdate);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"update",lua_ax_extension_AssetsManagerEx_update);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"downloadFailedAssets",lua_ax_extension_AssetsManagerEx_downloadFailedAssets);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"getState",lua_ax_extension_AssetsManagerEx_getState);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"getStoragePath",lua_ax_extension_AssetsManagerEx_getStoragePath);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"getLocalManifest",lua_ax_extension_AssetsManagerEx_getLocalManifest);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"getRemoteManifest",lua_ax_extension_AssetsManagerEx_getRemoteManifest);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"getMaxConcurrentTask",lua_ax_extension_AssetsManagerEx_getMaxConcurrentTask);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"setMaxConcurrentTask",lua_ax_extension_AssetsManagerEx_setMaxConcurrentTask);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"setVersionCompareHandle",lua_ax_extension_AssetsManagerEx_setVersionCompareHandle);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"setVerifyCallback",lua_ax_extension_AssetsManagerEx_setVerifyCallback);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"create", lua_ax_extension_AssetsManagerEx_create);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::extension::AssetsManagerEx).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.AssetsManagerEx";
     g_typeCast[typeName] = "ax.AssetsManagerEx";
     return 1;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_EventListenerAssetsManagerEx_init(lua_State* tolua_S)
 {
     int argc = 0;
@@ -5412,6 +5816,8 @@ int lua_ax_extension_EventListenerAssetsManagerEx_init(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
 int lua_ax_extension_EventListenerAssetsManagerEx_constructor(lua_State* tolua_S)
 {
     int argc = 0;
@@ -5448,6 +5854,7 @@ int lua_ax_extension_EventListenerAssetsManagerEx_constructor(lua_State* tolua_S
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
 
 static int lua_ax_extension_EventListenerAssetsManagerEx_finalize(lua_State* tolua_S)
 {
@@ -5462,14 +5869,19 @@ int lua_register_ax_extension_EventListenerAssetsManagerEx(lua_State* tolua_S)
 
     tolua_beginmodule(tolua_S,"EventListenerAssetsManagerEx");
         tolua_function(tolua_S,"new",lua_ax_extension_EventListenerAssetsManagerEx_constructor);
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
         tolua_function(tolua_S,"init",lua_ax_extension_EventListenerAssetsManagerEx_init);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::extension::EventListenerAssetsManagerEx).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.EventListenerAssetsManagerEx";
     g_typeCast[typeName] = "ax.EventListenerAssetsManagerEx";
     return 1;
 }
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_ParticleSystem3D_setBlendFunc(lua_State* tolua_S)
 {
     int argc = 0;
@@ -5520,6 +5932,8 @@ int lua_ax_extension_ParticleSystem3D_setBlendFunc(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_ParticleSystem3D_getBlendFunc(lua_State* tolua_S)
 {
     int argc = 0;
@@ -5567,6 +5981,8 @@ int lua_ax_extension_ParticleSystem3D_getBlendFunc(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_ParticleSystem3D_startParticleSystem(lua_State* tolua_S)
 {
     int argc = 0;
@@ -5614,6 +6030,8 @@ int lua_ax_extension_ParticleSystem3D_startParticleSystem(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_ParticleSystem3D_stopParticleSystem(lua_State* tolua_S)
 {
     int argc = 0;
@@ -5661,6 +6079,8 @@ int lua_ax_extension_ParticleSystem3D_stopParticleSystem(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_ParticleSystem3D_pauseParticleSystem(lua_State* tolua_S)
 {
     int argc = 0;
@@ -5708,6 +6128,8 @@ int lua_ax_extension_ParticleSystem3D_pauseParticleSystem(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_ParticleSystem3D_resumeParticleSystem(lua_State* tolua_S)
 {
     int argc = 0;
@@ -5755,6 +6177,8 @@ int lua_ax_extension_ParticleSystem3D_resumeParticleSystem(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_ParticleSystem3D_setEmitter(lua_State* tolua_S)
 {
     int argc = 0;
@@ -5805,6 +6229,8 @@ int lua_ax_extension_ParticleSystem3D_setEmitter(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_ParticleSystem3D_setRender(lua_State* tolua_S)
 {
     int argc = 0;
@@ -5855,6 +6281,8 @@ int lua_ax_extension_ParticleSystem3D_setRender(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_ParticleSystem3D_getRender(lua_State* tolua_S)
 {
     int argc = 0;
@@ -5902,6 +6330,8 @@ int lua_ax_extension_ParticleSystem3D_getRender(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_ParticleSystem3D_addAffector(lua_State* tolua_S)
 {
     int argc = 0;
@@ -5952,6 +6382,8 @@ int lua_ax_extension_ParticleSystem3D_addAffector(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_ParticleSystem3D_removeAffector(lua_State* tolua_S)
 {
     int argc = 0;
@@ -6002,6 +6434,8 @@ int lua_ax_extension_ParticleSystem3D_removeAffector(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_ParticleSystem3D_removeAllAffector(lua_State* tolua_S)
 {
     int argc = 0;
@@ -6049,6 +6483,8 @@ int lua_ax_extension_ParticleSystem3D_removeAllAffector(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_ParticleSystem3D_getParticleQuota(lua_State* tolua_S)
 {
     int argc = 0;
@@ -6096,6 +6532,8 @@ int lua_ax_extension_ParticleSystem3D_getParticleQuota(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_ParticleSystem3D_setParticleQuota(lua_State* tolua_S)
 {
     int argc = 0;
@@ -6146,6 +6584,8 @@ int lua_ax_extension_ParticleSystem3D_setParticleQuota(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_ParticleSystem3D_getAliveParticleCount(lua_State* tolua_S)
 {
     int argc = 0;
@@ -6193,6 +6633,8 @@ int lua_ax_extension_ParticleSystem3D_getAliveParticleCount(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_ParticleSystem3D_getState(lua_State* tolua_S)
 {
     int argc = 0;
@@ -6240,6 +6682,8 @@ int lua_ax_extension_ParticleSystem3D_getState(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_ParticleSystem3D_isKeepLocal(lua_State* tolua_S)
 {
     int argc = 0;
@@ -6287,6 +6731,8 @@ int lua_ax_extension_ParticleSystem3D_isKeepLocal(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_ParticleSystem3D_setKeepLocal(lua_State* tolua_S)
 {
     int argc = 0;
@@ -6337,6 +6783,8 @@ int lua_ax_extension_ParticleSystem3D_setKeepLocal(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_ParticleSystem3D_setEnabled(lua_State* tolua_S)
 {
     int argc = 0;
@@ -6387,6 +6835,8 @@ int lua_ax_extension_ParticleSystem3D_setEnabled(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_ParticleSystem3D_isEnabled(lua_State* tolua_S)
 {
     int argc = 0;
@@ -6434,6 +6884,8 @@ int lua_ax_extension_ParticleSystem3D_isEnabled(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_ParticleSystem3D_constructor(lua_State* tolua_S)
 {
     int argc = 0;
@@ -6470,6 +6922,7 @@ int lua_ax_extension_ParticleSystem3D_constructor(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
 
 static int lua_ax_extension_ParticleSystem3D_finalize(lua_State* tolua_S)
 {
@@ -6484,33 +6937,76 @@ int lua_register_ax_extension_ParticleSystem3D(lua_State* tolua_S)
 
     tolua_beginmodule(tolua_S,"ParticleSystem3D");
         tolua_function(tolua_S,"new",lua_ax_extension_ParticleSystem3D_constructor);
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"setBlendFunc",lua_ax_extension_ParticleSystem3D_setBlendFunc);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"getBlendFunc",lua_ax_extension_ParticleSystem3D_getBlendFunc);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"startParticleSystem",lua_ax_extension_ParticleSystem3D_startParticleSystem);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"stopParticleSystem",lua_ax_extension_ParticleSystem3D_stopParticleSystem);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"pauseParticleSystem",lua_ax_extension_ParticleSystem3D_pauseParticleSystem);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"resumeParticleSystem",lua_ax_extension_ParticleSystem3D_resumeParticleSystem);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"setEmitter",lua_ax_extension_ParticleSystem3D_setEmitter);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"setRender",lua_ax_extension_ParticleSystem3D_setRender);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"getRender",lua_ax_extension_ParticleSystem3D_getRender);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"addAffector",lua_ax_extension_ParticleSystem3D_addAffector);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"removeAffector",lua_ax_extension_ParticleSystem3D_removeAffector);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"removeAllAffector",lua_ax_extension_ParticleSystem3D_removeAllAffector);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"getParticleQuota",lua_ax_extension_ParticleSystem3D_getParticleQuota);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"setParticleQuota",lua_ax_extension_ParticleSystem3D_setParticleQuota);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"getAliveParticleCount",lua_ax_extension_ParticleSystem3D_getAliveParticleCount);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"getState",lua_ax_extension_ParticleSystem3D_getState);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"isKeepLocal",lua_ax_extension_ParticleSystem3D_isKeepLocal);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"setKeepLocal",lua_ax_extension_ParticleSystem3D_setKeepLocal);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"setEnabled",lua_ax_extension_ParticleSystem3D_setEnabled);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"isEnabled",lua_ax_extension_ParticleSystem3D_isEnabled);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::ParticleSystem3D).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.ParticleSystem3D";
     g_typeCast[typeName] = "ax.ParticleSystem3D";
     return 1;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_forceUpdate(lua_State* tolua_S)
 {
     int argc = 0;
@@ -6561,6 +7057,8 @@ int lua_ax_extension_PUParticleSystem3D_forceUpdate(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_getParticleSystemScaleVelocity(lua_State* tolua_S)
 {
     int argc = 0;
@@ -6608,6 +7106,8 @@ int lua_ax_extension_PUParticleSystem3D_getParticleSystemScaleVelocity(lua_State
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_setParticleSystemScaleVelocity(lua_State* tolua_S)
 {
     int argc = 0;
@@ -6658,6 +7158,8 @@ int lua_ax_extension_PUParticleSystem3D_setParticleSystemScaleVelocity(lua_State
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_rotationOffset(lua_State* tolua_S)
 {
     int argc = 0;
@@ -6708,6 +7210,8 @@ int lua_ax_extension_PUParticleSystem3D_rotationOffset(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_getTimeElapsedSinceStart(lua_State* tolua_S)
 {
     int argc = 0;
@@ -6755,6 +7259,8 @@ int lua_ax_extension_PUParticleSystem3D_getTimeElapsedSinceStart(lua_State* tolu
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_getDefaultWidth(lua_State* tolua_S)
 {
     int argc = 0;
@@ -6802,6 +7308,8 @@ int lua_ax_extension_PUParticleSystem3D_getDefaultWidth(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_setDefaultWidth(lua_State* tolua_S)
 {
     int argc = 0;
@@ -6852,6 +7360,8 @@ int lua_ax_extension_PUParticleSystem3D_setDefaultWidth(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_getDefaultHeight(lua_State* tolua_S)
 {
     int argc = 0;
@@ -6899,6 +7409,8 @@ int lua_ax_extension_PUParticleSystem3D_getDefaultHeight(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_setDefaultHeight(lua_State* tolua_S)
 {
     int argc = 0;
@@ -6949,6 +7461,8 @@ int lua_ax_extension_PUParticleSystem3D_setDefaultHeight(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_getDefaultDepth(lua_State* tolua_S)
 {
     int argc = 0;
@@ -6996,6 +7510,8 @@ int lua_ax_extension_PUParticleSystem3D_getDefaultDepth(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_setDefaultDepth(lua_State* tolua_S)
 {
     int argc = 0;
@@ -7046,6 +7562,8 @@ int lua_ax_extension_PUParticleSystem3D_setDefaultDepth(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_getDerivedPosition(lua_State* tolua_S)
 {
     int argc = 0;
@@ -7093,6 +7611,8 @@ int lua_ax_extension_PUParticleSystem3D_getDerivedPosition(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_getDerivedScale(lua_State* tolua_S)
 {
     int argc = 0;
@@ -7140,6 +7660,8 @@ int lua_ax_extension_PUParticleSystem3D_getDerivedScale(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_getMaxVelocity(lua_State* tolua_S)
 {
     int argc = 0;
@@ -7187,6 +7709,8 @@ int lua_ax_extension_PUParticleSystem3D_getMaxVelocity(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_setMaxVelocity(lua_State* tolua_S)
 {
     int argc = 0;
@@ -7237,6 +7761,8 @@ int lua_ax_extension_PUParticleSystem3D_setMaxVelocity(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_setMaterialName(lua_State* tolua_S)
 {
     int argc = 0;
@@ -7287,6 +7813,8 @@ int lua_ax_extension_PUParticleSystem3D_setMaterialName(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_getMaterialName(lua_State* tolua_S)
 {
     int argc = 0;
@@ -7334,6 +7862,8 @@ int lua_ax_extension_PUParticleSystem3D_getMaterialName(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_forceEmission(lua_State* tolua_S)
 {
     int argc = 0;
@@ -7387,6 +7917,8 @@ int lua_ax_extension_PUParticleSystem3D_forceEmission(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_addEmitter(lua_State* tolua_S)
 {
     int argc = 0;
@@ -7437,6 +7969,8 @@ int lua_ax_extension_PUParticleSystem3D_addEmitter(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_removeAllEmitter(lua_State* tolua_S)
 {
     int argc = 0;
@@ -7484,6 +8018,8 @@ int lua_ax_extension_PUParticleSystem3D_removeAllEmitter(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_addListener(lua_State* tolua_S)
 {
     int argc = 0;
@@ -7534,6 +8070,8 @@ int lua_ax_extension_PUParticleSystem3D_addListener(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_removeListener(lua_State* tolua_S)
 {
     int argc = 0;
@@ -7584,6 +8122,8 @@ int lua_ax_extension_PUParticleSystem3D_removeListener(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_removeAllListener(lua_State* tolua_S)
 {
     int argc = 0;
@@ -7631,6 +8171,8 @@ int lua_ax_extension_PUParticleSystem3D_removeAllListener(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_addObserver(lua_State* tolua_S)
 {
     int argc = 0;
@@ -7681,6 +8223,8 @@ int lua_ax_extension_PUParticleSystem3D_addObserver(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_removerAllObserver(lua_State* tolua_S)
 {
     int argc = 0;
@@ -7728,6 +8272,8 @@ int lua_ax_extension_PUParticleSystem3D_removerAllObserver(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_addBehaviourTemplate(lua_State* tolua_S)
 {
     int argc = 0;
@@ -7778,6 +8324,8 @@ int lua_ax_extension_PUParticleSystem3D_addBehaviourTemplate(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_removeAllBehaviourTemplate(lua_State* tolua_S)
 {
     int argc = 0;
@@ -7825,6 +8373,8 @@ int lua_ax_extension_PUParticleSystem3D_removeAllBehaviourTemplate(lua_State* to
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_isMarkedForEmission(lua_State* tolua_S)
 {
     int argc = 0;
@@ -7872,6 +8422,8 @@ int lua_ax_extension_PUParticleSystem3D_isMarkedForEmission(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_setMarkedForEmission(lua_State* tolua_S)
 {
     int argc = 0;
@@ -7922,6 +8474,8 @@ int lua_ax_extension_PUParticleSystem3D_setMarkedForEmission(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_clearAllParticles(lua_State* tolua_S)
 {
     int argc = 0;
@@ -7969,6 +8523,8 @@ int lua_ax_extension_PUParticleSystem3D_clearAllParticles(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_getEmittedEmitterQuota(lua_State* tolua_S)
 {
     int argc = 0;
@@ -8016,6 +8572,8 @@ int lua_ax_extension_PUParticleSystem3D_getEmittedEmitterQuota(lua_State* tolua_
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_setEmittedEmitterQuota(lua_State* tolua_S)
 {
     int argc = 0;
@@ -8066,6 +8624,8 @@ int lua_ax_extension_PUParticleSystem3D_setEmittedEmitterQuota(lua_State* tolua_
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_getEmittedSystemQuota(lua_State* tolua_S)
 {
     int argc = 0;
@@ -8113,6 +8673,8 @@ int lua_ax_extension_PUParticleSystem3D_getEmittedSystemQuota(lua_State* tolua_S
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_setEmittedSystemQuota(lua_State* tolua_S)
 {
     int argc = 0;
@@ -8163,6 +8725,8 @@ int lua_ax_extension_PUParticleSystem3D_setEmittedSystemQuota(lua_State* tolua_S
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_getParentParticleSystem(lua_State* tolua_S)
 {
     int argc = 0;
@@ -8210,6 +8774,8 @@ int lua_ax_extension_PUParticleSystem3D_getParentParticleSystem(lua_State* tolua
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_makeParticleLocal(lua_State* tolua_S)
 {
     int argc = 0;
@@ -8261,6 +8827,8 @@ int lua_ax_extension_PUParticleSystem3D_makeParticleLocal(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_calulateRotationOffset(lua_State* tolua_S)
 {
     int argc = 0;
@@ -8308,6 +8876,8 @@ int lua_ax_extension_PUParticleSystem3D_calulateRotationOffset(lua_State* tolua_
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_clone(lua_State* tolua_S)
 {
     int argc = 0;
@@ -8355,6 +8925,8 @@ int lua_ax_extension_PUParticleSystem3D_clone(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_copyAttributesTo(lua_State* tolua_S)
 {
     int argc = 0;
@@ -8405,6 +8977,8 @@ int lua_ax_extension_PUParticleSystem3D_copyAttributesTo(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_initSystem(lua_State* tolua_S)
 {
     int argc = 0;
@@ -8455,6 +9029,8 @@ int lua_ax_extension_PUParticleSystem3D_initSystem(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_initWithFilePath(lua_State* tolua_S)
 {
     int argc = 0;
@@ -8505,6 +9081,8 @@ int lua_ax_extension_PUParticleSystem3D_initWithFilePath(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_initWithFilePathAndMaterialPath(lua_State* tolua_S)
 {
     int argc = 0;
@@ -8558,6 +9136,8 @@ int lua_ax_extension_PUParticleSystem3D_initWithFilePathAndMaterialPath(lua_Stat
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_create(lua_State* tolua_S)
 {
     int argc = 0;
@@ -8616,6 +9196,8 @@ int lua_ax_extension_PUParticleSystem3D_create(lua_State* tolua_S)
 #endif
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
 int lua_ax_extension_PUParticleSystem3D_constructor(lua_State* tolua_S)
 {
     int argc = 0;
@@ -8652,6 +9234,7 @@ int lua_ax_extension_PUParticleSystem3D_constructor(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
 
 static int lua_ax_extension_PUParticleSystem3D_finalize(lua_State* tolua_S)
 {
@@ -8666,55 +9249,142 @@ int lua_register_ax_extension_PUParticleSystem3D(lua_State* tolua_S)
 
     tolua_beginmodule(tolua_S,"PUParticleSystem3D");
         tolua_function(tolua_S,"new",lua_ax_extension_PUParticleSystem3D_constructor);
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"forceUpdate",lua_ax_extension_PUParticleSystem3D_forceUpdate);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"getParticleSystemScaleVelocity",lua_ax_extension_PUParticleSystem3D_getParticleSystemScaleVelocity);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"setParticleSystemScaleVelocity",lua_ax_extension_PUParticleSystem3D_setParticleSystemScaleVelocity);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"rotationOffset",lua_ax_extension_PUParticleSystem3D_rotationOffset);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"getTimeElapsedSinceStart",lua_ax_extension_PUParticleSystem3D_getTimeElapsedSinceStart);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"getDefaultWidth",lua_ax_extension_PUParticleSystem3D_getDefaultWidth);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"setDefaultWidth",lua_ax_extension_PUParticleSystem3D_setDefaultWidth);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"getDefaultHeight",lua_ax_extension_PUParticleSystem3D_getDefaultHeight);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"setDefaultHeight",lua_ax_extension_PUParticleSystem3D_setDefaultHeight);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"getDefaultDepth",lua_ax_extension_PUParticleSystem3D_getDefaultDepth);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"setDefaultDepth",lua_ax_extension_PUParticleSystem3D_setDefaultDepth);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"getDerivedPosition",lua_ax_extension_PUParticleSystem3D_getDerivedPosition);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"getDerivedScale",lua_ax_extension_PUParticleSystem3D_getDerivedScale);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"getMaxVelocity",lua_ax_extension_PUParticleSystem3D_getMaxVelocity);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"setMaxVelocity",lua_ax_extension_PUParticleSystem3D_setMaxVelocity);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"setMaterialName",lua_ax_extension_PUParticleSystem3D_setMaterialName);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"getMaterialName",lua_ax_extension_PUParticleSystem3D_getMaterialName);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"forceEmission",lua_ax_extension_PUParticleSystem3D_forceEmission);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"addEmitter",lua_ax_extension_PUParticleSystem3D_addEmitter);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"removeAllEmitter",lua_ax_extension_PUParticleSystem3D_removeAllEmitter);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"addListener",lua_ax_extension_PUParticleSystem3D_addListener);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"removeListener",lua_ax_extension_PUParticleSystem3D_removeListener);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"removeAllListener",lua_ax_extension_PUParticleSystem3D_removeAllListener);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"addObserver",lua_ax_extension_PUParticleSystem3D_addObserver);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"removerAllObserver",lua_ax_extension_PUParticleSystem3D_removerAllObserver);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"addBehaviourTemplate",lua_ax_extension_PUParticleSystem3D_addBehaviourTemplate);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"removeAllBehaviourTemplate",lua_ax_extension_PUParticleSystem3D_removeAllBehaviourTemplate);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"isMarkedForEmission",lua_ax_extension_PUParticleSystem3D_isMarkedForEmission);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"setMarkedForEmission",lua_ax_extension_PUParticleSystem3D_setMarkedForEmission);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"clearAllParticles",lua_ax_extension_PUParticleSystem3D_clearAllParticles);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"getEmittedEmitterQuota",lua_ax_extension_PUParticleSystem3D_getEmittedEmitterQuota);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"setEmittedEmitterQuota",lua_ax_extension_PUParticleSystem3D_setEmittedEmitterQuota);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"getEmittedSystemQuota",lua_ax_extension_PUParticleSystem3D_getEmittedSystemQuota);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"setEmittedSystemQuota",lua_ax_extension_PUParticleSystem3D_setEmittedSystemQuota);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"getParentParticleSystem",lua_ax_extension_PUParticleSystem3D_getParentParticleSystem);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"makeParticleLocal",lua_ax_extension_PUParticleSystem3D_makeParticleLocal);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"calulateRotationOffset",lua_ax_extension_PUParticleSystem3D_calulateRotationOffset);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"clone",lua_ax_extension_PUParticleSystem3D_clone);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"copyAttributesTo",lua_ax_extension_PUParticleSystem3D_copyAttributesTo);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"initSystem",lua_ax_extension_PUParticleSystem3D_initSystem);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"initWithFilePath",lua_ax_extension_PUParticleSystem3D_initWithFilePath);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"initWithFilePathAndMaterialPath",lua_ax_extension_PUParticleSystem3D_initWithFilePathAndMaterialPath);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
         tolua_function(tolua_S,"create", lua_ax_extension_PUParticleSystem3D_create);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::PUParticleSystem3D).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PUParticleSystem3D";
     g_typeCast[typeName] = "ax.PUParticleSystem3D";
     return 1;
 }
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
 TOLUA_API int register_all_ax_extension(lua_State* tolua_S)
 {
     tolua_open(tolua_S);
@@ -8722,16 +9392,36 @@ TOLUA_API int register_all_ax_extension(lua_State* tolua_S)
     tolua_module(tolua_S,"ax",0);
     tolua_beginmodule(tolua_S,"ax");
 
+#if (defined(AX_ENABLE_EXT_GUI))
     lua_register_ax_extension_ScrollView(tolua_S);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
     lua_register_ax_extension_TableViewCell(tolua_S);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_GUI))
     lua_register_ax_extension_TableView(tolua_S);
+#endif // (defined(AX_ENABLE_EXT_GUI))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
     lua_register_ax_extension_AssetsManager(tolua_S);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
     lua_register_ax_extension_EventAssetsManagerEx(tolua_S);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
     lua_register_ax_extension_Manifest(tolua_S);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
     lua_register_ax_extension_AssetsManagerEx(tolua_S);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_ASSETMANAGER))
     lua_register_ax_extension_EventListenerAssetsManagerEx(tolua_S);
+#endif // (defined(AX_ENABLE_EXT_ASSETMANAGER))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
     lua_register_ax_extension_ParticleSystem3D(tolua_S);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
+#if (defined(AX_ENABLE_EXT_PARTICLE3D))
     lua_register_ax_extension_PUParticleSystem3D(tolua_S);
+#endif // (defined(AX_ENABLE_EXT_PARTICLE3D))
 
     tolua_endmodule(tolua_S);
     return 1;

@@ -33,11 +33,14 @@ int register_network_module(lua_State* L)
     lua_getglobal(L, "_G");
     if (lua_istable(L, -1))  // stack:...,_G,
     {
+#if defined(AX_ENABLE_WEBSOCKET)
         tolua_web_socket_open(L);
         register_web_socket_manual(L);
-        
+#endif
+#if defined(AX_ENABLE_HTTP)
         register_xml_http_request(L);
         register_downloader(L);
+#endif
     }
     lua_pop(L, 1);
 

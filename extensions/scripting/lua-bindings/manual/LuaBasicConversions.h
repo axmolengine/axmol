@@ -35,13 +35,17 @@
 #include "lua-bindings/manual/Lua-BindingsExport.h"
 #include "2d/Label.h"
 #include "2d/Sprite.h"
+#if defined(AX_ENABLE_3D)
 #include "3d/Bundle3D.h"
+#endif
 #include "base/Value.h"
 #include "base/Types.h"
+#if defined(AX_ENABLE_PHYSICS)
 #include "physics/PhysicsContact.h"
 #include "physics/PhysicsJoint.h"
 #include "physics/PhysicsShape.h"
 #include "physics/PhysicsWorld.h"
+#endif
 #include "renderer/backend/Types.h"
 #include "renderer/backend/VertexLayout.h"
 #include "ui/GUIDefine.h"
@@ -742,7 +746,9 @@ bool luaval_to_object(lua_State* L, int lo, const char* type, T** ret, const cha
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
+#if defined(AX_ENABLE_3D)
 extern bool luaval_to_mesh_vertex_attrib(lua_State* L, int lo, ax::MeshVertexAttrib* ret, const char* funcName = "");
+#endif
 
 /**
  * Get a pointer points to a std::vector<float> from a Lua array table in the stack.
@@ -1246,7 +1252,9 @@ void object_to_luaval(lua_State* L, const char* type, T* ret)
  * @param L the current lua_State.
  * @param inValue a ax::MeshVertexAttrib object.
  */
+#if defined(AX_ENABLE_3D)
 void mesh_vertex_attrib_to_luaval(lua_State* L, const ax::MeshVertexAttrib& inValue);
+#endif
 
 /**
  * Push a Lua array table converted from a std::vector<std::string> into the Lua stack.

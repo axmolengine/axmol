@@ -2,7 +2,9 @@
 #include "ui/UIWebView/UIWebView.h"
 #include "lua-bindings/manual/tolua_fix.h"
 #include "lua-bindings/manual/LuaBasicConversions.h"
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
 
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
 int lua_ax_webview_WebView_setJavascriptInterfaceScheme(lua_State* tolua_S)
 {
     int argc = 0;
@@ -53,6 +55,8 @@ int lua_ax_webview_WebView_setJavascriptInterfaceScheme(lua_State* tolua_S)
 
     return 0;
 }
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
 int lua_ax_webview_WebView_loadHTMLString(lua_State* tolua_S)
 {
     int argc = 0;
@@ -120,6 +124,8 @@ int lua_ax_webview_WebView_loadHTMLString(lua_State* tolua_S)
 
     return 0;
 }
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
 int lua_ax_webview_WebView_loadURL(lua_State* tolua_S)
 {
     int argc = 0;
@@ -179,6 +185,8 @@ int lua_ax_webview_WebView_loadURL(lua_State* tolua_S)
 
     return 0;
 }
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
 int lua_ax_webview_WebView_loadFile(lua_State* tolua_S)
 {
     int argc = 0;
@@ -229,6 +237,8 @@ int lua_ax_webview_WebView_loadFile(lua_State* tolua_S)
 
     return 0;
 }
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
 int lua_ax_webview_WebView_stopLoading(lua_State* tolua_S)
 {
     int argc = 0;
@@ -276,6 +286,8 @@ int lua_ax_webview_WebView_stopLoading(lua_State* tolua_S)
 
     return 0;
 }
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
 int lua_ax_webview_WebView_reload(lua_State* tolua_S)
 {
     int argc = 0;
@@ -323,6 +335,8 @@ int lua_ax_webview_WebView_reload(lua_State* tolua_S)
 
     return 0;
 }
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
 int lua_ax_webview_WebView_canGoBack(lua_State* tolua_S)
 {
     int argc = 0;
@@ -370,6 +384,8 @@ int lua_ax_webview_WebView_canGoBack(lua_State* tolua_S)
 
     return 0;
 }
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
 int lua_ax_webview_WebView_canGoForward(lua_State* tolua_S)
 {
     int argc = 0;
@@ -417,6 +433,8 @@ int lua_ax_webview_WebView_canGoForward(lua_State* tolua_S)
 
     return 0;
 }
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
 int lua_ax_webview_WebView_goBack(lua_State* tolua_S)
 {
     int argc = 0;
@@ -464,6 +482,8 @@ int lua_ax_webview_WebView_goBack(lua_State* tolua_S)
 
     return 0;
 }
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
 int lua_ax_webview_WebView_goForward(lua_State* tolua_S)
 {
     int argc = 0;
@@ -511,6 +531,8 @@ int lua_ax_webview_WebView_goForward(lua_State* tolua_S)
 
     return 0;
 }
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
 int lua_ax_webview_WebView_evaluateJS(lua_State* tolua_S)
 {
     int argc = 0;
@@ -561,6 +583,8 @@ int lua_ax_webview_WebView_evaluateJS(lua_State* tolua_S)
 
     return 0;
 }
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
 int lua_ax_webview_WebView_setScalesPageToFit(lua_State* tolua_S)
 {
     int argc = 0;
@@ -611,6 +635,8 @@ int lua_ax_webview_WebView_setScalesPageToFit(lua_State* tolua_S)
 
     return 0;
 }
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
 int lua_ax_webview_WebView_getOnJSCallback(lua_State* tolua_S)
 {
     int argc = 0;
@@ -658,6 +684,8 @@ int lua_ax_webview_WebView_getOnJSCallback(lua_State* tolua_S)
 
     return 0;
 }
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
 int lua_ax_webview_WebView_setBounces(lua_State* tolua_S)
 {
     int argc = 0;
@@ -708,6 +736,8 @@ int lua_ax_webview_WebView_setBounces(lua_State* tolua_S)
 
     return 0;
 }
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
 int lua_ax_webview_WebView_setOpacityWebView(lua_State* tolua_S)
 {
     int argc = 0;
@@ -758,6 +788,8 @@ int lua_ax_webview_WebView_setOpacityWebView(lua_State* tolua_S)
 
     return 0;
 }
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
 int lua_ax_webview_WebView_getOpacityWebView(lua_State* tolua_S)
 {
     int argc = 0;
@@ -805,6 +837,8 @@ int lua_ax_webview_WebView_getOpacityWebView(lua_State* tolua_S)
 
     return 0;
 }
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
 int lua_ax_webview_WebView_setBackgroundTransparent(lua_State* tolua_S)
 {
     int argc = 0;
@@ -852,6 +886,8 @@ int lua_ax_webview_WebView_setBackgroundTransparent(lua_State* tolua_S)
 
     return 0;
 }
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
 int lua_ax_webview_WebView_create(lua_State* tolua_S)
 {
     int argc = 0;
@@ -886,6 +922,8 @@ int lua_ax_webview_WebView_create(lua_State* tolua_S)
 #endif
     return 0;
 }
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
 int lua_ax_webview_WebView_constructor(lua_State* tolua_S)
 {
     int argc = 0;
@@ -922,6 +960,7 @@ int lua_ax_webview_WebView_constructor(lua_State* tolua_S)
 
     return 0;
 }
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
 
 static int lua_ax_webview_WebView_finalize(lua_State* tolua_S)
 {
@@ -936,30 +975,67 @@ int lua_register_ax_webview_WebView(lua_State* tolua_S)
 
     tolua_beginmodule(tolua_S,"WebView");
         tolua_function(tolua_S,"new",lua_ax_webview_WebView_constructor);
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
         tolua_function(tolua_S,"setJavascriptInterfaceScheme",lua_ax_webview_WebView_setJavascriptInterfaceScheme);
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
         tolua_function(tolua_S,"loadHTMLString",lua_ax_webview_WebView_loadHTMLString);
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
         tolua_function(tolua_S,"loadURL",lua_ax_webview_WebView_loadURL);
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
         tolua_function(tolua_S,"loadFile",lua_ax_webview_WebView_loadFile);
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
         tolua_function(tolua_S,"stopLoading",lua_ax_webview_WebView_stopLoading);
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
         tolua_function(tolua_S,"reload",lua_ax_webview_WebView_reload);
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
         tolua_function(tolua_S,"canGoBack",lua_ax_webview_WebView_canGoBack);
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
         tolua_function(tolua_S,"canGoForward",lua_ax_webview_WebView_canGoForward);
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
         tolua_function(tolua_S,"goBack",lua_ax_webview_WebView_goBack);
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
         tolua_function(tolua_S,"goForward",lua_ax_webview_WebView_goForward);
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
         tolua_function(tolua_S,"evaluateJS",lua_ax_webview_WebView_evaluateJS);
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
         tolua_function(tolua_S,"setScalesPageToFit",lua_ax_webview_WebView_setScalesPageToFit);
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
         tolua_function(tolua_S,"getOnJSCallback",lua_ax_webview_WebView_getOnJSCallback);
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
         tolua_function(tolua_S,"setBounces",lua_ax_webview_WebView_setBounces);
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
         tolua_function(tolua_S,"setOpacityWebView",lua_ax_webview_WebView_setOpacityWebView);
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
         tolua_function(tolua_S,"getOpacityWebView",lua_ax_webview_WebView_getOpacityWebView);
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
         tolua_function(tolua_S,"setBackgroundTransparent",lua_ax_webview_WebView_setBackgroundTransparent);
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
         tolua_function(tolua_S,"create", lua_ax_webview_WebView_create);
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::ui::WebView).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.WebView";
     g_typeCast[typeName] = "axui.WebView";
     return 1;
 }
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
 TOLUA_API int register_all_ax_webview(lua_State* tolua_S)
 {
     tolua_open(tolua_S);
@@ -967,7 +1043,9 @@ TOLUA_API int register_all_ax_webview(lua_State* tolua_S)
     tolua_module(tolua_S,"axui",0);
     tolua_beginmodule(tolua_S,"axui");
 
+#if ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
     lua_register_ax_webview_WebView(tolua_S);
+#endif // ((defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) ||                              (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS ||  AX_TARGET_PLATFORM == AX_PLATFORM_LINUX))
 
     tolua_endmodule(tolua_S);
     return 1;

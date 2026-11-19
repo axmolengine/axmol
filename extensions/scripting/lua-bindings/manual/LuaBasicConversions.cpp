@@ -1661,6 +1661,7 @@ bool luaval_to_std_vector_int(lua_State* L, int lo, std::vector<int>* ret, const
     return ok;
 }
 
+#if defined(AX_ENABLE_3D)
 bool luaval_to_mesh_vertex_attrib(lua_State* L, int lo, ax::MeshVertexAttrib* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret || lua_gettop(L) < lo)
@@ -1693,6 +1694,7 @@ bool luaval_to_mesh_vertex_attrib(lua_State* L, int lo, ax::MeshVertexAttrib* re
 
     return ok;
 }
+#endif
 
 bool luaval_to_std_vector_float(lua_State* L, int lo, std::vector<float>* ret, const char* funcName)
 {
@@ -2818,6 +2820,7 @@ void ttfconfig_to_luaval(lua_State* L, const ax::TTFConfig& config)
     lua_rawset(L, -3);
 }
 
+#if defined(AX_ENABLE_3D)
 void mesh_vertex_attrib_to_luaval(lua_State* L, const ax::MeshVertexAttrib& inValue)
 {
     if (nullptr == L)
@@ -2837,6 +2840,7 @@ void mesh_vertex_attrib_to_luaval(lua_State* L, const ax::MeshVertexAttrib& inVa
     lua_pushnumber(L, (lua_Number)inValue.getAttribSizeBytes());
     lua_rawset(L, -3);
 }
+#endif
 
 void ccvector_std_string_to_luaval(lua_State* L, const std::vector<std::string>& inValue)
 {

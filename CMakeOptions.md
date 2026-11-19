@@ -1,5 +1,63 @@
 # The axmol CMake options
 
+## Minimal C++ 2D game profile
+
+For a game that uses only the built-in 2D scene, sprites, input, and renderer,
+the following optional modules can be disabled. This is a starting profile,
+not a requirement for every 2D game. Pass these as CMake `-D...=OFF` options,
+or set them before the engine is added in the app's
+`cmake/modules/AXGameEngineOptions.cmake`.
+
+```cmake
+set(AX_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(AX_ENABLE_3D OFF CACHE BOOL "" FORCE)
+set(AX_ENABLE_3D_PHYSICS OFF CACHE BOOL "" FORCE)
+set(AX_ENABLE_NAVMESH OFF CACHE BOOL "" FORCE)
+set(AX_ENABLE_PHYSICS OFF CACHE BOOL "" FORCE)
+set(AX_ENABLE_AUDIO OFF CACHE BOOL "" FORCE)
+set(AX_ENABLE_OPUS OFF CACHE BOOL "" FORCE)
+set(AX_ENABLE_MEDIA OFF CACHE BOOL "" FORCE)
+set(AX_ENABLE_HTTP OFF CACHE BOOL "" FORCE)
+set(AX_ENABLE_WEBSOCKET OFF CACHE BOOL "" FORCE)
+set(AX_ENABLE_CONSOLE OFF CACHE BOOL "" FORCE)
+set(AX_EXT_HINT OFF CACHE BOOL "" FORCE)
+set(AX_ENABLE_EXT_LUA OFF CACHE BOOL "" FORCE)
+set(AX_ENABLE_EXT_GUI OFF CACHE BOOL "" FORCE)
+set(AX_ENABLE_EXT_ASSETMANAGER OFF CACHE BOOL "" FORCE)
+set(AX_ENABLE_EXT_SPINE OFF CACHE BOOL "" FORCE)
+set(AX_ENABLE_EXT_DRAGONBONES OFF CACHE BOOL "" FORCE)
+set(AX_ENABLE_EXT_COCOSTUDIO OFF CACHE BOOL "" FORCE)
+set(AX_ENABLE_EXT_FAIRYGUI OFF CACHE BOOL "" FORCE)
+set(AX_ENABLE_EXT_LIVE2D OFF CACHE BOOL "" FORCE)
+set(AX_ENABLE_EXT_EFFEKSEER OFF CACHE BOOL "" FORCE)
+set(AX_ENABLE_EXT_PARTICLE3D OFF CACHE BOOL "" FORCE)
+set(AX_ENABLE_EXT_PHYSICS_NODE OFF CACHE BOOL "" FORCE)
+set(AX_ENABLE_EXT_IMGUI OFF CACHE BOOL "" FORCE)
+set(AX_ENABLE_EXT_INSPECTOR OFF CACHE BOOL "" FORCE)
+set(AX_ENABLE_EXT_SDFGEN OFF CACHE BOOL "" FORCE)
+set(AX_ENABLE_EXT_JSONDEFAULT OFF CACHE BOOL "" FORCE)
+```
+
+Re-enable `AX_ENABLE_PHYSICS` for the built-in 2D physics engine,
+`AX_ENABLE_AUDIO` for sound, and `AX_ENABLE_OPUS` only for `.opus` playback.
+`AX_ENABLE_EXT_GUI`, Spine, FairyGUI, and other 2D-oriented extensions are
+needed only if the game uses their APIs or asset formats. HTTP and WebSocket
+are needed only for those network clients; media is needed for video playback.
+The default for `AX_ENABLE_EXT_EFFEKSEER` is already `OFF`.
+
+`AX_EXT_HINT` controls defaults when options are first configured; it does not
+reset values already stored in `CMakeCache.txt`. Explicitly set each option as
+above or configure from a fresh build directory. Disabling CMake modules does
+not remove Java dependencies or assets independently included by an Android
+project, so measure the APK after packaging.
+
+For a minimal 2D Lua project, change `AX_ENABLE_EXT_LUA` to `ON` in this
+profile. The `lua-feature-guards` branch guards optional generated and manual
+bindings according to the corresponding CMake options; switching these options
+requires reconfiguration and compilation, but not binding regeneration. See
+`../HelloLuaSize/BUILD_RESULTS.md` for Android and Web build results and the
+remaining runtime verification limits.
+
 ## The options for axmol engine
 - AX_BUILD_TESTS: whether build test porojects: cpp-tests, lua-tests, fairygui-tests, default: `TRUE`
 - AX_ENABLE_XXX for core feature: 

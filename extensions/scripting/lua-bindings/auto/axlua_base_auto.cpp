@@ -11762,6 +11762,7 @@ int lua_ax_base_Node_initLayer(lua_State* tolua_S)
 
     return 0;
 }
+#if (defined(AX_ENABLE_PHYSICS))
 int lua_ax_base_Node_setPhysicsBody(lua_State* tolua_S)
 {
     int argc = 0;
@@ -11812,6 +11813,8 @@ int lua_ax_base_Node_setPhysicsBody(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_PHYSICS))
+#if (defined(AX_ENABLE_PHYSICS))
 int lua_ax_base_Node_getPhysicsBody(lua_State* tolua_S)
 {
     int argc = 0;
@@ -11859,6 +11862,7 @@ int lua_ax_base_Node_getPhysicsBody(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_PHYSICS))
 int lua_ax_base_Node_create(lua_State* tolua_S)
 {
     int argc = 0;
@@ -12122,8 +12126,12 @@ int lua_register_ax_base_Node(lua_State* tolua_S)
         tolua_function(tolua_S,"resetChild",lua_ax_base_Node_resetChild);
         tolua_function(tolua_S,"init",lua_ax_base_Node_init);
         tolua_function(tolua_S,"initLayer",lua_ax_base_Node_initLayer);
+#if (defined(AX_ENABLE_PHYSICS))
         tolua_function(tolua_S,"setPhysicsBody",lua_ax_base_Node_setPhysicsBody);
+#endif // (defined(AX_ENABLE_PHYSICS))
+#if (defined(AX_ENABLE_PHYSICS))
         tolua_function(tolua_S,"getPhysicsBody",lua_ax_base_Node_getPhysicsBody);
+#endif // (defined(AX_ENABLE_PHYSICS))
         tolua_function(tolua_S,"create", lua_ax_base_Node_create);
         tolua_function(tolua_S,"getAttachedNodeCount", lua_ax_base_Node_getAttachedNodeCount);
     tolua_endmodule(tolua_S);
@@ -12400,6 +12408,7 @@ int lua_ax_base_Scene_onProjectionChanged(lua_State* tolua_S)
 
     return 0;
 }
+#if ((AX_ENABLE_PHYSICS || defined(AX_ENABLE_3D_PHYSICS)))
 int lua_ax_base_Scene_initWithPhysics(lua_State* tolua_S)
 {
     int argc = 0;
@@ -12447,6 +12456,8 @@ int lua_ax_base_Scene_initWithPhysics(lua_State* tolua_S)
 
     return 0;
 }
+#endif // ((AX_ENABLE_PHYSICS || defined(AX_ENABLE_3D_PHYSICS)))
+#if ((AX_ENABLE_PHYSICS || defined(AX_ENABLE_3D_PHYSICS)))
 int lua_ax_base_Scene_initPhysicsWorld(lua_State* tolua_S)
 {
     int argc = 0;
@@ -12494,6 +12505,8 @@ int lua_ax_base_Scene_initPhysicsWorld(lua_State* tolua_S)
 
     return 0;
 }
+#endif // ((AX_ENABLE_PHYSICS || defined(AX_ENABLE_3D_PHYSICS)))
+#if ((AX_ENABLE_PHYSICS || defined(AX_ENABLE_3D_PHYSICS)))
 int lua_ax_base_Scene_fixedUpdate(lua_State* tolua_S)
 {
     int argc = 0;
@@ -12544,6 +12557,8 @@ int lua_ax_base_Scene_fixedUpdate(lua_State* tolua_S)
 
     return 0;
 }
+#endif // ((AX_ENABLE_PHYSICS || defined(AX_ENABLE_3D_PHYSICS)))
+#if ((defined(AX_ENABLE_PHYSICS) || defined(AX_ENABLE_3D_PHYSICS) || defined(AX_ENABLE_NAVMESH)))
 int lua_ax_base_Scene_stepPhysicsAndNavigation(lua_State* tolua_S)
 {
     int argc = 0;
@@ -12594,6 +12609,7 @@ int lua_ax_base_Scene_stepPhysicsAndNavigation(lua_State* tolua_S)
 
     return 0;
 }
+#endif // ((defined(AX_ENABLE_PHYSICS) || defined(AX_ENABLE_3D_PHYSICS) || defined(AX_ENABLE_NAVMESH)))
 int lua_ax_base_Scene_create(lua_State* tolua_S)
 {
     int argc = 0;
@@ -12664,6 +12680,7 @@ int lua_ax_base_Scene_createWithSize(lua_State* tolua_S)
 #endif
     return 0;
 }
+#if ((AX_ENABLE_PHYSICS || defined(AX_ENABLE_3D_PHYSICS)))
 int lua_ax_base_Scene_createWithPhysics(lua_State* tolua_S)
 {
     int argc = 0;
@@ -12698,6 +12715,7 @@ int lua_ax_base_Scene_createWithPhysics(lua_State* tolua_S)
 #endif
     return 0;
 }
+#endif // ((AX_ENABLE_PHYSICS || defined(AX_ENABLE_3D_PHYSICS)))
 int lua_ax_base_Scene_constructor(lua_State* tolua_S)
 {
     int argc = 0;
@@ -12753,13 +12771,23 @@ int lua_register_ax_base_Scene(lua_State* tolua_S)
         tolua_function(tolua_S,"initWithSize",lua_ax_base_Scene_initWithSize);
         tolua_function(tolua_S,"setCameraOrderDirty",lua_ax_base_Scene_setCameraOrderDirty);
         tolua_function(tolua_S,"onProjectionChanged",lua_ax_base_Scene_onProjectionChanged);
+#if ((AX_ENABLE_PHYSICS || defined(AX_ENABLE_3D_PHYSICS)))
         tolua_function(tolua_S,"initWithPhysics",lua_ax_base_Scene_initWithPhysics);
+#endif // ((AX_ENABLE_PHYSICS || defined(AX_ENABLE_3D_PHYSICS)))
+#if ((AX_ENABLE_PHYSICS || defined(AX_ENABLE_3D_PHYSICS)))
         tolua_function(tolua_S,"initPhysicsWorld",lua_ax_base_Scene_initPhysicsWorld);
+#endif // ((AX_ENABLE_PHYSICS || defined(AX_ENABLE_3D_PHYSICS)))
+#if ((AX_ENABLE_PHYSICS || defined(AX_ENABLE_3D_PHYSICS)))
         tolua_function(tolua_S,"fixedUpdate",lua_ax_base_Scene_fixedUpdate);
+#endif // ((AX_ENABLE_PHYSICS || defined(AX_ENABLE_3D_PHYSICS)))
+#if ((defined(AX_ENABLE_PHYSICS) || defined(AX_ENABLE_3D_PHYSICS) || defined(AX_ENABLE_NAVMESH)))
         tolua_function(tolua_S,"stepPhysicsAndNavigation",lua_ax_base_Scene_stepPhysicsAndNavigation);
+#endif // ((defined(AX_ENABLE_PHYSICS) || defined(AX_ENABLE_3D_PHYSICS) || defined(AX_ENABLE_NAVMESH)))
         tolua_function(tolua_S,"create", lua_ax_base_Scene_create);
         tolua_function(tolua_S,"createWithSize", lua_ax_base_Scene_createWithSize);
+#if ((AX_ENABLE_PHYSICS || defined(AX_ENABLE_3D_PHYSICS)))
         tolua_function(tolua_S,"createWithPhysics", lua_ax_base_Scene_createWithPhysics);
+#endif // ((AX_ENABLE_PHYSICS || defined(AX_ENABLE_3D_PHYSICS)))
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::Scene).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.Scene";
@@ -90330,6 +90358,7 @@ int lua_ax_base_Camera_projectGL(lua_State* tolua_S)
 
     return 0;
 }
+#if (defined(AX_ENABLE_3D))
 int lua_ax_base_Camera_isVisibleInFrustum(lua_State* tolua_S)
 {
     int argc = 0;
@@ -90380,6 +90409,7 @@ int lua_ax_base_Camera_isVisibleInFrustum(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_3D))
 int lua_ax_base_Camera_getDepthInView(lua_State* tolua_S)
 {
     int argc = 0;
@@ -91921,7 +91951,9 @@ int lua_register_ax_base_Camera(lua_State* tolua_S)
         tolua_function(tolua_S,"getViewProjectionMatrix",lua_ax_base_Camera_getViewProjectionMatrix);
         tolua_function(tolua_S,"project",lua_ax_base_Camera_project);
         tolua_function(tolua_S,"projectGL",lua_ax_base_Camera_projectGL);
+#if (defined(AX_ENABLE_3D))
         tolua_function(tolua_S,"isVisibleInFrustum",lua_ax_base_Camera_isVisibleInFrustum);
+#endif // (defined(AX_ENABLE_3D))
         tolua_function(tolua_S,"getDepthInView",lua_ax_base_Camera_getDepthInView);
         tolua_function(tolua_S,"setDepth",lua_ax_base_Camera_setDepth);
         tolua_function(tolua_S,"getDepth",lua_ax_base_Camera_getDepth);
@@ -112470,7 +112502,9 @@ int lua_register_ax_base_FastTMXTiledMap(lua_State* tolua_S)
     g_typeCast[typeName] = "ax.FastTMXTiledMap";
     return 1;
 }
+#if (defined(AX_ENABLE_3D))
 
+#if (defined(AX_ENABLE_3D))
 int lua_ax_base_MotionStreak3D_tintWithColor(lua_State* tolua_S)
 {
     int argc = 0;
@@ -112521,6 +112555,8 @@ int lua_ax_base_MotionStreak3D_tintWithColor(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_3D))
+#if (defined(AX_ENABLE_3D))
 int lua_ax_base_MotionStreak3D_reset(lua_State* tolua_S)
 {
     int argc = 0;
@@ -112568,6 +112604,8 @@ int lua_ax_base_MotionStreak3D_reset(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_3D))
+#if (defined(AX_ENABLE_3D))
 int lua_ax_base_MotionStreak3D_getStroke(lua_State* tolua_S)
 {
     int argc = 0;
@@ -112615,6 +112653,8 @@ int lua_ax_base_MotionStreak3D_getStroke(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_3D))
+#if (defined(AX_ENABLE_3D))
 int lua_ax_base_MotionStreak3D_setStroke(lua_State* tolua_S)
 {
     int argc = 0;
@@ -112665,6 +112705,8 @@ int lua_ax_base_MotionStreak3D_setStroke(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_3D))
+#if (defined(AX_ENABLE_3D))
 int lua_ax_base_MotionStreak3D_isStartingPositionInitialized(lua_State* tolua_S)
 {
     int argc = 0;
@@ -112712,6 +112754,8 @@ int lua_ax_base_MotionStreak3D_isStartingPositionInitialized(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_3D))
+#if (defined(AX_ENABLE_3D))
 int lua_ax_base_MotionStreak3D_setStartingPositionInitialized(lua_State* tolua_S)
 {
     int argc = 0;
@@ -112762,6 +112806,8 @@ int lua_ax_base_MotionStreak3D_setStartingPositionInitialized(lua_State* tolua_S
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_3D))
+#if (defined(AX_ENABLE_3D))
 int lua_ax_base_MotionStreak3D_getTexture(lua_State* tolua_S)
 {
     int argc = 0;
@@ -112809,6 +112855,8 @@ int lua_ax_base_MotionStreak3D_getTexture(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_3D))
+#if (defined(AX_ENABLE_3D))
 int lua_ax_base_MotionStreak3D_setTexture(lua_State* tolua_S)
 {
     int argc = 0;
@@ -112859,6 +112907,8 @@ int lua_ax_base_MotionStreak3D_setTexture(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_3D))
+#if (defined(AX_ENABLE_3D))
 int lua_ax_base_MotionStreak3D_setBlendFunc(lua_State* tolua_S)
 {
     int argc = 0;
@@ -112909,6 +112959,8 @@ int lua_ax_base_MotionStreak3D_setBlendFunc(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_3D))
+#if (defined(AX_ENABLE_3D))
 int lua_ax_base_MotionStreak3D_getBlendFunc(lua_State* tolua_S)
 {
     int argc = 0;
@@ -112956,6 +113008,8 @@ int lua_ax_base_MotionStreak3D_getBlendFunc(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_3D))
+#if (defined(AX_ENABLE_3D))
 int lua_ax_base_MotionStreak3D_setSweepAxis(lua_State* tolua_S)
 {
     int argc = 0;
@@ -113006,6 +113060,8 @@ int lua_ax_base_MotionStreak3D_setSweepAxis(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_3D))
+#if (defined(AX_ENABLE_3D))
 int lua_ax_base_MotionStreak3D_getSweepAxis(lua_State* tolua_S)
 {
     int argc = 0;
@@ -113053,6 +113109,8 @@ int lua_ax_base_MotionStreak3D_getSweepAxis(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_3D))
+#if (defined(AX_ENABLE_3D))
 int lua_ax_base_MotionStreak3D_initWithFade(lua_State* tolua_S)
 {
     int argc = 0;
@@ -113140,6 +113198,8 @@ int lua_ax_base_MotionStreak3D_initWithFade(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_3D))
+#if (defined(AX_ENABLE_3D))
 int lua_ax_base_MotionStreak3D_create(lua_State* tolua_S)
 {
     int argc = 0;
@@ -113210,6 +113270,8 @@ int lua_ax_base_MotionStreak3D_create(lua_State* tolua_S)
 #endif
     return 0;
 }
+#endif // (defined(AX_ENABLE_3D))
+#if (defined(AX_ENABLE_3D))
 int lua_ax_base_MotionStreak3D_constructor(lua_State* tolua_S)
 {
     int argc = 0;
@@ -113246,6 +113308,7 @@ int lua_ax_base_MotionStreak3D_constructor(lua_State* tolua_S)
 
     return 0;
 }
+#endif // (defined(AX_ENABLE_3D))
 
 static int lua_ax_base_MotionStreak3D_finalize(lua_State* tolua_S)
 {
@@ -113260,26 +113323,55 @@ int lua_register_ax_base_MotionStreak3D(lua_State* tolua_S)
 
     tolua_beginmodule(tolua_S,"MotionStreak3D");
         tolua_function(tolua_S,"new",lua_ax_base_MotionStreak3D_constructor);
+#if (defined(AX_ENABLE_3D))
         tolua_function(tolua_S,"tintWithColor",lua_ax_base_MotionStreak3D_tintWithColor);
+#endif // (defined(AX_ENABLE_3D))
+#if (defined(AX_ENABLE_3D))
         tolua_function(tolua_S,"reset",lua_ax_base_MotionStreak3D_reset);
+#endif // (defined(AX_ENABLE_3D))
+#if (defined(AX_ENABLE_3D))
         tolua_function(tolua_S,"getStroke",lua_ax_base_MotionStreak3D_getStroke);
+#endif // (defined(AX_ENABLE_3D))
+#if (defined(AX_ENABLE_3D))
         tolua_function(tolua_S,"setStroke",lua_ax_base_MotionStreak3D_setStroke);
+#endif // (defined(AX_ENABLE_3D))
+#if (defined(AX_ENABLE_3D))
         tolua_function(tolua_S,"isStartingPositionInitialized",lua_ax_base_MotionStreak3D_isStartingPositionInitialized);
+#endif // (defined(AX_ENABLE_3D))
+#if (defined(AX_ENABLE_3D))
         tolua_function(tolua_S,"setStartingPositionInitialized",lua_ax_base_MotionStreak3D_setStartingPositionInitialized);
+#endif // (defined(AX_ENABLE_3D))
+#if (defined(AX_ENABLE_3D))
         tolua_function(tolua_S,"getTexture",lua_ax_base_MotionStreak3D_getTexture);
+#endif // (defined(AX_ENABLE_3D))
+#if (defined(AX_ENABLE_3D))
         tolua_function(tolua_S,"setTexture",lua_ax_base_MotionStreak3D_setTexture);
+#endif // (defined(AX_ENABLE_3D))
+#if (defined(AX_ENABLE_3D))
         tolua_function(tolua_S,"setBlendFunc",lua_ax_base_MotionStreak3D_setBlendFunc);
+#endif // (defined(AX_ENABLE_3D))
+#if (defined(AX_ENABLE_3D))
         tolua_function(tolua_S,"getBlendFunc",lua_ax_base_MotionStreak3D_getBlendFunc);
+#endif // (defined(AX_ENABLE_3D))
+#if (defined(AX_ENABLE_3D))
         tolua_function(tolua_S,"setSweepAxis",lua_ax_base_MotionStreak3D_setSweepAxis);
+#endif // (defined(AX_ENABLE_3D))
+#if (defined(AX_ENABLE_3D))
         tolua_function(tolua_S,"getSweepAxis",lua_ax_base_MotionStreak3D_getSweepAxis);
+#endif // (defined(AX_ENABLE_3D))
+#if (defined(AX_ENABLE_3D))
         tolua_function(tolua_S,"initWithFade",lua_ax_base_MotionStreak3D_initWithFade);
+#endif // (defined(AX_ENABLE_3D))
+#if (defined(AX_ENABLE_3D))
         tolua_function(tolua_S,"create", lua_ax_base_MotionStreak3D_create);
+#endif // (defined(AX_ENABLE_3D))
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::MotionStreak3D).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.MotionStreak3D";
     g_typeCast[typeName] = "ax.MotionStreak3D";
     return 1;
 }
+#endif // (defined(AX_ENABLE_3D))
 
 int lua_ax_base_ComponentLua_getScriptObject(lua_State* tolua_S)
 {
@@ -113751,7 +113843,9 @@ TOLUA_API int register_all_ax_base(lua_State* tolua_S)
     lua_register_ax_base_TMXTileAnimTask(tolua_S);
     lua_register_ax_base_TMXTileAnimManager(tolua_S);
     lua_register_ax_base_FastTMXTiledMap(tolua_S);
+#if (defined(AX_ENABLE_3D))
     lua_register_ax_base_MotionStreak3D(tolua_S);
+#endif // (defined(AX_ENABLE_3D))
     lua_register_ax_base_ComponentLua(tolua_S);
 
     tolua_endmodule(tolua_S);

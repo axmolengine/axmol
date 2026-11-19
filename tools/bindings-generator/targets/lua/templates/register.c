@@ -61,11 +61,25 @@ int lua_register_${generator.prefix}_${current_class.class_name}(lua_State* tolu
     #end if
     #for m in methods
         #set fn = m['impl']
+        #set guard = $generator.feature_guard_for_binding($fn)
+        #if $guard
+\#if $guard
+        #end if
         tolua_function(tolua_S,"${m['name']}",${fn.signature_name});
+        #if $guard
+\#endif // $guard
+        #end if
     #end for
     #for m in st_methods
         #set fn = m['impl']
+        #set guard = $generator.feature_guard_for_binding($fn)
+        #if $guard
+\#if $guard
+        #end if
         tolua_function(tolua_S,"${m['name']}", ${fn.signature_name});
+        #if $guard
+\#endif // $guard
+        #end if
     #end for
     tolua_endmodule(tolua_S);
     auto typeName = typeid(${current_class.namespaced_class_name}).name(); // rtti is literal storage

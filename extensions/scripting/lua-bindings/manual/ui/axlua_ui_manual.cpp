@@ -1250,8 +1250,10 @@ int register_ui_module(lua_State* L)
         register_all_ax_ui(L);
         register_all_ax_ui_manual(L);
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS) && !defined(AX_TARGET_OS_TVOS)
+#    if defined(AX_ENABLE_MEDIA)
         register_all_ax_video(L);
         register_all_ax_video_manual(L);
+#    endif
         register_all_ax_webview(L);
         register_all_ax_webview_manual(L);
 #elif defined(_WIN32)
