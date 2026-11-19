@@ -32,6 +32,11 @@
 #include "extensions/axmol-ext.h"
 #include "cocostudio/LocalizationManager.h"
 
+namespace ax
+{
+    class FontFallback;
+}
+
 DEFINE_TEST_SUITE(NewLabelTests);
 
 class AtlasDemoNew : public TestCase
@@ -746,7 +751,7 @@ protected:
     void setAlignmentTop(ax::Object* sender);
     void setAlignmentMiddle(ax::Object* sender);
     void setAlignmentBottom(ax::Object* sender);
-    
+
     void initWrapOption(const ax::Size& size);
     void initToggleLabelTypeOption(const ax::Size& size);
     void initAlignmentOption(const ax::Size& size);
@@ -1075,6 +1080,25 @@ public:
 
 private:
     static void setLetterColors(ax::Label* label, const ax::Color3B& color);
+};
+
+class LabelUnicodeFallbackTest : public LabelLayoutBaseTest
+{
+public:
+    CREATE_FUNC(LabelUnicodeFallbackTest);
+
+    LabelUnicodeFallbackTest();
+    ~LabelUnicodeFallbackTest();
+
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+
+private:
+    void onEnter() override;
+    void onExit() override;
+
+private:
+    std::unique_ptr<ax::FontFallback> _fallback;
 };
 
 #endif
