@@ -15,6 +15,7 @@ set(_AX_3D_HEADER
   3d/MeshSkin.h
   3d/Bundle3D.h
   3d/ObjLoader.h
+  3d/GltfLoader.h
   3d/Bundle3DData.h
   3d/Skeleton3D.h
   3d/AttachNode.h
@@ -35,6 +36,7 @@ set(_AX_3D_SRC
   3d/MeshVertexIndexData.cpp
   3d/MotionStreak3D.cpp
   3d/ObjLoader.cpp
+  3d/GltfLoader.cpp
   3d/Skeleton3D.cpp
   3d/Skybox.cpp
   3d/MeshDataCache.cpp

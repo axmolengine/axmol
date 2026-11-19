@@ -68,6 +68,15 @@ public:
     virtual std::string subtitle() const override;
 };
 
+class MeshRendererGltfTest : public MeshRendererTestDemo
+{
+public:
+    CREATE_FUNC(MeshRendererGltfTest);
+    MeshRendererGltfTest();
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+};
+
 class MeshRendererBasicTest : public MeshRendererTestDemo
 {
 public:
