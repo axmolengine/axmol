@@ -290,7 +290,7 @@ public class UnixFileStream : FileStream
                     }
 
                     if ($prefix) {
-                        $rname = Join-Path $prefix $rname
+                        $rname = "$prefix/$rname"
                     }
                     $zentry = $archive.CreateEntry($rname)
                     $zentry.ExternalAttributes = (($Script:S_IFREG -bor $uxmode) -shl 16)
