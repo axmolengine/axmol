@@ -27,7 +27,7 @@ nuget=5.5.1.*
 vs=17.9+
 
 # as stable and latest as possible, @axmol-cmdline @genbindings.ps1
-llvm=21.1.8
+llvm=22.1.8
 
 # as stable as possibile, for `axmol genbindings`, `axmol clang-format`
 llvm-tools=21.1.8
