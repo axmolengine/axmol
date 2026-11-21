@@ -30,11 +30,11 @@ function Get-PlatformLibClangName {
     return 'libclang.so'
 }
 
-function Get-1kissLlvmVersion {
+function Get-1kissLibClangVersion {
     $buildProfiles = Join-Path $axmolRoot '1k/build.profiles'
-    $match = Select-String -LiteralPath $buildProfiles -Pattern '^\s*llvm\s*=\s*([^#\s]+)' | Select-Object -First 1
-    if (-not $match) { throw "The LLVM version is not declared in $buildProfiles." }
-    return ($match.Matches[0].Groups[1].Value -replace '[+~].*$', '')
+    $match = Select-String -LiteralPath $buildProfiles -Pattern '^\s*llvm-tools\s*=\s*((\d+)\.\d+\.\d+)\s*(?:#.*)?$' | Select-Object -First 1
+    if (-not $match) { throw "Expected llvm-tools=<major>.<minor>.<patch> in $buildProfiles." }
+    return $match.Matches[0].Groups[1].Value
 }
 
 function Get-1kissMirror {
@@ -65,7 +65,7 @@ function Ensure-1kissLibClang {
     $libraryName = Get-PlatformLibClangName
     $prebuiltDirectory = Join-Path $axmolRoot 'tools/bindings-generator/clang/prebuilt'
     $libraryPath = Join-Path $prebuiltDirectory $libraryName
-    $llvmVersion = Get-1kissLlvmVersion
+    $llvmVersion = Get-1kissLibClangVersion
 
     if (Test-Path $libraryPath -PathType Leaf) {
         $versionScript = Join-Path $PSScriptRoot 'clang-ver.ps1'
