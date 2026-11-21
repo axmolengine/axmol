@@ -89,6 +89,7 @@ set(JOLT_PHYSICS_SRC_FILES
 	${JOLT_PHYSICS_ROOT}/Core/TempAllocator.h
 	${JOLT_PHYSICS_ROOT}/Core/TickCounter.cpp
 	${JOLT_PHYSICS_ROOT}/Core/TickCounter.h
+	${JOLT_PHYSICS_ROOT}/Core/TSANSuppressions.h
 	${JOLT_PHYSICS_ROOT}/Core/UnorderedMap.h
 	${JOLT_PHYSICS_ROOT}/Core/UnorderedMapFwd.h
 	${JOLT_PHYSICS_ROOT}/Core/UnorderedSet.h
@@ -667,6 +668,13 @@ if (APPLE)
 			${JOLT_PHYSICS_ROOT}/Compute/MTL/ComputeSystemMTLImpl.h
 		)
 
+		# Determine target for shader compiler
+		if (IOS)
+			set(METAL_SDK_TARGET "iphonesimulator")
+		else()
+			set(METAL_SDK_TARGET "macosx")
+		endif()
+
 		find_program(DXC_COMPILER NAMES dxc)
 		find_program(SPIRV_CROSS_COMPILER NAMES spirv-cross)
 		if (NOT DXC_COMPILER)
@@ -674,30 +682,25 @@ if (APPLE)
 		elseif (NOT SPIRV_CROSS_COMPILER)
 			MESSAGE("Application 'spirv-cross' not found. Can't compile compute shaders. Some functionality will be unavailable. You can install it by e.g. installing the Vulkan SDK.")
 		else()
-			# Determine target for shader compiler
-			if (IOS)
-				set(METAL_SDK_TARGET "iphonesimulator")
-			else()
-				set(METAL_SDK_TARGET "macosx")
-			endif()
-
 			# Compile Metal shaders
 			foreach(SHADER ${JOLT_PHYSICS_SHADERS})
 				cmake_path(GET SHADER STEM SHADER_STEM) # Filename without extension
 				set(SPV_SHADER "${CMAKE_CURRENT_BINARY_DIR}/${SHADER_STEM}.spv")
 				set(MTL_SHADER "${CMAKE_CURRENT_BINARY_DIR}/${SHADER_STEM}.metal")
 				set(AIR_SHADER "${CMAKE_CURRENT_BINARY_DIR}/${SHADER_STEM}.air")
+				# Note: We compile to SPIR-V without optimizations (-Od) because spirv-cross can generate incorrect MSL from optimized SPIR-V
+				# (e.g. it moved a buffer load past an increment of its index in HairCalculateCollisionPlanes). The Metal compiler optimizes the shader instead.
 				add_custom_command(OUTPUT ${AIR_SHADER}
-					COMMAND ${DXC_COMPILER} -E main -T cs_6_0 -I Jolt/Shaders -WX -O3 -all_resources_bound ${SHADER} -spirv -fvk-use-dx-layout -fspv-entrypoint-name=${SHADER_STEM} -Fo ${SPV_SHADER}
+					COMMAND ${DXC_COMPILER} -E main -T cs_6_0 -I Jolt/Shaders -WX -Od -all_resources_bound ${SHADER} -spirv -fvk-use-dx-layout -fspv-entrypoint-name=${SHADER_STEM} -Fo ${SPV_SHADER}
 					COMMAND ${SPIRV_CROSS_COMPILER} ${SPV_SHADER} --msl --output ${MTL_SHADER}
-					COMMAND xcrun -sdk ${METAL_SDK_TARGET} metal -c ${MTL_SHADER} -o ${AIR_SHADER}
+					COMMAND xcrun -sdk ${METAL_SDK_TARGET} metal -Wno-unused-variable -c ${MTL_SHADER} -o ${AIR_SHADER}
 					DEPENDS ${SHADER} ${JOLT_PHYSICS_SHADER_HEADERS} # Currently don't have a way to detect header dependencies, so making dependent on all
 					COMMENT "Compiling Metal ${SHADER}")
 				list(APPEND JOLT_PHYSICS_MTL_SHADERS ${AIR_SHADER})
 			endforeach()
 
-			# Link Metal shaders
-			set(JOLT_PHYSICS_METAL_LIB ${JOLT_PHYSICS_ROOT}/Shaders/Jolt.metallib)
+			# Link Metal shaders (output to the build folder since the library is different for macOS and iOS)
+			set(JOLT_PHYSICS_METAL_LIB ${CMAKE_CURRENT_BINARY_DIR}/Jolt.metallib)
 			add_custom_command(OUTPUT ${JOLT_PHYSICS_METAL_LIB}
 				COMMAND xcrun -sdk ${METAL_SDK_TARGET} metallib -o ${JOLT_PHYSICS_METAL_LIB} ${JOLT_PHYSICS_MTL_SHADERS}
 				DEPENDS ${JOLT_PHYSICS_MTL_SHADERS}
@@ -721,7 +724,13 @@ endif()
 # Vulkan support
 if (JPH_USE_VK)
 	find_package(Vulkan)
-	if (Vulkan_FOUND)
+	if (Vulkan_FOUND AND (NOT Vulkan_GLSLC_EXECUTABLE OR NOT EXISTS "${Vulkan_GLSLC_EXECUTABLE}"))
+		# E.g. when cross compiling, the Vulkan headers/library may be found while the shader compilers are not.
+		# The path may also be stale in the CMake cache (e.g. when the Vulkan SDK was uninstalled), so remove it from the cache to search again on the next configure.
+		MESSAGE("Vulkan found but application 'glslc' not found. Can't compile shaders, disabling Vulkan support. You can install it by installing the Vulkan SDK.")
+		unset(Vulkan_GLSLC_EXECUTABLE CACHE)
+		set(JPH_USE_VK OFF)
+	elseif (Vulkan_FOUND)
 		# Vulkan source files
 		set(JOLT_PHYSICS_SRC_FILES
 			${JOLT_PHYSICS_SRC_FILES}
@@ -822,9 +831,8 @@ else()
 	target_precompile_headers(Jolt PRIVATE "$<$<NOT:$<CONFIG:ReleaseCoverage>>:${JOLT_PHYSICS_ROOT}/Jolt.h>")
 endif()
 
-# Set the NDEBUG define for release builds
-# Axmol spec: keep cmake standard builds
-# target_compile_definitions(Jolt PUBLIC "$<$<CONFIG:Release,Distribution,ReleaseASAN,ReleaseUBSAN,ReleaseTSAN,ReleaseCoverage>:NDEBUG>")
+# Set the JPH_DEBUG define for debug builds (not when installing the library)
+target_compile_definitions(Jolt PUBLIC "$<BUILD_INTERFACE:$<$<CONFIG:Debug>:JPH_DEBUG>>")
 
 # Setting floating point exceptions
 if (FLOATING_POINT_EXCEPTIONS_ENABLED AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
@@ -855,10 +863,6 @@ endif()
 # Setting to determine number of bits in ObjectLayer
 if (OBJECT_LAYER_BITS)
 	target_compile_definitions(Jolt PUBLIC JPH_OBJECT_LAYER_BITS=${OBJECT_LAYER_BITS})
-endif()
-
-if (USE_STD_VECTOR)
-	target_compile_definitions(Jolt PUBLIC JPH_USE_STD_VECTOR)
 endif()
 
 # Setting to periodically trace broadphase stats to help determine if the broadphase layer configuration is optimal

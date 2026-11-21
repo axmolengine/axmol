@@ -156,6 +156,10 @@ public:
 	/// RemoveDependency causes the dependency counter to reach 0.
 	virtual JobHandle		CreateJob(const char *inName, ColorArg inColor, const JobFunction &inJobFunction, uint32 inNumDependencies = 0) = 0;
 
+	/// Create a number of similar jobs, the jobs are started immediately if inNumDependencies == 0 otherwise they start when
+	/// RemoveDependency causes the dependency counter to reach 0.
+	virtual void			CreateJobs(const char *inName, ColorArg inColor, const JobFunction &inJobFunction, JobHandle *outJobs, uint32 inNumJobs, uint32 inNumDependencies = 0) = 0;
+
 	/// Create a new barrier, used to wait on jobs
 	virtual Barrier *		CreateBarrier() = 0;
 
@@ -174,12 +178,12 @@ protected:
 
 		/// Constructor
 							Job([[maybe_unused]] const char *inJobName, [[maybe_unused]] ColorArg inColor, JobSystem *inJobSystem, const JobFunction &inJobFunction, uint32 inNumDependencies) :
+			mJobFunction(inJobFunction),
 		#if defined(JPH_EXTERNAL_PROFILE) || defined(JPH_PROFILE_ENABLED)
 			mJobName(inJobName),
 			mColor(inColor),
 		#endif // defined(JPH_EXTERNAL_PROFILE) || defined(JPH_PROFILE_ENABLED)
 			mJobSystem(inJobSystem),
-			mJobFunction(inJobFunction),
 			mNumDependencies(inNumDependencies)
 		{
 		}
@@ -188,10 +192,10 @@ protected:
 		inline JobSystem *	GetJobSystem()								{ return mJobSystem; }
 
 		/// Add or release a reference to this object
-		inline void			AddRef()
+		inline void			AddRef(uint32 inCount = 1)
 		{
 			// Adding a reference can use relaxed memory ordering
-			mReferenceCount.fetch_add(1, memory_order_relaxed);
+			mReferenceCount.fetch_add(inCount, memory_order_relaxed);
 		}
 		inline void			Release()
 		{
@@ -224,8 +228,9 @@ protected:
 		/// Set the job barrier that this job belongs to and returns false if this was not possible because the job already finished
 		inline bool			SetBarrier(Barrier *inBarrier)
 		{
+			// Acquire on failure so that, if the job already finished, the caller sees all side effects of the job function
 			intptr_t barrier = 0;
-			if (mBarrier.compare_exchange_strong(barrier, reinterpret_cast<intptr_t>(inBarrier), memory_order_relaxed))
+			if (mBarrier.compare_exchange_strong(barrier, reinterpret_cast<intptr_t>(inBarrier), memory_order_release, memory_order_acquire))
 				return true;
 			JPH_ASSERT(barrier == cBarrierDoneState, "A job can only belong to 1 barrier");
 			return false;
@@ -245,18 +250,23 @@ protected:
 				mJobFunction();
 			}
 
+			// Clear the job function. It is a lambda with captured state that we want to destruct in a controlled fashion.
+			// If we release it after notifying the barrier then that state might access deleted data.
+			mJobFunction = {};
+
 			// Fetch the barrier pointer and exchange it for the done state, so we're sure that no barrier gets set after we want to call the callback
 			intptr_t barrier = mBarrier.load(memory_order_relaxed);
 			for (;;)
 			{
-				if (mBarrier.compare_exchange_weak(barrier, cBarrierDoneState, memory_order_relaxed))
+				// Acquire to pair with the release in SetBarrier, release so that a failing SetBarrier sees the side effects of the job function
+				if (mBarrier.compare_exchange_weak(barrier, cBarrierDoneState, memory_order_acq_rel, memory_order_relaxed))
 					break;
 			}
 			JPH_ASSERT(barrier != cBarrierDoneState);
 
-			// Mark job as done
+			// Mark job as done, release so that a thread that sees the done state through IsDone also sees the side effects of the job function
 			state = cExecutingState;
-			mNumDependencies.compare_exchange_strong(state, cDoneState, memory_order_relaxed);
+			mNumDependencies.compare_exchange_strong(state, cDoneState, memory_order_release);
 			JPH_ASSERT(state == cExecutingState);
 
 			// Notify the barrier after we've changed the job to the done state so that any thread reading the state after receiving the callback will see that the job has finished
@@ -269,8 +279,8 @@ protected:
 		/// Test if the job can be executed
 		inline bool			CanBeExecuted() const						{ return mNumDependencies.load(memory_order_relaxed) == 0; }
 
-		/// Test if the job finished executing
-		inline bool			IsDone() const								{ return mNumDependencies.load(memory_order_relaxed) == cDoneState; }
+		/// Test if the job finished executing. If this returns true, the side effects of the job function are visible to the calling thread.
+		inline bool			IsDone() const								{ return mNumDependencies.load(memory_order_acquire) == cDoneState; }
 
 	#if defined(JPH_EXTERNAL_PROFILE) || defined(JPH_PROFILE_ENABLED)
 		/// Get the name of the job
@@ -283,13 +293,13 @@ protected:
 		static constexpr intptr_t cBarrierDoneState = ~intptr_t(0);		///< Value to use when the barrier has been triggered
 
 private:
+		JobFunction			mJobFunction;								///< Main job function (first member because it fills an entire cache line)
 	#if defined(JPH_EXTERNAL_PROFILE) || defined(JPH_PROFILE_ENABLED)
 		const char *		mJobName;									///< Name of the job
 		Color				mColor;										///< Color of the job in the profiler
 	#endif // defined(JPH_EXTERNAL_PROFILE) || defined(JPH_PROFILE_ENABLED)
 		JobSystem *			mJobSystem;									///< The job system we belong to
 		atomic<intptr_t>	mBarrier = 0;								///< Barrier that this job is associated with (is a Barrier pointer)
-		JobFunction			mJobFunction;								///< Main job function
 		atomic<uint32>		mReferenceCount = 0;						///< Amount of JobHandles pointing to this job
 		atomic<uint32>		mNumDependencies;							///< Amount of jobs that need to complete before this job can run
 	};

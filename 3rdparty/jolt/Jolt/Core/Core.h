@@ -6,8 +6,18 @@
 
 // Jolt library version
 #define JPH_VERSION_MAJOR 5
-#define JPH_VERSION_MINOR 6
+#define JPH_VERSION_MINOR 7
 #define JPH_VERSION_PATCH 0
+
+// Always turn on asserts in Debug mode
+#if defined(JPH_DEBUG) && !defined(JPH_ENABLE_ASSERTS)
+	#define JPH_ENABLE_ASSERTS
+#endif
+
+// Default to 16-bits object layer
+#ifndef JPH_OBJECT_LAYER_BITS
+	#define JPH_OBJECT_LAYER_BITS 16
+#endif
 
 // Determine which features the library was compiled with
 #ifdef JPH_DOUBLE_PRECISION
@@ -50,22 +60,29 @@
 #else
 	#define JPH_VERSION_FEATURE_BIT_8 0
 #endif
-#if defined(JPH_OBJECT_LAYER_BITS) && JPH_OBJECT_LAYER_BITS == 32
-	#define JPH_VERSION_FEATURE_BIT_9 1
-#else
+#if JPH_OBJECT_LAYER_BITS == 16
 	#define JPH_VERSION_FEATURE_BIT_9 0
+	#define JPH_VERSION_FEATURE_BIT_10 0
+#elif JPH_OBJECT_LAYER_BITS == 32
+	#define JPH_VERSION_FEATURE_BIT_9 0
+	#define JPH_VERSION_FEATURE_BIT_10 1
+#elif JPH_OBJECT_LAYER_BITS == 64
+	#define JPH_VERSION_FEATURE_BIT_9 1
+	#define JPH_VERSION_FEATURE_BIT_10 0
+#else
+	#error Invalid value for JPH_OBJECT_LAYER_BITS. Must be 16, 32 or 64.
 #endif
 #ifdef JPH_ENABLE_ASSERTS
-	#define JPH_VERSION_FEATURE_BIT_10 1
-#else
-	#define JPH_VERSION_FEATURE_BIT_10 0
-#endif
-#ifdef JPH_OBJECT_STREAM
 	#define JPH_VERSION_FEATURE_BIT_11 1
 #else
 	#define JPH_VERSION_FEATURE_BIT_11 0
 #endif
-#define JPH_VERSION_FEATURES (uint64(JPH_VERSION_FEATURE_BIT_1) | (JPH_VERSION_FEATURE_BIT_2 << 1) | (JPH_VERSION_FEATURE_BIT_3 << 2) | (JPH_VERSION_FEATURE_BIT_4 << 3) | (JPH_VERSION_FEATURE_BIT_5 << 4) | (JPH_VERSION_FEATURE_BIT_6 << 5) | (JPH_VERSION_FEATURE_BIT_7 << 6) | (JPH_VERSION_FEATURE_BIT_8 << 7) | (JPH_VERSION_FEATURE_BIT_9 << 8) | (JPH_VERSION_FEATURE_BIT_10 << 9) | (JPH_VERSION_FEATURE_BIT_11 << 10))
+#ifdef JPH_OBJECT_STREAM
+	#define JPH_VERSION_FEATURE_BIT_12 1
+#else
+	#define JPH_VERSION_FEATURE_BIT_12 0
+#endif
+#define JPH_VERSION_FEATURES (uint64(JPH_VERSION_FEATURE_BIT_1) | (JPH_VERSION_FEATURE_BIT_2 << 1) | (JPH_VERSION_FEATURE_BIT_3 << 2) | (JPH_VERSION_FEATURE_BIT_4 << 3) | (JPH_VERSION_FEATURE_BIT_5 << 4) | (JPH_VERSION_FEATURE_BIT_6 << 5) | (JPH_VERSION_FEATURE_BIT_7 << 6) | (JPH_VERSION_FEATURE_BIT_8 << 7) | (JPH_VERSION_FEATURE_BIT_9 << 8) | (JPH_VERSION_FEATURE_BIT_10 << 9) | (JPH_VERSION_FEATURE_BIT_11 << 10) | (JPH_VERSION_FEATURE_BIT_12 << 11))
 
 // Combine the version and features in a single ID
 #define JPH_VERSION_ID ((JPH_VERSION_FEATURES << 24) | (JPH_VERSION_MAJOR << 16) | (JPH_VERSION_MINOR << 8) | JPH_VERSION_PATCH)
@@ -394,6 +411,7 @@
 	JPH_CLANG_SUPPRESS_WARNING("-Wdocumentation-unknown-command")								\
 	JPH_CLANG_SUPPRESS_WARNING("-Wctad-maybe-unsupported")										\
 	JPH_CLANG_SUPPRESS_WARNING("-Wswitch-default")												\
+	JPH_CLANG_SUPPRESS_WARNING("-Wthread-safety-analysis")										\
 	JPH_CLANG_SUPPRESS_DEPRECATED_COPY_WARNING													\
 	JPH_CLANG_SUPPRESS_DEPRECATED_COPY_WITH_DTOR_WARNING										\
 	JPH_CLANG_SUPPRESS_UNSAFE_BUFFER_USAGE_WARNING												\
@@ -558,11 +576,6 @@ static_assert(sizeof(uint16) == 2, "Invalid size of uint16");
 static_assert(sizeof(uint32) == 4, "Invalid size of uint32");
 static_assert(sizeof(uint64) == 8, "Invalid size of uint64");
 
-// Determine if we want extra debugging code to be active
-#if !defined(NDEBUG) && !defined(JPH_NO_DEBUG)
-	#define JPH_DEBUG
-#endif
-
 // Define inline macro
 #if defined(JPH_NO_FORCE_INLINE)
 	#define JPH_INLINE inline
@@ -585,7 +598,14 @@ static_assert(sizeof(uint64) == 8, "Invalid size of uint64");
 // Default memory allocation alignment.
 // This define can be overridden in case the user provides an Allocate function that has a different alignment than the platform default.
 #ifndef JPH_DEFAULT_ALLOCATE_ALIGNMENT
-	#define JPH_DEFAULT_ALLOCATE_ALIGNMENT __STDCPP_DEFAULT_NEW_ALIGNMENT__
+	#if defined(JPH_COMPILER_MINGW) && JPH_CPU_ARCH_BITS == 32
+		// 32-bit MinGW g++ lies that __STDCPP_DEFAULT_NEW_ALIGNMENT__ is 16, but it is actually 8.
+		// See: https://github.com/godotengine/godot/issues/121608#issuecomment-5142806330
+		// Note: See similar fix for the definition of JPH_INTERNAL_DEFAULT_ALLOCATE.
+		#define JPH_DEFAULT_ALLOCATE_ALIGNMENT 8
+	#else
+		#define JPH_DEFAULT_ALLOCATE_ALIGNMENT __STDCPP_DEFAULT_NEW_ALIGNMENT__
+	#endif
 #endif
 
 // Cache line size (used for aligning to cache line)

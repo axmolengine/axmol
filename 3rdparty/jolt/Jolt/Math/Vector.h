@@ -189,7 +189,7 @@ public:
 		return Sqrt(LengthSq());
 	}
 
-	/// Check if vector is normalized
+	/// Test if length^2 of this vector is within the range [1 - inTolerance, 1 + inTolerance]
 	inline bool					IsNormalized(float inToleranceSq = 1.0e-6f)
 	{
 		return abs(LengthSq() - 1.0f) <= inToleranceSq;

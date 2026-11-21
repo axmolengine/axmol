@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
 
-project(JoltPhysics VERSION 5.5.1 LANGUAGES CXX)
+project(JoltPhysics VERSION 5.7.0 LANGUAGES CXX)
 
 # When turning this option on, the library will be compiled using assertions. By default asserts are enabled in Debug build.
 option(USE_ASSERTS "Enable asserts" OFF)
@@ -33,8 +33,8 @@ option(INTERPROCEDURAL_OPTIMIZATION "Enable interprocedural optimizations" ON)
 # Note that this currently only works using MSVC. Clang turns Float2 into a SIMD vector sometimes causing floating point exceptions (the option is ignored).
 option(FLOATING_POINT_EXCEPTIONS_ENABLED "Enable floating point exceptions" ON)
 
-# Number of bits to use in ObjectLayer. Can be 16 or 32.
-option(OBJECT_LAYER_BITS "Number of bits in ObjectLayer" 16)
+# Number of bits to use in ObjectLayer. Can be 16, 32 or 64.
+set(OBJECT_LAYER_BITS 16 CACHE STRING "Number of bits in ObjectLayer")
 
 # Select X86 processor features to use (if everything is off it will be SSE2 compatible)
 option(USE_SSE4_1 "Enable SSE4.1" ON)
@@ -88,9 +88,6 @@ option(JPH_USE_EXTERNAL_PROFILE "Use external profiler when profiling is enabled
 
 # Setting this option will force the library to use malloc/free instead of allowing the user to override the memory allocator
 option(DISABLE_CUSTOM_ALLOCATOR "Disable support for a custom memory allocator" OFF)
-
-# Setting this option will force the library to use the STL vector instead of the custom Array class
-option(USE_STD_VECTOR "Use std::vector instead of own Array class" ON)
 
 # Setting this option will compile the ObjectStream class and RTTI attribute information
 option(ENABLE_OBJECT_STREAM "Compile the ObjectStream class and RTTI attribute information" OFF)

@@ -3,3 +3,6 @@
 build
 **/*.zip
 _x*
+
+# Jolt DX12 shader build outputs
+/jolt/Jolt/Shaders/*.dxil

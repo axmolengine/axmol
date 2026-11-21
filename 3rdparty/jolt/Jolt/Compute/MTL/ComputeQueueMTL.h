@@ -21,7 +21,7 @@ public:
 	JPH_OVERRIDE_NEW_DELETE
 
 	/// Constructor / destructor
-										ComputeQueueMTL(id<MTLDevice> inDevice);
+										ComputeQueueMTL(id<MTLDevice> inDevice, id<MTLBuffer> inDummyBuffer);
 	virtual								~ComputeQueueMTL() override;
 
 	// See: ComputeQueue
@@ -38,8 +38,9 @@ private:
 	void								BeginCommandBuffer();
 
 	id<MTLCommandQueue>					mCommandQueue;
-	id<MTLCommandBuffer> 				mCommandBuffer;
-	id<MTLComputeCommandEncoder>		mComputeEncoder;
+	id<MTLBuffer>						mDummyBuffer;
+	id<MTLCommandBuffer> 				mCommandBuffer = nil;
+	id<MTLComputeCommandEncoder>		mComputeEncoder = nil;
 	RefConst<ComputeShaderMTL>			mShader;
 	bool								mIsExecuting = false;
 };
