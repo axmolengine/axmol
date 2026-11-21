@@ -233,7 +233,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
   if(WINDOWS)
     target_link_libraries(${APP_NAME}
       ${LIBS}
-      zlib
+      libz
       jpeg-static
       libcrypto
       libssl
@@ -276,7 +276,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
       "${AX_ROOT_DIR}/3rdparty/openssl/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libcrypto-3${ssl_dll_suffix}.dll"
       "${AX_ROOT_DIR}/3rdparty/openssl/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libssl-3${ssl_dll_suffix}.dll"
       "${AX_ROOT_DIR}/3rdparty/curl/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libcurl.dll"
-      "${AX_ROOT_DIR}/3rdparty/zlib/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/zlib1.dll"
+      "${AX_ROOT_DIR}/3rdparty/zlib/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libz.dll"
     )
 
     if(AX_ENABLE_AUDIO)

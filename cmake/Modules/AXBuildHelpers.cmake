@@ -719,7 +719,7 @@ macro(ax_setup_winrt_sources)
 
     find_windows_sdk_bin(_winsdk_bin_dir ${ARCH_ALIAS})
     set(prebuilt_dlls
-      ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/zlib/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/zlib1.dll
+      ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/zlib/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libz.dll
       ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/openssl/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libssl-3${ssl_dll_suffix}.dll
       ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/openssl/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libcrypto-3${ssl_dll_suffix}.dll
       ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/curl/_x/lib/${PLATFORM_NAME}/${ARCH_ALIAS}/libcurl.dll

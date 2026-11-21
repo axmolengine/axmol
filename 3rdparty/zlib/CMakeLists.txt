@@ -11,8 +11,8 @@ endif()
 
 if(WINDOWS)
   set_target_properties(${target_name} PROPERTIES
-    IMPORTED_LOCATION "${zlib_LIB_DIR}/zlib1.dll"
-    IMPORTED_IMPLIB "${zlib_LIB_DIR}/zlib.lib"
+    IMPORTED_LOCATION "${zlib_LIB_DIR}/libz.dll"
+    IMPORTED_IMPLIB "${zlib_LIB_DIR}/libz.lib"
     INTERFACE_COMPILE_DEFINITIONS ZLIB_DLL=1
   )
 elseif(APPLE)
