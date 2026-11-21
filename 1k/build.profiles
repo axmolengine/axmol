@@ -93,7 +93,7 @@ emsdk=3.1.73~6.0.13+
 # --- endregion
 
 # --- region dependencies @fetch.cmake
-1kdist=v124
+1kdist=v125
 oboe=1.11.0
 kcp=2.1.1
 lz4=v1.11.1

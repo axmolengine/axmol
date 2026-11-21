@@ -124,7 +124,7 @@
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: 2.1-c4b1e2f
+  - Version: 2.1-96f7b29
   - License: MIT
 
 - lua-cjson
