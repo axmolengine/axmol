@@ -36,10 +36,7 @@ public:
 
 	/// Constructor
 							STLLocalAllocator() = default;
-	/// Copy constructor. The local buffer can't be copied, so a copy falls back to the heap immediately
-	/// (like the rebind constructor). Required because some std::vector implementations (e.g. libc++
-	/// used by Emscripten) copy the allocator when growing/reserving capacity.
-							STLLocalAllocator(const STLLocalAllocator &) : mNumElementsUsed(N) { }
+							STLLocalAllocator(const STLLocalAllocator &) = delete; // Can't copy an allocator as the buffer is local to the original
 							STLLocalAllocator(STLLocalAllocator &&) = delete; // Can't move an allocator as the buffer is local to the original
 	STLLocalAllocator &		operator = (const STLLocalAllocator &) = delete; // Can't copy an allocator as the buffer is local to the original
 

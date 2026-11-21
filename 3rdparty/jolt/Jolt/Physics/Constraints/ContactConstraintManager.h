@@ -437,7 +437,7 @@ private:
 		using ConstraintPart = ContactConstraintPart<Type1, Type2>;
 
 		/// Calculate constraint properties for the non penetration constraint
-		JPH_INLINE void			CalculateNonPenetrationConstraintProperties(float inDeltaTime, Vec3Arg inGravity, const Body &inBody1, const Body &inBody2, float inInvM1, float inInvM2, Mat44Arg inInvI1, Mat44Arg inInvI2, RVec3Arg inWorldSpacePosition1, RVec3Arg inWorldSpacePosition2, Vec3Arg inWorldSpaceNormal, const ContactSettings &inSettings, float inMinVelocityForRestitution);
+		JPH_INLINE void			CalculateNonPenetrationConstraintProperties(float inDeltaTime, Vec3Arg inGravity, const Body &inBody1, const Body &inBody2, float inInvM1, float inInvM2, Mat44Arg inInvI1, Mat44Arg inInvI2, Vec3Arg inR1, Vec3Arg inR2, float inPenetration, Vec3Arg inWorldSpaceNormal, const ContactSettings &inSettings, float inMinVelocityForRestitution);
 
 		/// The constraint parts
 		ConstraintPart			mNonPenetrationConstraint;
@@ -459,15 +459,16 @@ private:
 		/// Get the tangents for this contact constraint
 		JPH_INLINE void			GetTangents(Vec3 &outTangent1, Vec3 &outTangent2) const
 		{
-			Vec3 ws_normal = GetWorldSpaceNormal();
-			outTangent1 = ws_normal.GetNormalizedPerpendicular();
-			outTangent2 = ws_normal.Cross(outTangent1);
+			outTangent1 = Vec3::sLoadFloat3Unsafe(mWorldSpaceTangent1);
+			outTangent2 = Vec3::sLoadFloat3Unsafe(mWorldSpaceTangent2);
 		}
 
 		Body *					mBody1;
 		Body *					mBody2;
 		uint64					mSortKey;
 		Float3					mWorldSpaceNormal;
+		Float3					mWorldSpaceTangent1;
+		Float3					mWorldSpaceTangent2;
 		float					mCombinedFriction;
 		float					mInvMass1;
 		float					mInvInertiaScale1;
@@ -483,7 +484,7 @@ private:
 	{
 	public:
 		/// Calculate constraint properties for the friction constraint
-		JPH_INLINE void			CalculateFrictionConstraintProperties(const Body &inBody1, const Body &inBody2, float inInvM1, float inInvM2, Mat44Arg inInvI1, Mat44Arg inInvI2, const RVec3 *inWorldSpaceContacts, Vec3Arg inWorldSpaceNormal, Vec3Arg inWorldSpaceTangent1, Vec3Arg inWorldSpaceTangent2, const ContactSettings &inSettings);
+		JPH_INLINE void			CalculateFrictionConstraintProperties(float inInvM1, float inInvM2, Mat44Arg inInvI1, Mat44Arg inInvI2, const Vec3 *inR1, const Vec3 *inR2, Vec3Arg inWorldSpaceNormal, Vec3Arg inWorldSpaceTangent1, Vec3Arg inWorldSpaceTangent2, const ContactSettings &inSettings);
 
 	#ifdef JPH_DEBUG_RENDERER
 		/// Draw the state of the contact constraint

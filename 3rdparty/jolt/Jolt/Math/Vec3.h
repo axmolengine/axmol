@@ -153,7 +153,7 @@ public:
 	/// Test if vector is near zero
 	JPH_INLINE bool				IsNearZero(float inMaxDistSq = 1.0e-12f) const;
 
-	/// Test if vector is normalized
+	/// Test if length^2 of this vector is within the range [1 - inTolerance, 1 + inTolerance]
 	JPH_INLINE bool				IsNormalized(float inTolerance = 1.0e-6f) const;
 
 	/// Test if vector contains NaN elements

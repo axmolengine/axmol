@@ -17,12 +17,8 @@ struct CollisionEstimationResult
 	Vec3			mAngularVelocity2;				///< The estimated angular velocity of body 2 after collision
 
 	Vec3			mFrictionPoint;					///< Point at which friction was applied (relative to mBaseOffset of the manifold)
-	Vec3			mTangent1;						///< Normalized tangent of contact normal
-	Vec3			mTangent2;						///< Second normalized tangent of contact normal (forms a basis with mTangent1 and mWorldSpaceNormal)
-
-	float			mFrictionImpulse1 = 0;			///< Estimated friction impulses in the direction of tangent 1 (kg m / s)
-	float			mFrictionImpulse2 = 0;			///< Estimated friction impulses in the direction of tangent 2 (kg m / s)
-	float			mAngularFrictionImpulse = 0;	///< Estimated angular friction impulse around the world space normal (kg m^2 / s)
+	Vec3			mFrictionImpulse;				///< Estimated linear friction impulse (kg m / s)
+	float			mAngularFrictionImpulse;		///< Estimated angular friction impulse around the world space normal (kg m^2 / s)
 
 	StaticArray<float, ContactPoints::Capacity> mContactImpulse; ///< Estimated contact impulses (kg m / s)
 };
@@ -35,10 +31,9 @@ struct CollisionEstimationResult
 /// @param inBody2 Colliding body 2
 /// @param inManifold The collision manifold
 /// @param outResult A structure that contains the estimated contact and friction impulses and the resulting body velocities
-/// @param inCombinedFriction The combined friction of body 1 and body 2 (see ContactSettings::mCombinedFriction)
-/// @param inCombinedRestitution The combined restitution of body 1 and body 2 (see ContactSettings::mCombinedRestitution)
+/// @param inContactSettings The contact settings for this contact
 /// @param inMinVelocityForRestitution Minimal velocity required for restitution to be applied (see PhysicsSettings::mMinVelocityForRestitution)
 /// @param inNumIterations Number of iterations to use for the impulse estimation (see PhysicsSettings::mNumVelocitySteps, note you can probably use a lower number for a decent estimate). If you set the number of iterations to 1 then no friction will be calculated.
-JPH_EXPORT void EstimateCollisionResponse(const Body &inBody1, const Body &inBody2, const ContactManifold &inManifold, CollisionEstimationResult &outResult, float inCombinedFriction, float inCombinedRestitution, float inMinVelocityForRestitution = 1.0f, uint inNumIterations = 10);
+JPH_EXPORT void EstimateCollisionResponse(const Body &inBody1, const Body &inBody2, const ContactManifold &inManifold, CollisionEstimationResult &outResult, const ContactSettings &inContactSettings, float inMinVelocityForRestitution = 1.0f, uint inNumIterations = 10);
 
 JPH_NAMESPACE_END

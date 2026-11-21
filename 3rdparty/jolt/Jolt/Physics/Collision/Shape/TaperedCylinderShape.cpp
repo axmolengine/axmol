@@ -26,7 +26,7 @@ static const Vec3 cTaperedCylinderFace[] =
 	Vec3(0.707106769f,	0.0f,	0.707106769f),
 	Vec3(1.0f,			0.0f,	0.0f),
 	Vec3(0.707106769f,	0.0f,	-0.707106769f),
-	Vec3(-0.0f,			0.0f,	-1.0f),
+	Vec3(0.0f,			0.0f,	-1.0f),
 	Vec3(-0.707106769f,	0.0f,	-0.707106769f),
 	Vec3(-1.0f,			0.0f,	0.0f),
 	Vec3(-0.707106769f,	0.0f,	0.707106769f)
@@ -50,11 +50,7 @@ ShapeSettings::ShapeResult TaperedCylinderShapeSettings::Create() const
 		if (mTopRadius == mBottomRadius)
 		{
 			// Convert to regular cylinder
-			CylinderShapeSettings settings;
-			settings.mHalfHeight = mHalfHeight;
-			settings.mRadius = mTopRadius;
-			settings.mMaterial = mMaterial;
-			settings.mConvexRadius = mConvexRadius;
+			CylinderShapeSettings settings(mHalfHeight, mTopRadius, mConvexRadius, mMaterial);
 			shape = new CylinderShape(settings, mCachedResult);
 		}
 		else

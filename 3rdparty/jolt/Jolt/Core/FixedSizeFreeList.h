@@ -46,8 +46,9 @@ private:
 	/// Total number of pages that are usable
 	uint32					mNumPages;
 
-	/// Total number of objects that have been allocated
-	uint32					mNumObjectsAllocated;
+	/// Total number of objects that have been allocated.
+	/// Only modified under mPageMutex, but read without lock in ConstructObject. Stored with release semantics after the page pointer has been written so that a reader that sees the new value also sees the page.
+	atomic<uint32>			mNumObjectsAllocated;
 
 	/// Array of pages of objects
 	ObjectStorage **		mPages = nullptr;
@@ -115,6 +116,9 @@ public:
 
 	/// Access an object by index.
 	inline const Object &	Get(uint32 inObjectIndex) const			{ return GetStorage(inObjectIndex).mObject; }
+
+	/// Get the index of an object that was created by this free list
+	inline uint32			GetObjectIndex(const Object *inObject) const;
 };
 
 JPH_NAMESPACE_END
