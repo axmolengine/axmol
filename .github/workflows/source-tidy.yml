@@ -39,9 +39,6 @@ on:
   issue_comment:
     types: [created] # Listen for new comments on issues/PRs
 
-env:
-  LLVM_VER: '21'
-
 jobs:
   source-tidy:
     runs-on: ubuntu-latest
@@ -147,6 +144,15 @@ jobs:
       if: ${{ steps.pp.outputs.should_run == 'true' }}
       shell: pwsh
       run: ./tools/cmdline/plugins/source-lint.ps1
+
+    - name: Read clang-format version
+      if: ${{ steps.pp.outputs.should_run == 'true' }}
+      shell: pwsh
+      run: |
+        $buildProfiles = '1k/build.profiles'
+        $match = Select-String -LiteralPath $buildProfiles -Pattern '^\s*llvm-tools\s*=\s*((\d+)\.\d+\.\d+)\s*(?:#.*)?$' | Select-Object -First 1
+        if (-not $match) { throw "Expected llvm-tools=<major>.<minor>.<patch> in $buildProfiles." }
+        "LLVM_VER=$($match.Matches[0].Groups[2].Value)" >> $env:GITHUB_ENV
 
     - name: Install llvm clang-format
       if: ${{ steps.pp.outputs.should_run == 'true' }}
