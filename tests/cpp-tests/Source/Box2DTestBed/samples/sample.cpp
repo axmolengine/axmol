@@ -77,7 +77,7 @@ static int jsoneq( const char* json, jsmntok_t* tok, const char* s )
 void DrawPolygonFcn( b2WorldTransform transform, const b2Vec2* vertices, int vertexCount, b2HexColor color, void* context )
 {
 	SampleContext* sampleContext = static_cast<SampleContext*>( context );
-	DrawSolidPolygon( sampleContext->draw, transform, vertices, vertexCount, 0.0f, color );
+	DrawPolygon( sampleContext->draw, vertices, vertexCount, color, transform );
 }
 
 void DrawSolidPolygonFcn( b2Transform transform, const b2Vec2* vertices, int vertexCount, float radius, b2HexColor color,
@@ -96,8 +96,7 @@ void DrawCircleFcn( b2Vec2 center, float radius, b2HexColor color, void* context
 void DrawSolidCircleFcn( b2WorldTransform transform, b2Vec2 center, float radius, b2HexColor color, void* context )
 {
 	SampleContext* sampleContext = static_cast<SampleContext*>( context );
-	transform.p = center;
-	transform.p = center;
+	transform.p = b2TransformWorldPoint( transform, center );
 	DrawSolidCircle( sampleContext->draw, transform, radius, color );
 }
 

@@ -22,35 +22,31 @@
 NS_AX_EXT_BEGIN
 
 /// Draw a closed polygon provided in CCW order.
-// void (*DrawPolygon)(const b2Vec2* vertices, int vertexCount, b2HexColor color, void* context);
-static void b2DrawPolygon(const b2Vec2* verts, int vertexCount, b2HexColor color, PhysicsDebugNode* dn)
+static void b2DrawPolygon(b2WorldTransform t, const b2Vec2* verts, int vertexCount, b2HexColor color, void* context)
 {
-    Vec2* vec = new Vec2[vertexCount];
+    auto dn = static_cast<PhysicsDebugNode*>(context);
+    tlx::pod_vector<Vec2> vec(vertexCount);
     for (size_t i = 0; i < vertexCount; i++)
     {
-        vec[i] = Vec2(verts[i].x * dn->getPTMRatio(), verts[i].y * dn->getPTMRatio()) + dn->getWorldOffset();
+        auto pt = b2TransformWorldPoint(t, verts[i]);
+        vec[i]  = Vec2(pt.x * dn->getPTMRatio(), pt.y * dn->getPTMRatio()) + dn->getWorldOffset();
     }
-    dn->drawPolygon(vec, vertexCount, ax::Color::black, 0.4f, b2util::cast(color));
+    dn->drawPolygon(vec.data(), vertexCount, ax::Color::black, 0.4f, b2util::cast(color));
 }
 
 /// Draw a solid closed polygon provided in CCW order.
-// void (*DrawSolidPolygon)(b2Transform,
-//                          const b2Vec2* vertices,
-//                          int vertexCount,
-//                          float radius,
-//                          b2HexColor color,
-//                          void* context);
-static void b2DrawSolidPolygon(b2Transform t,
+static void b2DrawSolidPolygon(b2WorldTransform t,
                                const b2Vec2* verts,
                                int vertexCount,
                                float radius,
                                b2HexColor color,
-                               PhysicsDebugNode* dn)
+                               void* context)
 {
+    auto dn = static_cast<PhysicsDebugNode*>(context);
     tlx::pod_vector<Vec2> vec(vertexCount);
     for (size_t i = 0; i < vertexCount; i++)
     {
-        auto pt = b2TransformPoint(t, verts[i]);
+        auto pt = b2TransformWorldPoint(t, verts[i]);
         vec[i]  = Vec2(pt.x * dn->getPTMRatio(), pt.y * dn->getPTMRatio()) + dn->getWorldOffset();
     }
     auto color4f = b2util::cast(color);
@@ -59,18 +55,18 @@ static void b2DrawSolidPolygon(b2Transform t,
 }
 
 /// Draw a circle.
-// void (*DrawCircle)(b2Vec2 center, float radius, b2HexColor color, void* context);
-static void b2DrawCircle(b2Vec2 center, float radius, b2HexColor color, PhysicsDebugNode* dn)
+static void b2DrawCircle(b2Pos center, float radius, b2HexColor color, void* context)
 {
+    auto dn = static_cast<PhysicsDebugNode*>(context);
     dn->drawDot(Vec2(center.x * dn->getPTMRatio(), center.y * dn->getPTMRatio()) + dn->getWorldOffset(),
                 radius * dn->getPTMRatio(), b2util::cast(color));
 }
 
 /// Draw a solid circle.
-// void (*DrawSolidCircle)(b2Transform, float radius, b2HexColor color, void* context);
-static void b2DrawSolidCircle(b2Transform t, float radius, b2HexColor color, PhysicsDebugNode* dn)
+static void b2DrawSolidCircle(b2WorldTransform t, b2Vec2 localCenter, float radius, b2HexColor color, void* context)
 {
-    auto center  = b2TransformPoint(t, b2Vec2_zero);
+    auto dn      = static_cast<PhysicsDebugNode*>(context);
+    auto center  = b2TransformWorldPoint(t, localCenter);
     Vec2 c       = {Vec2(center.x * dn->getPTMRatio(), center.y * dn->getPTMRatio()) + dn->getWorldOffset()};
     auto color4f = b2util::cast(color);
 
@@ -85,41 +81,37 @@ static void b2DrawSolidCircle(b2Transform t, float radius, b2HexColor color, Phy
                 radius * dn->getPTMRatio() - 0.5f, ax::Color(color4f.r / 4, color4f.g / 4, color4f.b / 4, color4f.a));
 
     // Draw a line fixed in the circle to animate rotation.
-    b2Vec2 pp = {(center + radius * b2Rot_GetXAxis(t.q))};
+    auto pp   = center + radius * b2Rot_GetXAxis(t.q);
     Vec2 cp   = {Vec2(pp.x * dn->getPTMRatio(), pp.y * dn->getPTMRatio()) + dn->getWorldOffset()};
     dn->drawLine(c, cp, color4f);
 #endif  // AX_DRAWNODE_FAST_LINE2CENTER
 }
 
-/// Draw a solid capsule.
-// void (*DrawSolidCapsule)(b2Vec2 p1, b2Vec2 p2, float radius, b2HexColor color, void* context);
-
 /// Draw a line segment.
-// void (*DrawSegment)(b2Vec2 p1, b2Vec2 p2, b2HexColor color, void* context);
-static void b2DrawLine(b2Vec2 p1, b2Vec2 p2, b2HexColor color, PhysicsDebugNode* dn)
+static void b2DrawLine(b2Pos p1, b2Pos p2, b2HexColor color, void* context)
 {
+    auto dn = static_cast<PhysicsDebugNode*>(context);
     dn->drawLine(Vec2(p1.x * dn->getPTMRatio(), p1.y * dn->getPTMRatio()) + dn->getWorldOffset(),
                  Vec2(p2.x * dn->getPTMRatio(), p2.y * dn->getPTMRatio()) + dn->getWorldOffset(), b2util::cast(color));
 }
 
 /// Draw a transform. Choose your own length scale.
-// void (*DrawTransform)(b2Transform transform, void* context);
-static void b2DrawTransform(b2Transform t, PhysicsDebugNode* dn)
+static void b2DrawTransform(b2WorldTransform t, void* context)
 {
-    b2Vec2 p1               = t.p, p2;
+    b2Pos p1               = t.p, p2;
     const float k_axisScale = 0.4f;
 
     p2 = p1 + k_axisScale * b2Rot_GetXAxis(t.q);
-    b2DrawLine(p1, p2, b2HexColor::b2_colorRed, dn);
+    b2DrawLine(p1, p2, b2HexColor::b2_colorRed, context);
 
     p2 = p1 + k_axisScale * b2Rot_GetYAxis(t.q);
-    b2DrawLine(p1, p2, b2HexColor::b2_colorGreen, dn);
+    b2DrawLine(p1, p2, b2HexColor::b2_colorGreen, context);
 }
 
 /// Draw a point.
-// void (*DrawPoint)(b2Vec2 p, float size, b2HexColor color, void* context);
-static void b2DrawPoint(b2Vec2 p, float size, b2HexColor color, PhysicsDebugNode* dn)
+static void b2DrawPoint(b2Pos p, float size, b2HexColor color, void* context)
 {
+    auto dn = static_cast<PhysicsDebugNode*>(context);
     dn->drawPoint(Vec2(p.x * dn->getPTMRatio(), p.y * dn->getPTMRatio()) + dn->getWorldOffset(), size,
                   b2util::cast(color));
 }
@@ -169,16 +161,14 @@ PhysicsDebugNode::~PhysicsDebugNode()
 
 void PhysicsDebugNode::setBuiltinDrawFuncs()
 {
-    _debugDraw->context = this;
-#define __b2_setfun(f) _debugDraw->f##Fcn = reinterpret_cast<decltype(_debugDraw->f##Fcn)>(b2##f);
-    __b2_setfun(DrawPolygon);
-    __b2_setfun(DrawSolidPolygon);
-    __b2_setfun(DrawCircle);
-    __b2_setfun(DrawSolidCircle);
-    __b2_setfun(DrawLine);
-    __b2_setfun(DrawTransform);
-    __b2_setfun(DrawPoint);
-#undef __b2_setfun
+    _debugDraw->context             = this;
+    _debugDraw->DrawPolygonFcn      = b2DrawPolygon;
+    _debugDraw->DrawSolidPolygonFcn = b2DrawSolidPolygon;
+    _debugDraw->DrawCircleFcn       = b2DrawCircle;
+    _debugDraw->DrawSolidCircleFcn  = b2DrawSolidCircle;
+    _debugDraw->DrawLineFcn         = b2DrawLine;
+    _debugDraw->DrawTransformFcn    = b2DrawTransform;
+    _debugDraw->DrawPointFcn        = b2DrawPoint;
 }
 
 NS_AX_EXT_END

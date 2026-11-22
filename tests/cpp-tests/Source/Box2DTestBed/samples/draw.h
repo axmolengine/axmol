@@ -61,7 +61,8 @@ void DrawLine(SampleDraw* draw, b2Vec2 p1, b2Vec2 p2, b2HexColor color);
 void DrawCircle(SampleDraw* draw, b2Vec2 center, float radius, b2HexColor color);
 void DrawSolidCircle(SampleDraw* draw, b2Transform transform, float radius, b2HexColor color);
 void DrawSolidCapsule(SampleDraw* draw, b2Vec2 p1, b2Vec2 p2, float radius, b2HexColor color);
-void DrawPolygon(SampleDraw* SampleDraw, const b2Vec2* vertices, int vertexCount, b2HexColor color);
+void DrawPolygon(SampleDraw* draw, const b2Vec2* vertices, int vertexCount, b2HexColor color,
+                 b2WorldTransform transform = b2WorldTransform_identity);
 void DrawSolidPolygon(SampleDraw* draw,
                       b2Transform transform,
                       const b2Vec2* vertices,
