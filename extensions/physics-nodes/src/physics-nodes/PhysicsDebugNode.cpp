@@ -81,8 +81,8 @@ static void b2DrawSolidCircle(b2WorldTransform t, b2Vec2 localCenter, float radi
                 radius * dn->getPTMRatio() - 0.5f, ax::Color(color4f.r / 4, color4f.g / 4, color4f.b / 4, color4f.a));
 
     // Draw a line fixed in the circle to animate rotation.
-    auto pp   = center + radius * b2Rot_GetXAxis(t.q);
-    Vec2 cp   = {Vec2(pp.x * dn->getPTMRatio(), pp.y * dn->getPTMRatio()) + dn->getWorldOffset()};
+    auto pp = center + radius * b2Rot_GetXAxis(t.q);
+    Vec2 cp = {Vec2(pp.x * dn->getPTMRatio(), pp.y * dn->getPTMRatio()) + dn->getWorldOffset()};
     dn->drawLine(c, cp, color4f);
 #endif  // AX_DRAWNODE_FAST_LINE2CENTER
 }
@@ -98,7 +98,7 @@ static void b2DrawLine(b2Pos p1, b2Pos p2, b2HexColor color, void* context)
 /// Draw a transform. Choose your own length scale.
 static void b2DrawTransform(b2WorldTransform t, void* context)
 {
-    b2Pos p1               = t.p, p2;
+    b2Pos p1                = t.p, p2;
     const float k_axisScale = 0.4f;
 
     p2 = p1 + k_axisScale * b2Rot_GetXAxis(t.q);
