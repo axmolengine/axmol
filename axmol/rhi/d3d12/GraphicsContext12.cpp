@@ -805,11 +805,14 @@ void GraphicsContextImpl::prepareDrawing(ID3D12GraphicsCommandList* cmd)
     const auto& cpuBuffer = _programState->getUniformBuffer();
     if (!cpuBuffer.empty())
     {
-        for (auto& uboInfo : _programState->getActiveUniformBlockInfos())
+        // updateRootSignature places block i at root parameter i, regardless of its shader register.
+        const auto& blocks = _programState->getActiveUniformBlockInfos();
+        for (size_t i = 0, count = blocks.size(); i < count; ++i)
         {
-            auto s = allocateUniformSlice(_frameIndex, uboInfo.sizeBytes);
+            const auto& uboInfo = blocks[i];
+            auto s              = allocateUniformSlice(_frameIndex, uboInfo.sizeBytes);
             ::memcpy(s.cpuPtr, cpuBuffer.data() + uboInfo.cpuOffset, uboInfo.sizeBytes);
-            _currentCmdList->SetGraphicsRootConstantBufferView(uboInfo.binding, s.gpuVA);
+            _currentCmdList->SetGraphicsRootConstantBufferView(static_cast<UINT>(i), s.gpuVA);
         }
     }
 

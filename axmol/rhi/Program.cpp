@@ -57,12 +57,6 @@ Program::Program(Data& vsData, Data& fsData)
     parseStageReflection(ShaderStage::FRAGMENT, &context);
 
     resolveBuiltinUniforms();
-
-    if (rhi::GraphicsCore::isD3D12() && _activeUniformBlockInfos.size() > 1)
-    {
-        std::sort(_activeUniformBlockInfos.begin(), _activeUniformBlockInfos.end(),
-                  [](auto& a, auto& b) { return a.binding < b.binding; });
-    }
 }
 
 Program::Program(Data& csData)
