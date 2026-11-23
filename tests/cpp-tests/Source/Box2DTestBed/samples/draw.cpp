@@ -140,7 +140,7 @@ void DrawCircle(SampleDraw* draw, b2Vec2 center, float radius, b2HexColor color)
 
 void DrawSolidCircle(SampleDraw* draw, b2Transform transform, float radius, b2HexColor color)
 {
-    draw->impl->getB2DebugDraw().DrawSolidCircleFcn(transform, transform.p, radius, color, draw->impl);
+    draw->impl->getB2DebugDraw().DrawSolidCircleFcn(transform, b2Vec2_zero, radius, color, draw->impl);
 }
 
 void DrawSolidCapsule(SampleDraw* draw, b2Vec2 p1, b2Vec2 p2, float radius, b2HexColor color)
@@ -148,9 +148,9 @@ void DrawSolidCapsule(SampleDraw* draw, b2Vec2 p1, b2Vec2 p2, float radius, b2He
     draw->impl->getB2DebugDraw().DrawSolidCapsuleFcn(p1, p2, radius, color, draw->impl);
 }
 
-void DrawPolygon(SampleDraw* draw, const b2Vec2* vertices, int vertexCount, b2HexColor color)
+void DrawPolygon(SampleDraw* draw, const b2Vec2* vertices, int vertexCount, b2HexColor color, b2WorldTransform transform)
 {
-    draw->impl->getB2DebugDraw().DrawPolygonFcn(b2Transform_identity, vertices, vertexCount, color, draw->impl);
+    draw->impl->getB2DebugDraw().DrawPolygonFcn(transform, vertices, vertexCount, color, draw->impl);
 }
 
 void DrawSolidPolygon(SampleDraw* draw,
@@ -238,26 +238,28 @@ void DrawBackground(SampleDraw* draw, Camera* camera)
 #pragma endregion
 
 #pragma region SampleDrawNode
-static void b2DrawCircle(b2Vec2 center, float radius, b2HexColor color, SampleDrawNode* context)
+static void b2DrawCircle(b2Pos center, float radius, b2HexColor color, void* ctx)
 {
+    auto context = static_cast<SampleDrawNode*>(ctx);
     auto ratio  = context->getPTMRatio();
     auto offset = context->getWorldOffset();
     context->AddCircle(CircleData{b2util::cast(color),
                                   b2Vec2{center.x * ratio + offset.x, center.y * ratio + offset.y}, radius * ratio});
 }
 
-static void b2DrawSolidCircle(b2Transform t, float radius, b2HexColor color, SampleDrawNode* context)
+static void b2DrawSolidCircle(b2WorldTransform t, b2Vec2 localCenter, float radius, b2HexColor color, void* ctx)
 {
-    // RGBA8 rgba = MakeRGBA8(color, 1.0f);
-    // m_circles.push_back({{transform.p.x, transform.p.y, transform.q.c, transform.q.s}, radius, rgba});
-    auto ratio  = context->getPTMRatio();
-    auto offset = context->getWorldOffset();
-    context->AddCircle({{t.p.x * ratio + offset.x, t.p.y * ratio + offset.y, t.q.c, t.q.s}, b2util::cast(color),
+    auto context = static_cast<SampleDrawNode*>(ctx);
+    auto center  = b2TransformWorldPoint(t, localCenter);
+    auto ratio   = context->getPTMRatio();
+    auto offset  = context->getWorldOffset();
+    context->AddCircle({{center.x * ratio + offset.x, center.y * ratio + offset.y, t.q.c, t.q.s}, b2util::cast(color),
                         radius * ratio});
 }
 
-static void b2DrawSolidCapsule(b2Vec2 pt1, b2Vec2 pt2, float radius, b2HexColor c, SampleDrawNode* context)
+static void b2DrawSolidCapsule(b2Pos pt1, b2Pos pt2, float radius, b2HexColor c, void* ctx)
 {
+    auto context = static_cast<SampleDrawNode*>(ctx);
     auto ratio  = context->getPTMRatio();
     auto offset = context->getWorldOffset();
     Vec2 p1{pt1.x * ratio, pt1.y * ratio}, p2{pt2.x * ratio, pt2.y * ratio};
@@ -295,11 +297,9 @@ bool SampleDrawNode::initWithWorld(b2WorldId worldId)
 {
     bool ret = ax::extension::PhysicsDebugNode::initWithWorld(worldId);
 
-#define __b2_setfun(f) _debugDraw->f##Fcn = reinterpret_cast<decltype(_debugDraw->f##Fcn)>(b2##f);
-    __b2_setfun(DrawCircle);
-    __b2_setfun(DrawSolidCircle);
-    __b2_setfun(DrawSolidCapsule);
-#undef __b2_setfun
+    _debugDraw->DrawCircleFcn       = b2DrawCircle;
+    _debugDraw->DrawSolidCircleFcn  = b2DrawSolidCircle;
+    _debugDraw->DrawSolidCapsuleFcn = b2DrawSolidCapsule;
 
     /// circle shader
     {
