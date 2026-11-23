@@ -191,24 +191,21 @@ void GraphicsPipelineImpl::updateRootSignature(ProgramImpl* program)
 
     RootSignatureEntry entry;
 
-    UINT rootIndex = 0;
-
     tlx::pod_vector<D3D12_ROOT_PARAMETER> rootParams;
     rootParams.reserve(4);  // VS UBO, FS UBO, FS SRV table, FS Sampler table
 
-    for (auto& uboInfo : program->getActiveUniformBlockInfos())
+    // Graphics CBVs occupy the first root parameters in active block order (see prepareDrawing).
+    for (const auto& uboInfo : program->getActiveUniformBlockInfos())
     {
         D3D12_ROOT_PARAMETER& param     = rootParams.emplace_back();
         param.ParameterType             = D3D12_ROOT_PARAMETER_TYPE_CBV;
-        param.Descriptor.ShaderRegister = uboInfo.binding;  // usually 0
-        param.Descriptor.RegisterSpace  = SET_INDEX_UBO;    // map Vulkan set -> D3D12 space
+        param.Descriptor.ShaderRegister = uboInfo.binding;
+        param.Descriptor.RegisterSpace  = SET_INDEX_UBO;  // map Vulkan set -> D3D12 space
         param.ShaderVisibility =
             uboInfo.stage == ShaderStage::VERTEX ? D3D12_SHADER_VISIBILITY_VERTEX : D3D12_SHADER_VISIBILITY_PIXEL;
-
-        // hack: rootIndex must match the uboInfo.binding
-        assert(rootIndex == uboInfo.binding);
-        rootIndex++;
     }
+
+    UINT rootIndex = static_cast<UINT>(rootParams.size());
 
     // --- FS SRVs (textures) + storage buffers -> descriptor table, space = SET_INDEX_SRV ---
     tlx::pod_vector<D3D12_DESCRIPTOR_RANGE> srvRanges;
