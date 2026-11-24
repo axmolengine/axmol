@@ -82,7 +82,7 @@ void register_ax_base_members_5(lua_State* L)
     class_2_ProgramManager.static_method("destroyInstance", static_cast<void (*)()>(&ax::ProgramManager::destroyInstance));
     class_2_ProgramManager.method("getBuiltinProgram", static_cast<ax::Program * (ax::ProgramManager::*)(uint32_t)>(&ax::ProgramManager::getBuiltinProgram));
     class_2_ProgramManager.static_method("getInstance", static_cast<ax::ProgramManager * (*)()>(&ax::ProgramManager::getInstance));
-    class_2_ProgramManager.method("loadProgram", axlua::overload(axlua::overload_candidate<uint64_t>(static_cast<ax::Program * (ax::ProgramManager::*)(uint64_t)>(&ax::ProgramManager::loadProgram)), axlua::overload_candidate<std::string_view, std::string_view, ax::VertexLayoutKind>(static_cast<ax::Program * (ax::ProgramManager::*)(std::string_view, std::string_view, ax::VertexLayoutKind)>(&ax::ProgramManager::loadProgram)), axlua::overload_candidate<std::string_view, std::string_view>([](ax::ProgramManager& self, std::string_view arg0, std::string_view arg1) -> ax::Program * { return static_cast<ax::ProgramManager&>(self).loadProgram(arg0, arg1, ax::VertexLayoutKind::Invalid); })));
+    class_2_ProgramManager.method("loadProgram", axlua::overload(axlua::overload_candidate<uint64_t>(static_cast<ax::Program * (ax::ProgramManager::*)(uint64_t)>(&ax::ProgramManager::loadProgram)), axlua::overload_candidate<std::string_view, std::string_view, ax::VertexLayoutKind>(static_cast<ax::Program * (ax::ProgramManager::*)(std::string_view, std::string_view, ax::VertexLayoutKind)>(&ax::ProgramManager::loadProgram)), axlua::overload_candidate<std::string_view, std::string_view>([](ax::ProgramManager& self, std::string_view arg0, std::string_view arg1) -> ax::Program * { return static_cast<ax::ProgramManager&>(self).loadProgram(arg0, arg1, ax::VertexLayoutKind::Invalid); }), axlua::overload_candidate<std::string_view, std::string_view, ax::VertexLayoutKind, ax::ProgramManager::LoadPolicy>(static_cast<ax::Program * (ax::ProgramManager::*)(std::string_view, std::string_view, ax::VertexLayoutKind, ax::ProgramManager::LoadPolicy)>(&ax::ProgramManager::loadProgram))));
     class_2_ProgramManager.method("registerCustomProgram", axlua::overload(axlua::overload_candidate<std::string_view, std::string_view, ax::VertexLayoutKind, bool>(static_cast<uint64_t (ax::ProgramManager::*)(std::string_view, std::string_view, ax::VertexLayoutKind, bool)>(&ax::ProgramManager::registerCustomProgram)), axlua::overload_candidate<std::string_view, std::string_view>([](ax::ProgramManager& self, std::string_view arg0, std::string_view arg1) -> uint64_t { return static_cast<ax::ProgramManager&>(self).registerCustomProgram(arg0, arg1, ax::VertexLayoutKind::Invalid, false); }), axlua::overload_candidate<std::string_view, std::string_view, ax::VertexLayoutKind>([](ax::ProgramManager& self, std::string_view arg0, std::string_view arg1, ax::VertexLayoutKind arg2) -> uint64_t { return static_cast<ax::ProgramManager&>(self).registerCustomProgram(arg0, arg1, arg2, false); })));
     class_2_ProgramManager.method("unloadAllPrograms", static_cast<void (ax::ProgramManager::*)()>(&ax::ProgramManager::unloadAllPrograms));
     class_2_ProgramManager.method("unloadProgram", static_cast<void (ax::ProgramManager::*)(ax::Program *)>(&ax::ProgramManager::unloadProgram));
@@ -401,26 +401,30 @@ void register_ax_base_members_5(lua_State* L)
 void register_ax_base_enums_5(lua_State* L)
 {
     auto module = axlua::Module::from(L, "ax", "ax");
+    auto class_2_ProgramManager = module.class_<ax::ProgramManager>("ProgramManager");
     auto class_4_ProgressTimer = module.class_<ax::ProgressTimer>("ProgressTimer");
     auto class_6_Properties = module.class_<ax::Properties>("Properties");
     auto class_13_RenderViewCore = module.class_<ax::RenderViewCore>("RenderViewCore");
-    auto enum_0_Type = class_4_ProgressTimer.get_or_create_table("Type");
-    enum_0_Type.set("RADIAL", 0ll);
-    enum_0_Type.set("BAR", 1ll);
-    auto enum_1_Type = class_6_Properties.get_or_create_table("Type");
-    enum_1_Type.set("NONE", 0ll);
-    enum_1_Type.set("STRING", 1ll);
-    enum_1_Type.set("NUMBER", 2ll);
-    enum_1_Type.set("VECTOR2", 3ll);
-    enum_1_Type.set("VECTOR3", 4ll);
-    enum_1_Type.set("VECTOR4", 5ll);
-    enum_1_Type.set("MATRIX", 6ll);
-    auto enum_2_SurfaceUpdateFlag = class_13_RenderViewCore.get_or_create_table("SurfaceUpdateFlag");
-    enum_2_SurfaceUpdateFlag.set("WindowSizeChanged", 1ll);
-    enum_2_SurfaceUpdateFlag.set("RenderSizeChanged", 2ll);
-    enum_2_SurfaceUpdateFlag.set("SilentUpdate", 4ll);
-    enum_2_SurfaceUpdateFlag.set("AllUpdates", 3ll);
-    enum_2_SurfaceUpdateFlag.set("AllUpdatesSilently", 7ll);
+    auto enum_0_LoadPolicy = class_2_ProgramManager.get_or_create_table("LoadPolicy");
+    enum_0_LoadPolicy.set("Required", 0ll);
+    enum_0_LoadPolicy.set("Optional", 1ll);
+    auto enum_1_Type = class_4_ProgressTimer.get_or_create_table("Type");
+    enum_1_Type.set("RADIAL", 0ll);
+    enum_1_Type.set("BAR", 1ll);
+    auto enum_2_Type = class_6_Properties.get_or_create_table("Type");
+    enum_2_Type.set("NONE", 0ll);
+    enum_2_Type.set("STRING", 1ll);
+    enum_2_Type.set("NUMBER", 2ll);
+    enum_2_Type.set("VECTOR2", 3ll);
+    enum_2_Type.set("VECTOR3", 4ll);
+    enum_2_Type.set("VECTOR4", 5ll);
+    enum_2_Type.set("MATRIX", 6ll);
+    auto enum_3_SurfaceUpdateFlag = class_13_RenderViewCore.get_or_create_table("SurfaceUpdateFlag");
+    enum_3_SurfaceUpdateFlag.set("WindowSizeChanged", 1ll);
+    enum_3_SurfaceUpdateFlag.set("RenderSizeChanged", 2ll);
+    enum_3_SurfaceUpdateFlag.set("SilentUpdate", 4ll);
+    enum_3_SurfaceUpdateFlag.set("AllUpdates", 3ll);
+    enum_3_SurfaceUpdateFlag.set("AllUpdatesSilently", 7ll);
 }
 
 } // namespace ax::lua::detail

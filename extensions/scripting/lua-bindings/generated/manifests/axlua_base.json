@@ -22991,6 +22991,27 @@
           "isVariadic": false
         },
         {
+          "nativeName": "loadProgram",
+          "luaName": "loadProgram",
+          "declaringType": "ax::ProgramManager",
+          "returnType": "ax::Program *",
+          "parameterTypes": [
+            "std::string_view",
+            "std::string_view",
+            "ax::VertexLayoutKind",
+            "ax::ProgramManager::LoadPolicy"
+          ],
+          "defaultValues": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "isStatic": false,
+          "isConst": false,
+          "isVariadic": false
+        },
+        {
           "nativeName": "registerCustomProgram",
           "luaName": "registerCustomProgram",
           "declaringType": "ax::ProgramManager",
@@ -37603,6 +37624,25 @@
           "name": "CAPTURED",
           "signedValue": -2147483648,
           "unsignedValue": 2147483648,
+          "isUnsigned": false
+        }
+      ]
+    },
+    {
+      "nativeName": "LoadPolicy",
+      "qualifiedName": "ax::ProgramManager::LoadPolicy",
+      "ownerQualifiedName": "ax::ProgramManager",
+      "values": [
+        {
+          "name": "Required",
+          "signedValue": 0,
+          "unsignedValue": 0,
+          "isUnsigned": false
+        },
+        {
+          "name": "Optional",
+          "signedValue": 1,
+          "unsignedValue": 1,
           "isUnsigned": false
         }
       ]
