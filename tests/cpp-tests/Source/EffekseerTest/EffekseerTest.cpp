@@ -21,6 +21,7 @@ static const TestEffect _effects[] = {
     {"Laser04.efkefc",            "Laser04",                1.0f},
     {"TriggerLaser.efkefc",       "Trigger Laser",          1.0f},
     {"Simple_Distortion.efkefc",  "Simple Distortion",      1.0f},
+    {"Simple_Model_UV.efkefc",    "Simple Model UV",        1.0f},
 
     // GPU particles (require compute/storage/Texture3D backend support)
     {"GpuParticles_sprite_simple.efkefc",    "GPU Sprite Simple",    1.0f},
@@ -31,6 +32,97 @@ static const TestEffect _effects[] = {
     {"GpuParticles_mesh_simple.efkefc",      "GPU Mesh Simple",      1.0f},
 };
 // clang-format on
+
+namespace
+{
+class EffekseerPlainSamplerTest final : public TestCase
+{
+public:
+    CREATE_FUNC(EffekseerPlainSamplerTest);
+
+    std::string title() const override { return "Plain particle wrap and filter"; }
+    std::string subtitle() const override
+    {
+        return "Same texture, UV 0..2. Left: Repeat. Right: Clamp. Top: Nearest. Bottom: Linear.";
+    }
+
+    bool init() override
+    {
+        if (!TestCase::init())
+            return false;
+        _manager.reset(efk::EffectManager::create(_director->getVisibleSize()), tlx::adopt_object);
+        _effect = efk::Effect::create("Simple_Model_UV.efkefc"); // only use the Arrow color texture
+        if (!_manager || !_effect || !_effect->getInternalPtr()->GetColorImage(0))
+        {
+            auto* label = Label::createWithSystemFont("Missing Effekseer renderer or Arrow texture", "Arial", 16);
+            label->setPosition(_director->getVisibleSize() * 0.5f);
+            addChild(label);
+        }
+        return true;
+    }
+
+    void draw(const SceneRenderState& state, const Mat4&, uint32_t) override
+    {
+        if (!_manager || !_manager->getInternalManager() || !_effect || !_effect->getInternalPtr())
+            return;
+        auto renderer = _manager->getInternalRenderer();
+        auto sprite = _manager->getInternalManager()->GetSpriteRenderer();
+        auto effect = _effect->getInternalPtr();
+        if (!sprite || !effect->GetColorImage(0))
+            return;
+
+        using namespace Effekseer;
+        NodeRendererDepthParameter depth;
+        NodeRendererBasicParameter material;
+        material.TextureIndexes[0] = 0;
+        SpriteRenderer::NodeParameter node{};
+        node.EffectPointer = effect.Get();
+        node.Billboard = BillboardType::Fixed;
+        node.IsRightHand = true;
+        node.Maginification = 1.0f;
+        node.DepthParameterPtr = &depth;
+        node.BasicParameterPtr = &material;
+
+        const auto size = _director->getVisibleSize();
+        const float halfSize = size.height * 0.145f;
+        SpriteRenderer::InstanceParameter quad{.Positions = {SIMD::Vec2f(-halfSize, -halfSize),
+                                                            SIMD::Vec2f(halfSize, -halfSize),
+                                                            SIMD::Vec2f(-halfSize, halfSize),
+                                                            SIMD::Vec2f(halfSize, halfSize)},
+                                               .Direction = SIMD::Vec3f(0, 0, 1)};
+        quad.AllColor = Effekseer::Color(255, 255, 255, 255);
+        for (auto& color : quad.Colors)
+            color = quad.AllColor;
+        quad.UV = RectF(0, 0, 2, 2);
+
+        _manager->begin(state, _globalZOrder);
+        renderer->BeginRendering();
+        for (int row = 0; row != 2; ++row)
+        {
+            for (int column = 0; column != 2; ++column)
+            {
+                material.TextureWraps[0] = column == 0 ? TextureWrapType::Repeat : TextureWrapType::Clamp;
+                material.TextureFilters[0] = row == 0 ? TextureFilterType::Nearest : TextureFilterType::Linear;
+                quad.SRTMatrix43 = SIMD::Mat43f::Translation(size.width * (column == 0 ? 0.29f : 0.71f),
+                                                            size.height * (row == 0 ? 0.60f : 0.28f), 0);
+                sprite->BeginRendering(node, 1, nullptr);
+                sprite->Rendering(node, quad, nullptr);
+                sprite->EndRendering(node, nullptr);
+            }
+        }
+        renderer->EndRendering();
+        _manager->end(state, _globalZOrder);
+        state.getRenderer()->addDrawnBatches(renderer->GetDrawCallCount());
+        state.getRenderer()->addDrawnVertices(renderer->GetDrawVertexCount());
+        renderer->ResetDrawCallCount();
+        renderer->ResetDrawVertexCount();
+    }
+
+private:
+    RefPtr<efk::EffectManager> _manager;
+    RefPtr<efk::Effect> _effect;
+};
+} // namespace
 
 //------------------------------------------------------------------
 //
@@ -45,6 +137,8 @@ EffekseerTests::EffekseerTests()
     fu->addSearchPath("Effekseer", true);
 
     ADD_TEST_CASE(EffekseerTest);
+    addEffekseerModelTests(*this);
+    ADD_TEST_CASE(EffekseerPlainSamplerTest);
 }
 
 EffekseerTests::~EffekseerTests()
@@ -82,22 +176,19 @@ std::string EffekseerTest::title() const
     return "EffekseerTest";
 }
 
-bool EffekseerTest::init()
+bool EffekseerViewTest::init()
 {
     if (!TestCase::init())
         return false;
 
-    constexpr float hPadding = 300;
-
-    auto visibleSize = _director->getVisibleSize();
-
-    // 3D camera (perspective) for Effekseer effects
-    _3dCamera = Camera::create(CameraMode::Perspective);
-    _3dCamera->setCameraFlag(CameraFlag::USER1);
-    _3dCamera->setPosition3D(Vec3(0, 10, 24));
-    _3dCamera->lookAt(Vec3(0, 0, 0), Vec3(0, 1, 0));
-    _3dCamera->setBackgroundBrush(CameraBackgroundBrush::createColorBrush(Color(Color32(0, 0, 0)), 1.0f));
-    addChild(_3dCamera);
+    constexpr float radius = 24.0f;
+    constexpr float height = 10.0f;
+    _effectCamera = Camera::create(CameraMode::Perspective);
+    _effectCamera->setCameraFlag(CameraFlag::USER1);
+    _effectCamera->setPosition3D(Vec3(0, height, radius));
+    _effectCamera->lookAt(Vec3::zero, Vec3(0, 1, 0));
+    _effectCamera->setBackgroundBrush(CameraBackgroundBrush::createColorBrush(Color(Color32(0, 0, 0)), 1.0f));
+    addChild(_effectCamera);
 
     // 3D grid
     auto grid                   = DrawNode3D::create();
@@ -117,6 +208,35 @@ bool EffekseerTest::init()
     grid->setCameraMask(static_cast<unsigned short>(CameraFlag::USER1));
     addChild(grid, -10);
 
+    auto orbit = PointerEventListener::create();
+    orbit->onPointerHitTest = [](PointerEvent* event, Vec3* hit) {
+        // Drag on the whole viewport, not just where the pointer ray hits scene geometry.
+        if (event->getCamera()->getCameraFlag() != CameraFlag::DEFAULT)
+            return false;
+        const auto point = event->getWorldPoint();
+        *hit = Vec3(point.x, point.y, 0);
+        return true;
+    };
+    orbit->onPointerDown = [](PointerEvent* event) { return event->isPrimaryPressed(); };
+    orbit->onPointerMove = [this](PointerEvent* event) {
+        if (!event->isCaptured())
+            return;
+        // Use pointer displacement on screen so orbit speed is independent of the camera angle.
+        _orbitAngle -= MathUtil::radians(event->getPoint().x - event->getPrevPoint().x);
+        _effectCamera->setPosition3D(Vec3(radius * sinf(_orbitAngle), height, radius * cosf(_orbitAngle)));
+        _effectCamera->lookAt(Vec3::zero, Vec3(0, 1, 0));
+    };
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(orbit, this);
+    return true;
+}
+
+bool EffekseerTest::init()
+{
+    if (!EffekseerViewTest::init())
+        return false;
+
+    auto visibleSize = _director->getVisibleSize();
+
     // Create effect manager
     _manager = efk::EffectManager::create(visibleSize);
     _manager->setIsDistortionEnabled(true);
@@ -130,7 +250,8 @@ bool EffekseerTest::init()
     auto prevBtn = ui::Button::create();
     prevBtn->setTitleText("<< Prev");
     prevBtn->setTitleFontSize(20);
-    prevBtn->setPosition(Vec2(visibleSize.width - hPadding, 30));
+    // Leave the bottom row free for the suite's model test navigation.
+    prevBtn->setPosition(Vec2(visibleSize.width * 0.25f, visibleSize.height * 0.22f));
     prevBtn->addClickEventListener([this](auto*) { switchEffect(-1); });
     addChild(prevBtn, 10);
 
@@ -138,7 +259,7 @@ bool EffekseerTest::init()
     auto nextBtn = ui::Button::create();
     nextBtn->setTitleText("Next >>");
     nextBtn->setTitleFontSize(20);
-    nextBtn->setPosition(Vec2(hPadding, 30));
+    nextBtn->setPosition(Vec2(visibleSize.width * 0.75f, visibleSize.height * 0.22f));
     nextBtn->addClickEventListener([this](auto*) { switchEffect(1); });
     addChild(nextBtn, 10);
 
@@ -152,13 +273,6 @@ bool EffekseerTest::init()
             switchEffect(1);
     };
     _eventDispatcher->addEventListenerWithSceneGraphPriority(kb, this);
-
-    // Pointer: drag to orbit camera
-    auto pointerListener           = PointerEventListener::create();
-    pointerListener->onPointerDown = AX_CALLBACK_1(EffekseerTest::onPointerDown, this);
-    pointerListener->onPointerMove = AX_CALLBACK_1(EffekseerTest::onPointerMove, this);
-    pointerListener->onPointerUp   = AX_CALLBACK_1(EffekseerTest::onPointerUp, this);
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(pointerListener, this);
 
     scheduleUpdate();
 
@@ -175,24 +289,6 @@ void EffekseerTest::switchEffect(int direction)
     _currentIndex               = (_currentIndex + direction + EFFECT_COUNT) % EFFECT_COUNT;
     playCurrentEffect();
 }
-
-bool EffekseerTest::onPointerDown(ax::PointerEvent* event)
-{
-    return true;
-}
-
-void EffekseerTest::onPointerMove(ax::PointerEvent* event)
-{
-    if (!event->isCaptured())
-        return;
-
-    auto delta = event->getWorldPoint() - event->getPrevWorldPoint();
-    _angle -= MathUtil::radians(delta.x);
-    _3dCamera->setPosition3D(Vec3(24.0f * sinf(_angle), 10.0f, 24.0f * cosf(_angle)));
-    _3dCamera->lookAt(Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 1.0f, 0.0f));
-}
-
-void EffekseerTest::onPointerUp(ax::PointerEvent* event) {}
 
 void EffekseerTest::playCurrentEffect()
 {

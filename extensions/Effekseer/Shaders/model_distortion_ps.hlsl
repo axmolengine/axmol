@@ -18,10 +18,13 @@ cbuffer fs_ub
 };
 
 Texture2D u_tex0;
+SamplerState sampler_colorTex;
 Texture2D u_tex1;
+SamplerState sampler_backTex;
 
 #ifndef DISABLED_SOFT_PARTICLE
 Texture2D u_tex2;
+SamplerState sampler_depthTex;
 #endif
 
 struct PS_IN
@@ -38,7 +41,7 @@ struct PS_IN
 
 float4 main(PS_IN input) : SV_Target0
 {
-    float4 output = u_tex0.Sample(LinearClamp, input.v_texCoord);
+    float4 output = u_tex0.Sample(sampler_colorTex, input.v_texCoord);
     output.a = output.a * input.v_color.a;
 
     float2 pos = input.v_posP.xy / input.v_posP.w;
@@ -55,7 +58,7 @@ float4 main(PS_IN input) : SV_Target0
 
     uv.y = mUVInversedBack.x + mUVInversedBack.y * uv.y;
 
-    float3 color = u_tex1.Sample(LinearClamp, uv);
+    float3 color = u_tex1.Sample(sampler_backTex, uv);
     output.xyz = color;
 
 #ifndef DISABLED_SOFT_PARTICLE
@@ -66,7 +69,7 @@ float4 main(PS_IN input) : SV_Target0
 
     if (softParticleParam.w != 0.0f)
     {
-        float backgroundZ = u_tex2.Sample(LinearClamp, screenUV).x;
+        float backgroundZ = u_tex2.Sample(sampler_depthTex, screenUV).x;
         output.a *= SoftParticle(
             backgroundZ,
             screenPos.z,

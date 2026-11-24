@@ -1,4 +1,5 @@
 #include "EffekseerRendererAxmol.h"
+#include "EffekseerModelShader.h"
 
 #include "axmol/rhi/GraphicsDevice.h"
 #include "axmol/rhi/GraphicsCore.h"
@@ -11,6 +12,8 @@
 #include "axmol/platform/RenderViewCore.h"
 #include "axmol/renderer/ProgramManager.h"
 #include "axmol/renderer/Texture2D.h"
+#include "axmol/renderer/TextureCache.h"
+#include "axmol/base/CustomEventListener.h"
 #include "axmol/base/EventDispatcher.h"
 #include "axmol/base/EventType.h"
 #include <EffekseerRendererCommon/EffekseerRenderer.CommonUtils.h>
@@ -53,15 +56,6 @@ public:
 private:
     bool _previous = true;
 };
-
-float ToSamplerMode(Effekseer::TextureFilterType filter, Effekseer::TextureWrapType wrap)
-{
-    const bool nearest = filter == Effekseer::TextureFilterType::Nearest;
-    const bool repeat = wrap == Effekseer::TextureWrapType::Repeat || wrap == Effekseer::TextureWrapType::Mirror;
-    if (nearest)
-        return repeat ? 3.0f : 2.0f;
-    return repeat ? 1.0f : 0.0f;
-}
 
 ax::rhi::SamplerDesc ToSamplerDesc(Effekseer::TextureFilterType filter, Effekseer::TextureWrapType wrap)
 {
@@ -314,11 +308,62 @@ public:
         param_.MipLevelCount = _texture ? _texture->getMipLevels() : 1;
     }
 
-    ~TextureAX() override { AX_SAFE_RELEASE(_texture); }
+    TextureAX(ax::Texture2D* texture, ax::Image* image) : TextureAX(texture->getRHITexture())
+    {
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
+        if (ax::rhi::GraphicsCore::isOpenGL())
+        {
+            // Keep the Texture2D registered until the Effekseer resource is released.
+            // Retain the decoded image (including straight-alpha pixels), not a file path.
+            _owner = texture;
+            ax::VolatileTextureMgr::addImage(texture, image);
+        }
+#endif
+    }
+
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
+    void preserveInitialData(const Effekseer::CustomVector<uint8_t>& pixels)
+    {
+        if (pixels.empty() || param_.Dimension != 2 || !ax::rhi::GraphicsCore::isOpenGL())
+            return;
+        if (_recreated && _eventDispatcher)
+        {
+            _eventDispatcher->removeEventListener(_recreated);
+            _recreated = nullptr;
+        }
+        if (!_eventDispatcher)
+        {
+            _eventDispatcher = ax::Director::getInstance()->getEventDispatcher();
+            AX_SAFE_RETAIN(_eventDispatcher);
+        }
+        if (!_eventDispatcher)
+            return;
+        // Raw textures (notably white/normal proxies) bypass VolatileTextureMgr.
+        _recreated = ax::CustomEventListener::create(EVENT_RENDERER_RECREATED, [this, pixels](ax::CustomEvent*) {
+            _texture->invalidate();
+            _texture->updateData(pixels.data(), param_.Size[0], param_.Size[1], 0, 0);
+        });
+        _eventDispatcher->addEventListenerWithFixedPriority(_recreated, 1);
+    }
+#endif
+    ~TextureAX() override
+    {
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
+        if (_recreated && _eventDispatcher)
+            _eventDispatcher->removeEventListener(_recreated);
+        AX_SAFE_RELEASE(_eventDispatcher);
+#endif
+        AX_SAFE_RELEASE(_texture);
+    }
     ax::rhi::Texture* get() const { return _texture; }
 
 private:
     ax::rhi::Texture* _texture = nullptr;
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
+    ax::RefPtr<ax::Texture2D> _owner;
+    ax::EventDispatcher* _eventDispatcher = nullptr;
+    ax::CustomEventListener* _recreated = nullptr;
+#endif
 };
 
 class VertexLayoutAX : public Effekseer::Backend::VertexLayout
@@ -334,7 +379,7 @@ public:
      * descriptions. The location/semantic index must come from the program
      * reflection (backends remap them differently), never from manual values.
      */
-    void buildLayout(ax::rhi::Program* program)
+    void buildLayout(ax::rhi::Program* program, bool model = false)
     {
         AX_SAFE_RELEASE(_layout);
         if (!program || _elements.empty())
@@ -342,6 +387,7 @@ public:
 
         ax::rhi::VertexLayoutDesc desc;
         desc.startLayout(_elements.size());
+        size_t matched = 0;
         size_t offset = 0;
         for (const auto& el : _elements)
         {
@@ -379,11 +425,19 @@ public:
 
             auto inputDesc = program->getVertexInputDesc(
                 ax::rhi::VertexSemantic{el.SemanticName.c_str(), static_cast<uint16_t>(el.SemanticIndex)});
-            if (!inputDesc)
+            if (inputDesc)
+            {
+                desc.addAttrib(inputDesc, elementType, offset, needNormalize);
+                ++matched;
+            }
+            else if (!model)
                 return;
-            desc.addAttrib(inputDesc, elementType, offset, needNormalize);
+            // An optimized-out UV2/normal does not remove its bytes from the model VB.
             offset += elementSize;
         }
+        if (model && (matched != program->getActiveVertexInputs().size() || offset != sizeof(Effekseer::Model::Vertex) ||
+                      !program->getVertexInputDesc(ax::rhi::VertexSemantic::POSITION)))
+            return;
         desc.endLayout(static_cast<int>(offset));
 
         _layout = ax::rhi::GraphicsCore::device()->createVertexLayout(std::move(desc));
@@ -658,6 +712,9 @@ public:
                 texture->updateData(initialData.data(), desc.width, desc.height, 0, 0);
         }
         auto ret = Effekseer::MakeRefPtr<TextureAX>(texture);
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
+        ret->preserveInitialData(initialData);
+#endif
         AX_SAFE_RELEASE(texture);
         return ret;
     }
@@ -1087,8 +1144,32 @@ private:
 class DistortingCallbackAxmol : public EffekseerRenderer::DistortingCallback
 {
 public:
-    DistortingCallbackAxmol() = default;
-    ~DistortingCallbackAxmol() override { AX_SAFE_RELEASE(_backgroundTexture); }
+    DistortingCallbackAxmol()
+    {
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
+        _eventDispatcher = ax::Director::getInstance()->getEventDispatcher();
+        AX_SAFE_RETAIN(_eventDispatcher);
+        if (_eventDispatcher)
+        {
+            _recreated = ax::CustomEventListener::create(EVENT_RENDERER_RECREATED, [this](ax::CustomEvent*) {
+                if (_backgroundTexture)
+                    _backgroundTexture->invalidate();
+                _efkTexture = nullptr;
+                AX_SAFE_RELEASE_NULL(_backgroundTexture); // recapture at current attachment size next time
+            });
+            _eventDispatcher->addEventListenerWithFixedPriority(_recreated, 1);
+        }
+#endif
+    }
+    ~DistortingCallbackAxmol() override
+    {
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
+        if (_recreated && _eventDispatcher)
+            _eventDispatcher->removeEventListener(_recreated);
+        AX_SAFE_RELEASE(_eventDispatcher);
+#endif
+        AX_SAFE_RELEASE(_backgroundTexture);
+    }
 
     bool OnDistorting(EffekseerRenderer::Renderer* renderer) override
     {
@@ -1165,6 +1246,10 @@ private:
         }
     }
 
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
+    ax::EventDispatcher* _eventDispatcher = nullptr;
+    ax::CustomEventListener* _recreated = nullptr;
+#endif
     ax::Texture2D* _backgroundTexture = nullptr;
     ax::rhi::PixelFormat _backgroundFormat = ax::rhi::PixelFormat::NONE;
     Effekseer::Backend::TextureRef _efkTexture;
@@ -1177,13 +1262,25 @@ EffekseerRenderer::DistortingCallback* createDistortingCallback()
     return new DistortingCallbackAxmol();
 }
 
-class Shader : public EffekseerRenderer::ShaderBase
+ax::rhi::VertexLayout* createModelLayout(Effekseer::Backend::GraphicsDeviceRef device, ax::rhi::Program* program)
+{
+    using Vertex = Effekseer::Model::Vertex;
+    static_assert(sizeof(Vertex) == 68 && offsetof(Vertex, UV1) == 48 && offsetof(Vertex, VColor) == 64);
+    auto layout = EffekseerRenderer::GetModelRendererVertexLayout(device).DownCast<VertexLayoutAX>();
+    if (!layout)
+        return nullptr;
+    layout->buildLayout(program, true);
+    auto result = layout->get();
+    AX_SAFE_RETAIN(result);
+    return result;
+}
+
+class Shader : public DrawShader
 {
 public:
-    Shader(const std::string& vsName, const std::string& psName, bool isDistortion = false)
+    Shader(ax::rhi::Program* program, bool isDistortion)
     {
         _isDistortion = isDistortion;
-        auto program = ax::ProgramManager::getInstance()->loadProgram(vsName, psName);
         _programState = new ax::rhi::ProgramState(program);
         _program = program;
 
@@ -1199,7 +1296,6 @@ public:
         _reconstructionParam1Location = _programState->getUniformLocation("reconstructionParam1");
         _reconstructionParam2Location = _programState->getUniformLocation("reconstructionParam2");
         _uvInversedBackLocation = _programState->getUniformLocation("mUVInversedBack");
-        _samplerModesLocation = _programState->getUniformLocation("fSamplerModes");
 
         if (isDistortion)
         {
@@ -1231,12 +1327,9 @@ public:
 
         _samplerLocations[0] = _program->getSamplerLocation("sampler_colorTex");
         _samplerLocations[1] = _program->getSamplerLocation(isDistortion ? "sampler_backTex" : "sampler_normalTex");
-        _samplerLocations[2] = _program->getSamplerLocation("sampler_alphaTex");
-        _samplerLocations[3] = _program->getSamplerLocation("sampler_uvDistortionTex");
-        _samplerLocations[4] = _program->getSamplerLocation("sampler_blendTex");
-        _samplerLocations[5] = _program->getSamplerLocation("sampler_blendAlphaTex");
-        _samplerLocations[6] = _program->getSamplerLocation("sampler_blendUVDistortionTex");
-        _samplerLocations[7] = _program->getSamplerLocation("sampler_depthTex");
+        // Unlit has color/depth; lit and distortion have color/normal-or-background/depth.
+        const int depthSlot = _samplerLocations[1] ? 2 : 1;
+        _samplerLocations[depthSlot] = _program->getSamplerLocation("sampler_depthTex");
     }
 
     ~Shader() override
@@ -1305,14 +1398,9 @@ public:
         }
     }
 
-    ax::rhi::ProgramState* programState() const { return _programState; }
+    ax::rhi::ProgramState* programState() const override { return _programState; }
 
-    void SetSamplerModes(const float* modes)
-    {
-        _programState->setUniform(_samplerModesLocation, modes, sizeof(float) * 4);
-    }
-
-    ax::rhi::VertexLayout* vertexLayout(int32_t stride)
+    ax::rhi::VertexLayout* vertexLayout(int32_t stride) override
     {
         auto it = _vertexLayouts.find(stride);
         if (it != _vertexLayouts.end())
@@ -1347,21 +1435,19 @@ public:
         return layout;
     }
 
-    void setTexture(int slot, ax::rhi::Texture* texture)
+    void setTexture(int slot, ax::rhi::Texture* texture) override
     {
-        if (texture && slot >= 0 && slot < 8)
-            _programState->setTexture(_textureLocations[slot], slot, texture);
+        if (texture && slot >= 0 && slot < 8 && _textureLocations[slot])
+            _programState->setTexture(_textureLocations[slot], _textureLocations[slot].location, texture);
     }
 
-    bool setSampler(int slot, const ax::rhi::SamplerDesc& samplerDesc)
+    void setSampler(int slot, const ax::rhi::SamplerDesc& samplerDesc) override
     {
-        if (slot < 0 || slot >= 8 || !_samplerLocations[slot])
-            return false;
-        _programState->setSampler(_samplerLocations[slot], samplerDesc);
-        return true;
+        if (slot >= 0 && slot < 8 && _samplerLocations[slot])
+            _programState->setSampler(_samplerLocations[slot], samplerDesc);
     }
 
-    void setDefaultTextures(ax::rhi::Texture* texture)
+    void setDefaultTextures(ax::rhi::Texture* texture) override
     {
         if (!texture)
             return;
@@ -1398,7 +1484,6 @@ private:
     ax::rhi::UniformLocation _reconstructionParam1Location;
     ax::rhi::UniformLocation _reconstructionParam2Location;
     ax::rhi::UniformLocation _uvInversedBackLocation;
-    ax::rhi::UniformLocation _samplerModesLocation;
 
     ax::rhi::UniformLocation _distortionIntensityLocation;
 
@@ -1433,7 +1518,6 @@ public:
 
     Effekseer::TextureRef Load(const char16_t* path, Effekseer::TextureType textureType) override
     {
-        AX_UNUSED_PARAM(textureType);
         char utf8[512];
         Effekseer::ConvertUtf16ToUtf8(utf8, sizeof(utf8), path);
 
@@ -1452,48 +1536,27 @@ public:
             data = ax::FileUtils::getInstance()->getDataFromFile(utf8);
         }
 
-        if (data.isNull())
+        if (data.isNull() || data.getSize() > (std::numeric_limits<int32_t>::max)())
             return nullptr;
-
-        ax::Image image;
-        {
-            ScopedPNGStraightAlpha straightAlpha;
-            if (!image.initWithImageData(data.getBytes(), data.getSize()))
-                return nullptr;
-        }
-
-        auto texture = new ax::Texture2D();
-        if (!texture->initWithImage(&image))
-        {
-            texture->release();
-            return nullptr;
-        }
-
-        auto backendTexture = Effekseer::MakeRefPtr<TextureAX>(texture->getRHITexture());
-        texture->release();
-        auto efkTexture = Effekseer::MakeRefPtr<Effekseer::Texture>();
-        efkTexture->SetBackend(backendTexture);
-        return efkTexture;
+        return Load(data.getBytes(), static_cast<int32_t>(data.getSize()), textureType, false);
     }
 
     Effekseer::TextureRef Load(const void* data, int32_t size, Effekseer::TextureType textureType, bool isMipMapEnabled) override
     {
         AX_UNUSED_PARAM(textureType);
         AX_UNUSED_PARAM(isMipMapEnabled);
-        ax::Image image;
+        if (!data || size <= 0)
+            return nullptr;
+        ax::RefPtr<ax::Image> image(new ax::Image(), tlx::adopt_object);
         {
             ScopedPNGStraightAlpha straightAlpha;
-            if (!image.initWithImageData(static_cast<const uint8_t*>(data), size))
+            if (!image->initWithImageData(static_cast<const uint8_t*>(data), size))
                 return nullptr;
         }
-        auto texture = new ax::Texture2D();
-        if (!texture->initWithImage(&image))
-        {
-            texture->release();
+        ax::RefPtr<ax::Texture2D> texture(new ax::Texture2D(), tlx::adopt_object);
+        if (!texture->initWithImage(image.get()))
             return nullptr;
-        }
-        auto backendTexture = Effekseer::MakeRefPtr<TextureAX>(texture->getRHITexture());
-        texture->release();
+        auto backendTexture = Effekseer::MakeRefPtr<TextureAX>(texture.get(), image.get());
         auto efkTexture = Effekseer::MakeRefPtr<Effekseer::Texture>();
         efkTexture->SetBackend(backendTexture);
         return efkTexture;
@@ -1665,6 +1728,11 @@ Renderer::Renderer(int32_t squareMaxCount) : _squareMaxCount(squareMaxCount) {}
 
 Renderer::~Renderer()
 {
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
+    if (_standardShadersRecreated && _eventDispatcher)
+        _eventDispatcher->removeEventListener(_standardShadersRecreated);
+    AX_SAFE_RELEASE(_eventDispatcher);
+#endif
     ReleaseCachedCommands();
     _currentVertexBuffer = nullptr;
     _currentIndexBuffer = nullptr;
@@ -1697,12 +1765,61 @@ bool Renderer::initialize()
     }
     _indexBuffer = _graphicsDevice->CreateIndexBuffer(static_cast<int32_t>(indices.size()), indices.data(), Effekseer::Backend::IndexBufferStrideType::Stride2);
 
-    GetImpl()->ShaderUnlit = std::make_unique<Shader>("custom/sprite_unlit_vs", "custom/model_ps");
-    GetImpl()->ShaderLit = std::make_unique<Shader>("custom/sprite_unlit_vs_1", "custom/model_ps_1");
-    GetImpl()->ShaderDistortion = std::make_unique<Shader>("custom/sprite_unlit_vs_2", "custom/model_distortion_ps_1", true);
-    GetImpl()->ShaderAdUnlit = std::make_unique<Shader>("custom/sprite_unlit_vs", "custom/model_ps");
-    GetImpl()->ShaderAdLit = std::make_unique<Shader>("custom/sprite_unlit_vs_1", "custom/model_ps_1");
-    GetImpl()->ShaderAdDistortion = std::make_unique<Shader>("custom/sprite_unlit_vs_2", "custom/model_distortion_ps_1", true);
+    if (!initializeStandardShaders())
+        return false;
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
+    _eventDispatcher = ax::Director::getInstance()->getEventDispatcher();
+    AX_SAFE_RETAIN(_eventDispatcher);
+    if (_eventDispatcher)
+    {
+        _standardShadersRecreated = ax::CustomEventListener::create(EVENT_RENDERER_RECREATED, [this](ax::CustomEvent*) {
+            // Rebind programs on the next draw, after sampler registry recovery has completed.
+            _standardShadersDirty = true;
+        });
+        _eventDispatcher->addEventListenerWithFixedPriority(_standardShadersRecreated, 1);
+    }
+#endif
+    GetImpl()->CreateProxyTextures(this);
+    return true;
+}
+
+bool Renderer::initializeStandardShaders()
+{
+    auto* registry = ax::rhi::SamplerRegistry::getInstance();
+    for (const char* name : {"sampler_colorTex", "sampler_normalTex", "sampler_backTex", "sampler_depthTex"})
+        if (!registry->registerSampler(name, ax::rhi::SamplerDesc{}))
+            return false;
+
+    auto* pm = ax::ProgramManager::getInstance();
+    auto load = [pm](const char* vs, const char* ps) {
+        using Policy = ax::ProgramManager::LoadPolicy;
+        auto* program = pm->loadProgram(vs, ps, ax::VertexLayoutKind::Invalid, Policy::Optional);
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
+        // An old cached program can reference sampler IDs from before the registry rebuild.
+        auto* registry = ax::rhi::SamplerRegistry::getInstance();
+        if (program && (!program->isValid() || std::any_of(program->getActiveSamplerInfos().begin(),
+                program->getActiveSamplerInfos().end(), [registry](const auto& sampler) {
+                    return sampler.samplerId.value != registry->find(sampler.name).value;
+                })))
+        {
+            pm->unloadProgram(program);
+            program = pm->loadProgram(vs, ps, ax::VertexLayoutKind::Invalid, Policy::Optional);
+        }
+#endif
+        return program;
+    };
+    auto* unlit = load("custom/sprite_unlit_vs", "custom/model_ps");
+    auto* lit = load("custom/sprite_unlit_vs_1", "custom/model_ps_1");
+    auto* distortion = load("custom/sprite_unlit_vs_2", "custom/model_distortion_ps_1");
+    if (!unlit || !lit || !distortion)
+        return false;
+
+    GetImpl()->ShaderUnlit = std::make_unique<Shader>(unlit, false);
+    GetImpl()->ShaderLit = std::make_unique<Shader>(lit, false);
+    GetImpl()->ShaderDistortion = std::make_unique<Shader>(distortion, true);
+    GetImpl()->ShaderAdUnlit = std::make_unique<Shader>(unlit, false);
+    GetImpl()->ShaderAdLit = std::make_unique<Shader>(lit, false);
+    GetImpl()->ShaderAdDistortion = std::make_unique<Shader>(distortion, true);
     for (auto* shader : {GetImpl()->ShaderUnlit.get(), GetImpl()->ShaderLit.get(), GetImpl()->ShaderDistortion.get(),
                          GetImpl()->ShaderAdUnlit.get(), GetImpl()->ShaderAdLit.get(), GetImpl()->ShaderAdDistortion.get()})
     {
@@ -1710,14 +1827,19 @@ bool Renderer::initialize()
         shader->SetPixelConstantBufferSize(sizeof(EffekseerRenderer::PixelConstantBuffer));
     }
 
-    GetImpl()->CreateProxyTextures(this);
-    // process at shader
-    // GetImpl()->SetBackgroundTextureUVStyle(EffekseerRenderer::UVStyle::VerticalFlipped);
     return true;
 }
 
 bool Renderer::BeginRendering()
 {
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
+    if (_standardShadersDirty)
+    {
+        _standardShadersDirty = false;
+        if (!initializeStandardShaders())
+            AXLOGE("Failed to restore Effekseer standard particle shaders");
+    }
+#endif
     GetImpl()->CalculateCameraProjectionMatrix();
     _renderState->GetActiveState().Reset();
     _renderState->Update(true);
@@ -1777,9 +1899,58 @@ Effekseer::RingRendererRef Renderer::CreateRingRenderer()
     return Effekseer::MakeRefPtr<RendererAdapter<EffekseerRenderer::RingRendererBase<Renderer, false>>>(this);
 }
 
+namespace
+{
+class ModelRenderer final : public EffekseerRenderer::ModelRendererBase
+{
+public:
+    explicit ModelRenderer(Renderer* renderer) : _renderer(renderer) {}
+
+    void BeginRendering(const NodeParameter& param, int32_t count, void* userData) override
+    {
+        BeginRendering_(_renderer, param, count, userData);
+    }
+    void Rendering(const NodeParameter& param, const InstanceParameter& instance, void* userData) override
+    {
+        Rendering_(_renderer, param, instance, userData);
+    }
+    void EndRendering(const NodeParameter& param, void* userData) override
+    {
+        if (matrixes_.empty() || (!param.IsExternalMode && param.ModelIndex < 0) ||
+            param.BasicParameterPtr->MaterialType == Effekseer::RendererMaterialType::File)
+            return; // file materials have a different constant buffer ABI
+
+        auto model = param.IsExternalMode ? param.ExternalModel : param.IsProceduralMode
+                       ? param.EffectPointer->GetProceduralModel(param.ModelIndex)
+                       : param.EffectPointer->GetModel(param.ModelIndex);
+        if (!model || model->GetFrameCount() <= 0)
+            return;
+
+        auto device = _renderer->GetGraphicsDevice();
+        auto* shader = _shaders.acquire(collector_.ShaderType, device);
+        if (!shader)
+            return;
+        if (!model->GetIsBufferStoredOnGPU() && !model->StoreBufferToGPU(device.Get()))
+            return;
+        if (_renderer->GetRenderMode() == Effekseer::RenderMode::Wireframe && !model->GenerateWireIndexBuffer(device.Get()))
+            return;
+
+        // BeginRendering_ already selected this node's fixed shader via the collector.
+        // The base also dereferences the unlit slot for OverrideShader even for lit
+        // draws. Supply the selected shader in every slot; no other variant is needed.
+        EndRendering_<Renderer, DrawShader, Effekseer::Model, false, 1>(
+            _renderer, shader, shader, shader, shader, shader, shader, param, userData);
+    }
+
+private:
+    Renderer* _renderer;
+    ModelShaderCache _shaders;
+};
+} // namespace
+
 Effekseer::ModelRendererRef Renderer::CreateModelRenderer()
 {
-    return nullptr;
+    return Effekseer::MakeRefPtr<ModelRenderer>(this);
 }
 
 Effekseer::TrackRendererRef Renderer::CreateTrackRenderer()
@@ -1880,7 +2051,7 @@ void Renderer::SetPixelBufferToShader(const void* data, int32_t size, int32_t ds
 
 void Renderer::SetTextures(EffekseerRenderer::ShaderBase* shaderBase, Effekseer::Backend::TextureRef* textures, int32_t count)
 {
-    auto shader = static_cast<Shader*>(shaderBase);
+    auto shader = static_cast<DrawShader*>(shaderBase);
     if (!shader)
         return;
 
@@ -1888,39 +2059,38 @@ void Renderer::SetTextures(EffekseerRenderer::ShaderBase* shaderBase, Effekseer:
     if (proxyTexture && proxyTexture->get())
         shader->setDefaultTextures(proxyTexture->get());
 
-    float samplerModes[4] = {};
     const auto& state = _renderState->GetActiveState();
     for (int32_t i = 0; i < count; i++)
     {
-        if (i < 4)
-            samplerModes[i] = ToSamplerMode(state.TextureFilterTypes[i], state.TextureWrapTypes[i]);
-
-        auto texture = textures[i].DownCast<TextureAX>();
-        if (texture && texture->get())
-        {
-            auto samplerDesc = ToSamplerDesc(state.TextureFilterTypes[i], state.TextureWrapTypes[i]);
-            if (!shader->setSampler(i, samplerDesc))
-                texture->get()->updateSamplerDesc(samplerDesc);
+        // Sampler overrides belong to the queued draw, not to the shared texture.
+        shader->setSampler(i, ToSamplerDesc(state.TextureFilterTypes[i], state.TextureWrapTypes[i]));
+        if (auto texture = textures[i].DownCast<TextureAX>(); texture && texture->get())
             shader->setTexture(i, texture->get());
-        }
     }
-    shader->SetSamplerModes(samplerModes);
 }
 
 void Renderer::DrawSprites(int32_t spriteCount, int32_t vertexOffset)
 {
-    if (!_axRenderer || !_currentShader || !_currentVertexBuffer || !_currentIndexBuffer || spriteCount <= 0)
+    if (spriteCount > 0 && spriteCount <= (std::numeric_limits<int32_t>::max)() / 6)
+        submitIndexed(Geometry::SpriteSnapshot, spriteCount * 4, spriteCount * 6, vertexOffset);
+}
+
+void Renderer::submitIndexed(Geometry geometry, int32_t vertexCount, int32_t indexCount, int32_t vertexOffset)
+{
+    if (!_axRenderer || !_currentShader || !_currentVertexBuffer || !_currentIndexBuffer ||
+        vertexCount <= 0 || indexCount <= 0 || _currentVertexStride <= 0 || vertexOffset < 0)
         return;
 
-    auto shader = static_cast<Shader*>(_currentShader);
-    shader->SetConstantBuffer();
+    const bool model = geometry == Geometry::StaticModel;
+    auto shader = static_cast<DrawShader*>(_currentShader);
+    if (!model) // ModelRendererBase commits the constants immediately before DrawPolygon.
+        shader->SetConstantBuffer();
 
     auto vb = static_cast<VertexBufferAX*>(_currentVertexBuffer.Get());
     auto ib = static_cast<IndexBufferAX*>(_currentIndexBuffer.Get());
-    const auto vertexCount = static_cast<size_t>(spriteCount * 4);
-    const auto vertexBytes = vertexCount * static_cast<size_t>(_currentVertexStride);
-    const auto vertexOffsetBytes = static_cast<size_t>(vertexOffset) * static_cast<size_t>(_currentVertexStride);
-    if (vertexOffsetBytes + vertexBytes > vb->shadowSize())
+    const size_t capacity = vb->shadowSize() / static_cast<size_t>(_currentVertexStride);
+    if (static_cast<size_t>(vertexOffset) > capacity || static_cast<size_t>(vertexCount) > capacity - vertexOffset ||
+        indexCount > ib->getElementCount())
         return;
 
     if (_commandIndex >= _commands.size())
@@ -1931,26 +2101,41 @@ void Renderer::DrawSprites(int32_t spriteCount, int32_t vertexOffset)
 
     auto* command = _commands[_commandIndex].get();
     auto strideChanged = _commandStrides[_commandIndex] != static_cast<size_t>(_currentVertexStride);
-    _commandStrides[_commandIndex] = static_cast<size_t>(_currentVertexStride);
+    // Zero marks an externally owned static VB: a subsequent sprite must allocate
+    // its own buffer even if its stride/capacity would otherwise match.
+    _commandStrides[_commandIndex] = model ? 0 : static_cast<size_t>(_currentVertexStride);
     _commandIndex++;
     command->init(_globalZOrder);
     command->setOwnPSVL(shader->programState()->clone(), shader->vertexLayout(_currentVertexStride), ax::RenderCommand::ADOPT_FLAG_PS);
     command->setDrawType(ax::CustomCommand::DrawType::ELEMENT);
-    command->setPrimitiveType(ax::CustomCommand::PrimitiveType::TRIANGLE);
+    command->setPrimitiveType(model && GetRenderMode() == Effekseer::RenderMode::Wireframe
+                                  ? ax::CustomCommand::PrimitiveType::LINE : ax::CustomCommand::PrimitiveType::TRIANGLE);
     command->setTransparent(true);
 
+    const auto cull = _renderState->GetActiveState().CullingType;
+    const auto cullMode = cull == Effekseer::CullingType::Front ? ax::rhi::CullMode::FRONT :
+                          cull == Effekseer::CullingType::Back ? ax::rhi::CullMode::BACK : ax::rhi::CullMode::NONE;
     const auto depthTest = _renderState->GetActiveState().DepthTest;
     const auto depthWrite = _renderState->GetActiveState().DepthWrite;
-    struct DepthStateBackup
+    struct DrawStateBackup
     {
+        ax::rhi::CullMode cullMode;
+        ax::rhi::Winding winding;
         bool depthTest = false;
         bool depthWrite = false;
         ax::rhi::CompareFunc compareFunc = ax::rhi::CompareFunc::LESS;
     };
-    auto depthStateBackup = std::make_shared<DepthStateBackup>();
-    command->setBeforeCallback([renderer = _axRenderer, depthStateBackup, depthTest, depthWrite]() {
+    auto depthStateBackup = std::make_shared<DrawStateBackup>();
+    command->setBeforeCallback([renderer = _axRenderer, depthStateBackup, depthTest, depthWrite, model, cullMode]() {
         if (!renderer)
             return;
+        if (model)
+        {
+            depthStateBackup->cullMode = renderer->getCullMode();
+            depthStateBackup->winding = renderer->getWinding();
+            renderer->setCullMode(cullMode);
+            renderer->setWinding(ax::rhi::Winding::COUNTER_CLOCK_WISE);
+        }
         depthStateBackup->depthTest = renderer->getDepthTest();
         depthStateBackup->depthWrite = renderer->getDepthWrite();
         depthStateBackup->compareFunc = renderer->getDepthCompareFunc();
@@ -1958,20 +2143,31 @@ void Renderer::DrawSprites(int32_t spriteCount, int32_t vertexOffset)
         renderer->setDepthWrite(depthWrite);
         renderer->setDepthCompareFunc(ax::rhi::CompareFunc::LESS_EQUAL);
     });
-    command->setAfterCallback([renderer = _axRenderer, depthStateBackup]() {
+    command->setAfterCallback([renderer = _axRenderer, depthStateBackup, model]() {
         if (!renderer)
             return;
+        if (model)
+        {
+            renderer->setCullMode(depthStateBackup->cullMode);
+            renderer->setWinding(depthStateBackup->winding);
+        }
         renderer->setDepthTest(depthStateBackup->depthTest);
         renderer->setDepthWrite(depthStateBackup->depthWrite);
         renderer->setDepthCompareFunc(depthStateBackup->compareFunc);
     });
 
-    if (command->getVertexCapacity() < vertexCount || strideChanged)
-        command->createVertexBuffer(static_cast<size_t>(_currentVertexStride), vertexCount, ax::CustomCommand::BufferUsage::DYNAMIC);
-    command->updateVertexBuffer(vb->shadowData() + vertexOffsetBytes, vertexBytes);
-
-    command->setIndexBuffer(ib->get(), ax::CustomCommand::IndexFormat::U_SHORT);
-    command->setIndexDrawInfo(0, static_cast<size_t>(spriteCount * 6));
+    if (model)
+        command->setVertexBuffer(vb->get()); // retains this model frame until the queued draw is consumed
+    else
+    {
+        const auto stride = static_cast<size_t>(_currentVertexStride);
+        if (command->getVertexCapacity() < static_cast<size_t>(vertexCount) || strideChanged)
+            command->createVertexBuffer(stride, vertexCount, ax::CustomCommand::BufferUsage::DYNAMIC);
+        command->updateVertexBuffer(vb->shadowData() + vertexOffset * stride, vertexCount * stride);
+    }
+    command->setIndexBuffer(ib->get(), ib->getStrideType() == Effekseer::Backend::IndexBufferStrideType::Stride4
+                                            ? ax::CustomCommand::IndexFormat::U_INT : ax::CustomCommand::IndexFormat::U_SHORT);
+    command->setIndexDrawInfo(0, static_cast<size_t>(indexCount));
 
     auto& blendDesc = command->blendDesc();
     blendDesc.blendEnabled = true;
@@ -2019,13 +2215,12 @@ void Renderer::DrawSprites(int32_t spriteCount, int32_t vertexOffset)
     _axRenderer->addCommand(command);
 
     GetImpl()->drawcallCount++;
-    GetImpl()->drawvertexCount += spriteCount * 4;
+    GetImpl()->drawvertexCount += vertexCount;
 }
 
 void Renderer::DrawPolygon(int32_t vertexCount, int32_t indexCount)
 {
-    AX_UNUSED_PARAM(vertexCount);
-    AX_UNUSED_PARAM(indexCount);
+    submitIndexed(Geometry::StaticModel, vertexCount, indexCount, 0);
 }
 
 void Renderer::DrawPolygonInstanced(int32_t vertexCount, int32_t indexCount, int32_t instanceCount)

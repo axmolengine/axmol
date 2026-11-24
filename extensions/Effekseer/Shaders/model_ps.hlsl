@@ -32,19 +32,23 @@ cbuffer fs_ub
 };
 
 Texture2D u_tex0;
+SamplerState sampler_colorTex;
 
 #if ENABLE_LIGHTING
 
 Texture2D u_tex1;
+SamplerState sampler_normalTex;
 
 #ifndef DISABLED_SOFT_PARTICLE
 Texture2D u_tex2;
+SamplerState sampler_depthTex;
 #endif
 
 #else
 
 #ifndef DISABLED_SOFT_PARTICLE
 Texture2D u_tex1;
+SamplerState sampler_depthTex;
 #endif
 
 #endif
@@ -55,9 +59,9 @@ struct PS_IN
     float4 v_color : COLOR;
     float2 v_texCoord : TEXCOORD0;
 #if ENABLE_LIGHTING
-    half3 v_worldN : TEXCOORD1;
-    half3 v_worldB : TEXCOORD2;
-    half3 v_worldT : TEXCOORD3;
+    float3 v_worldN : TEXCOORD1;
+    float3 v_worldB : TEXCOORD2;
+    float3 v_worldT : TEXCOORD3;
 #endif
     float4 v_posP : TEXCOORD4;
 };
@@ -69,10 +73,10 @@ float4 main(PS_IN input) : SV_Target0
 {
     bool convertColorSpace = miscFlags.x != 0.0f;
 
-    float4 output = ConvertFromSRGBTexture(u_tex0.Sample(LinearClamp, input.v_texCoord), convertColorSpace) * input.v_color;
+    float4 output = ConvertFromSRGBTexture(u_tex0.Sample(sampler_colorTex, input.v_texCoord), convertColorSpace) * input.v_color;
 
 #if ENABLE_LIGHTING
-    half3 texNormal = (u_tex1.Sample(LinearClamp, input.v_texCoord).xyz - 0.5) * 2.0;
+    half3 texNormal = (u_tex1.Sample(sampler_normalTex, input.v_texCoord).xyz - 0.5) * 2.0;
     half3 localNormal = (half3)normalize(
         mul(
             texNormal,
@@ -93,7 +97,11 @@ float4 main(PS_IN input) : SV_Target0
 
     if (softParticleParam.w != 0.0f)
     {
-        float backgroundZ = u_tex1.Sample(LinearClamp, screenUV).x;
+#if ENABLE_LIGHTING
+        float backgroundZ = u_tex2.Sample(sampler_depthTex, screenUV).x;
+#else
+        float backgroundZ = u_tex1.Sample(sampler_depthTex, screenUV).x;
+#endif
         output.a *= SoftParticle(
             backgroundZ,
             screenPos.z,

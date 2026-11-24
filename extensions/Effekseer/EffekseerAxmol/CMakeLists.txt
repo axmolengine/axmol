@@ -3,6 +3,8 @@ project(EffekseerAxmol)
 set(_src
   EffekseerAxmol.h
   EffekseerAxmol.cpp
+  EffekseerModelShader.h
+  EffekseerModelShader.cpp
   EffekseerRendererAxmol.h
   EffekseerRendererAxmol.cpp
 )

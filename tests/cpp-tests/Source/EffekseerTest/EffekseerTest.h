@@ -13,6 +13,8 @@
 #include "../BaseTest.h"
 #include "EffekseerAxmol.h"
 
+void addEffekseerModelTests(TestSuite& suite);
+
 struct TestEffect
 {
     const char* filename;
@@ -33,7 +35,20 @@ private:
     std::vector<std::string> _searchPaths;
 };
 
-class EffekseerTest : public TestCase
+class EffekseerViewTest : public TestCase
+{
+public:
+    bool init() override;
+
+protected:
+    ax::Camera* getEffectCamera() const { return _effectCamera; }
+
+private:
+    ax::Camera* _effectCamera = nullptr;
+    float _orbitAngle = 0.0f;
+};
+
+class EffekseerTest : public EffekseerViewTest
 {
 public:
     CREATE_FUNC(EffekseerTest);
@@ -52,17 +67,11 @@ private:
     void playCurrentEffect();
     void updateLabel();
 
-    bool onPointerDown(ax::PointerEvent* ev);
-    void onPointerMove(ax::PointerEvent* ev);
-    void onPointerUp(ax::PointerEvent* ev);
-
     efk::EffectManager* _manager = nullptr;
     efk::EffectEmitter* _emitter = nullptr;
 
-    ax::Label* _label     = nullptr;
-    ax::Camera* _3dCamera = nullptr;
+    ax::Label* _label = nullptr;
 
-    float _angle      = 0.0f;
     int _currentIndex = 0;
 };
 

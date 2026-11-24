@@ -79,6 +79,14 @@ public:
 
 private:
     bool initialize();
+    bool initializeStandardShaders();
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
+    ax::EventDispatcher* _eventDispatcher = nullptr;
+    ax::CustomEventListener* _standardShadersRecreated = nullptr;
+    bool _standardShadersDirty = false;
+#endif
+    enum class Geometry { SpriteSnapshot, StaticModel };
+    void submitIndexed(Geometry geometry, int32_t vertexCount, int32_t indexCount, int32_t vertexOffset);
 
     int32_t _squareMaxCount = 0;
     Effekseer::Backend::GraphicsDeviceRef _graphicsDevice;
