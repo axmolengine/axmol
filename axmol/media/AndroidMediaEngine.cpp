@@ -158,15 +158,26 @@ bool AndroidMediaEngine::transferVideoFrame()
         if (!_frameBuffer1.empty())
         {
             _frameBuffer2.swap(_frameBuffer1);
-            lck.unlock();  // unlock immidiately before invoke user callback (maybe upload buffer to GPU)
-
-            auto& buffer = _frameBuffer2;
-
-            ax::MEVideoFrame frame{buffer.data(), buffer.data() + _cbcrOffset, buffer.size(),
+            auto& buffer          = _frameBuffer2;
+            const auto cbcrOffset = _cbcrOffset;
+            ax::MEVideoFrame frame{buffer.data(), nullptr, buffer.size(),
                                    ax::MEVideoPixelDesc{static_cast<ax::MEVideoPixelFormat>(_videoPF), _outputDim},
                                    _videoDim};
             frame._vpd._rotation = _videoRotation;
-            assert(static_cast<int>(frame._dataLen) >= frame._vpd._dim.x * frame._vpd._dim.y * 3 / 2);
+            lck.unlock();  // Upload without holding the producer lock.
+
+            const auto [width, height] = frame._vpd._dim;
+            const int64_t yBytes       = int64_t{width} * height;
+            const int64_t chromaPlane  = int64_t{width / 2} * (height / 2);
+            // VideoPlayer starts I420's V plane at CbCr + yBytes/4; NV12 reads interleaved UV.
+            const auto uvBytes  = chromaPlane + (frame._vpd._PF == MEVideoPixelFormat::I420 ? yBytes / 4 : chromaPlane);
+            const auto required = std::max(yBytes, cbcrOffset + uvBytes);
+            if (width < 2 || height < 2 || cbcrOffset < 0 || int64_t(buffer.size()) < required)
+            {
+                buffer.clear();
+                return false;
+            }
+            frame._cbcrDataPointer = buffer.data() + cbcrOffset;
             _onVideoFrame(frame);
             _frameBuffer2.clear();
             return true;
@@ -183,6 +194,7 @@ void AndroidMediaEngine::_setVideoMeta(int outputX,
                                        int rotation,
                                        int videoPF)
 {
+    std::lock_guard<std::mutex> lock(_frameBuffer1Mtx);
     _outputDim.set(outputX, outputY);
     _videoDim.set(videoX, videoY);
     _cbcrOffset    = cbcrOffset;

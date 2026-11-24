@@ -291,8 +291,27 @@ public class ByteBufferVideoRenderer
             mediaFormat.setInteger(MediaFormat.KEY_COLOR_FORMAT, colorFormat);
         }
         mediaFormat.setInteger(MediaFormat.KEY_ALLOW_FRAME_DROP, 0);
+        // Media3 enables MediaCodec.CONFIGURE_FLAG_DETACHED_SURFACE on API 35+ when surface == null
+        // and codecInfo.detachedSurfaceSupported is true. That forces MediaCodec into Surface mode
+        // (backed by an internal detached surface) so getOutputBuffer() yields a 1-byte placeholder
+        // instead of YUV data or fails on some decoders. Pass a configuration-only MediaCodecInfo
+        // without capabilities so detachedSurfaceSupported is false while keeping the real
+        // codecInfo on MediaCodecRenderer.
+        MediaCodecInfo byteBufferCodecInfo =
+            codecInfo.detachedSurfaceSupported
+                ? MediaCodecInfo.newInstance(
+                    codecInfo.name,
+                    codecInfo.mimeType,
+                    codecInfo.codecMimeType,
+                    /* capabilities= */ null,
+                    codecInfo.hardwareAccelerated,
+                    codecInfo.softwareOnly,
+                    codecInfo.vendor,
+                    /* forceDisableAdaptive= */ false,
+                    /* forceSecure= */ codecInfo.secure)
+                : codecInfo;
         return MediaCodecAdapter.Configuration.createForVideoDecoding(
-            codecInfo,
+            byteBufferCodecInfo,
             mediaFormat,
             format,
             /* surface= */ null,
@@ -372,11 +391,11 @@ public class ByteBufferVideoRenderer
         MediaCodecAdapter codec, int index, long presentationTimeUs, Format format) {
         @Nullable VideoFrameProcessor output = this.output;
         try {
+            long releaseTimeNs = getClock().nanoTime();
+            notifyFrameMetadataListener(presentationTimeUs, releaseTimeNs, format);
             if (output != null) {
                 output.processVideoFrame(codec, index, presentationTimeUs);
             }
-            long releaseTimeNs = getClock().nanoTime();
-            notifyFrameMetadataListener(presentationTimeUs, releaseTimeNs, format);
         } finally {
             renderOutputBufferInternal(codec, index, presentationTimeUs);
         }
