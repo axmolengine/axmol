@@ -45,7 +45,7 @@ protected:
 
 private:
     ax::Camera* _effectCamera = nullptr;
-    float _orbitAngle = 0.0f;
+    float _orbitAngle         = 0.0f;
 };
 
 class EffekseerTest : public EffekseerViewTest

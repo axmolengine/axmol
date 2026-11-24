@@ -71,7 +71,11 @@ public:
      */
     Program* loadProgram(uint64_t progId);
 
-    enum class LoadPolicy { Required, Optional };
+    enum class LoadPolicy
+    {
+        Required,
+        Optional
+    };
 
     /**
      * @brief Load a program with vsName, fsName as CUSTOM immediately without register

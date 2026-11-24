@@ -51,7 +51,7 @@ public:
         if (!TestCase::init())
             return false;
         _manager.reset(efk::EffectManager::create(_director->getVisibleSize()), tlx::adopt_object);
-        _effect = efk::Effect::create("Simple_Model_UV.efkefc"); // only use the Arrow color texture
+        _effect = efk::Effect::create("Simple_Model_UV.efkefc");  // only use the Arrow color texture
         if (!_manager || !_effect || !_effect->getInternalPtr()->GetColorImage(0))
         {
             auto* label = Label::createWithSystemFont("Missing Effekseer renderer or Arrow texture", "Arial", 16);
@@ -66,8 +66,8 @@ public:
         if (!_manager || !_manager->getInternalManager() || !_effect || !_effect->getInternalPtr())
             return;
         auto renderer = _manager->getInternalRenderer();
-        auto sprite = _manager->getInternalManager()->GetSpriteRenderer();
-        auto effect = _effect->getInternalPtr();
+        auto sprite   = _manager->getInternalManager()->GetSpriteRenderer();
+        auto effect   = _effect->getInternalPtr();
         if (!sprite || !effect->GetColorImage(0))
             return;
 
@@ -76,20 +76,19 @@ public:
         NodeRendererBasicParameter material;
         material.TextureIndexes[0] = 0;
         SpriteRenderer::NodeParameter node{};
-        node.EffectPointer = effect.Get();
-        node.Billboard = BillboardType::Fixed;
-        node.IsRightHand = true;
-        node.Maginification = 1.0f;
+        node.EffectPointer     = effect.Get();
+        node.Billboard         = BillboardType::Fixed;
+        node.IsRightHand       = true;
+        node.Maginification    = 1.0f;
         node.DepthParameterPtr = &depth;
         node.BasicParameterPtr = &material;
 
-        const auto size = _director->getVisibleSize();
+        const auto size      = _director->getVisibleSize();
         const float halfSize = size.height * 0.145f;
-        SpriteRenderer::InstanceParameter quad{.Positions = {SIMD::Vec2f(-halfSize, -halfSize),
-                                                            SIMD::Vec2f(halfSize, -halfSize),
-                                                            SIMD::Vec2f(-halfSize, halfSize),
-                                                            SIMD::Vec2f(halfSize, halfSize)},
-                                               .Direction = SIMD::Vec3f(0, 0, 1)};
+        SpriteRenderer::InstanceParameter quad{
+            .Positions = {SIMD::Vec2f(-halfSize, -halfSize), SIMD::Vec2f(halfSize, -halfSize),
+                          SIMD::Vec2f(-halfSize, halfSize), SIMD::Vec2f(halfSize, halfSize)},
+            .Direction = SIMD::Vec3f(0, 0, 1)};
         quad.AllColor = Effekseer::Color(255, 255, 255, 255);
         for (auto& color : quad.Colors)
             color = quad.AllColor;
@@ -101,10 +100,10 @@ public:
         {
             for (int column = 0; column != 2; ++column)
             {
-                material.TextureWraps[0] = column == 0 ? TextureWrapType::Repeat : TextureWrapType::Clamp;
+                material.TextureWraps[0]   = column == 0 ? TextureWrapType::Repeat : TextureWrapType::Clamp;
                 material.TextureFilters[0] = row == 0 ? TextureFilterType::Nearest : TextureFilterType::Linear;
-                quad.SRTMatrix43 = SIMD::Mat43f::Translation(size.width * (column == 0 ? 0.29f : 0.71f),
-                                                            size.height * (row == 0 ? 0.60f : 0.28f), 0);
+                quad.SRTMatrix43           = SIMD::Mat43f::Translation(size.width * (column == 0 ? 0.29f : 0.71f),
+                                                                       size.height * (row == 0 ? 0.60f : 0.28f), 0);
                 sprite->BeginRendering(node, 1, nullptr);
                 sprite->Rendering(node, quad, nullptr);
                 sprite->EndRendering(node, nullptr);
@@ -122,7 +121,7 @@ private:
     RefPtr<efk::EffectManager> _manager;
     RefPtr<efk::Effect> _effect;
 };
-} // namespace
+}  // namespace
 
 //------------------------------------------------------------------
 //
@@ -183,7 +182,7 @@ bool EffekseerViewTest::init()
 
     constexpr float radius = 24.0f;
     constexpr float height = 10.0f;
-    _effectCamera = Camera::create(CameraMode::Perspective);
+    _effectCamera          = Camera::create(CameraMode::Perspective);
     _effectCamera->setCameraFlag(CameraFlag::USER1);
     _effectCamera->setPosition3D(Vec3(0, height, radius));
     _effectCamera->lookAt(Vec3::zero, Vec3(0, 1, 0));
@@ -208,13 +207,13 @@ bool EffekseerViewTest::init()
     grid->setCameraMask(static_cast<unsigned short>(CameraFlag::USER1));
     addChild(grid, -10);
 
-    auto orbit = PointerEventListener::create();
+    auto orbit              = PointerEventListener::create();
     orbit->onPointerHitTest = [](PointerEvent* event, Vec3* hit) {
         // Drag on the whole viewport, not just where the pointer ray hits scene geometry.
         if (event->getCamera()->getCameraFlag() != CameraFlag::DEFAULT)
             return false;
         const auto point = event->getWorldPoint();
-        *hit = Vec3(point.x, point.y, 0);
+        *hit             = Vec3(point.x, point.y, 0);
         return true;
     };
     orbit->onPointerDown = [](PointerEvent* event) { return event->isPrimaryPressed(); };

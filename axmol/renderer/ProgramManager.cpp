@@ -199,7 +199,9 @@ Program* ProgramManager::loadProgram(std::string_view vsName, std::string_view f
     return loadProgram(vsName, fsName, vlk, LoadPolicy::Required);
 }
 
-Program* ProgramManager::loadProgram(std::string_view vsName, std::string_view fsName, VertexLayoutKind vlk,
+Program* ProgramManager::loadProgram(std::string_view vsName,
+                                     std::string_view fsName,
+                                     VertexLayoutKind vlk,
                                      LoadPolicy policy)
 {
     return loadProgram(vsName, fsName, ProgramType::CUSTOM_PROGRAM, computeProgramId(vsName, fsName), vlk, policy);
