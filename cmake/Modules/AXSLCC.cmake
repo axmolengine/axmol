@@ -13,6 +13,11 @@ axslcc_option(AXSLCC_SOURCE_FILE_EXTENSIONS ".hlsl")
 axslcc_option(AXSLCC_OUT_DIR ${CMAKE_BINARY_DIR}/runtime/axslc)
 axslcc_option(AXSLCC_FIND_PROG_ROOT "")
 axslcc_option(AXSLCC_FLAGS "-S")
+# Shader optimization level. Defaults to -O2 because unoptimized (-O0) SPIR-V
+# shaders (such as Effekseer's GPU particle compute/render shaders) can make
+# Adreno 660 (driver 512.530) fail vkCreateComputePipelines / vkCreateGraphicsPipelines
+# with VK_ERROR_UNKNOWN.
+axslcc_option(AXSLCC_OPT_LEVEL "-O2")
 
 find_program(AXSLCC_EXE NAMES axslcc
   PATHS ${AXSLCC_FIND_PROG_ROOT}
@@ -153,6 +158,9 @@ function(ax_add_shader_target target_name)
 
     separate_arguments(AXSLCC_FLAGS_LIST NATIVE_COMMAND "${AXSLCC_FLAGS}")
     list(APPEND SC_FLAGS ${AXSLCC_FLAGS_LIST})
+    if(AXSLCC_OPT_LEVEL)
+      list(APPEND SC_FLAGS ${AXSLCC_OPT_LEVEL})
+    endif()
 
     # Per-shader target override, otherwise use the backend-derived target list.
     set(SC_TARGET_LIST ${TARGET_LIST})
