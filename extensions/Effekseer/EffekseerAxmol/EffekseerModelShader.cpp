@@ -9,6 +9,7 @@
 #include "axmol/base/EventType.h"
 #include "axmol/renderer/ProgramManager.h"
 #include "axmol/rhi/GraphicsCore.h"
+#include "axmol/rhi/Program.h"
 #include "axmol/rhi/SamplerRegistry.h"
 #include "axmol/rhi/VertexLayout.h"
 #include <EffekseerRendererCommon/EffekseerRenderer.ModelRendererBase.h>
@@ -51,76 +52,15 @@ struct Variant
     std::array<Binding, 7> slots; // Effekseer's collector order, independent of RHI register allocation
 };
 
-// The base writes C++ objects, not serialized bytes. Use real aligned objects of
-// the selected type rather than casting storage sized for another shader ABI.
-template<class VS, class PS>
-class ModelShader final : public DrawShader
+class ModelShaderBase : public DrawShader
 {
 public:
-    static std::unique_ptr<DrawShader> create(const Variant& variant, Effekseer::Backend::GraphicsDeviceRef device)
-    {
-        auto ret = std::make_unique<ModelShader>();
-        for (const auto& slot : variant.slots)
-            if (slot.sampler && !SamplerRegistry::getInstance()->registerSampler(slot.sampler, SamplerDesc{}))
-                return nullptr;
-
-        auto* manager = ax::ProgramManager::getInstance();
-        auto load = [&] { return manager->loadProgram(variant.vs, variant.fs, ax::VertexLayoutKind::Invalid,
-                                                      ax::ProgramManager::LoadPolicy::Optional); };
-        auto* program = load(); // borrowed; ProgramState takes its own reference
-#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
-        // A cached program may outlive every EffectManager. A registry rebuild
-        // can reassign custom sampler IDs even when the GL relink succeeded.
-        if (program && (!program->isValid() || std::any_of(program->getActiveSamplerInfos().begin(),
-                program->getActiveSamplerInfos().end(), [](const auto& info) {
-                    return info.samplerId.value != SamplerRegistry::getInstance()->find(info.name).value;
-                })))
-        {
-            manager->unloadProgram(program);
-            program = load();
-        }
-#endif
-        if (!program || !program->isValid())
-            return nullptr;
-        ret->_state = new ProgramState(program);
-        ret->_layout = createModelLayout(device, program);
-        if (!ret->_layout)
-            return nullptr;
-
-        bool hasVS = false, hasPS = false;
-        for (const auto& block : program->getActiveUniformBlockInfos())
-        {
-            if (block.stage == ShaderStage::VERTEX && block.sizeBytes == sizeof(VS))
-                hasVS = true;
-            if (block.stage == ShaderStage::FRAGMENT && block.sizeBytes == sizeof(PS))
-                hasPS = true;
-        }
-        if (!hasVS || !hasPS || !ret->uploadBlocks())
-            return nullptr;
-
-        for (const auto& slot : variant.slots)
-        {
-            if (!slot.texture)
-                break;
-            auto idx = ret->_slotCount++;
-            ret->_textures[idx] = program->getUniformLocation(slot.texture);
-            ret->_samplers[idx] = program->getSamplerLocation(slot.sampler);
-            if (!ret->_textures[idx] || !ret->_samplers[idx])
-                return nullptr;
-        }
-        if (program->getActiveTextureInfos().size() != static_cast<size_t>(ret->_slotCount))
-            return nullptr;
-        return ret;
-    }
-    ~ModelShader() override
+    ~ModelShaderBase() override
     {
         AX_SAFE_RELEASE(_state);
         AX_SAFE_RELEASE(_layout);
     }
-    void* GetVertexConstantBuffer() override { return &_vs; }
-    void* GetPixelConstantBuffer() override { return &_ps; }
-    void SetVertexConstantBufferSize(int32_t size) override { AXASSERT(size == sizeof(VS), "Model VS ABI mismatch"); }
-    void SetPixelConstantBufferSize(int32_t size) override { AXASSERT(size == sizeof(PS), "Model PS ABI mismatch"); }
+
     void SetConstantBuffer() override { uploadBlocks(); }
     ProgramState* programState() const override { return _state; }
     VertexLayout* vertexLayout(int32_t) override { return _layout; }
@@ -140,19 +80,113 @@ public:
             setTexture(i, white);
     }
 
+protected:
+    bool init(const Variant& variant,
+              Effekseer::Backend::GraphicsDeviceRef device,
+              const void* vsData,
+              size_t vsSize,
+              const void* psData,
+              size_t psSize)
+    {
+        _vsData = vsData;
+        _vsSize = vsSize;
+        _psData = psData;
+        _psSize = psSize;
+
+        for (const auto& slot : variant.slots)
+            if (slot.sampler && !SamplerRegistry::getInstance()->registerSampler(slot.sampler, SamplerDesc{}))
+                return false;
+
+        auto* manager = ax::ProgramManager::getInstance();
+        auto load = [&]() -> ax::Program* {
+            return manager->loadProgram(variant.vs, variant.fs, ax::VertexLayoutKind::Invalid,
+                                        ax::ProgramManager::LoadPolicy::Optional);
+        };
+        ax::Program* program = load(); // borrowed; ProgramState takes its own reference
+#if AX_ENABLE_CONTEXT_LOSS_RECOVERY
+        // A cached program may outlive every EffectManager. A registry rebuild
+        // can reassign custom sampler IDs even when the GL relink succeeded.
+        if (program && (!program->isValid() || std::any_of(program->getActiveSamplerInfos().begin(),
+                program->getActiveSamplerInfos().end(), [](const auto& info) {
+                    return info.samplerId.value != SamplerRegistry::getInstance()->find(info.name).value;
+                })))
+        {
+            manager->unloadProgram(program);
+            program = load();
+        }
+#endif
+        if (!program || !program->isValid())
+            return false;
+        _state = new ProgramState(program);
+        _layout = createModelLayout(device, program);
+        if (!_layout)
+            return false;
+
+        bool hasVS = false, hasPS = false;
+        for (const auto& block : program->getActiveUniformBlockInfos())
+        {
+            if (block.stage == ShaderStage::VERTEX && block.sizeBytes == vsSize)
+                hasVS = true;
+            if (block.stage == ShaderStage::FRAGMENT && block.sizeBytes == psSize)
+                hasPS = true;
+        }
+        if (!hasVS || !hasPS || !uploadBlocks())
+            return false;
+
+        for (const auto& slot : variant.slots)
+        {
+            if (!slot.texture)
+                break;
+            auto idx = _slotCount++;
+            _textures[idx] = program->getUniformLocation(slot.texture);
+            _samplers[idx] = program->getSamplerLocation(slot.sampler);
+            if (!_textures[idx] || !_samplers[idx])
+                return false;
+        }
+        if (program->getActiveTextureInfos().size() != static_cast<size_t>(_slotCount))
+            return false;
+        return true;
+    }
+
 private:
     bool uploadBlocks()
     {
-        return _state->setUniformBlock(ShaderStage::VERTEX, "vs_ub", &_vs, sizeof(_vs)) &&
-               _state->setUniformBlock(ShaderStage::FRAGMENT, "fs_ub", &_ps, sizeof(_ps));
+        return _state->setUniformBlock(ShaderStage::VERTEX, "vs_ub", _vsData, _vsSize) &&
+               _state->setUniformBlock(ShaderStage::FRAGMENT, "fs_ub", _psData, _psSize);
     }
-    VS _vs{};
-    PS _ps{};
+
+    const void* _vsData = nullptr;
+    size_t _vsSize = 0;
+    const void* _psData = nullptr;
+    size_t _psSize = 0;
     ProgramState* _state = nullptr;
     VertexLayout* _layout = nullptr;
     int _slotCount = 0;
     std::array<UniformLocation, 7> _textures{};
     std::array<SamplerLocation, 7> _samplers{};
+};
+
+// The base writes C++ objects, not serialized bytes. Use real aligned objects of
+// the selected type rather than casting storage sized for another shader ABI.
+template<class VS, class PS>
+class ModelShader final : public ModelShaderBase
+{
+public:
+    static std::unique_ptr<DrawShader> create(const Variant& variant, Effekseer::Backend::GraphicsDeviceRef device)
+    {
+        auto ret = std::make_unique<ModelShader>();
+        if (!ret->init(variant, device, &ret->_vs, sizeof(VS), &ret->_ps, sizeof(PS)))
+            return nullptr;
+        return ret;
+    }
+    void* GetVertexConstantBuffer() override { return &_vs; }
+    void* GetPixelConstantBuffer() override { return &_ps; }
+    void SetVertexConstantBufferSize(int32_t size) override { AXASSERT(size == sizeof(VS), "Model VS ABI mismatch"); }
+    void SetPixelConstantBufferSize(int32_t size) override { AXASSERT(size == sizeof(PS), "Model PS ABI mismatch"); }
+
+private:
+    VS _vs{};
+    PS _ps{};
 };
 
 constexpr Variant variants[] = {
