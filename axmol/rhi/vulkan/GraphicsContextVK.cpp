@@ -1684,8 +1684,15 @@ void GraphicsContextImpl::doReadPixels(RenderTarget* rt, std::function<void(cons
     _driver->finishIsolateSubmission(submission);
 
     // Map and copy out
-    void* mapped = nullptr;
-    AXASSERT(vmaMapMemory(_driver->getVmaAllocator(), stagingAlloc, &mapped) == VK_SUCCESS, "vmaMapMemory failed");
+    void* mapped{nullptr};
+    res = vmaMapMemory(_driver->getVmaAllocator(), stagingAlloc, &mapped);
+    if (res != VK_SUCCESS || !mapped)
+    {
+        AXLOGE("Failed to map staging buffer for readPixels, ret={}", static_cast<int>(res));
+        vmaDestroyBuffer(_driver->getVmaAllocator(), stagingBuf, stagingAlloc);
+        callback(pbd);
+        return;
+    }
 
     pbd._width  = width;
     pbd._height = height;
