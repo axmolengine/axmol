@@ -6,7 +6,7 @@
 # --- region platfom:common
 
 # The Axmol HLSL-first cross-platform shader compiler
-axslcc=4.0.1
+axslcc=4.0.2
 
 # The cmake, @gradle @axmol-cmdline
 # as latest as possible
