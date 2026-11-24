@@ -16,17 +16,18 @@ static void drawVertRect(ax::DrawNode* shape, float x, float y, float width, flo
 {
     float mx = x + width;
     float my = y + height;
-    shape->drawSolidRect(Vec2(x, y), Vec2(mx, my), color, 0.0f); // Draw no border!
+    shape->drawSolidRect(Vec2(x, y), Vec2(mx, my), color, 0.0f);  // Draw no border!
 }
 
-GGraph::GGraph() : _shape(nullptr),
-                   _type(0),
-                   _lineSize(1),
-                   _lineColor(ax::Color::black),
-                   _fillColor(ax::Color::white),
-                   _cornerRadius(nullptr),
-                   _polygonPoints(nullptr),
-                   _distances(nullptr)
+GGraph::GGraph()
+    : _shape(nullptr)
+    , _type(0)
+    , _lineSize(1)
+    , _lineColor(ax::Color::black)
+    , _fillColor(ax::Color::white)
+    , _cornerRadius(nullptr)
+    , _polygonPoints(nullptr)
+    , _distances(nullptr)
 {
     _touchDisabled = true;
 }
@@ -48,55 +49,68 @@ void GGraph::handleInit()
 
 void GGraph::drawRect(float aWidth, float aHeight, int lineSize, const ax::Color& lineColor, const ax::Color& fillColor)
 {
-    _type = 0; //avoid updateshape call in handleSizeChange
+    _type = 0;  // avoid updateshape call in handleSizeChange
     setSize(aWidth, aHeight);
-    _type = 1;
-    _lineSize = lineSize;
+    _type      = 1;
+    _lineSize  = lineSize;
     _lineColor = lineColor;
     _fillColor = fillColor;
     updateShape();
 }
 
-void GGraph::drawEllipse(float aWidth, float aHeight, int lineSize, const ax::Color& lineColor, const ax::Color& fillColor)
+void GGraph::drawEllipse(float aWidth,
+                         float aHeight,
+                         int lineSize,
+                         const ax::Color& lineColor,
+                         const ax::Color& fillColor)
 {
-    _type = 0; //avoid updateshape call in handleSizeChange
+    _type = 0;  // avoid updateshape call in handleSizeChange
     setSize(aWidth, aHeight);
-    _type = 2;
-    _lineSize = lineSize;
+    _type      = 2;
+    _lineSize  = lineSize;
     _lineColor = lineColor;
     _fillColor = fillColor;
     updateShape();
 }
 
-void GGraph::drawPolygon(int lineSize, const ax::Color& lineColor, const ax::Color& fillColor, const ax::Vec2* points, int count)
+void GGraph::drawPolygon(int lineSize,
+                         const ax::Color& lineColor,
+                         const ax::Color& fillColor,
+                         const ax::Vec2* points,
+                         int count)
 {
-    _type = 3;
-    _lineSize = lineSize;
+    _type      = 3;
+    _lineSize  = lineSize;
     _lineColor = lineColor;
     _fillColor = fillColor;
     if (_polygonPoints == nullptr)
         _polygonPoints = new std::vector<Vec2>();
     else
         _polygonPoints->clear();
-    float h = getHeight();
+    float h             = getHeight();
     _polygonPointOffset = h;
     for (int i = 0; i < count; i++)
     {
         Vec2 pt = *(points + i);
-        pt.y = h - pt.y;
+        pt.y    = h - pt.y;
         _polygonPoints->push_back(*(points + i));
     }
     updateShape();
 }
 
-void GGraph::drawRegularPolygon(int lineSize, const ax::Color& lineColor, const ax::Color& fillColor,
-                                int sides, float startAngle, const float* distances, int count)
+void GGraph::drawRegularPolygon(int lineSize,
+                                const ax::Color& lineColor,
+                                const ax::Color& fillColor,
+                                int sides,
+                                float startAngle,
+                                const float* distances,
+                                int count)
 {
-    _type = 4;
-    _lineSize = lineSize;
-    _lineColor = lineColor;
-    _fillColor = fillColor;
-    _sides = sides;
+    _type       = 4;
+    _lineSize   = lineSize;
+    _lineColor  = lineColor;
+    _fillColor  = fillColor;
+    _sides      = sides;
     _startAngle = startAngle;
     if (distances != nullptr)
     {
@@ -114,7 +128,7 @@ void GGraph::drawRegularPolygon(int lineSize, const ax::Color& lineColor, const 
 void GGraph::updateShape()
 {
     _shape->clear();
-    if (_type == 0) // Empty
+    if (_type == 0)  // Empty
     {
         _touchDisabled = false;
         return;
@@ -123,7 +137,7 @@ void GGraph::updateShape()
     const float lineSize05 = _lineSize * 0.5f;
     const float lineSize2  = _lineSize * 2.0f;
 
-    switch (_type) 
+    switch (_type)
     {
     case 1:  // Rectangle (+ optional corner radius)
     {
@@ -131,15 +145,15 @@ void GGraph::updateShape()
         float hl  = _size.height - _lineSize;
         float wl2 = _size.width - lineSize05;
         float hl2 = _size.height - lineSize05;
-        if (_cornerRadius) 
+        if (_cornerRadius)
         {
-            if (_fillColor.a == 0) // not solid
+            if (_fillColor.a == 0)  // not solid
                 _shape->drawCornerRect(Vec2(lineSize05, lineSize05), Vec2(wl2, hl2), _lineColor, lineSize2,
                                        _cornerRadius[2], _cornerRadius[0], _cornerRadius[1], _cornerRadius[3]);
-            else // solid with/without border
+            else  // solid with/without border
                 _shape->drawSolidCornerRect(Vec2(lineSize05, lineSize05), Vec2(wl2, hl2), _fillColor, _lineColor,
-                                             lineSize2, _cornerRadius[2], _cornerRadius[0], _cornerRadius[1],
-                                             _cornerRadius[3]);
+                                            lineSize2, _cornerRadius[2], _cornerRadius[0], _cornerRadius[1],
+                                            _cornerRadius[3]);
         }
         else if (_lineSize != 0)
         {
@@ -154,7 +168,7 @@ void GGraph::updateShape()
             drawVertRect(_shape, 0, 0, _size.width, _size.height, _fillColor);
         break;
     }
-    case 2: // Circle
+    case 2:  // Circle
     {
         const float cx     = _size.width * 0.5f;
         const float cy     = _size.height * 0.5f;
@@ -162,16 +176,16 @@ void GGraph::updateShape()
         const float scaleY = (_size.width > 0.0f) ? (_size.height / _size.width) : 1.0f;
 
         _shape->drawSolidCircle(Vec2(cx, cy), rx, 0, AX_DRAWNODE_PRE_CALCULATING_VERTICES, 1, scaleY, _fillColor,
-            lineSize2, _lineColor);
+                                lineSize2, _lineColor);
         break;
     }
-    case 3: // Polygon
+    case 3:  // Polygon
     {
         _shape->drawPolygon(_polygonPoints->data(), _polygonPoints->size(), _fillColor, lineSize2, _lineColor, false);
         break;
     }
 
-    case 4: // Regular Polygon
+    case 4:  // Regular Polygon
     {
         float h             = getHeight();
         _polygonPointOffset = h;
@@ -249,12 +263,12 @@ void GGraph::handleSizeChanged()
 
     if (_type == 3 || _type == 4)
     {
-        float h = getHeight();
+        float h   = getHeight();
         int count = (int)_polygonPoints->size();
         for (int i = 0; i < count; i++)
         {
-            Vec2 pt = (*_polygonPoints)[i];
-            pt.y = h - (_polygonPointOffset - pt.y);
+            Vec2 pt              = (*_polygonPoints)[i];
+            pt.y                 = h - (_polygonPointOffset - pt.y);
             (*_polygonPoints)[i] = pt;
         }
         _polygonPointOffset = h;
@@ -272,7 +286,7 @@ void GGraph::setup_beforeAdd(ByteBuffer* buffer, int beginPos)
     _type = buffer->readByte();
     if (_type != 0)
     {
-        _lineSize = buffer->readInt();
+        _lineSize  = buffer->readInt();
         _lineColor = ax::Color{buffer->readColor()};
         _fillColor = ax::Color{buffer->readColor()};
         if (buffer->readBool())
@@ -284,22 +298,23 @@ void GGraph::setup_beforeAdd(ByteBuffer* buffer, int beginPos)
 
         if (_type == 3)
         {
-            int cnt = buffer->readShort() / 2;
-            _polygonPoints = new std::vector<Vec2>(cnt);
-            float h = getHeight();
+            int cnt             = buffer->readShort() / 2;
+            _polygonPoints      = new std::vector<Vec2>(cnt);
+            float h             = getHeight();
             _polygonPointOffset = h;
+
             for (int i = 0; i < cnt; i++)
             {
-                float f1 = buffer->readFloat();
-                float f2 = h - buffer->readFloat();
+                float f1             = std::round(buffer->readFloat());
+                float f2             = h - std::round(buffer->readFloat());
                 (*_polygonPoints)[i] = Vec2(f1, f2);
             }
         }
         else if (_type == 4)
         {
-            _sides = buffer->readShort();
+            _sides      = buffer->readShort();
             _startAngle = buffer->readFloat();
-            int cnt = buffer->readShort();
+            int cnt     = buffer->readShort();
             if (cnt > 0)
             {
                 _distances = new std::vector<float>(cnt);
