@@ -21,9 +21,6 @@ using namespace ax;
 #define LOG_INDENTATION "  "
 #define LOG_TAG         "[TestController]"
 
-static void initCrashCatch();
-static void disableCrashCatch();
-
 class RootTests : public TestList
 {
 public:
@@ -380,18 +377,6 @@ bool TestController::checkTest(TestCase* testCase)
     return true;
 }
 
-void TestController::handleCrash()
-{
-    disableCrashCatch();
-
-    AXLOGE("{}Catch an crash event", LOG_TAG);
-
-    if (!_stopAutoTest)
-    {
-        stopAutoTest();
-    }
-}
-
 void TestController::onEnterBackground()
 {
     _isRunInBackground = true;
@@ -409,8 +394,6 @@ TestController* TestController::getInstance()
     if (s_testController == nullptr)
     {
         s_testController = new TestController;
-
-        initCrashCatch();
     }
 
     return s_testController;
@@ -427,8 +410,6 @@ void TestController::destroyInstance()
         delete s_testController;
         s_testController = nullptr;
     }
-
-    disableCrashCatch();
 }
 
 bool TestController::blockTouchBegan(PointerEvent* event)
@@ -439,71 +420,3 @@ bool TestController::blockTouchBegan(PointerEvent* event)
     event->stopPropagation();
     return true;
 }
-
-//==================================================================================================
-#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
-#    include <windows.h>
-
-static long __stdcall windowExceptionFilter(_EXCEPTION_POINTERS* excp)
-{
-    if (s_testController)
-    {
-        s_testController->handleCrash();
-    }
-
-    return EXCEPTION_EXECUTE_HANDLER;
-}
-
-static void initCrashCatch()
-{
-    SetUnhandledExceptionFilter(windowExceptionFilter);
-}
-static void disableCrashCatch()
-{
-    SetUnhandledExceptionFilter(UnhandledExceptionFilter);
-}
-
-#elif AX_TARGET_PLATFORM == AX_PLATFORM_MAC || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || \
-    AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
-
-#    if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
-static int s_fatal_signals[] = {
-    SIGILL, SIGABRT, SIGBUS, SIGFPE, SIGSEGV, SIGSTKFLT, SIGPIPE,
-};
-#    else
-static int s_fatal_signals[] = {
-    SIGABRT, SIGBUS, SIGFPE, SIGILL, SIGSEGV, SIGTRAP, SIGTERM, SIGKILL,
-};
-#    endif
-
-static void signalHandler(int sig)
-{
-    if (s_testController)
-    {
-        s_testController->handleCrash();
-    }
-}
-
-static void initCrashCatch()
-{
-    for (auto&& sig : s_fatal_signals)
-    {
-        signal(sig, signalHandler);
-    }
-}
-
-static void disableCrashCatch()
-{
-    for (auto&& sig : s_fatal_signals)
-    {
-        signal(sig, SIG_DFL);
-    }
-}
-
-#else
-
-static void initCrashCatch() {}
-
-static void disableCrashCatch() {}
-
-#endif

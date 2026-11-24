@@ -57,8 +57,6 @@ public:
     void startAutoTest();
     void stopAutoTest();
 
-    void handleCrash();
-
     void onEnterBackground();
     void onEnterForeground();
 
