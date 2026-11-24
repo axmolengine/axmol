@@ -483,6 +483,7 @@ bool EffectManager::initialize(ax::Size visibleSize)
     _manager->SetRibbonRenderer(_renderer->CreateRibbonRenderer());
     _manager->SetRingRenderer(_renderer->CreateRingRenderer());
     _manager->SetTrackRenderer(_renderer->CreateTrackRenderer());
+    _manager->SetModelRenderer(_renderer->CreateModelRenderer()); // programs are loaded per material on first draw
 
     // Register the GPU particle system when the backend supports compute/storage/Texture3D.
     Effekseer::GpuParticleSystem::Settings gpuSettings;
@@ -585,6 +586,7 @@ void EffectManager::setIsDistortionEnabled(bool value)
     else if (!value && _distortionCallback)
     {
         _renderer->SetDistortingCallback(nullptr);
+        _renderer->SetBackground(nullptr); // do not reuse the last capture after distortion was disabled
         delete _distortionCallback;
         _distortionCallback = nullptr;
     }

@@ -196,14 +196,23 @@ Program* ProgramManager::loadProgram(uint64_t progId)
 
 Program* ProgramManager::loadProgram(std::string_view vsName, std::string_view fsName, VertexLayoutKind vlk)
 {
-    return loadProgram(vsName, fsName, ProgramType::CUSTOM_PROGRAM, computeProgramId(vsName, fsName), vlk);
+    return loadProgram(vsName, fsName, vlk, LoadPolicy::Required);
+}
+
+Program* ProgramManager::loadProgram(std::string_view vsName,
+                                     std::string_view fsName,
+                                     VertexLayoutKind vlk,
+                                     LoadPolicy policy)
+{
+    return loadProgram(vsName, fsName, ProgramType::CUSTOM_PROGRAM, computeProgramId(vsName, fsName), vlk, policy);
 }
 
 Program* ProgramManager::loadProgram(std::string_view vsName,
                                      std::string_view fsName,
                                      uint32_t progType,
                                      uint64_t progId,
-                                     VertexLayoutKind vlk)
+                                     VertexLayoutKind vlk,
+                                     LoadPolicy policy)
 {
     assert(!vsName.empty() && !fsName.empty());
 
@@ -217,13 +226,19 @@ Program* ProgramManager::loadProgram(std::string_view vsName,
     if (vertFile.empty() || fragFile.empty())
     {
         AXLOGE("Load program: {} {}, {} fail, vert or frag file not found", progId, vsName, fsName);
-        AXASSERT(false, "Load program fail, vert or frag file not found");
+        AXASSERT(policy == LoadPolicy::Optional, "Load program fail, vert or frag file not found");
         return nullptr;
     }
 
     auto vertSource = fileUtils->getDataFromFile(vertFile);
     auto fragSource = fileUtils->getDataFromFile(fragFile);
-    auto program    = axdrv->createProgram(std::move(vertSource), std::move(fragSource));
+    if (vertSource.isNull() || fragSource.isNull())
+    {
+        AXLOGE("Load program: {} {}, {} fail, empty shader archive", progId, vsName, fsName);
+        AXASSERT(policy == LoadPolicy::Optional, "Load program fail, empty shader archive");
+        return nullptr;
+    }
+    auto program = axdrv->createProgram(std::move(vertSource), std::move(fragSource));
 
     if (program && program->isValid())
     {
@@ -240,7 +255,8 @@ Program* ProgramManager::loadProgram(std::string_view vsName,
     else
     {
         AXLOGE("Load program: {} {}, {} fail", progId, vsName, fsName);
-        AXASSERT(false, "Load program fail");
+        AX_SAFE_RELEASE_NULL(program);
+        AXASSERT(policy == LoadPolicy::Optional, "Load program fail");
     }
     return program;
 }

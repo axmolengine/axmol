@@ -437,7 +437,7 @@ list(APPEND GAME_SOURCE
 
 if(AX_ENABLE_EXT_EFFEKSEER)
   list(APPEND GAME_HEADER Source/EffekseerTest/EffekseerTest.h)
-  list(APPEND GAME_SOURCE Source/EffekseerTest/EffekseerTest.cpp)
+  list(APPEND GAME_SOURCE Source/EffekseerTest/EffekseerTest.cpp Source/EffekseerTest/EffekseerModelTest.cpp)
 endif()
 
 if(AX_ENABLE_VR)

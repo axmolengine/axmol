@@ -71,17 +71,24 @@ public:
      */
     Program* loadProgram(uint64_t progId);
 
+    enum class LoadPolicy
+    {
+        Required,
+        Optional
+    };
+
     /**
      * @brief Load a program with vsName, fsName as CUSTOM immediately without register
      * @param vsName the vertex shader name: custom/xxx_vs
      * @param fsName the fragment shader name: custom/xxx_vs
      * @param vlk the builtin vertex layout type used for loading program
-     * @return Program* (nullable)
-     * @remark the returend program type always ProgramType::CUSTOM_PROGRAM
+     * @return A borrowed cached program on success. Failures are not cached.
      */
     Program* loadProgram(std::string_view vsName,
                          std::string_view fsName,
                          VertexLayoutKind vlk = VertexLayoutKind::Invalid);
+    /// Optional logs load/link failures and returns nullptr without asserting. Same cache and ownership.
+    Program* loadProgram(std::string_view vsName, std::string_view fsName, VertexLayoutKind vlk, LoadPolicy policy);
 
     /**
      * Unload a program object from cache.
@@ -124,7 +131,8 @@ protected:
                          std::string_view fsName,
                          uint32_t progType,
                          uint64_t progId,
-                         VertexLayoutKind vlk);
+                         VertexLayoutKind vlk,
+                         LoadPolicy policy = LoadPolicy::Required);
 
     uint64_t computeProgramId(std::string_view vsName, std::string_view fsName);
 

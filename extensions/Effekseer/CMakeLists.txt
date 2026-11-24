@@ -28,14 +28,19 @@ set(_SHADER_DIR "${CMAKE_CURRENT_LIST_DIR}/Shaders")
 
 ax_find_shaders(${_SHADER_DIR} _shader_src)
 
-# Phase 1: exclude model/advanced shaders (need __INST__ define or not used yet)
-list(REMOVE_ITEM _shader_src
-  "${_SHADER_DIR}/model_vs.hlsl"
-  "${_SHADER_DIR}/ad_model_vs.hlsl"
-  "${_SHADER_DIR}/ad_sprite_unlit_vs.hlsl"
-  "${_SHADER_DIR}/ad_model_ps.hlsl"
-  "${_SHADER_DIR}/ad_model_distortion_ps.hlsl"
-)
+# The advanced sprite path still uses the standard sprite fallback.
+list(REMOVE_ITEM _shader_src "${_SHADER_DIR}/ad_sprite_unlit_vs.hlsl")
+
+# Built-in model shaders: non-instanced, no scene depth. Suffixes _1 and _2
+# denote lit and background distortion respectively on the vertex stage.
+set_source_files_properties(
+  "${_SHADER_DIR}/model_vs.hlsl" "${_SHADER_DIR}/ad_model_vs.hlsl"
+  PROPERTIES AXSLCC_DEFINES "DISABLE_INSTANCE;DISABLED_SOFT_PARTICLE"
+             AXSLCC_VARIANT_DEFINES "ENABLE_LIGHTING=1;ENABLE_DISTORTION=1")
+set_source_files_properties("${_SHADER_DIR}/ad_model_ps.hlsl"
+  PROPERTIES AXSLCC_DEFINES "DISABLED_SOFT_PARTICLE" AXSLCC_VARIANT_DEFINES "ENABLE_LIGHTING=1")
+set_source_files_properties("${_SHADER_DIR}/ad_model_distortion_ps.hlsl"
+  PROPERTIES AXSLCC_DEFINES "DISABLED_SOFT_PARTICLE")
 
 set_source_files_properties(
   "${_SHADER_DIR}/sprite_unlit_vs.hlsl"
@@ -44,11 +49,12 @@ set_source_files_properties(
       "ENABLE_LIGHTING;ENABLE_DISTORTION"
 )
 
+# model_ps: base/_1 keep soft particles for sprites; _2/_3 disable soft particles for models.
 set_source_files_properties(
   "${_SHADER_DIR}/model_ps.hlsl"
   PROPERTIES
     AXSLCC_VARIANT_DEFINES
-      "ENABLE_LIGHTING=1"
+      "ENABLE_LIGHTING=1;DISABLED_SOFT_PARTICLE;ENABLE_LIGHTING=1,DISABLED_SOFT_PARTICLE"
 )
 
 set_source_files_properties(
@@ -94,6 +100,16 @@ set_source_files_properties(
 )
 
 ax_add_shader_target(Effekseer_shaders FILES ${_shader_src})
+
+# axslcc's custom commands track the entry point; also invalidate all variants
+# when shared model stage interfaces, cbuffer fields or shading functions change.
+file(GLOB _efk_shader_includes "${_SHADER_DIR}/*.hlsli")
+foreach(_entry sprite_unlit_vs model_vs model_ps model_distortion_ps
+               ad_model_vs ad_model_ps ad_model_distortion_ps
+               gpu_particles_clear_cs gpu_particles_spawn_cs gpu_particles_update_cs
+               gpu_particles_render_vs gpu_particles_render_ps)
+  add_custom_command(OUTPUT "${AXSLCC_OUT_DIR}/custom/${_entry}" APPEND DEPENDS ${_efk_shader_includes})
+endforeach()
 
 add_library(EffekseerAxmolSIMDOptions INTERFACE)
 target_compile_definitions(EffekseerAxmolSIMDOptions INTERFACE EFK_SIMD_LEVEL=${AX_ISA_LEVEL})

@@ -56,7 +56,7 @@ float4 main(const PS_Input Input)
 	float2 UVOffset = UVDistortionOffset(_uvDistortionTex, sampler_uvDistortionTex, advancedParam.UVDistortionUV, fUVDistortionParameter.zw, false);
 	UVOffset *= fUVDistortionParameter.x;
 
-	float4 Output = _colorTex.Sample(sampler_colorTex, Input.UV_Others + UVOffset);
+	float4 Output = _colorTex.Sample(sampler_colorTex, Input.UV_Others.xy + UVOffset);
 
 	Output.a = Output.a * Input.Color.a;
 
