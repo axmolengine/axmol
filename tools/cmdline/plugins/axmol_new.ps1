@@ -263,7 +263,9 @@ function update_axproj_prop($props, $prop_name, $prop_val) {
 }
 
 update_axproj_prop $proj_props 'package_name' $packageName
-update_axproj_prop $proj_props 'engine_version' $axmolVersion
+if ($proj_props['engine_version'] -ne 'current') {
+    update_axproj_prop $proj_props 'engine_version' $axmolVersion
+}
 update_axproj_prop $proj_props 'project_type' $lang
 
 if ($update_axproj_mods) {
