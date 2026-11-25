@@ -64,7 +64,6 @@ set(_AX_BASE_HEADER
   base/FocusEvent.h
   base/Environment.h
   base/Protocols.h
-  base/TGAlib.h
   base/InputDelegate.h
   base/AutoreleasePool.h
   base/StencilStateManager.h
@@ -116,7 +115,6 @@ set(_AX_BASE_SRC
   base/Value.cpp
   base/ObjectFactory.cpp
   base/StencilStateManager.cpp
-  base/TGAlib.cpp
   base/ZipUtils.cpp
   base/atitc.cpp
   base/base64.cpp

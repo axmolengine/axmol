@@ -26,107 +26,6 @@ local function createTileDemoLayer(title, subtitle)
 
     return layer
 end
---------------------------------------------------------------------
---
--- TileMapTest
---
---------------------------------------------------------------------
-local function TileMapTest()
-    local layer = createTileDemoLayer("TileMapAtlas")
-
-    local  map = ax.TileMapAtlas:create(s_TilesPng,  s_LevelMapTga, 16, 16)
-    -- Convert it to "alias" (GL_LINEAR filtering)
-
-    local  s = map:getContentSize()
-    cclog("ContentSize: %f, %f", s.width,s.height)
-
-    -- If you are not going to use the Map, you can free it now
-    -- NEW since v0.7
-    map:releaseMap()
-
-    layer:addChild(map, 0, kTagTileMap)
-
-    map:setAnchorPoint( ax.p(0, 0.5) )
-
-    local scale = ax.ScaleBy:create(4, 0.8)
-    local scaleBack = scale:reverse()
-
-    local  seq = ax.Sequence:create(scale, scaleBack)
-
-    map:runAction(ax.RepeatForever:create(seq))
-
-    return layer
-end
-
---------------------------------------------------------------------
---
--- TileMapEditTest
---
---------------------------------------------------------------------
-local function TileMapEditTest()
-    local layer = createTileDemoLayer("Editable TileMapAtlas")
-    local  map = ax.TileMapAtlas:create(s_TilesPng, s_LevelMapTga, 16, 16)
-    -- Create an Aliased Atlas
-    map:getTexture():setAliasTexParameters()
-
-    local  s = map:getContentSize()
-    cclog("ContentSize: %f, %f", s.width,s.height)
-
-    -- If you are not going to use the Map, you can free it now
-    -- [tilemap releaseMap)
-    -- And if you are going to use, it you can access the data with:
-    local function updateMap(dt)
-
-        -- IMPORTANT
-        --   The only limitation is that you cannot change an empty, or assign an empty tile to a tile
-        --   The value 0 not rendered so don't assign or change a tile with value 0
-
-        local  tilemap = layer:getChildByTag(kTagTileMap)
-
-        --
-        -- For example you can iterate over all the tiles
-        -- using this code, but try to avoid the iteration
-        -- over all your tiles in every frame. It's very expensive
-        --    for(int x=0 x < tilemap.tgaInfo:width x++)
-        --        for(int y=0 y < tilemap.tgaInfo:height y++)
-        --            Color32 c =[tilemap getTileAt:local Make(x,y))
-        --            if( c.r != 0 )
-        --                --------cclog("%d,%d = %d", x,y,c.r)
-        --            end
-        --        end
-        --    end
-
-        -- NEW since v0.7
-        local c = tilemap:getTileAt(ax.p(13,21))
-        c.r = c.r + 1
-        c.r = c.r % 50
-
-        if( c.r==0) then
-            c.r=1
-        end
-        -- NEW since v0.7
-        tilemap:setTile(c, ax.p(13,21) )
-    end
-
-    local schedulerEntry = nil
-    local function onNodeEvent(event)
-        if event == "enter" then
-            schedulerEntry = scheduler:scheduleScriptFunc(updateMap, 0.2, false)
-        elseif event == "exit" then
-            scheduler:unscheduleScriptEntry(schedulerEntry)
-        end
-    end
-
-    layer:setLifecycleCallback(onNodeEvent)
-
-    layer:addChild(map, 0, kTagTileMap)
-
-    map:setAnchorPoint( ax.p(0, 0) )
-    map:setPosition( ax.p(-20,-200) )
-
-    return layer
-end
-
 
 --------------------------------------------------------------------
 --
@@ -1164,8 +1063,6 @@ function TileMapTestMain()
     local scene = ax.Scene:create()
 
     Helper.createFunctionTable = {
-        TileMapTest,
-        TileMapEditTest,
         TMXOrthoTest,
         TMXOrthoTest2,
         TMXOrthoTest3,
@@ -1195,7 +1092,7 @@ function TileMapTestMain()
     }
     Helper.index = 1
 
-    scene:addChild(TileMapTest())
+    scene:addChild(TMXOrthoTest())
     scene:addChild(CreateBackMenuItem())
     return scene
 end

@@ -209,7 +209,6 @@ SPDX-License-Identifier: MIT
 
 #include "axmol/2d/TMXObjectGroup.h"
 #include "axmol/2d/TMXXMLParser.h"
-#include "axmol/2d/TileMapAtlas.h"
 #include "axmol/2d/FastTMXLayer.h"
 #include "axmol/2d/FastTMXTiledMap.h"
 
