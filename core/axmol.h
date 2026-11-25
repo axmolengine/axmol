@@ -253,7 +253,6 @@ THE SOFTWARE.
 #include "2d/ParallaxNode.h"
 #include "2d/TMXObjectGroup.h"
 #include "2d/TMXXMLParser.h"
-#include "2d/TileMapAtlas.h"
 #include "2d/FastTMXLayer.h"
 #include "2d/FastTMXTiledMap.h"
 

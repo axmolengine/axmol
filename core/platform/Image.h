@@ -192,7 +192,6 @@ public:
     void reversePremultipliedAlpha();
 
 protected:
-    typedef struct sImageTGA tImageTGA;
 #if AX_USE_WIC
     bool encodeWithWIC(std::string_view filePath, bool isToRGB, GUID containerFormat);
     bool decodeWithWIC(const unsigned char* data, ssize_t dataLen);
@@ -201,7 +200,7 @@ protected:
     bool initWithPngData(uint8_t* data, ssize_t dataLen);
     bool initWithBmpData(uint8_t* data, ssize_t dataLen);
     bool initWithWebpData(uint8_t* data, ssize_t dataLen);
-    bool initWithTGAData(tImageTGA* tgaData);
+    bool initWithTgaData(uint8_t* data, ssize_t dataLen);
 
     // All internal init function have chance to own the data for fast forward data to hardware decoder
     // see: initWithImageData

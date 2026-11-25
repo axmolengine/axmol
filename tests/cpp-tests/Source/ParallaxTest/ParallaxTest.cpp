@@ -55,15 +55,11 @@ Parallax1::Parallax1()
     // change the transform anchor point to 0,0 (optional)
     cocosImage->setAnchorPoint(Vec2(0, 0));
 
-    // Middle layer: a Tile map atlas
-    auto tilemap = TileMapAtlas::create(s_TilesPng, s_LevelMapTga, 16, 16);
-    tilemap->releaseMap();
+    // Middle layer: a TMX tiled map
+    auto tilemap = FastTMXTiledMap::create("TileMaps/orthogonal-test2.tmx");
 
     // change the transform anchor to 0,0 (optional)
     tilemap->setAnchorPoint(Vec2(0, 0));
-
-    // Anti Aliased images
-    tilemap->getTexture()->setAntiAliasTexParameters();
 
     // background layer: another image
     auto background = Sprite::create(s_back);
@@ -123,15 +119,11 @@ Parallax2::Parallax2()
     // change the transform anchor point to 0,0 (optional)
     cocosImage->setAnchorPoint(Vec2(0, 0));
 
-    // Middle layer: a Tile map atlas
-    auto tilemap = TileMapAtlas::create(s_TilesPng, s_LevelMapTga, 16, 16);
-    tilemap->releaseMap();
+    // Middle layer: a TMX tiled map
+    auto tilemap = FastTMXTiledMap::create("TileMaps/orthogonal-test2.tmx");
 
     // change the transform anchor to 0,0 (optional)
     tilemap->setAnchorPoint(Vec2(0, 0));
-
-    // Anti Aliased images
-    tilemap->getTexture()->setAntiAliasTexParameters();
 
     // background layer: another image
     auto background = Sprite::create(s_back);
