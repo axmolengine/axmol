@@ -1,3 +1,3 @@
 package_name=dev.axmol.unit_tests
-engine_version=2.3.0
+engine_version=current
 project_type=cpp
