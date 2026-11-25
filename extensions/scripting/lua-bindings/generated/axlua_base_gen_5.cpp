@@ -49,7 +49,6 @@ void register_ax_base_types_5(lua_State* L)
     module.class_<ax::ScriptEvent>("ScriptEvent");
     module.class_<ax::Sequence>("Sequence");
     module.class_<ax::Shaky3D>("Shaky3D");
-    module.class_<ax::ShakyTiles3D>("ShakyTiles3D");
 }
 
 void register_ax_base_members_5(lua_State* L)
@@ -391,11 +390,6 @@ void register_ax_base_members_5(lua_State* L)
     class_27_Shaky3D.constructors<ax::Shaky3D()>();
     class_27_Shaky3D.static_method("create", static_cast<ax::Shaky3D * (*)(float, const ax::Vec2 &, int, bool)>(&ax::Shaky3D::create));
     class_27_Shaky3D.method("initWithDuration", static_cast<bool (ax::Shaky3D::*)(float, const ax::Vec2 &, int, bool)>(&ax::Shaky3D::initWithDuration));
-    auto class_28_ShakyTiles3D = module.class_<ax::ShakyTiles3D>("ShakyTiles3D");
-    class_28_ShakyTiles3D.bases<ax::TiledGrid3DAction, ax::GridAction, ax::ActionInterval, ax::FiniteTimeAction, ax::Action, ax::Object>();
-    class_28_ShakyTiles3D.constructors<ax::ShakyTiles3D()>();
-    class_28_ShakyTiles3D.static_method("create", static_cast<ax::ShakyTiles3D * (*)(float, const ax::Vec2 &, int, bool)>(&ax::ShakyTiles3D::create));
-    class_28_ShakyTiles3D.method("initWithDuration", static_cast<bool (ax::ShakyTiles3D::*)(float, const ax::Vec2 &, int, bool)>(&ax::ShakyTiles3D::initWithDuration));
 }
 
 void register_ax_base_enums_5(lua_State* L)

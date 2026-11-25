@@ -51,7 +51,6 @@ set(_AX_2D_HEADER
   2d/FontCharMap.h
   2d/ParticleSystem.h
   2d/ProgressTimer.h
-  2d/TileMapAtlas.h
   2d/ActionTiledGrid.h
   2d/ActionManager.h
   2d/MotionStreak.h
@@ -114,7 +113,6 @@ set(_AX_2D_SRC
   2d/SpriteFrameCache.cpp
   2d/SpriteFrame.cpp
   2d/AutoPolygon.cpp
-  2d/TileMapAtlas.cpp
 
   # 2d/TMXLayer.cpp
   2d/TMXObjectGroup.cpp

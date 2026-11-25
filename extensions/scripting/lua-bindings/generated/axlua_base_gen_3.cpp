@@ -108,7 +108,6 @@ void register_ax_base_types_3(lua_State* L)
     module.class_<ax::NodeGrid>("NodeGrid");
     module.class_<ax::Object>("Object");
     module.class_<ax::OrbitCamera>("OrbitCamera");
-    module.class_<ax::PageTurn3D>("PageTurn3D");
 }
 
 void register_ax_base_members_3(lua_State* L)
@@ -487,9 +486,6 @@ void register_ax_base_members_3(lua_State* L)
     class_21_OrbitCamera.constructors<ax::OrbitCamera()>();
     class_21_OrbitCamera.static_method("create", static_cast<ax::OrbitCamera * (*)(float, float, float, float, float, float, float)>(&ax::OrbitCamera::create));
     class_21_OrbitCamera.method("initWithDuration", static_cast<bool (ax::OrbitCamera::*)(float, float, float, float, float, float, float)>(&ax::OrbitCamera::initWithDuration));
-    auto class_22_PageTurn3D = module.class_<ax::PageTurn3D>("PageTurn3D");
-    class_22_PageTurn3D.bases<ax::Grid3DAction, ax::GridAction, ax::ActionInterval, ax::FiniteTimeAction, ax::Action, ax::Object>();
-    class_22_PageTurn3D.static_method("create", static_cast<ax::PageTurn3D * (*)(float, const ax::Vec2 &)>(&ax::PageTurn3D::create));
 }
 
 void register_ax_base_enums_3(lua_State* L)

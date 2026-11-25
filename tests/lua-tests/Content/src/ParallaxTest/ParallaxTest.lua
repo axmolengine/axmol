@@ -27,15 +27,11 @@ local function Parallax1()
     cocosImage:setAnchorPoint( ax.p(0,0) )
 
 
-    -- Middle layer: a Tile map atlas
-    local tilemap = ax.TileMapAtlas:create(s_TilesPng, s_LevelMapTga, 16, 16)
-    tilemap:releaseMap()
+    -- Middle layer: a TMX tiled map
+    local tilemap = ax.FastTMXTiledMap:create("TileMaps/orthogonal-test2.tmx")
 
     -- change the transform anchor to 0,0 (optional)
     tilemap:setAnchorPoint( ax.p(0, 0) )
-
-    -- Anti Aliased images
-    tilemap:getTexture():setAntiAliasTexParameters()
 
 
     -- background layer: another image
@@ -92,15 +88,11 @@ local function Parallax2()
     cocosImage:setAnchorPoint( ax.p(0,0) )
 
 
-    -- Middle layer: a Tile map atlas
-    local  tilemap = ax.TileMapAtlas:create(s_TilesPng, s_LevelMapTga, 16, 16)
-    tilemap:releaseMap()
+    -- Middle layer: a TMX tiled map
+    local  tilemap = ax.FastTMXTiledMap:create("TileMaps/orthogonal-test2.tmx")
 
     -- change the transform anchor to 0,0 (optional)
     tilemap:setAnchorPoint( ax.p(0, 0) )
-
-    -- Anti Aliased images
-    tilemap:getTexture():setAntiAliasTexParameters()
 
 
     -- background layer: another image
