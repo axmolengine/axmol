@@ -1623,8 +1623,9 @@ bool Image::initWithPVRv2Data(uint8_t* data, ssize_t dataLen, bool ownData)
     // Get ptr to where data starts..
     int dataLength = AX_SWAP_INT32_LITTLE_TO_HOST(header->dataLength);
 
-    // Calculate the data size for each texture level and respect the minimum number of blocks
-    while (dataOffset < dataLength)
+    // Calculate the data size for each texture level and respect the minimum number of blocks.
+    // _numberOfMipmaps indexes the fixed _mipmaps[MIPMAP_MAX] array, so it must be capped.
+    while (dataOffset < dataLength && _numberOfMipmaps < MIPMAP_MAX)
     {
         switch (formatFlags)
         {
@@ -1786,8 +1787,13 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
     int blockSize = 0, widthBlocks = 0, heightBlocks = 0;
 
     _numberOfMipmaps = header->numberOfMipmaps;
-    AXASSERT(_numberOfMipmaps < MIPMAP_MAX,
-             "Image: Maximum number of mimpaps reached. Increase the AX_MIPMAP_MAX value");
+    // AXASSERT compiles out in release (NDEBUG) builds, so the count must be checked
+    // at runtime to avoid writing past the fixed _mipmaps[MIPMAP_MAX] array.
+    if (_numberOfMipmaps < 0 || _numberOfMipmaps >= MIPMAP_MAX)
+    {
+        AXLOGW("axmol: WARNING: pvr file reports too many mipmaps");
+        return false;
+    }
 
     for (int i = 0; i < _numberOfMipmaps; i++)
     {
@@ -2227,6 +2233,9 @@ bool Image::initWithS3TCData(uint8_t* data, ssize_t dataLen, bool ownData)
 
     /* load the .dds file */
 
+    if (dataLen < static_cast<ssize_t>(sizeof(S3TCTexHeader)))
+        return false;
+
     S3TCTexHeader* header = (S3TCTexHeader*)data;
     _width                = header->ddsd.width;
     _height               = header->ddsd.height;
@@ -2234,6 +2243,11 @@ bool Image::initWithS3TCData(uint8_t* data, ssize_t dataLen, bool ownData)
         1,
         header->ddsd.DUMMYUNIONNAMEN2
             .mipMapCount);  // if dds header reports 0 mipmaps, set to 1 to force correct software decoding (if needed).
+
+    // mipMapCount comes straight from the file; clamp against the fixed-size
+    // _mipmaps[MIPMAP_MAX] array to avoid an out-of-bounds write (CWE-787/CWE-129).
+    if (_numberOfMipmaps > MIPMAP_MAX)
+        return false;
     _dataLen      = 0;
     int blockSize = (FOURCC_DXT1 == header->ddsd.DUMMYUNIONNAMEN4.ddpfPixelFormat.fourCC) ? 8 : 16;
 
@@ -2349,10 +2363,18 @@ bool Image::initWithS3TCData(uint8_t* data, ssize_t dataLen, bool ownData)
 bool Image::initWithATITCData(uint8_t* data, ssize_t dataLen, bool ownData)
 {
     /* load the .ktx file */
+    if (dataLen < static_cast<ssize_t>(KTX_V1_HEADER_SIZE))
+        return false;
+
     KTXv1Header* header = (KTXv1Header*)data;
     _width              = header->pixelWidth;
     _height             = header->pixelHeight;
     _numberOfMipmaps    = header->numberOfMipmapLevels;
+
+    // numberOfMipmapLevels comes straight from the file; clamp against the
+    // fixed-size _mipmaps[MIPMAP_MAX] array to avoid an out-of-bounds write.
+    if (_numberOfMipmaps < 0 || _numberOfMipmaps > MIPMAP_MAX)
+        return false;
 
     int blockSize = 0;
     switch (header->glInternalFormat)
