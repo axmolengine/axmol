@@ -42,24 +42,6 @@ public:
     void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
 };
 
-class TileMapTestNew : public TileDemoNew
-{
-public:
-    CREATE_FUNC(TileMapTestNew);
-    TileMapTestNew();
-    virtual std::string title() const override;
-};
-
-class TileMapEditTestNew : public TileDemoNew
-{
-public:
-    CREATE_FUNC(TileMapEditTestNew);
-    TileMapEditTestNew();
-    virtual std::string title() const override;
-
-    void updateMap(float dt);
-};
-
 class TMXOrthoTestNew : public TileDemoNew
 {
 public:

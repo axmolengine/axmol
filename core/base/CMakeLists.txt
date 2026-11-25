@@ -65,7 +65,6 @@ set(_AX_BASE_HEADER
   base/EventFocus.h
   base/Configuration.h
   base/Protocols.h
-  base/TGAlib.h
   base/EventMouse.h
   base/IMEDelegate.h
   base/NS.h
@@ -121,7 +120,6 @@ set(_AX_BASE_SRC
   base/Value.cpp
   base/ObjectFactory.cpp
   base/StencilStateManager.cpp
-  base/TGAlib.cpp
   base/ZipUtils.cpp
   base/atitc.cpp
   base/base64.cpp

@@ -61,8 +61,6 @@ FastTileMapTests::FastTileMapTests()
     ADD_TEST_CASE(TMXOrthoFlipRunTimeTestNew);
     ADD_TEST_CASE(TMXOrthoFromXMLTestNew);
     ADD_TEST_CASE(TMXOrthoXMLFormatTestNew);
-    ADD_TEST_CASE(TileMapTestNew);
-    ADD_TEST_CASE(TileMapEditTestNew);
     ADD_TEST_CASE(TMXBug987New);
     ADD_TEST_CASE(TMXBug787New);
     ADD_TEST_CASE(TMXGIDObjectsTestNew);
@@ -110,103 +108,6 @@ void TileDemoNew::onTouchesMoved(const std::vector<Touch*>& touches, Event* even
     auto node       = getChildByTag(kTagTileMap);
     auto currentPos = node->getPosition();
     node->setPosition(currentPos + diff);
-}
-
-//------------------------------------------------------------------
-//
-// TileMapTestNew
-//
-//------------------------------------------------------------------
-TileMapTestNew::TileMapTestNew()
-{
-    auto map = TileMapAtlas::create(s_TilesPng, s_LevelMapTga, 16, 16);
-    // Convert it to "alias" (GL_LINEAR filtering)
-    map->getTexture()->setAntiAliasTexParameters();
-
-    Size AX_UNUSED s = map->getContentSize();
-    AXLOGD("ContentSize: {}, {}", s.width, s.height);
-
-    // If you are not going to use the Map, you can free it now
-    // NEW since v0.7
-    map->releaseMap();
-
-    addChild(map, 0, kTagTileMap);
-
-    map->setAnchorPoint(Vec2(0.0f, 0.5f));
-
-    auto scale     = ScaleBy::create(4, 0.8f);
-    auto scaleBack = scale->reverse();
-
-    auto seq = Sequence::create(scale, scaleBack, nullptr);
-
-    map->runAction(RepeatForever::create(seq));
-}
-
-std::string TileMapTestNew::title() const
-{
-    return "TileMapAtlas";
-}
-
-//------------------------------------------------------------------
-//
-// TileMapEditTestNew
-//
-//------------------------------------------------------------------
-TileMapEditTestNew::TileMapEditTestNew()
-{
-    auto map = TileMapAtlas::create(s_TilesPng, s_LevelMapTga, 16, 16);
-    // Create an Aliased Atlas
-    map->getTexture()->setAliasTexParameters();
-
-    Size AX_UNUSED s = map->getContentSize();
-    AXLOGD("ContentSize: {}, {}", s.width, s.height);
-
-    // If you are not going to use the Map, you can free it now
-    // [tilemap releaseMap);
-    // And if you are going to use, it you can access the data with:
-    schedule(AX_SCHEDULE_SELECTOR(TileMapEditTestNew::updateMap), 0.2f);
-
-    addChild(map, 0, kTagTileMap);
-
-    map->setAnchorPoint(Vec2(0, 0));
-    map->setPosition(Vec2(-20, -200));
-}
-
-void TileMapEditTestNew::updateMap(float dt)
-{
-    // IMPORTANT
-    //   The only limitation is that you cannot change an empty, or assign an empty tile to a tile
-    //   The value 0 not rendered so don't assign or change a tile with value 0
-
-    auto tilemap = (TileMapAtlas*)getChildByTag(kTagTileMap);
-
-    //
-    // For example you can iterate over all the tiles
-    // using this code, but try to avoid the iteration
-    // over all your tiles in every frame. It's very expensive
-    //    for(int x=0; x < tilemap.tgaInfo->width; x++) {
-    //        for(int y=0; y < tilemap.tgaInfo->height; y++) {
-    //            Color3B c =[tilemap tileAt:Size(x,y));
-    //            if( c.r != 0 ) {
-    //                ////----AXLOGD("{},{} = {}", x,y,c.r);
-    //            }
-    //        }
-    //    }
-
-    // NEW since v0.7
-    Color3B c = tilemap->getTileAt(Vec2(13, 21));
-    c.r++;
-    c.r %= 50;
-    if (c.r == 0)
-        c.r = 1;
-
-    // NEW since v0.7
-    tilemap->setTile(c, Vec2(13, 21));
-}
-
-std::string TileMapEditTestNew::title() const
-{
-    return "Editable TileMapAtlas";
 }
 
 //------------------------------------------------------------------

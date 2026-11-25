@@ -42,7 +42,6 @@ THE SOFTWARE.
 #define STBI_NO_PIC
 #define STBI_NO_PNM
 #define STBI_NO_HDR
-#define STBI_NO_TGA
 #define STB_IMAGE_IMPLEMENTATION
 #if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
 #    define STBI_NO_THREAD_LOCALS
@@ -109,7 +108,6 @@ struct dirent* readdir$INODE64(DIR* dir)
 #include "base/s3tc.h"
 #include "base/atitc.h"
 #include "base/pvr.h"
-#include "base/TGAlib.h"
 
 #include "base/etc1.h"
 #include "base/etc2.h"
@@ -755,19 +753,11 @@ bool Image::initWithImageData(uint8_t* data, ssize_t dataLen, bool ownData)
             break;
         default:
         {
-            // load and detect image format
-            tImageTGA* tgaData = tgaLoadBuffer(unpackedData, static_cast<int32_t>(unpackedLen));
-
-            if (tgaData != nullptr && tgaData->status == TGA_OK)
-            {
-                ret = initWithTGAData(tgaData);
-            }
-            else
+            ret = initWithTgaData(unpackedData, unpackedLen);
+            if (!ret)
             {
                 AXLOGW("unsupported image format!");
             }
-
-            free(tgaData);
             break;
         }
         }
@@ -1471,80 +1461,45 @@ bool Image::initWithWebpData(uint8_t* data, ssize_t dataLen)
 #endif  // AX_USE_WEBP
 }
 
-bool Image::initWithTGAData(tImageTGA* tgaData)
+bool Image::initWithTgaData(uint8_t* data, ssize_t dataLen)
 {
-    bool ret = false;
+    if (!data || dataLen <= 0 || dataLen > INT_MAX)
+        return false;
 
-    do
+    int channels = 0;
+    _data        = stbi_load_from_memory(data, static_cast<int>(dataLen), &_width, &_height, &channels, 0);
+    if (!_data)
+        return false;
+
+    switch (channels)
     {
-        AX_BREAK_IF(tgaData == nullptr);
-
-        // tgaLoadBuffer only support type 2, 3, 10
-        if (2 == tgaData->type || 10 == tgaData->type)
-        {
-            // true color
-            // unsupported RGB555
-            if (tgaData->pixelDepth == 16)
-            {
-                _pixelFormat = backend::PixelFormat::RGB5A1;
-            }
-            else if (tgaData->pixelDepth == 24)
-            {
-                _pixelFormat = backend::PixelFormat::RGB8;
-            }
-            else if (tgaData->pixelDepth == 32)
-            {
-                _pixelFormat = backend::PixelFormat::RGBA8;
-            }
-            else
-            {
-                AXLOGW("Image WARNING: unsupported true color tga data pixel format. FILE: {}", _filePath);
-                break;
-            }
-        }
-        else if (3 == tgaData->type)
-        {
-            // gray
-            if (8 == tgaData->pixelDepth)
-            {
-                _pixelFormat = backend::PixelFormat::R8;
-            }
-            else
-            {
-                // actually this won't happen, if it happens, maybe the image file is not a tga
-                AXLOGW("Image WARNING: unsupported gray tga data pixel format. FILE: {}", _filePath);
-                break;
-            }
-        }
-
-        _width    = tgaData->width;
-        _height   = tgaData->height;
-        _data     = tgaData->imageData;
-        _dataLen  = _width * _height * tgaData->pixelDepth / 8;
-        _fileType = Format::TGA;
-
-        ret = true;
-
-    } while (false);
-
-    if (ret)
-    {
-        if (FileUtils::getPathExtension(_filePath) != ".tga")
-        {
-            AXLOGW("Image WARNING: the image file suffix is not tga, but parsed as a tga image file. FILE: {}",
-                  _filePath);
-        }
-    }
-    else
-    {
-        if (tgaData && tgaData->imageData != nullptr)
-        {
-            free(tgaData->imageData);
-            _data = nullptr;
-        }
+    case 1:
+        _pixelFormat = backend::PixelFormat::R8;
+        break;
+    case 2:
+        _pixelFormat = backend::PixelFormat::RG8;
+        break;
+    case 3:
+        _pixelFormat = backend::PixelFormat::RGB8;
+        break;
+    case 4:
+        _pixelFormat = backend::PixelFormat::RGBA8;
+        break;
+    default:
+        stbi_image_free(_data);
+        _data = nullptr;
+        return false;
     }
 
-    return ret;
+    _dataLen  = static_cast<ssize_t>(_width) * _height * channels;
+    _fileType = Format::TGA;
+
+    if (!_filePath.empty() && FileUtils::getPathExtension(_filePath) != ".tga")
+    {
+        AXLOGW("Image WARNING: the image file suffix is not tga, but parsed as a tga image file. FILE: {}", _filePath);
+    }
+
+    return true;
 }
 
 bool Image::initWithPVRv2Data(uint8_t* data, ssize_t dataLen, bool ownData)
