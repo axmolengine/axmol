@@ -709,6 +709,7 @@ FontAtlas* FontFNT::newFontAtlas()
         BMFontDef& fontDef = e.second;
 
         FontLetterDefinition tempDefinition;
+        tempDefinition.scale = 1;
 
         const auto tempRect = AX_RECT_PIXELS_TO_POINTS(fontDef.rect);
 

@@ -27,6 +27,7 @@
 #include "../testResource.h"
 #include "renderer/Renderer.h"
 #include "2d/FontAtlasCache.h"
+#include "2d/FontFallback.h"
 
 using namespace ax;
 using namespace ui;
@@ -74,6 +75,132 @@ public:
 
     virtual std::string title() const override { return "Github Issue 1336"; }
     virtual std::string subtitle() const override { return "The label char shouldn't overlap"; }
+};
+
+class LabelTTFFontFallbackTest : public AtlasDemoNew
+{
+public:
+    explicit LabelTTFFontFallbackTest(bool sdfEnabled) : _sdfEnabled(sdfEnabled) {}
+
+    void onEnter() override
+    {
+        AtlasDemoNew::onEnter();
+
+        _initialGlobalSDF = FontFreeType::isGlobalSDFEnabled();
+        FontFreeType::setGlobalSDFEnabled(_sdfEnabled);
+
+        std::string fonts[] = {"fonts/Japanese.ttf"};
+        _fallback.reset(new ax::FontFallback(fonts, true));
+        FontFreeType::setFontEngine(_fallback.get());
+
+        auto winSize = Director::getInstance()->getWinSize();
+
+        const auto addLabel = [&](float rx, float ry) -> Label* {
+            // The main font is quite basic.
+            Label* const label = Label::createWithTTF("", "fonts/OpenSans-Regular.ttf", 10);
+            label->setPosition(winSize.width * rx, winSize.height * ry);
+            label->setVerticalAlignment(ax::TextVAlignment::CENTER);
+            label->setHorizontalAlignment(ax::TextHAlignment::CENTER);
+            addChild(label);
+
+            label->retain();
+
+            label->runAction(RepeatForever::create(
+                Sequence::create(DelayTime::create(10), FadeOut::create(1.0), FadeIn::create(1.0f), nullptr)));
+
+            return label;
+        };
+
+        const bool underline[] = {false, true};
+        const bool strikethrough[] = {false, true};
+        const Vec2 shadow[]   = {Vec2::ZERO, Vec2(0, -3)};
+        const float outline[] = {0.f, _sdfEnabled ? 6.f : 1.f};
+        const bool glow[]     = {false, true};
+
+        int x = 0;
+        int y = 0;
+
+        for (const bool u : underline)
+            for (const bool st : strikethrough)
+            {
+                for (const Vec2 s : shadow)
+                    for (const float o : outline)
+                        for (const bool g : glow)
+                        {
+                            Label* const label = addLabel(-0.05 + 0.22 * (x + 1), 0.7 - y * 0.1);
+
+                            if (s != Vec2::ZERO)
+                            {
+                                if (g)
+                                    continue;
+                                label->enableShadow(Color4B::BLUE, s);
+                            }
+
+                            if (o != 0)
+                            {
+                                if (g)
+                                    continue;
+                                label->enableOutline(Color4B::BLUE, o);
+                            }
+
+                            if (g)
+                                label->enableGlow(Color4B::GREEN);
+
+                            if (st)
+                                label->enableStrikethrough();
+
+                            if (u)
+                                label->enableUnderline();
+
+                            label->setString("Text, '日本語'🏴‍☠️\ntext, '火', '😄🫶'");
+                            _labels.emplace_back(label);
+
+                            ++y;
+                        }
+
+                ++x;
+                y = 0;
+            }
+    }
+
+    void onExit() override
+    {
+        for (Label* const label : _labels)
+            label->removeFromParent();
+
+        FontFreeType::setFontEngine(nullptr);
+        FontFreeType::setGlobalSDFEnabled(_initialGlobalSDF);
+
+        AtlasDemoNew::onExit();
+    }
+
+private:
+    std::unique_ptr<ax::FontFallback> _fallback;
+    std::vector<ax::Label*> _labels;
+    const bool _sdfEnabled;
+    bool _initialGlobalSDF;
+};
+
+class LabelTTFFontFallback : public LabelTTFFontFallbackTest
+{
+public:
+    CREATE_FUNC(LabelTTFFontFallback);
+
+    LabelTTFFontFallback() : LabelTTFFontFallbackTest(false) {}
+    std::string title() const override { return "TTF font fallback and system (SDF off)"; }
+
+    std::string subtitle() const override { return "Effects do not apply to bitmap glyphs."; }
+};
+
+class LabelTTFFontFallbackSDF : public LabelTTFFontFallbackTest
+{
+public:
+    CREATE_FUNC(LabelTTFFontFallbackSDF);
+
+    LabelTTFFontFallbackSDF() : LabelTTFFontFallbackTest(true) {}
+    std::string title() const override { return "TTF font fallback and system (SDF on)"; }
+
+    std::string subtitle() const override { return "Effects do not apply to bitmap glyphs."; }
 };
 
 //------------------------------------------------------------------
@@ -173,6 +300,11 @@ NewLabelTests::NewLabelTests()
     ADD_TEST_CASE(LabelIssueLineGap);
     ADD_TEST_CASE(LabelIssue17902);
     ADD_TEST_CASE(LabelLetterColorsTest);
+
+    ADD_TEST_CASE(LabelTTFFontFallback);
+    ADD_TEST_CASE(LabelTTFFontFallbackSDF);
+
+    ADD_TEST_CASE(LabelUnicodeFallbackTest);
 };
 
 LabelFNTColorAndOpacity::LabelFNTColorAndOpacity()
@@ -1565,7 +1697,7 @@ void LabelTTFSDF::onChangedRadioButtonSelect(RadioButton* radioButton, RadioButt
     switch (radioButton->getTag())
     {
     case 0:
-        
+
         break;
     case 1:
         _labelNormal->enableGlow(Color4B::RED, 1);
@@ -3701,7 +3833,7 @@ LabelUnderlineStrikethroughMultiline::LabelUnderlineStrikethroughMultiline()
 
     labels[1] = Label::createWithSystemFont("SystemFont TextVAlignment::CENTER\nusing setColor(*RED*)", font, 14, Vec2::ZERO, TextHAlignment::RIGHT, TextVAlignment::CENTER);
     labels[1]->setColor(Color3B::RED);
- 
+
     labels[2] = Label::createWithSystemFont("SystemFont TextVAlignment::BOTTOM\nusingsetTextColor(*YELLOW)", font, 14,
                                            Vec2::ZERO, TextHAlignment::CENTER, TextVAlignment::BOTTOM);
     labels[2]->setTextColor(Color4B::YELLOW);
@@ -4201,4 +4333,36 @@ void LabelLetterColorsTest::setLetterColors(ax::Label* label, const ax::Color3B&
         if (letter != nullptr)
             letter->setColor(color);
     }
+}
+
+LabelUnicodeFallbackTest::LabelUnicodeFallbackTest() = default;
+LabelUnicodeFallbackTest::~LabelUnicodeFallbackTest() = default;
+
+std::string LabelUnicodeFallbackTest::title() const
+{
+    return "Unicode Glyphs and Fallback Font Test";
+}
+
+std::string LabelUnicodeFallbackTest::subtitle() const
+{
+    return {};
+}
+
+void LabelUnicodeFallbackTest::onEnter()
+{
+    std::string fonts[] = {"fonts/Japanese.ttf"};
+    _fallback.reset(new ax::FontFallback(fonts, true));
+    FontFreeType::setFontEngine(_fallback.get());
+
+    _label->setString("Aa0éñüßħǃɑéʃʒʔΩαβЯжщԱաאשابعकषज्ञกฮქა한글あんアン中文漢€₹₿→⇒↔∑∞≠✓✗★\"—…⠁⠃𝔸𝕏😀🎉𝄞❤️👨‍👩‍👧");
+
+
+    LabelLayoutBaseTest::onEnter();
+}
+
+void LabelUnicodeFallbackTest::onExit()
+{
+    LabelLayoutBaseTest::onExit();
+
+    FontFreeType::setFontEngine(nullptr);
 }

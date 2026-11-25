@@ -92,7 +92,7 @@ void EditBoxImplCommon::initInactiveLabels(const Vec2& size)
 {
     const char* pDefaultFontName = this->getNativeDefaultFontName();
 
-    _label = Label::create();
+    _label = Label::create(_editBox->getFontFallbackEngine());
     _label->setAnchorPoint(Vec2(0.0f, 1.0f));
     _label->setOverflow(Label::Overflow::CLAMP);
     _label->setVisible(false);

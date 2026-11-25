@@ -99,6 +99,7 @@ bool ProgramManager::init()
     registerProgram(ProgramType::LABEL_DISTANCE_NORMAL, positionTextureColor_vert, label_distanceNormal_frag,
                     VertexLayoutType::Sprite);
     registerProgram(ProgramType::LABEL_NORMAL, positionTextureColor_vert, label_normal_frag, VertexLayoutType::Sprite);
+    registerProgram(ProgramType::LABEL_COLOR, positionTextureColor_vert, label_color_frag, VertexLayoutType::Sprite);
     registerProgram(ProgramType::LABLE_OUTLINE, positionTextureColor_vert, label_outline_frag,
                     VertexLayoutType::Sprite);
     registerProgram(ProgramType::LABEL_DISTANCE_OUTLINE, positionTextureColor_vert, label_distanceOutline_frag,
