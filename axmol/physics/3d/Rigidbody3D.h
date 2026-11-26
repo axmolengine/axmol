@@ -10,6 +10,7 @@
 #include "axmol/base/Config.h"
 #include "axmol/math/Math.h"
 #include "axmol/physics/3d/Collider3D.h"
+#include "axmol/physics/3d/ContactEvent3D.h"
 #include "axmol/tlx/bitmask.hpp"
 
 #include <stdint.h>
@@ -395,6 +396,12 @@ public:
     /** @brief Returns the opaque user data pointer assigned to this body. */
     void* getUserData() const { return _userData; }
 
+    /**
+     * @brief Returns persisted contact manifolds recorded for this body during the last physics step.
+     * @note Requires ContactEventBits::Persisted enabled globally and on this actor.
+     */
+    const std::vector<ContactInfo3D>& getPersistedContacts() const { return _persistedContacts; }
+
 protected:
     Rigidbody3D();
 
@@ -453,6 +460,8 @@ protected:
     std::vector<Joint3D*> _joints;
 
     void* _userData{nullptr};
+
+    std::vector<ContactInfo3D> _persistedContacts;
 };
 
 }  // namespace ax
