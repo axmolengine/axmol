@@ -1073,10 +1073,13 @@ void GComponent::handleSizeChanged()
     if (_hitArea)
     {
         PixelHitTest* test = dynamic_cast<PixelHitTest*>(_hitArea);
-        if (sourceSize.width != 0)
-            test->scaleX = _size.width / sourceSize.width;
-        if (sourceSize.height != 0)
-            test->scaleY = _size.height / sourceSize.height;
+        if (test)
+        {
+            if (sourceSize.width != 0)
+                test->scaleX = _size.width / sourceSize.width;
+            if (sourceSize.height != 0)
+                test->scaleY = _size.height / sourceSize.height;
+        }
     }
 }
 
@@ -1308,7 +1311,7 @@ void GComponent::constructFromResource(std::vector<GObject*>* objectPool, int po
     }
     else if (i1 != 0 && i2 != -1)
     {
-        //setHitArea(new ChildHitArea(getChildAt(i2)));
+        setHitArea(new ChildHitArea(getChildAt(i2)));
     }
 
     buffer->seek(0, 5);

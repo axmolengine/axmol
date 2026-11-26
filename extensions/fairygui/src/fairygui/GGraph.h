@@ -31,8 +31,14 @@ public:
     ax::Color32 getColor() const;
     void setColor(const ax::Color32& value);
 
+    // Shape hit-area helper: geometry only, ignores touch/visibility (invisible hit graph child).
+    bool hitTestShape(const ax::Vec2& localPoint) const;
+
+
     virtual ax::Value getProp(ObjectPropID propId) override;
     virtual void setProp(ObjectPropID propId, const ax::Value& value) override;
+
+     virtual GObject* hitTest(const ax::Vec2& worldPoint, const ax::Camera* camera) override;
 
 protected:
     virtual void handleInit() override;

@@ -19,6 +19,23 @@ static void drawVertRect(ax::DrawNode* shape, float x, float y, float width, flo
     shape->drawSolidRect(Vec2(x, y), Vec2(mx, my), color, 0.0f);  // Draw no border!
 }
 
+static bool pointInPolygon(const Vec2& p, const std::vector<Vec2>& polygon)
+{
+    if (polygon.size() < 3)
+        return false;
+
+    bool inside  = false;
+    size_t count = polygon.size();
+    for (size_t i = 0, j = count - 1; i < count; j = i++)
+    {
+        const Vec2& a = polygon[i];
+        const Vec2& b = polygon[j];
+        if (((a.y > p.y) != (b.y > p.y)) && (p.x < (b.x - a.x) * (p.y - a.y) / (b.y - a.y) + a.x))
+            inside = !inside;
+    }
+    return inside;
+}
+
 GGraph::GGraph()
     : _shape(nullptr)
     , _type(0)
@@ -255,6 +272,51 @@ void GGraph::setProp(ObjectPropID propId, const ax::Value& value)
         GObject::setProp(propId, value);
         break;
     }
+}
+
+GObject* GGraph::hitTest(const Vec2& worldPoint, const ax::Camera* camera)
+{
+    if (!_touchable || !((ax::Node*)_displayObject)->isVisible() || !_displayObject->getParent())
+        return nullptr;
+
+    Vec2 localPoint = globalToLocal(worldPoint);
+    if (hitTestShape(localPoint))
+        return this;
+    return nullptr;
+}
+
+bool GGraph::hitTestShape(const Vec2& localPoint) const
+{
+    if ((_type == 3 || _type == 4) && _polygonPoints != nullptr && _polygonPoints->size() >= 3)
+    {
+        // _polygonPoints is stored bottom-up (flipped by _size.height, see setup_beforeAdd /
+        // handleSizeChanged / updateShape's regular-polygon case) to match DrawNode's convention,
+        // while localPoint arrives top-down (editor space, via GObject::globalToLocal). Flip here
+        // so both sides agree; otherwise hit-testing silently mirrors vertically for any polygon
+        // that isn't symmetric about its own vertical center.
+        Vec2 flipped(localPoint.x, _size.height - localPoint.y);
+        return pointInPolygon(flipped, *_polygonPoints);
+    }
+
+    if (_type == 2)
+    {
+        float rx = _size.width * 0.5f;
+        float ry = _size.height * 0.5f;
+        if (rx <= 0 || ry <= 0)
+            return false;
+        Vec2 c(_size.width * 0.5f, _size.height * 0.5f);
+        Vec2 d = localPoint - c;
+        return (d.x * d.x) / (rx * rx) + (d.y * d.y) / (ry * ry) <= 1.0f;
+    }
+
+    if (_type == 1 || _type == 0)
+    {
+        Rect rect;
+        rect.size = _size;
+        return rect.containsPoint(localPoint);
+    }
+
+    return false;
 }
 
 void GGraph::handleSizeChanged()

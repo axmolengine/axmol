@@ -147,7 +147,9 @@ void GButton::setState(const std::string& value)
         if (value == DOWN || value == SELECTED_OVER || value == SELECTED_DISABLED)
         {
             int c = _downEffectValue * 255;
-            Value color = Value((c << 16) + (c << 8) + c);
+            // ToolSet::intToColor reads bits 24-31 as alpha; without 0xFF here the color (and the
+            // sprite's opacity, since Node::setColor overwrites alpha too) would be fully transparent.
+            Value color = Value((unsigned int)(0xFF000000u + (c << 16) + (c << 8) + c));
             for (int i = 0; i < cnt; i++)
             {
                 GObject* obj = this->getChildAt(i);
@@ -157,7 +159,7 @@ void GButton::setState(const std::string& value)
         }
         else
         {
-            Value color = Value(0xFFFFFF);
+            Value color = Value((unsigned int)0xFFFFFFFFu);
             for (int i = 0; i < cnt; i++)
             {
                 GObject* obj = this->getChildAt(i);
