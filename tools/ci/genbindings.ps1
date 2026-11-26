@@ -30,7 +30,7 @@ if (($stage -band 1)) {
     echo "$ndk_root=$ndk_root"
 
     ## setup llvm libclang.dll
-    $llvm_ver_pred = $manifest['llvm'].Split('~')
+    $llvm_ver_pred = $manifest['llvm-tools'].Split('~')
     $llvm_ver = [Version]$llvm_ver_pred[$llvm_ver_pred.Count -gt 1].TrimLast('+')
     $lib_name = @('libclang.dll', 'libclang.so', 'libclang.dylib')[$HOST_OS_INT]
     $lib_path = Join-Path $AX_ROOT "tools/bindings-generator/clang/prebuilt/$lib_name"
