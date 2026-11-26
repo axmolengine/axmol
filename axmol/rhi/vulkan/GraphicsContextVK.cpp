@@ -18,12 +18,14 @@
 #include "axmol/rhi/vulkan/ComputePipelineVK.h"
 #include "axmol/rhi/vulkan/SemaphorePoolVK.h"
 #include "axmol/rhi/GraphicsCore.h"
+#include "axmol/rhi/RHIUtils.h"
 #include "axmol/rhi/SamplerRegistry.h"
 #include "axmol/base/Logging.h"
 #include "axmol/math/MathUtil.h"
 
 #include <glad/vulkan.h>
 #include <assert.h>
+#include <string.h>
 #include <algorithm>
 
 namespace ax::rhi::vk
@@ -1619,46 +1621,61 @@ void GraphicsContextImpl::doReadPixels(RenderTarget* rt, std::function<void(cons
         return;
     }
 
-    auto& colorDesc = colorAttachment->getDesc();
-
+    const auto& colorDesc = colorAttachment->getDesc();
     const uint32_t width  = colorDesc.width;
     const uint32_t height = colorDesc.height;
-    const VkFormat format = UtilsVK::toVkFormat(colorDesc.pixelFormat, colorDesc.colorSpace == ColorSpace::Srgb);
-
-    // Read the true current layout from tracker.
-    VkImageLayout currentLayout = colorAttachment->getCurrentLayout();
-    if (rtImpl->isDefaultRenderTarget() && currentLayout == VK_IMAGE_LAYOUT_UNDEFINED)
+    if (width == 0 || height == 0)
     {
         callback(pbd);
         return;
     }
 
-    // Basic stride for RGBA8
-    const uint32_t pixelStride    = 4;
-    const VkDeviceSize bufferSize = static_cast<VkDeviceSize>(width) * static_cast<VkDeviceSize>(height) * pixelStride;
+    if (colorDesc.pixelFormat != PixelFormat::RGBA8 && colorDesc.pixelFormat != PixelFormat::BGRA8)
+    {
+        AXLOGE("Unsupported pixel format {} for readPixels", static_cast<int>(colorDesc.pixelFormat));
+        callback(pbd);
+        return;
+    }
 
-    // Create HOST_VISIBLE | COHERENT staging buffer using VMA
-    VkBuffer stagingBuf = VK_NULL_HANDLE;
-    VmaAllocation stagingAlloc;
-    VmaAllocationCreateInfo allocInfo = {};
-    allocInfo.usage                   = VMA_MEMORY_USAGE_CPU_ONLY;
+    const VkImage srcImage = colorAttachment->internalHandle().image;
+    if (srcImage == VK_NULL_HANDLE || !(colorAttachment->getUsageFlags() & VK_IMAGE_USAGE_TRANSFER_SRC_BIT))
+    {
+        AXLOGE("Color attachment is not readable (missing image or VK_IMAGE_USAGE_TRANSFER_SRC_BIT)");
+        callback(pbd);
+        return;
+    }
+
+    // Read the true current layout from tracker.
+    VkImageLayout currentLayout = colorAttachment->getCurrentLayout();
+    if (isDefaultRT && currentLayout == VK_IMAGE_LAYOUT_UNDEFINED)
+    {
+        callback(pbd);
+        return;
+    }
+
+    // Basic stride for 32-bit RGBA8/BGRA8
+    constexpr uint32_t pixelStride = 4;
+    const VkDeviceSize bufferSize =
+        static_cast<VkDeviceSize>(width) * static_cast<VkDeviceSize>(height) * pixelStride;
+
+    // Create host-visible (preferring cached) persistently mapped staging buffer using VMA
+    VkBuffer stagingBuf        = VK_NULL_HANDLE;
+    VmaAllocation stagingAlloc = VK_NULL_HANDLE;
+    VmaAllocationInfo allocResult{};
+    VmaAllocationCreateInfo allocInfo{};
+    allocInfo.usage = VMA_MEMORY_USAGE_AUTO_PREFER_HOST;
+    allocInfo.flags = VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT | VMA_ALLOCATION_CREATE_MAPPED_BIT;
 
     VkBufferCreateInfo bufInfo{.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO};
     bufInfo.size        = bufferSize;
     bufInfo.usage       = VK_BUFFER_USAGE_TRANSFER_DST_BIT;
     bufInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
-    auto res = vmaCreateBuffer(_driver->getVmaAllocator(), &bufInfo, &allocInfo, &stagingBuf, &stagingAlloc, nullptr);
+    auto allocator = _driver->getVmaAllocator();
+    auto res       = vmaCreateBuffer(allocator, &bufInfo, &allocInfo, &stagingBuf, &stagingAlloc, &allocResult);
     VK_REQUIRE(res, "vmaCreateBuffer failed");
 
     auto submission = _driver->startIsolateSubmission();
-
-    VkCommandBufferBeginInfo const binfo{
-        .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
-        .flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT,
-    };
-
-    const VkImage srcImage = colorAttachment->internalHandle().image;
 
     // Transition to TRANSFER_SRC_OPTIMAL using TextureImpl
     colorAttachment->transitionLayout(submission, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
@@ -1683,26 +1700,32 @@ void GraphicsContextImpl::doReadPixels(RenderTarget* rt, std::function<void(cons
     // Submit and wait
     _driver->finishIsolateSubmission(submission);
 
-    // Map and copy out
-    void* mapped{nullptr};
-    res = vmaMapMemory(_driver->getVmaAllocator(), stagingAlloc, &mapped);
-    if (res != VK_SUCCESS || !mapped)
+    // Ensure GPU writes are visible to CPU if staging memory is non-coherent cached
+    res = vmaInvalidateAllocation(allocator, stagingAlloc, 0, VK_WHOLE_SIZE);
+    if (res != VK_SUCCESS || !allocResult.pMappedData)
     {
-        AXLOGE("Failed to map staging buffer for readPixels, ret={}", static_cast<int>(res));
-        vmaDestroyBuffer(_driver->getVmaAllocator(), stagingBuf, stagingAlloc);
+        AXLOGE("Failed to read staging buffer for readPixels, ret={}", static_cast<int>(res));
+        vmaDestroyBuffer(allocator, stagingBuf, stagingAlloc);
         callback(pbd);
         return;
     }
 
-    pbd._width  = width;
-    pbd._height = height;
-    pbd._data.resize(static_cast<size_t>(bufferSize));
-    ::memcpy(pbd._data.data(), mapped, static_cast<size_t>(bufferSize));
+    const auto byteSize = static_cast<size_t>(bufferSize);
+    uint8_t* dst        = pbd._data.resize(byteSize);
+    if (dst)
+    {
+        const auto* src = static_cast<const uint8_t*>(allocResult.pMappedData);
+        if (colorDesc.pixelFormat == PixelFormat::BGRA8)
+            RHIUtils::convertBGRA8ToRGBA8(src, byteSize, dst);
+        else
+            memcpy(dst, src, byteSize);
 
-    vmaUnmapMemory(_driver->getVmaAllocator(), stagingAlloc);
+        pbd._width  = static_cast<int>(width);
+        pbd._height = static_cast<int>(height);
+    }
 
     // Cleanup
-    vmaDestroyBuffer(_driver->getVmaAllocator(), stagingBuf, stagingAlloc);
+    vmaDestroyBuffer(allocator, stagingBuf, stagingAlloc);
 
     callback(pbd);
 }
