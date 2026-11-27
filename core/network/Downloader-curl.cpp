@@ -212,9 +212,11 @@ public:
         return ret;
     }
 
-    void cancel() override
+    void cancel(bool cleanup = false) override
     {
         std::lock_guard<std::recursive_mutex> lock(_mutex);
+
+        _cleanupOnCancel |= cleanup;
 
         if (!_cancelled)
         {
@@ -329,6 +331,8 @@ private:
     CURL* _curl = nullptr;
     curl_socket_t _sockfd = -1;  // store the sockfd to support cancel download manually
     bool _cancelled       = false;
+    bool _cleanupOnCancel = false;  // remove temp files when the task stopped because of cancel
+    std::atomic<bool> _finished{false};  // set once the task is completely done, temp files are closed
 
     // progress
     bool _alreadyDownloaded = false;
@@ -651,7 +655,17 @@ private:
                                     fmt::format_to(std::back_inserter(errorMsg), FMT_COMPILE(": {}"), responeCode);
                                 }
 
-                                context->setErrorDesc(DownloadTask::ERROR_IMPL_INTERNAL, errCode, std::move(errorMsg));
+                                if (context->_cancelled)
+                                {
+                                    // curl failure (aborted by callback, send/recv error) is caused by cancel()
+                                    context->setErrorDesc(DownloadTask::ERROR_TASK_CANCELLED, errCode,
+                                                          "Task cancelled");
+                                }
+                                else
+                                {
+                                    context->setErrorDesc(DownloadTask::ERROR_IMPL_INTERNAL, errCode,
+                                                          std::move(errorMsg));
+                                }
                                 break;
                             }
 
@@ -841,6 +855,22 @@ void DownloaderCURL::startTask(std::shared_ptr<DownloadTask>& task)
     }
 }
 
+bool DownloaderCURL::cleanupTask(const DownloadTask& task)
+{
+    auto context = static_cast<DownloadContextCURL*>(task._context.get());
+    if (!context || context->_tempFileName.empty() || !context->_finished)
+        return false;
+
+    auto pFileUtils = FileUtils::getInstance();
+    bool ok         = true;
+    for (auto&& name : {context->_tempFileName, context->_tempFileName + ".digest"})
+    {
+        if (pFileUtils->isFileExistInternal(name))
+            ok &= pFileUtils->removeFile(name);
+    }
+    return ok;
+}
+
 void DownloaderCURL::_lazyScheduleUpdate()
 {
     if (!_scheduler)
@@ -957,6 +987,13 @@ void DownloaderCURL::_onDownloadFinished(DownloadTask& task)
                     pFileUtils->removeFile(context->_checksumFileName);
                     pFileUtils->removeFile(context->_tempFileName);
                 }
+                else if (context->_errCode == DownloadTask::ERROR_TASK_CANCELLED && context->_cleanupOnCancel &&
+                         !context->_tempFileName.empty())
+                {
+                    // cancel(true): file handles are closed above, remove the partial download
+                    pFileUtils->removeFile(context->_tempFileName + ".digest");
+                    pFileUtils->removeFile(context->_tempFileName);
+                }
                 break;
             }
 
@@ -1007,6 +1044,8 @@ void DownloaderCURL::_onDownloadFinished(DownloadTask& task)
             context->_errDescription.append(context->_fileName);
         } while (0);
     }
+
+    context->_finished = true;
 
     // needn't lock coTask here, because tasks has removed form _impl
     onTaskFinish(task, context->_errCode, context->_errCodeInternal, context->_errDescription, context->_buf);
