@@ -1,6 +1,10 @@
 #include "HitTest.h"
+#include "GGraph.h"
 #include "GComponent.h"
+#include "GObject.h"
+#include "GRoot.h"
 #include "utils/ByteBuffer.h"
+#include "utils/ToolSet.h"
 
 using namespace ax;
 NS_FGUI_BEGIN
@@ -54,5 +58,34 @@ bool PixelHitTest::hitTest(GComponent * obj, const ax::Vec2 & localPoint)
     else
         return false;
 }
+
+bool ChildHitArea::hitTestCanvas(GComponent* obj, const ax::Vec2& canvasPoint)
+{
+    if (_child == nullptr || obj == nullptr || !_child->displayObject())
+        return false;
+
+    Vec2 logical = _child->globalToLocal(GRoot::getInstance()->worldToRoot(canvasPoint));
+
+    if (GGraph* graph = dynamic_cast<GGraph*>(_child))
+        return graph->hitTestShape(logical);
+
+    Rect rect;
+    rect.size = _child->getSize();
+    return rect.containsPoint(logical);
+}
+
+bool ChildHitArea::hitTest(GComponent* obj, const Vec2& localPoint)
+{
+    if (_child == nullptr || obj == nullptr || !obj->displayObject())
+        return false;
+
+    ax::Node* compDisplay = obj->displayObject();
+    if (!compDisplay)
+        return false;
+
+    Vec2 canvasPoint = compDisplay->convertToWorldSpace(localPoint);
+    return hitTestCanvas(obj, canvasPoint);
+}
+
 
 NS_FGUI_END

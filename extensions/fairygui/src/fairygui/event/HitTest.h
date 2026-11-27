@@ -2,7 +2,8 @@
 #define __HITTEST_H__
 
 #include "FairyGUIMacros.h"
-#include "axmol/cocos2d.h"
+#include "GObject.h"
+#include "axmol/axmol.h"
 
 NS_FGUI_BEGIN
 
@@ -47,6 +48,20 @@ public:
 
 private:
     PixelHitTestData* _data;
+};
+
+class ChildHitArea : public IHitTest
+{
+public:
+    explicit ChildHitArea(GObject* child) : _child(child) {}
+
+    virtual bool hitTest(GComponent* obj, const ax::Vec2& localPoint) override;
+    bool hitTestCanvas(GComponent* obj, const ax::Vec2& canvasPoint);
+
+    GObject* getHitChild() const { return _child; }
+
+private:
+    GObject* _child = nullptr;
 };
 
 NS_FGUI_END
