@@ -1096,9 +1096,9 @@ void GraphicsContextImpl::readPixelsInternal(RenderTarget* rt, std::function<voi
         if (dstData)
         {
             const uint8_t* srcData = reinterpret_cast<const uint8_t*>(mapped);
-            const bool isBGRA      = (desc.pixelFormat == PixelFormat::BGRA8 ||
-                                 nativeTexDesc.Format == DXGI_FORMAT_B8G8R8A8_UNORM ||
-                                 nativeTexDesc.Format == DXGI_FORMAT_B8G8R8A8_UNORM_SRGB);
+            const bool isBGRA =
+                (desc.pixelFormat == PixelFormat::BGRA8 || nativeTexDesc.Format == DXGI_FORMAT_B8G8R8A8_UNORM ||
+                 nativeTexDesc.Format == DXGI_FORMAT_B8G8R8A8_UNORM_SRGB);
 
             // Copy row by row, removing padding
             for (UINT row = 0; row < height; ++row)

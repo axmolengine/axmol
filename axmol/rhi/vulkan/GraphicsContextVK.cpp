@@ -1655,8 +1655,7 @@ void GraphicsContextImpl::doReadPixels(RenderTarget* rt, std::function<void(cons
 
     // Basic stride for 32-bit RGBA8/BGRA8
     constexpr uint32_t pixelStride = 4;
-    const VkDeviceSize bufferSize =
-        static_cast<VkDeviceSize>(width) * static_cast<VkDeviceSize>(height) * pixelStride;
+    const VkDeviceSize bufferSize  = static_cast<VkDeviceSize>(width) * static_cast<VkDeviceSize>(height) * pixelStride;
 
     // Create host-visible (preferring cached) persistently mapped staging buffer using VMA
     VkBuffer stagingBuf        = VK_NULL_HANDLE;
