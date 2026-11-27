@@ -49,6 +49,15 @@ inline bool isCompressed(PixelFormat format)
 /**convert functions*/
 
 /**
+Convert BGRA8888 pixel data to RGBA8888.
+Supports both out-of-place single-pass copy (src != dst) and in-place swizzle (src == dst).
+@param src Pointer to source BGRA8 pixel data.
+@param dataLen Size of the buffer in bytes.
+@param dst Pointer to destination RGBA8 buffer (may equal src).
+*/
+AX_DLL void convertBGRA8ToRGBA8(const uint8_t* src, size_t dataLen, uint8_t* dst);
+
+/**
 Convert the format to the format param you specified, if the format is PixelFormat::NONE, it will detect it
 automatically and convert to the closest format for you. It will return the converted format to you. if the outData !=
 data, you must delete it manually.

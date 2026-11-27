@@ -9,6 +9,7 @@
 
 #include "axmol/rhi/RHIUtils.h"
 #include "axmol/base/Logging.h"
+#include <string.h>
 
 namespace ax::rhi
 {
@@ -444,15 +445,18 @@ static void convertR8ToRGBA8(const unsigned char* data, size_t dataLen, unsigned
     }
 }
 
-static void convertBGRA8ToRGBA8(const unsigned char* data, size_t dataLen, unsigned char* outData)
+void convertBGRA8ToRGBA8(const uint8_t* src, size_t dataLen, uint8_t* dst)
 {
-    const size_t pixelCounts = dataLen / 4;
-    for (size_t i = 0; i < pixelCounts; i++)
+    if (!src || !dst || dataLen < 4)
+        return;
+
+    const size_t pixelCount = dataLen / 4;
+    for (size_t i = 0; i < pixelCount; ++i)
     {
-        *outData++ = data[i * 4 + 2];
-        *outData++ = data[i * 4 + 1];
-        *outData++ = data[i * 4 + 0];
-        *outData++ = data[i * 4 + 3];
+        uint32_t pixel;
+        memcpy(&pixel, src + i * 4, sizeof(pixel));
+        pixel = (pixel & 0xFF00FF00u) | ((pixel & 0x00FF0000u) >> 16) | ((pixel & 0x000000FFu) << 16);
+        memcpy(dst + i * 4, &pixel, sizeof(pixel));
     }
 }
 

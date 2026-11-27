@@ -15,6 +15,7 @@
 #include "axmol/rhi/d3d11/Texture11.h"
 #include "axmol/rhi/ComputePipeline.h"
 #include "axmol/rhi/GraphicsCore.h"
+#include "axmol/rhi/RHIUtils.h"
 #include "axmol/rhi/SamplerRegistry.h"
 #include <dxgi1_2.h>
 #include <dxgi1_3.h>
@@ -1003,13 +1004,21 @@ void GraphicsContextImpl::readPixels(RenderTarget* rt, UINT x, UINT y, UINT widt
     uint8_t* dst           = pbd._data.resize(bufferSize);
     uint8_t* src           = reinterpret_cast<uint8_t*>(mapped.pData);
 
-    for (uint32_t row = 0; row < height; ++row)
+    if (dst)
     {
-        memcpy(dst + row * bytesPerRow, src + row * mapped.RowPitch, bytesPerRow);
-    }
+        const bool isBGRA =
+            (desc.Format == DXGI_FORMAT_B8G8R8A8_UNORM || desc.Format == DXGI_FORMAT_B8G8R8A8_UNORM_SRGB);
+        for (uint32_t row = 0; row < height; ++row)
+        {
+            if (isBGRA)
+                RHIUtils::convertBGRA8ToRGBA8(src + row * mapped.RowPitch, bytesPerRow, dst + row * bytesPerRow);
+            else
+                memcpy(dst + row * bytesPerRow, src + row * mapped.RowPitch, bytesPerRow);
+        }
 
-    pbd._width  = width;
-    pbd._height = height;
+        pbd._width  = width;
+        pbd._height = height;
+    }
 
     _d3d11Context->Unmap(stagingTex, 0);
     SafeRelease(stagingTex);

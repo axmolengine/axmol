@@ -150,17 +150,12 @@ void UtilsMTL::swizzleImage(unsigned char* image, size_t width, size_t height, M
     if (!image)
         return;
 
-    auto len = width * height;
     switch (format)
     {
     // convert to RGBA
     case MTLPixelFormatBGRA8Unorm:
-        for (int i = 0; i < len; i++)
-        {
-            unsigned char temp = image[i * 4];
-            image[i * 4]       = image[i * 4 + 2];
-            image[i * 4 + 2]   = temp;
-        }
+    case MTLPixelFormatBGRA8Unorm_sRGB:
+        RHIUtils::convertBGRA8ToRGBA8(image, width * height * 4, image);
         break;
 
     default:

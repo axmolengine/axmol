@@ -15,6 +15,7 @@
 #include "axmol/rhi/d3d12/Buffer12.h"
 #include "axmol/rhi/d3d12/Texture12.h"
 #include "axmol/rhi/d3d12/ComputePipeline12.h"
+#include "axmol/rhi/RHIUtils.h"
 #include "axmol/rhi/SamplerRegistry.h"
 #include "axmol/base/Logging.h"
 #include "axmol/math/MathUtil.h"
@@ -1090,17 +1091,27 @@ void GraphicsContextImpl::readPixelsInternal(RenderTarget* rt, std::function<voi
     hr = readback->Map(0, &readRange, &mapped);
     if (SUCCEEDED(hr) && mapped)
     {
-        pbd._width  = width;
-        pbd._height = height;
-        pbd._data.resize(width * height * 4);
-
-        BYTE* srcData = reinterpret_cast<BYTE*>(mapped);
-        BYTE* dstData = pbd._data.data();
-
-        // Copy row by row, removing padding
-        for (UINT row = 0; row < height; ++row)
+        const UINT bytesPerRow = width * 4;
+        uint8_t* dstData       = pbd._data.resize(static_cast<size_t>(bytesPerRow) * height);
+        if (dstData)
         {
-            memcpy(dstData + row * width * 4, srcData + row * footprint.Footprint.RowPitch, width * 4);
+            const uint8_t* srcData = reinterpret_cast<const uint8_t*>(mapped);
+            const bool isBGRA =
+                (desc.pixelFormat == PixelFormat::BGRA8 || nativeTexDesc.Format == DXGI_FORMAT_B8G8R8A8_UNORM ||
+                 nativeTexDesc.Format == DXGI_FORMAT_B8G8R8A8_UNORM_SRGB);
+
+            // Copy row by row, removing padding
+            for (UINT row = 0; row < height; ++row)
+            {
+                if (isBGRA)
+                    RHIUtils::convertBGRA8ToRGBA8(srcData + row * footprint.Footprint.RowPitch, bytesPerRow,
+                                                  dstData + row * bytesPerRow);
+                else
+                    memcpy(dstData + row * bytesPerRow, srcData + row * footprint.Footprint.RowPitch, bytesPerRow);
+            }
+
+            pbd._width  = width;
+            pbd._height = height;
         }
 
         D3D12_RANGE written{0, 0};
